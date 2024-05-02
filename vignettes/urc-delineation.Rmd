@@ -1,0 +1,12 @@
+---
+title: "Urban river corridor delineation"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Urban river corridor delineation}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup}
+library(CRiSp)
+```
