@@ -1,4 +1,6 @@
 url: https://cityriverspaces.github.io/CRiSp/
 template:
   bootstrap: 5
-
+authors:
+  sidebar:
+    roles: [aut, cre]
