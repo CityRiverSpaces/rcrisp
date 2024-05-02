@@ -4,6 +4,8 @@
 # CRiSp
 
 <!-- badges: start -->
+
+[![R-CMD-check](https://github.com/CityRiverSpaces/CRiSp/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/CityRiverSpaces/CRiSp/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 The goal of CRiSp is to automate the spatial delineation of urban river
