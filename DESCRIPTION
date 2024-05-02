@@ -1,4 +1,4 @@
-Package: CRiSp
+Package: crisp
 Title: Automate the Delineation of Urban River Spaces
 Version: 0.0.0.9000
 Authors@R: c(
