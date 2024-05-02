@@ -1,8 +1,8 @@
 ---
-title: "1. Urban river corridor delineation"
+title: "2. Urban River Space Delineation"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{urc-delineation}
+  %\VignetteIndexEntry{urs-delineation}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
