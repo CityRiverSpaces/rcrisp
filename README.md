@@ -8,8 +8,8 @@
 [![R-CMD-check](https://github.com/CityRiverSpaces/CRiSp/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/CityRiverSpaces/CRiSp/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-The goal of CRiSp is to automate the spatial delineation of urban river
-corridors.
+CRiSp (City River Spaces) provides tools to automate the morphological
+delineation of riverside urban areas.
 
 ## Installation
 
