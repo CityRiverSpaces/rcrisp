@@ -10,7 +10,7 @@ Authors@R: c(
 Description: CRiSp (City River Spaces) provides tools to automate the 
     morphological delineation of riverside urban areas.
 License: Apache License (>= 2)
-URL: https://github.com/CityRiverSpaces/crisp, https://cityriverspaces.github.io/CRiSp/
+URL: https://cityriverspaces.github.io/CRiSp/
 BugReports: https://github.com/CityRiverSpaces/crisp/issues
 Suggests: 
     knitr,
