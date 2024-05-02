@@ -1,5 +1,5 @@
 ---
-title: "2. Urban River Space Delineation"
+title: "2. Urban river space delineation"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{urs-delineation}
