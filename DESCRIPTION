@@ -10,8 +10,8 @@ Authors@R: c(
 Description: CRiSp provides tools for the morpholigical delineation of
     riverside urban areas.
 License: Apache License (>= 2)
-URL: https://github.com/CityRiverSpaces/CRiSp
-BugReports: https://github.com/CityRiverSpaces/CRiSp/issues
+URL: https://github.com/CityRiverSpaces/CRiSp, https://github.com/CityRiverSpaces/crisp
+BugReports: https://github.com/CityRiverSpaces/crisp/issues
 Suggests: 
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
