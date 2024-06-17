@@ -10,6 +10,8 @@ define_aoi(bb, crs, buffer_dist = 0)
 \item{bb}{A bounding box as a matrix with 4 elements: xmin, ymin, xmax, ymax}
 
 \item{crs}{A coordinate reference system as an epsg code, e.g. 4326 for WGS84}
+
+\item{buffer_dist}{A numeric value to buffer the area of interest}
 }
 \value{
 An area of interest as a simple feature geometry

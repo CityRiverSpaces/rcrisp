@@ -2,6 +2,7 @@
 #'
 #' @param bb A bounding box as a matrix with 4 elements: xmin, ymin, xmax, ymax
 #' @param crs A coordinate reference system as an epsg code, e.g. 4326 for WGS84
+#' @param buffer_dist A numeric value to buffer the area of interest
 #'
 #' @return An area of interest as a simple feature geometry
 #' @export
@@ -135,7 +136,18 @@ get_corridor_edge <- function(net, area, vertices){
   edges[edge_path]
 }
 
-cap_corridor <- function(edges, cap = "city", crs = NULL) {
+#' Cap corridor edges with a city boundary.
+#'
+#' @param corridor_edges Edge of the corridor as a simple feature
+#' @param river River centerline as a simple feature
+#' @param crs A coordinate reference system as an epsg code, e.g. 4326 for WGS84
+#' @param bb A bounding box as a matrix with 4 elements: xmin, ymin, xmax, ymax
+#' @param cap Character string with the type of cap to be used. Default is "city"
+#'
+#' @return A simple feature geometry
+#' @export
+cap_corridor <- function(corridor_edges, river, crs, bb, cap = "city") {
+
   if (cap == "city") {
     cap <- CRiSp::osmdata_as_sf("place", "city", bb)
     cap <- cap$osm_multipolygons |>
@@ -143,7 +155,7 @@ cap_corridor <- function(edges, cap = "city", crs = NULL) {
   } else {
     cap <- cap
   }
-  if (!is.null(crs)) cap <- cap |> sf::st_transform(crs)
+  cap <- cap |> sf::st_transform(crs)
 
   capped_corridor <- cap |>
     lwgeom::st_split(corridor_edges) |>
@@ -160,7 +172,7 @@ cap_corridor <- function(edges, cap = "city", crs = NULL) {
 #'
 #' @return A simple feature geometry
 #' @export
-delineate_corridor <- function(place, river, crs = NULL) {
+delineate_corridor <- function(place, river, crs) {
   bb <- CRiSp::osm_bb(place)
 
   highways_value <- c("motorway", "primary", "secondary", "tertiary")
@@ -176,5 +188,5 @@ delineate_corridor <- function(place, river, crs = NULL) {
   corridor_edge_2 <- CRiSp::get_corridor_edge(net, areas[2], vertices)
   corridor_edges <- sf::st_union(corridor_edge_1, corridor_edge_2)
 
-  cap_corridor(corridor_edges, cap)
+  CRiSp::cap_corridor(corridor_edges, river, crs)
 }

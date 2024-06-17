@@ -4,7 +4,7 @@
 \alias{delineate_corridor}
 \title{Delineate a corridor around a river.}
 \usage{
-delineate_corridor(place, river, crs = NULL)
+delineate_corridor(place, river, crs)
 }
 \arguments{
 \item{place}{A place name as a string}

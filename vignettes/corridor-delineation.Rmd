@@ -131,12 +131,22 @@ corridor_edges <- st_union(corridor_edge_1, corridor_edge_2)
 ## Capping the corridor
 
 ```{r}
-corridor <- city_boundary |>
-  lwgeom::st_split(corridor_edges) |>
-  st_collection_extract("POLYGON") |>
-  st_as_sf() |>
-  st_filter(river_centerline, .predicate = st_intersects)
+capped_corridor <- city_boundary |>
+    lwgeom::st_split(corridor_edges) |>
+    sf::st_collection_extract("POLYGON") |>
+    sf::st_as_sf() |>
+    sf::st_filter(river_centerline, .predicate = sf::st_intersects)
+
+# TODO replace with call to cap_corridor()
+# corridor <- cap_corridor(corridor_edges, river_centerline, epsg_code, bb)
 ```
 
 Note that this is not ideal, as the municipal boundaries can be arbitrary and might exclude important end features of the corridors, so the user should have the option to input their own feature to cap the corridor ends. In the case of Bucharest, this can be the ring road.
+
+## All in one step
+
+```{r}
+# TODO this function should run the entire delineation process
+# delineate_corridor(city_name, river_name, epsg_code)
+```
 

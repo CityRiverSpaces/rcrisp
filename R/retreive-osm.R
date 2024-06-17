@@ -46,10 +46,10 @@ get_osmdata <- function(name, key, value) {
 
 #' Get OpenStreetMap data for a river corridor
 #'
-#' @param name A character string with the name of the place to retrieve the bounding box
+#' @param city_name A character string with the name of the place to retrieve the bounding box
 #' @param river_name A character string with the name of the river
 #' @param epsg_code An integer with the EPSG code for the projection
-#' @param buffer A numeric with the buffer distance in meters from the water stream
+#' @param buffer_dist A numeric with the buffer distance in meters from the water stream
 #'
 #' @return An sf object with the river corridor
 #' @export
