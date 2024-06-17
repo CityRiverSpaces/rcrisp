@@ -44,6 +44,7 @@ get_osmdata <- function(name, key, value) {
   CRiSp::osmdata_as_sf(key, value, bb)
 }
 
+name <- NULL
 #' Get OpenStreetMap data for a river corridor
 #'
 #' @param city_name A character string with the name of the place to retrieve the bounding box
