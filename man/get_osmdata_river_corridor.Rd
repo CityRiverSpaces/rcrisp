@@ -4,14 +4,14 @@
 \alias{get_osmdata_river_corridor}
 \title{Get OpenStreetMap data for a river corridor}
 \usage{
-get_osmdata_river_corridor(name, river_name, epsg_code, buffer)
+get_osmdata_river_corridor(city_name, river_name, epsg_code, buffer_dist)
 }
 \arguments{
-\item{name}{A character string with the name of the place to retrieve the bounding box}
-
 \item{river_name}{A character string with the name of the river}
 
 \item{epsg_code}{An integer with the EPSG code for the projection}
+
+\item{name}{A character string with the name of the place to retrieve the bounding box}
 
 \item{buffer}{A numeric with the buffer distance in meters from the water stream}
 }

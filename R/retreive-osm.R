@@ -13,6 +13,8 @@ osm_bb <- function(name) {
 
 #' Retrieve OpenStreetMap data as sf object
 #'
+#' Query the Overpass API for a key:value pair within a given bounding box.
+#'
 #' @param key A character string with the key to filter the data
 #' @param value A character string with the value to filter the data
 #' @param bb A list with the bounding box
@@ -51,10 +53,10 @@ get_osmdata <- function(name, key, value) {
 #'
 #' @return An sf object with the river corridor
 #' @export
-get_osmdata_river_corridor <- function(name, river_name, epsg_code, buffer) {
+get_osmdata_river_corridor <- function(city_name, river_name, epsg_code, buffer_dist) {
   key = "waterway"
   value = "river"
-  waterways <- CRiSp::get_osmdata(name, key, value)
+  waterways <- CRiSp::get_osmdata(city_name, key, value)
   waterway <- waterways$osm_multilines |>
     dplyr::filter(name == river_name) |>
     sf::st_transform(epsg_code) |>
@@ -62,7 +64,7 @@ get_osmdata_river_corridor <- function(name, river_name, epsg_code, buffer) {
 
   key = "natural"
   value = "water"
-  water <- CRiSp::get_osmdata(name, key, value)
+  water <- CRiSp::get_osmdata(city_name, key, value)
 
   waterbody <- dplyr::bind_rows(water$osm_polygons, water$osm_multipolygons) |>
     sf::st_transform(epsg_code) |>
@@ -71,6 +73,6 @@ get_osmdata_river_corridor <- function(name, river_name, epsg_code, buffer) {
     sf::st_union()
 
   corridor_initial <- c(waterway, waterbody) |>
-    sf::st_buffer(buffer) |>
+    sf::st_buffer(buffer_dist) |>
     sf::st_union()
 }

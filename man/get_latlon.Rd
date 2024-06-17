@@ -2,16 +2,16 @@
 % Please edit documentation in R/utils.R
 \name{get_latlon}
 \alias{get_latlon}
-\title{Get the latitude and longitude of an sf object}
+\title{Add latitude and longitude information to an sf object}
 \usage{
 get_latlon(x)
 }
 \arguments{
-\item{x}{Object of sf class sf, sfc or sfg}
+\item{x}{Object of class sf, sfc or sfg}
 }
 \value{
-An sf object with the latitude and longitude
+An sf object with latitude and longitude
 }
 \description{
-Get the latitude and longitude of an sf object
+Add latitude and longitude information to an sf object (WGS84)
 }

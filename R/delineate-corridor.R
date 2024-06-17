@@ -5,12 +5,14 @@
 #'
 #' @return An area of interest as a simple feature geometry
 #' @export
-define_aoi <- function(bb, crs) {
+define_aoi <- function(bb, crs, buffer_dist = 0) {
   bbox <- as.vector(bb)
   names(bbox) <- c("xmin", "ymin", "xmax", "ymax")
   aoi <- sf::st_bbox(bbox, crs = sf::st_crs(4326)) |>
     sf::st_as_sfc() |>
     sf::st_transform(crs)
+
+  if (buffer_dist != 0) aoi <- sf::st_buffer(aoi, buffer_dist) else aoi
 }
 
 #' Split the area of interest (AoI) by a river.
@@ -133,6 +135,23 @@ get_corridor_edge <- function(net, area, vertices){
   edges[edge_path]
 }
 
+cap_corridor <- function(edges, cap = "city", crs = NULL) {
+  if (cap == "city") {
+    cap <- CRiSp::osmdata_as_sf("place", "city", bb)
+    cap <- cap$osm_multipolygons |>
+      sf::st_geometry()
+  } else {
+    cap <- cap
+  }
+  if (!is.null(crs)) cap <- cap |> sf::st_transform(crs)
+
+  capped_corridor <- cap |>
+    lwgeom::st_split(corridor_edges) |>
+    sf::st_collection_extract("POLYGON") |>
+    sf::st_as_sf() |>
+    sf::st_filter(river, .predicate = sf::st_intersects)
+}
+
 #' Delineate a corridor around a river.
 #'
 #' @param place A place name as a string
@@ -143,10 +162,6 @@ get_corridor_edge <- function(net, area, vertices){
 #' @export
 delineate_corridor <- function(place, river, crs = NULL) {
   bb <- CRiSp::osm_bb(place)
-  cap <- CRiSp::osmdata_as_sf("place", "city", bb)
-  cap <- cap$osm_multipolygons |>
-    sf::st_geometry()
-  if (!is.null(crs)) cap <- cap |> sf::st_transform(crs)
 
   highways_value <- c("motorway", "primary", "secondary", "tertiary")
   net <- CRiSp::osmdata_as_sf("highway", highways_value, bb) |>
@@ -161,9 +176,5 @@ delineate_corridor <- function(place, river, crs = NULL) {
   corridor_edge_2 <- CRiSp::get_corridor_edge(net, areas[2], vertices)
   corridor_edges <- sf::st_union(corridor_edge_1, corridor_edge_2)
 
-  corridor <- cap |>
-    lwgeom::st_split(corridor_edges) |>
-    sf::st_collection_extract("POLYGON") |>
-    sf::st_as_sf() |>
-    sf::st_filter(river, .predicate = sf::st_intersects)
+  cap_corridor(corridor_edges, cap)
 }

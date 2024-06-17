@@ -17,5 +17,5 @@ osmdata_as_sf(key, value, bb)
 An sf object with the retrieved OpenStreetMap data
 }
 \description{
-Retrieve OpenStreetMap data as sf object
+Query the Overpass API for a key:value pair within a given bounding box.
 }

@@ -1,8 +1,10 @@
-#' Get the latitude and longitude of an sf object
+#' Add latitude and longitude information to an sf object
 #'
-#' @param x Object of sf class sf, sfc or sfg
+#' Add latitude and longitude information to an sf object (WGS84)
 #'
-#' @return An sf object with the latitude and longitude
+#' @param x Object of class sf, sfc or sfg
+#'
+#' @return An sf object with latitude and longitude
 #' @export
 get_latlon <- function(x) {
   sf::st_transform(x, 4326) |>

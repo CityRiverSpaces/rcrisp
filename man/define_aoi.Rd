@@ -4,7 +4,7 @@
 \alias{define_aoi}
 \title{Define an area of interest (AoI) from a bounding box and a coordinate reference system (CRS).}
 \usage{
-define_aoi(bb, crs)
+define_aoi(bb, crs, buffer_dist = 0)
 }
 \arguments{
 \item{bb}{A bounding box as a matrix with 4 elements: xmin, ymin, xmax, ymax}

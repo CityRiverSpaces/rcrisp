@@ -21,7 +21,6 @@ merge_streets <- function(highways) {
 #' @export
 create_network <- function(data, crs = NULL) {
   net <- data |>
-    dplyr::select("highway") |>
     sfnetworks::as_sfnetwork(directed = FALSE)
 
   if (!is.null(crs)) {
