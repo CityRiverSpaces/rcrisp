@@ -7,13 +7,10 @@
     <loc>https://cityriverspaces.github.io/CRiSp/LICENSE.html</loc>
   </url>
   <url>
+    <loc>https://cityriverspaces.github.io/CRiSp/articles/corridor-delineation.html</loc>
+  </url>
+  <url>
     <loc>https://cityriverspaces.github.io/CRiSp/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>https://cityriverspaces.github.io/CRiSp/articles/urc-delineation.html</loc>
-  </url>
-  <url>
-    <loc>https://cityriverspaces.github.io/CRiSp/articles/urs-delineation.html</loc>
   </url>
   <url>
     <loc>https://cityriverspaces.github.io/CRiSp/authors.html</loc>
@@ -22,6 +19,63 @@
     <loc>https://cityriverspaces.github.io/CRiSp/index.html</loc>
   </url>
   <url>
+    <loc>https://cityriverspaces.github.io/CRiSp/reference/calc_weights.html</loc>
+  </url>
+  <url>
+    <loc>https://cityriverspaces.github.io/CRiSp/reference/cap_corridor.html</loc>
+  </url>
+  <url>
+    <loc>https://cityriverspaces.github.io/CRiSp/reference/clean_network.html</loc>
+  </url>
+  <url>
+    <loc>https://cityriverspaces.github.io/CRiSp/reference/create_network.html</loc>
+  </url>
+  <url>
+    <loc>https://cityriverspaces.github.io/CRiSp/reference/define_aoi.html</loc>
+  </url>
+  <url>
+    <loc>https://cityriverspaces.github.io/CRiSp/reference/delineate_corridor.html</loc>
+  </url>
+  <url>
+    <loc>https://cityriverspaces.github.io/CRiSp/reference/get_corridor_edge.html</loc>
+  </url>
+  <url>
+    <loc>https://cityriverspaces.github.io/CRiSp/reference/get_latlon.html</loc>
+  </url>
+  <url>
+    <loc>https://cityriverspaces.github.io/CRiSp/reference/get_osmdata.html</loc>
+  </url>
+  <url>
+    <loc>https://cityriverspaces.github.io/CRiSp/reference/get_osmdata_river_corridor.html</loc>
+  </url>
+  <url>
+    <loc>https://cityriverspaces.github.io/CRiSp/reference/get_target_points.html</loc>
+  </url>
+  <url>
+    <loc>https://cityriverspaces.github.io/CRiSp/reference/get_vertices.html</loc>
+  </url>
+  <url>
     <loc>https://cityriverspaces.github.io/CRiSp/reference/index.html</loc>
+  </url>
+  <url>
+    <loc>https://cityriverspaces.github.io/CRiSp/reference/merge_streets.html</loc>
+  </url>
+  <url>
+    <loc>https://cityriverspaces.github.io/CRiSp/reference/not_intersects.html</loc>
+  </url>
+  <url>
+    <loc>https://cityriverspaces.github.io/CRiSp/reference/osm_bb.html</loc>
+  </url>
+  <url>
+    <loc>https://cityriverspaces.github.io/CRiSp/reference/osmdata_as_sf.html</loc>
+  </url>
+  <url>
+    <loc>https://cityriverspaces.github.io/CRiSp/reference/simplify_network.html</loc>
+  </url>
+  <url>
+    <loc>https://cityriverspaces.github.io/CRiSp/reference/split_aoi.html</loc>
+  </url>
+  <url>
+    <loc>https://cityriverspaces.github.io/CRiSp/reference/trim_network.html</loc>
   </url>
 </urlset>

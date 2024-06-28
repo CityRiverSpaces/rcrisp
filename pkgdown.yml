@@ -2,9 +2,8 @@ pandoc: 3.1.11
 pkgdown: 2.0.9
 pkgdown_sha: ~
 articles:
-  urc-delineation: urc-delineation.html
-  urs-delineation: urs-delineation.html
-last_built: 2024-05-02T15:50Z
+  corridor-delineation: corridor-delineation.html
+last_built: 2024-06-28T11:01Z
 urls:
   reference: https://cityriverspaces.github.io/CRiSp/reference
   article: https://cityriverspaces.github.io/CRiSp/articles
