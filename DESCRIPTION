@@ -13,6 +13,13 @@ Description: CRiSp (City River Spaces) provides tools to automate the
 License: Apache License (>= 2)
 URL: https://cityriverspaces.github.io/CRiSp/
 BugReports: https://github.com/CityRiverSpaces/crisp/issues
+Imports: 
+    dplyr,
+    lwgeom,
+    osmdata,
+    sf,
+    sfnetworks,
+    tidygraph
 Suggests: 
     knitr,
     rmarkdown,
