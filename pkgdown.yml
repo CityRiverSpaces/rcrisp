@@ -3,7 +3,7 @@ pkgdown: 2.0.9
 pkgdown_sha: ~
 articles:
   corridor-delineation: corridor-delineation.html
-last_built: 2024-06-28T11:01Z
+last_built: 2024-06-28T11:07Z
 urls:
   reference: https://cityriverspaces.github.io/CRiSp/reference
   article: https://cityriverspaces.github.io/CRiSp/articles
