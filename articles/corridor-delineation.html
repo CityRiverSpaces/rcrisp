@@ -109,8 +109,8 @@ include a given area around the city boundaries.</p>
 <span></span>
 <span><span class="va">aoi</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/define_aoi.html">define_aoi</a></span><span class="op">(</span><span class="va">bb</span>, <span class="va">epsg_code</span>, <span class="va">bbox_buffer</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">city_boundary</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/osmdata_as_sf.html">osmdata_as_sf</a></span><span class="op">(</span><span class="st">"place"</span>, <span class="st">"city"</span>, <span class="va">bb</span><span class="op">)</span><span class="op">$</span><span class="va">osm_multipolygons</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html" class="external-link">st_transform</a></span><span class="op">(</span><span class="va">epsg_code</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<code class="sourceCode R"><span><span class="va">city_boundary</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/osmdata_as_sf.html">osmdata_as_sf</a></span><span class="op">(</span><span class="st">"place"</span>, <span class="st">"city"</span>, <span class="va">bb</span><span class="op">)</span><span class="op">$</span><span class="va">osm_multipolygons</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html" class="external-link">st_transform</a></span><span class="op">(</span><span class="va">epsg_code</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_geometry</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
@@ -119,14 +119,14 @@ include a given area around the city boundaries.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">river_centerline</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/osmdata_as_sf.html">osmdata_as_sf</a></span><span class="op">(</span><span class="st">"waterway"</span>, <span class="st">"river"</span>, <span class="va">bb</span><span class="op">)</span><span class="op">$</span><span class="va">osm_multilines</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">name</span> <span class="op">==</span> <span class="va">river_name</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html" class="external-link">st_transform</a></span><span class="op">(</span><span class="va">epsg_code</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_geometry</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html" class="external-link">st_transform</a></span><span class="op">(</span><span class="va">epsg_code</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_geometry</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_binary_ops.html" class="external-link">st_intersection</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_unary.html" class="external-link">st_buffer</a></span><span class="op">(</span><span class="va">aoi</span>, <span class="va">bbox_buffer</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">river_surface</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/osmdata_as_sf.html">osmdata_as_sf</a></span><span class="op">(</span><span class="st">"natural"</span>, <span class="st">"water"</span>, <span class="va">bb</span><span class="op">)</span></span>
 <span><span class="va">river_surface</span> <span class="op">&lt;-</span> <span class="va">river_surface</span><span class="op">$</span><span class="va">osm_multipolygons</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html" class="external-link">bind_rows</a></span><span class="op">(</span><span class="va">river_surface</span><span class="op">$</span><span class="va">osm_polygons</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html" class="external-link">st_transform</a></span><span class="op">(</span><span class="va">epsg_code</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html" class="external-link">st_transform</a></span><span class="op">(</span><span class="va">epsg_code</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_join.html" class="external-link">st_filter</a></span><span class="op">(</span><span class="va">river_centerline</span>, .predicate <span class="op">=</span> <span class="va">st_intersects</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_geometry</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_combine.html" class="external-link">st_union</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
@@ -138,12 +138,15 @@ merged geometries of <code>river_centerline</code> and
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">corridor_buffer</span> <span class="op">&lt;-</span> <span class="fl">500</span></span>
 <span><span class="va">corridor_initial</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">river_centerline</span>, <span class="va">river_surface</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>    <span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_unary.html" class="external-link">st_buffer</a></span><span class="op">(</span><span class="va">corridor_buffer</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>    <span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_combine.html" class="external-link">st_union</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_unary.html" class="external-link">st_buffer</a></span><span class="op">(</span><span class="va">corridor_buffer</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_combine.html" class="external-link">st_union</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>We can now plot the initial corridor:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">city_boundary</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">corridor_initial</span>, border <span class="op">=</span> <span class="st">"red"</span>, main <span class="op">=</span> <span class="st">"Initial river corridor"</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">corridor_initial</span>,</span>
+<span>     border <span class="op">=</span> <span class="st">"red"</span>,</span>
+<span>     main <span class="op">=</span> <span class="st">"Initial river corridor"</span>,</span>
+<span>     add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p><img src="corridor-delineation_files/figure-html/unnamed-chunk-2-1.png" width="700"></p>
 </div>
 <div class="section level2">
@@ -154,7 +157,7 @@ merged geometries of <code>river_centerline</code> and
 <code class="sourceCode R"><span><span class="va">highway_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"motorway"</span>, <span class="st">"primary"</span>, <span class="st">"secondary"</span>, <span class="st">"tertiary"</span><span class="op">)</span></span>
 <span><span class="va">streets</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/osmdata_as_sf.html">osmdata_as_sf</a></span><span class="op">(</span><span class="st">"highway"</span>, <span class="va">highway_values</span>, <span class="va">bb</span><span class="op">)</span></span>
 <span><span class="va">streets</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/merge_streets.html">merge_streets</a></span><span class="op">(</span><span class="va">streets</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="st">"highway"</span><span class="op">)</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="st">"highway"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Warning in st_cast.sf(highways$osm_polygons, "LINESTRING"): repeating</span></span>
 <span><span class="co">#&gt; attributes for all sub-geometries for which they may not be constant</span></span></code></pre></div>
 <p>We split the area of interest in two parts using the river centreline
@@ -162,24 +165,24 @@ as separator. The two areas can then be used to split the network in two
 as a preparation to the shortest path algorithm used for edge
 delineation in the next step:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">aoi_split</span> <span class="op">&lt;-</span> <span class="va">aoi</span> <span class="op">|&gt;</span> </span>
+<code class="sourceCode R"><span><span class="va">aoi_split</span> <span class="op">&lt;-</span> <span class="va">aoi</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/split_aoi.html">split_aoi</a></span><span class="op">(</span><span class="va">river_centerline</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">net</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/create_network.html">create_network</a></span><span class="op">(</span><span class="va">streets</span>, <span class="va">epsg_code</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">net_1</span> <span class="op">&lt;-</span> <span class="va">net</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="../reference/trim_network.html">trim_network</a></span><span class="op">(</span><span class="va">aoi_split</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="va">corridor_initial</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="../reference/clean_network.html">clean_network</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="../reference/calc_weights.html">calc_weights</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span><span class="va">net_1</span> <span class="op">&lt;-</span> <span class="va">net</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="../reference/trim_network.html">trim_network</a></span><span class="op">(</span><span class="va">aoi_split</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="va">corridor_initial</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="../reference/clean_network.html">clean_network</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="../reference/calc_weights.html">calc_weights</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">sfnetworks</span><span class="fu">::</span><span class="fu"><a href="https://tidygraph.data-imaginist.com/reference/activate.html" class="external-link">activate</a></span><span class="op">(</span><span class="st">"nodes"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="fu">tidygraph</span><span class="fu">::</span><span class="fu"><a href="https://tidygraph.data-imaginist.com/reference/group_graph.html" class="external-link">group_components</a></span><span class="op">(</span><span class="op">)</span> <span class="op">==</span> <span class="fl">1</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Warning: to_spatial_subdivision assumes attributes are constant over geometries</span></span></code></pre></div>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
-<span><span class="va">net_2</span> <span class="op">&lt;-</span> <span class="va">net</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="../reference/trim_network.html">trim_network</a></span><span class="op">(</span><span class="va">aoi_split</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, <span class="va">corridor_initial</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="../reference/clean_network.html">clean_network</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="../reference/calc_weights.html">calc_weights</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span><span class="va">net_2</span> <span class="op">&lt;-</span> <span class="va">net</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="../reference/trim_network.html">trim_network</a></span><span class="op">(</span><span class="va">aoi_split</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, <span class="va">corridor_initial</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="../reference/clean_network.html">clean_network</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="../reference/calc_weights.html">calc_weights</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">sfnetworks</span><span class="fu">::</span><span class="fu"><a href="https://tidygraph.data-imaginist.com/reference/activate.html" class="external-link">activate</a></span><span class="op">(</span><span class="st">"nodes"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="fu">tidygraph</span><span class="fu">::</span><span class="fu"><a href="https://tidygraph.data-imaginist.com/reference/group_graph.html" class="external-link">group_components</a></span><span class="op">(</span><span class="op">)</span> <span class="op">==</span> <span class="fl">1</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Warning: to_spatial_subdivision assumes attributes are constant over geometries</span></span></code></pre></div>
@@ -191,8 +194,10 @@ delineation in the next step:</p>
 intersections of the initial river corridor with the AoI boundary. We
 will use these points as extremes for the corridor edges:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">vertices_1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_vertices.html">get_vertices</a></span><span class="op">(</span><span class="va">aoi_split</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="va">corridor_initial</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_cast.html" class="external-link">st_cast</a></span><span class="op">(</span><span class="st">"LINESTRING"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">vertices_2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_vertices.html">get_vertices</a></span><span class="op">(</span><span class="va">aoi_split</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, <span class="va">corridor_initial</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_cast.html" class="external-link">st_cast</a></span><span class="op">(</span><span class="st">"LINESTRING"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">vertices_1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_vertices.html">get_vertices</a></span><span class="op">(</span><span class="va">aoi_split</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="va">corridor_initial</span> <span class="op">|&gt;</span></span>
+<span>                             <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_cast.html" class="external-link">st_cast</a></span><span class="op">(</span><span class="st">"LINESTRING"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">vertices_2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_vertices.html">get_vertices</a></span><span class="op">(</span><span class="va">aoi_split</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, <span class="va">corridor_initial</span> <span class="op">|&gt;</span></span>
+<span>                             <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_cast.html" class="external-link">st_cast</a></span><span class="op">(</span><span class="st">"LINESTRING"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">corridor_edge_1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_corridor_edge.html">get_corridor_edge</a></span><span class="op">(</span><span class="va">net_1</span>, <span class="va">aoi_split</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="va">vertices_1</span><span class="op">)</span></span>
 <span><span class="va">corridor_edge_2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_corridor_edge.html">get_corridor_edge</a></span><span class="op">(</span><span class="va">net_2</span>, <span class="va">aoi_split</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, <span class="va">vertices_2</span><span class="op">)</span></span>
@@ -204,13 +209,13 @@ will use these points as extremes for the corridor edges:</p>
 </h2>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">capped_corridor</span> <span class="op">&lt;-</span> <span class="va">city_boundary</span> <span class="op">|&gt;</span></span>
-<span>    <span class="fu">lwgeom</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/lwgeom/reference/st_split.html" class="external-link">st_split</a></span><span class="op">(</span><span class="va">corridor_edges</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>    <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_collection_extract.html" class="external-link">st_collection_extract</a></span><span class="op">(</span><span class="st">"POLYGON"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>    <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>    <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_join.html" class="external-link">st_filter</a></span><span class="op">(</span><span class="va">river_centerline</span>, .predicate <span class="op">=</span> <span class="fu">sf</span><span class="fu">::</span><span class="va"><a href="https://r-spatial.github.io/sf/reference/geos_binary_pred.html" class="external-link">st_intersects</a></span><span class="op">)</span></span>
+<span>  <span class="fu">lwgeom</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/lwgeom/reference/st_split.html" class="external-link">st_split</a></span><span class="op">(</span><span class="va">corridor_edges</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_collection_extract.html" class="external-link">st_collection_extract</a></span><span class="op">(</span><span class="st">"POLYGON"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_join.html" class="external-link">st_filter</a></span><span class="op">(</span><span class="va">river_centerline</span>, .predicate <span class="op">=</span> <span class="fu">sf</span><span class="fu">::</span><span class="va"><a href="https://r-spatial.github.io/sf/reference/geos_binary_pred.html" class="external-link">st_intersects</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># TODO replace with call to cap_corridor()</span></span>
-<span><span class="co"># corridor &lt;- cap_corridor(corridor_edges, river_centerline, epsg_code, bb)</span></span></code></pre></div>
+<span><span class="va">corridor</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cap_corridor.html">cap_corridor</a></span><span class="op">(</span><span class="va">corridor_edges</span>, <span class="va">river_centerline</span>, <span class="va">epsg_code</span>, <span class="va">bb</span><span class="op">)</span></span></code></pre></div>
 <p>Note that this is not ideal, as the municipal boundaries can be
 arbitrary and might exclude important end features of the corridors, so
 the user should have the option to input their own feature to cap the
@@ -221,7 +226,7 @@ corridor ends. In the case of Bucharest, this can be the ring road.</p>
 </h2>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># TODO this function should run the entire delineation process</span></span>
-<span><span class="co"># delineate_corridor(city_name, river_name, epsg_code)</span></span></code></pre></div>
+<span><span class="fu"><a href="../reference/delineate_corridor.html">delineate_corridor</a></span><span class="op">(</span><span class="va">city_name</span>, <span class="va">river_name</span>, <span class="va">epsg_code</span><span class="op">)</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
