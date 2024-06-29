@@ -2,7 +2,8 @@
 % Please edit documentation in R/delineate-corridor.R
 \name{define_aoi}
 \alias{define_aoi}
-\title{Define an area of interest (AoI) from a bounding box and a coordinate reference system (CRS).}
+\title{Define an area of interest (AoI) from a bounding box and a
+coordinate reference system (CRS).}
 \usage{
 define_aoi(bb, crs, buffer_dist = 0)
 }
@@ -17,5 +18,6 @@ define_aoi(bb, crs, buffer_dist = 0)
 An area of interest as a simple feature geometry
 }
 \description{
-Define an area of interest (AoI) from a bounding box and a coordinate reference system (CRS).
+Define an area of interest (AoI) from a bounding box and a
+coordinate reference system (CRS).
 }

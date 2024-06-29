@@ -17,5 +17,6 @@ get_corridor_edge(net, area, vertices)
 A simple feature geometry
 }
 \description{
-Find the corridor edge on one side of the river by using a shortest path algorithm.
+Find the corridor edge on one side of the river by using a
+shortest path algorithm.
 }

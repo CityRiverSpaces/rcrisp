@@ -7,7 +7,8 @@
 create_network(data, crs = NULL)
 }
 \arguments{
-\item{data}{A data frame with a column named 'highway' containing line strings}
+\item{data}{A data frame with a column named 'highway' containing
+line strings}
 
 \item{crs}{A coordinate reference system as an epsg code, e.g. 4326 for WGS84}
 }

@@ -1,4 +1,5 @@
-#' Define an area of interest (AoI) from a bounding box and a coordinate reference system (CRS).
+#' Define an area of interest (AoI) from a bounding box and a
+#' coordinate reference system (CRS).
 #'
 #' @param bb A bounding box as a matrix with 4 elements: xmin, ymin, xmax, ymax
 #' @param crs A coordinate reference system as an epsg code, e.g. 4326 for WGS84
@@ -24,7 +25,7 @@ define_aoi <- function(bb, crs, buffer_dist = 0) {
 #' @return A simple feature geometry set of two areas of interest
 #' @export
 split_aoi <- function(aoi, river) {
-  areas <- aoi |>
+  aoi |>
     lwgeom::st_split(river) |>
     sf::st_collection_extract()
 }
@@ -37,7 +38,7 @@ split_aoi <- function(aoi, river) {
 #'
 #' @return A network object
 #' @export
-trim_network <- function(net, area, river_corridor){
+trim_network <- function(net, area, river_corridor) {
   net |>
     sfnetworks::activate("nodes") |>
     sf::st_filter(area, .predicate = sf::st_intersects) |>
@@ -51,7 +52,7 @@ trim_network <- function(net, area, river_corridor){
 #' @return A simplifed network object
 #' @export
 simplify_network <- function(net) {
-  net|>
+  net |>
     sfnetworks::activate("edges") |>
     # TODO incorporate this comment in the function description
     # reorder the edges so that the shortest is kept
@@ -101,18 +102,21 @@ get_vertices <- function(aoi, corridor_initial) {
 #'
 #' @return A simple feature geometry set of two points
 #' @export
-get_target_points <- function(vertices, area, threshold = 0.001){
+get_target_points <- function(vertices, area, threshold = 0.001) {
   vertices |>
     sf::st_as_sf() |>
     # TODO incorporate this comment into the function description
     # keep threshold to check which points intersect the polygons
-    sf::st_filter(area, .predicate = sf::st_is_within_distance, dist = threshold) |>
+    sf::st_filter(area,
+                  .predicate = sf::st_is_within_distance,
+                  dist = threshold) |>
     sf::st_geometry()
 }
 
 #' Determine the corridor edge on the network.
 #'
-#' Find the corridor edge on one side of the river by using a shortest path algorithm.
+#' Find the corridor edge on one side of the river by using a
+#' shortest path algorithm.
 #'
 #' @param net A network object
 #' @param area An area of interest as a simple feature
@@ -120,7 +124,7 @@ get_target_points <- function(vertices, area, threshold = 0.001){
 #'
 #' @return A simple feature geometry
 #' @export
-get_corridor_edge <- function(net, area, vertices){
+get_corridor_edge <- function(net, area, vertices) {
   target_points <- CRiSp::get_target_points(vertices, area)
 
   paths <- sfnetworks::st_network_paths(
@@ -142,7 +146,8 @@ get_corridor_edge <- function(net, area, vertices){
 #' @param river River centerline as a simple feature
 #' @param crs A coordinate reference system as an epsg code, e.g. 4326 for WGS84
 #' @param bb A bounding box as a matrix with 4 elements: xmin, ymin, xmax, ymax
-#' @param cap Character string with the type of cap to be used. Default is "city"
+#' @param cap Character string with the type of cap to be used.
+#' Default is "city"
 #'
 #' @return A simple feature geometry
 #' @export
@@ -162,6 +167,8 @@ cap_corridor <- function(corridor_edges, river, crs, bb, cap = "city") {
     sf::st_collection_extract("POLYGON") |>
     sf::st_as_sf() |>
     sf::st_filter(river, .predicate = sf::st_intersects)
+
+  capped_corridor
 }
 
 #' Delineate a corridor around a river.

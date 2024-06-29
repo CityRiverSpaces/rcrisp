@@ -7,7 +7,8 @@
 osm_bb(name)
 }
 \arguments{
-\item{name}{A character string with the name of the place to retrieve the bounding box}
+\item{name}{A character string with the name of the place to retrieve
+the bounding box}
 }
 \value{
 A list with the bounding box

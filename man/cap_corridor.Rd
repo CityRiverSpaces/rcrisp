@@ -15,7 +15,8 @@ cap_corridor(corridor_edges, river, crs, bb, cap = "city")
 
 \item{bb}{A bounding box as a matrix with 4 elements: xmin, ymin, xmax, ymax}
 
-\item{cap}{Character string with the type of cap to be used. Default is "city"}
+\item{cap}{Character string with the type of cap to be used.
+Default is "city"}
 }
 \value{
 A simple feature geometry

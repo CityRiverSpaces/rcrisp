@@ -7,14 +7,16 @@
 get_osmdata(name, key, value)
 }
 \arguments{
-\item{name}{A character string with the name of the place to retrieve the bounding box}
+\item{name}{A character string with the name of the place to retrieve
+the bounding box}
 
 \item{key}{A character string with the key to filter the data}
 
 \item{value}{A character string with the value to filter the data}
 }
 \value{
-An sf object with the retrieved OpenStreetMap data for the given location
+An sf object with the retrieved OpenStreetMap data for the
+given location
 }
 \description{
 Retrieve OpenStreetMap data for a given location

@@ -10,7 +10,8 @@ calc_weights(net)
 \item{net}{A network object}
 }
 \value{
-A network object with a new column 'weight' containing the length of the edges
+A network object with a new column 'weight' containing the length of
+the edges
 }
 \description{
 Calculate the weights of the edges of a network based on their length

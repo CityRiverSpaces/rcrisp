@@ -26,9 +26,10 @@ not_intersects <- function(x, y) {
 #'
 #' @param net A network object
 #'
-#' @return A network object with a new column 'weight' containing the length of the edges
+#' @return A network object with a new column 'weight' containing the length of
+#'         the edges
 #' @export
-calc_weights <- function(net){
+calc_weights <- function(net) {
   net |>
     sfnetworks::activate("edges") |>
     dplyr::mutate(weight = sfnetworks::edge_length())

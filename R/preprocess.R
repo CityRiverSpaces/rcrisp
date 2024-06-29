@@ -10,11 +10,13 @@ merge_streets <- function(highways) {
     sf::st_cast("LINESTRING")
   highways_lines <- highways$osm_lines |>
     dplyr::bind_rows(poly_to_lines)
+  highways_lines
 }
 
 #' Create a network from a line strings
 #'
-#' @param data A data frame with a column named 'highway' containing line strings
+#' @param data A data frame with a column named 'highway' containing
+#'             line strings
 #' @param crs A coordinate reference system as an epsg code, e.g. 4326 for WGS84
 #'
 #' @return A network object
