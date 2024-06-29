@@ -39,8 +39,8 @@ aoi <- define_aoi(bb, epsg_code, bbox_buffer)
 ```
 
 ```{r city}
-city_boundary <- osmdata_as_sf("place", "city", bb)$osm_multipolygons |> 
-  st_transform(epsg_code) |> 
+city_boundary <- osmdata_as_sf("place", "city", bb)$osm_multipolygons |>
+  st_transform(epsg_code) |>
   st_geometry()
 ```
 
@@ -49,14 +49,14 @@ city_boundary <- osmdata_as_sf("place", "city", bb)$osm_multipolygons |>
 ```{r river}
 river_centerline <- osmdata_as_sf("waterway", "river", bb)$osm_multilines |>
   filter(name == river_name) |>
-  st_transform(epsg_code) |> 
-  st_geometry() |> 
+  st_transform(epsg_code) |>
+  st_geometry() |>
   st_intersection(st_buffer(aoi, bbox_buffer))
 
 river_surface <- osmdata_as_sf("natural", "water", bb)
 river_surface <- river_surface$osm_multipolygons |>
   bind_rows(river_surface$osm_polygons) |>
-  st_transform(epsg_code) |> 
+  st_transform(epsg_code) |>
   st_filter(river_centerline, .predicate = st_intersects) |>
   st_geometry() |>
   st_union()
@@ -67,15 +67,18 @@ With these features we can now delineate a theoretical river corridor representi
 ```{r corridor_initial}
 corridor_buffer <- 500
 corridor_initial <- c(river_centerline, river_surface) |>
-    st_buffer(corridor_buffer) |>
-    st_union()
+  st_buffer(corridor_buffer) |>
+  st_union()
 ```
 
 We can now plot the initial corridor:
 
 ```{r}
 plot(city_boundary)
-plot(corridor_initial, border = "red", main = "Initial river corridor", add = TRUE)
+plot(corridor_initial,
+     border = "red",
+     main = "Initial river corridor",
+     add = TRUE)
 ```
 
 ## Getting the street network
@@ -86,28 +89,28 @@ Querying the Overpass API for the `highway` key:
 highway_values <- c("motorway", "primary", "secondary", "tertiary")
 streets <- osmdata_as_sf("highway", highway_values, bb)
 streets <- merge_streets(streets) |>
-  select("highway") 
+  select("highway")
 ```
 
 We split the area of interest in two parts using the river centreline as separator. The two areas can then be used to split the network in two as a preparation to the shortest path algorithm used for edge delineation in the next step:
 
 ```{r}
-aoi_split <- aoi |> 
+aoi_split <- aoi |>
   split_aoi(river_centerline)
 
 net <- create_network(streets, epsg_code)
 
-net_1 <- net |> 
-  trim_network(aoi_split[1], corridor_initial) |> 
-  clean_network() |> 
-  calc_weights() |> 
+net_1 <- net |>
+  trim_network(aoi_split[1], corridor_initial) |>
+  clean_network() |>
+  calc_weights() |>
   sfnetworks::activate("nodes") |>
   filter(tidygraph::group_components() == 1)
 
-net_2 <- net |> 
-  trim_network(aoi_split[2], corridor_initial) |> 
-  clean_network() |> 
-  calc_weights() |> 
+net_2 <- net |>
+  trim_network(aoi_split[2], corridor_initial) |>
+  clean_network() |>
+  calc_weights() |>
   sfnetworks::activate("nodes") |>
   filter(tidygraph::group_components() == 1)
 ```
@@ -117,8 +120,10 @@ net_2 <- net |>
 Determine the "vertices" of the initial river corridor as the intersections of the initial river corridor with the AoI boundary. We will use these points as extremes for the corridor edges:
 
 ```{r}
-vertices_1 <- get_vertices(aoi_split[1], corridor_initial |> st_cast("LINESTRING"))
-vertices_2 <- get_vertices(aoi_split[2], corridor_initial |> st_cast("LINESTRING"))
+vertices_1 <- get_vertices(aoi_split[1], corridor_initial |>
+                             st_cast("LINESTRING"))
+vertices_2 <- get_vertices(aoi_split[2], corridor_initial |>
+                             st_cast("LINESTRING"))
 ```
 
 ```{r}
@@ -130,23 +135,23 @@ corridor_edges <- st_union(corridor_edge_1, corridor_edge_2)
 
 ## Capping the corridor
 
-```{r}
+```{r eval=FALSE}
 capped_corridor <- city_boundary |>
-    lwgeom::st_split(corridor_edges) |>
-    sf::st_collection_extract("POLYGON") |>
-    sf::st_as_sf() |>
-    sf::st_filter(river_centerline, .predicate = sf::st_intersects)
+  lwgeom::st_split(corridor_edges) |>
+  sf::st_collection_extract("POLYGON") |>
+  sf::st_as_sf() |>
+  sf::st_filter(river_centerline, .predicate = sf::st_intersects)
 
 # TODO replace with call to cap_corridor()
-# corridor <- cap_corridor(corridor_edges, river_centerline, epsg_code, bb)
+corridor <- cap_corridor(corridor_edges, river_centerline, epsg_code, bb)
 ```
 
 Note that this is not ideal, as the municipal boundaries can be arbitrary and might exclude important end features of the corridors, so the user should have the option to input their own feature to cap the corridor ends. In the case of Bucharest, this can be the ring road.
 
 ## All in one step
 
-```{r}
+```{r eval=FALSE}
 # TODO this function should run the entire delineation process
-# delineate_corridor(city_name, river_name, epsg_code)
+delineate_corridor(city_name, river_name, epsg_code)
 ```
 
