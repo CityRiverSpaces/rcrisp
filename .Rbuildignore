@@ -8,3 +8,4 @@
 ^docs$
 ^pkgdown$
 ^codemeta\.json$
+^CITATION.cff$

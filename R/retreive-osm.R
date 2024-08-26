@@ -58,6 +58,7 @@ name <- NULL
 #'                    water stream
 #'
 #' @return An sf object with the river corridor
+#' @importFrom rlang .data
 #' @export
 get_osmdata_river_corridor <- function(city_name,
                                        river_name,
@@ -67,7 +68,7 @@ get_osmdata_river_corridor <- function(city_name,
   value <- "river"
   waterways <- CRiSp::get_osmdata(city_name, key, value)
   waterway <- waterways$osm_multilines |>
-    dplyr::filter(name == river_name) |>
+    dplyr::filter(.data$name == river_name) |>
     sf::st_transform(epsg_code) |>
     sf::st_geometry()
 
