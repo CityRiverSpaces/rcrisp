@@ -1,5 +1,5 @@
 ---
-title: "Corridor delineation"
+title: "1. Corridor delineation"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Corridor delineation}
@@ -151,7 +151,7 @@ Note that this is not ideal, as the municipal boundaries can be arbitrary and mi
 ## All in one step
 
 ```{r eval=FALSE}
-# TODO this function should run the entire delineation process
-delineate_corridor(city_name, river_name, epsg_code)
+# TODO this function should run the entire delineation process in one step
+delineate_corridor(city_name, river_name)
 ```
 
