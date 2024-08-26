@@ -1,17 +1,3 @@
-#' Retrieve bounding box from OpenStreetMap
-#'
-#' @param name A character string with the name of the place to retrieve
-#'             the bounding box
-#'
-#' @return A list with the bounding box
-#' @export
-#'
-#' @examples
-#' osm_bb("Bucharest")
-osm_bb <- function(name) {
-  osmdata::getbb(name)
-}
-
 #' Retrieve OpenStreetMap data as sf object
 #'
 #' Query the Overpass API for a key:value pair within a given bounding box.
