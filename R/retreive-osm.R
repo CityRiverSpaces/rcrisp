@@ -29,7 +29,7 @@ osmdata_as_sf <- function(key, value, bb) {
 #' @examples
 #' get_osmdata("Bucharest", "waterway", "river")
 get_osmdata <- function(name, key, value) {
-  bb <- CRiSp::osm_bb(name)
+  bb <- osmdata::getbb(name)
   CRiSp::osmdata_as_sf(key, value, bb)
 }
 
