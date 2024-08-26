@@ -1,0 +1,20 @@
+---
+title: "1. The method"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{1. The method}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+  , eval = FALSE  # temporarily disable evaluation
+)
+```
+
+```{r setup}
+library(CRiSp)
+```
