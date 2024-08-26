@@ -4,3 +4,11 @@ template:
 authors:
   sidebar:
     roles: [aut, cre]
+articles:
+- title: Articles
+  navbar: ~
+  contents:
+  - method
+  - corridor-delineation
+  - corridor-segmentation
+  - multiple-cities

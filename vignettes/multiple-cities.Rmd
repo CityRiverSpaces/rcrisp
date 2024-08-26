@@ -1,8 +1,8 @@
 ---
-title: "multiple-cities"
+title: "4. Multiple delineations"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{multiple-cities}
+  %\VignetteIndexEntry{4. Multiple delineations}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
