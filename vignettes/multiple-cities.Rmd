@@ -1,0 +1,64 @@
+---
+title: "multiple-cities"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{multiple-cities}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(CRiSp)
+```
+
+## Motivation
+
+Comparative analysis can shed light on patterns that are not visible in a single case. Accordingly, 
+
+We can use the `delineate_corridor()` function repeatedly to extract data for multiple cities and compare them. This vignette shows how to extract data for multiple cities and rivers and how to compare them.
+
+1. All cities along a large river
+1. All river-crossed cities of a given size
+1. All cities crossed by rivers of the same kind in a given region
+
+## Data
+
+We focus on the following five cities and their rivers:
+
+```{r, eval=FALSE}
+cities <- c("Bucharest, Romania", "Vienna, Austria", "Paris, France", "London, United Kingdom", "Berlin, Germany")
+rivers <- c("Dâmbovița", "Wienfluss", "Seine", "Thames", "Spree")
+```
+
+## Delineation
+
+We can use the `map2()` function form the `purrr` package to iterate over the cities and rivers and extract the data. The result is a list of delineated corridors.
+
+```{r, eval=FALSE}}
+corridors <- purrr::map2(cities, rivers, delineate_corridor)
+corridors[[1]]
+```
+
+## Validation
+
+We can validate the results either by plotting the corridors of each city or by checking if the delineation resulted in any empty geometries. While the former can be a quick way to validate a small number of cities, the latter is better suited for a larger number of cases.
+
+```{r, eval=FALSE}
+purrr::map(corridors, ~ .x |> st_is_empty())
+```
+
+## Parallelisation
+
+When used on multiple cities this can quickly become computationally expensive. To improve computation, we can run the function in parallel with an homologous function from the `furrr` package. 
+
+```{r, eval=FALSE}
+future::plan(multisession)
+corridors <- furrr::future_map2(cities, rivers, delineate_corridor)
+```
