@@ -47,7 +47,24 @@ get_osmdata <- function(name, key, value) {
   CRiSp::osmdata_as_sf(key, value, bb)
 }
 
-name <- NULL
+#' Get the city boundary from OpenStreetMap
+#'
+#' @param city_name A character string with the name of the city
+#'
+#' @return An sf object with the city boundary
+#' @export
+#'
+#' @examples
+#' get_osm_city_boundary("Bucharest")
+get_osm_city_boundary <- function(city_name) {
+  city_boundary <- CRiSp::get_osmdata(city_name, "boundary", "administrative")
+  if (is.null(city_boundary)) {
+    city_boundary <- CRiSp::get_osmdata(city_name, "place", "city")
+  } else {
+    stop("No city boundary found")
+  }
+}
+
 #' Get OpenStreetMap data for a river corridor
 #'
 #' @param city_name A character string with the name of the place to retrieve
