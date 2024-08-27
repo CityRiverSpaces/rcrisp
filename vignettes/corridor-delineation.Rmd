@@ -154,7 +154,8 @@ The `delineate_corridor()` function carries out the entire delineation in one st
 
 ```{r eval=FALSE}
 # TODO this function should run the entire urc delineation process in one step
-urc <- delineate_corridor(city_name, river_name, segments = TRUE, riverspace = TRUE)
+urc <- delineate_corridor(city_name, river_name, 
+                          segments = TRUE, riverspace = TRUE)
 
 # `$corridor` of the resulting object is an sf polygon representing the corridor
 urc$corridor
