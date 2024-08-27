@@ -1,0 +1,19 @@
+---
+title: "6. Study area around POI"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{6. Study area around POI}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(CRiSp)
+```
