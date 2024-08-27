@@ -65,7 +65,7 @@ save_sf <- function(object, filename) {
   sf::st_write(object, dsn = filepath, append = FALSE)
 }
 
-setup_testdata <- function() {
+download_testdata <- function() {
   bbox <- osmdata::getbb(city)
 
   highways <- get_highways(bbox)
@@ -81,4 +81,4 @@ setup_testdata <- function() {
   save_sf(waterbody, filename = sprintf("waterbody_%s.gpkg", river))
 }
 
-setup_testdata()
+download_testdata()
