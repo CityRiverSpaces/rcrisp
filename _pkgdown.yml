@@ -21,15 +21,15 @@ navbar:
       menu:
         - text: 1. Method
           href: articles/method.html
-        - text: 2. Corridor Delineation
+        - text: 2. Corridor delineation
           href: articles/corridor-delineation.html
-        - text: 3. Corridor Segmentation
+        - text: 3. Corridor segmentation
           href: articles/corridor-segmentation.html
-        - text: 4. Riverspace Delineation
+        - text: 4. Riverspace delineation
           href: articles/riverspace-delineation.html
         - text: -------
         - text: Use cases
-        - text: 5. Multiple Cities
+        - text: 5. Multiple delineations
           href: articles/multiple-cities.html
-        - text: 6. Study Area around a POI
+        - text: 6. Study area around a POI
           href: articles/poi-study-area.html
