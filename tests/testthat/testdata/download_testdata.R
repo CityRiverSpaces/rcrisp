@@ -78,8 +78,8 @@ download_testdata <- function() {
   save_sf(highways, filename = sprintf("highways_%s.gpkg", city))
   save_sf(railways, filename = sprintf("railways_%s.gpkg", city))
   save_sf(city_boundary, filename = sprintf("city_boundary_%s.gpkg", city))
-  save_sf(waterway, filename = sprintf("waterway_%s.gpkg", river))
-  save_sf(waterbody, filename = sprintf("waterbody_%s.gpkg", river))
+  save_sf(waterway, filename = sprintf("waterway_%s.gpkg", city))
+  save_sf(waterbody, filename = sprintf("waterbody_%s.gpkg", city))
 }
 
 download_testdata()
