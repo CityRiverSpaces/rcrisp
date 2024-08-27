@@ -20,13 +20,13 @@ library(CRiSp)
 
 ## Motivation
 
-Comparative analysis can shed light on patterns that are not visible in a single case. Accordingly, 
+Comparative analysis can shed light on patterns that are not visible in a single case. The automated delineation provided by CRiSp allows for a reliable frame of reference for such comparisons, including:
+
+1. all cities along a large river;
+1. all river-crossed cities of a given size;
+1. all cities crossed by rivers of the same kind in a given region.
 
 We can use the `delineate_corridor()` function repeatedly to extract data for multiple cities and compare them. This vignette shows how to extract data for multiple cities and rivers and how to compare them.
-
-1. All cities along a large river
-1. All river-crossed cities of a given size
-1. All cities crossed by rivers of the same kind in a given region
 
 ## Data
 
