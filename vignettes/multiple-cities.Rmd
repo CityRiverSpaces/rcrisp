@@ -33,7 +33,7 @@ We can use the `delineate_corridor()` function repeatedly to extract data for mu
 We focus on the following five cities and rivers:
 
 ```{r, eval=FALSE}
-cities <- c("Bucharest, Romania", "Vienna, Austria", "Paris, France", 
+cities <- c("Bucharest, Romania", "Vienna, Austria", "Paris, France",
             "London, United Kingdom", "Berlin, Germany")
 rivers <- c("Dâmbovița", "Wienfluss", "Seine", "Thames", "Spree")
 ```
