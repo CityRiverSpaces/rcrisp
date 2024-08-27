@@ -8,6 +8,8 @@ epsg_code <- 32635
 # OSM values for the "highway" key
 highways_value <- c("motorway", "primary", "secondary", "tertiary")
 
+.data <- NULL
+
 get_highways <- function(bbox) {
   highways <- CRiSp::osmdata_as_sf("highway", highways_value, bbox)
   highways <- highways$osm_polygons |>
@@ -28,7 +30,6 @@ get_railways <- function(bbox) {
   highways
 }
 
-.data <- NULL
 get_city_boundary <- function(bbox, city) {
   city_boundary <- CRiSp::osmdata_as_sf("place", "city", bbox)
   city_boundary <- city_boundary$osm_multipolygons |>
@@ -42,7 +43,7 @@ get_city_boundary <- function(bbox, city) {
 get_waterway <- function(bbox, river) {
   waterways <- CRiSp::osmdata_as_sf("waterway", "river", bbox)
   waterway <- waterways$osm_multilines |>
-    dplyr::filter(name == river) |>
+    dplyr::filter(.data$name == river) |>
     sf::st_geometry() |>
     sf::st_transform(epsg_code)
 
