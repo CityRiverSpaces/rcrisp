@@ -1,8 +1,8 @@
 ---
-title: "4. Multiple delineations"
+title: "5. Multiple delineations"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{4. Multiple delineations}
+  %\VignetteIndexEntry{5. Multiple delineations}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -41,7 +41,7 @@ rivers <- c("Dâmbovița", "Wienfluss", "Seine", "Thames", "Spree")
 
 We can use the `map2()` function form the `purrr` package to iterate over the cities and rivers and extract the data. The result is a list of delineated corridors.
 
-```{r, eval=FALSE}}
+```{r, eval=FALSE}
 corridors <- purrr::map2(cities, rivers, delineate_corridor)
 corridors[[1]]
 ```
