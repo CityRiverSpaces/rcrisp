@@ -11,4 +11,25 @@ articles:
   - method
   - corridor-delineation
   - corridor-segmentation
+  - riverspace-delineation
   - multiple-cities
+  - poi-study-area
+navbar:
+  components:
+    articles:
+      text: Articles
+      menu:
+        - text: 1. Method
+          href: articles/method.html
+        - text: 2. Corridor Delineation
+          href: articles/corridor-delineation.html
+        - text: 3. Corridor Segmentation
+          href: articles/corridor-segmentation.html
+        - text: 4. Riverspace Delineation
+          href: articles/riverspace-delineation.html
+        - text: -------
+        - text: Use cases
+        - text: 5. Multiple Cities
+          href: articles/multiple-cities.html
+        - text: 6. Study Area around a POI
+          href: articles/poi-study-area.html
