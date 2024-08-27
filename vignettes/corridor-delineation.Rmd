@@ -150,8 +150,25 @@ Note that this is not ideal, as the municipal boundaries can be arbitrary and mi
 
 ## All in one step
 
+The `delineate_corridor()` function carries out the entire delineation in one step and returns a list with three elements: `corridor`, `segments`, and `riverspace`.
+
 ```{r eval=FALSE}
-# TODO this function should run the entire delineation process in one step
-delineate_corridor(city_name, river_name)
+# TODO this function should run the entire urc delineation process in one step
+urc <- delineate_corridor(city_name, river_name, segments = TRUE, riverspace = TRUE)
+
+# `$corridor` of the resulting object is an sf polygon representing the corridor
+urc$corridor
+
+# `$segments` is an sf polygon representing the segments of the corridor, 
+# TODO number the segments from upstream to downstream
+urc$segments
+
+# `$riverspace` is an sf polygon representing the delineated river space
+urc$riverspace
+
+# All three elements of delineation 
+plot(urc$riverspace, col = "green")
+plot(urc$segments, col = "blue", add = TRUE)
+plot(urc$corridor, add = TRUE, col = "red", wt = 2, add = TRUE)
 ```
 
