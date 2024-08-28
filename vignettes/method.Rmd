@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-CRiSp implements a spatial morphological method of delineation (Forgaci, 2018) that considers both the terrain of the river valley and the urban fabric, as shown in the diagram below.
+CRiSp implements a spatial morphological method of delineation ([Forgaci, 2018](https://doi.org/10.7480/abe.2018.31)) that considers both the terrain of the river valley and the urban fabric, as shown in the diagram below.
 
 ```{r fig.align='center', fig.alt='Diagram of the method of delineation', echo=FALSE}
 knitr::include_graphics("img/delineation.jpg")
