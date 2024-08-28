@@ -28,4 +28,6 @@ create_network <- function(data, crs = NULL) {
   if (!is.null(crs)) {
     net <- net |> sf::st_transform(crs)
   }
+
+  net
 }
