@@ -26,9 +26,17 @@ In this article we explore how to delineate a study area around a point of inter
 poi <- st_sfc(st_point(c(26.074123, 44.432875)), crs = 4326)
 ```
 
-The `delineate_segment()` takes the POI as input. By default, it tries to identify the city and the river closest to it. If no river is found, it will return an error message.
+The `delineate_segment()` takes the POI as input. By default, it tries to identify the city and the river closest to it. Alternatively, it can take an already delineated corridor and street network as input. We will use the built-in data `bucharest_corridor` and `bucharest_streets`. It also takes care of any CRS transformations needed. Optionally, it can also generate the riverspace.
 
 ```{r}
-segment_poi <- delineate_segment(poi)
+segment_poi <- delineate_segment(poi, bucharest_corridor, bucharest_streets, riverspace = TRUE)
+```
+
+The output is a list object with three elements: `$poi`, `$segment` and `$riverspace`.
+
+```{r}
+plot(segment_poi$riverspace, col = "lightblue")
+plot(segment_poi$segment, col = "blue", add = TRUE)
+plot(segment_poi$poi, col = "red", size = 3, add = TRUE)
 ```
 
