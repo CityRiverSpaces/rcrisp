@@ -14,16 +14,17 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
+```{r setup, warning=FALSE, message=FALSE}
 library(CRiSp)
-library(sf)
 library(dplyr)
+library(sf)
+library(osmdata)
 ```
 
 In this notebook we explore how to delineate a river corridor using Bucharest as the study area. We focus on one of the rivers and use a specific projected CRS for the analysis. Also, we make sure that we include a given area around the city boundaries.
 
 ```{r variables}
-city_name <- "Bucharest, Romania"   # Be specific and spell as it appears in OSM
+city_name <- "Bucharest, Romania"   # Be specific and spell as in OSM
 river_name <- "Dâmbovița"           # Spell as it appears in OpenStreetMap
 epsg_code <- 32635                  # UTM zone 35N
 bbox_buffer <- 2000                 # Buffer around the city boundary in meters
@@ -33,8 +34,7 @@ bbox_buffer <- 2000                 # Buffer around the city boundary in meters
 
 ```{r aoi}
 # Get the bounding box from the Nominatim API provided by OSM.
-bb <- osm_bb(city_name)
-
+bb <- getbb(city_name)
 aoi <- define_aoi(bb, epsg_code, bbox_buffer)
 ```
 
@@ -148,9 +148,9 @@ corridor <- cap_corridor(corridor_edges, river_centerline, epsg_code, bb)
 
 Note that this is not ideal, as the municipal boundaries can be arbitrary and might exclude important end features of the corridors, so the user should have the option to input their own feature to cap the corridor ends. In the case of Bucharest, this can be the ring road.
 
-## All in one step
+## All in one
 
-The `delineate_corridor()` function carries out the entire delineation in one step and returns a list with three elements: `corridor`, `segments`, and `riverspace`.
+The `delineate_corridor()` function carries out the entire delineation in one step and returns a list that by default contains the following output elements: `corridor`, `segments`, and `riverspace`. Although not included by default, the used input objects `river_line`, `river_polygon`, and `buildings` can also be included in the resulting object. The initial corridor boundary, either a buffer or valley edges derived from the digital elevation model, can also be included in the output object.
 
 ```{r eval=FALSE}
 # TODO this function should run the entire urc delineation process in one step
@@ -161,7 +161,7 @@ urc <- delineate_corridor(city_name, river_name,
 urc$corridor
 
 # `$segments` is an sf polygon representing the segments of the corridor,
-# TODO number the segments from upstream to downstream
+# TODO make sure the segments are numbered from upstream to downstream
 urc$segments
 
 # `$riverspace` is an sf polygon representing the delineated river space
@@ -169,7 +169,8 @@ urc$riverspace
 
 # All three elements of delineation
 plot(urc$riverspace, col = "green")
-plot(urc$segments, col = "blue", add = TRUE)
+plot(urc$river, col = "blue")
+plot(urc$segments, col = "lightblue", add = TRUE)
 plot(urc$corridor, add = TRUE, col = "red", wt = 2, add = TRUE)
 ```
 
