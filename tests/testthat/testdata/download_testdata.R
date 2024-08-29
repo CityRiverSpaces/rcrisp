@@ -17,8 +17,6 @@ get_highways <- function(bbox) {
     dplyr::bind_rows(highways$osm_lines) |>
     dplyr::select("highway") |>
     sf::st_transform(epsg_code)
-
-  highways
 }
 
 get_railways <- function(bbox) {
@@ -26,8 +24,6 @@ get_railways <- function(bbox) {
   highways <- railways$osm_lines |>
     sf::st_geometry() |>
     sf::st_transform(epsg_code)
-
-  highways
 }
 
 get_city_boundary <- function(bbox, city) {
@@ -36,8 +32,6 @@ get_city_boundary <- function(bbox, city) {
     dplyr::filter(.data$`name:en` == city) |>
     sf::st_geometry() |>
     sf::st_transform(epsg_code)
-
-  city_boundary
 }
 
 get_waterway <- function(bbox, river) {
@@ -46,8 +40,6 @@ get_waterway <- function(bbox, river) {
     dplyr::filter(.data$name == river) |>
     sf::st_geometry() |>
     sf::st_transform(epsg_code)
-
-  waterway
 }
 
 get_waterbody <- function(bbox, waterway) {
@@ -57,8 +49,6 @@ get_waterbody <- function(bbox, waterway) {
     sf::st_filter(waterway, .predicate = sf::st_intersects) |>
     sf::st_geometry() |>
     sf::st_union()
-
-  waterbody
 }
 
 save_sf <- function(object, filename) {
