@@ -33,6 +33,7 @@ get_osmdata <- function(name, key, value) {
   CRiSp::osmdata_as_sf(key, value, bb)
 }
 
+name <- NULL
 #' Get the city boundary from OpenStreetMap
 #'
 #' @param city_name A character string with the name of the city
@@ -55,7 +56,10 @@ get_osm_city_boundary <- function(city_name) {
   if (is.null(city_boundary)) {
     tryCatch(
       {
-        city_boundary <- CRiSp::get_osmdata(city_name, "boundary", "administrative")$osm_multipolygons |>
+        city_boundary <-
+          CRiSp::get_osmdata(city_name,
+                             "boundary", "administrative")$osm_multipolygons |>
+
           dplyr::filter(name == stringr::str_extract(city_name, "^[^,]+")) |>
           sf::st_geometry() |>
           head(1)
