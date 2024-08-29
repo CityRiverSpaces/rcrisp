@@ -19,6 +19,7 @@ Imports:
     osmdata,
     sf,
     sfnetworks,
+    stringr,
     tidygraph
 Suggests: 
     knitr,
