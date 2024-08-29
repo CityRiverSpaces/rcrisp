@@ -66,20 +66,16 @@ save_sf <- function(object, filename) {
   sf::st_write(object, dsn = filepath, append = FALSE)
 }
 
-download_testdata <- function() {
-  bbox <- osmdata::getbb(city)
+bbox <- osmdata::getbb(city)
 
-  highways <- get_highways(bbox)
-  railways <- get_railways(bbox)
-  city_boundary <- get_city_boundary(bbox, city)
-  waterway <- get_waterway(bbox, river)
-  waterbody <- get_waterbody(bbox, waterway)
+highways <- get_highways(bbox)
+railways <- get_railways(bbox)
+city_boundary <- get_city_boundary(bbox, city)
+waterway <- get_waterway(bbox, river)
+waterbody <- get_waterbody(bbox, waterway)
 
-  save_sf(highways, filename = sprintf("highways_%s.gpkg", city))
-  save_sf(railways, filename = sprintf("railways_%s.gpkg", city))
-  save_sf(city_boundary, filename = sprintf("city_boundary_%s.gpkg", city))
-  save_sf(waterway, filename = sprintf("waterway_%s.gpkg", city))
-  save_sf(waterbody, filename = sprintf("waterbody_%s.gpkg", city))
-}
-
-download_testdata()
+save_sf(highways, filename = sprintf("highways_%s.gpkg", city))
+save_sf(railways, filename = sprintf("railways_%s.gpkg", city))
+save_sf(city_boundary, filename = sprintf("city_boundary_%s.gpkg", city))
+save_sf(waterway, filename = sprintf("waterway_%s.gpkg", city))
+save_sf(waterbody, filename = sprintf("waterbody_%s.gpkg", city))
