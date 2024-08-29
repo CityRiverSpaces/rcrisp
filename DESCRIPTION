@@ -20,7 +20,8 @@ Imports:
     sf,
     sfnetworks,
     stringr,
-    tidygraph
+    tidygraph,
+    rlang
 Suggests: 
     knitr,
     rmarkdown,
