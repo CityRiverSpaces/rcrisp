@@ -12,7 +12,7 @@ highways_value <- c("motorway", "primary", "secondary", "tertiary")
 
 get_highways <- function(bbox) {
   highways <- CRiSp::osmdata_as_sf("highway", highways_value, bbox)
-  highways <- highways$osm_polygons |>
+  highways$osm_polygons |>
     sf::st_cast("LINESTRING") |>
     dplyr::bind_rows(highways$osm_lines) |>
     dplyr::select("highway") |>
@@ -21,14 +21,14 @@ get_highways <- function(bbox) {
 
 get_railways <- function(bbox) {
   railways <- CRiSp::osmdata_as_sf("railway", "rail", bbox)
-  highways <- railways$osm_lines |>
+  railways$osm_lines |>
     sf::st_geometry() |>
     sf::st_transform(epsg_code)
 }
 
 get_city_boundary <- function(bbox, city) {
   city_boundary <- CRiSp::osmdata_as_sf("place", "city", bbox)
-  city_boundary <- city_boundary$osm_multipolygons |>
+  city_boundary$osm_multipolygons |>
     dplyr::filter(.data$`name:en` == city) |>
     sf::st_geometry() |>
     sf::st_transform(epsg_code)
@@ -36,7 +36,7 @@ get_city_boundary <- function(bbox, city) {
 
 get_waterway <- function(bbox, river) {
   waterways <- CRiSp::osmdata_as_sf("waterway", "river", bbox)
-  waterway <- waterways$osm_multilines |>
+  waterways$osm_multilines |>
     dplyr::filter(.data$name == river) |>
     sf::st_geometry() |>
     sf::st_transform(epsg_code)
@@ -44,7 +44,7 @@ get_waterway <- function(bbox, river) {
 
 get_waterbody <- function(bbox, waterway) {
   water <- CRiSp::osmdata_as_sf("natural", "water", bbox)
-  waterbody <- dplyr::bind_rows(water$osm_polygons, water$osm_multipolygons) |>
+  dplyr::bind_rows(water$osm_polygons, water$osm_multipolygons) |>
     sf::st_transform(epsg_code) |>
     sf::st_filter(waterway, .predicate = sf::st_intersects) |>
     sf::st_geometry() |>
