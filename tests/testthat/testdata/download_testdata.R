@@ -63,7 +63,7 @@ get_waterbody <- function(bbox, waterway) {
 
 save_sf <- function(object, filename) {
   filepath <- testthat::test_path("testdata", filename)
-  sf::st_write(object, dsn = filepath, append = FALSE)
+  sf::st_write(object, dsn = filepath, append = FALSE, quiet = TRUE)
 }
 
 bbox <- osmdata::getbb(city)
