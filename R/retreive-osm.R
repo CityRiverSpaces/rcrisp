@@ -43,12 +43,34 @@ get_osmdata <- function(name, key, value) {
 #' @examples
 #' get_osm_city_boundary("Bucharest")
 get_osm_city_boundary <- function(city_name) {
-  city_boundary <- CRiSp::get_osmdata(city_name, "boundary", "administrative")
+  city_boundary <- tryCatch(
+    {
+      CRiSp::get_osmdata(city_name, "place", "city")$osm_multipolygons$geometry
+    },
+    error = function(e) {
+      NULL
+    }
+  )
+
   if (is.null(city_boundary)) {
-    city_boundary <- CRiSp::get_osmdata(city_name, "place", "city")
-  } else {
+    tryCatch(
+      {
+        city_boundary <- CRiSp::get_osmdata(city_name, "boundary", "administrative")$osm_multipolygons |>
+          dplyr::filter(name == stringr::str_extract(city_name, "^[^,]+")) |>
+          sf::st_geometry() |>
+          head(1)
+      },
+      error = function(e) {
+        NULL
+      }
+    )
+  }
+
+  if (is.null(city_boundary)) {
     stop("No city boundary found")
   }
+
+  city_boundary
 }
 
 #' Get OpenStreetMap data for a river corridor
