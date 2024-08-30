@@ -44,35 +44,23 @@ name <- NULL
 #' @examples
 #' get_osm_city_boundary("Bucharest")
 get_osm_city_boundary <- function(city_name) {
-  city_boundary <- tryCatch(
-    {
-      CRiSp::get_osmdata(city_name, "place", "city")$osm_multipolygons |>
-        dplyr::filter(`name:en` == stringr::str_extract(city_name, "^[^,]+")) |>
-        sf::st_geometry()
-    },
-    error = function(e) {
-      NULL
-    }
-  )
-
-  if (is.null(city_boundary)) {
-    tryCatch(
-      {
-        city_boundary <-
-          CRiSp::get_osmdata(city_name,
-                             "boundary", "administrative")$osm_multipolygons |>
-          dplyr::filter(name == stringr::str_extract(city_name, "^[^,]+")) |>
-          sf::st_geometry()
-      },
-      error = function(e) {
-        NULL
-      }
-    )
+  fetch_boundary <- function(key, value) {
+    CRiSp::get_osmdata(city_name, key, value)$osm_multipolygons |>
+      dplyr::filter(dplyr::if_any(c(`name:en`, name),
+                                  ~ . == stringr::str_extract(city_name,
+                                                              "^[^,]+"))) |>
+      sf::st_geometry()
   }
 
+  city_boundary <- tryCatch(fetch_boundary("place", "city"),
+                            error = function(e) NULL)
+
   if (is.null(city_boundary)) {
-    stop("No city boundary found")
+    city_boundary <- tryCatch(fetch_boundary("boundary", "administrative"),
+                              error = function(e) NULL)
   }
+
+  if (is.null(city_boundary)) stop("No city boundary found")
 
   city_boundary
 }
