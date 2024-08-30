@@ -76,7 +76,9 @@
 <span><span class="co">#&gt;     filter, lag</span></span>
 <span><span class="co">#&gt; The following objects are masked from 'package:base':</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     intersect, setdiff, setequal, union</span></span></code></pre></div>
+<span><span class="co">#&gt;     intersect, setdiff, setequal, union</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://docs.ropensci.org/osmdata/" class="external-link">osmdata</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; Data (c) OpenStreetMap contributors, ODbL 1.0. https://www.openstreetmap.org/copyright</span></span></code></pre></div>
 <p>In this notebook we explore how to delineate a river corridor using
 Bucharest as the study area. We focus on one of the rivers and use a
 specific projected CRS for the analysis. Also, we make sure that we
@@ -91,8 +93,7 @@ include a given area around the city boundaries.</p>
 </h2>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Get the bounding box from the Nominatim API provided by OSM.</span></span>
-<span><span class="va">bb</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/osm_bb.html">osm_bb</a></span><span class="op">(</span><span class="va">city_name</span><span class="op">)</span></span>
-<span></span>
+<span><span class="va">bb</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://docs.ropensci.org/osmdata/reference/getbb.html" class="external-link">getbb</a></span><span class="op">(</span><span class="va">city_name</span><span class="op">)</span></span>
 <span><span class="va">aoi</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/define_aoi.html">define_aoi</a></span><span class="op">(</span><span class="va">bb</span>, <span class="va">epsg_code</span>, <span class="va">bbox_buffer</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">city_boundary</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/osmdata_as_sf.html">osmdata_as_sf</a></span><span class="op">(</span><span class="st">"place"</span>, <span class="st">"city"</span>, <span class="va">bb</span><span class="op">)</span><span class="op">$</span><span class="va">osm_multipolygons</span> <span class="op">|&gt;</span></span>
