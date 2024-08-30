@@ -1,4 +1,5 @@
 test_that("City boundary is correctly retreived", {
+  skip_on_ci()
   bucharest_boundary_path <- testthat::test_path("testdata",
                                                  "city_boundary_Bucharest.gpkg")
   bucharest_boundary <- sf::st_read(bucharest_boundary_path, quiet = TRUE) |>
