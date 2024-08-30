@@ -26,7 +26,7 @@ Comparative analysis can shed light on patterns that are not visible in a single
 1. all river-crossed cities of a given size;
 1. all cities crossed by rivers of the same kind in a given region.
 
-We can use the `delineate_corridor()` function repeatedly to extract data for multiple cities and compare them. This vignette shows how to extract data for multiple cities and rivers and how to compare them.
+We can use the `delineate_corridor()` function repeatedly to extract data for multiple cities and rivers, and subsequently compare them. This vignette demonstrates how to perform such an analysis using CRiSp.
 
 ## Data
 
