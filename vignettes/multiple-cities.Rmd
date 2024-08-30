@@ -40,7 +40,7 @@ rivers <- c("Dâmbovița", "Wienfluss", "Seine", "Thames", "Spree")
 
 ## Delineation
 
-We can use the `map2()` function form the `purrr` package to iterate over the cities and rivers and extract their corridor boundaries. We can skip parts of the delineation by passing the respective parameters to the `purrrr::map2()` function. We skip riverspace delineation in this case. The result is a list of delineated corridors.
+We can use the `map2()` function form the `purrr` package to iterate over the cities and rivers and extract their corridor boundaries. We can skip parts of the delineation by passing the respective parameters to the `purrrr::map2()` function. We skip riverspace delineation in this case (i.e. `riverspace = FALSE`). The result is a list of delineated corridors.
 
 ```{r, eval=FALSE}
 corridors <- purrr::map2(cities, rivers, delineate_corridor, riverspace = FALSE)
