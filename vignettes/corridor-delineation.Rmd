@@ -25,7 +25,7 @@ In this notebook we explore how to delineate a river corridor using Bucharest as
 
 ```{r variables}
 city_name <- "Bucharest, Romania"   # Be specific and spell as in OpenStreetMap (OSM)
-river_name <- "Dâmbovița"           # Spell as it appears in OpenStreetMap
+river_name <- "Dâmbovița"           # Spell as in OpenStreetMap (OSM)
 epsg_code <- 32635                  # UTM zone 35N
 bbox_buffer <- 2000                 # Buffer around the city boundary in meters
 ```
