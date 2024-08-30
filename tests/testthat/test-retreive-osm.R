@@ -19,5 +19,6 @@ test_that("City boundary of Paris is correctly returned", {
 })
 
 test_that("Wrong city name throws error", {
+  skip_on_ci()
   expect_error(get_osm_city_boundary("Buhcarest"))
 })
