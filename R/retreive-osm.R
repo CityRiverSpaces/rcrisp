@@ -34,7 +34,6 @@ get_osmdata <- function(name, key, value) {
 }
 
 name <- NULL
-`name:en` <- NULL
 #' Get the city boundary from OpenStreetMap
 #'
 #' @param city_name A character string with the name of the city
@@ -48,7 +47,7 @@ name <- NULL
 get_osm_city_boundary <- function(city_name) {
   fetch_boundary <- function(key, value) {
     CRiSp::get_osmdata(city_name, key, value)$osm_multipolygons |>
-      dplyr::filter(dplyr::if_any(c(rlang::.data$`name:en`, rlang::.data$name),
+      dplyr::filter(dplyr::if_any(c(.data$`name:en`, .data$name),
                                   ~ . == stringr::str_extract(city_name,
                                                               "^[^,]+"))) |>
       sf::st_geometry()
