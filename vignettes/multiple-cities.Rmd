@@ -57,7 +57,7 @@ purrr::map(corridors, ~ .x |> st_is_empty())
 
 ## Parallelisation
 
-When used on multiple cities this can quickly become computationally expensive. To improve computation, we can run the function in parallel with an homologous function from the `furrr` package. 
+Analysing  multiple cities with CRiSp in this fashion can quickly become computationally expensive. However, as the analysis required for each city is independent of that of the other cities, we can improve the wall-time of the computation (i.e. the time we must wait for our results), by using the `furrr` package to map and execute the analysis functions for each city in parallel.
 
 ```{r, eval=FALSE}
 future::plan(multisession)
