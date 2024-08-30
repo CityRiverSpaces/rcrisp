@@ -1,17 +1,3 @@
-#' Retrieve bounding box from OpenStreetMap
-#'
-#' @param name A character string with the name of the place to retrieve
-#'             the bounding box
-#'
-#' @return A list with the bounding box
-#' @export
-#'
-#' @examples
-#' osm_bb("Bucharest")
-osm_bb <- function(name) {
-  osmdata::getbb(name)
-}
-
 #' Retrieve OpenStreetMap data as sf object
 #'
 #' Query the Overpass API for a key:value pair within a given bounding box.
@@ -43,11 +29,42 @@ osmdata_as_sf <- function(key, value, bb) {
 #' @examples
 #' get_osmdata("Bucharest", "waterway", "river")
 get_osmdata <- function(name, key, value) {
-  bb <- CRiSp::osm_bb(name)
+  bb <- osmdata::getbb(name)
   CRiSp::osmdata_as_sf(key, value, bb)
 }
 
-name <- NULL
+#' Get the city boundary from OpenStreetMap
+#'
+#' @param city_name A character string with the name of the city
+#'
+#' @return An sf object with the city boundary
+#' @importFrom rlang .data
+#' @export
+#'
+#' @examples
+#' get_osm_city_boundary("Bucharest")
+get_osm_city_boundary <- function(city_name) {
+  fetch_boundary <- function(key, value) {
+    CRiSp::get_osmdata(city_name, key, value)$osm_multipolygons |>
+      dplyr::filter(dplyr::if_any(c(.data$`name:en`, .data$name),
+                                  ~ . == stringr::str_extract(city_name,
+                                                              "^[^,]+"))) |>
+      sf::st_geometry()
+  }
+
+  city_boundary <- tryCatch(fetch_boundary("place", "city"),
+                            error = function(e) NULL)
+
+  if (is.null(city_boundary)) {
+    city_boundary <- tryCatch(fetch_boundary("boundary", "administrative"),
+                              error = function(e) NULL)
+  }
+
+  if (is.null(city_boundary)) stop("No city boundary found")
+
+  city_boundary
+}
+
 #' Get OpenStreetMap data for a river corridor
 #'
 #' @param city_name A character string with the name of the place to retrieve
