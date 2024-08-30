@@ -24,7 +24,7 @@ library(osmdata)
 In this notebook we explore how to delineate a river corridor using Bucharest as the study area. We focus on one of the rivers and use a specific projected CRS (coordinate reference system) for the analysis. A project CRS is required for calculating distances along the street network during delineation. Also, we make sure that we include a given area around the city boundaries.
 
 ```{r variables}
-city_name <- "Bucharest, Romania"   # Be specific and spell as in OSM
+city_name <- "Bucharest, Romania"   # Be specific and spell as in OpenStreetMap (OSM)
 river_name <- "Dâmbovița"           # Spell as it appears in OpenStreetMap
 epsg_code <- 32635                  # UTM zone 35N
 bbox_buffer <- 2000                 # Buffer around the city boundary in meters
