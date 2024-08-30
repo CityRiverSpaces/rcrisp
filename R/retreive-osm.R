@@ -34,6 +34,7 @@ get_osmdata <- function(name, key, value) {
 }
 
 name <- NULL
+`name:en` <- NULL
 #' Get the city boundary from OpenStreetMap
 #'
 #' @param city_name A character string with the name of the city
