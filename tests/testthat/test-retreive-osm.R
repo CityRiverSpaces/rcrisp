@@ -1,4 +1,5 @@
 test_that("City boundary is correctly retreived", {
+  skip_on_ci()
   bucharest_boundary_path <- testthat::test_path("testdata",
                                                  "city_boundary_Bucharest.gpkg")
   bucharest_boundary <- sf::st_read(bucharest_boundary_path, quiet = TRUE) |>
@@ -13,9 +14,11 @@ test_that("City boundary is correctly retreived", {
 })
 
 test_that("City boundary of Paris is correctly returned", {
+  skip_on_ci()
   expect_no_error(get_osm_city_boundary("Paris, France"))
 })
 
 test_that("Wrong city name throws error", {
+  skip_on_ci()
   expect_error(get_osm_city_boundary("Buhcarest"))
 })
