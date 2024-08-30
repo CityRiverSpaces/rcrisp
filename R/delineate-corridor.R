@@ -180,7 +180,7 @@ cap_corridor <- function(corridor_edges, river, crs, bb, cap = "city") {
 #' @return A simple feature geometry
 #' @export
 delineate_corridor <- function(place, river, crs) {
-  bb <- CRiSp::osm_bb(place)
+  bb <- osmdata::getbb(place)
 
   highways_value <- c("motorway", "primary", "secondary", "tertiary")
   net <- CRiSp::osmdata_as_sf("highway", highways_value, bb) |>
