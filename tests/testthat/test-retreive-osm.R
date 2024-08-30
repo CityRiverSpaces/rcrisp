@@ -14,6 +14,7 @@ test_that("City boundary is correctly retreived", {
 })
 
 test_that("City boundary of Paris is correctly returned", {
+  skip_on_ci()
   expect_no_error(get_osm_city_boundary("Paris, France"))
 })
 
