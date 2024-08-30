@@ -46,7 +46,9 @@ name <- NULL
 get_osm_city_boundary <- function(city_name) {
   city_boundary <- tryCatch(
     {
-      CRiSp::get_osmdata(city_name, "place", "city")$osm_multipolygons$geometry
+      CRiSp::get_osmdata(city_name, "place", "city")$osm_multipolygons |>
+        dplyr::filter(`name:en` == stringr::str_extract(city_name, "^[^,]+")) |>
+        sf::st_geometry()
     },
     error = function(e) {
       NULL
@@ -59,10 +61,8 @@ get_osm_city_boundary <- function(city_name) {
         city_boundary <-
           CRiSp::get_osmdata(city_name,
                              "boundary", "administrative")$osm_multipolygons |>
-
           dplyr::filter(name == stringr::str_extract(city_name, "^[^,]+")) |>
-          sf::st_geometry() |>
-          head(1)
+          sf::st_geometry()
       },
       error = function(e) {
         NULL
