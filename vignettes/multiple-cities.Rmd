@@ -49,7 +49,7 @@ corridors[[1]]
 
 ## Validation
 
-We can validate the results either by plotting the corridors of each city or by checking if the delineation resulted in any empty geometries. While the former can be a quick way to validate a small number of cities, the latter is better suited for a larger number of cases.
+We can validate the results either by plotting the corridors of each city or by checking if the delineation resulted in any empty geometries. While the former can be a quick way to validate a small number of cities, the latter is better suited for a larger number of cases and requires automated tests that identify the exact causes of missing geometries.
 
 ```{r, eval=FALSE}
 purrr::map(corridors, ~ .x |> st_is_empty())
