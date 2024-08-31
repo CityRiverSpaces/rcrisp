@@ -1,0 +1,65 @@
+---
+title: "5. Multiple cities"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{5. Multiple cities}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(CRiSp)
+```
+
+## Motivation
+
+Comparative analysis can shed light on patterns that are not visible in a single case. The automated delineation provided by CRiSp allows for a reliable frame of reference for such comparisons, including:
+
+1. all cities along a large river;
+1. all river-crossed cities of a given size;
+1. all cities crossed by rivers of the same kind in a given region.
+
+We can use the `delineate_corridor()` function repeatedly to extract data for multiple cities and rivers, and subsequently compare them. This vignette demonstrates how to perform such an analysis using CRiSp.
+
+## Data
+
+We focus on the following five cities and rivers:
+
+```{r, eval=FALSE}
+cities <- c("Bucharest, Romania", "Vienna, Austria", "Paris, France",
+            "London, United Kingdom", "Berlin, Germany")
+rivers <- c("Dâmbovița", "Wienfluss", "Seine", "Thames", "Spree")
+```
+
+## Delineation
+
+We can use the `map2()` function form the `purrr` package to iterate over the cities and rivers and extract their corridor boundaries. We can skip parts of the delineation by passing the respective parameters to the `purrrr::map2()` function. We skip riverspace delineation in this case (i.e. `riverspace = FALSE`). The result is a list of delineated corridors.
+
+```{r, eval=FALSE}
+corridors <- purrr::map2(cities, rivers, delineate_corridor, riverspace = FALSE)
+corridors[[1]]
+```
+
+## Validation
+
+We can validate the results either by plotting the corridors of each city or by checking if the delineation resulted in any empty geometries. While the former can be a quick way to validate a small number of cities, the latter is better suited for a larger number of cases and requires automated tests that identify the exact causes of missing geometries.
+
+```{r, eval=FALSE}
+purrr::map(corridors, ~ .x |> st_is_empty())
+```
+
+## Parallelisation
+
+Analysing  multiple cities with CRiSp in this fashion can quickly become computationally expensive. However, as the analysis required for each city is independent of that of the other cities, we can improve the wall-time of the computation (i.e. the time we must wait for our results), by using the `furrr` package to map and execute the analysis functions for each city in parallel.
+
+```{r, eval=FALSE}
+future::plan(multisession)
+corridors <- furrr::future_map2(cities, rivers, delineate_corridor)
+```
