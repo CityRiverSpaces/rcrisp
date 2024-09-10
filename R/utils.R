@@ -34,3 +34,23 @@ calc_weights <- function(net) {
     sfnetworks::activate("edges") |>
     dplyr::mutate(weight = sfnetworks::edge_length())
 }
+
+#' Get UTM zone from longitude
+#'
+#' @param x An sf object
+#'
+#' @return The UTM zone
+#' @export
+get_utm_zone_epsg <- function(x) {
+  if (!"sf" %in% class(x)) {
+    stop("x must be an sf object")
+  }
+
+  long <- x |>
+    sf::st_transform(4326) |>
+    sf::st_union() |>
+    sf::st_centroid() |>
+    sf::st_coordinates()
+
+  32600 + floor((long[1] + 180) / 6) + 1
+}
