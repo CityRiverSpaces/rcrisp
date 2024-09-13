@@ -34,6 +34,7 @@ streets <- merge_streets(streets) |>
   select("highway")
 
 bucharest <- list(
+  bb = bb,
   boundary = city_boundary,
   river_centerline = river_centerline,
   river_surface = river_surface,
