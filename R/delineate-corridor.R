@@ -20,7 +20,9 @@ define_aoi <- function(bb, crs, buffer_dist = 0) {
               "Consider using a projected CRS when buffering the AoI.")
     }
     aoi <- sf::st_buffer(aoi, buffer_dist)
-  } else aoi
+  } else {
+    aoi
+  }
 }
 
 #' Split the area of interest (AoI) by a river.

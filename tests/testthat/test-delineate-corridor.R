@@ -4,8 +4,7 @@ test_that("given bounding box coordinates and crs, a correct AoI is returned", {
   aoi <- define_aoi(bb, crs, buffer_dist = 0)
   coords <- sf::st_coordinates(aoi)
 
-  bb_expected <- matrix(coords[1:2, 1]) |>
-                 cbind(matrix(coords[2:3, 2])) |> t()
+  bb_expected <- cbind(matrix(coords[1:2, 1]), matrix(coords[2:3, 2])) |> t()
   colnames(bb_expected) <- c("min", "max")
   rownames(bb_expected) <- c("x", "y")
 
@@ -30,4 +29,3 @@ test_that("splitting an AoI by a river gives two areas of interest", {
 
   expect_equal(length(aoi_split), 2)
 })
-
