@@ -20,3 +20,14 @@ test_that("buffering an AoI with geographic crs gives a warning", {
   expect_warning(define_aoi(bb, crs, buffer_dist = 1000), regexp = NA)
 })
 
+test_that("splitting an AoI by a river gives two areas of interest", {
+  bb <- bucharest$bb
+  crs <- 4326
+  aoi <- define_aoi(bb, crs, buffer_dist = 0)
+  river <- bucharest$river_centerline
+
+  aoi_split <- split_aoi(aoi, sf::st_transform(river, sf::st_crs(aoi)))
+
+  expect_equal(length(aoi_split), 2)
+})
+
