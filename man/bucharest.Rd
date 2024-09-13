@@ -7,7 +7,8 @@
 \format{
 A list with the following components:
 \describe{
-\item{boundary}{A sf object representing the administrative boundary of Bucharest.}
+\item{boundary}{A sf object representing the administrative boundary of
+Bucharest.}
 }
 }
 \source{
