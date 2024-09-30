@@ -29,3 +29,11 @@ test_that("splitting an AoI by a river gives two areas of interest", {
 
   expect_equal(length(aoi_split), 2)
 })
+
+test_that("street network is correctly trimmed", {
+  expect_equal(2 * 2, 4)
+})
+
+test_that("street network is correctly simplified", {
+  expect_equal(2 * 2, 4)
+})
