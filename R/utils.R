@@ -53,11 +53,10 @@ get_utm_zone_epsg <- function(x) {
     sf::st_transform(4326) |>
     sf::st_coordinates()
 
-  if (coords[2] >= 0.){
+  if (coords[2] >= 0L) {
     base <- 32600
   } else {
     base <- 32700
   }
-  
   base + floor((coords[1] + 180) / 6) + 1
 }
