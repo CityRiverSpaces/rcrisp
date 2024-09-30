@@ -46,10 +46,11 @@ get_utm_zone_epsg <- function(x) {
     stop("x must be an sf object")
   }
 
-  long <- x |>
-    sf::st_transform(4326) |>
-    sf::st_union() |>
+  coords <- x |>
+    sf::st_bbox() |>
+    sf::st_as_sfc() |>
     sf::st_centroid() |>
+    sf::st_transform(4326) |>
     sf::st_coordinates()
 
   32600 + floor((long[1] + 180) / 6) + 1
