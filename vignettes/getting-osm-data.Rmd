@@ -51,11 +51,11 @@ bbox <- st_bbox(bbox, crs = 4326)
 
 # bbox expanded
 bbox_expanded <- bbox |>
-    st_as_sfc() |>
-    st_transform(crs = epsg_code) |>  # transform to projected CRS
-    st_buffer(bbox_buffer) |>
-    st_transform(crs = 4326) |>  # transform back to lat/lon
-    st_bbox()
+  st_as_sfc() |>
+  st_transform(crs = epsg_code) |>  # transform to projected CRS
+  st_buffer(bbox_buffer) |>
+  st_transform(crs = 4326) |>  # transform back to lat/lon
+  st_bbox()
 ```
 
 ## 1. City boundary
@@ -64,8 +64,8 @@ bbox_expanded <- bbox |>
 # get city boundary
 city_boundary <- osmdata_as_sf("place", "city", bbox)
 city_boundary <- city_boundary$osm_multipolygons |>
-    st_transform(epsg_code) |>
-    st_geometry()
+  st_transform(epsg_code) |>
+  st_geometry()
 ```
 
 ## 2. Waterways
@@ -76,10 +76,10 @@ Querying the Overpass API for `waterway:river`. OSM multilines include river lin
 # waterways (linestrings)
 waterways <- osmdata_as_sf("waterway", "river", bbox)
 waterway <- waterways$osm_multilines |>
-    filter(name == river_name) |>
-    st_intersection(st_as_sfc(bbox_expanded)) |> 
-    st_transform(epsg_code) |>
-    st_geometry()
+  filter(name == river_name) |>
+  st_intersection(st_as_sfc(bbox_expanded)) |> 
+  st_transform(epsg_code) |>
+  st_geometry()
 ```
 
 We also query the Overpass API for `natural:water`. The results also include features such as fountains. The geometries are not contiguous and some part of the water bodies are actually represented as lines instead of polygons. We determine and keep the only features that intersect the relevant waterway:
@@ -88,10 +88,10 @@ We also query the Overpass API for `natural:water`. The results also include fea
 # water area (polygons)
 water <- osmdata_as_sf("natural", "water", bbox)
 waterbody <- bind_rows(water$osm_polygons, water$osm_multipolygons) |>
-    st_transform(epsg_code) |>
-    st_filter(waterway, .predicate = st_intersects) |>
-    st_union() |>
-    st_geometry()
+  st_transform(epsg_code) |>
+  st_filter(waterway, .predicate = st_intersects) |>
+  st_union() |>
+  st_geometry()
 ```
 
 ## 3. Street network
@@ -115,14 +115,14 @@ As some of elements are returend as polygons (see e.g. [this tutorial](https://g
 ```{r}
 # cast polygons (closed streets) into lines
 poly_to_lines <- highways$osm_polygons |>
-    st_cast("LINESTRING")
+  st_cast("LINESTRING")
 
 # combine all features in one data frame
 highways_lines <- highways$osm_lines |>
-    bind_rows(poly_to_lines) |>
-    select("highway") |>  # only keep "highway" column
-    rename(type = `highway`) |>  # rename it to "type"
-    st_transform(epsg_code)
+  bind_rows(poly_to_lines) |>
+  select("highway") |>  # only keep "highway" column
+  rename(type = `highway`) |>  # rename it to "type"
+  st_transform(epsg_code)
 ```
 
 ## 4. Rail network
@@ -132,33 +132,33 @@ Querying the Overpass API for the `railway:rail` key:tag, also using the expande
 ```{r}
 railways <- osmdata_as_sf("railway", "rail", bbox_expanded)
 railways_lines <- railways$osm_lines |>
-    select("railway") |>  # only keep "railway" column
-    rename(type = `railway`) |>  # rename it to "type"
-    st_transform(epsg_code)
+  select("railway") |>  # only keep "railway" column
+  rename(type = `railway`) |>  # rename it to "type"
+  st_transform(epsg_code)
 ```
 
 ## Write OSM data to file
 
 ```{r}
 st_write_list <- list(
-    city_boundary = bucharest$boundary,
-    waterway = bucharest$river_centerline, 
-    waterbody = bucharest$river_surface,
-    highways = bucharest$streets,
-    railways = railways_lines
+  city_boundary = bucharest$boundary,
+  waterway = bucharest$river_centerline, 
+  waterbody = bucharest$river_surface,
+  highways = bucharest$streets,
+  railways = railways_lines
 )
 
 purrr::walk(
-    st_write_list,
-    ~ st_write(
-        .x,
-        dsn = sprintf(here::here("data/generated/%s_%s.gpkg"), 
-                      names(st_write_list)[purrr::map_lgl(st_write_list, 
-                                                          identical, 
-                                                          .x)], city_name),
-        append = FALSE,
-        quiet = TRUE
-    )
+  st_write_list,
+  ~ st_write(
+      .x,
+      dsn = sprintf(here::here("data/generated/%s_%s.gpkg"), 
+                    names(st_write_list)[purrr::map_lgl(st_write_list, 
+                                                        identical, 
+                                                        .x)], city_name),
+      append = FALSE,
+      quiet = TRUE
+  )
 )
 ```
 
