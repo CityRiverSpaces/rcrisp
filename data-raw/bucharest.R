@@ -13,6 +13,7 @@ city_boundary <- get_osm_city_boundary(city_name) |>
 
 bb <- getbb(city_name)
 aoi <- define_aoi(bb, epsg_code, bbox_buffer)
+bbox_expanded <- aoi |> st_transform(4326) |> st_bbox()
 
 river_centerline <- osmdata_as_sf("waterway", "river", bb)$osm_multilines |>
   filter(name == river_name) |>
@@ -33,12 +34,19 @@ streets <- osmdata_as_sf("highway", highway_values, bb)
 streets <- merge_streets(streets) |>
   select("highway")
 
+railways <- osmdata_as_sf("railway", "rail", bbox_expanded)
+railways_lines <- railways$osm_lines |>
+  select("railway") |>  # only keep "railway" column
+  rename(type = `railway`) |>  # rename it to "type"
+  st_transform(epsg_code)
+
 bucharest <- list(
   bb = bb,
   boundary = city_boundary,
   river_centerline = river_centerline,
   river_surface = river_surface,
-  streets = streets
+  streets = streets,
+  railways_lines = railways_lines
 )
 
 usethis::use_data(bucharest, overwrite = TRUE)
