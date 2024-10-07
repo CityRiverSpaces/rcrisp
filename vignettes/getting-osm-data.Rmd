@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
   eval = FALSE
 )
 
-devtools::load_all(".")
+library(CRiSp)
 
 city_boundary <- bucharest$boundary
 railways_lines <- bucharest$railways_lines
@@ -37,9 +37,7 @@ In this notebook we download OSM data needed for urban river corridor delineatio
 ```{r}
 city_name <- "Bucharest"
 river_name <- "Dâmbovița"
-epsg_code <-  # get the UTM zone for the city
-  
-  32635  # UTM zone 35N
+epsg_code <- 32635  # UTM zone 35N
 bbox_buffer <- 2000  # in m, expand bbox for street network
 ```
 
