@@ -26,7 +26,6 @@ waterway <- bucharest$river_centerline
 ```{r packages, eval=TRUE, message=FALSE}
 library(CRiSp)
 library(dplyr)
-library(here)
 library(ggplot2)
 library(osmdata)
 library(sf)
@@ -152,7 +151,7 @@ purrr::walk(
   st_write_list,
   ~ st_write(
       .x,
-      dsn = sprintf(here::here("data/generated/%s_%s.gpkg"),
+      dsn = sprintf("%s_%s.gpkg",
                     names(st_write_list)[purrr::map_lgl(st_write_list,
                                                         identical,
                                                         .x)], city_name),
