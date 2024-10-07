@@ -10,7 +10,8 @@ bbox_buffer <- 2000
 
 city_boundary <- get_osm_city_boundary(city_name) |>
   st_transform(epsg_code)
-st_crs(city_boundary)$wkt <- gsub("°|º", "\\\u00b0", st_crs(city_boundary)$wkt)
+st_crs(city_boundary)$wkt <- gsub("°|º", "\\\u00b0",
+                                  st_crs(city_boundary)$wkt)
 
 bb <- getbb(city_name)
 aoi <- define_aoi(bb, epsg_code, bbox_buffer)
@@ -21,7 +22,8 @@ river_centerline <- osmdata_as_sf("waterway", "river", bb)$osm_multilines |>
   st_transform(epsg_code) |>
   st_geometry() |>
   st_intersection(st_buffer(aoi, bbox_buffer))
-st_crs(river_centerline)$wkt <- gsub("°|º", "\\\u00b0", st_crs(river_centerline)$wkt)
+st_crs(river_centerline)$wkt <- gsub("°|º", "\\\u00b0",
+                                     st_crs(river_centerline)$wkt)
 
 river_surface <- osmdata_as_sf("natural", "water", bb)
 river_surface <- river_surface$osm_multipolygons |>
@@ -30,7 +32,8 @@ river_surface <- river_surface$osm_multipolygons |>
   st_filter(river_centerline, .predicate = st_intersects) |>
   st_geometry() |>
   st_union()
-st_crs(river_surface)$wkt <- gsub("°|º", "\\\u00b0", st_crs(river_surface)$wkt)
+st_crs(river_surface)$wkt <- gsub("°|º", "\\\u00b0",
+                                  st_crs(river_surface)$wkt)
 
 highway_values <- c("motorway", "primary", "secondary", "tertiary")
 streets <- osmdata_as_sf("highway", highway_values, bb)
@@ -43,7 +46,8 @@ railways_lines <- railways$osm_lines |>
   select("railway") |>  # only keep "railway" column
   rename(type = `railway`) |>  # rename it to "type"
   st_transform(epsg_code)
-st_crs(railways_lines)$wkt <- gsub("°|º", "\\\u00b0", st_crs(railways_lines)$wkt)
+st_crs(railways_lines)$wkt <- gsub("°|º", "\\\u00b0",
+                                   st_crs(railways_lines)$wkt)
 
 bucharest <- list(
   bb = bb,
