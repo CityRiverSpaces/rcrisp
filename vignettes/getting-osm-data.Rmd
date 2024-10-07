@@ -7,35 +7,39 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r, include = FALSE}
+```{r setup, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
   eval = FALSE
 )
+
+devtools::load_all(".")
+
+city_boundary <- bucharest$boundary
+railways_lines <- bucharest$railways_lines
+highways_lines <- bucharest$streets
+waterbody <- bucharest$river_surface
+waterway <- bucharest$river_centerline
 ```
 
-```{r setup, eval=TRUE, include=FALSE}
+```{r packages, eval=TRUE, message=FALSE}
 library(CRiSp)
 library(dplyr)
 library(here)
 library(ggplot2)
 library(osmdata)
 library(sf)
-
-city_boundary <- st_read(here("data/generated/city_boundary_Bucharest.gpkg"))
-waterway <- st_read(here("data/generated/waterway_Bucharest.gpkg"))
-waterbody <- st_read(here("data/generated/waterbody_Bucharest.gpkg"))
-highways_lines <- st_read(here("data/generated/highways_Bucharest.gpkg"))
-railways_lines <- st_read(here("data/generated/railways_Bucharest.gpkg"))
 ```
 
-In this notebooks we download the relevant OSM data for Bucharest. We focus on one of the rivers and use a specific projected CRS for the analysis. Also, we make sure that we include a given area around the city boundaries.
+In this notebook we download OSM data needed for urban river corridor delineation in Bucharest, Romania. We focus on one of the rivers and use a specific projected CRS for the analysis. Also, we make sure that we include a given area around the city boundaries.
 
 ```{r}
 city_name <- "Bucharest"
 river_name <- "Dâmbovița"
-epsg_code <- 32635  # UTM zone 35N
+epsg_code <-  # get the UTM zone for the city
+  
+  32635  # UTM zone 35N
 bbox_buffer <- 2000  # in m, expand bbox for street network
 ```
 
@@ -139,10 +143,10 @@ railways_lines <- railways$osm_lines |>
 
 ```{r}
 st_write_list <- list(
-    city_boundary = city_boundary,
-    waterway = waterway, 
-    waterbody = waterbody,
-    highways = highways_lines,
+    city_boundary = bucharest$boundary,
+    waterway = bucharest$river_centerline, 
+    waterbody = bucharest$river_surface,
+    highways = bucharest$streets,
     railways = railways_lines
 )
 
