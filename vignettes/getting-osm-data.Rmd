@@ -29,6 +29,7 @@ library(dplyr)
 library(ggplot2)
 library(osmdata)
 library(sf)
+library(purrr)
 ```
 
 In this notebook we download OSM data needed for urban river corridor delineation in Bucharest, Romania. We focus on one of the rivers and use a specific projected CRS for the analysis. Also, we make sure that we include a given area around the city boundaries.
