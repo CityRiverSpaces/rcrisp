@@ -9,6 +9,7 @@ articles:
   navbar: ~
   contents:
   - method
+  - getting-osm-data
   - corridor-delineation
   - corridor-segmentation
   - riverspace-delineation
@@ -21,15 +22,17 @@ navbar:
       menu:
         - text: 1. The method
           href: articles/method.html
-        - text: 2. Corridor delineation
+        - text: 2. Getting OSM data for delineation
+          href: articles/getting-osm-data.html
+        - text: 3. Corridor delineation
           href: articles/corridor-delineation.html
-        - text: 3. Corridor segmentation
+        - text: 4. Corridor segmentation
           href: articles/corridor-segmentation.html
-        - text: 4. Riverspace delineation
+        - text: 5. Riverspace delineation
           href: articles/riverspace-delineation.html
         - text: -------
         - text: Use cases
-        - text: 5. Multiple delineations
+        - text: 7. Multiple delineations
           href: articles/multiple-cities.html
-        - text: 6. Study area around a POI
+        - text: 8. Study area around a POI
           href: articles/poi-study-area.html

@@ -1,8 +1,8 @@
 ---
-title: "4. Riverspace delineation"
+title: "5. Riverspace delineation"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{4. Riverspace delineation}
+  %\VignetteIndexEntry{5. Riverspace delineation}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
