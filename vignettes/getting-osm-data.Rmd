@@ -147,12 +147,12 @@ st_write_list <- list(
   railways = railways_lines
 )
 
-purrr::walk(
+walk(
   st_write_list,
   ~ st_write(
     .x,
     dsn = sprintf("%s_%s.gpkg",
-                  names(st_write_list)[purrr::map_lgl(st_write_list,
+                  names(st_write_list)[map_lgl(st_write_list,
                                                       identical,
                                                       .x)], city_name),
     append = FALSE,
