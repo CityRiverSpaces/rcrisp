@@ -4,11 +4,12 @@ pkgdown_sha: ~
 articles:
   corridor-delineation: corridor-delineation.html
   corridor-segmentation: corridor-segmentation.html
+  getting-osm-data: getting-osm-data.html
   method: method.html
   multiple-cities: multiple-cities.html
   poi-study-area: poi-study-area.html
   riverspace-delineation: riverspace-delineation.html
-last_built: 2024-10-07T13:14Z
+last_built: 2024-10-10T20:04Z
 urls:
   reference: https://cityriverspaces.github.io/CRiSp/reference
   article: https://cityriverspaces.github.io/CRiSp/articles
