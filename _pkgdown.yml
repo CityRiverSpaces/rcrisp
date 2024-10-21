@@ -23,10 +23,14 @@ navbar:
       menu:
         - text: 1. The method
           href: articles/method.html
+        - text: -------
+        - text: Preparation
         - text: 2. Getting OSM data for delineation
           href: articles/getting-osm-data.html
         - text: 3. Preparing the network for delineation
           href: articles/network-preparation.html
+        - text: -------
+        - text: Delineation
         - text: 4. Corridor delineation
           href: articles/corridor-delineation.html
         - text: 5. Corridor segmentation
