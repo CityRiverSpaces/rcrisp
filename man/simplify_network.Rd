@@ -13,5 +13,6 @@ simplify_network(net)
 A simplifed network object
 }
 \description{
-Simplify a street network by removing multiple edges and loops.
+Simplify the graph, removing loops and double-edge connections following
+\href{https://luukvdmeer.github.io/sfnetworks/articles/sfn02_preprocess_clean.html#simplify-network}{this approach}.
 }

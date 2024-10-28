@@ -26,6 +26,7 @@ Imports:
     tidygraph
 Suggests: 
     ggplot2,
+    gridExtra,
     knitr,
     purrr,
     rmarkdown,

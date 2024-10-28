@@ -13,5 +13,7 @@ clean_network(net)
 A cleaned network object
 }
 \description{
-Clean a street network by subdividing edges and removing pseudo-nodes.
+Subdivide edges by \href{https://luukvdmeer.github.io/sfnetworks/articles/sfn02_preprocess_clean.html#subdivide-edges}{adding missing nodes},
+remove \href{https://luukvdmeer.github.io/sfnetworks/articles/sfn02_preprocess_clean.html#smooth-pseudo-nodes}{pseudo-nodes},
+and keep only the main connected component of the network.
 }
