@@ -8,6 +8,7 @@
 <url><loc>https://cityriverspaces.github.io/CRiSp/articles/index.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/articles/method.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/articles/multiple-cities.html</loc></url>
+<url><loc>https://cityriverspaces.github.io/CRiSp/articles/network-preparation.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/articles/poi-study-area.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/articles/riverspace-delineation.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/authors.html</loc></url>
@@ -19,8 +20,9 @@
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/create_network.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/define_aoi.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/delineate_corridor.html</loc></url>
+<url><loc>https://cityriverspaces.github.io/CRiSp/reference/flatten_network.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/get_corridor_edge.html</loc></url>
-<url><loc>https://cityriverspaces.github.io/CRiSp/reference/get_latlon.html</loc></url>
+<url><loc>https://cityriverspaces.github.io/CRiSp/reference/get_geom_latlon.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/get_osm_city_boundary.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/get_osmdata.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/get_osmdata_river_corridor.html</loc></url>
