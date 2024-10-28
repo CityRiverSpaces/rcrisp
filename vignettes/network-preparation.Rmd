@@ -30,7 +30,7 @@ library(leaflet)
 
 In this article we show how to set up the spatial network for a city before using it for urban river corridor delineation. We work with OSM data for the city of Bucharest. 
 
-We start by loading the OSM data that we have previously downloaded in vignette("getting-osm-data"). According to the delineation method, all persistent physical structures need to be considered. Therefore, the network will contains both streets and railways from OSM.
+We start by loading the OSM data that we have previously downloaded in `vignette("getting-osm-data")`. According to the delineation method, all persistent physical structures need to be considered. Therefore, the network will contains both streets and railways from OSM.
 
 ```{r}
 streets <- bucharest$streets
