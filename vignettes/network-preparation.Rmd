@@ -54,13 +54,14 @@ We want to flatten the two networks and add nodes at all intersections between e
 # Determine intersection points between crossing edges
 edges_cross <- network |>
   activate("edges") |>
-  mutate(id = 1:n()) |>  # Add ID to ease replacement later on
+  mutate(id = seq_len(n())) |>  # Add ID to ease replacement later on
   filter(edge_crosses(.E())) |>
   st_as_sf("edges")
 
 pts_intersect <- st_intersection(edges_cross) |>
   # Cast multipoint intersections into points
-  st_collection_extract("POINT") |> sf_cast(to = "POINT")
+  st_collection_extract("POINT") |>
+  sf_cast(to = "POINT")
 
 # Drop duplicates
 pts_intersect_agg <- aggregate(
@@ -80,8 +81,8 @@ We define the functions that we use to inject points to the edge geometries:
 
 ```{r}
 # Calculate Euclidean distance between (x1, y1) and (x2, y2)
-distance <- function(x1, y1, x2, y2){
-  sqrt((x2 - x1)^2 + (y2 - y1)^2)
+distance <- function(x1, y1, x2, y2) {
+  sqrt((x2 - x1) ^ 2 + (y2 - y1) ^ 2)
 }
 
 # `edge_pts` data.frame with all the edge points from the network
