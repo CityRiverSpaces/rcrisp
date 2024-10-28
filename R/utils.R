@@ -6,7 +6,7 @@
 #'
 #' @return An sf object with latitude and longitude
 #' @export
-get_latlon <- function(x) {
+get_geom_latlon <- function(x) {
   sf::st_transform(x, 4326) |>
     sf::st_geometry()
 }
