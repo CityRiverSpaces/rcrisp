@@ -33,7 +33,7 @@ In this article we show how to set up the spatial network for a city before usin
 We start by loading the OSM data that we have previously downloaded in vignette("getting-osm-data"). According to the delineation method, all persistent physical structures need to be considered. Therefore, the network will contains both streets and railways from OSM.
 
 ```{r}
-highways <- bucharest$streets
+streets <- bucharest$streets
 railways <- bucharest$railways_lines
 ```
 
@@ -42,7 +42,7 @@ railways <- bucharest$railways_lines
 We want to create a joint network that includes both railways and highways:
 
 ```{r}
-network <- bind_rows(highways, railways) |>
+network <- bind_rows(streets, railways) |>
   as_sfnetwork(directed = FALSE)
 ```
 
