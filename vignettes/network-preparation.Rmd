@@ -37,7 +37,7 @@ streets <- bucharest$streets
 railways <- bucharest$railways_lines
 ```
 
-## Setting up the network
+## 2. Setting up the network
 
 We want to create a joint network that includes both railways and highways:
 
