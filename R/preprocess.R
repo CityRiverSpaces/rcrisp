@@ -53,7 +53,7 @@ flatten_network <- function(network) {
   edge_pts$is_endpoint <- !duplicated(edge_idxs, fromLast = TRUE)
 
   # Loop over all points, add them to the edge table
-  for (i in 1:nrow(pts_intersect)){
+  for (i in seq_len(nrow(pts_intersect))) {
     point <- pts_intersect$geometry[[i]]
     intersecting_edges <- unique(unlist(pts_intersect$origins[i]))
     for (edge_id in intersecting_edges){
@@ -62,25 +62,29 @@ flatten_network <- function(network) {
   }
 
   # Convert back edge table to sfc object
-  edges_cross_new <- sfheaders::sfc_linestring(edge_pts, linestring_id = "id", x = "x", y = "y")
+  edges_cross_new <- sfheaders::sfc_linestring(edge_pts, linestring_id = "id",
+                                               x = "x", y = "y")
   sf::st_crs(edges_cross_new) <- sf::st_crs(edges_cross)
 
   # Update the network with the new edge geometries
   nodes <- network |> sf::st_as_sf("nodes")
   edges <- network |> sf::st_as_sf("edges")
-  edges[edges_cross$id,] <- edges[edges_cross$id,] |> sf::st_set_geometry(edges_cross_new)
+  edges[edges_cross$id, ] <- edges[edges_cross$id, ] |>
+    sf::st_set_geometry(edges_cross_new)
   network_new <- sfnetworks::sfnetwork(
     nodes = nodes,
     edges = edges,
     directed = FALSE,
     force = TRUE,  # skip checks
   )
+  network_new
 }
 
 get_crossing_edges <- function(network) {
   network |>
     tidygraph::activate("edges") |>
-    dplyr::mutate(id = seq_len(dplyr::n())) |>  # Add ID to ease replacement later on
+    # Add ID to ease replacement later on
+    dplyr::mutate(id = seq_len(dplyr::n())) |>
     dplyr::filter(sfnetworks::edge_crosses(tidygraph::.E())) |>
     sf::st_as_sf("edges")
 }
@@ -100,6 +104,7 @@ get_intersection_points <- function(edges) {
   )
 
   pts_intersect_unique <- pts_intersect_agg |> dplyr::distinct()
+  pts_intersect_unique
 }
 
 distance <- function(x1, y1, x2, y2) {
@@ -124,7 +129,6 @@ insert_intersection <- function(edge_pts, point, line_id) {
       pt_a_y <- edge_pts[kk, ]$y
       pt_b_x <- edge_pts[kk + 1, ]$x
       pt_b_y <- edge_pts[kk + 1, ]$y
-
       d_ab <- distance(pt_a_x, pt_a_y, pt_b_x, pt_b_y)
       d_ax <- distance(pt_a_x, pt_a_y, pt_x, pt_y)
       d_bx <- distance(pt_b_x, pt_b_y, pt_x, pt_y)
