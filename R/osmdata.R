@@ -109,7 +109,9 @@ get_osm_city_boundary <- function(city_name, bb, crs, multiple = FALSE) {
   }
 
   # If still not found, throw an error
-  if (is.null(city_boundary)) stop("No city boundary found")
+  if (is.null(city_boundary)) {
+    stop("No city boundary found. The city name may be incorrect.")
+  }
 
   if (length(city_boundary) > 1) {
     if (!multiple) {
