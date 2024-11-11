@@ -55,6 +55,9 @@ trim_network <- function(net, area, river_corridor) {
 
 #' Simplify a street network by removing multiple edges and loops.
 #'
+#' Simplify the graph, removing loops and double-edge connections following
+#' [this approach](https://luukvdmeer.github.io/sfnetworks/articles/sfn02_preprocess_clean.html#simplify-network).
+#'
 #' @param net A network object
 #'
 #' @return A simplifed network object
@@ -71,15 +74,21 @@ simplify_network <- function(net) {
 
 #' Clean a street network by subdividing edges and removing pseudo-nodes.
 #'
+#' Subdivide edges by [adding missing nodes](https://luukvdmeer.github.io/sfnetworks/articles/sfn02_preprocess_clean.html#subdivide-edges),
+#' remove [pseudo-nodes](https://luukvdmeer.github.io/sfnetworks/articles/sfn02_preprocess_clean.html#smooth-pseudo-nodes),
+#' and keep only the main connected component of the network.
+#'
 #' @param net A network object
 #'
 #' @return A cleaned network object
 #' @export
 clean_network <- function(net) {
   net |>
+    tidygraph::convert(sfnetworks::to_spatial_subdivision, .clean = TRUE) |>
+    tidygraph::convert(sfnetworks::to_spatial_smooth, .clean = TRUE) |>
     CRiSp::simplify_network() |>
-    tidygraph::convert(sfnetworks::to_spatial_subdivision) |>
-    tidygraph::convert(sfnetworks::to_spatial_smooth)
+    tidygraph::activate("nodes") |>
+    dplyr::filter(tidygraph::group_components() == 1)
 }
 
 #' Determine the end vertices of the initial river corridor.

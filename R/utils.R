@@ -6,7 +6,7 @@
 #'
 #' @return An sf object with latitude and longitude
 #' @export
-get_latlon <- function(x) {
+get_geom_latlon <- function(x) {
   sf::st_transform(x, 4326) |>
     sf::st_geometry()
 }
@@ -33,4 +33,30 @@ calc_weights <- function(net) {
   net |>
     sfnetworks::activate("edges") |>
     dplyr::mutate(weight = sfnetworks::edge_length())
+}
+
+#' Get UTM zone from longitude
+#'
+#' @param x An sf object
+#'
+#' @return The UTM zone
+#' @export
+get_utm_zone_epsg <- function(x) {
+  if (!"sf" %in% class(x)) {
+    stop("x must be an sf object")
+  }
+
+  coords <- x |>
+    sf::st_bbox() |>
+    sf::st_as_sfc() |>
+    sf::st_centroid() |>
+    sf::st_transform(4326) |>
+    sf::st_coordinates()
+
+  if (coords[2] >= 0L) {
+    base <- 32600
+  } else {
+    base <- 32700
+  }
+  base + floor((coords[1] + 180) / 6) + 1
 }
