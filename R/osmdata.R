@@ -78,6 +78,8 @@ get_osmdata <- function(city_name, river_name, crs = NULL, buffer = NULL) {
 #' @param city_name A character string with the name of the city
 #' @param bb Bounding box of class `bbox`
 #' @param crs Coordinate reference system as EPSG code
+#' @param multiple A logical indicating if multiple city boundaries should be
+#'                 returned. By default, only the first one is returned.
 #'
 #' @return An sf object with the city boundary
 #' @importFrom rlang .data
@@ -85,7 +87,7 @@ get_osmdata <- function(city_name, river_name, crs = NULL, buffer = NULL) {
 #'
 #' @examples
 #' get_osm_city_boundary("Bucharest", bb, crs)
-get_osm_city_boundary <- function(city_name, bb, crs) {
+get_osm_city_boundary <- function(city_name, bb, crs, multiple = FALSE) {
   # Define a helper function to fetch the city boundary
   fetch_boundary <- function(key, value, ...) {
     CRiSp::osmdata_as_sf(key, value, bb)$osm_multipolygons |>
@@ -108,6 +110,15 @@ get_osm_city_boundary <- function(city_name, bb, crs) {
 
   # If still not found, throw an error
   if (is.null(city_boundary)) stop("No city boundary found")
+
+  if (length(city_boundary) > 1) {
+    if (!multiple) {
+      message("Multiple boundaries were found. Using the first one.")
+      return(city_boundary[1])
+    } else {
+      message("Multiple boundaries were found. Returning all.")
+    }
+  }
 
   city_boundary
 }
