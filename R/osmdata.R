@@ -85,6 +85,10 @@ get_osmdata <- function(city_name, river_name, crs = NULL, buffer = NULL) {
 
 #' Get the city boundary from OpenStreetMap
 #'
+#' This function retrieves the city boundary from OpenStreetMap based on a
+#' bounding box with the OSM tags "place:city" and "boundary:administrative".
+#' The result is filtered by the city name.
+#'
 #' @param city_name A character string with the name of the city
 #' @param bb Bounding box of class `bbox`
 #' @param crs Coordinate reference system as EPSG code

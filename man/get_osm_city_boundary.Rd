@@ -20,7 +20,9 @@ returned. By default, only the first one is returned.}
 An sf object with the city boundary
 }
 \description{
-Get the city boundary from OpenStreetMap
+This function retrieves the city boundary from OpenStreetMap based on a
+bounding box with the OSM tags "place:city" and "boundary:administrative".
+The result is filtered by the city name.
 }
 \examples{
 bb <- get_osm_bb("Bucharest")
