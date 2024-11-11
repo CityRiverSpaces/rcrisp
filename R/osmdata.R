@@ -45,6 +45,7 @@ get_osm_bb <- function(city_name) {
 get_osmdata <- function(city_name, river_name, crs = NULL, buffer = NULL) {
   bb <- get_osm_bb(city_name)
 
+  if (is.null(crs)) crs <- get_utm_zone_epsg_bbox(bb) |> as.numeric()
 
   if (!is.null(buffer)) {
     bb <- bb |>

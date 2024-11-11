@@ -35,7 +35,7 @@ calc_weights <- function(net) {
     dplyr::mutate(weight = sfnetworks::edge_length())
 }
 
-#' Get UTM zone from longitude
+#' Get UTM zone from sf object
 #'
 #' @param x An sf object
 #'
@@ -61,19 +61,19 @@ get_utm_zone_epsg_sf <- function(x) {
   base + floor((coords[1] + 180) / 6) + 1
 }
 
-#' Get UTM zone from longitude
+#' Get UTM zone from bbox object
 #'
-#' @param x A matrix with longitude and latitude bounds
+#' @param x A bbox object
 #'
 #' @return The UTM zone
 #' @export
-get_utm_zone_epsg_bb <- function(bb) {
-  if (!is.matrix(bb) || ncol(bb) != 2 || nrow(bb) != 2) {
-    stop("bbox must be a 2x2 matrix with longitude and latitude bounds")
+get_utm_zone_epsg_bbox <- function(bb) {
+  if (class(bb) != "bbox") {
+    stop("the bounding box must be of class bbox")
   }
 
-  centroid_long <- (bb[1, 1] + bb[1, 2]) / 2
-  centroid_lat <- (bb[2, 1] + bb[2, 2]) / 2
+  centroid_long <- (bb[1] + bb[3]) / 2
+  centroid_lat <- (bb[2] + bb[4]) / 2
 
   base <- if (centroid_lat >= 0) 32600 else 32700
   utm_zone <- base + floor((centroid_long + 180) / 6) + 1

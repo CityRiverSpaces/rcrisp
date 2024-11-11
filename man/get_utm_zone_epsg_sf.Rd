@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{get_utm_zone_epsg_sf}
 \alias{get_utm_zone_epsg_sf}
-\title{Get UTM zone from longitude}
+\title{Get UTM zone from sf object}
 \usage{
 get_utm_zone_epsg_sf(x)
 }
@@ -13,5 +13,5 @@ get_utm_zone_epsg_sf(x)
 The UTM zone
 }
 \description{
-Get UTM zone from longitude
+Get UTM zone from sf object
 }
