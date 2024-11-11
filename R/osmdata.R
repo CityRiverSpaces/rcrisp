@@ -176,6 +176,7 @@ get_osm_river <- function(river_name, bb, crs) {
 #'             "motorway", "trunk", "primary", "secondary", "tertiary"
 #' @return An sf object with the streets
 #' @export
+#' @importFrom rlang .data
 #'
 #' @examples
 #' get_osm_streets(bb, crs)
@@ -198,7 +199,7 @@ get_osm_streets <- function(bb, crs, highway_values = NULL) {
   streets_lines <- streets$osm_lines |>
     dplyr::bind_rows(poly_to_lines) |>
     dplyr::select("highway") |>
-    dplyr::rename(type = `highway`) |>
+    dplyr::rename(type = .data$highway) |>
     sf::st_transform(crs)
 
   return(streets_lines)
@@ -211,6 +212,7 @@ get_osm_streets <- function(bb, crs, highway_values = NULL) {
 #'
 #' @return An sf object with the railways
 #' @export
+#' @importFrom rlang .data
 #'
 #' @examples
 #' get_osm_railways(bb, crs)
@@ -218,7 +220,7 @@ get_osm_railways <- function(bb, crs) {
   railways <- osmdata_as_sf("railway", "rail", bb)
   railways_lines <- railways$osm_lines |>
     dplyr::select("railway") |>
-    dplyr::rename(type = `railway`) |>
+    dplyr::rename(type = .data$railway) |>
     sf::st_transform(crs)
 
   return(railways_lines)
