@@ -8,7 +8,6 @@
 #'           "min", "max")
 #'
 #' @return An sf object with the retrieved OpenStreetMap data
-#' @export
 osmdata_as_sf <- function(key, value, bb) {
   bb |>
     osmdata::opq() |>
