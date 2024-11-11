@@ -23,5 +23,7 @@ An sf object with the city boundary
 Get the city boundary from OpenStreetMap
 }
 \examples{
+bb <- get_osm_bb("Bucharest")
+crs <- get_utm_zone_epsg_bbox(bb)
 get_osm_city_boundary("Bucharest", bb, crs)
 }

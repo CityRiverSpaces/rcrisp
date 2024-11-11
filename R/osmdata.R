@@ -96,6 +96,8 @@ get_osmdata <- function(city_name, river_name, crs = NULL, buffer = NULL) {
 #' @export
 #'
 #' @examples
+#' bb <- get_osm_bb("Bucharest")
+#' crs <- get_utm_zone_epsg_bbox(bb)
 #' get_osm_city_boundary("Bucharest", bb, crs)
 get_osm_city_boundary <- function(city_name, bb, crs, multiple = FALSE) {
   # Define a helper function to fetch the city boundary
