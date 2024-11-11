@@ -63,7 +63,7 @@ get_utm_zone_epsg_sf <- function(x) {
 
 #' Get UTM zone from bbox object
 #'
-#' @param x A bbox object
+#' @param bb A bbox object
 #'
 #' @return The UTM zone
 #' @export

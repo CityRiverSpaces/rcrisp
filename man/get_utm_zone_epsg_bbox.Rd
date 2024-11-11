@@ -7,7 +7,7 @@
 get_utm_zone_epsg_bbox(bb)
 }
 \arguments{
-\item{x}{A bbox object}
+\item{bb}{A bbox object}
 }
 \value{
 The UTM zone
