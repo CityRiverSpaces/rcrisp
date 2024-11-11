@@ -8,6 +8,7 @@
 #'           "min", "max")
 #'
 #' @return An sf object with the retrieved OpenStreetMap data
+#' @export
 osmdata_as_sf <- function(key, value, bb) {
   bb |>
     osmdata::opq() |>
@@ -15,6 +16,15 @@ osmdata_as_sf <- function(key, value, bb) {
     osmdata::osmdata_sf()
 }
 
+#' Get the bounding box of a city
+#'
+#' @param city_name The name of the city
+#'
+#' @return A bbox object with the bounding box of the city
+#' @export
+#'
+#' @examples
+#' get_osm_bb("Bucharest")
 get_osm_bb <- function(city_name) {
   bb <- osmdata::getbb(city_name)
   bb <- bb |> as.vector()
