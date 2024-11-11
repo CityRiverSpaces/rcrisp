@@ -15,6 +15,14 @@ osmdata_as_sf <- function(key, value, bb) {
     osmdata::osmdata_sf()
 }
 
+get_osm_bb <- function(city_name) {
+  bb <- osmdata::getbb(city_name)
+  bb <- bb |> as.vector()
+  names(bb) <- c("xmin", "ymin", "xmax", "ymax")
+  bb <- st_bbox(bb, crs = 4326)
+  return(bb)
+}
+
 #' Retrieve OpenStreetMap data for a given location
 #'
 #' Retrieve OpenStreetMap data for a given location, including
@@ -35,12 +43,8 @@ osmdata_as_sf <- function(key, value, bb) {
 #' @examples
 #' get_osmdata("Bucharest", "Dambovita", buffer = 2000)
 get_osmdata <- function(city_name, river_name, crs = NULL, buffer = NULL) {
-  bb <- osmdata::getbb(city_name)
-  if (is.null(crs)) crs <- get_utm_zone_epsg_bb(bb)
+  bb <- get_osm_bb(city_name)
 
-  bb <- bb |> as.vector()
-  names(bb) <- c("xmin", "ymin", "xmax", "ymax")
-  bb <- st_bbox(bb, crs = 4326)
 
   if (!is.null(buffer)) {
     bb <- bb |>
