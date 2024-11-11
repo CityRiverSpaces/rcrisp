@@ -4,7 +4,8 @@
 #'
 #' @param key A character string with the key to filter the data
 #' @param value A character string with the value to filter the data
-#' @param bb A list with the bounding box
+#' @param bb A matrix with the bounding box (rows for "x", "y", columns for
+#'           "min", "max")
 #'
 #' @return An sf object with the retrieved OpenStreetMap data
 #' @export
@@ -17,20 +18,34 @@ osmdata_as_sf <- function(key, value, bb) {
 
 #' Retrieve OpenStreetMap data for a given location
 #'
-#' @param name A character string with the name of the place to retrieve
-#'             the bounding box
-#' @param key A character string with the key to filter the data
-#' @param value A character string with the value to filter the data
+#' @param
 #'
-#' @return An sf object with the retrieved OpenStreetMap data for the
+#' @return An list with the retrieved OpenStreetMap data sets for the
 #'         given location
 #' @export
 #'
 #' @examples
-#' get_osmdata("Bucharest", "waterway", "river")
-get_osmdata <- function(name, key, value) {
-  bb <- osmdata::getbb(name)
-  CRiSp::osmdata_as_sf(key, value, bb)
+#' get_osmdata()
+get_osm_data <- function(city_name, river_name, crs = NULL, buffer = NULL) {
+  bb <- osmdata::getbb(city_name)
+
+  if (!is.null(buffer)) bb <- ...
+  if (!is.null(crs)) crs <- ...
+
+  boundary <- get_osm_city_boundary(bb, crs)
+  river <- get_osm_river(bb, crs)
+  highways <- get_osm_highways(bb, crs)
+  railways <- get_osm_railways(bb, crs)
+
+  osm_data <- list(
+    bb = bb,
+    boundary = boundary,
+    river_centerline = river[["centerline"]],
+    river_surface = river[["surface"]],
+    highways = highways,
+    railways = railways,
+  )
+  return(osm_data)
 }
 
 #' Get the city boundary from OpenStreetMap
@@ -63,6 +78,18 @@ get_osm_city_boundary <- function(city_name) {
   if (is.null(city_boundary)) stop("No city boundary found")
 
   city_boundary
+}
+
+get_osm_river <- function(crs = NULL) {
+
+}
+
+get_osm_highways <- function() {
+
+}
+
+get_osm_railways <- function() {
+
 }
 
 #' Get OpenStreetMap data for a river corridor

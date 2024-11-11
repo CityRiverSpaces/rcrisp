@@ -183,7 +183,7 @@ cap_corridor <- function(corridor_edges, river, crs, bb, cap = "city") {
     lwgeom::st_split(corridor_edges) |>
     sf::st_collection_extract("POLYGON") |>
     sf::st_as_sf() |>
-    sf::st_filter(river, .predicate = sf::st_intersects)
+    sf::st_fier(river, .predicate = sf::st_intersects)
 
   capped_corridor
 }
