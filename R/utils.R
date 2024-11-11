@@ -41,7 +41,7 @@ calc_weights <- function(net) {
 #'
 #' @return The UTM zone
 #' @export
-get_utm_zone_epsg <- function(x) {
+get_utm_zone_epsg_sf <- function(x) {
   if (!"sf" %in% class(x)) {
     stop("x must be an sf object")
   }
@@ -59,4 +59,24 @@ get_utm_zone_epsg <- function(x) {
     base <- 32700
   }
   base + floor((coords[1] + 180) / 6) + 1
+}
+
+#' Get UTM zone from longitude
+#'
+#' @param x A matrix with longitude and latitude bounds
+#'
+#' @return The UTM zone
+#' @export
+get_utm_zone_epsg_bb <- function(bb) {
+  if (!is.matrix(bb) || ncol(bb) != 2 || nrow(bb) != 2) {
+    stop("bbox must be a 2x2 matrix with longitude and latitude bounds")
+  }
+
+  centroid_long <- (bb[1, 1] + bb[1, 2]) / 2
+  centroid_lat <- (bb[2, 1] + bb[2, 2]) / 2
+
+  base <- if (centroid_lat >= 0) 32600 else 32700
+  utm_zone <- base + floor((centroid_long + 180) / 6) + 1
+
+  return(utm_zone)
 }
