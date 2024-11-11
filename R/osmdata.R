@@ -76,6 +76,8 @@ get_osmdata <- function(city_name, river_name, crs = NULL, buffer = NULL) {
 #' Get the city boundary from OpenStreetMap
 #'
 #' @param city_name A character string with the name of the city
+#' @param bb Bounding box of class `bbox`
+#' @param crs Coordinate reference system as EPSG code
 #'
 #' @return An sf object with the city boundary
 #' @importFrom rlang .data
