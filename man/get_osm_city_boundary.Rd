@@ -4,10 +4,17 @@
 \alias{get_osm_city_boundary}
 \title{Get the city boundary from OpenStreetMap}
 \usage{
-get_osm_city_boundary(city_name, bb, crs)
+get_osm_city_boundary(city_name, bb, crs, multiple = FALSE)
 }
 \arguments{
 \item{city_name}{A character string with the name of the city}
+
+\item{bb}{Bounding box of class \code{bbox}}
+
+\item{crs}{Coordinate reference system as EPSG code}
+
+\item{multiple}{A logical indicating if multiple city boundaries should be
+returned. By default, only the first one is returned.}
 }
 \value{
 An sf object with the city boundary
