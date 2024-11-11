@@ -15,7 +15,7 @@ bucharest <- get_osmdata(city_name, river_name,
 
 # Fix encoding issue in the WKT string
 st_crs(bucharest$boundary)$wkt <- gsub("°|º", "\\\u00b0",
-                                  st_crs(bucharest$boundary)$wkt)
+                                       st_crs(bucharest$boundary)$wkt)
 
 # Save as package data
 usethis::use_data(bucharest, overwrite = TRUE)

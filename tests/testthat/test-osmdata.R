@@ -45,5 +45,7 @@ test_that("Multiple boundaries are correcly retreived", {
   bb <- get_osm_bb(city_name)
   crs <- get_utm_zone_epsg_bbox(bb) |> as.numeric()
 
-  expect_true(length(get_osm_city_boundary(city_name, bb, crs, multiple = TRUE)) > 1)
+  expect_true(
+    length(get_osm_city_boundary(city_name, bb, crs, multiple = TRUE)) > 1
+  )
 })
