@@ -19,7 +19,7 @@ get_osm_bb <- function(city_name) {
   bb <- osmdata::getbb(city_name)
   bb <- bb |> as.vector()
   names(bb) <- c("xmin", "ymin", "xmax", "ymax")
-  bb <- st_bbox(bb, crs = 4326)
+  bb <- sf::st_bbox(bb, crs = 4326)
   return(bb)
 }
 
@@ -49,11 +49,11 @@ get_osmdata <- function(city_name, river_name, crs = NULL, buffer = NULL) {
 
   if (!is.null(buffer)) {
     bb <- bb |>
-      st_as_sfc() |>
-      st_transform(crs = crs) |>
-      st_buffer(buffer) |>
-      st_transform(crs = 4326) |>
-      st_bbox()
+      sf::st_as_sfc() |>
+      sf::st_transform(crs = crs) |>
+      sf::st_buffer(buffer) |>
+      sf::st_transform(crs = 4326) |>
+      sf::st_bbox()
   }
 
   boundary <- get_osm_city_boundary(city_name, bb, crs)
