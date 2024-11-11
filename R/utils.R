@@ -68,7 +68,7 @@ get_utm_zone_epsg_sf <- function(x) {
 #' @return The UTM zone
 #' @export
 get_utm_zone_epsg_bbox <- function(bb) {
-  if (class(bb) != "bbox") {
+  if (!inherits(bb, "bbox")) {
     stop("the bounding box must be of class bbox")
   }
 
