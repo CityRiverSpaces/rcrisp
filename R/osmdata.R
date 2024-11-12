@@ -105,11 +105,10 @@ get_osmdata <- function(city_name, river_name, crs = NULL, buffer = NULL) {
 #' get_osm_city_boundary("Bucharest", bb, crs)
 get_osm_city_boundary <- function(city_name, bb, crs, multiple = FALSE) {
   # Define a helper function to fetch the city boundary
-  fetch_boundary <- function(key, value, ...) {
+  fetch_boundary <- function(key, value) {
     CRiSp::osmdata_as_sf(key, value, bb)$osm_multipolygons |>
-      dplyr::filter(dplyr::if_any(c(rlang::.data$`name:en`, rlang::.data$name),
-                                  ~ . == stringr::str_extract(city_name,
-                                                              "^[^,]+"))) |>
+      dplyr::filter(`name:en` == stringr::str_extract(city_name, "^[^,]+") |
+                    name == stringr::str_extract(city_name, "^[^,]+")) |>
       sf::st_transform(crs) |>
       sf::st_geometry()
   }
