@@ -18,5 +18,7 @@ An sf object with the railways
 Get OpenStreetMap railways
 }
 \examples{
+bb <- get_osm_bb("Bucharest")
+crs <- get_utm_zone_epsg_bbox(bb)
 get_osm_railways(bb, crs)
 }

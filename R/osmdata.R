@@ -151,6 +151,8 @@ get_osm_city_boundary <- function(city_name, bb, crs, multiple = FALSE) {
 #' @export
 #'
 #' @examples
+#' bb <- get_osm_bb("Bucharest")
+#' crs <- get_utm_zone_epsg_bbox(bb)
 #' get_osm_river("Dâmbovița", bb, crs)
 get_osm_river <- function(river_name, bb, crs) {
   # Get the river centreline
@@ -185,6 +187,8 @@ get_osm_river <- function(river_name, bb, crs) {
 #' @importFrom rlang .data
 #'
 #' @examples
+#' bb <- get_osm_bb("Bucharest")
+#' crs <- get_utm_zone_epsg_bbox(bb)
 #' get_osm_streets(bb, crs)
 get_osm_streets <- function(bb, crs, highway_values = NULL) {
   if (is.null(highway_values)) {
@@ -221,6 +225,8 @@ get_osm_streets <- function(bb, crs, highway_values = NULL) {
 #' @importFrom rlang .data
 #'
 #' @examples
+#' bb <- get_osm_bb("Bucharest")
+#' crs <- get_utm_zone_epsg_bbox(bb)
 #' get_osm_railways(bb, crs)
 get_osm_railways <- function(bb, crs) {
   railways <- osmdata_as_sf("railway", "rail", bb)
