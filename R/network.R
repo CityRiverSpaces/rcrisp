@@ -94,14 +94,16 @@ distance <- function(x1, y1, x2, y2) {
   sqrt((x2 - x1) ^ 2 + (y2 - y1) ^ 2)
 }
 
+#' @importFrom rlang .data
 insert_intersection <- function(edge_pts, point, line_id) {
-  line_pts <- subset(edge_pts, linestring_id == line_id)
+  line_pts <- subset(edge_pts, .data$linestring_id == line_id)
   pt_x <- point[[1]]
   pt_y <- point[[2]]
-  is_point_in_line <- nrow(subset(line_pts, x == pt_x &
-                                    y == pt_y)) >= 1
+  is_point_in_line <- nrow(
+    subset(line_pts, .data$x == pt_x & .data$y == pt_y)
+  ) >= 1
   if (!is_point_in_line) {
-    startpoint <- subset(line_pts, is_startpoint == TRUE)
+    startpoint <- subset(line_pts, .data$is_startpoint == TRUE)
     kk <- as.numeric(rownames(startpoint))
     w_break <- FALSE
     while (!w_break) {
@@ -141,8 +143,8 @@ insert_intersection <- function(edge_pts, point, line_id) {
 
 #' Clean a spatial network.
 #'
-#' Subdivide edges by [adding missing nodes](https://luukvdmeer.github.io/sfnetworks/articles/sfn02_preprocess_clean.html#subdivide-edges),
-#' remove [pseudo-nodes](https://luukvdmeer.github.io/sfnetworks/articles/sfn02_preprocess_clean.html#smooth-pseudo-nodes),
+#' Subdivide edges by [adding missing nodes](https://luukvdmeer.github.io/sfnetworks/articles/sfn02_preprocess_clean.html#subdivide-edges), #nolint
+#' remove [pseudo-nodes](https://luukvdmeer.github.io/sfnetworks/articles/sfn02_preprocess_clean.html#smooth-pseudo-nodes), #nolint
 #' simplify the network (see [simplify_network()]), and discard all but the
 #' main connected component.
 #'
@@ -166,7 +168,7 @@ clean_network <- function(network) {
 #' Simplify a spatial network by removing multiple edges and loops.
 #'
 #' Simplify the graph, removing loops and double-edge connections following
-#' [this approach](https://luukvdmeer.github.io/sfnetworks/articles/sfn02_preprocess_clean.html#simplify-network).
+#' [this approach](https://luukvdmeer.github.io/sfnetworks/articles/sfn02_preprocess_clean.html#simplify-network). #nolint
 #' When dropping multiple edges, keep the shortest ones.
 #'
 #' @param network A network object

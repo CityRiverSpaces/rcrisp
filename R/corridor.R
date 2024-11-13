@@ -109,6 +109,7 @@ corridor_end_points <- function(river, bbox) {
 #' @param river A simple feature geometry representing the river centerline
 #'
 #' @return A simple feature geometry set of two areas of interest
+#' @importFrom rlang .data
 split_aoi <- function(bbox, river) {
   regions <- split(sf::st_as_sfc(bbox), river)
 
@@ -116,7 +117,7 @@ split_aoi <- function(bbox, river) {
     # Sort fragments according to area in descending order
     regions_sorted <- regions |>
       dplyr::mutate(area = sf::st_area(regions)) |>
-      dplyr::arrange(-area)
+      dplyr::arrange(-.data$area)
 
     # Return the geometries of the two largest fragments
     return(sf::st_geometry(regions_sorted[1:2, ]))

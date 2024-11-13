@@ -11,7 +11,7 @@ bucharest <- CRiSp::get_osmdata(city_name, river_name,
 # Fix encoding issue in the WKT string of city boundary
 lapply(names(bucharest), function(layer) {
   sf::st_crs(bucharest[[layer]])$wkt <- gsub("°|º", "\\\u00b0",
-                                            sf::st_crs(bucharest[[layer]])$wkt)
+                                             sf::st_crs(bucharest[[layer]])$wkt)
 })
 
 # Save as package data
