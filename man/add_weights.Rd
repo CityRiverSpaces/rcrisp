@@ -37,7 +37,7 @@ target geometry, and whether or not an edge falls within a specified region,
 which we aim to exclude from search of the shortest paths.
 }
 \details{
-For the i-th edge of the network, its weight \math{w_i} is defined in the
+For the i-th edge of the network, its weight \eqn{w_i} is defined in the
 following way:
 \deqn{
  w_i = |e_i| + d_{geom}(e_i) + p_{buf}(e_i)
