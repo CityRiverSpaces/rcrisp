@@ -66,6 +66,8 @@ get_osmdata <- function(city_name, river_name, crs = NULL, buffer = NULL) {
       sf::st_bbox()
   }
 
+  bb <- sf::st_transform(bb, crs)
+
   boundary <- get_osm_city_boundary(city_name, bb, crs)
   river <- get_osm_river(river_name, bb, crs)
   srteets <- get_osm_streets(bb, crs)
