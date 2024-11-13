@@ -27,7 +27,7 @@ delineate_corridor <- function(
   # Define the area of interest
   bbox <- sf::st_transform(osm_data$bb, sf::st_crs(osm_data$boundary))
 
-  # Setup the combined street and rail network for the delineation
+  # Set up the combined street and rail network for the delineation
   network_edges <- dplyr::bind_rows(osm_data$streets, osm_data$railways)
   network <- as_network(network_edges)
 
