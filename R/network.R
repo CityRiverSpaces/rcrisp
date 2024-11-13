@@ -39,7 +39,7 @@ flatten_network <- function(network) {
   for (i in seq_len(nrow(pts_intersect))) {
     point <- pts_intersect$geometry[[i]]
     intersecting_edges <- unique(unlist(pts_intersect$origins[i]))
-    for (edge_id in intersecting_edges){
+    for (edge_id in intersecting_edges) {
       edge_pts <- insert_intersection(edge_pts, point, edge_id)
     }
   }
