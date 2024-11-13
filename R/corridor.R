@@ -133,8 +133,7 @@ split_aoi <- function(bbox, river) {
 #'
 #' @return A simple feature object
 split <- function(geometry, line) {
-  sf::st_as_sf(geometry) |>
-    lwgeom::st_split(sf::st_geometry(line)) |>
+  lwgeom::st_split(geometry, line) |>
     sf::st_collection_extract()
 }
 
