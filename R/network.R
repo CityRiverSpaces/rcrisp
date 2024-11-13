@@ -94,16 +94,15 @@ distance <- function(x1, y1, x2, y2) {
   sqrt((x2 - x1) ^ 2 + (y2 - y1) ^ 2)
 }
 
-#' @importFrom rlang .data
 insert_intersection <- function(edge_pts, point, line_id) {
-  line_pts <- subset(edge_pts, .data$linestring_id == line_id)
+  line_pts <- subset(edge_pts, edge_pts$linestring_id == line_id)
   pt_x <- point[[1]]
   pt_y <- point[[2]]
   is_point_in_line <- nrow(
-    subset(line_pts, .data$x == pt_x & .data$y == pt_y)
+    subset(line_pts, line_pts$x == pt_x & line_pts$y == pt_y)
   ) >= 1
   if (!is_point_in_line) {
-    startpoint <- subset(line_pts, .data$is_startpoint == TRUE)
+    startpoint <- subset(line_pts, line_pts$is_startpoint == TRUE)
     kk <- as.numeric(rownames(startpoint))
     w_break <- FALSE
     while (!w_break) {
@@ -249,6 +248,7 @@ add_weights <- function(network, target = NULL, exclude_area = NULL,
 #'   take the weigths
 #'
 #' @return A simple feature geometry
+#' @importFrom rlang .data
 shortest_path <- function(network, from, to, weights = "weight") {
   paths <- sfnetworks::st_network_paths(
     network, from = from, to = to, weights = weights, type = "shortest",
