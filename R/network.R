@@ -150,11 +150,10 @@ insert_intersection <- function(edge_pts, point, line_id) {
 #' Clean a spatial network.
 #'
 #' Subdivide edges by [adding missing nodes](https://luukvdmeer.github.io/\
-#'  sfnetworks/articles/sfn02_preprocess_clean.html#subdivide-edges),
-#' remove [pseudo-nodes](https://luukvdmeer.github.io/sfnetworks/articles/\
-#'  sfn02_preprocess_clean.html#smooth-pseudo-nodes), simplify the network
-#' (see [`simplify_network()`]), and discard all but the main connected
-#' component.
+#'  sfnetworks/articles/sfn02_preprocess_clean.html#subdivide-edges), simplify
+#' the network (see [`simplify_network()`]), remove [pseudo-nodes](https://\
+#'  luukvdmeer.github.io/sfnetworks/articles/sfn02_preprocess_clean.html\
+#'  #smooth-pseudo-nodes), and discard all but the main connected component.
 #'
 #' @param network A network object
 #'
@@ -164,10 +163,10 @@ clean_network <- function(network) {
   network |>
     # subdivide edges by adding missing nodes
     tidygraph::convert(sfnetworks::to_spatial_subdivision, .clean = TRUE) |>
-    # remove pseudo-nodes
-    tidygraph::convert(sfnetworks::to_spatial_smooth, .clean = TRUE) |>
     # run simplification steps
     simplify_network() |>
+    # remove pseudo-nodes
+    tidygraph::convert(sfnetworks::to_spatial_smooth, .clean = TRUE) |>
     # keep only the main connected component of the network
     tidygraph::activate("nodes") |>
     dplyr::filter(tidygraph::group_components() == 1)
