@@ -4,7 +4,7 @@
 #' @param flatten Whether all intersections between edges should be
 #'   converted to nodes
 #' @param clean Whether general cleaning tasks should be run on the generated
-#'   network (see [clean_network()] for the description of tasks)
+#'   network (see [`clean_network()`] for the description of tasks)
 #'
 #' @return A spatial network object
 #' @export
@@ -17,8 +17,15 @@ as_network <- function(edges, flatten = TRUE, clean = TRUE) {
 
 #' Flatten a network by adding points at apparent intersections.
 #'
-#' This function adds nodes at intersections between network edges that
-#' cross each other but do not have vertices at the intersection.
+#' All crossing edges are identified, and the points of intersections are
+#' injected within the edge geometries. Note that the injected points are
+#' not converted to network nodes (this can be achieved via sfnetworks'
+#' [`sfnetworks::to_spatial_subdivision()`], which is part of the tasks
+#' that are included in [`clean_network()`].
+#'
+#' The functionality is similar to sfnetworks'
+#' [`sfnetworks::st_network_blend()`], but in that case an external point is
+#' only injected to the closest edge.
 #'
 #' @param network A network object
 #'
@@ -146,7 +153,7 @@ insert_intersection <- function(edge_pts, point, line_id) {
 #'  sfnetworks/articles/sfn02_preprocess_clean.html#subdivide-edges),
 #' remove [pseudo-nodes](https://luukvdmeer.github.io/sfnetworks/articles/\
 #'  sfn02_preprocess_clean.html#smooth-pseudo-nodes), simplify the network
-#' (see [simplify_network()]), and discard all but the main connected
+#' (see [`simplify_network()`]), and discard all but the main connected
 #' component.
 #'
 #' @param network A network object
