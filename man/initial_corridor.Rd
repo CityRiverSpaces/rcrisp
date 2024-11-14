@@ -4,7 +4,7 @@
 \alias{initial_corridor}
 \title{Draw the initial geometry of a river corridor.}
 \usage{
-initial_corridor(river, method = "buffer", bbox = NULL)
+initial_corridor(river, method = "buffer", ..., bbox = NULL)
 }
 \arguments{
 \item{river}{A simple feature geometry representing the river}
@@ -15,8 +15,10 @@ initial_corridor(river, method = "buffer", bbox = NULL)
 (see \code{\link[=river_buffer]{river_buffer()}})
 }}
 
-\item{bbox}{Bounding box defining the extent of the area of interest
-TODO: add input arguments for the initialization method}
+\item{...}{Additional arguments required by the function that implements the
+chosen method (see \code{method})}
+
+\item{bbox}{Bounding box defining the extent of the area of interest}
 }
 \value{
 A simple feature geometry

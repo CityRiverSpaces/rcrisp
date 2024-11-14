@@ -4,15 +4,14 @@
 \alias{river_buffer}
 \title{Draw a corridor as a fixed buffer region around a river.}
 \usage{
-river_buffer(river, bbox, buffer = 1000)
+river_buffer(river, buffer, bbox = NULL)
 }
 \arguments{
 \item{river}{A simple feature geometry representing the river}
 
-\item{bbox}{Bounding box defining the extent of the area of interest}
+\item{buffer}{Size of the buffer (in the river's CRS units)}
 
-\item{buffer}{Size of the buffer (in the river's CRS units)
-TODO: remove default for the buffer argument}
+\item{bbox}{Bounding box defining the extent of the area of interest}
 }
 \value{
 A simple feature geometry
