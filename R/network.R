@@ -214,6 +214,7 @@ simplify_network <- function(network) {
 #'   weights
 #'
 #' @return A network object with weights added as a column in the edge table
+#' @importFrom rlang :=
 #' @export
 add_weights <- function(network, target = NULL, exclude_area = NULL,
                         penalty = 1000., weight_name = "weight") {
@@ -238,7 +239,7 @@ add_weights <- function(network, target = NULL, exclude_area = NULL,
 
   network |>
     tidygraph::activate("edges") |>
-    dplyr::mutate("{weight_name}" := lengths + distances + repellance)
+    dplyr::mutate(!!weight_name := lengths + distances + repellance)
 }
 
 #' Find shortest path between a pair of nodes in the network.
