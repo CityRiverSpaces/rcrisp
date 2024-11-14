@@ -21,7 +21,8 @@ corridor <- function(
 
   # Draw the initial corridor geometry within the area of interest
   river <- c(river_centerline, river_surface)
-  corridor_init <- initial_corridor(river, initial_method, bbox)
+  # TODO: remove hardcoded buffer value here
+  corridor_init <- initial_corridor(river, initial_method, bbox, buffer = 1000)
 
   # Find the corridor end points
   end_points <- corridor_end_points(river_centerline, bbox)
@@ -53,16 +54,14 @@ corridor <- function(
 #' @param method The method employed to draw the initial river corridor:
 #'   - "buffer" (default): add a fixed buffer region to the river geometry
 #'     (see [river_buffer()])
+#' @param ... Additional arguments required by the function that implements the
+#'   chosen method (see `method`)
 #' @param bbox Bounding box defining the extent of the area of interest
-#' TODO: add input arguments for the initialization method
 #'
 #' @return A simple feature geometry
-initial_corridor <- function(river, method = "buffer", bbox = NULL) {
-
-  if (is.null(bbox)) bbox <- sf::st_bbox(river)
-
+initial_corridor <- function(river, method = "buffer", ..., bbox = NULL) {
   if (method == "buffer") {
-    return(river_buffer(river, bbox))
+    return(river_buffer(river, ..., bbox = bbox))
   } else {
     stop(
       sprintf("Unknown method to initialize river corridor: {method}", method)
@@ -73,15 +72,18 @@ initial_corridor <- function(river, method = "buffer", bbox = NULL) {
 #' Draw a corridor as a fixed buffer region around a river.
 #'
 #' @param river A simple feature geometry representing the river
-#' @param bbox Bounding box defining the extent of the area of interest
 #' @param buffer Size of the buffer (in the river's CRS units)
-#' TODO: remove default for the buffer argument
+#' @param bbox Bounding box defining the extent of the area of interest
 #'
 #' @return A simple feature geometry
-river_buffer <- function(river, bbox, buffer = 1000) {
+river_buffer <- function(river, buffer, bbox = NULL) {
   river_buf <- sf::st_buffer(river, buffer)
   river_buf_union <- sf::st_union(river_buf)
-  sf::st_crop(river_buf_union, bbox)
+  if (!is.null(bbox)) {
+    return(sf::st_crop(river_buf_union, bbox))
+  } else {
+    return(river_buf_union)
+  }
 }
 
 #' Find the corridor end points.
@@ -115,7 +117,7 @@ split_aoi <- function(bbox, river) {
 
   if (length(regions) > 2) {
     # Sort fragments according to area in descending order
-    regions_sorted <- regions |>
+    regions_sorted <- sf::st_as_sf(regions) |>
       dplyr::mutate(area = sf::st_area(regions)) |>
       dplyr::arrange(-.data$area)
 
