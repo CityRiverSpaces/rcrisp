@@ -157,7 +157,7 @@ test_that("Capping a corridor with 'shortest_path' uses network paths", {
                                    node_key = "x")
   corridor_edge_1 <- sf::st_linestring(cbind(c(-1, 1), c(1, 1)))
   corridor_edge_2 <- sf::st_linestring(cbind(c(-1, 1), c(-1, -1)))
-  corridor_edges <- sf::st_sfc(edge_1, edge_2)
+  corridor_edges <- sf::st_sfc(corridor_edge_1, corridor_edge_2)
   corridor <- cap_corridor(corridor_edges, method = "shortest-path",
                            network = network)
   pts_corridor <- sf::st_cast(corridor, "POINT")
