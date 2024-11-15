@@ -61,6 +61,6 @@ test_that("Splitting an AoI by a more complex river still gives two regions", {
 test_that("Splitting an AoI by a river works with real data", {
   bbox <- sf::st_bbox(bucharest$boundary)
   river <- bucharest$river_centerline
-  aoi_split <- split_aoi(bb, river)
+  aoi_split <- split_aoi(bbox, river)
   expect_equal(length(aoi_split), 2)
 })
