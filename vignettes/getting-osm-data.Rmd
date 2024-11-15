@@ -154,8 +154,7 @@ walk(
     .x,
     dsn = sprintf("%s_%s.gpkg",
                   names(st_write_list)[map_lgl(st_write_list,
-                                                      identical,
-                                                      .x)], city_name),
+                                               identical, .x)], city_name),
     append = FALSE,
     quiet = TRUE
   )
