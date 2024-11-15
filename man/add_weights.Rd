@@ -21,8 +21,8 @@ feature geometry}
 \item{exclude_area}{Area that we aim to exclude from the shortest-path
 search, as a simple feature geometry}
 
-\item{penalty}{Penalty (in m) that is added to the edges that falls within
-the excluded area}
+\item{penalty}{Penalty (in the network CRS' units) that is added to the
+edges that falls within the excluded area}
 
 \item{weight_name}{Name of the column in the edge table where to add the
 weights}

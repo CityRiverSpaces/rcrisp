@@ -214,8 +214,8 @@ simplify_network <- function(network) {
 #'   feature geometry
 #' @param exclude_area Area that we aim to exclude from the shortest-path
 #'   search, as a simple feature geometry
-#' @param penalty Penalty (in m) that is added to the edges that falls within
-#'   the excluded area
+#' @param penalty Penalty (in the network CRS' units) that is added to the
+#'   edges that falls within the excluded area
 #' @param weight_name Name of the column in the edge table where to add the
 #'   weights
 #'
@@ -232,16 +232,18 @@ add_weights <- function(network, target = NULL, exclude_area = NULL,
   } else {
     distances <- 0.
   }
+  distances <- set_units_like(distances, lengths)
 
   if (!is.null(exclude_area)) {
     is_inside <- edges |>
       sf::st_centroid() |>
       sf::st_intersects(exclude_area, sparse = FALSE) |>
       as.numeric()
-    repellance <- units::set_units(1000., "m") * is_inside
+    repellance <- penalty * is_inside
   } else {
-    repellance <- units::set_units(0, "m")
+    repellance <- 0.
   }
+  repellance <- set_units_like(repellance, lengths)
 
   network |>
     tidygraph::activate("edges") |>
