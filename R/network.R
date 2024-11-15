@@ -224,11 +224,12 @@ simplify_network <- function(network) {
 #' @export
 add_weights <- function(network, target = NULL, exclude_area = NULL,
                         penalty = 1000., weight_name = "weight") {
-  edges <- sf::st_as_sf(network, "edges")
+  edges <- sf::st_geometry(sf::st_as_sf(network, "edges"))
   lengths <- sf::st_length(edges)
 
   if (!is.null(target)) {
     distances <- sf::st_distance(edges, target, which = "Euclidean")
+    distances <- drop(distances)  # drop column dimension with single element
   } else {
     distances <- 0.
   }
