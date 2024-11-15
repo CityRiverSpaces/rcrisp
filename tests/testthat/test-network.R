@@ -178,7 +178,7 @@ test_that("Weights can also include distance from target", {
   edges <- sf::st_as_sf(network_weights, "edges")
   expect_true("weight" %in% colnames(edges))
   weight_actual <- edges[["weight"]]
-  weight_expected <- sf::st_length(edges) + sf::st_distance(edges, target)
+  weight_expected <- sf::st_length(edges) + drop(sf::st_distance(edges, target))
   expect_equal(weight_actual, weight_expected)
 })
 
