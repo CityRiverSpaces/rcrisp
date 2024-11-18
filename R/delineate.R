@@ -42,11 +42,18 @@ delineate_corridor <- function(
   return(corridor)
 }
 
+
+#' Delineate segments of a river corridor.
+#'
+#' @return A simple feature geometry
 #' @export
 delineate_segments <- function() {
   stop("Segmentation not yet implemented.")
 }
 
+#' Delinate the riverspace.
+#'
+#' @return A simple feature geometry
 #' @export
 delineate_riverspace <- function() {
   stop("Riverspace delineation not yet implemented.")
