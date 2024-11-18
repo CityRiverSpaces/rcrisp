@@ -167,10 +167,11 @@ get_osm_river <- function(river_name, bb, crs) {
   river_surface <- CRiSp::osmdata_as_sf("natural", "water", bb)
   river_surface <- dplyr::bind_rows(river_surface$osm_polygons,
                                     river_surface$osm_multipolygons) |>
+    sf::st_geometry() |>
+    sf::st_as_sf() |>
     sf::st_crop(bb) |>
     sf::st_transform(crs) |>
     sf::st_filter(river_centerline, .predicate = sf::st_intersects) |>
-    sf::st_geometry() |>
     sf::st_union()
 
   return(list(centerline = river_centerline,
