@@ -21,6 +21,6 @@ Get the river centreline and surface from OpenStreetMap
 }
 \examples{
 bb <- get_osm_bb("Bucharest")
-crs <- get_utm_zone_epsg_bbox(bb)
+crs <- get_utm_zone(bb)
 get_osm_river("Dâmbovița", bb, crs)
 }

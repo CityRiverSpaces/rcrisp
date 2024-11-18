@@ -19,6 +19,6 @@ Get OpenStreetMap railways
 }
 \examples{
 bb <- get_osm_bb("Bucharest")
-crs <- get_utm_zone_epsg_bbox(bb)
+crs <- get_utm_zone(bb)
 get_osm_railways(bb, crs)
 }

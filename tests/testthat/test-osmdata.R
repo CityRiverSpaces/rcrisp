@@ -6,7 +6,7 @@ test_that("City boundary of Bucharest is correctly retreived", {
 
   city_name <- "Bucharest"
   bb <- get_osm_bb(city_name)
-  crs <- get_utm_zone_epsg_bbox(bb) |> as.numeric()
+  crs <- get_utm_zone(bb)
 
   bucharest_boundary_osm <- get_osm_city_boundary(city_name, bb, crs) |>
     sf::st_geometry() |>
@@ -20,7 +20,7 @@ test_that("City boundary of Paris is returned without error", {
 
   city_name <- "Paris, France"
   bb <- get_osm_bb(city_name)
-  crs <- get_utm_zone_epsg_bbox(bb) |> as.numeric()
+  crs <- get_utm_zone(bb)
 
   expect_no_error(get_osm_city_boundary(city_name, bb, crs))
 })
@@ -43,7 +43,7 @@ test_that("Multiple boundaries are correcly retreived", {
 
   city_name <- "Paris, France"
   bb <- get_osm_bb(city_name)
-  crs <- get_utm_zone_epsg_bbox(bb) |> as.numeric()
+  crs <- get_utm_zone(bb)
 
   expect_true(
     length(get_osm_city_boundary(city_name, bb, crs, multiple = TRUE)) > 1
