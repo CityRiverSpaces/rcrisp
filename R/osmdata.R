@@ -213,7 +213,7 @@ get_osm_streets <- function(bb, crs, highway_values = NULL) {
   streets_lines <- streets$osm_lines |>
     dplyr::bind_rows(poly_to_lines) |>
     dplyr::select("highway") |>
-    dplyr::rename(!!sym("type") := highway) |>
+    dplyr::rename(!!sym("type") := !!sym("highway")) |>
     sf::st_transform(crs)
 
   return(streets_lines)
