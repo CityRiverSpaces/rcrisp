@@ -16,6 +16,7 @@ BugReports: https://github.com/CityRiverSpaces/crisp/issues
 Depends:
     R (>= 2.10)
 Imports:
+    dbscan,
     dplyr,
     lwgeom,
     osmdata,
