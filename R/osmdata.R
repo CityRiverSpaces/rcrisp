@@ -55,7 +55,7 @@ get_osm_bb <- function(city_name) {
 get_osmdata <- function(city_name, river_name, crs = NULL, buffer = NULL) {
   bb <- get_osm_bb(city_name)
 
-  if (is.null(crs)) crs <- get_utm_zone_epsg_bbox(bb) |> as.numeric()
+  if (is.null(crs)) crs <- get_utm_zone(bb)
 
   if (!is.null(buffer)) {
     bb <- bb |>
@@ -101,7 +101,7 @@ get_osmdata <- function(city_name, river_name, crs = NULL, buffer = NULL) {
 #'
 #' @examples
 #' bb <- get_osm_bb("Bucharest")
-#' crs <- get_utm_zone_epsg_bbox(bb)
+#' crs <- get_utm_zone(bb)
 #' get_osm_city_boundary("Bucharest", bb, crs)
 get_osm_city_boundary <- function(city_name, bb, crs, multiple = FALSE) {
   # Define a helper function to fetch the city boundary
@@ -153,7 +153,7 @@ get_osm_city_boundary <- function(city_name, bb, crs, multiple = FALSE) {
 #'
 #' @examples
 #' bb <- get_osm_bb("Bucharest")
-#' crs <- get_utm_zone_epsg_bbox(bb)
+#' crs <- get_utm_zone(bb)
 #' get_osm_river("Dâmbovița", bb, crs)
 get_osm_river <- function(river_name, bb, crs) {
   # Get the river centreline
@@ -190,7 +190,7 @@ get_osm_river <- function(river_name, bb, crs) {
 #'
 #' @examples
 #' bb <- get_osm_bb("Bucharest")
-#' crs <- get_utm_zone_epsg_bbox(bb)
+#' crs <- get_utm_zone(bb)
 #' get_osm_streets(bb, crs)
 get_osm_streets <- function(bb, crs, highway_values = NULL) {
   if (is.null(highway_values)) {
@@ -228,7 +228,7 @@ get_osm_streets <- function(bb, crs, highway_values = NULL) {
 #'
 #' @examples
 #' bb <- get_osm_bb("Bucharest")
-#' crs <- get_utm_zone_epsg_bbox(bb)
+#' crs <- get_utm_zone(bb)
 #' get_osm_railways(bb, crs)
 get_osm_railways <- function(bb, crs) {
   railways <- osmdata_as_sf("railway", "rail", bb)
