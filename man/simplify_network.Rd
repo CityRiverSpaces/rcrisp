@@ -14,7 +14,6 @@ A simplifed network object
 }
 \description{
 Simplify the graph, removing loops and double-edge connections following
-\link{this approach}(https://luukvdmeer.github.io/sfnetworks/articles/\
-sfn02_preprocess_clean.html#simplify-network).
+\link[=https://luukvdmeer.github.io/sfnetworks/articles/sfn02_preprocess_clean.html#simplify-network]{this approach}.
 When dropping multiple edges, keep the shortest ones.
 }
