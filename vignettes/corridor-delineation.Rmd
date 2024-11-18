@@ -16,156 +16,49 @@ knitr::opts_chunk$set(
 
 ```{r setup, warning=FALSE, message=FALSE}
 library(CRiSp)
-library(dplyr)
-library(sf)
-library(osmdata)
 ```
 
-In this notebook we explore how to delineate a river corridor using Bucharest as the study area using OpenStreetMap (OSM) data. We focus on one of the rivers and use a specific projected CRS (coordinate reference system) for the analysis. A project CRS is required for calculating distances along the street network during delineation. Also, we make sure that we include a given area around the city boundaries.
+In this notebook we explore how to delineate an urban river corridor using river Dâmbovița in Bucharest, Romania's capital, as the study area. We will use OpenStreetMap (OSM) data, first from the Overpass API and then from a local file.
 
 ```{r variables}
 city_name <- "Bucharest, Romania"   # Be specific and spell as in OSM
 river_name <- "Dâmbovița"           # Spell as in OSM
-epsg_code <- 32635                  # UTM zone 35N
-bbox_buffer <- 2000                 # Buffer around the city boundary in meters
+bbox_buffer <- 2000                 # Buffer distance in meters
 ```
 
-## Setting the area of interest
+We start by demonstrating the use of the all-in-one `delineate_corridor()` function which does the following three steps:
 
-```{r aoi}
-# Get the bounding box from the Nominatim API provided by OSM.
-bb <- getbb(city_name)
-aoi <- define_aoi(bb, epsg_code, bbox_buffer)
-```
+1. Fetches city boundary, street and rail network, as well as river centreline and surface data from the [Overpass API](https://wiki.openstreetmap.org/wiki/Overpass_API) as shown in `vignette("getting-osm-data")`;
 
-```{r city}
-city_boundary <- osmdata_as_sf("place", "city", bb)$osm_multipolygons |>
-  st_transform(epsg_code) |>
-  st_geometry()
-```
+2. Pre-processes the street and rail network for delineation as in `vignette("network-preparation")`
 
-## Constructing the initial corridor
+3. Constructs the initial corridor based on the chosen method. If the `method = "buffer"` is chosen, the corridor is constructed by buffering the river centreline and surface data with a given buffer distance. If the `method = "dem"` is chosen instead, the Cost Distance Accumulation algorithm is used to delineate the corridor based on the digital elevation model (DEM) of the area retrieved from the [Earth Search API](https://element84.com/earth-search/).
 
-```{r river}
-river_centerline <- osmdata_as_sf("waterway", "river", bb)$osm_multilines |>
-  filter(name == river_name) |>
-  st_transform(epsg_code) |>
-  st_geometry() |>
-  st_intersection(st_buffer(aoi, bbox_buffer))
+4. Delineates the corridor based on the pre-processed network and initial corridor. Optionally, the corridor is split into segments based on the network and the river space is delineated.
 
-river_surface <- osmdata_as_sf("natural", "water", bb)
-river_surface <- river_surface$osm_multipolygons |>
-  bind_rows(river_surface$osm_polygons) |>
-  st_transform(epsg_code) |>
-  st_filter(river_centerline, .predicate = st_intersects) |>
-  st_geometry() |>
-  st_union()
-```
-
-With these features we can now delineate a theoretical river corridor representing the maximum area from which the river could be reached within a walking distance. We construct the initial corridor from the merged geometries of `river_centerline` and `river_surface`, with a buffer of 500m around them:
-
-```{r corridor_initial}
-corridor_buffer <- 500
-corridor_initial <- c(river_centerline, river_surface) |>
-  st_buffer(corridor_buffer) |>
-  st_union()
-```
-
-We can now plot the initial corridor:
-
-```{r}
-plot(city_boundary)
-plot(corridor_initial,
-     border = "red",
-     main = "Initial river corridor",
-     add = TRUE)
-```
-
-## Getting the street network
-
-Querying the Overpass API for the `highway` key:
-
-```{r streets}
-highway_values <- c("motorway", "primary", "secondary", "tertiary")
-streets <- osmdata_as_sf("highway", highway_values, bb)
-streets <- merge_streets(streets) |>
-  select("highway")
-```
-
-We split the area of interest in two parts using the river centreline as separator. The two areas can then be used to split the network in two as a preparation to the shortest path algorithm used for edge delineation in the next step:
-
-```{r}
-aoi_split <- aoi |>
-  split_aoi(river_centerline)
-
-net <- create_network(streets, epsg_code)
-
-net_1 <- net |>
-  trim_network(aoi_split[1], corridor_initial) |>
-  clean_network() |>
-  calc_weights() |>
-  sfnetworks::activate("nodes") |>
-  filter(tidygraph::group_components() == 1)
-
-net_2 <- net |>
-  trim_network(aoi_split[2], corridor_initial) |>
-  clean_network() |>
-  calc_weights() |>
-  sfnetworks::activate("nodes") |>
-  filter(tidygraph::group_components() == 1)
-```
-
-## Corridor edge delineation
-
-Determine the "vertices" of the initial river corridor as the intersections of the initial river corridor with the AoI boundary. We will use these points as extremes for the corridor edges:
-
-```{r}
-vertices_1 <- get_vertices(aoi_split[1], corridor_initial |>
-                             st_cast("LINESTRING"))
-vertices_2 <- get_vertices(aoi_split[2], corridor_initial |>
-                             st_cast("LINESTRING"))
-```
-
-```{r}
-corridor_edge_1 <- get_corridor_edge(net_1, aoi_split[1], vertices_1)
-corridor_edge_2 <- get_corridor_edge(net_2, aoi_split[2], vertices_2)
-
-corridor_edges <- st_union(corridor_edge_1, corridor_edge_2)
-```
-
-## Capping the corridor
+The `delineate_corridor()` function carries out the above steps in one and returns a list that by default contains the following output elements: `corridor`, `segments`, and `riverspace`.
 
 ```{r eval=FALSE}
-capped_corridor <- city_boundary |>
-  lwgeom::st_split(corridor_edges) |>
-  sf::st_collection_extract("POLYGON") |>
-  sf::st_as_sf() |>
-  sf::st_filter(river_centerline, .predicate = sf::st_intersects)
-
-# TODO replace with call to cap_corridor()
-corridor <- cap_corridor(corridor_edges, river_centerline, epsg_code, bb)
-```
-
-Note that this is not ideal, as the municipal boundaries can be arbitrary and might exclude important end features of the corridors, so the user should have the option to input their own feature to cap the corridor ends. In the case of Bucharest, this can be the ring road.
-
-## All in one
-
-The `delineate_corridor()` function carries out the entire delineation in one step and returns a list that by default contains the following output elements: `corridor`, `segments`, and `riverspace`. Although not included by default, the used input objects `river_line`, `river_polygon`, and `buildings` can also be included in the resulting object. The initial corridor boundary, either a buffer or valley edges derived from the digital elevation model, can also be included in the output object.
-
-```{r eval=FALSE}
-# TODO this function should run the entire urc delineation process in one step
-urc <- delineate_corridor(city_name, river_name,
-                          segments = TRUE, riverspace = TRUE)
+# TODO remove eval=FALSE after segment and riverspace delineation are 
+# implemented and the delineate_corridor() function is updated to return a list
+bucharest_dambovita <- delineate_corridor(
+  city_name,
+  river_name,
+  bbox_buffer = bbox_buffer,
+  initial_method = "buffer",
+  capping_method = "direct",
+  segments = TRUE,
+  riverspace = TRUE
+)
 
 # `$corridor` of the resulting object is an sf polygon representing the corridor
-urc$corridor
+bucharest_dambovita$corridor
 
-# `$segments` is an sf polygon representing the segments of the corridor,
-# TODO make sure the segments are numbered from upstream to downstream
-urc$segments
+# `$segments` is an sf polygon representing the segments of the corridor
+bucharest_dambovita$segments
 
 # `$riverspace` is an sf polygon representing the delineated river space
-urc$riverspace
+bucharest_dambovita$riverspace
 
 # All three elements of delineation
 plot(urc$riverspace, col = "green")
