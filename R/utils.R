@@ -19,6 +19,7 @@ set_units_like <- function(x, y) {
 #'
 #' @param x Bounding box or geometry object
 #' @return The EPSG of the UTM zone
+#' @export
 get_utm_zone <- function(x) {
   bb <- sf::st_bbox(x)
 
