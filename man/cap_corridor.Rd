@@ -7,6 +7,8 @@
 cap_corridor(edges, method = "direct", network = NULL)
 }
 \arguments{
+\item{edges}{A simple feature geometry representing the corridor edges}
+
 \item{method}{The method employed for the capping:
 \itemize{
 \item \code{direct} (default): connect the start points and the end points of the

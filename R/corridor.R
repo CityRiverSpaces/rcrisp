@@ -174,6 +174,7 @@ corridor_edge <- function(
 
 #' Cap the corridor by connecting the edge end points
 #'
+#' @param edges A simple feature geometry representing the corridor edges
 #' @param method The method employed for the capping:
 #'   - `direct` (default): connect the start points and the end points of the
 #'     edges via straight segments
