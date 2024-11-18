@@ -39,7 +39,7 @@ We start by demonstrating the use of the all-in-one `delineate_corridor()` funct
 The `delineate_corridor()` function carries out the above steps in one and returns a list that by default contains the following output elements: `corridor`, `segments`, and `riverspace`.
 
 ```{r eval=FALSE}
-# TODO remove eval=FALSE after segment and riverspace delineation are 
+# TODO remove eval=FALSE after segment and riverspace delineation are
 # implemented and the delineate_corridor() function is updated to return a list
 bucharest_dambovita <- delineate_corridor(
   city_name,
