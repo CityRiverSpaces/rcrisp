@@ -236,7 +236,7 @@ get_osm_railways <- function(bb, crs) {
   railways <- osmdata_as_sf("railway", "rail", bb)
   railways_lines <- railways$osm_lines |>
     dplyr::select("railway") |>
-    dplyr::rename(!!sym("type") := railway) |>
+    dplyr::rename(!!sym("type") := !!sym("railway")) |>
     sf::st_transform(crs)
 
   return(railways_lines)
