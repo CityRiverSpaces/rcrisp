@@ -60,8 +60,9 @@ corridor <- function(
 #'
 #' @return A simple feature geometry
 initial_corridor <- function(river, method = "buffer", ..., bbox = NULL) {
+  args <- list(...)
   if (method == "buffer") {
-    return(river_buffer(river, ..., bbox = bbox))
+    return(river_buffer(river, buffer = args$buffer, bbox = bbox))
   } else {
     stop(
       sprintf("Unknown method to initialize river corridor: {method}", method)
