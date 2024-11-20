@@ -164,7 +164,7 @@ get_slope_raw <- function(dem){
 #' 
 #' @return updated slope raster
 #' @export
-mask_slope <- function(slope, river, lthresh=1.e-3){
+mask_slope <- function(slope, river, lthresh=1.e-3, target = 0){
     slope_masked <- mask(
     slope,
     ifel(slope <= lthresh, NA, 1),
@@ -174,7 +174,7 @@ mask_slope <- function(slope, river, lthresh=1.e-3){
     slope_masked,
     river,
     inverse = TRUE,
-    updatevalue = 0,
+    updatevalue = target,
     touches = TRUE)
 }
 
