@@ -17,135 +17,52 @@ knitr::opts_chunk$set(
 library(CRiSp)
 
 city_boundary <- bucharest$boundary
-railways_lines <- bucharest$railways_lines
-highways_lines <- bucharest$streets
-waterbody <- bucharest$river_surface
-waterway <- bucharest$river_centerline
+river_surface <- bucharest$river_surface
+river_centerline <- bucharest$river_centerline
+railways <- bucharest$railways
+streets <- bucharest$streets
 ```
 
-```{r packages, eval=TRUE, message=FALSE}
+```{r packages, eval=FALSE, message=FALSE}
 library(CRiSp)
-library(dplyr)
 library(ggplot2)
-library(osmdata)
-library(sf)
 library(purrr)
 ```
 
-In this notebook we download OSM data needed for urban river corridor delineation in Bucharest, Romania. We focus on one of the rivers and use a specific projected CRS for the analysis. Also, we make sure that we include a given area around the city boundaries.
+In this notebook we download OSM data needed for the delineation of the urban river corridor of River Dâmbovița in Bucharest, Romania. We make sure that we include a given area around the city boundaries.
 
-```{r}
+```{r eval=FALSE}
 city_name <- "Bucharest"
 river_name <- "Dâmbovița"
-epsg_code <- 32635  # UTM zone 35N
+crs <- 32635  # EPSG code for UTM zone 35N
 bbox_buffer <- 2000  # in m, expand bbox for street network
 ```
 
-We start by getting the bounding box for the study area, and expand it using the provided buffer:
+We start by getting the bounding box for the study area:
 
-```{r}
-# bounding box
-bbox <- getbb(city_name) |> as.vector()
-names(bbox) <- c("xmin", "ymin", "xmax", "ymax")
-bbox <- st_bbox(bbox, crs = 4326)
-
-# bbox expanded
-bbox_expanded <- bbox |>
-  st_as_sfc() |>
-  st_transform(crs = epsg_code) |>  # transform to projected CRS
-  st_buffer(bbox_buffer) |>
-  st_transform(crs = 4326) |>  # transform back to lat/lon
-  st_bbox()
+```{r eval=FALSE}
+bb <- get_osm_bb(city_name)
 ```
 
-## 1. City boundary
+Using the obtained bounding box, we get the different layers of OSM data needed for the delineation of the urban river corridor. We will get the city boundary, the waterways, the street network, and the rail network using built-in functions from the `CRiSp` package.
 
-```{r}
-# get city boundary
-city_boundary <- osmdata_as_sf("place", "city", bbox)
-city_boundary <- city_boundary$osm_multipolygons |>
-  st_transform(epsg_code) |>
-  st_geometry()
+```{r eval = FALSE}
+city_boundary <- get_osm_city_boundary(city_name, bb, crs)
+river <- get_osm_river(river_name, bb, crs)
+streets <- get_osm_streets(bb, crs)
+railways <- get_osm_railways(bb, crs)
 ```
 
-## 2. Waterways
+Individual layers can be written to disk before being read in for delineation.
 
-Querying the Overpass API for `waterway:river`. OSM multilines include river lines grouped by the river name. We extract the relevant waterway and transform to the projected CRS:
-
-```{r}
-# waterways (linestrings)
-waterways <- osmdata_as_sf("waterway", "river", bbox)
-waterway <- waterways$osm_multilines |>
-  filter(name == river_name) |>
-  st_intersection(st_as_sfc(bbox_expanded)) |>
-  st_transform(epsg_code) |>
-  st_geometry()
-```
-
-We also query the Overpass API for `natural:water`. The results also include features such as fountains. The geometries are not contiguous and some part of the water bodies are actually represented as lines instead of polygons. We determine and keep the only features that intersect the relevant waterway:
-
-```{r}
-# water area (polygons)
-water <- osmdata_as_sf("natural", "water", bbox)
-waterbody <- bind_rows(water$osm_polygons, water$osm_multipolygons) |>
-  st_transform(epsg_code) |>
-  st_filter(waterway, .predicate = st_intersects) |>
-  st_union() |>
-  st_geometry()
-```
-
-## 3. Street network
-
-Querying the Overpass API for the `highway` key, using the expanded bounding box to include relevant streets close to the edge of the city:
-
-```{r}
-highways_value <- c("motorway", "trunk", "primary", "secondary", "tertiary")
-
-links_value <- sapply(X = highways_value,
-                      FUN = \(x) sprintf("%s_link", x),
-                      USE.NAMES = FALSE)
-
-highways <- osmdata_as_sf("highway",
-                          c(highways_value, links_value),
-                          bbox_expanded)
-```
-
-As some of elements are returend as polygons (see e.g. [this tutorial](https://geospatial-community.netlify.app/post/2022-03-31-spatial-networks/)) we cast those too into lines and combine them with the rest of the street network:
-
-```{r}
-# cast polygons (closed streets) into lines
-poly_to_lines <- highways$osm_polygons |>
-  st_cast("LINESTRING")
-
-# combine all features in one data frame
-highways_lines <- highways$osm_lines |>
-  bind_rows(poly_to_lines) |>
-  select("highway") |>  # only keep "highway" column
-  rename(type = `highway`) |>  # rename it to "type"
-  st_transform(epsg_code)
-```
-
-## 4. Rail network
-
-Querying the Overpass API for the `railway:rail` key:tag, also using the expanded bounding box to include relevant ways close to the edge of the city:
-
-```{r}
-railways <- osmdata_as_sf("railway", "rail", bbox_expanded)
-railways_lines <- railways$osm_lines |>
-  select("railway") |>  # only keep "railway" column
-  rename(type = `railway`) |>  # rename it to "type"
-  st_transform(epsg_code)
-```
-
-## Write OSM data to file
-
-```{r}
-st_write_list <- list(
-  city_boundary = bucharest$boundary,
-  waterway = bucharest$river_centerline,
-  waterbody = bucharest$river_surface,
-  highways = bucharest$streets,
-  railways = railways_lines
+```{r eval=FALSE}
+bucharest <- list(
+  bb = bb,
+  boundary = city_boundary,
+  river_centerline = river$centerline,
+  river_surface = river$surface,
+  streets = streets,
+  railways = railways
 )
 
 walk(
@@ -153,26 +70,38 @@ walk(
   ~ st_write(
     .x,
     dsn = sprintf("%s_%s.gpkg",
-                  names(st_write_list)[map_lgl(st_write_list,
-                                               identical, .x)], city_name),
+                  names(st_write_list)[map_lgl(st_write_list, identical, .x)], 
+                  city_name),
     append = FALSE,
     quiet = TRUE
   )
 )
 ```
 
+The above layers can also be obtained with the all-in-one function `get_osmdata()`. Optionally, a bounding box buffer can be specified to expand the bounding box.
 
-## Visualise OSM data
+```{r eval=FALSE}
+bucharest <- get_osmdata(city_name, river_name, buffer = bbox_buffer)
+```
+
+The resulting object is a list with all the layers obtained individually above.
+
+```{r}
+names(bucharest)
+```
+
 
 ```{r, eval=TRUE, fig.alt="All layers combined", fig.cap="All layers combined"}
 if (requireNamespace("ggplot2", quietly = TRUE)) {
   library(ggplot2)
   ggplot() +
-    geom_sf(data = city_boundary, fill = "grey", color = "black") +
-    geom_sf(data = railways_lines, color = "orange") +
-    geom_sf(data = highways_lines, color = "black") +
-    geom_sf(data = waterbody, fill = "blue", color = "blue") +
-    geom_sf(data = waterway, color = "blue")
+    geom_sf(data = bucharest$boundary, fill = "grey", color = "black") +
+    geom_sf(data = bucharest$railways, color = "orange") +
+    geom_sf(data = bucharest$streets, color = "black") +
+    geom_sf(data = bucharest$river_surface, fill = "blue", color = "blue") +
+    geom_sf(data = bucharest$river_centerline, color = "blue") +
+    xlim(417000, 439000) +
+    ylim(4908800, 4932500)
 } else {
   message("ggplot2 not available; skipping plot examples.")
 }
