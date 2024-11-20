@@ -111,46 +111,22 @@ dem_to_COG <- function(dem,fpath,output_directory=NULL,){
 
 
 
-#'Reproject dem raster to specified coordiante reference system
+#' Reproject a raster or vector dataset to the specified coordinate reference system (CRS)
 #' 
-#' @param dem digital elevation model
-#' @param crs coordinate reference system to be projected to
-#' @param specification of reprojection metod for non-matched pixels
+#' @param x Raster or vector object
+#' @param crs CRS to be projected to
+#' @param ... Optional arguments for raster or vector reproject functions
 #' 
-#' @return dem as raster reprojected to crs
-reproject_dem <- function(dem, crs, method="near"){
-    dem_repr <- project(dem,crs,method=method)
-}
-
-#'Reproject river vector/polygon to specified coordiante reference system
-#' 
-#' @param river vector/polygon of river
-#' @param crs coordinate reference system to be projected to
-#' @param method specification of reprojection metod for non-matched pixels. see project
-#' 
-#' @return river polygon reprojected to specified crs
-reproject_river <- function(river, crs){
-    river_repr <- st_transform(river, crs=crs)
-}
-
-#'Reproject either dem raster data or river vector/polygon 
-#'to specified coordiante reference system
-#' 
-#' @param data raster of dem or vector/polygon of river
-#' @param crs coordinate reference system to be projected to
-#' @param mode either 'DEM' or 'RIVER' shorthhad specification 
-#' of data type for reprojection.
-#' 
-#' @return data reprojected to specified crs
+#' @return Object reprojected to specified CRS
 #' @export
-reproject_dem_river <- function(data, crs, mode){
-    if (mode == 'DEM'){
-        data_repr <- reproject_dem(data,crs)
-    }else if (mode == 'RIVER') {
-       data_repr <- reproject_river(data, crs)
-    } else {
-        #issue warning on mode selected
-    }
+reproject <- function(x, crs, ...){
+  if (inherits(x, "SpatRaster")){
+    return(terra::project(x, crs, ...)
+  } else if (inherits(x, c("bbox", "sfc", "sf"))) {
+    return(sf::st_transform(x, crs, ...))
+  } else {
+    stop(sprintf("Cannot reproject object type: %s", class(x)))
+  }  
 }
 
 #' spatially smooth dem by (window) filtering
