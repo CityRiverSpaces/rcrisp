@@ -70,7 +70,7 @@ walk(
   ~ st_write(
     .x,
     dsn = sprintf("%s_%s.gpkg",
-                  names(st_write_list)[map_lgl(st_write_list, identical, .x)], 
+                  names(st_write_list)[map_lgl(st_write_list, identical, .x)],
                   city_name),
     append = FALSE,
     quiet = TRUE
