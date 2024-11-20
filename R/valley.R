@@ -26,8 +26,8 @@ get_stac_asset_urls <- function(bb, endpoint="https://earth-search.aws.element84
 #' 
 #' @return A a merged dem fromm retrieved assets cropped to the bounding box
 #' @export
-get_stac_dem <- function(bb, asset_urls){
-    dem <- asset_urls |>
+load_raster <- function(raster_urlpaths, bb){
+    raster_urlpaths |>
     lapply(rast) |>
     lapply(crop, as.vector(t(bb))) |>
     do.call(merge, args=_)
