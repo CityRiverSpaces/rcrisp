@@ -197,10 +197,11 @@ get_slope <- function(dem,river){
 #' 
 #' @return raster of cost distance
 #' @export
-get_cost_distance_ <- function(slope_masked,target=0){
-    cd <- costDist(slope_masked,target=target)
-    names(cd) <- "cost_distance"
-    return(cd)
+get_cost_distance <- function(slope, river, target = 0){
+  slope_masked <- mask_slope(slope, river, target = target)
+  cd <- costDist(slope_masked, target = target)
+  names(cd) <- "cost_distance"
+  return(cd)
 }
 
 #' Mask out river regions incl. a buffer in cost distance raster data
