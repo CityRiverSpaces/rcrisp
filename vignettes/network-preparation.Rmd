@@ -31,14 +31,14 @@ We start by loading the OSM data. According to the delineation method, all persi
 
 ```{r}
 streets <- bucharest$streets
-railways <- bucharest$railways_lines
+railways <- bucharest$railways
 ```
 
 **Note**: If the city in question contains other surface-level structures that need to be included in the network, such as above-ground metro lines, retrieve them with the appropriate OSM tags following the instructions in `vignette("getting-osm-data")` and include them here in the network.
 
 ## 2. Setting up the network
 
-After combining the strets and railway lines, we create a network object.
+After combining the streets and railway lines, we create a network object.
 
 ```{r}
 network <- bind_rows(streets, railways) |>
