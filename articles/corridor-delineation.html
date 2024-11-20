@@ -8,8 +8,8 @@
 <title>4. Corridor delineation • CRiSp</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
-<link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="4. Corridor delineation">
 </head>
 <body>
@@ -41,12 +41,6 @@
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Delineation</h6></li>
     <li><a class="dropdown-item" href="../articles/corridor-delineation.html">4. Corridor delineation</a></li>
-    <li><a class="dropdown-item" href="../articles/corridor-segmentation.html">5. Corridor segmentation</a></li>
-    <li><a class="dropdown-item" href="../articles/riverspace-delineation.html">6. Riverspace delineation</a></li>
-    <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Use cases</h6></li>
-    <li><a class="dropdown-item" href="../articles/multiple-cities.html">7. Multiple delineations</a></li>
-    <li><a class="dropdown-item" href="../articles/poi-study-area.html">8. Study area around a POI</a></li>
   </ul>
 </li>
       </ul>
@@ -78,175 +72,68 @@
     
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://cityriverspaces.github.io/CRiSp/">CRiSp</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://docs.ropensci.org/osmdata/" class="external-link">osmdata</a></span><span class="op">)</span></span></code></pre></div>
-<p>In this notebook we explore how to delineate a river corridor using
-Bucharest as the study area using OpenStreetMap (OSM) data. We focus on
-one of the rivers and use a specific projected CRS (coordinate reference
-system) for the analysis. A project CRS is required for calculating
-distances along the street network during delineation. Also, we make
-sure that we include a given area around the city boundaries.</p>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://cityriverspaces.github.io/CRiSp/">CRiSp</a></span><span class="op">)</span></span></code></pre></div>
+<p>In this notebook we explore how to delineate an urban river corridor
+using river Dâmbovița in Bucharest, Romania’s capital, as the study
+area. We will use OpenStreetMap (OSM) data, first from the Overpass API
+and then from a local file.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">city_name</span> <span class="op">&lt;-</span> <span class="st">"Bucharest, Romania"</span>   <span class="co"># Be specific and spell as in OSM</span></span>
 <span><span class="va">river_name</span> <span class="op">&lt;-</span> <span class="st">"Dâmbovița"</span>           <span class="co"># Spell as in OSM</span></span>
-<span><span class="va">epsg_code</span> <span class="op">&lt;-</span> <span class="fl">32635</span>                  <span class="co"># UTM zone 35N</span></span>
-<span><span class="va">bbox_buffer</span> <span class="op">&lt;-</span> <span class="fl">2000</span>                 <span class="co"># Buffer around the city boundary in meters</span></span></code></pre></div>
-<div class="section level2">
-<h2 id="setting-the-area-of-interest">Setting the area of interest<a class="anchor" aria-label="anchor" href="#setting-the-area-of-interest"></a>
-</h2>
+<span><span class="va">bbox_buffer</span> <span class="op">&lt;-</span> <span class="fl">2000</span>                 <span class="co"># Buffer distance in meters</span></span></code></pre></div>
+<p>We start by demonstrating the use of the all-in-one
+<code><a href="../reference/delineate_corridor.html">delineate_corridor()</a></code> function which does the following
+three steps:</p>
+<ol style="list-style-type: decimal">
+<li><p>Fetches city boundary, street and rail network, as well as river
+centreline and surface data from the <a href="https://wiki.openstreetmap.org/wiki/Overpass_API" class="external-link">Overpass API</a>
+as shown in <code><a href="../articles/getting-osm-data.html">vignette("getting-osm-data")</a></code>;</p></li>
+<li><p>Pre-processes the street and rail network for delineation as in
+<code><a href="../articles/network-preparation.html">vignette("network-preparation")</a></code></p></li>
+<li><p>Constructs the initial corridor based on the chosen method. If
+the <code>method = "buffer"</code> is chosen, the corridor is
+constructed by buffering the river centreline and surface data with a
+given buffer distance. If the <code>method = "dem"</code> is chosen
+instead, the Cost Distance Accumulation algorithm is used to delineate
+the corridor based on the digital elevation model (DEM) of the area
+retrieved from the <a href="https://element84.com/earth-search/" class="external-link">Earth
+Search API</a>.</p></li>
+<li><p>Delineates the corridor based on the pre-processed network and
+initial corridor. Optionally, the corridor is split into segments based
+on the network and the river space is delineated.</p></li>
+</ol>
+<p>The <code><a href="../reference/delineate_corridor.html">delineate_corridor()</a></code> function carries out the above
+steps in one and returns a list that by default contains the following
+output elements: <code>corridor</code>, <code>segments</code>, and
+<code>riverspace</code>.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Get the bounding box from the Nominatim API provided by OSM.</span></span>
-<span><span class="va">bb</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://docs.ropensci.org/osmdata/reference/getbb.html" class="external-link">getbb</a></span><span class="op">(</span><span class="va">city_name</span><span class="op">)</span></span>
-<span><span class="va">aoi</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/define_aoi.html">define_aoi</a></span><span class="op">(</span><span class="va">bb</span>, <span class="va">epsg_code</span>, <span class="va">bbox_buffer</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">city_boundary</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/osmdata_as_sf.html">osmdata_as_sf</a></span><span class="op">(</span><span class="st">"place"</span>, <span class="st">"city"</span>, <span class="va">bb</span><span class="op">)</span><span class="op">$</span><span class="va">osm_multipolygons</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html" class="external-link">st_transform</a></span><span class="op">(</span><span class="va">epsg_code</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_geometry</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level2">
-<h2 id="constructing-the-initial-corridor">Constructing the initial corridor<a class="anchor" aria-label="anchor" href="#constructing-the-initial-corridor"></a>
-</h2>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">river_centerline</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/osmdata_as_sf.html">osmdata_as_sf</a></span><span class="op">(</span><span class="st">"waterway"</span>, <span class="st">"river"</span>, <span class="va">bb</span><span class="op">)</span><span class="op">$</span><span class="va">osm_multilines</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">name</span> <span class="op">==</span> <span class="va">river_name</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html" class="external-link">st_transform</a></span><span class="op">(</span><span class="va">epsg_code</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_geometry</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_binary_ops.html" class="external-link">st_intersection</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_unary.html" class="external-link">st_buffer</a></span><span class="op">(</span><span class="va">aoi</span>, <span class="va">bbox_buffer</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">river_surface</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/osmdata_as_sf.html">osmdata_as_sf</a></span><span class="op">(</span><span class="st">"natural"</span>, <span class="st">"water"</span>, <span class="va">bb</span><span class="op">)</span></span>
-<span><span class="va">river_surface</span> <span class="op">&lt;-</span> <span class="va">river_surface</span><span class="op">$</span><span class="va">osm_multipolygons</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html" class="external-link">bind_rows</a></span><span class="op">(</span><span class="va">river_surface</span><span class="op">$</span><span class="va">osm_polygons</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html" class="external-link">st_transform</a></span><span class="op">(</span><span class="va">epsg_code</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_join.html" class="external-link">st_filter</a></span><span class="op">(</span><span class="va">river_centerline</span>, .predicate <span class="op">=</span> <span class="va">st_intersects</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_geometry</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_combine.html" class="external-link">st_union</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p>With these features we can now delineate a theoretical river corridor
-representing the maximum area from which the river could be reached
-within a walking distance. We construct the initial corridor from the
-merged geometries of <code>river_centerline</code> and
-<code>river_surface</code>, with a buffer of 500m around them:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">corridor_buffer</span> <span class="op">&lt;-</span> <span class="fl">500</span></span>
-<span><span class="va">corridor_initial</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">river_centerline</span>, <span class="va">river_surface</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_unary.html" class="external-link">st_buffer</a></span><span class="op">(</span><span class="va">corridor_buffer</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_combine.html" class="external-link">st_union</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p>We can now plot the initial corridor:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">city_boundary</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">corridor_initial</span>,</span>
-<span>     border <span class="op">=</span> <span class="st">"red"</span>,</span>
-<span>     main <span class="op">=</span> <span class="st">"Initial river corridor"</span>,</span>
-<span>     add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="corridor-delineation_files/figure-html/unnamed-chunk-2-1.png" width="700"></p>
-</div>
-<div class="section level2">
-<h2 id="getting-the-street-network">Getting the street network<a class="anchor" aria-label="anchor" href="#getting-the-street-network"></a>
-</h2>
-<p>Querying the Overpass API for the <code>highway</code> key:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">highway_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"motorway"</span>, <span class="st">"primary"</span>, <span class="st">"secondary"</span>, <span class="st">"tertiary"</span><span class="op">)</span></span>
-<span><span class="va">streets</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/osmdata_as_sf.html">osmdata_as_sf</a></span><span class="op">(</span><span class="st">"highway"</span>, <span class="va">highway_values</span>, <span class="va">bb</span><span class="op">)</span></span>
-<span><span class="va">streets</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/merge_streets.html">merge_streets</a></span><span class="op">(</span><span class="va">streets</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="st">"highway"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning in st_cast.sf(highways$osm_polygons, "LINESTRING"): repeating</span></span>
-<span><span class="co">#&gt; attributes for all sub-geometries for which they may not be constant</span></span></code></pre></div>
-<p>We split the area of interest in two parts using the river centreline
-as separator. The two areas can then be used to split the network in two
-as a preparation to the shortest path algorithm used for edge
-delineation in the next step:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">aoi_split</span> <span class="op">&lt;-</span> <span class="va">aoi</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="../reference/split_aoi.html">split_aoi</a></span><span class="op">(</span><span class="va">river_centerline</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">net</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/create_network.html">create_network</a></span><span class="op">(</span><span class="va">streets</span>, <span class="va">epsg_code</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">net_1</span> <span class="op">&lt;-</span> <span class="va">net</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="../reference/trim_network.html">trim_network</a></span><span class="op">(</span><span class="va">aoi_split</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="va">corridor_initial</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="../reference/clean_network.html">clean_network</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="../reference/calc_weights.html">calc_weights</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">sfnetworks</span><span class="fu">::</span><span class="fu"><a href="https://tidygraph.data-imaginist.com/reference/activate.html" class="external-link">activate</a></span><span class="op">(</span><span class="st">"nodes"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="fu">tidygraph</span><span class="fu">::</span><span class="fu"><a href="https://tidygraph.data-imaginist.com/reference/group_graph.html" class="external-link">group_components</a></span><span class="op">(</span><span class="op">)</span> <span class="op">==</span> <span class="fl">1</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: to_spatial_subdivision assumes attributes are constant over geometries</span></span>
-<span></span>
-<span><span class="va">net_2</span> <span class="op">&lt;-</span> <span class="va">net</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="../reference/trim_network.html">trim_network</a></span><span class="op">(</span><span class="va">aoi_split</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, <span class="va">corridor_initial</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="../reference/clean_network.html">clean_network</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="../reference/calc_weights.html">calc_weights</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">sfnetworks</span><span class="fu">::</span><span class="fu"><a href="https://tidygraph.data-imaginist.com/reference/activate.html" class="external-link">activate</a></span><span class="op">(</span><span class="st">"nodes"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="fu">tidygraph</span><span class="fu">::</span><span class="fu"><a href="https://tidygraph.data-imaginist.com/reference/group_graph.html" class="external-link">group_components</a></span><span class="op">(</span><span class="op">)</span> <span class="op">==</span> <span class="fl">1</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: to_spatial_subdivision assumes attributes are constant over geometries</span></span></code></pre></div>
-</div>
-<div class="section level2">
-<h2 id="corridor-edge-delineation">Corridor edge delineation<a class="anchor" aria-label="anchor" href="#corridor-edge-delineation"></a>
-</h2>
-<p>Determine the “vertices” of the initial river corridor as the
-intersections of the initial river corridor with the AoI boundary. We
-will use these points as extremes for the corridor edges:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">vertices_1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_vertices.html">get_vertices</a></span><span class="op">(</span><span class="va">aoi_split</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="va">corridor_initial</span> <span class="op">|&gt;</span></span>
-<span>                             <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_cast.html" class="external-link">st_cast</a></span><span class="op">(</span><span class="st">"LINESTRING"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">vertices_2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_vertices.html">get_vertices</a></span><span class="op">(</span><span class="va">aoi_split</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, <span class="va">corridor_initial</span> <span class="op">|&gt;</span></span>
-<span>                             <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_cast.html" class="external-link">st_cast</a></span><span class="op">(</span><span class="st">"LINESTRING"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">corridor_edge_1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_corridor_edge.html">get_corridor_edge</a></span><span class="op">(</span><span class="va">net_1</span>, <span class="va">aoi_split</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="va">vertices_1</span><span class="op">)</span></span>
-<span><span class="va">corridor_edge_2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_corridor_edge.html">get_corridor_edge</a></span><span class="op">(</span><span class="va">net_2</span>, <span class="va">aoi_split</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, <span class="va">vertices_2</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">corridor_edges</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_combine.html" class="external-link">st_union</a></span><span class="op">(</span><span class="va">corridor_edge_1</span>, <span class="va">corridor_edge_2</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level2">
-<h2 id="capping-the-corridor">Capping the corridor<a class="anchor" aria-label="anchor" href="#capping-the-corridor"></a>
-</h2>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">capped_corridor</span> <span class="op">&lt;-</span> <span class="va">city_boundary</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">lwgeom</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/lwgeom/reference/st_split.html" class="external-link">st_split</a></span><span class="op">(</span><span class="va">corridor_edges</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_collection_extract.html" class="external-link">st_collection_extract</a></span><span class="op">(</span><span class="st">"POLYGON"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_join.html" class="external-link">st_filter</a></span><span class="op">(</span><span class="va">river_centerline</span>, .predicate <span class="op">=</span> <span class="fu">sf</span><span class="fu">::</span><span class="va"><a href="https://r-spatial.github.io/sf/reference/geos_binary_pred.html" class="external-link">st_intersects</a></span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># TODO replace with call to cap_corridor()</span></span>
-<span><span class="va">corridor</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cap_corridor.html">cap_corridor</a></span><span class="op">(</span><span class="va">corridor_edges</span>, <span class="va">river_centerline</span>, <span class="va">epsg_code</span>, <span class="va">bb</span><span class="op">)</span></span></code></pre></div>
-<p>Note that this is not ideal, as the municipal boundaries can be
-arbitrary and might exclude important end features of the corridors, so
-the user should have the option to input their own feature to cap the
-corridor ends. In the case of Bucharest, this can be the ring road.</p>
-</div>
-<div class="section level2">
-<h2 id="all-in-one">All in one<a class="anchor" aria-label="anchor" href="#all-in-one"></a>
-</h2>
-<p>The <code><a href="../reference/delineate_corridor.html">delineate_corridor()</a></code> function carries out the entire
-delineation in one step and returns a list that by default contains the
-following output elements: <code>corridor</code>, <code>segments</code>,
-and <code>riverspace</code>. Although not included by default, the used
-input objects <code>river_line</code>, <code>river_polygon</code>, and
-<code>buildings</code> can also be included in the resulting object. The
-initial corridor boundary, either a buffer or valley edges derived from
-the digital elevation model, can also be included in the output
-object.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># TODO this function should run the entire urc delineation process in one step</span></span>
-<span><span class="va">urc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/delineate_corridor.html">delineate_corridor</a></span><span class="op">(</span><span class="va">city_name</span>, <span class="va">river_name</span>,</span>
-<span>                          segments <span class="op">=</span> <span class="cn">TRUE</span>, riverspace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="co"># TODO remove eval=FALSE after segment and riverspace delineation are</span></span>
+<span><span class="co"># implemented and the delineate_corridor() function is updated to return a list</span></span>
+<span><span class="va">bucharest_dambovita</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/delineate_corridor.html">delineate_corridor</a></span><span class="op">(</span></span>
+<span>  <span class="va">city_name</span>,</span>
+<span>  <span class="va">river_name</span>,</span>
+<span>  bbox_buffer <span class="op">=</span> <span class="va">bbox_buffer</span>,</span>
+<span>  initial_method <span class="op">=</span> <span class="st">"buffer"</span>,</span>
+<span>  capping_method <span class="op">=</span> <span class="st">"direct"</span>,</span>
+<span>  segments <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  riverspace <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># `$corridor` of the resulting object is an sf polygon representing the corridor</span></span>
-<span><span class="va">urc</span><span class="op">$</span><span class="va">corridor</span></span>
+<span><span class="va">bucharest_dambovita</span><span class="op">$</span><span class="va">corridor</span></span>
 <span></span>
-<span><span class="co"># `$segments` is an sf polygon representing the segments of the corridor,</span></span>
-<span><span class="co"># TODO make sure the segments are numbered from upstream to downstream</span></span>
-<span><span class="va">urc</span><span class="op">$</span><span class="va">segments</span></span>
+<span><span class="co"># `$segments` is an sf polygon representing the segments of the corridor</span></span>
+<span><span class="va">bucharest_dambovita</span><span class="op">$</span><span class="va">segments</span></span>
 <span></span>
 <span><span class="co"># `$riverspace` is an sf polygon representing the delineated river space</span></span>
-<span><span class="va">urc</span><span class="op">$</span><span class="va">riverspace</span></span>
+<span><span class="va">bucharest_dambovita</span><span class="op">$</span><span class="va">riverspace</span></span>
 <span></span>
 <span><span class="co"># All three elements of delineation</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">urc</span><span class="op">$</span><span class="va">riverspace</span>, col <span class="op">=</span> <span class="st">"green"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">urc</span><span class="op">$</span><span class="va">river</span>, col <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">urc</span><span class="op">$</span><span class="va">segments</span>, col <span class="op">=</span> <span class="st">"lightblue"</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">urc</span><span class="op">$</span><span class="va">corridor</span>, add <span class="op">=</span> <span class="cn">TRUE</span>, col <span class="op">=</span> <span class="st">"red"</span>, wt <span class="op">=</span> <span class="fl">2</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-</div>
-  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
-    </nav></aside>
+  </main>
 </div>
 
 
