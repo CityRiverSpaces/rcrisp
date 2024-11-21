@@ -1,9 +1,9 @@
 #'Retrieve asset urls for the intersection of a bounding box with a 
 #'remote STAC endpoint 
 #' 
+#' @param bb A bounding box (compliant with CRiSp, i.e. as a matrix with 4 elements: xmin, ymin, xmax, ymax)
 #' @param endpoint url of (remote) STAC endpoint
 #' @param collection STAC collection to be queried
-#' @param bb A bounding box (compliant with CRiSp, i.e. as a matrix with 4 elements: xmin, ymin, xmax, ymax)
 #'
 #' @return A list of urls for the assets in the collection overlapping with the specified bounding box
 #' @export
