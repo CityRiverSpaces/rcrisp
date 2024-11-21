@@ -48,7 +48,7 @@ get_dem <- function(bb, resource="STAC",...){
         if(length(kwargs) && !is.null(...)){
             endpoint = kwargs$endpoint
             collection = kwargs$collection
-            asset_urls <- get_stac_asset_urls(bb,endpoint=endpoint,collection=collection
+            asset_urls <- get_stac_asset_urls(bb,endpoint=endpoint,collection=collection)
         } else {
             asset_urls <- get_stac_asset_urls(bb)
         }
