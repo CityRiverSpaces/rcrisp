@@ -178,9 +178,8 @@ get_cost_distance <- function(slope, river, target = 0){
 #' 
 #' @return cd raster with river+BUFFER pixels masked
 #' @export
-mask_cost_distance <- function(cd, river, BUFFER=2000){
-    BUFFER_REGION <- BUFFER  # m
-    river_buffer <- st_buffer(river, BUFFER_REGION)
+mask_cost_distance <- function(cd, river, buffer=2000){
+    river_buffer <- st_buffer(river, buffer)
     cd_masked <- mask(
         cd,
         river_buffer,
