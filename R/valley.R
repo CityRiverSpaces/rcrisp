@@ -246,8 +246,8 @@ get_valley_polygon_no_hole <- function(valley_polygon){
 #' @return (multi)polygon representation of valley area as st_geometry without holes
 #' @export
 get_valley_polygon <- function(valley_mask){
-    val_poly_raw <- get_valley_polygon_raw(valley_mask)
-    val_poly <- get_valley_polygon_no_hole(val_poly_raw)
+    val_poly <- get_valley_polygon_raw(valley_mask) |>
+      get_valley_polygon_no_hole()
 }
 
 
