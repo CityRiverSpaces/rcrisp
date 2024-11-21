@@ -261,11 +261,14 @@ get_valley_polygon <- function(valley_mask){
 get_valley <- function(dem, rivier, crs){
     dem_repr <- reproject(dem,crs)
     river_repr <- reproject(river,crs)
-    dem_filtered <- filter_dem(dem_repr)
-    slope <- get_slope(dem_filtered)
-    cd <- get_cost_distance(slope)
-    cd_masked <- mask_cost_distance(cd,river_repr)
-    cd_thresh <- get_cd_char(cd_maksed)
-    valley_mask <- get_valley_mask(cd_masked, cd_thresh)
-    valley_polygon <- get_valley_polygon(valley_mask)
+    
+    cd_masked <- filter_dem(dem_repr) |> 
+      get_slope() |> 
+      get_cost_distance() |> 
+      mask_cost_distance(river_repr)
+    
+    cd_thresh <- get_cd_char(cd_masked)
+    
+    valley <- get_valley_mask(cd_masked, cd_thresh) |>
+      get_valley_polygon()
 }
