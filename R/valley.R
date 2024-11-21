@@ -114,7 +114,7 @@ reproject <- function(x, crs, ...){
 #' 
 #' @return filtered dem
 #' @export
-filter_dem <- function{dem, method="median", window=5}{
+filter_dem <- function(dem, method="median", window=5){
     dem_filtered <- focal(dem, w=window, fun=method)
     names(dem_filtered) <- "dem_filtered"
     return(dem_filtered)
