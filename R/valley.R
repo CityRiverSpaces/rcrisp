@@ -8,12 +8,13 @@
 #' @return A list of urls for the assets in the collection overlapping with the specified bounding box
 #' @export
 get_stac_asset_urls <- function(bb, endpoint="https://earth-search.aws.element84.com/v1", collection="cop-dem-glo-30", limit=100){
-    s_obj <- stac(endpoint)
-    it_obj <- s_obj |>
-    stac_search(collections = collection,
-              bbox = as.vector(bb)) |>
-    get_request()
-    asset_urls <- rstac::assets_url(it_obj)
+  s_obj <- rstac::stac(endpoint)
+  it_obj <- s_obj |>
+rstac::stac_search(collections = collection,
+    bbox = terra::as.vector(bb)) |>
+  rstac::get_request()
+  asset_urls <- rstac::assets_url(it_obj)
+  return(asset_urls)
 }
 
 #' retrieve STAC records (of a DEM) corresponding to a list of asset urls,
@@ -27,8 +28,8 @@ get_stac_asset_urls <- function(bb, endpoint="https://earth-search.aws.element84
 #' @export
 load_raster <- function(raster_urlpaths, bb){
     raster_urlpaths |>
-    lapply(rast) |>
-    lapply(crop, as.vector(t(bb))) |>
+    lapply(terra::rast) |>
+    lapply(terra::crop, as.vector(t(bb))) |>
     do.call(merge, args=_)
 }
 
@@ -49,11 +50,11 @@ get_dem <- function(bb, resource="STAC",...){
         if(length(kwargs) && !is.null(...)){
             endpoint = kwargs$endpoint
             collection = kwargs$collection
-            asset_urls <- get_stac_asset_urls(bb,endpoint=endpoint,collection=collection
+            asset_urls <- get_stac_asset_urls(bb,endpoint=endpoint,collection=collection)
         } else {
             asset_urls <- get_stac_asset_urls(bb)
         }
-        dem <- get_stac_dem(bb, asset_urls) 
+        dem <- load_raster(bb, asset_urls) 
     } else {
         #add error statement
     }
@@ -68,7 +69,7 @@ get_dem <- function(bb, resource="STAC",...){
 #' @param output_directory where file should be written. If specified fpath is treated as filename only.
 #' 
 #' @export
-dem_to_COG <- function(dem,fpath,output_directory=NULL,){
+dem_to_COG <- function(dem,fpath,output_directory=NULL){
     if (is.null(output_directory)){
         file_name = basename(fpath)
         directory_name = dirname(file)
@@ -99,7 +100,7 @@ dem_to_COG <- function(dem,fpath,output_directory=NULL,){
 #' @export
 reproject <- function(x, crs, ...){
   if (inherits(x, "SpatRaster")){
-    return(terra::project(x, crs, ...)
+    return(terra::project(x, crs, ...))
   } else if (inherits(x, c("bbox", "sfc", "sf"))) {
     return(sf::st_transform(x, crs, ...))
   } else {
@@ -115,7 +116,7 @@ reproject <- function(x, crs, ...){
 #' 
 #' @return filtered dem
 #' @export
-filter_dem <- function{dem, method="median", window=5}{
+filter_dem <- function(dem, method="median", window=5){
     dem_filtered <- focal(dem, w=window, fun=method)
     names(dem_filtered) <- "dem_filtered"
     return(dem_filtered)
