@@ -144,7 +144,7 @@ get_slope <- function(dem){
 mask_slope <- function(slope, river, lthresh=1.e-3, target = 0){
     slope_masked <- mask(
     slope,
-    ifel(slope <= lthresh, NA, 1),
+    ifelse(slope <= lthresh, NA, 1),
     updatevalue = lthresh)
 
     slope_masked <- mask(
