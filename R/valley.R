@@ -4,7 +4,6 @@
 #' @param endpoint url of (remote) STAC endpoint
 #' @param collection STAC collection to be queried
 #' @param bb A bounding box (compliant with CRiSp, i.e. as a matrix with 4 elements: xmin, ymin, xmax, ymax)
-#' @param limit limiting number of records to be retireved
 #'
 #' @return A list of urls for the assets in the collection overlapping with the specified bounding box
 #' @export
@@ -12,14 +11,14 @@ get_stac_asset_urls <- function(bb, endpoint="https://earth-search.aws.element84
     s_obj <- stac(endpoint)
     it_obj <- s_obj |>
     stac_search(collections = collection,
-              bbox = as.vector(bb),
-              limit = limit) |>
+              bbox = as.vector(bb)) |>
     get_request()
     asset_urls <- rstac::assets_url(it_obj)
 }
 
-#' retrieve STAC records (of a DEM) corresponding to a list of asset urls, crop and merge with a specified
-#' bounding box to create a dem of the specified region
+#' retrieve STAC records (of a DEM) corresponding to a list of asset urls,
+#' crop and merge with a specified bounding box to create a dem of the 
+#' specified region
 #' 
 #' @param asset_urls a list of STAC records to be retrieved
 #' @param bb A bounding box (compliant with CRiSp, i.e. as a matrix with 4 elements: xmin, ymin, xmax, ymax)
@@ -33,17 +32,6 @@ load_raster <- function(raster_urlpaths, bb){
     do.call(merge, args=_)
 }
 
-#' Load local dem from file. Optionally crop to a bounding box.
-#' NOTE: User is responsible for dem and bounding box specifications being compatible
-#' 
-#' @param demfilepath path to dem to be loaded
-#' @param bb A bounding box (compliant with CRiSp, i.e. as a matrix with 4 elements: xmin, ymin, xmax, ymax). Optional
-#' 
-#' @return A a merged dem from cropped to the bounding box
-#' @export
-get_local_dem <- function(bb, demfilepath){
-    dem <- 
-}
 
 #'Load dem either from file or a STAC endpoint
 #' 
@@ -52,8 +40,6 @@ get_local_dem <- function(bb, demfilepath){
 #' @param endpoint STAC endpoint to use (required)
 #' @param collection STAC collection to use (required)
 #' @param limit limit of records to retrieve (optional)
-#' if resource is "FILE" the filepath to the dem must be specified using the named parameter
-#' @param demfilepath
 #' 
 #' @return dem 
 #' @export
@@ -63,19 +49,11 @@ get_dem <- function(bb, resource="STAC",...){
         if(length(kwargs) && !is.null(...)){
             endpoint = kwargs$endpoint
             collection = kwargs$collection
-            if("limit" in names(kwargs)){
-                limit=kwargs$limit
-                asset_urls <- get_stac_asset_urls(bb,endpoint=endpoint,collection=collection,limit=limit)
-            } else {
-                asset_urls <- get_stac_asset_urls(bb,endpoint=endpoint,collection=collection)
-            }
+            asset_urls <- get_stac_asset_urls(bb,endpoint=endpoint,collection=collection
         } else {
             asset_urls <- get_stac_asset_urls(bb)
         }
-        dem <- get_stac_dem(bb, asset_urls)
-    } else if (resource == "FILE") {
-        demfilepath = kwargs$demfilepath
-        dem <- get_local_dem(bb, demfilepath)
+        dem <- get_stac_dem(bb, asset_urls) 
     } else {
         #add error statement
     }
@@ -150,7 +128,7 @@ filter_dem <- function{dem, method="median", window=5}{
 #' 
 #' @return raster of derived slope over dem extent
 #' @export
-get_slope_raw <- function(dem){
+get_slope <- function(dem){
     slope_radians <- terrain(dem, v = "slope", unit = "radians")
     slope <- tan(slope_radians)
 }
@@ -176,18 +154,6 @@ mask_slope <- function(slope, river, lthresh=1.e-3, target = 0){
     inverse = TRUE,
     updatevalue = target,
     touches = TRUE)
-}
-
-#` Determine slope from dem rater data and mask river areas, settingf slope to 0 within.
-#'
-#' @param dem raster data
-#' @param river vector/polygon
-#' 
-#' @return raster data of slope with pixels overlapping river area set to 0
-#' @export
-get_slope <- function(dem,river){
-    slope <- get_slope_raw(dem)
-    slope_masked <- mask_slope(slope,river)
 }
 
 #' Derive cost distance function from masked slope
@@ -243,7 +209,7 @@ get_cd_char <- function(cd, method='mean'){
 #' @param thresh threshold cost distance value below which pixels are assuemd
 #' to belong to the valley
 #' 
-get_valley_raw <- function(cd, thresh){
+get_valley_mask <- function(cd, thresh){
     valley_mask <- (cd < thresh)
 }
 
@@ -257,7 +223,7 @@ get_valley_polygon_raw <- function(valley_mask){
     valley_polygon <- as.polygons(valley_mask, dissolve=TRUE) |>
     st_as_sf() |>
     filter(cost_distance == 1) |>
-    st_geometry()    
+    st_geometry()
 }
 
 #' Remove possible holes from valley geometry
@@ -295,13 +261,13 @@ get_valley_polygon <- function(valley_mask){
 #' @return (multi)polygon representation of valley area as st_geometry without holes
 #' @export
 get_valley <- function(dem, rivier, crs){
-    dem_repr <- reproject_dem_river(dem,crs,"DEM")
-    river_repr <- reproject_dem_river(river,crs,"RIVER")
+    dem_repr <- reproject(dem,crs)
+    river_repr <- reproject(river,crs)
     dem_filtered <- filter_dem(dem_repr)
-    slope_masked <- get_masked_slope(dem_filtered,river_repr)
-    cd <- get_cost_distance(slope_masked)
+    slope <- get_slope(dem_filtered)
+    cd <- get_cost_distance(slope)
     cd_masked <- mask_cost_distance(cd,river_repr)
     cd_thresh <- get_cd_char(cd_maksed)
-    valley_mask <- get_valley_raw(cd_masked, cd_thresh)
+    valley_mask <- get_valley_mask(cd_masked, cd_thresh)
     valley_polygon <- get_valley_polygon(valley_mask)
 }
