@@ -68,7 +68,7 @@ get_dem <- function(bb, resource="STAC",...){
 #' @param output_directory where file should be written. If specified fpath is treated as filename only.
 #' 
 #' @export
-dem_to_COG <- function(dem,fpath,output_directory=NULL,){
+dem_to_COG <- function(dem,fpath,output_directory=NULL){
     if (is.null(output_directory)){
         file_name = basename(fpath)
         directory_name = dirname(file)
