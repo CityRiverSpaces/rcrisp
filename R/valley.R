@@ -1,20 +1,18 @@
 #'Retrieve asset urls for the intersection of a bounding box with a 
 #'remote STAC endpoint 
 #' 
+#' @param bb A bounding box (compliant with CRiSp, i.e. as a matrix with 4 elements: xmin, ymin, xmax, ymax)
 #' @param endpoint url of (remote) STAC endpoint
 #' @param collection STAC collection to be queried
-#' @param bb A bounding box (compliant with CRiSp, i.e. as a matrix with 4 elements: xmin, ymin, xmax, ymax)
 #'
 #' @return A list of urls for the assets in the collection overlapping with the specified bounding box
 #' @export
 get_stac_asset_urls <- function(bb, endpoint="https://earth-search.aws.element84.com/v1", collection="cop-dem-glo-30", limit=100){
-  s_obj <- rstac::stac(endpoint)
-  it_obj <- s_obj |>
-rstac::stac_search(collections = collection,
-    bbox = terra::as.vector(bb)) |>
-  rstac::get_request()
-  asset_urls <- rstac::assets_url(it_obj)
-  return(asset_urls)
+    it_obj <- stac(endpoint) |>
+    stac_search(collections = collection,
+              bbox = as.vector(bb)) |>
+    get_request()
+    asset_urls <- rstac::assets_url(it_obj)
 }
 
 #' retrieve STAC records (of a DEM) corresponding to a list of asset urls,
@@ -146,7 +144,7 @@ get_slope <- function(dem){
 mask_slope <- function(slope, river, lthresh=1.e-3, target = 0){
     slope_masked <- mask(
     slope,
-    ifel(slope <= lthresh, NA, 1),
+    terra::ifel(slope <= lthresh, NA, 1),
     updatevalue = lthresh)
 
     slope_masked <- mask(
@@ -179,9 +177,8 @@ get_cost_distance <- function(slope, river, target = 0){
 #' 
 #' @return cd raster with river+BUFFER pixels masked
 #' @export
-mask_cost_distance <- function(cd, river, BUFFER=2000){
-    BUFFER_REGION <- BUFFER  # m
-    river_buffer <- st_buffer(river, BUFFER_REGION)
+mask_cost_distance <- function(cd, river, buffer=2000){
+    river_buffer <- st_buffer(river, buffer)
     cd_masked <- mask(
         cd,
         river_buffer,
@@ -247,8 +244,8 @@ get_valley_polygon_no_hole <- function(valley_polygon){
 #' @return (multi)polygon representation of valley area as st_geometry without holes
 #' @export
 get_valley_polygon <- function(valley_mask){
-    val_poly_raw <- get_valley_polygon_raw(valley_mask)
-    val_poly <- get_valley_polygon_no_hole(val_poly_raw)
+    val_poly <- get_valley_polygon_raw(valley_mask) |>
+      get_valley_polygon_no_hole()
 }
 
 
@@ -264,11 +261,14 @@ get_valley_polygon <- function(valley_mask){
 get_valley <- function(dem, rivier, crs){
     dem_repr <- reproject(dem,crs)
     river_repr <- reproject(river,crs)
-    dem_filtered <- filter_dem(dem_repr)
-    slope <- get_slope(dem_filtered)
-    cd <- get_cost_distance(slope)
-    cd_masked <- mask_cost_distance(cd,river_repr)
-    cd_thresh <- get_cd_char(cd_maksed)
-    valley_mask <- get_valley_mask(cd_masked, cd_thresh)
-    valley_polygon <- get_valley_polygon(valley_mask)
+    
+    cd_masked <- filter_dem(dem_repr) |> 
+      get_slope() |> 
+      get_cost_distance() |> 
+      mask_cost_distance(river_repr)
+    
+    cd_thresh <- get_cd_char(cd_masked)
+    
+    valley <- get_valley_mask(cd_masked, cd_thresh) |>
+      get_valley_polygon()
 }
