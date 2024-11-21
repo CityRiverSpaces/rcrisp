@@ -8,10 +8,10 @@
 #' @return A list of urls for the assets in the collection overlapping with the specified bounding box
 #' @export
 get_stac_asset_urls <- function(bb, endpoint="https://earth-search.aws.element84.com/v1", collection="cop-dem-glo-30", limit=100){
-    it_obj <- stac(endpoint) |>
-    stac_search(collections = collection,
+    it_obj <- rstac::stac(endpoint) |>
+    rsatc::stac_search(collections = collection,
               bbox = as.vector(bb)) |>
-    get_request()
+    rstac::get_request()
     asset_urls <- rstac::assets_url(it_obj)
 }
 
@@ -48,11 +48,11 @@ get_dem <- function(bb, resource="STAC",...){
         if(length(kwargs) && !is.null(...)){
             endpoint = kwargs$endpoint
             collection = kwargs$collection
-            asset_urls <- get_stac_asset_urls(bb,endpoint=endpoint,collection=collection)
+            asset_urls <- CRiSp::get_stac_asset_urls(bb,endpoint=endpoint,collection=collection)
         } else {
-            asset_urls <- get_stac_asset_urls(bb)
+            asset_urls <- CRiSp::get_stac_asset_urls(bb)
         }
-        dem <- load_raster(bb, asset_urls) 
+        dem <- CRiSp::load_raster(bb, asset_urls) 
     } else {
         #add error statement
     }
@@ -75,8 +75,8 @@ dem_to_COG <- function(dem,fpath,output_directory=NULL){
         file_name = fpath
         directory_name = output_directory
     }
-    data_dir  <- here(directory_name)
-    writeRaster(
+    data_dir  <- here::here(directory_name)
+    terra::writeRaster(
     x = dem,
     filename = sprintf("%s/%s", data_dir, filename),
     filetype = "COG",
@@ -115,7 +115,7 @@ reproject <- function(x, crs, ...){
 #' @return filtered dem
 #' @export
 smooth_dem <- function(dem, method="median", window=5){
-    dem_smoothed <- focal(dem, w=window, fun=method)
+    dem_smoothed <- terra::focal(dem, w=window, fun=method)
     names(dem_smoothed) <- "dem_smoothed"
     return(dem_smoothed)
 }
@@ -128,7 +128,7 @@ smooth_dem <- function(dem, method="median", window=5){
 #' @return raster of derived slope over dem extent
 #' @export
 get_slope <- function(dem){
-    slope_radians <- terrain(dem, v = "slope", unit = "radians")
+    slope_radians <- terra::terrain(dem, v = "slope", unit = "radians")
     slope <- tan(slope_radians)
 }
 
@@ -142,12 +142,12 @@ get_slope <- function(dem){
 #' @return updated slope raster
 #' @export
 mask_slope <- function(slope, river, lthresh=1.e-3, target = 0){
-    slope_masked <- mask(
+    slope_masked <- terra::mask(
     slope,
     terra::ifel(slope <= lthresh, NA, 1),
     updatevalue = lthresh)
 
-    slope_masked <- mask(
+    slope_masked <- terra::mask(
     slope_masked,
     river,
     inverse = TRUE,
@@ -163,8 +163,8 @@ mask_slope <- function(slope, river, lthresh=1.e-3, target = 0){
 #' @return raster of cost distance
 #' @export
 get_cost_distance <- function(slope, river, target = 0){
-  slope_masked <- mask_slope(slope, river, target = target)
-  cd <- costDist(slope_masked, target = target)
+  slope_masked <- CRiSp::mask_slope(slope, river, target = target)
+  cd <- terra::costDist(slope_masked, target = target)
   names(cd) <- "cost_distance"
   return(cd)
 }
@@ -178,8 +178,8 @@ get_cost_distance <- function(slope, river, target = 0){
 #' @return cd raster with river+BUFFER pixels masked
 #' @export
 mask_cost_distance <- function(cd, river, buffer=2000){
-    river_buffer <- st_buffer(river, buffer)
-    cd_masked <- mask(
+    river_buffer <- sf::st_buffer(river, buffer)
+    cd_masked <- terra::mask(
         cd,
         river_buffer,
         updatevalue = NA,
@@ -218,10 +218,10 @@ get_valley_mask <- function(cd, thresh){
 #' @return polygon representation of valley area as st_geometry
 #' 
 get_valley_polygon_raw <- function(valley_mask){
-    valley_polygon <- as.polygons(valley_mask, dissolve=TRUE) |>
-    st_as_sf() |>
+    valley_polygon <- terra::as.polygons(valley_mask, dissolve=TRUE) |>
+    sf::st_as_sf() |>
     filter(cost_distance == 1) |>
-    st_geometry()
+    sf::st_geometry()
 }
 
 #' Remove possible holes from valley geometry
@@ -231,10 +231,10 @@ get_valley_polygon_raw <- function(valley_mask){
 #' @return (multi)polygon geometry of valley 
 get_valley_polygon_no_hole <- function(valley_polygon){
     valley_polygon_noholes <- valley_polygon |>
-    st_cast("POLYGON") |>
+    sf::st_cast("POLYGON") |>
     lapply(function(x) x[1]) |>
-    st_multipolygon() |>
-    st_sfc(crs = st_crs(valley_polygon))
+    sf::st_multipolygon() |>
+    sf::st_sfc(crs = sf::st_crs(valley_polygon))
 }
 
 #' Create vector/polygon representation of valley without holes from raster mask
@@ -244,8 +244,8 @@ get_valley_polygon_no_hole <- function(valley_polygon){
 #' @return (multi)polygon representation of valley area as st_geometry without holes
 #' @export
 get_valley_polygon <- function(valley_mask){
-    val_poly <- get_valley_polygon_raw(valley_mask) |>
-      get_valley_polygon_no_hole()
+    val_poly <- CRiSp::get_valley_polygon_raw(valley_mask) |>
+      CRiSp::get_valley_polygon_no_hole()
 }
 
 
@@ -259,16 +259,16 @@ get_valley_polygon <- function(valley_mask){
 #' @return (multi)polygon representation of valley area as st_geometry without holes
 #' @export
 get_valley <- function(dem, rivier, crs){
-    dem_repr <- reproject(dem,crs)
-    river_repr <- reproject(river,crs)
+    dem_repr <- CRiSp::reproject(dem,crs)
+    river_repr <- CRiSp::reproject(river,crs)
     
-    cd_masked <- smooth_dem(dem_repr) |> 
-      get_slope() |> 
-      get_cost_distance() |> 
-      mask_cost_distance(river_repr)
+    cd_masked <- CRiSp::smooth_dem(dem_repr) |> 
+      CRiSp::get_slope() |> 
+      CRiSp::get_cost_distance() |> 
+      CRiSp::mask_cost_distance(river_repr)
     
-    cd_thresh <- get_cd_char(cd_masked)
+    cd_thresh <- CRiSp::get_cd_char(cd_masked)
     
-    valley <- get_valley_mask(cd_masked, cd_thresh) |>
-      get_valley_polygon()
+    valley <- CRiSp::get_valley_mask(cd_masked, cd_thresh) |>
+      CRiSp::get_valley_polygon()
 }
