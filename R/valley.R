@@ -8,8 +8,7 @@
 #' @return A list of urls for the assets in the collection overlapping with the specified bounding box
 #' @export
 get_stac_asset_urls <- function(bb, endpoint="https://earth-search.aws.element84.com/v1", collection="cop-dem-glo-30", limit=100){
-    s_obj <- stac(endpoint)
-    it_obj <- s_obj |>
+    it_obj <- stac(endpoint) |>
     stac_search(collections = collection,
               bbox = as.vector(bb)) |>
     get_request()
