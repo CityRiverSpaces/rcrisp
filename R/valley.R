@@ -109,15 +109,15 @@ reproject <- function(x, crs, ...){
 #' spatially smooth dem by (window) filtering
 #' 
 #' @param dem raster data of dem 
-#' @param method filtering function to be used, e.g. "median". As accepted by focal
-#' @param window size of filter
+#' @param method smoothing function to be used, e.g. "median". As accepted by focal
+#' @param window size of smoothing kernel
 #' 
 #' @return filtered dem
 #' @export
-filter_dem <- function(dem, method="median", window=5){
-    dem_filtered <- focal(dem, w=window, fun=method)
-    names(dem_filtered) <- "dem_filtered"
-    return(dem_filtered)
+smooth_dem <- function(dem, method="median", window=5){
+    dem_smoothed <- focal(dem, w=window, fun=method)
+    names(dem_smoothed) <- "dem_smoothed"
+    return(dem_smoothed)
 }
 
 #' Derive slope as percentage from dem
@@ -262,7 +262,7 @@ get_valley <- function(dem, rivier, crs){
     dem_repr <- reproject(dem,crs)
     river_repr <- reproject(river,crs)
     
-    cd_masked <- filter_dem(dem_repr) |> 
+    cd_masked <- smooth_dem(dem_repr) |> 
       get_slope() |> 
       get_cost_distance() |> 
       mask_cost_distance(river_repr)
