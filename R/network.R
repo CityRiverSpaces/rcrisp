@@ -150,9 +150,9 @@ insert_intersection <- function(edge_pts, point, line_id) {
 #' Clean a spatial network.
 #'
 # nolint start
-#' Subdivide edges by [adding missing nodes][https://luukvdmeer.github.io/sfnetworks/articles/sfn02_preprocess_clean.html#subdivide-edges],
+#' Subdivide edges by [adding missing nodes](https://luukvdmeer.github.io/sfnetworks/articles/sfn02_preprocess_clean.html#subdivide-edges),
 #' simplify the network (see [`simplify_network()`]), remove
-#' [pseudo-nodes][https://luukvdmeer.github.io/sfnetworks/articles/sfn02_preprocess_clean.html#smooth-pseudo-nodes],
+#' [pseudo-nodes](https://luukvdmeer.github.io/sfnetworks/articles/sfn02_preprocess_clean.html#smooth-pseudo-nodes),
 #' and discard all but the main connected component.
 # nolint end
 #'
@@ -177,7 +177,7 @@ clean_network <- function(network) {
 #'
 # nolint start
 #' Simplify the graph, removing loops and double-edge connections following
-#' [this approach][https://luukvdmeer.github.io/sfnetworks/articles/sfn02_preprocess_clean.html#simplify-network].
+#' [this approach](https://luukvdmeer.github.io/sfnetworks/articles/sfn02_preprocess_clean.html#simplify-network).
 #' When dropping multiple edges, keep the shortest ones.
 # nolint end
 #'

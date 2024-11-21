@@ -23,13 +23,17 @@ Imports:
     rcoins,
     rlang,
     sf,
+    sfheaders,
     sfnetworks,
     stringr,
-    tidygraph
+    tibble,
+    tidygraph,
+    units
 Suggests:
     ggplot2,
     gridExtra,
     knitr,
+    purrr,
     rmarkdown,
     testthat (>= 3.0.0)
 VignetteBuilder:

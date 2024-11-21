@@ -13,8 +13,8 @@ clean_network(network)
 A cleaned network object
 }
 \description{
-Subdivide edges by \link[=https://luukvdmeer.github.io/sfnetworks/articles/sfn02_preprocess_clean.html#subdivide-edges]{adding missing nodes},
+Subdivide edges by \href{https://luukvdmeer.github.io/sfnetworks/articles/sfn02_preprocess_clean.html#subdivide-edges}{adding missing nodes},
 simplify the network (see \code{\link[=simplify_network]{simplify_network()}}), remove
-\link[=https://luukvdmeer.github.io/sfnetworks/articles/sfn02_preprocess_clean.html#smooth-pseudo-nodes]{pseudo-nodes},
+\href{https://luukvdmeer.github.io/sfnetworks/articles/sfn02_preprocess_clean.html#smooth-pseudo-nodes}{pseudo-nodes},
 and discard all but the main connected component.
 }

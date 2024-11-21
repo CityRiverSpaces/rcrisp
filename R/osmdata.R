@@ -167,10 +167,11 @@ get_osm_river <- function(river_name, bb, crs) {
   river_surface <- CRiSp::osmdata_as_sf("natural", "water", bb)
   river_surface <- dplyr::bind_rows(river_surface$osm_polygons,
                                     river_surface$osm_multipolygons) |>
+    sf::st_geometry() |>
+    sf::st_as_sf() |>
     sf::st_crop(bb) |>
     sf::st_transform(crs) |>
     sf::st_filter(river_centerline, .predicate = sf::st_intersects) |>
-    sf::st_geometry() |>
     sf::st_union()
 
   return(list(centerline = river_centerline,
@@ -186,7 +187,7 @@ get_osm_river <- function(river_name, bb, crs) {
 #'             "motorway", "trunk", "primary", "secondary", "tertiary"
 #' @return An sf object with the streets
 #' @export
-#' @importFrom rlang .data
+#' @importFrom rlang !! sym
 #'
 #' @examples
 #' bb <- get_osm_bb("Bucharest")
@@ -204,14 +205,15 @@ get_osm_streets <- function(bb, crs, highway_values = NULL) {
   streets <- osmdata_as_sf("highway", c(highway_values, link_values), bb)
 
   # Cast polygons (closed streets) into lines
-  poly_to_lines <- streets$osm_polygons |>
-    sf::st_cast("LINESTRING")
+  poly_to_lines <- suppressWarnings(
+    streets$osm_polygons |> sf::st_cast("LINESTRING")
+  )
 
   # Combine all features in one data frame
   streets_lines <- streets$osm_lines |>
     dplyr::bind_rows(poly_to_lines) |>
     dplyr::select("highway") |>
-    dplyr::rename(type = .data$highway) |>
+    dplyr::rename(!!sym("type") := !!sym("highway")) |>
     sf::st_transform(crs)
 
   return(streets_lines)
@@ -224,7 +226,7 @@ get_osm_streets <- function(bb, crs, highway_values = NULL) {
 #'
 #' @return An sf object with the railways
 #' @export
-#' @importFrom rlang .data
+#' @importFrom rlang !! sym
 #'
 #' @examples
 #' bb <- get_osm_bb("Bucharest")
@@ -234,7 +236,7 @@ get_osm_railways <- function(bb, crs) {
   railways <- osmdata_as_sf("railway", "rail", bb)
   railways_lines <- railways$osm_lines |>
     dplyr::select("railway") |>
-    dplyr::rename(type = .data$railway) |>
+    dplyr::rename(!!sym("type") := !!sym("railway")) |>
     sf::st_transform(crs)
 
   return(railways_lines)
