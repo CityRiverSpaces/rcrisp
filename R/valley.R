@@ -263,7 +263,7 @@ get_valley_mask <- function(cd, thresh) {
 #'
 #' @return polygon representation of valley area as st_geometry
 #' @importFrom rlang .data
-#'
+#' @export
 get_valley_polygon_raw <- function(valley_mask) {
   valley_polygon <- terra::as.polygons(valley_mask, dissolve = TRUE) |>
     sf::st_as_sf() |>
