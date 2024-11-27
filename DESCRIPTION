@@ -20,9 +20,11 @@ Imports:
     lwgeom,
     osmdata,
     rlang,
+    rstac,
     sf,
     sfnetworks,
     stringr,
+    terra,
     tidygraph
 Suggests: 
     ggplot2,
