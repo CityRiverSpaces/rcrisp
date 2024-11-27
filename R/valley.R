@@ -16,14 +16,14 @@ get_dem <- function(bb, resource = "STAC", ...) {
     if (length(kwargs) && !is.null(...)) {
       endpoint <- kwargs$endpoint
       collection <- kwargs$collection
-      asset_urls <- CRiSp::get_stac_asset_urls(
-                                               bb,
-                                               endpoint = endpoint,
-                                               collection = collection)
+      asset_urls <- get_stac_asset_urls(
+                                        bb,
+                                        endpoint = endpoint,
+                                        collection = collection)
     } else {
-      asset_urls <- CRiSp::get_stac_asset_urls(bb)
+      asset_urls <- get_stac_asset_urls(bb)
     }
-    dem <- CRiSp::load_raster(bb, asset_urls)
+    dem <- load_raster(bb, asset_urls)
     return(dem)
   } else {
     #add error statement
