@@ -262,6 +262,7 @@ get_valley_mask <- function(cd, thresh) {
 #' @param valley_mask raster mask of valley pixels
 #'
 #' @return polygon representation of valley area as st_geometry
+#' @importFrom rlang .data
 #'
 get_valley_polygon_raw <- function(valley_mask) {
   valley_polygon <- terra::as.polygons(valley_mask, dissolve = TRUE) |>
