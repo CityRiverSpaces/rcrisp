@@ -73,7 +73,7 @@ get_stac_asset_urls <- function(
     endpoint = "https://earth-search.aws.element84.com/v1",
     collection = "cop-dem-glo-30", limit = 100) {
   it_obj <- rstac::stac(endpoint) |>
-    rsatc::stac_search(collections = collection, bbox = as.vector(bb)) |>
+    rstac::stac_search(collections = collection, bbox = as.vector(bb)) |>
     rstac::get_request()
   asset_urls <- rstac::assets_url(it_obj)
   return(asset_urls)
