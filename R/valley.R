@@ -41,17 +41,17 @@ get_dem <- function(bb, resource = "STAC", ...) {
 #' area as st_geometry without holes
 #' @export
 get_valley <- function(dem, river, crs) {
-  dem_repr <- CRiSp::reproject(dem, crs)
-  river_repr <- CRiSp::reproject(river, crs)
-  cd_masked <- CRiSp::smooth_dem(dem_repr) |>
-    CRiSp::get_slope() |>
-    CRiSp::get_cost_distance() |>
-    CRiSp::mask_cost_distance(river_repr)
+  dem_repr <- reproject(dem, crs)
+  river_repr <- reproject(river, crs)
+  cd_masked <- smooth_dem(dem_repr) |>
+    get_slope() |>
+    get_cost_distance() |>
+    mask_cost_distance(river_repr)
 
-  cd_thresh <- CRiSp::get_cd_char(cd_masked)
+  cd_thresh <- get_cd_char(cd_masked)
 
-  valley <- CRiSp::get_valley_mask(cd_masked, cd_thresh) |>
-    CRiSp::get_valley_polygon()
+  valley <- get_valley_mask(cd_masked, cd_thresh) |>
+    get_valley_polygon()
   return(valley)
 }
 
@@ -71,7 +71,7 @@ get_valley <- function(dem, river, crs) {
 get_stac_asset_urls <- function(
     bb,
     endpoint = "https://earth-search.aws.element84.com/v1",
-    collection = "cop-dem-glo-30", limit = 100) {
+    collection = "cop-dem-glo-30") {
   it_obj <- rstac::stac(endpoint) |>
     rsatc::stac_search(collections = collection, bbox = as.vector(bb)) |>
     rstac::get_request()
