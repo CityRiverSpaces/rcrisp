@@ -41,21 +41,12 @@ get_dem <- function(bb, resource = "STAC", ...) {
 #' area as st_geometry without holes
 #' @export
 get_valley <- function(dem, river, crs) {
-<<<<<<< HEAD
   dem_repr <- reproject(dem, crs)
   river_repr <- reproject(river, crs)
   cd_masked <- smooth_dem(dem_repr) |>
     get_slope() |>
-    get_cost_distance() |>
+    get_cost_distance(river_repr) |>
     mask_cost_distance(river_repr)
-=======
-  dem_repr <- CRiSp::reproject(dem, crs)
-  river_repr <- CRiSp::reproject(river, crs)
-  cd_masked <- CRiSp::smooth_dem(dem_repr) |>
-    CRiSp::get_slope() |>
-    CRiSp::get_cost_distance(river_repr) |>
-    CRiSp::mask_cost_distance(river_repr)
->>>>>>> f30e0d5c499d228ca67fe0d0bd7a0928779e0fbf
 
   cd_thresh <- get_cd_char(cd_masked)
 
