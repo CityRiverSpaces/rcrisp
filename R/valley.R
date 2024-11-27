@@ -267,7 +267,7 @@ get_valley_mask <- function(cd, thresh) {
 get_valley_polygon_raw <- function(valley_mask) {
   valley_polygon <- terra::as.polygons(valley_mask, dissolve = TRUE) |>
     sf::st_as_sf() |>
-    dplyr::filter(cost_distance == 1) |>
+    dplyr::filter(.data$cost_distance == 1) |>
     sf::st_geometry()
   return(valley_polygon)
 }
