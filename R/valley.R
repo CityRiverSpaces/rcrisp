@@ -299,4 +299,3 @@ get_valley_polygon <- function(valley_mask) {
     CRiSp::get_valley_polygon_no_hole()
   return(val_poly)
 }
-
