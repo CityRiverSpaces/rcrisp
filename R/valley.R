@@ -11,19 +11,19 @@
 #' @return dem
 #' @export
 get_dem <- function(bb, resource = "STAC", ...) {
-  kwargs <- list(...)
+  args <- list(...)
   if (resource == "STAC") {
-    if (length(kwargs) && !is.null(...)) {
-      endpoint <- kwargs$endpoint
-      collection <- kwargs$collection
-      asset_urls <- CRiSp::get_stac_asset_urls(
-                                               bb,
-                                               endpoint = endpoint,
-                                               collection = collection)
+    if (length(args) && !is.null(...)) {
+      endpoint <- args$endpoint
+      collection <- args$collection
+      asset_urls <- get_stac_asset_urls(
+                                        bb,
+                                        endpoint = endpoint,
+                                        collection = collection)
     } else {
-      asset_urls <- CRiSp::get_stac_asset_urls(bb)
+      asset_urls <- get_stac_asset_urls(bb)
     }
-    dem <- CRiSp::load_raster(bb, asset_urls)
+    dem <- load_raster(bb, asset_urls)
     return(dem)
   } else {
     #add error statement
@@ -41,12 +41,21 @@ get_dem <- function(bb, resource = "STAC", ...) {
 #' area as st_geometry without holes
 #' @export
 get_valley <- function(dem, river, crs) {
+<<<<<<< HEAD
   dem_repr <- reproject(dem, crs)
   river_repr <- reproject(river, crs)
   cd_masked <- smooth_dem(dem_repr) |>
     get_slope() |>
     get_cost_distance() |>
     mask_cost_distance(river_repr)
+=======
+  dem_repr <- CRiSp::reproject(dem, crs)
+  river_repr <- CRiSp::reproject(river, crs)
+  cd_masked <- CRiSp::smooth_dem(dem_repr) |>
+    CRiSp::get_slope() |>
+    CRiSp::get_cost_distance(river_repr) |>
+    CRiSp::mask_cost_distance(river_repr)
+>>>>>>> f30e0d5c499d228ca67fe0d0bd7a0928779e0fbf
 
   cd_thresh <- get_cd_char(cd_masked)
 
@@ -73,7 +82,7 @@ get_stac_asset_urls <- function(
     endpoint = "https://earth-search.aws.element84.com/v1",
     collection = "cop-dem-glo-30") {
   it_obj <- rstac::stac(endpoint) |>
-    rsatc::stac_search(collections = collection, bbox = as.vector(bb)) |>
+    rstac::stac_search(collections = collection, bbox = as.vector(bb)) |>
     rstac::get_request()
   asset_urls <- rstac::assets_url(it_obj)
   return(asset_urls)
@@ -89,11 +98,11 @@ get_stac_asset_urls <- function(
 #'
 #' @return A a merged dem fromm retrieved assets cropped to the bounding box
 #' @export
-load_raster <- function(raster_urlpaths, bb) {
+load_raster <- function(bb, raster_urlpaths) {
   raster_urlpaths |>
     lapply(terra::rast) |>
     lapply(terra::crop, as.vector(t(bb))) |>
-    do.call(merge, args = _)
+    do.call(terra::merge, args = _)
 }
 
 #'Write dem to cloud optimized GeoTiff file as specified location
@@ -191,7 +200,7 @@ mask_slope <- function(slope, river, lthresh = 1.e-3, target = 0) {
 
   slope_masked <- terra::mask(
                               slope_masked,
-                              river,
+                              terra::vect(river),
                               inverse = TRUE,
                               updatevalue = target,
                               touches = TRUE)
@@ -220,7 +229,7 @@ get_cost_distance <- function(slope, river, target = 0) {
 #' @return cd raster with river+BUFFER pixels masked
 #' @export
 mask_cost_distance <- function(cd, river, buffer = 2000) {
-  river_buffer <- sf::st_buffer(river, buffer)
+  river_buffer <- sf::st_buffer(river, buffer) |> terra::vect()
   cd_masked <- terra::mask(
     cd,
     river_buffer,
@@ -236,7 +245,7 @@ mask_cost_distance <- function(cd, river, buffer = 2000) {
 #' @param method function used to derive caracteristic value (mean)
 #'
 #' @return characteristic value of cd raster
-#'
+#' @export
 get_cd_char <- function(cd, method = "mean") {
   if (method == "mean") {
     cd_char <- mean(terra::values(cd), na.rm = TRUE)
@@ -262,11 +271,12 @@ get_valley_mask <- function(cd, thresh) {
 #' @param valley_mask raster mask of valley pixels
 #'
 #' @return polygon representation of valley area as st_geometry
+#' @importFrom rlang .data
 #'
 get_valley_polygon_raw <- function(valley_mask) {
   valley_polygon <- terra::as.polygons(valley_mask, dissolve = TRUE) |>
     sf::st_as_sf() |>
-    dplyr::filter(cost_distance == 1) |>
+    dplyr::filter(.data$cost_distance == 1) |>
     sf::st_geometry()
   return(valley_polygon)
 }
