@@ -110,12 +110,12 @@ load_raster <- function(bb, raster_urlpaths) {
 dem_to_cog <- function(dem, fpath, output_directory = NULL) {
   if (is.null(output_directory)) {
     filename <- basename(fpath)
-    directory_name <- dirname(file)
+    directory_name <- dirname(fpath)
   } else {
     filename <- fpath
     directory_name <- output_directory
   }
-  data_dir  <- here::here(directory_name)
+  data_dir <- directory_name
   terra::writeRaster(
                      x = dem,
                      filename = sprintf("%s/%s", data_dir, filename),
