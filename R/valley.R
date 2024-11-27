@@ -5,8 +5,9 @@
 #' if "STAC" the parameters the following parameters
 #' must be supplied as named parameters. If omitted defaults
 #' will be used.
-#' @param endpoint STAC endpoint to use (required)
-#' @param collection STAC collection to use (required)
+#' @param ... Additional parameters to be passed depending on the resource.
+#'            In case `resource = "STAC"`, the arguments `endpoint` and
+#'            `collection` need to be passed to `get_stac_asset_urls()`.
 #'
 #' @return dem
 #' @export
@@ -83,11 +84,11 @@ get_stac_asset_urls <- function(
 #' crop and merge with a specified bounding box to create a dem of the
 #' specified region
 #'
-#' @param asset_urls a list of STAC records to be retrieved
 #' @param bb A bounding box (compliant with CRiSp,
 #' i.e. as a matrix with 4 elements: xmin, ymin, xmax, ymax)
+#' @param raster_urlpaths a list of STAC records to be retrieved
 #'
-#' @return A a merged dem fromm retrieved assets cropped to the bounding box
+#' @return A a merged dem from retrieved assets cropped to the bounding box
 #' @export
 load_raster <- function(bb, raster_urlpaths) {
   raster_urlpaths |>
@@ -178,10 +179,12 @@ get_slope <- function(dem) {
 #' the river area.
 #'
 #' @param slope raster data of slope
-#' @param vector/polygon data of river
+#' @param river vector/polygon data of river
 #' @param lthresh lower numerival threshold to consider slope non-zero
+#' @param target value to set for pixels overlapping river area
 #'
 #' @return updated slope raster
+#'
 #' @export
 mask_slope <- function(slope, river, lthresh = 1.e-3, target = 0) {
   slope_masked <- terra::mask(
@@ -199,8 +202,9 @@ mask_slope <- function(slope, river, lthresh = 1.e-3, target = 0) {
 
 #' Derive cost distance function from masked slope
 #'
-#' @param slope_masked raster of masked slope data
-#' @param target value for codt distance calculation
+#' @param slope raster of slope data
+#' @param river vector data of river
+#' @param target value for cost distance calculation
 #'
 #' @return raster of cost distance
 #' @export
@@ -215,7 +219,7 @@ get_cost_distance <- function(slope, river, target = 0) {
 #'
 #' @param cd cost distance raster
 #' @param river vector/polygon
-#' @param BUFFER size of buffer around river polygon to additionally mask
+#' @param buffer size of buffer around river polygon to additionally mask
 #'
 #' @return cd raster with river+BUFFER pixels masked
 #' @export
