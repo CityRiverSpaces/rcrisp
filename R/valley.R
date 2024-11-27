@@ -89,7 +89,7 @@ get_stac_asset_urls <- function(
 #'
 #' @return A a merged dem fromm retrieved assets cropped to the bounding box
 #' @export
-load_raster <- function(raster_urlpaths, bb) {
+load_raster <- function(bb, raster_urlpaths) {
   raster_urlpaths |>
     lapply(terra::rast) |>
     lapply(terra::crop, as.vector(t(bb))) |>
