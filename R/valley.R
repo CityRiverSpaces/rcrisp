@@ -277,6 +277,7 @@ get_valley_polygon_raw <- function(valley_mask) {
 #' @param valley_polygon st_geometry of valley region
 #'
 #' @return (multi)polygon geometry of valley
+#' @export
 get_valley_polygon_no_hole <- function(valley_polygon) {
   valley_polygon_noholes <- valley_polygon |>
     sf::st_cast("POLYGON") |>
