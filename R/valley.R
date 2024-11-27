@@ -45,7 +45,7 @@ get_valley <- function(dem, river, crs) {
   river_repr <- CRiSp::reproject(river, crs)
   cd_masked <- CRiSp::smooth_dem(dem_repr) |>
     CRiSp::get_slope() |>
-    CRiSp::get_cost_distance() |>
+    CRiSp::get_cost_distance(river_repr) |>
     CRiSp::mask_cost_distance(river_repr)
 
   cd_thresh <- CRiSp::get_cd_char(cd_masked)
