@@ -251,7 +251,7 @@ get_cd_char <- function(cd, method = "mean") {
 #' @param cd cost distance raster
 #' @param thresh threshold cost distance value below which pixels are assuemd
 #' to belong to the valley
-#'
+#' @export
 get_valley_mask <- function(cd, thresh) {
   valley_mask <- (cd < thresh)
   return(valley_mask)
