@@ -1,3 +1,5 @@
+^renv$
+^renv\.lock$
 ^CRiSp\.Rproj$
 ^\.Rproj\.user$
 ^LICENSE\.md$
@@ -9,3 +11,5 @@
 ^pkgdown$
 ^codemeta\.json$
 ^CITATION.cff$
+^doc$
+^Meta$

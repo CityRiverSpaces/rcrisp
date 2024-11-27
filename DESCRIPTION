@@ -22,14 +22,18 @@ Imports:
     rlang,
     rstac,
     sf,
+    sfheaders,
     sfnetworks,
     stringr,
     terra,
-    tidygraph
+    tibble,
+    tidygraph,
+    units
 Suggests: 
     ggplot2,
     gridExtra,
     knitr,
+    purrr,
     rmarkdown,
     testthat (>= 3.0.0)
 VignetteBuilder: 
