@@ -236,7 +236,7 @@ mask_cost_distance <- function(cd, river, buffer = 2000) {
 #' @param method function used to derive caracteristic value (mean)
 #'
 #' @return characteristic value of cd raster
-#'
+#' @export
 get_cd_char <- function(cd, method = "mean") {
   if (method == "mean") {
     cd_char <- mean(terra::values(cd), na.rm = TRUE)
