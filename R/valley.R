@@ -11,11 +11,11 @@
 #' @return dem
 #' @export
 get_dem <- function(bb, resource = "STAC", ...) {
-  kwargs <- list(...)
+  args <- list(...)
   if (resource == "STAC") {
-    if (length(kwargs) && !is.null(...)) {
-      endpoint <- kwargs$endpoint
-      collection <- kwargs$collection
+    if (length(args) && !is.null(...)) {
+      endpoint <- args$endpoint
+      collection <- args$collection
       asset_urls <- get_stac_asset_urls(
                                         bb,
                                         endpoint = endpoint,
