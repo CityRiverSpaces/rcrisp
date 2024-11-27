@@ -93,7 +93,7 @@ load_raster <- function(raster_urlpaths, bb) {
   raster_urlpaths |>
     lapply(terra::rast) |>
     lapply(terra::crop, as.vector(t(bb))) |>
-    do.call(merge, args = _)
+    do.call(terra::merge, args = _)
 }
 
 #'Write dem to cloud optimized GeoTiff file as specified location
