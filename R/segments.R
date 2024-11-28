@@ -3,15 +3,14 @@
 #' @param corridor The river corridor as a simple feature geometry
 #' @param network The spatial network to be used for the segmentation
 #' @param river_centerline The river centerline as a simple feature geometry
+#' @param angle_threshold Only angles above this threshold will be included
 #'
 #' @return Segment polygons as a simple feature geometry
 #' @export
-segments <- function(corridor, network, river_centerline) {
+segments <- function(corridor, network, river_centerline, angle_threshold) {
 
-  crossings <- get_crossing_edges(network, river_centerline)
-  # TODO: remove hard coded angle threshold
-  crossings_strokes <- strokes(network, crossings, angle_threshold = 100.)
-
+  crossings <- get_intersecting_edges(network, river_centerline)
+  crossings_strokes <- strokes(network, crossings, angle_threshold)
   crossings_clustered <- cluster_crossings(crossings_strokes, river_centerline)
 }
 
