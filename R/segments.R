@@ -16,15 +16,15 @@ segments <- function(corridor, network, river_centerline) {
 }
 
 
-#' Identify network edges that are crossing the river.
+#' Identify network edges that are intersecting a geometry.
 #'
 #' @param network A spatial network object
-#' @param river The river geometry as a simple feature object
+#' @param river A simple feature geometry
 #'
-#' @return Indices of the edges crossing the river
-get_crossing_edges <- function(network, river) {
+#' @return Indices of the edges intersecting the geometry as a vector
+get_intersecting_edges <- function(network, geometry) {
   edges <- sf::st_as_sf(network, "edges")
-  which(sf::st_intersects(edges, river, sparse = FALSE))
+  which(sf::st_intersects(edges, geometry, sparse = FALSE))
 }
 
 #' Group the river crossingns into clusters.
