@@ -27,7 +27,7 @@ get_dem <- function(bb, resource = "STAC", ...) {
     dem <- load_raster(bb, asset_urls)
     return(dem)
   } else {
-    #add error statement
+    stop(sprintf("Resource %s unknown", resource))
   }
 }
 
