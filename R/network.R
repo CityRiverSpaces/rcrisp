@@ -324,10 +324,10 @@ filter_network <- function(network, target) {
 #'
 #' @return Stroke geometries as a simple feature object
 strokes <- function(
-  network, from_edges, angle_threshold = 0., flow_mode = FALSE
+  network, from_edge, angle_threshold = 0., flow_mode = FALSE
 ) {
-  rcoins::strokes(
+  rcoins::stroke(
     network, angle_threshold = angle_threshold, attributes = FALSE,
-    flow_mode = flow_mode, from_edges = from_edges
+    flow_mode = flow_mode, from_edge = from_edge
   )
 }
