@@ -120,6 +120,12 @@
         <dd>Delineate segments of a river corridor.</dd>
       </dl><dl><dt>
 
+          <code><a href="dem_to_cog.html">dem_to_cog()</a></code>
+
+        </dt>
+        <dd>Write dem to cloud optimized GeoTiff file as specified location</dd>
+      </dl><dl><dt>
+
           <code><a href="filter_network.html">filter_network()</a></code>
 
         </dt>
@@ -130,6 +136,24 @@
 
         </dt>
         <dd>Flatten a network by adding points at apparent intersections.</dd>
+      </dl><dl><dt>
+
+          <code><a href="get_cd_char.html">get_cd_char()</a></code>
+
+        </dt>
+        <dd>Get characteristic value of distribution of cost distance</dd>
+      </dl><dl><dt>
+
+          <code><a href="get_cost_distance.html">get_cost_distance()</a></code>
+
+        </dt>
+        <dd>Derive cost distance function from masked slope</dd>
+      </dl><dl><dt>
+
+          <code><a href="get_dem.html">get_dem()</a></code>
+
+        </dt>
+        <dd>Load dem from a STAC endpoint</dd>
       </dl><dl><dt>
 
           <code><a href="get_osm_bb.html">get_osm_bb()</a></code>
@@ -168,10 +192,52 @@
         <dd>Retrieve OpenStreetMap data for a given location</dd>
       </dl><dl><dt>
 
+          <code><a href="get_slope.html">get_slope()</a></code>
+
+        </dt>
+        <dd>Derive slope as percentage from dem This makes use of the terrain function of the terra package</dd>
+      </dl><dl><dt>
+
+          <code><a href="get_stac_asset_urls.html">get_stac_asset_urls()</a></code>
+
+        </dt>
+        <dd>Retrieve asset urls for the intersection of a bounding box with a remote STAC endpoint</dd>
+      </dl><dl><dt>
+
           <code><a href="get_utm_zone.html">get_utm_zone()</a></code>
 
         </dt>
         <dd>Get the UTM zone of a spatial object</dd>
+      </dl><dl><dt>
+
+          <code><a href="get_valley.html">get_valley()</a></code>
+
+        </dt>
+        <dd>Create vector/polygon representation of valley from dem and river polygon for a crs</dd>
+      </dl><dl><dt>
+
+          <code><a href="get_valley_mask.html">get_valley_mask()</a></code>
+
+        </dt>
+        <dd>Select valley pixels from cost distance based on threshold</dd>
+      </dl><dl><dt>
+
+          <code><a href="get_valley_polygon.html">get_valley_polygon()</a></code>
+
+        </dt>
+        <dd>Create vector/polygon representation of valley without holes from raster mask</dd>
+      </dl><dl><dt>
+
+          <code><a href="get_valley_polygon_no_hole.html">get_valley_polygon_no_hole()</a></code>
+
+        </dt>
+        <dd>Remove possible holes from valley geometry</dd>
+      </dl><dl><dt>
+
+          <code><a href="get_valley_polygon_raw.html">get_valley_polygon_raw()</a></code>
+
+        </dt>
+        <dd>Create vector/polygon representation of valley raster mask</dd>
       </dl><dl><dt>
 
           <code><a href="initial_corridor.html">initial_corridor()</a></code>
@@ -186,6 +252,24 @@
         <dd>Identify the initial edges of the river corridor</dd>
       </dl><dl><dt>
 
+          <code><a href="load_raster.html">load_raster()</a></code>
+
+        </dt>
+        <dd>retrieve STAC records (of a DEM) corresponding to a list of asset urls, crop and merge with a specified bounding box to create a dem of the specified region</dd>
+      </dl><dl><dt>
+
+          <code><a href="mask_cost_distance.html">mask_cost_distance()</a></code>
+
+        </dt>
+        <dd>Mask out river regions incl. a buffer in cost distance raster data</dd>
+      </dl><dl><dt>
+
+          <code><a href="mask_slope.html">mask_slope()</a></code>
+
+        </dt>
+        <dd>Mask slope raster, setting the slope to zero for the pixels overlapping the river area.</dd>
+      </dl><dl><dt>
+
           <code><a href="nearest_node.html">nearest_node()</a></code>
 
         </dt>
@@ -196,6 +280,12 @@
 
         </dt>
         <dd>Retrieve OpenStreetMap data as sf object</dd>
+      </dl><dl><dt>
+
+          <code><a href="reproject.html">reproject()</a></code>
+
+        </dt>
+        <dd>Reproject a raster or vector dataset to the specified coordinate reference system (CRS)</dd>
       </dl><dl><dt>
 
           <code><a href="river_buffer.html">river_buffer()</a></code>
@@ -220,6 +310,12 @@
 
         </dt>
         <dd>Simplify a spatial network by removing multiple edges and loops.</dd>
+      </dl><dl><dt>
+
+          <code><a href="smooth_dem.html">smooth_dem()</a></code>
+
+        </dt>
+        <dd>spatially smooth dem by (window) filtering</dd>
       </dl><dl><dt>
 
           <code><a href="split.html">split()</a></code>
