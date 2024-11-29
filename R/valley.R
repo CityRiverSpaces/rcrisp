@@ -1,6 +1,7 @@
-#'Load dem from a STAC endpoint
+#' Load dem from a STAC endpoint
 #'
-#' @param bb bounding box of aoi for which to retrieve dem.
+#' @param bb A bounding box, provided either as a matrix (rows for "x", "y",
+#'   columns for "min", "max") or as a vector ("xmin", "ymin", "xmax", "ymax")
 #' @param resource from which to source dem. Can be "STAC".
 #' if "STAC" the parameters the following parameters
 #' must be supplied as named parameters. If omitted defaults
@@ -12,19 +13,19 @@
 #' @return dem
 #' @export
 get_dem <- function(bb, resource = "STAC", ...) {
+  bbox <- as_bbox(bb)
   args <- list(...)
   if (resource == "STAC") {
     if (length(args) && !is.null(...)) {
       endpoint <- args$endpoint
       collection <- args$collection
-      asset_urls <- get_stac_asset_urls(
-                                        bb,
+      asset_urls <- get_stac_asset_urls(bbox,
                                         endpoint = endpoint,
                                         collection = collection)
     } else {
-      asset_urls <- get_stac_asset_urls(bb)
+      asset_urls <- get_stac_asset_urls(bbox)
     }
-    dem <- load_raster(bb, asset_urls)
+    dem <- load_raster(bbox, asset_urls)
     return(dem)
   } else {
     stop(sprintf("Resource %s unknown", resource))
@@ -56,13 +57,11 @@ get_valley <- function(dem, river, crs) {
   return(valley)
 }
 
-
-
-#'Retrieve asset urls for the intersection of a bounding box with a
-#'remote STAC endpoint
+#' Retrieve asset urls for the intersection of a bounding box with a
+#' remote STAC endpoint
 #'
-#' @param bb A bounding box (compliant with CRiSp,
-#' i.e. as a matrix with 4 elements: xmin, ymin, xmax, ymax)
+#' @param bb A bounding box, provided either as a matrix (rows for "x", "y",
+#'   columns for "min", "max") or as a vector ("xmin", "ymin", "xmax", "ymax")
 #' @param endpoint url of (remote) STAC endpoint
 #' @param collection STAC collection to be queried
 #'
@@ -73,31 +72,33 @@ get_stac_asset_urls <- function(
     bb,
     endpoint = "https://earth-search.aws.element84.com/v1",
     collection = "cop-dem-glo-30") {
+  bbox <- as_bbox(bb)
   it_obj <- rstac::stac(endpoint) |>
-    rstac::stac_search(collections = collection, bbox = as.vector(bb)) |>
+    rstac::stac_search(collections = collection, bbox = bbox) |>
     rstac::get_request()
   asset_urls <- rstac::assets_url(it_obj)
   return(asset_urls)
 }
 
-#' retrieve STAC records (of a DEM) corresponding to a list of asset urls,
+#' Retrieve STAC records (of a DEM) corresponding to a list of asset urls,
 #' crop and merge with a specified bounding box to create a dem of the
 #' specified region
 #'
-#' @param bb A bounding box (compliant with CRiSp,
-#' i.e. as a matrix with 4 elements: xmin, ymin, xmax, ymax)
+#' @param bb A bounding box, provided either as a matrix (rows for "x", "y",
+#'   columns for "min", "max") or as a vector ("xmin", "ymin", "xmax", "ymax")
 #' @param raster_urlpaths a list of STAC records to be retrieved
 #'
 #' @return A a merged dem from retrieved assets cropped to the bounding box
 #' @export
 load_raster <- function(bb, raster_urlpaths) {
+  bbox <- as_bbox(bb)
   raster_urlpaths |>
     lapply(terra::rast) |>
-    lapply(terra::crop, as.vector(t(bb))) |>
+    lapply(terra::crop, terra::ext(bbox)) |>
     do.call(terra::merge, args = _)
 }
 
-#'Write dem to cloud optimized GeoTiff file as specified location
+#' Write dem to cloud optimized GeoTiff file as specified location
 #'
 #' @param dem to write to file
 #' @param fpath filepath for output. If no output directory is specified
@@ -123,11 +124,6 @@ dem_to_cog <- function(dem, fpath, output_directory = NULL) {
                      overwrite = TRUE)
 }
 
-
-
-
-
-
 #' Reproject a raster or vector dataset to the specified
 #' coordinate reference system (CRS)
 #'
@@ -147,7 +143,7 @@ reproject <- function(x, crs, ...) {
   }
 }
 
-#' spatially smooth dem by (window) filtering
+#' Spatially smooth dem by (window) filtering
 #'
 #' @param dem raster data of dem
 #' @param method smoothing function to be used, e.g. "median".

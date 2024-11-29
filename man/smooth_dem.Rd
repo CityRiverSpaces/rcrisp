@@ -2,7 +2,7 @@
 % Please edit documentation in R/valley.R
 \name{smooth_dem}
 \alias{smooth_dem}
-\title{spatially smooth dem by (window) filtering}
+\title{Spatially smooth dem by (window) filtering}
 \usage{
 smooth_dem(dem, method = "median", window = 5)
 }
@@ -18,5 +18,5 @@ As accepted by focal}
 filtered dem
 }
 \description{
-spatially smooth dem by (window) filtering
+Spatially smooth dem by (window) filtering
 }
