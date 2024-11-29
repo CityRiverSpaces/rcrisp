@@ -36,7 +36,7 @@ get_utm_zone <- function(x) {
 #' @param x Simple feature object or a bounding box, provided either as a
 #'   matrix (with x, y as rows and min, max as columns) or as a vector (xmin,
 #'   ymin, xmax, ymax)
-#' @return A bounding box as a \code{\link[sf]{bbox}} object
+#' @return A bounding box as returned by [`sf::st_bbox()`]
 #' @export
 as_bbox <- function(x) {
   if (inherits(x, c("numeric", "matrix"))) {

@@ -13,7 +13,7 @@ matrix (with x, y as rows and min, max as columns) or as a vector (xmin,
 ymin, xmax, ymax)}
 }
 \value{
-A bounding box as a \code{\link[sf]{bbox}} object
+A bounding box as returned by \code{\link[sf:st_bbox]{sf::st_bbox()}}
 }
 \description{
 Get the bounding box from the x object. If the x does not have a CRS, WGS84
