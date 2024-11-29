@@ -52,3 +52,40 @@ test_that("both bbox and sf objects can be used to find UTM zone", {
   utm_epsg_geom <- get_utm_zone(geom)
   expect_equal(utm_epsg_bbox, utm_epsg_geom)
 })
+
+test_that("a matrix is correctly converted to a bbox", {
+  bb <- matrix(data = c(0, 1, 2, 3),
+               nrow = 2,
+               ncol = 2,
+               dimnames = list(c("x", "y"), c("min", "max")))
+  bbox <- as_bbox(bb)
+  expect_true(inherits(bbox, "bbox"))
+  expect_true(all(as.vector(bbox) == c(0, 1, 2, 3)))
+  expect_equal(sf::st_crs(bbox), sf::st_crs(4326))
+})
+
+test_that("a vector is correctly converted to a bbox", {
+  bb <- c(0, 1, 2, 3)
+  names(bb) <- c("xmin", "ymin", "xmax", "ymax")
+  bbox <- as_bbox(bb)
+  expect_true(inherits(bbox, "bbox"))
+  expect_true(all(as.vector(bbox) == c(0, 1, 2, 3)))
+  expect_equal(sf::st_crs(bbox), sf::st_crs(4326))
+})
+
+test_that("a sf object is correctly converted to a bbox", {
+  linestring <- sf::st_linestring(matrix(c(0, 1, 2, 3), ncol = 2, byrow = TRUE))
+  bbox <- as_bbox(linestring)
+  expect_true(inherits(bbox, "bbox"))
+  expect_true(all(as.vector(bbox) == c(0, 1, 2, 3)))
+  expect_equal(sf::st_crs(bbox), sf::st_crs(4326))
+})
+
+test_that("a bbox object does not change class", {
+  crs <- 3285
+  bb <- sf::st_bbox(c(xmin = 0, ymin = 1, xmax = 2, ymax = 3), crs = crs)
+  bbox <- as_bbox(bb)
+  expect_true(inherits(bbox, "bbox"))
+  expect_true(all(as.vector(bbox) == c(0, 1, 2, 3)))
+  expect_equal(sf::st_crs(bbox), sf::st_crs(crs))
+})
