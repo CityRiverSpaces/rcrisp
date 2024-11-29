@@ -21,11 +21,30 @@ set_units_like <- function(x, y) {
 #' @return The EPSG of the UTM zone
 #' @export
 get_utm_zone <- function(x) {
-  bb <- sf::st_bbox(x)
+  bb <- as_bbox(x)
 
   centroid_long <- (bb[["xmin"]] + bb[["xmax"]]) / 2
   centroid_lat <- (bb[["ymin"]] + bb[["ymax"]]) / 2
   base <- if (centroid_lat >= 0) 32600 else 32700
   epsg_code <- base + floor((centroid_long + 180) / 6) + 1
   return(epsg_code)
+}
+
+#' Get the bounding box from the x object. If the x does not have a CRS, WGS84
+#' is assumed.
+#'
+#' @param x Simple feature object or a bounding box, provided either as a
+#'   matrix (with x, y as rows and min, max as columns) or as a vector (xmin,
+#'   ymin, xmax, ymax)
+#' @return A bounding box as a \code{\link[sf]{bbox}} object
+#' @export
+as_bbox <- function(x) {
+  if (inherits(x, c("numeric", "matrix"))) {
+    x <- as.vector(x)
+    names(x) <- c("xmin", "ymin", "xmax", "ymax")
+  }
+  bbox <- sf::st_bbox(x)
+  crs <- sf::st_crs(bbox)
+  if (is.na(crs)) sf::st_crs(bbox) <- sf::st_crs(4326)
+  return(bbox)
 }
