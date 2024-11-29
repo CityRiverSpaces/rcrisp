@@ -12,8 +12,8 @@ get_stac_asset_urls(
 )
 }
 \arguments{
-\item{bb}{A bounding box (compliant with CRiSp,
-i.e. as a matrix with 4 elements: xmin, ymin, xmax, ymax)}
+\item{bb}{A bounding box, provided either as a matrix (rows for "x", "y",
+columns for "min", "max") or as a vector ("xmin", "ymin", "xmax", "ymax")}
 
 \item{endpoint}{url of (remote) STAC endpoint}
 

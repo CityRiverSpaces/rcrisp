@@ -7,7 +7,8 @@
 get_dem(bb, resource = "STAC", ...)
 }
 \arguments{
-\item{bb}{bounding box of aoi for which to retrieve dem.}
+\item{bb}{A bounding box, provided either as a matrix (rows for "x", "y",
+columns for "min", "max") or as a vector ("xmin", "ymin", "xmax", "ymax")}
 
 \item{resource}{from which to source dem. Can be "STAC".
 if "STAC" the parameters the following parameters
