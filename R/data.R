@@ -1,4 +1,4 @@
-#' CRiSp example data for Bucharest
+#' CRiSp example OSM data for Bucharest
 #'
 #' Data extracted from OpenStreetMap for examples used in the CRiSp package.
 #'
@@ -8,4 +8,12 @@
 #'                  Bucharest.}
 #' }
 #' @source OpenStreetMap
-"bucharest"
+"bucharest_osm"
+
+#' CRiSp example DEM data for Bucharest
+#'
+#' Digital Elevation Model (DEM) for examples used in the CRiSp package.
+#'
+#' @format TODO
+#' @source Copernicus DEM 30
+"bucharest_dem"
