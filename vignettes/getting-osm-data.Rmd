@@ -16,11 +16,11 @@ knitr::opts_chunk$set(
 
 library(CRiSp)
 
-city_boundary <- bucharest$boundary
-river_surface <- bucharest$river_surface
-river_centerline <- bucharest$river_centerline
-railways <- bucharest$railways
-streets <- bucharest$streets
+city_boundary <- bucharest_osm$boundary
+river_surface <- bucharest_osm$river_surface
+river_centerline <- bucharest_osm$river_centerline
+railways <- bucharest_osm$railways
+streets <- bucharest_osm$streets
 ```
 
 ```{r packages, eval=FALSE, message=FALSE}
