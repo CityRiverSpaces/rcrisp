@@ -56,7 +56,7 @@ railways <- get_osm_railways(bb, crs)
 Individual layers can be written to disk before being read in for delineation.
 
 ```{r eval=FALSE}
-bucharest <- list(
+bucharest_osm <- list(
   bb = bb,
   boundary = city_boundary,
   river_centerline = river$centerline,
@@ -65,13 +65,12 @@ bucharest <- list(
   railways = railways
 )
 
-walk(
-  st_write_list,
+walk2(
+  bucharest_osm,
+  names(bucharest_osm),
   ~ st_write(
     .x,
-    dsn = sprintf("%s_%s.gpkg",
-                  names(st_write_list)[map_lgl(st_write_list, identical, .x)],
-                  city_name),
+    dsn = sprintf("%s_%s.gpkg", .y, city_name),
     append = FALSE,
     quiet = TRUE
   )
@@ -81,13 +80,13 @@ walk(
 The above layers can also be obtained with the all-in-one function `get_osmdata()`. Optionally, a bounding box buffer can be specified to expand the bounding box.
 
 ```{r eval=FALSE}
-bucharest <- get_osmdata(city_name, river_name, buffer = bbox_buffer)
+bucharest_osm <- get_osmdata(city_name, river_name, buffer = bbox_buffer)
 ```
 
 The resulting object is a list with all the layers obtained individually above.
 
 ```{r}
-names(bucharest)
+names(bucharest_osm)
 ```
 
 
@@ -95,11 +94,11 @@ names(bucharest)
 if (requireNamespace("ggplot2", quietly = TRUE)) {
   library(ggplot2)
   ggplot() +
-    geom_sf(data = bucharest$boundary, fill = "grey", color = "black") +
-    geom_sf(data = bucharest$railways, color = "orange") +
-    geom_sf(data = bucharest$streets, color = "black") +
-    geom_sf(data = bucharest$river_surface, fill = "blue", color = "blue") +
-    geom_sf(data = bucharest$river_centerline, color = "blue") +
+    geom_sf(data = bucharest_osm$boundary, fill = "grey", color = "black") +
+    geom_sf(data = bucharest_osm$railways, color = "orange") +
+    geom_sf(data = bucharest_osm$streets, color = "black") +
+    geom_sf(data = bucharest_osm$river_surface, fill = "blue", color = "blue") +
+    geom_sf(data = bucharest_osm$river_centerline, color = "blue") +
     xlim(417000, 439000) +
     ylim(4908800, 4932500)
 } else {
