@@ -30,8 +30,8 @@ In this article we show how to set up the spatial network for a city before usin
 We start by loading the OSM data. According to the delineation method, all persistent physical structures need to be considered. Therefore, the network will contain both streets and railways from OSM.
 
 ```{r}
-streets <- bucharest$streets
-railways <- bucharest$railways
+streets <- bucharest_osm$streets
+railways <- bucharest_osm$railways
 ```
 
 **Note**: If the city in question contains other surface-level structures that need to be included in the network, such as above-ground metro lines, retrieve them with the appropriate OSM tags following the instructions in `vignette("getting-osm-data")` and include them here in the network.
@@ -45,7 +45,7 @@ network <- bind_rows(streets, railways) |>
   as_sfnetwork(directed = FALSE)
 ```
 
-To be able to use the network for delineation, we need to flatten it (that is, project bridges to the ground surface) and add nodes at all intersections between edges. 
+To be able to use the network for delineation, we need to flatten it (that is, project bridges to the ground surface) and add nodes at all intersections between edges.
 
 ```{r}
 network_new <- flatten_network(network)

@@ -22,9 +22,10 @@ For a more detailed analysis of an urban river corridor, corridor-level delineat
 
 By default, the all-in-one function `delineate_corridor()` includes the division of the corridor into segments. It is also possible to use the `delineate_segment()` function to divide the corridor in a separate step.
 
-To demonstrate this as a separate step, we will use the `bucharest$corridor` and `bucharest$streets` layers from the package data as input.
+To demonstrate this as a separate step, we will use the `bucharest_osm$corridor` and `bucharest_osm$streets` layers from the package data as input.
 
 ```{r eval=FALSE}
-segmented_corridor <- delineate_segments(bucharest$corridor, bucharest$streets)
+segmented_corridor <- delineate_segments(bucharest_osm$corridor,
+                                         bucharest_osm$streets)
 ```
 

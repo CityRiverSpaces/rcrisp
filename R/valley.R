@@ -135,7 +135,8 @@ dem_to_cog <- function(dem, fpath, output_directory = NULL) {
 #' @export
 reproject <- function(x, crs, ...) {
   if (inherits(x, "SpatRaster")) {
-    return(terra::project(x, crs, ...))
+    wkt <- sf::st_crs(crs)$wkt
+    return(terra::project(x, wkt, ...))
   } else if (inherits(x, c("bbox", "sfc", "sf"))) {
     return(sf::st_transform(x, crs, ...))
   } else {
