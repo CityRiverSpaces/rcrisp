@@ -4,17 +4,22 @@ river_name <- "Dâmbovița"
 epsg_code <- 32635
 bbox_buffer <- 2000
 
-# Fix encoding issue for linter in the WKT string
-crs_wkt <- sf::st_crs(epsg_code)$wkt
-crs_wkt_fixed <- gsub("°|º", "\\\u00b0", crs_wkt)
-
 # Fetch the OSM data
 bucharest_osm <- CRiSp::get_osmdata(city_name, river_name,
-                                    crs = crs_wkt_fixed, buffer = bbox_buffer)
-# Add the DEM
+                                    crs = epsg_code, buffer = bbox_buffer)
+
+# Fix encoding issue in the WKT strings
+fix_wkt_encoding <- function(x) {
+  wkt <- sf::st_crs(x)$wkt
+  sf::st_crs(x)$wkt <- gsub("°|º", "\\\u00b0", wkt)  # replace with ASCII code
+  x
+}
+bucharest_osm <- lapply(bucharest_osm, fix_wkt_encoding)
+
+# Fetch the DEM data
 bucharest_dem <- CRiSp::get_dem(bucharest_osm$bb) |>
-  CRiSp::reproject(crs_wkt_fixed) |>
-  # SpatRaster objects needs cannot be directly serialized as RDS/RDA files
+  CRiSp::reproject(epsg_code) |>
+  # SpatRaster objects cannot be directly serialized as RDS/RDA files
   terra::wrap()
 
 # Save as package data
