@@ -1,6 +1,6 @@
 test_that("STAC asset urls are correctly retrieved", {
   skip_on_ci()
-  bb <- osmdata::getbb("Bucharest")
+  bb <- bucharest_osm$bb
   ep <- "https://earth-search.aws.element84.com/v1"
   col <- "cop-dem-glo-30"
 
