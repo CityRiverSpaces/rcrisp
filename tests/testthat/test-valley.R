@@ -4,24 +4,20 @@ test_that("STAC asset urls are correctly retrieved", {
   ep <- "https://earth-search.aws.element84.com/v1"
   col <- "cop-dem-glo-30"
 
-  asset_urls_retrieved <- get_stac_asset_urls(
-                                              bb, endpoint = ep,
+  asset_urls_retrieved <- get_stac_asset_urls(bb, endpoint = ep,
                                               collection = col)
   asset_urls_retrieved_default <- get_stac_asset_urls(bb)
 
-  expasset1 <- paste0(
-                      "s3://copernicus-dem-30m/",
+  expasset1 <- paste0("s3://copernicus-dem-30m/",
                       "Copernicus_DSM_COG_10_N44_00_E026_00_DEM/",
                       "Copernicus_DSM_COG_10_N44_00_E026_00_DEM.tif")
-  expasset2 <- paste0(
-                      "s3://copernicus-dem-30m/",
+  expasset2 <- paste0("s3://copernicus-dem-30m/",
                       "Copernicus_DSM_COG_10_N44_00_E025_00_DEM/",
                       "Copernicus_DSM_COG_10_N44_00_E025_00_DEM.tif")
-
   expected_asset_urls <- c(expasset1, expasset2)
+
   expect_equal(expected_asset_urls, asset_urls_retrieved)
   expect_equal(expected_asset_urls, asset_urls_retrieved_default)
-
 })
 
 
