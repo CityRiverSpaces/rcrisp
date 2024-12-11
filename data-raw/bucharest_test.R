@@ -8,4 +8,5 @@ if (!dir.exists("tests/testthat/fixtures")) {
   dir.create("tests/testthat/fixtures", recursive = TRUE)
 }
 
-sf::st_write(valley, "tests/testthat/fixtures/expected_valley.gpkg", overwrite = TRUE)
+sf::st_write(valley, "tests/testthat/fixtures/expected_valley.gpkg",
+             overwrite = TRUE)
