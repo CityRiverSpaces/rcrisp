@@ -2,15 +2,15 @@
 % Please edit documentation in R/valley.R
 \name{load_raster}
 \alias{load_raster}
-\title{retrieve STAC records (of a DEM) corresponding to a list of asset urls,
+\title{Retrieve STAC records (of a DEM) corresponding to a list of asset urls,
 crop and merge with a specified bounding box to create a dem of the
 specified region}
 \usage{
 load_raster(bb, raster_urlpaths)
 }
 \arguments{
-\item{bb}{A bounding box (compliant with CRiSp,
-i.e. as a matrix with 4 elements: xmin, ymin, xmax, ymax)}
+\item{bb}{A bounding box, provided either as a matrix (rows for "x", "y",
+columns for "min", "max") or as a vector ("xmin", "ymin", "xmax", "ymax")}
 
 \item{raster_urlpaths}{a list of STAC records to be retrieved}
 }
@@ -18,7 +18,7 @@ i.e. as a matrix with 4 elements: xmin, ymin, xmax, ymax)}
 A a merged dem from retrieved assets cropped to the bounding box
 }
 \description{
-retrieve STAC records (of a DEM) corresponding to a list of asset urls,
+Retrieve STAC records (of a DEM) corresponding to a list of asset urls,
 crop and merge with a specified bounding box to create a dem of the
 specified region
 }

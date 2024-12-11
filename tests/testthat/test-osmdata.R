@@ -1,6 +1,6 @@
 test_that("City boundary of Bucharest is correctly retreived", {
   skip_on_ci()
-  bucharest_boundary <- bucharest$boundary |>
+  bucharest_boundary <- bucharest_osm$boundary |>
     sf::st_geometry() |>
     sf::st_transform(4326)
 
