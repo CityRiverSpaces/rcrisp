@@ -35,7 +35,8 @@ test_that("raster data are correctly retrieved and merged", {
   dem <- load_raster(bb, raster_paths) |> CRiSp::reproject(32635)
   expected_dem <- terra::unwrap(bucharest_dem)
   expect_equal(terra::values(dem), terra::values(expected_dem))
-  expect_true(all.equal(terra::ext(dem), terra::ext(expected_dem), tolerance = 1e-4))
+  expect_true(all.equal(terra::ext(dem), terra::ext(expected_dem),
+                        tolerance = 1e-4))
   expect_equal(terra::crs(dem), terra::crs(expected_dem))
 })
 
