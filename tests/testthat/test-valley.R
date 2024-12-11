@@ -27,33 +27,30 @@ test_that("STAC asset urls are correctly retrieved", {
 
 test_that("raster data are correctly retrieved and merged", {
   skip_on_ci()
-  bb <- osmdata::getbb("Bucharest")
-  rp1 <- paste0(
-                "s3://copernicus-dem-30m/",
+  bb <- bucharest_osm$bb
+  rp1 <- paste0("s3://copernicus-dem-30m/",
                 "Copernicus_DSM_COG_10_N44_00_E026_00_DEM/",
                 "Copernicus_DSM_COG_10_N44_00_E026_00_DEM.tif")
-  rp2 <- paste0(
-                "s3://copernicus-dem-30m/",
+  rp2 <- paste0("s3://copernicus-dem-30m/",
                 "Copernicus_DSM_COG_10_N44_00_E025_00_DEM/",
                 "Copernicus_DSM_COG_10_N44_00_E025_00_DEM.tif")
-
   raster_paths <- c(rp1, rp2)
 
-  dem <- load_raster(bb, raster_paths)
-  expected_dem <- terra::rast("path_to_example_data") #TODO add path and data
-  expect_equal(dem, expected_dem)
+  dem <- load_raster(bb, raster_paths) |> CRiSp::reproject(32635)
+  expected_dem <- terra::unwrap(bucharest_dem)
+  expect_equal(terra::values(dem), terra::values(expected_dem))
+  expect_true(all.equal(terra::ext(dem), terra::ext(expected_dem), tolerance = 1e-4))
+  expect_equal(terra::crs(dem), terra::crs(expected_dem))
 })
 
 test_that("valley polygon is correctly constructed", {
   skip_on_ci()
-  dem <- terra::rast("path_to_example_demd") #TODO add path and data
-  river_geoms <- st_read("path_to_example_river") #TODO add path and data
-  river <- river_geoms[1, ]  # select waterbody extent
+  dem <- terra::unwrap(bucharest_dem)
+  river <- bucharest_osm$river_surface
   crs <- "epsg:32635"
 
   valley <- get_valley(dem, river, crs)
-  expected_valley <- st_read("path_to_example_valley")
-  #TODO add example valley and path
+  expected_valley <- readRDS("fixtures/expected_valley.rds")
 
   expect_equal(valley, expected_valley, tolerance = 1e-4)
 
