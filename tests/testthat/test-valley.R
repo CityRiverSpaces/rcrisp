@@ -47,7 +47,8 @@ test_that("valley polygon is correctly constructed", {
   crs <- "epsg:32635"
 
   valley <- get_valley(dem, river, crs)
-  expected_valley <- readRDS("fixtures/expected_valley.rds")
+  expected_valley <- readRDS(testthat::test_path("fixtures",
+                                                 "expected_valley.rds"))
 
   expect_equal(valley, expected_valley, tolerance = 1e-4)
 
