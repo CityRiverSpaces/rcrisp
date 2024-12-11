@@ -46,8 +46,9 @@ test_that("valley polygon is correctly constructed", {
   crs <- "epsg:32635"
 
   valley <- get_valley(dem, river, crs)
-  expected_valley <- readRDS(testthat::test_path("fixtures",
-                                                 "expected_valley.rds"))
+  expected_valley <- sf::st_read("fixtures/expected_valley.gpkg",
+                                 quiet = TRUE) |>
+    sf::st_as_sfc()
 
   expect_equal(valley, expected_valley, tolerance = 1e-4)
 

@@ -8,4 +8,4 @@ if (!dir.exists("tests/testthat/fixtures")) {
   dir.create("tests/testthat/fixtures", recursive = TRUE)
 }
 
-saveRDS(valley, "tests/testthat/fixtures/expected_valley.rds")
+sf::st_write(valley, "tests/testthat/fixtures/expected_valley.gpkg", overwrite = TRUE)
