@@ -41,7 +41,6 @@ test_that("raster data are correctly retrieved and merged", {
 })
 
 test_that("valley polygon is correctly constructed", {
-  # skip_on_ci()
   dem <- terra::unwrap(bucharest_dem)
   river <- bucharest_osm$river_surface
   crs <- "epsg:32635"
