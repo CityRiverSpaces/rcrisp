@@ -66,5 +66,4 @@ test_that("valley polygon is correctly constructed", {
     sf::st_as_sfc()
 
   expect_equal(valley, expected_valley, tolerance = 1e-4)
-
 })
