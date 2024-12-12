@@ -1,3 +1,10 @@
+asset_urls <- c(paste0("s3://copernicus-dem-30m/",
+                       "Copernicus_DSM_COG_10_N44_00_E026_00_DEM/",
+                       "Copernicus_DSM_COG_10_N44_00_E026_00_DEM.tif"),
+                paste0("s3://copernicus-dem-30m/",
+                       "Copernicus_DSM_COG_10_N44_00_E025_00_DEM/",
+                       "Copernicus_DSM_COG_10_N44_00_E025_00_DEM.tif"))
+
 test_that("STAC asset urls are correctly retrieved", {
   bb <- bucharest_osm$bb
   ep <- "https://earth-search.aws.element84.com/v1"
@@ -5,26 +12,14 @@ test_that("STAC asset urls are correctly retrieved", {
 
   if (Sys.getenv("CI") == "true") {
     get_stac_asset_urls <-
-      mockery::mock("get_stac_asset_urls",
-                    c(paste0("s3://copernicus-dem-30m/",
-                             "Copernicus_DSM_COG_10_N44_00_E026_00_DEM/",
-                             "Copernicus_DSM_COG_10_N44_00_E026_00_DEM.tif"),
-                      paste0("s3://copernicus-dem-30m/",
-                             "Copernicus_DSM_COG_10_N44_00_E025_00_DEM/",
-                             "Copernicus_DSM_COG_10_N44_00_E025_00_DEM.tif")))
+      mockery::mock("get_stac_asset_urls", asset_urls)
   }
 
   asset_urls_retrieved <- get_stac_asset_urls(bb, endpoint = ep,
                                               collection = col)
   asset_urls_retrieved_default <- get_stac_asset_urls(bb)
 
-  expasset1 <- paste0("s3://copernicus-dem-30m/",
-                      "Copernicus_DSM_COG_10_N44_00_E026_00_DEM/",
-                      "Copernicus_DSM_COG_10_N44_00_E026_00_DEM.tif")
-  expasset2 <- paste0("s3://copernicus-dem-30m/",
-                      "Copernicus_DSM_COG_10_N44_00_E025_00_DEM/",
-                      "Copernicus_DSM_COG_10_N44_00_E025_00_DEM.tif")
-  expected_asset_urls <- c(expasset1, expasset2)
+  expected_asset_urls <- asset_urls
 
   expect_equal(expected_asset_urls, asset_urls_retrieved)
   expect_equal(expected_asset_urls, asset_urls_retrieved_default)
@@ -32,13 +27,7 @@ test_that("STAC asset urls are correctly retrieved", {
 
 test_that("raster data are correctly retrieved and merged", {
   bb <- bucharest_osm$bb
-  rp1 <- paste0("s3://copernicus-dem-30m/",
-                "Copernicus_DSM_COG_10_N44_00_E026_00_DEM/",
-                "Copernicus_DSM_COG_10_N44_00_E026_00_DEM.tif")
-  rp2 <- paste0("s3://copernicus-dem-30m/",
-                "Copernicus_DSM_COG_10_N44_00_E025_00_DEM/",
-                "Copernicus_DSM_COG_10_N44_00_E025_00_DEM.tif")
-  raster_paths <- c(rp1, rp2)
+  raster_paths <- asset_urls
 
   if (Sys.getenv("CI") == "true") {
     load_raster <- mockery::mock("load_raster", terra::unwrap(bucharest_dem))
