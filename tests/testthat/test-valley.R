@@ -14,10 +14,9 @@ test_that("STAC asset urls are correctly retrieved", {
     get_stac_asset_urls <- mockery::mock("get_stac_asset_urls", asset_urls)
   }
 
-  asset_urls_retrieved <- get_stac_asset_urls(bb, endpoint = ep,
+  asset_urls_retrieved <-get_stac_asset_urls(bb, endpoint = ep,
                                               collection = col)
   asset_urls_retrieved_default <- get_stac_asset_urls(bb)
-
   expected_asset_urls <- asset_urls
 
   expect_equal(expected_asset_urls, asset_urls_retrieved)
@@ -31,10 +30,11 @@ test_that("raster data are correctly retrieved and merged", {
 
   dem <- load_raster(bb, asset_urls) |> CRiSp::reproject(32635)
   expected_dem <- terra::unwrap(bucharest_dem)
+
   expect_equal(terra::values(dem), terra::values(expected_dem))
+  expect_equal(terra::crs(dem), terra::crs(expected_dem))
   expect_true(all.equal(terra::ext(dem), terra::ext(expected_dem),
                         tolerance = 1e-4))
-  expect_equal(terra::crs(dem), terra::crs(expected_dem))
 })
 
 test_that("valley polygon is correctly constructed", {
