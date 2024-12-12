@@ -6,12 +6,12 @@ test_that("STAC asset urls are correctly retrieved", {
   if (Sys.getenv("CI") == "true") {
     get_stac_asset_urls <-
       mockery::mock("get_stac_asset_urls",
-        c(paste0("s3://copernicus-dem-30m/",
-                 "Copernicus_DSM_COG_10_N44_00_E026_00_DEM/",
-                 "Copernicus_DSM_COG_10_N44_00_E026_00_DEM.tif"),
-          paste0("s3://copernicus-dem-30m/",
-                 "Copernicus_DSM_COG_10_N44_00_E025_00_DEM/",
-                 "Copernicus_DSM_COG_10_N44_00_E025_00_DEM.tif")))
+                    c(paste0("s3://copernicus-dem-30m/",
+                             "Copernicus_DSM_COG_10_N44_00_E026_00_DEM/",
+                             "Copernicus_DSM_COG_10_N44_00_E026_00_DEM.tif"),
+                      paste0("s3://copernicus-dem-30m/",
+                             "Copernicus_DSM_COG_10_N44_00_E025_00_DEM/",
+                             "Copernicus_DSM_COG_10_N44_00_E025_00_DEM.tif")))
   }
 
   asset_urls_retrieved <- get_stac_asset_urls(bb, endpoint = ep,
