@@ -33,6 +33,7 @@ Suggests:
     ggplot2,
     gridExtra,
     knitr,
+    mockery,
     purrr,
     rmarkdown,
     testthat (>= 3.0.0)
