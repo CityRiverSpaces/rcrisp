@@ -11,8 +11,7 @@ test_that("STAC asset urls are correctly retrieved", {
   col <- "cop-dem-glo-30"
 
   if (Sys.getenv("CI") == "true") {
-    get_stac_asset_urls <-
-      mockery::mock("get_stac_asset_urls", asset_urls)
+    get_stac_asset_urls <- mockery::mock("get_stac_asset_urls", asset_urls)
   }
 
   asset_urls_retrieved <- get_stac_asset_urls(bb, endpoint = ep,
