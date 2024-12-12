@@ -5,14 +5,13 @@ test_that("STAC asset urls are correctly retrieved", {
 
   if (Sys.getenv("CI") == "true") {
     get_stac_asset_urls <-
-      mockery::mock("get_stac_asset_urls", \(bb, endpoint, collection) {
+      mockery::mock("get_stac_asset_urls",
         c(paste0("s3://copernicus-dem-30m/",
                  "Copernicus_DSM_COG_10_N44_00_E026_00_DEM/",
                  "Copernicus_DSM_COG_10_N44_00_E026_00_DEM.tif"),
           paste0("s3://copernicus-dem-30m/",
                  "Copernicus_DSM_COG_10_N44_00_E025_00_DEM/",
-                 "Copernicus_DSM_COG_10_N44_00_E025_00_DEM.tif"))
-      })
+                 "Copernicus_DSM_COG_10_N44_00_E025_00_DEM.tif")))
   }
 
   asset_urls_retrieved <- get_stac_asset_urls(bb, endpoint = ep,
@@ -42,9 +41,7 @@ test_that("raster data are correctly retrieved and merged", {
   raster_paths <- c(rp1, rp2)
 
   if (Sys.getenv("CI") == "true") {
-    load_raster <- mockery::mock("load_raster", \(bb, raster_paths) {
-      terra::unwrap(bucharest_dem)
-    })
+    load_raster <- mockery::mock("load_raster", terra::unwrap(bucharest_dem))
   }
 
   dem <- load_raster(bb, raster_paths) |> CRiSp::reproject(32635)
