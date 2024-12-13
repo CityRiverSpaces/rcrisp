@@ -14,7 +14,7 @@ test_that("STAC asset urls are correctly retrieved", {
     get_stac_asset_urls <- mockery::mock("get_stac_asset_urls", asset_urls)
   }
 
-  asset_urls_retrieved <-get_stac_asset_urls(bb, endpoint = ep,
+  asset_urls_retrieved <- get_stac_asset_urls(bb, endpoint = ep,
                                               collection = col)
   asset_urls_retrieved_default <- get_stac_asset_urls(bb)
   expected_asset_urls <- asset_urls
