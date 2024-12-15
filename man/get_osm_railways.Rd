@@ -7,7 +7,7 @@
 get_osm_railways(bb, crs)
 }
 \arguments{
-\item{bb}{Bounding box}
+\item{bb}{Bounding box of class \code{bbox}}
 
 \item{crs}{Coordinate reference system as EPSG code}
 }

@@ -22,10 +22,12 @@ Imports:
     osmdata,
     rcoins,
     rlang,
+    rstac,
     sf,
     sfheaders,
     sfnetworks,
     stringr,
+    terra,
     tibble,
     tidygraph,
     units

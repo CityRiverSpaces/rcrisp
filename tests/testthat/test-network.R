@@ -278,7 +278,7 @@ test_that("Filter network properly splits network across adjacent regions", {
 })
 
 test_that("Network setup with real data", {
-  edges <- bucharest$streets
+  edges <- bucharest_osm$streets
   network <- as_network(edges, clean = FALSE, flatten = FALSE)
   edges_actual <- sf::st_geometry(sf::st_as_sf(network, "edges"))
   edges_expected <- sf::st_geometry(edges)

@@ -11,8 +11,8 @@ osmdata_as_sf(key, value, bb)
 
 \item{value}{A character string with the value to filter the data}
 
-\item{bb}{A matrix with the bounding box (rows for "x", "y", columns for
-"min", "max")}
+\item{bb}{A bounding box, provided either as a matrix (rows for "x", "y",
+columns for "min", "max") or as a vector ("xmin", "ymin", "xmax", "ymax")}
 }
 \value{
 An sf object with the retrieved OpenStreetMap data

@@ -4,13 +4,14 @@
 #'
 #' @param key A character string with the key to filter the data
 #' @param value A character string with the value to filter the data
-#' @param bb A matrix with the bounding box (rows for "x", "y", columns for
-#'           "min", "max")
+#' @param bb A bounding box, provided either as a matrix (rows for "x", "y",
+#'   columns for "min", "max") or as a vector ("xmin", "ymin", "xmax", "ymax")
 #'
 #' @return An sf object with the retrieved OpenStreetMap data
 #' @export
 osmdata_as_sf <- function(key, value, bb) {
-  bb |>
+  bbox <- as_bbox(bb)
+  bbox |>
     osmdata::opq() |>
     osmdata::add_osm_feature(key = key, value = value) |>
     osmdata::osmdata_sf()
@@ -27,10 +28,7 @@ osmdata_as_sf <- function(key, value, bb) {
 #' get_osm_bb("Bucharest")
 get_osm_bb <- function(city_name) {
   bb <- osmdata::getbb(city_name)
-  bb <- bb |> as.vector()
-  names(bb) <- c("xmin", "ymin", "xmax", "ymax")
-  bb <- sf::st_bbox(bb, crs = 4326)
-  return(bb)
+  return(as_bbox(bb))
 }
 
 #' Retrieve OpenStreetMap data for a given location
@@ -180,7 +178,7 @@ get_osm_river <- function(river_name, bb, crs) {
 
 #' Get OpenStreetMap streets
 #'
-#' @param bb Boundary box
+#' @param bb Bounding box of class `bbox`
 #' @param crs Coordinate reference system as EPSG code
 #' @param highway_values A character vector with the highway values to retrieve.
 #'             If left NULL, the function retrieves the following values:
@@ -221,7 +219,7 @@ get_osm_streets <- function(bb, crs, highway_values = NULL) {
 
 #' Get OpenStreetMap railways
 #'
-#' @param bb Bounding box
+#' @param bb Bounding box of class `bbox`
 #' @param crs Coordinate reference system as EPSG code
 #'
 #' @return An sf object with the railways
