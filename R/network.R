@@ -314,7 +314,7 @@ filter_network <- function(network, target) {
 #' strokes. See [`rcoins::stroke()`] for more details.
 #'
 #' @param network A spatial network object
-#' @param from_edges The indices of the network edges to be continued
+#' @param from_edge The indices of the network edges to be continued
 #' @param angle_threshold Consecutive line segments are considered part of the
 #'   same continuous line if the internal angle they form is larger than
 #'   `angle_threshold`` (in degrees). Should be in the range [0, 180) degrees
