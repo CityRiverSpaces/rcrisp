@@ -133,11 +133,19 @@ split_aoi <- function(bbox, river) {
 #'
 #' @param geometry Geometry to split
 #' @param line Dividing (multi)linestring
+#' @param boundary Whether to return the split boundary instead of the regions
 #'
 #' @return A simple feature object
-split <- function(geometry, line) {
-  lwgeom::st_split(geometry, line) |>
+split <- function(geometry, line, boundary = FALSE) {
+  regions <- lwgeom::st_split(geometry, line) |>
     sf::st_collection_extract()
+  if (!boundary) {
+    return(regions)
+  } else {
+    boundaries <- sf::st_boundary(regions)
+    split_boundary <- sf::st_difference(boundaries, line)
+    return(split_boundary)
+  }
 }
 
 #' Identify the initial edges of the river corridor

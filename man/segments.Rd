@@ -4,7 +4,7 @@
 \alias{segments}
 \title{Split a river corridor into segments}
 \usage{
-segments(corridor, network, river_centerline)
+segments(corridor, network, river_centerline, angle_threshold = 90)
 }
 \arguments{
 \item{corridor}{The river corridor as a simple feature geometry}
@@ -12,10 +12,14 @@ segments(corridor, network, river_centerline)
 \item{network}{The spatial network to be used for the segmentation}
 
 \item{river_centerline}{The river centerline as a simple feature geometry}
+
+\item{angle_threshold}{Only consider angles above this threshold (in degrees)
+to form continuous strokes in the network}
 }
 \value{
 Segment polygons as a simple feature geometry
 }
 \description{
-Split a river corridor into segments
+Segments are defined as corridor subregions separated by river-crossing
+transversal lines that form continuous strokes in the network.
 }

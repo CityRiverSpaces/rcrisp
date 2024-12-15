@@ -4,12 +4,14 @@
 \alias{split}
 \title{Split a geometry along a (multi)linestring.}
 \usage{
-split(geometry, line)
+split(geometry, line, boundary = FALSE)
 }
 \arguments{
 \item{geometry}{Geometry to split}
 
 \item{line}{Dividing (multi)linestring}
+
+\item{boundary}{Whether to return the split boundary instead of the regions}
 }
 \value{
 A simple feature object

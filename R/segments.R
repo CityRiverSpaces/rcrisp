@@ -1,19 +1,33 @@
 #' Split a river corridor into segments
 #'
+#' Segments are defined as corridor subregions separated by river-crossing
+#' transversal lines that form continuous strokes in the network.
+#'
 #' @param corridor The river corridor as a simple feature geometry
 #' @param network The spatial network to be used for the segmentation
 #' @param river_centerline The river centerline as a simple feature geometry
-#' @param angle_threshold Only angles above this threshold will be included
+#' @param angle_threshold Only consider angles above this threshold (in degrees)
+#'   to form continuous strokes in the network
 #'
 #' @return Segment polygons as a simple feature geometry
 #' @export
-segments <- function(corridor, network, river_centerline, angle_threshold) {
+segments <- function(corridor, network, river_centerline,
+                     angle_threshold = 90) {
 
+  # Find river crossings in the network and build continuous strokes from them
   crossings <- get_intersecting_edges(network, river_centerline)
-  crossings_strokes <- strokes(network, crossings, angle_threshold)
-  crossings_clustered <- cluster_crossings(crossings_strokes, river_centerline)
-}
+  crossing_strokes <- strokes(network, crossings, angle_threshold)
 
+  # Clip strokes and select the ones that could be used as segment boundaries
+  block_edges <- clip_and_filter(crossing_strokes, corridor, river_centerline)
+
+  # Split the corridor into candidate segments ("blocks")
+  blocks <- split(corridor, block_edges)
+
+  # Refine the blocks to make sure that all segments touch the river and cross
+  # the corridor from side to side
+  refine_segments(blocks, river_centerline, corridor)
+}
 
 #' Identify network edges that are intersecting a geometry.
 #'
@@ -26,12 +40,99 @@ get_intersecting_edges <- function(network, geometry) {
   which(sf::st_intersects(edges, geometry, sparse = FALSE))
 }
 
-#' Group the river crossingns into clusters.
+#' Clip lines to the extent of the corridor, and filter valid segment edges
+#'
+#' Lines that intersect the river only once and that cross the corridor from
+#' side to side are considered valid segment edges. We group valid segment edges
+#' that cross the river in nearby locations, and select the shortest line per
+#' cluster.
+#'
+#' @param lines Candidate segment edges as a simple feature geometry
+#' @param corridor The river corridor as a simple feature geometry
+#' @param river_centerline The river centerline as a simple feature geometry
+#'
+#' @return Candidate segment edges as a simple feature geometry
+#' @importFrom rlang .data
+clip_and_filter <- function(lines, corridor, river_centerline) {
+
+  # Split corridor along the river centerline to find edges on the two sides
+  corridor_edges <- split(corridor, river_centerline, boundary = TRUE)
+
+  # Clip the lines, keeping the only fragments that intersect the river
+  lines_clipped <- sf::st_intersection(lines, corridor) |>
+    sf::st_as_sf() |>
+    dplyr::filter(sf::st_is(.data$x, c("MULTILINESTRING", "LINESTRING"))) |>
+    sfheaders::sf_cast("LINESTRING") |>
+    sf::st_filter(river_centerline, .predicate = sf::st_intersects) |>
+    sf::st_geometry()
+
+  # Select the fragments that cross the river only once and intersect both
+  # sides of the corridor
+  river_intersections <- sf::st_intersection(lines_clipped, river_centerline)
+  # TODO: we could generalize the following to allow for more complex river
+  # geometries (e.g. for river islands)
+  intersects_river <- sf::st_is(river_intersections, "POINT")
+  intersects_side_1 <- sf::st_intersects(lines_clipped, corridor_edges[[1]],
+                                         sparse = FALSE)
+  intersects_side_2 <- sf::st_intersects(lines_clipped, corridor_edges[[2]],
+                                         sparse = FALSE)
+  is_valid <- intersects_river & intersects_side_1 & intersects_side_2
+  lines_valid <- lines_clipped[is_valid]
+
+  # Cluster valid segment edges and select the shortest line per cluster
+  filter_clusters(lines_valid, river_centerline)
+}
+
+#' Refine candidate segments via recursive merging
+#'
+#' Recursively merge the candidate segments provided ("blocks"), until they all
+#' intersect the river centerline and both sides of the corridor.
+#'
+#' @param blocks Candidate segments as a simple feature geometry
+#' @param river_centerline The river centerline as a simple feature geometry
+#' @param corridor The river corridor as a simple feature geometry
+#'
+#' @return Refined corridor segments as a simple feature geometry
+refine_segments <- function(blocks, river_centerline, corridor) {
+
+  # Split corridor along the river centerline to find edges on the two sides
+  corridor_edges <- split(corridor, river_centerline, boundary = TRUE)
+
+  # Recursively merge blocks until all blocks intersect the river
+  not_intersect_river <- function(blocks) {
+    idx_instersect_river <- find_intersects(blocks, river_centerline)
+    idx <- seq_along(blocks)
+    idx[!idx %in% idx_instersect_river]
+  }
+  while (TRUE) {
+    idx_not_instersects_river <- not_intersect_river(blocks)
+    if (length(idx_not_instersects_river) == 0) break
+    blocks <- merge_blocks(blocks, idx_not_instersects_river,
+                           how = "longest-intersection")
+  }
+
+  # Recursively merge blocks until all blocks intersect both edges
+  not_intersect_both_edges <- function(blocks) {
+    idx_intersects_edge_1 <- find_intersects(blocks, corridor_edges[1])
+    idx_intersects_edge_2 <- find_intersects(blocks, corridor_edges[2])
+    idx <- seq_along(blocks)
+    idx[!(idx %in% idx_intersects_edge_1 & idx %in% idx_intersects_edge_2)]
+  }
+  while (TRUE) {
+    idx_not_intersect_both_edges <- not_intersect_both_edges(blocks)
+    if (length(idx_not_intersect_both_edges) == 0) break
+    blocks <- merge_blocks(blocks, idx_not_intersect_both_edges,
+                           how = "smallest")
+  }
+  return(blocks)
+}
+
+#' Cluster the river crossings and select the shortest crossing per cluster.
 #'
 #' Create groups of edges that are crossing the river in nearby locations,
 #' using a density-based clustering method (DBSCAN). This is to make sure that
 #' edges representing e.g. different lanes of the same street are treated as
-#' part of the same crossing.
+#' part of the same crossing. For each cluster, select the shortest edge.
 #'
 #' @param crossings Crossing edge geometries as a simple feature object
 #' @param river The river geometry as a simple feature object
@@ -39,9 +140,8 @@ get_intersecting_edges <- function(network, geometry) {
 #'   neighborhood. Should approximate the distance between edges that we want
 #'   to consider as a single river crossing
 #'
-#' @return A simple feature geometry where the `cluster` column labels crossings
-#'   that are part of the same group
-cluster_crossings <- function(crossings, river, eps = 100) {
+#' @return A simple feature geometry including the shortest edge per cluster
+filter_clusters <- function(crossings, river, eps = 100) {
   intersections <- sf::st_intersection(crossings, river)
   # By computing centroids we make sure we only have POINT geometries here
   intersections_centroids <- sf::st_centroid(intersections)
@@ -51,5 +151,95 @@ cluster_crossings <- function(crossings, river, eps = 100) {
 
   crossings_clustered <- sf::st_as_sf(crossings)
   crossings_clustered$cluster <- db$cluster
-  crossings_clustered
+  crossings_clustered$length <- sf::st_length(crossings_clustered)
+  crossings_clustered |>
+    dplyr::group_by(.data$cluster) |>
+    dplyr::filter(length == min(length))
+}
+
+#' Merge a set of blocks to adjacent ones
+#'
+#' Adjacent blocks are defined as the blocks that are neighbours to the blocks
+#' that need to be merged, and that intersect them via a (Multi)LineString. We
+#' consider the blocks to merge one by one, from the smallest to the largest,
+#' merging them to the other blocks recursively.
+#'
+#' @param blocks Simple feature geometry representing all the blocks
+#' @param to_merge Indices of the blocks to merge
+#' @param how Strategy for merging, see [merge_block()]
+#'
+#' @return Blocks merged to the specified ones as a simple feature geometry
+merge_blocks <- function(blocks, to_merge, how = "longest-intersection") {
+  if (length(to_merge) == 0) {
+    return(blocks)
+  }
+  # Pick the first block to merge, i.e. the smallest one, and the targets
+  idx_smallest <- find_smallest(blocks[to_merge])
+  idx_current <- to_merge[idx_smallest]
+  current <-  blocks[idx_current]
+  targets <- blocks[!seq_along(blocks) %in% idx_current]
+  # Keep track of the geometries of the blocks that still need merging: their
+  # position in the list of blocks might change after merging the current one!
+  idx_others <- to_merge[!seq_along(to_merge) %in% idx_smallest]
+  others <- blocks[idx_others]
+  # Merge current block with one of the targets
+  merged <- merge_block(targets, current, how = how)
+  # Determine the new indices of the other blocks that need to be merged
+  is_equal <- sf::st_equals(merged, others, sparse = TRUE)
+  idx_others <- which(apply(is_equal, any, MARGIN = 1))
+  # Continue merging other blocks, recursively
+  merge_blocks(blocks = merged, to_merge = idx_others, how = how)
+}
+
+#' Merge a block to one of the target geometries
+#'
+#' @param targets Sequence of target blocks as a simple feature geometry
+#' @param block Block to merge as a simple feature geometry
+#' @param how Strategy for merging, choose between "smallest" (merge to smallest
+#'   adjacent block) and "longest-intersection" (merge to block which it shares
+#'   the longest intersection with)
+#'
+#' @return Blocks merged to the specified one as a simple feature geometry
+merge_block <- function(targets, block, how = "longest-intersection") {
+  idx_adjacent <- find_adjacent(targets, block)
+  if (how == "longest-intersection") {
+    intersections <- sf::st_intersection(targets[idx_adjacent], block)
+    idx_longest_intersection <- find_longest(intersections)
+    idx_to_merge <- idx_adjacent[idx_longest_intersection]
+  } else if (how == "smallest") {
+    idx_smallest <- find_smallest(targets[idx_adjacent])
+    idx_to_merge <- idx_adjacent[idx_smallest]
+  } else {
+    stop(sprintf("Method '%s' unknown", how))
+  }
+  merged <- sf::st_union(targets[idx_to_merge], block)
+  others <- targets[!seq_along(targets) %in% idx_to_merge]
+  return(c(others, merged))
+}
+
+#' @noRd
+find_smallest <- function(geometry) {
+  area <- sf::st_area(geometry)
+  return(which.min(area))
+}
+
+#' @noRd
+find_longest <- function(geometry) {
+  length <- sf::st_length(geometry)
+  return(which.max(length))
+}
+
+#' @noRd
+find_intersects <- function(geometry, target) {
+  instersects <- sf::st_intersects(geometry, target, sparse = FALSE)
+  return(which(instersects))
+}
+
+#' @noRd
+find_adjacent <- function(geometry, target) {
+  idx_neighbour <- find_intersects(geometry, target)
+  intersections <- sf::st_intersection(geometry[idx_neighbour], target)
+  is_adjacent_intersections <- sf::st_is(intersections,
+                                         c("MULTILINESTRING", "LINESTRING"))
+  return(idx_neighbour[is_adjacent_intersections])
 }
