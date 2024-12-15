@@ -7,7 +7,7 @@
 get_osm_streets(bb, crs, highway_values = NULL)
 }
 \arguments{
-\item{bb}{Boundary box}
+\item{bb}{Bounding box of class \code{bbox}}
 
 \item{crs}{Coordinate reference system as EPSG code}
 
