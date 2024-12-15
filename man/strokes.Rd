@@ -9,6 +9,8 @@ strokes(network, from_edge, angle_threshold = 0, flow_mode = FALSE)
 \arguments{
 \item{network}{A spatial network object}
 
+\item{from_edge}{The indices of the network edges to be continued}
+
 \item{angle_threshold}{Consecutive line segments are considered part of the
 same continuous line if the internal angle they form is larger than
 `angle_threshold`` (in degrees). Should be in the range [0, 180) degrees}
@@ -16,8 +18,6 @@ same continuous line if the internal angle they form is larger than
 \item{flow_mode}{If TRUE, line segments that belong to the same edge are not
 split across strokes (even if they form internal angles smaller than
 \code{angle_threshold}).}
-
-\item{from_edges}{The indices of the network edges to be continued}
 }
 \value{
 Stroke geometries as a simple feature object
