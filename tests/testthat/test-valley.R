@@ -10,9 +10,7 @@ test_that("STAC asset urls are correctly retrieved", {
   ep <- "https://earth-search.aws.element84.com/v1"
   col <- "cop-dem-glo-30"
 
-  if (Sys.getenv("CI") == "true") {
-    get_stac_asset_urls <- mockery::mock("get_stac_asset_urls", asset_urls)
-  }
+  skip_on_ci()
 
   asset_urls_retrieved <- get_stac_asset_urls(bb, endpoint = ep,
                                               collection = col)
@@ -24,9 +22,7 @@ test_that("STAC asset urls are correctly retrieved", {
 })
 
 test_that("raster data are correctly retrieved and merged", {
-  if (Sys.getenv("CI") == "true") {
-    load_raster <- mockery::mock("load_raster", terra::unwrap(bucharest_dem))
-  }
+  skip_on_ci()
 
   dem <- load_raster(bb, asset_urls) |> CRiSp::reproject(32635)
   expected_dem <- terra::unwrap(bucharest_dem)
@@ -43,9 +39,9 @@ test_that("valley polygon is correctly constructed", {
   crs <- "epsg:32635"
 
   valley <- get_valley(dem, river, crs)
-  expected_valley <- sf::st_read("fixtures/expected_valley.gpkg",
+  expected_valley <- sf::st_read(test_path("testdata", "expected_valley.gpkg"),
                                  quiet = TRUE) |>
     sf::st_as_sfc()
 
-  expect_equal(valley, expected_valley, tolerance = 1e-4)
+  expect_true(sf::st_equals(valley, expected_valley, sparse = FALSE))
 })
