@@ -7,10 +7,10 @@ asset_urls <- c(paste0("s3://copernicus-dem-30m/",
                        "Copernicus_DSM_COG_10_N44_00_E025_00_DEM.tif"))
 
 test_that("STAC asset urls are correctly retrieved", {
+  skip_on_ci()
+
   ep <- "https://earth-search.aws.element84.com/v1"
   col <- "cop-dem-glo-30"
-
-  skip_on_ci()
 
   asset_urls_retrieved <- get_stac_asset_urls(bb, endpoint = ep,
                                               collection = col)
