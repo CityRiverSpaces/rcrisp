@@ -9,7 +9,7 @@ get_intersecting_edges(network, geometry)
 \arguments{
 \item{network}{A spatial network object}
 
-\item{river}{A simple feature geometry}
+\item{geometry}{A simple feature geometry}
 }
 \value{
 Indices of the edges intersecting the geometry as a vector

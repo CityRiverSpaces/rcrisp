@@ -32,7 +32,7 @@ get_segments <- function(corridor, network, river_centerline,
 #' Identify network edges that are intersecting a geometry.
 #'
 #' @param network A spatial network object
-#' @param river A simple feature geometry
+#' @param geometry A simple feature geometry
 #'
 #' @return Indices of the edges intersecting the geometry as a vector
 get_intersecting_edges <- function(network, geometry) {

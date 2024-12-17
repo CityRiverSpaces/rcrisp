@@ -35,8 +35,8 @@ points (i.e. to "cap" the corridor). See \code{\link[=cap_corridor]{cap_corridor
 the available methods}
 
 \item{angle_threshold}{Only network edges forming angles above this threshold
-(in degrees) are considered when forming segment edges. See \verb{[segments()]}
-and \code{\link[=strokes]{strokes()}}. Only used if \code{segments} is TRUE.}
+(in degrees) are considered when forming segment edges. See
+\verb{[get_segments()]}  and \code{\link[=strokes]{strokes()}}. Only used if \code{segments} is TRUE.}
 
 \item{segments}{Whether to carry out the corridor segmentation}
 
