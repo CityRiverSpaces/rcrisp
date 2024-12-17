@@ -13,4 +13,4 @@
 ^CITATION.cff$
 ^doc$
 ^Meta$
-^tests/testthat/fixtures/
+^tests/testthat/testdata/
