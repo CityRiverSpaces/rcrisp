@@ -12,8 +12,8 @@
 #'   points (i.e. to "cap" the corridor). See [cap_corridor()] for
 #'   the available methods
 #' @param angle_threshold Only network edges forming angles above this threshold
-#'   (in degrees) are considered when forming segment edges. See `[segments()]`
-#'   and [strokes()]. Only used if `segments` is TRUE.
+#'   (in degrees) are considered when forming segment edges. See
+#'  `[get_segments()]`  and [strokes()]. Only used if `segments` is TRUE.
 #' @param segments Whether to carry out the corridor segmentation
 #' @param riverspace Whether to carry out the riverspace delineation
 #'
@@ -35,7 +35,7 @@ delineate_corridor <- function(
   network <- as_network(network_edges)
 
   # Run the corridor delineation on the spatial network
-  corridor <- corridor(
+  corridor <- get_corridor(
     network, osm_data$river_centerline, osm_data$river_surface, bbox,
     initial_method, capping_method
   )
@@ -46,8 +46,8 @@ delineate_corridor <- function(
     corridor_buffer <- sf::st_buffer(corridor, buffer_corridor)
     network_filtered <- filter_network(network, corridor_buffer)
 
-    corridor <- segments(corridor, network_filtered, osm_data$river_centerline,
-                         angle_threshold)
+    corridor <- get_segments(corridor, network_filtered,
+                             osm_data$river_centerline, angle_threshold)
   }
   if (riverspace) delineate_riverspace()
   return(corridor)
