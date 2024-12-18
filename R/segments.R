@@ -7,7 +7,8 @@
 #' @param network The spatial network to be used for the segmentation
 #' @param river_centerline The river centerline as a simple feature geometry
 #' @param angle_threshold Only consider angles above this threshold (in degrees)
-#'   to form continuous strokes in the network
+#'   to form continuous strokes in the network. See [`rcoins::stroke()`] for
+#'   more details.
 #'
 #' @return Segment polygons as a simple feature geometry
 #' @export
@@ -16,7 +17,8 @@ get_segments <- function(corridor, network, river_centerline,
 
   # Find river crossings in the network and build continuous strokes from them
   crossings <- get_intersecting_edges(network, river_centerline)
-  crossing_strokes <- strokes(network, crossings, angle_threshold)
+  crossing_strokes <- rcoins::stroke(network, from_edge = crossings,
+                                     angle_threshold = angle_threshold)
 
   # Clip strokes and select the ones that could be used as segment boundaries
   block_edges <- clip_and_filter(crossing_strokes, corridor, river_centerline)
@@ -154,7 +156,8 @@ filter_clusters <- function(crossings, river, eps = 100) {
   crossings_clustered$length <- sf::st_length(crossings_clustered)
   crossings_clustered |>
     dplyr::group_by(.data$cluster) |>
-    dplyr::filter(length == min(length))
+    dplyr::filter(length == min(length) & !duplicated(length)) |>
+    sf::st_geometry()
 }
 
 #' Merge a set of blocks to adjacent ones

@@ -14,7 +14,8 @@ get_segments(corridor, network, river_centerline, angle_threshold = 90)
 \item{river_centerline}{The river centerline as a simple feature geometry}
 
 \item{angle_threshold}{Only consider angles above this threshold (in degrees)
-to form continuous strokes in the network}
+to form continuous strokes in the network. See \code{\link[rcoins:stroke]{rcoins::stroke()}} for
+more details.}
 }
 \value{
 Segment polygons as a simple feature geometry
