@@ -35,7 +35,6 @@ _We encourage you to keep the code coverage percentage at 75% and above._
 - [ ] I need help with writing tests
 
 ## Added entry in changelog?
-_For user-facing changes, add a line describing the changes in NEWS.md_
+_For user-facing changes, add a line describing the changes in [NEWS.md](/NEWS.md)_
 
 - [ ] Yes
-![alt_text](gif_link)
