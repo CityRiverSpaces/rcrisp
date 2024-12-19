@@ -36,7 +36,7 @@ the available methods}
 
 \item{angle_threshold}{Only network edges forming angles above this threshold
 (in degrees) are considered when forming segment edges. See
-\verb{[get_segments()]}  and \code{\link[=strokes]{strokes()}}. Only used if \code{segments} is TRUE.}
+\code{\link[=get_segments]{get_segments()}}  and \code{\link[rcoins:stroke]{rcoins::stroke()}}. Only used if \code{segments} is TRUE.}
 
 \item{segments}{Whether to carry out the corridor segmentation}
 
