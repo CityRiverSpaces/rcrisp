@@ -85,6 +85,37 @@ clip_and_filter <- function(lines, corridor, river_centerline) {
   filter_clusters(lines_valid, river_centerline)
 }
 
+#' Cluster the river crossings and select the shortest crossing per cluster.
+#'
+#' Create groups of edges that are crossing the river in nearby locations,
+#' using a density-based clustering method (DBSCAN). This is to make sure that
+#' edges representing e.g. different lanes of the same street are treated as
+#' part of the same crossing. For each cluster, select the shortest edge.
+#'
+#' @param crossings Crossing edge geometries as a simple feature object
+#' @param river The river geometry as a simple feature object
+#' @param eps DBSCAN parameter referring to the size (radius) distance of the
+#'   neighborhood. Should approximate the distance between edges that we want
+#'   to consider as a single river crossing
+#'
+#' @return A simple feature geometry including the shortest edge per cluster
+filter_clusters <- function(crossings, river, eps = 100) {
+  intersections <- sf::st_intersection(crossings, river)
+  # By computing centroids we make sure we only have POINT geometries here
+  intersections_centroids <- sf::st_centroid(intersections)
+  intersections_coords <- sf::st_coordinates(intersections_centroids)
+  # We should not enforce a min mumber of elements - one-element clusters are OK
+  db <- dbscan::dbscan(intersections_coords, eps = eps, minPts = 1)
+
+  crossings_clustered <- sf::st_as_sf(crossings)
+  crossings_clustered$cluster <- db$cluster
+  crossings_clustered$length <- sf::st_length(crossings_clustered)
+  crossings_clustered |>
+    dplyr::group_by(.data$cluster) |>
+    dplyr::filter(length == min(length) & !duplicated(length)) |>
+    sf::st_geometry()
+}
+
 #' Refine candidate segments via recursive merging
 #'
 #' Recursively merge the candidate segments provided ("blocks"), until they all
@@ -128,37 +159,6 @@ refine_segments <- function(blocks, river_centerline, corridor) {
                            method = "smallest")
   }
   return(blocks)
-}
-
-#' Cluster the river crossings and select the shortest crossing per cluster.
-#'
-#' Create groups of edges that are crossing the river in nearby locations,
-#' using a density-based clustering method (DBSCAN). This is to make sure that
-#' edges representing e.g. different lanes of the same street are treated as
-#' part of the same crossing. For each cluster, select the shortest edge.
-#'
-#' @param crossings Crossing edge geometries as a simple feature object
-#' @param river The river geometry as a simple feature object
-#' @param eps DBSCAN parameter referring to the size (radius) distance of the
-#'   neighborhood. Should approximate the distance between edges that we want
-#'   to consider as a single river crossing
-#'
-#' @return A simple feature geometry including the shortest edge per cluster
-filter_clusters <- function(crossings, river, eps = 100) {
-  intersections <- sf::st_intersection(crossings, river)
-  # By computing centroids we make sure we only have POINT geometries here
-  intersections_centroids <- sf::st_centroid(intersections)
-  intersections_coords <- sf::st_coordinates(intersections_centroids)
-  # We should not enforce a min mumber of elements - one-element clusters are OK
-  db <- dbscan::dbscan(intersections_coords, eps = eps, minPts = 1)
-
-  crossings_clustered <- sf::st_as_sf(crossings)
-  crossings_clustered$cluster <- db$cluster
-  crossings_clustered$length <- sf::st_length(crossings_clustered)
-  crossings_clustered |>
-    dplyr::group_by(.data$cluster) |>
-    dplyr::filter(length == min(length) & !duplicated(length)) |>
-    sf::st_geometry()
 }
 
 #' Merge a set of blocks to adjacent ones
