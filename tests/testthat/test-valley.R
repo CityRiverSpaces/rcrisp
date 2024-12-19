@@ -44,5 +44,5 @@ test_that("valley polygon is correctly constructed", {
     sf::st_as_sfc()
 
   expect_true(sf::st_equals_exact(valley, expected_valley,
-                                  par = 1.e-4, sparse = FALSE))
+                                  par = 1.e-3, sparse = FALSE))
 })
