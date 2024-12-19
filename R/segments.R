@@ -102,28 +102,29 @@ refine_segments <- function(blocks, river_centerline, corridor) {
 
   # Recursively merge blocks until all blocks intersect the river
   not_intersect_river <- function(blocks) {
-    idx_instersect_river <- find_intersects(blocks, river_centerline)
-    idx <- seq_along(blocks)
-    idx[!idx %in% idx_instersect_river]
+    index_instersect_river <- find_intersects(blocks, river_centerline)
+    index <- seq_along(blocks)
+    index[!index %in% index_instersect_river]
   }
   while (TRUE) {
-    idx_not_instersects_river <- not_intersect_river(blocks = blocks)
-    if (length(idx_not_instersects_river) == 0) break
-    blocks <- merge_blocks(blocks, idx_not_instersects_river,
+    index_not_instersects_river <- not_intersect_river(blocks = blocks)
+    if (length(index_not_instersects_river) == 0) break
+    blocks <- merge_blocks(blocks, index_not_instersects_river,
                            method = "longest-intersection")
   }
 
   # Recursively merge blocks until all blocks intersect both edges
   not_intersect_both_edges <- function(blocks) {
-    idx_intersects_edge_1 <- find_intersects(blocks, corridor_edges[1])
-    idx_intersects_edge_2 <- find_intersects(blocks, corridor_edges[2])
-    idx <- seq_along(blocks)
-    idx[!(idx %in% idx_intersects_edge_1 & idx %in% idx_intersects_edge_2)]
+    index_intersects_edge_1 <- find_intersects(blocks, corridor_edges[1])
+    index_intersects_edge_2 <- find_intersects(blocks, corridor_edges[2])
+    index <- seq_along(blocks)
+    index[!(index %in% index_intersects_edge_1 &
+              index %in% index_intersects_edge_2)]
   }
   while (TRUE) {
-    idx_not_intersect_both_edges <- not_intersect_both_edges(blocks)
-    if (length(idx_not_intersect_both_edges) == 0) break
-    blocks <- merge_blocks(blocks, idx_not_intersect_both_edges,
+    index_not_intersect_both_edges <- not_intersect_both_edges(blocks)
+    if (length(index_not_intersect_both_edges) == 0) break
+    blocks <- merge_blocks(blocks, index_not_intersect_both_edges,
                            method = "smallest")
   }
   return(blocks)
@@ -177,21 +178,21 @@ merge_blocks <- function(blocks, to_merge, method = "longest-intersection") {
     return(blocks)
   }
   # Pick the first block to merge, i.e. the smallest one, and the targets
-  idx_smallest <- find_smallest(blocks[to_merge])
-  idx_current <- to_merge[idx_smallest]
-  current <-  blocks[idx_current]
-  targets <- blocks[!seq_along(blocks) %in% idx_current]
+  index_smallest <- find_smallest(blocks[to_merge])
+  index_current <- to_merge[index_smallest]
+  current <-  blocks[index_current]
+  targets <- blocks[!seq_along(blocks) %in% index_current]
   # Keep track of the geometries of the blocks that still need merging: their
   # position in the list of blocks might change after merging the current one!
-  idx_others <- to_merge[!seq_along(to_merge) %in% idx_smallest]
-  others <- blocks[idx_others]
+  index_others <- to_merge[!seq_along(to_merge) %in% index_smallest]
+  others <- blocks[index_others]
   # Merge current block with one of the targets
   merged <- merge_block(targets, current, method = method)
   # Determine the new indices of the other blocks that need to be merged
   is_equal <- sf::st_equals(merged, others, sparse = TRUE)
-  idx_others <- which(apply(is_equal, any, MARGIN = 1))
+  index_others <- which(apply(is_equal, any, MARGIN = 1))
   # Continue merging other blocks, recursively
-  merge_blocks(blocks = merged, to_merge = idx_others, method = method)
+  merge_blocks(blocks = merged, to_merge = index_others, method = method)
 }
 
 #' Merge a block to one of the target geometries
@@ -204,19 +205,19 @@ merge_blocks <- function(blocks, to_merge, method = "longest-intersection") {
 #'
 #' @return Blocks merged to the specified one as a simple feature geometry
 merge_block <- function(targets, block, method = "longest-intersection") {
-  idx_adjacent <- find_adjacent(targets, block)
+  index_adjacent <- find_adjacent(targets, block)
   if (method == "longest-intersection") {
-    intersections <- sf::st_intersection(targets[idx_adjacent], block)
-    idx_longest_intersection <- find_longest(intersections)
-    idx_to_merge <- idx_adjacent[idx_longest_intersection]
+    intersections <- sf::st_intersection(targets[index_adjacent], block)
+    index_longest_intersection <- find_longest(intersections)
+    index_to_merge <- index_adjacent[index_longest_intersection]
   } else if (method == "smallest") {
-    idx_smallest <- find_smallest(targets[idx_adjacent])
-    idx_to_merge <- idx_adjacent[idx_smallest]
+    index_smallest <- find_smallest(targets[index_adjacent])
+    index_to_merge <- index_adjacent[index_smallest]
   } else {
     stop(sprintf("Method '%s' unknown", method))
   }
-  merged <- sf::st_union(targets[idx_to_merge], block)
-  others <- targets[!seq_along(targets) %in% idx_to_merge]
+  merged <- sf::st_union(targets[index_to_merge], block)
+  others <- targets[!seq_along(targets) %in% index_to_merge]
   return(c(others, merged))
 }
 
@@ -228,11 +229,11 @@ find_smallest <- function(geometry) {
 
 #' @noRd
 find_adjacent <- function(geometry, target) {
-  idx_neighbour <- find_intersects(geometry, target)
-  intersections <- sf::st_intersection(geometry[idx_neighbour], target)
+  index_neighbour <- find_intersects(geometry, target)
+  intersections <- sf::st_intersection(geometry[index_neighbour], target)
   is_adjacent_intersections <- sf::st_is(intersections,
                                          c("MULTILINESTRING", "LINESTRING"))
-  return(idx_neighbour[is_adjacent_intersections])
+  return(index_neighbour[is_adjacent_intersections])
 }
 
 #' @noRd
