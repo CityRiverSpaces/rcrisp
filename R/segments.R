@@ -110,7 +110,7 @@ refine_segments <- function(blocks, river_centerline, corridor) {
     idx_not_instersects_river <- not_intersect_river(blocks)
     if (length(idx_not_instersects_river) == 0) break
     blocks <- merge_blocks(blocks, idx_not_instersects_river,
-                           how = "longest-intersection")
+                           method = "longest-intersection")
   }
 
   # Recursively merge blocks until all blocks intersect both edges
@@ -124,7 +124,7 @@ refine_segments <- function(blocks, river_centerline, corridor) {
     idx_not_intersect_both_edges <- not_intersect_both_edges(blocks)
     if (length(idx_not_intersect_both_edges) == 0) break
     blocks <- merge_blocks(blocks, idx_not_intersect_both_edges,
-                           how = "smallest")
+                           method = "smallest")
   }
   return(blocks)
 }
@@ -169,10 +169,10 @@ filter_clusters <- function(crossings, river, eps = 100) {
 #'
 #' @param blocks Simple feature geometry representing all the blocks
 #' @param to_merge Indices of the blocks to merge
-#' @param how Strategy for merging, see [merge_block()]
+#' @param method Strategy for merging, see [merge_block()]
 #'
 #' @return Blocks merged to the specified ones as a simple feature geometry
-merge_blocks <- function(blocks, to_merge, how = "longest-intersection") {
+merge_blocks <- function(blocks, to_merge, method = "longest-intersection") {
   if (length(to_merge) == 0) {
     return(blocks)
   }
@@ -186,34 +186,34 @@ merge_blocks <- function(blocks, to_merge, how = "longest-intersection") {
   idx_others <- to_merge[!seq_along(to_merge) %in% idx_smallest]
   others <- blocks[idx_others]
   # Merge current block with one of the targets
-  merged <- merge_block(targets, current, how = how)
+  merged <- merge_block(targets, current, method = method)
   # Determine the new indices of the other blocks that need to be merged
   is_equal <- sf::st_equals(merged, others, sparse = TRUE)
   idx_others <- which(apply(is_equal, any, MARGIN = 1))
   # Continue merging other blocks, recursively
-  merge_blocks(blocks = merged, to_merge = idx_others, how = how)
+  merge_blocks(blocks = merged, to_merge = idx_others, method = method)
 }
 
 #' Merge a block to one of the target geometries
 #'
 #' @param targets Sequence of target blocks as a simple feature geometry
 #' @param block Block to merge as a simple feature geometry
-#' @param how Strategy for merging, choose between "smallest" (merge to smallest
-#'   adjacent block) and "longest-intersection" (merge to block which it shares
-#'   the longest intersection with)
+#' @param method Strategy for merging, choose between "smallest" (merge to
+#'   smallest adjacent block) and "longest-intersection" (merge to block which
+#'   it shares the longest intersection with)
 #'
 #' @return Blocks merged to the specified one as a simple feature geometry
-merge_block <- function(targets, block, how = "longest-intersection") {
+merge_block <- function(targets, block, method = "longest-intersection") {
   idx_adjacent <- find_adjacent(targets, block)
-  if (how == "longest-intersection") {
+  if (method == "longest-intersection") {
     intersections <- sf::st_intersection(targets[idx_adjacent], block)
     idx_longest_intersection <- find_longest(intersections)
     idx_to_merge <- idx_adjacent[idx_longest_intersection]
-  } else if (how == "smallest") {
+  } else if (method == "smallest") {
     idx_smallest <- find_smallest(targets[idx_adjacent])
     idx_to_merge <- idx_adjacent[idx_smallest]
   } else {
-    stop(sprintf("Method '%s' unknown", how))
+    stop(sprintf("Method '%s' unknown", method))
   }
   merged <- sf::st_union(targets[idx_to_merge], block)
   others <- targets[!seq_along(targets) %in% idx_to_merge]
