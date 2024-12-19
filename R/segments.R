@@ -227,6 +227,15 @@ find_smallest <- function(geometry) {
 }
 
 #' @noRd
+find_adjacent <- function(geometry, target) {
+  idx_neighbour <- find_intersects(geometry, target)
+  intersections <- sf::st_intersection(geometry[idx_neighbour], target)
+  is_adjacent_intersections <- sf::st_is(intersections,
+                                         c("MULTILINESTRING", "LINESTRING"))
+  return(idx_neighbour[is_adjacent_intersections])
+}
+
+#' @noRd
 find_longest <- function(geometry) {
   length <- sf::st_length(geometry)
   return(which.max(length))
@@ -236,13 +245,4 @@ find_longest <- function(geometry) {
 find_intersects <- function(geometry, target) {
   instersects <- sf::st_intersects(geometry, target, sparse = FALSE)
   return(which(instersects))
-}
-
-#' @noRd
-find_adjacent <- function(geometry, target) {
-  idx_neighbour <- find_intersects(geometry, target)
-  intersections <- sf::st_intersection(geometry[idx_neighbour], target)
-  is_adjacent_intersections <- sf::st_is(intersections,
-                                         c("MULTILINESTRING", "LINESTRING"))
-  return(idx_neighbour[is_adjacent_intersections])
 }
