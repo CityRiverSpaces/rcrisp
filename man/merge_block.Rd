@@ -4,16 +4,16 @@
 \alias{merge_block}
 \title{Merge a block to one of the target geometries}
 \usage{
-merge_block(targets, block, how = "longest-intersection")
+merge_block(targets, block, method = "longest-intersection")
 }
 \arguments{
 \item{targets}{Sequence of target blocks as a simple feature geometry}
 
 \item{block}{Block to merge as a simple feature geometry}
 
-\item{how}{Strategy for merging, choose between "smallest" (merge to smallest
-adjacent block) and "longest-intersection" (merge to block which it shares
-the longest intersection with)}
+\item{method}{Strategy for merging, choose between "smallest" (merge to
+smallest adjacent block) and "longest-intersection" (merge to block which
+it shares the longest intersection with)}
 }
 \value{
 Blocks merged to the specified one as a simple feature geometry

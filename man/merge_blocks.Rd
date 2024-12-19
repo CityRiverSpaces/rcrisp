@@ -4,14 +4,14 @@
 \alias{merge_blocks}
 \title{Merge a set of blocks to adjacent ones}
 \usage{
-merge_blocks(blocks, to_merge, how = "longest-intersection")
+merge_blocks(blocks, to_merge, method = "longest-intersection")
 }
 \arguments{
 \item{blocks}{Simple feature geometry representing all the blocks}
 
 \item{to_merge}{Indices of the blocks to merge}
 
-\item{how}{Strategy for merging, see \code{\link[=merge_block]{merge_block()}}}
+\item{method}{Strategy for merging, see \code{\link[=merge_block]{merge_block()}}}
 }
 \value{
 Blocks merged to the specified ones as a simple feature geometry

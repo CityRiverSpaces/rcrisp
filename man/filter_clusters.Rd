@@ -2,7 +2,7 @@
 % Please edit documentation in R/segments.R
 \name{filter_clusters}
 \alias{filter_clusters}
-\title{Cluster the river crossings and select the shortest crossing per cluster.}
+\title{Cluster the river crossings and select the shortest crossing per cluster}
 \usage{
 filter_clusters(crossings, river, eps = 100)
 }
