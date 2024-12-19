@@ -20,16 +20,16 @@ library(CRiSp)
 
 For a more detailed analysis of an urban river corridor, corridor-level delineation may not be sufficient. The corridor needs to be subdivided into smaller morphological units. Segmentation is a process of subdividing the corridor by using major transversal road or rail infrastructure lines.
 
-By default, the all-in-one function `delineate_corridor()` includes the division of the corridor into segments. It is also possible to use the `get_segments()` function to divide the corridor in a separate step.
+By default, the all-in-one function `delineate_corridor()` only returns the corridor boundary. The corridor can be segmented either by setting the argument `segments = TRUE` in `delineate_corridor()` or by using the `get_segments()` function in a separate step.
 
-To demonstrate this as a separate step, we will use the `bucharest_osm$corridor` and `bucharest_osm$streets` layers from the package data as input.
+To demonstrate this as a separate step, we will use the `bucharest_osm$corridor`, `bucharest_osm$streets` and `bucharest_osm$railways` layers from the package data as input.
 
 We first prepare the network and select all the streets and railways that cover the river corridor plus a small buffer region (see also `vignette("network-preparation")`):
 
 ```{r eval=FALSE}
 # TODO remove eval=FALSE when the corridor is available as packaged data
 # Build combined street and railway network
-network <- bind_rows(streets, railways) |>
+network <- bind_rows(bucharest_osm$streets, bucharest_orsm$railways) |>
   as_sfnetwork(directed = FALSE)
 
 # Add a 100 meter buffer region to the corridor
