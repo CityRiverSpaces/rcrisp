@@ -1,7 +1,9 @@
 <urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
 <url><loc>https://cityriverspaces.github.io/CRiSp/404.html</loc></url>
+<url><loc>https://cityriverspaces.github.io/CRiSp/CODE_OF_CONDUCT.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/CONTRIBUTING.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/LICENSE.html</loc></url>
+<url><loc>https://cityriverspaces.github.io/CRiSp/PULL_REQUEST_TEMPLATE.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/articles/corridor-delineation.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/articles/getting-osm-data.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/articles/index.html</loc></url>
@@ -9,6 +11,7 @@
 <url><loc>https://cityriverspaces.github.io/CRiSp/articles/network-preparation.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/authors.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/index.html</loc></url>
+<url><loc>https://cityriverspaces.github.io/CRiSp/news/index.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/add_weights.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/as_bbox.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/as_network.html</loc></url>
