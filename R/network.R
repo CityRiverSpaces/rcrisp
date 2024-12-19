@@ -307,3 +307,21 @@ filter_network <- function(network, target) {
     tidygraph::activate("nodes") |>
     tidygraph::filter(sfnetworks::node_intersects(target))
 }
+
+#' Identify network edges that are intersecting a geometry
+#'
+#' @param network A spatial network object
+#' @param geometry A simple feature geometry
+#' @param index Whether to return the indices of the matchin edges or the
+#'   geometries
+#'
+#' @return Indices or geometries of the edges intersecting the given geometry
+get_intersecting_edges <- function(network, geometry, index = FALSE) {
+  edges <- sf::st_as_sf(network, "edges")
+  intersects <- sf::st_intersects(edges, geometry, sparse = FALSE)
+  if (index) {
+    return(which(intersects))
+  } else {
+    return(edges[intersects, ])
+  }
+}

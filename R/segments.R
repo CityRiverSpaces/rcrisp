@@ -16,7 +16,7 @@ get_segments <- function(corridor, network, river_centerline,
                          angle_threshold = 90) {
 
   # Find river crossings in the network and build continuous strokes from them
-  crossings <- get_intersecting_edges(network, river_centerline)
+  crossings <- get_intersecting_edges(network, river_centerline, index = TRUE)
   crossing_strokes <- rcoins::stroke(network, from_edge = crossings,
                                      angle_threshold = angle_threshold)
 
@@ -29,17 +29,6 @@ get_segments <- function(corridor, network, river_centerline,
   # Refine the blocks to make sure that all segments touch the river and cross
   # the corridor from side to side
   refine_segments(blocks, river_centerline, corridor)
-}
-
-#' Identify network edges that are intersecting a geometry
-#'
-#' @param network A spatial network object
-#' @param geometry A simple feature geometry
-#'
-#' @return Indices of the edges intersecting the geometry as a vector
-get_intersecting_edges <- function(network, geometry) {
-  edges <- sf::st_as_sf(network, "edges")
-  which(sf::st_intersects(edges, geometry, sparse = FALSE))
 }
 
 #' Clip lines to the extent of the corridor, and filter valid segment edges
@@ -85,7 +74,7 @@ clip_and_filter <- function(lines, corridor, river_centerline) {
   filter_clusters(lines_valid, river_centerline)
 }
 
-#' Cluster the river crossings and select the shortest crossing per cluster.
+#' Cluster the river crossings and select the shortest crossing per cluster
 #'
 #' Create groups of edges that are crossing the river in nearby locations,
 #' using a density-based clustering method (DBSCAN). This is to make sure that
@@ -219,31 +208,4 @@ merge_block <- function(targets, block, method = "longest-intersection") {
   merged <- sf::st_union(targets[index_to_merge], block)
   others <- targets[!seq_along(targets) %in% index_to_merge]
   return(c(others, merged))
-}
-
-#' @noRd
-find_smallest <- function(geometry) {
-  area <- sf::st_area(geometry)
-  return(which.min(area))
-}
-
-#' @noRd
-find_adjacent <- function(geometry, target) {
-  index_neighbour <- find_intersects(geometry, target)
-  intersections <- sf::st_intersection(geometry[index_neighbour], target)
-  is_adjacent_intersections <- sf::st_is(intersections,
-                                         c("MULTILINESTRING", "LINESTRING"))
-  return(index_neighbour[is_adjacent_intersections])
-}
-
-#' @noRd
-find_longest <- function(geometry) {
-  length <- sf::st_length(geometry)
-  return(which.max(length))
-}
-
-#' @noRd
-find_intersects <- function(geometry, target) {
-  instersects <- sf::st_intersects(geometry, target, sparse = FALSE)
-  return(which(instersects))
 }
