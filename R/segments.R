@@ -107,7 +107,7 @@ refine_segments <- function(blocks, river_centerline, corridor) {
     idx[!idx %in% idx_instersect_river]
   }
   while (TRUE) {
-    idx_not_instersects_river <- not_intersect_river(blocks)
+    idx_not_instersects_river <- not_intersect_river(blocks = blocks)
     if (length(idx_not_instersects_river) == 0) break
     blocks <- merge_blocks(blocks, idx_not_instersects_river,
                            method = "longest-intersection")
