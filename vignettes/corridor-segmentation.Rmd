@@ -22,7 +22,7 @@ For a more detailed analysis of an urban river corridor, corridor-level delineat
 
 By default, the all-in-one function `delineate_corridor()` only returns the corridor boundary. The corridor can be segmented either by setting the argument `segments = TRUE` in `delineate_corridor()` or by using the `get_segments()` function in a separate step.
 
-To demonstrate this as a separate step, we will use the `bucharest_osm$corridor` and `bucharest_osm$streets` layers from the package data as input.
+To demonstrate this as a separate step, we will use the `bucharest_osm$corridor`, `bucharest_osm$streets` and `bucharest_osm$railways` layers from the package data as input.
 
 We first prepare the network and select all the streets and railways that cover the river corridor plus a small buffer region (see also `vignette("network-preparation")`):
 
