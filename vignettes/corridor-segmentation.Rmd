@@ -29,7 +29,7 @@ We first prepare the network and select all the streets and railways that cover 
 ```{r eval=FALSE}
 # TODO remove eval=FALSE when the corridor is available as packaged data
 # Build combined street and railway network
-network <- bind_rows(streets, railways) |>
+network <- bind_rows(bucharest_osm$streets, bucharest_orsm$railways) |>
   as_sfnetwork(directed = FALSE)
 
 # Add a 100 meter buffer region to the corridor
