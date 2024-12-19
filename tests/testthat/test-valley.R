@@ -43,7 +43,6 @@ test_that("valley polygon is correctly constructed", {
                                  quiet = TRUE) |>
     sf::st_as_sfc()
 
-  valley <- sf::st_set_precision(valley, 1e-8)
-  expected_valley <- sf::st_set_precision(expected_valley, 1e-8)
-  expect_true(sf::st_equals(valley, expected_valley, sparse = FALSE))
+  expect_true(sf::st_equals_exact(valley, expected_valley,
+                                  par = 1.e-4, sparse = FALSE))
 })
