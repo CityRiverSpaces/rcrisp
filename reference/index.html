@@ -26,6 +26,7 @@
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Delineation</h6></li>
     <li><a class="dropdown-item" href="../articles/corridor-delineation.html">4. Corridor delineation</a></li>
+    <li><a class="dropdown-item" href="../articles/corridor-segmentation.html">5. Corridor segmentation</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -97,10 +98,10 @@
         <dd>Clean a spatial network.</dd>
       </dl><dl><dt>
 
-          <code><a href="corridor.html">corridor()</a></code>
+          <code><a href="clip_and_filter.html">clip_and_filter()</a></code>
 
         </dt>
-        <dd>Delineate a river corridor on a spatial network.</dd>
+        <dd>Clip lines to the extent of the corridor, and filter valid segment edges</dd>
       </dl><dl><dt>
 
           <code><a href="corridor_edge.html">corridor_edge()</a></code>
@@ -127,16 +128,16 @@
         <dd>Delinate the riverspace.</dd>
       </dl><dl><dt>
 
-          <code><a href="delineate_segments.html">delineate_segments()</a></code>
-
-        </dt>
-        <dd>Delineate segments of a river corridor.</dd>
-      </dl><dl><dt>
-
           <code><a href="dem_to_cog.html">dem_to_cog()</a></code>
 
         </dt>
         <dd>Write dem to cloud optimized GeoTiff file as specified location</dd>
+      </dl><dl><dt>
+
+          <code><a href="filter_clusters.html">filter_clusters()</a></code>
+
+        </dt>
+        <dd>Cluster the river crossings and select the shortest crossing per cluster</dd>
       </dl><dl><dt>
 
           <code><a href="filter_network.html">filter_network()</a></code>
@@ -157,6 +158,12 @@
         <dd>Get characteristic value of distribution of cost distance</dd>
       </dl><dl><dt>
 
+          <code><a href="get_corridor.html">get_corridor()</a></code>
+
+        </dt>
+        <dd>Delineate a river corridor on a spatial network.</dd>
+      </dl><dl><dt>
+
           <code><a href="get_cost_distance.html">get_cost_distance()</a></code>
 
         </dt>
@@ -167,6 +174,12 @@
 
         </dt>
         <dd>Load dem from a STAC endpoint</dd>
+      </dl><dl><dt>
+
+          <code><a href="get_intersecting_edges.html">get_intersecting_edges()</a></code>
+
+        </dt>
+        <dd>Identify network edges that are intersecting a geometry</dd>
       </dl><dl><dt>
 
           <code><a href="get_osm_bb.html">get_osm_bb()</a></code>
@@ -203,6 +216,12 @@
 
         </dt>
         <dd>Retrieve OpenStreetMap data for a given location</dd>
+      </dl><dl><dt>
+
+          <code><a href="get_segments.html">get_segments()</a></code>
+
+        </dt>
+        <dd>Split a river corridor into segments</dd>
       </dl><dl><dt>
 
           <code><a href="get_slope.html">get_slope()</a></code>
@@ -283,6 +302,18 @@
         <dd>Mask slope raster, setting the slope to zero for the pixels overlapping the river area.</dd>
       </dl><dl><dt>
 
+          <code><a href="merge_block.html">merge_block()</a></code>
+
+        </dt>
+        <dd>Merge a block to one of the target geometries</dd>
+      </dl><dl><dt>
+
+          <code><a href="merge_blocks.html">merge_blocks()</a></code>
+
+        </dt>
+        <dd>Merge a set of blocks to adjacent ones</dd>
+      </dl><dl><dt>
+
           <code><a href="nearest_node.html">nearest_node()</a></code>
 
         </dt>
@@ -293,6 +324,12 @@
 
         </dt>
         <dd>Retrieve OpenStreetMap data as sf object</dd>
+      </dl><dl><dt>
+
+          <code><a href="refine_segments.html">refine_segments()</a></code>
+
+        </dt>
+        <dd>Refine candidate segments via recursive merging</dd>
       </dl><dl><dt>
 
           <code><a href="reproject.html">reproject()</a></code>

@@ -8,8 +8,8 @@
 <title>5. Corridor segmentation • CRiSp</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
-<link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="5. Corridor segmentation">
 </head>
 <body>
@@ -42,13 +42,9 @@
     <li><h6 class="dropdown-header" data-toc-skip>Delineation</h6></li>
     <li><a class="dropdown-item" href="../articles/corridor-delineation.html">4. Corridor delineation</a></li>
     <li><a class="dropdown-item" href="../articles/corridor-segmentation.html">5. Corridor segmentation</a></li>
-    <li><a class="dropdown-item" href="../articles/riverspace-delineation.html">6. Riverspace delineation</a></li>
-    <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Use cases</h6></li>
-    <li><a class="dropdown-item" href="../articles/multiple-cities.html">7. Multiple delineations</a></li>
-    <li><a class="dropdown-item" href="../articles/poi-study-area.html">8. Study area around a POI</a></li>
   </ul>
 </li>
+<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul>
 <ul class="navbar-nav">
 <li class="nav-item"><form class="form-inline" role="search">
@@ -85,13 +81,35 @@ be subdivided into smaller morphological units. Segmentation is a
 process of subdividing the corridor by using major transversal road or
 rail infrastructure lines.</p>
 <p>By default, the all-in-one function <code><a href="../reference/delineate_corridor.html">delineate_corridor()</a></code>
-includes the division of the corridor into segments. It is also possible
-to use the <code>delineate_segment()</code> function to divide the
-corridor in a separate step. To demonstrate this as a separate step, we
-will use the built-in <code>bucharest_corridor</code> and
-<code>bucharest_streets</code> as input.</p>
+only returns the corridor boundary. The corridor can be segmented either
+by setting the argument <code>segments = TRUE</code> in
+<code><a href="../reference/delineate_corridor.html">delineate_corridor()</a></code> or by using the
+<code><a href="../reference/get_segments.html">get_segments()</a></code> function in a separate step.</p>
+<p>To demonstrate this as a separate step, we will use the
+<code>bucharest_osm$corridor</code>, <code>bucharest_osm$streets</code>
+and <code>bucharest_osm$railways</code> layers from the package data as
+input.</p>
+<p>We first prepare the network and select all the streets and railways
+that cover the river corridor plus a small buffer region (see also
+<code><a href="../articles/network-preparation.html">vignette("network-preparation")</a></code>):</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">segmented_corridor</span> <span class="op">&lt;-</span> <span class="fu">delineate_segments</span><span class="op">(</span><span class="va">bucharest_corridor</span>, <span class="va">bucharest_streets</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># TODO remove eval=FALSE when the corridor is available as packaged data</span></span>
+<span><span class="co"># Build combined street and railway network</span></span>
+<span><span class="va">network</span> <span class="op">&lt;-</span> <span class="fu">bind_rows</span><span class="op">(</span><span class="va">bucharest_osm</span><span class="op">$</span><span class="va">streets</span>, <span class="va">bucharest_orsm</span><span class="op">$</span><span class="va">railways</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">as_sfnetwork</span><span class="op">(</span>directed <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Add a 100 meter buffer region to the corridor</span></span>
+<span><span class="va">corridor_buffer</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_unary.html" class="external-link">st_buffer</a></span><span class="op">(</span><span class="va">bucharest_osm</span><span class="op">$</span><span class="va">corridor</span>, <span class="fl">100</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Filter the network to the area of interest</span></span>
+<span><span class="va">network_filtered</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/filter_network.html">filter_network</a></span><span class="op">(</span><span class="va">network</span>, <span class="va">corridor_buffer</span><span class="op">)</span></span></code></pre></div>
+<p>We then delineate segments in the corridor. The algorithm spits the
+corridor using river-crossing transversal edges that form continuous
+lines in the network:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># TODO remove eval=FALSE when the corridor is available as packaged data</span></span>
+<span><span class="va">segmented_corridor</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_segments.html">get_segments</a></span><span class="op">(</span><span class="va">bucharest_delineation</span><span class="op">$</span><span class="va">corridor</span>,</span>
+<span>                                   <span class="va">network_filtered</span><span class="op">)</span></span></code></pre></div>
   </main>
 </div>
 

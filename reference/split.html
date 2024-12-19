@@ -26,6 +26,7 @@
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Delineation</h6></li>
     <li><a class="dropdown-item" href="../articles/corridor-delineation.html">4. Corridor delineation</a></li>
+    <li><a class="dropdown-item" href="../articles/corridor-segmentation.html">5. Corridor segmentation</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -40,7 +41,7 @@
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Split a geometry along a (multi)linestring.</h1>
-      <small class="dont-index">Source: <a href="https://github.com/CityRiverSpaces/crisp/blob/main/R/corridor.R" class="external-link"><code>R/corridor.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/CityRiverSpaces/crisp/blob/main/R/sf.R" class="external-link"><code>R/sf.R</code></a></small>
       <div class="d-none name"><code>split.Rd</code></div>
     </div>
 
@@ -50,7 +51,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">split</span><span class="op">(</span><span class="va">geometry</span>, <span class="va">line</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">split</span><span class="op">(</span><span class="va">geometry</span>, <span class="va">line</span>, boundary <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -63,6 +64,10 @@
 
 <dt id="arg-line">line<a class="anchor" aria-label="anchor" href="#arg-line"></a></dt>
 <dd><p>Dividing (multi)linestring</p></dd>
+
+
+<dt id="arg-boundary">boundary<a class="anchor" aria-label="anchor" href="#arg-boundary"></a></dt>
+<dd><p>Whether to return the split boundary instead of the regions</p></dd>
 
 </dl></div>
     <div class="section level2">
