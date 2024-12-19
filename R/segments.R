@@ -31,7 +31,7 @@ get_segments <- function(corridor, network, river_centerline,
   refine_segments(blocks, river_centerline, corridor)
 }
 
-#' Identify network edges that are intersecting a geometry.
+#' Identify network edges that are intersecting a geometry
 #'
 #' @param network A spatial network object
 #' @param geometry A simple feature geometry
