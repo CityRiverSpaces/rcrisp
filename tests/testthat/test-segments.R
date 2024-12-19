@@ -1,3 +1,5 @@
+river <- sf::st_sfc(sf::st_linestring(cbind(c(-6, 6), c(0, 0))))
+
 test_that("Candidate segments boundaries are properly grouped and filtered", {
   e1 <- sf::st_linestring(cbind(c(-3, -3), c(-1, 1)))  # group 1 <--
   e2 <- sf::st_linestring(cbind(c(-3.1, -2.9), c(-1, 1)))  # group 1
@@ -35,7 +37,7 @@ test_that("Candidate segments are properly refined", {
   actual_longest_intersection <- merge_blocks(blocks, to_merge,
                                               "longest-intersection")
   # p2 and p4 are each others' smallest neighbours
-  expected_smallest <- sf::st_sfc(p1, p6, p5, p6, sf::st_union(p2, p4))
+  expected_smallest <- sf::st_sfc(p1, p3, p5, p6, sf::st_union(p2, p4))
   actual_smallest <- merge_blocks(blocks, to_merge, "smallest")
   equals_longest_intersection <- sf::st_equals(actual_longest_intersection,
                                                expected_longest_intersection,
@@ -80,8 +82,10 @@ test_that("Refinement works with equivalent options for merging", {
                                   sf::st_union(p2, p3), sf::st_union(p4, p5))
   actual_smallest <- merge_blocks(blocks, to_merge, "smallest")
   equals_longest_intersection <- sf::st_equals(actual_longest_intersection,
-                                               expected, sparse = FALSE)
-  equals_smallest <- sf::st_equals(actual_smallest, expected, sparse = FALSE)
+                                               expected_longest_intersection,
+                                               sparse = FALSE)
+  equals_smallest <- sf::st_equals(actual_smallest, expected_smallest,
+                                   sparse = FALSE)
   expect_true(all(sapply(seq_len(length(expected_longest_intersection)),
                          \(x) equals_longest_intersection[x, x])))
   expect_true(all(sapply(seq_len(length(expected_smallest)),
