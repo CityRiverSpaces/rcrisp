@@ -48,3 +48,13 @@ plot(bucharest_streets, add = TRUE)
 ```
 
 <img src="man/figures/README-example-1.png" width="100%" />
+
+## Contributing
+
+We look very much forward to contributions to the package. See the
+[Contributing Guide](.github/CONTRIBUTING.md) for further details.
+
+This package is released with a [Contributor Code of
+Conduct](.github/CODE_OF_CONDUCT.md). By contributing to this project
+you agree to abide by its terms.
+
