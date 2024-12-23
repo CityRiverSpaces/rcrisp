@@ -68,6 +68,7 @@ get_osmdata <- function(city_name, river_name, crs = NULL, buffer = NULL) {
   river <- get_osm_river(river_name, bb, crs)
   srteets <- get_osm_streets(bb, crs)
   railways <- get_osm_railways(bb, crs)
+  buildings <- get_osm_buildings(bb, crs)
 
   osm_data <- list(
     bb = bb,
@@ -75,7 +76,8 @@ get_osmdata <- function(city_name, river_name, crs = NULL, buffer = NULL) {
     river_centerline = river$centerline,
     river_surface = river$surface,
     streets = srteets,
-    railways = railways
+    railways = railways,
+    buildings = buildings
   )
 
   return(osm_data)
@@ -238,4 +240,19 @@ get_osm_railways <- function(bb, crs) {
     sf::st_transform(crs)
 
   return(railways_lines)
+}
+
+#' Get OpenStreetMap buildings
+#'
+#' @param bb Bounding box of class `bbox`
+#' @param crs Coordinate reference system as EPSG code
+#'
+#' @return An sf object with the buildings
+#' @export
+get_osm_buildings <- function(bb, crs) {
+  buildings <- osmdata_as_sf("building", "", bb)
+  buildings <- buildings$osm_polygons |>
+    sf::st_transform(crs)
+
+  return(buildings)
 }
