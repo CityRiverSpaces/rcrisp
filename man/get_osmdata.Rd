@@ -26,5 +26,7 @@ the city boundary, the river centreline and surface, the streets, and the
 railways.
 }
 \examples{
-get_osmdata("Bucharest", "Dambovita", buffer = 2000)
+bb <- get_osm_bb("Bucharest")
+crs <- get_utm_zone(bb)
+get_osmdata(bb, "Bucharest", "Dambovita", crs)
 }
