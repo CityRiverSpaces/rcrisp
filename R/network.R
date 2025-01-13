@@ -298,6 +298,9 @@ nearest_node <- function(network, target) {
 
 #' Subset a network keeping the only nodes that intersect a target geometry.
 #'
+#' If subsetting results in multiple disconnected components, we keep the main
+#' one.
+#'
 #' @param network A network object
 #' @param target The target geometry
 #'
@@ -305,7 +308,10 @@ nearest_node <- function(network, target) {
 filter_network <- function(network, target) {
   network |>
     tidygraph::activate("nodes") |>
-    tidygraph::filter(sfnetworks::node_intersects(target))
+    tidygraph::filter(sfnetworks::node_intersects(target)) |>
+    # keep only the main connected component of the network
+    tidygraph::activate("nodes") |>
+    dplyr::filter(tidygraph::group_components() == 1)
 }
 
 #' Identify network edges that are intersecting a geometry

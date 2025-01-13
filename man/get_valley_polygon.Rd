@@ -10,8 +10,8 @@ get_valley_polygon(valley_mask)
 \item{valley_mask}{raster mask of valley pixels}
 }
 \value{
-(multi)polygon representation of valley area
-as st_geometry without holes
+(multi)polygon representation of valley area as a simple feature
+geometry without holes
 }
 \description{
 Create vector/polygon representation of valley without holes from raster mask

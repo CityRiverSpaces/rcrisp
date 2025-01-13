@@ -7,22 +7,24 @@
 #' @param bbox Bounding box defining the extent of the area of interest
 #' @param initial_method The method employed to define the initial river
 #'   corridor geometry. See [initial_corridor()] for the available methods
+#' @param buffer Buffer region to add to the river geometry to setup the initial
+#'   corridor (only used if `initial_method` is `"buffer"`)
+#' @param dem Digital elevation model (DEM) of the region (only used if
+#'   `initial_method` is `"valley"`)
 #' @param capping_method The method employed to connect the corridor edge end
 #'   points (i.e. to "cap" the corridor). See [cap_corridor()] for
 #'   the available methods
-#' TODO: add input arguments for the initialization method
 #'
 #' @return A simple feature geometry representing the river corridor
 #' @export
 get_corridor <- function(
   network, river_centerline, river_surface, bbox, initial_method = "buffer",
-  capping_method = "direct"
+  buffer = 1000, dem = NULL, capping_method = "direct"
 ) {
 
   # Draw the initial corridor geometry within the area of interest
-  river <- c(river_centerline, river_surface)
-  # TODO: remove hardcoded buffer value here
-  corridor_init <- initial_corridor(river, initial_method, bbox, buffer = 1000)
+  corridor_init <- initial_corridor(river_surface, method = initial_method,
+                                    buffer = buffer, dem = dem, bbox = bbox)
 
   # Find the corridor end points
   end_points <- corridor_end_points(river_centerline, bbox)
@@ -54,15 +56,28 @@ get_corridor <- function(
 #' @param method The method employed to draw the initial river corridor:
 #'   - "buffer" (default): add a fixed buffer region to the river geometry
 #'     (see [river_buffer()])
-#' @param ... Additional arguments required by the function that implements the
-#'   chosen method (see `method`)
+#'   - "valley": use the river valley boundary, as estimated from the provided
+#'     digital elevation model (DEM, see [river_valley()])
+#' @param buffer Buffer region to add to the river geometry (only used if
+#'   `initial_method` is `"buffer"`)
+#' @param dem Digital elevation model (DEM) of the region (only used if
+#'   `initial_method` is `"valley"`)
 #' @param bbox Bounding box defining the extent of the area of interest
 #'
 #' @return A simple feature geometry
-initial_corridor <- function(river, method = "buffer", ..., bbox = NULL) {
-  args <- list(...)
+initial_corridor <- function(
+  river, method = "buffer", buffer = NULL, dem = NULL, bbox = NULL
+) {
   if (method == "buffer") {
-    return(river_buffer(river, buffer = args$buffer, bbox = bbox))
+    if (is.null(buffer)) {
+      stop("Buffer should be provided if `method` is `'buffer'`")
+    }
+    return(river_buffer(river, buffer, bbox = bbox))
+  } else if (method == "valley") {
+    if (is.null(dem)) {
+      stop("DEM should be provided if `method` is `'valley'`")
+    }
+    return(river_valley(river, dem, bbox = bbox))
   } else {
     stop(
       sprintf("Unknown method to initialize river corridor: {method}", method)
@@ -85,6 +100,20 @@ river_buffer <- function(river, buffer, bbox = NULL) {
   } else {
     return(river_buf_union)
   }
+}
+
+#' Draw a corridor as an estimate of the river valley.
+#'
+#' The valley is drawn on a digital elevation model (DEM) of the area,
+#' see [get_valley()] for details on the implementation.
+#'
+#' @param river A simple feature geometry representing the river
+#' @param dem The DEM of the area as a terra SpatRaster object
+#' @param bbox Bounding box defining the extent of the area of interest
+#'
+#' @return A simple feature geometry
+river_valley <- function(river, dem, bbox = NULL) {
+  get_valley(dem, river, bbox = bbox)
 }
 
 #' Find the corridor end points.

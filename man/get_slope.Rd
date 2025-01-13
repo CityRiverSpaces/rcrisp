@@ -2,8 +2,7 @@
 % Please edit documentation in R/valley.R
 \name{get_slope}
 \alias{get_slope}
-\title{Derive slope as percentage from dem
-This makes use of the terrain function of the terra package}
+\title{Derive slope as percentage from DEM}
 \usage{
 get_slope(dem)
 }
@@ -14,6 +13,5 @@ get_slope(dem)
 raster of derived slope over dem extent
 }
 \description{
-Derive slope as percentage from dem
 This makes use of the terrain function of the terra package
 }

@@ -2,23 +2,26 @@
 % Please edit documentation in R/valley.R
 \name{get_valley}
 \alias{get_valley}
-\title{Create vector/polygon representation of valley from dem and river polygon
-for a crs}
+\title{Extract the river valley from the DEM}
 \usage{
-get_valley(dem, river, crs)
+get_valley(dem, river, bbox = NULL)
 }
 \arguments{
-\item{dem}{of region}
+\item{dem}{Digital elevation model of the region}
 
-\item{river}{vector/polygon representation of river area}
+\item{river}{A simple feature geometry representing the river}
 
-\item{crs}{coordiante reference system to use}
+\item{bbox}{Bounding box defining the extent of the area of interest}
 }
 \value{
-(multi)polygon representation of valley
-area as st_geometry without holes
+River valley as a simple feature geometry
 }
 \description{
-Create vector/polygon representation of valley from dem and river polygon
-for a crs
+The slope of the digital elevation model (DEM) is used as friction (cost)
+surface to compute the cost distance from any grid cell of the raster to
+the river. A characteristic value (default: the mean) of the cost distance
+distribution in a region surrounding the river (default: a buffer region of
+2 km) is then calculated, and used to threshold the cost-distance surface.
+The resulting area is then "polygonized" to obtain the valley boundary as a
+simple feature geometry.
 }

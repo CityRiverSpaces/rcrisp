@@ -4,18 +4,17 @@
 \alias{get_osmdata}
 \title{Retrieve OpenStreetMap data for a given location}
 \usage{
-get_osmdata(city_name, river_name, crs = NULL, buffer = NULL)
+get_osmdata(bb, city_name, river_name, crs = NULL)
 }
 \arguments{
+\item{bb}{Bounding box defining the area of interest}
+
 \item{city_name}{A character string with the name of the city.}
 
 \item{river_name}{A character string with the name of the river.}
 
 \item{crs}{An integer with the EPSG code for the projection. If no CRS is
 specified, the default is the UTM zone for the city.}
-
-\item{buffer}{A numeric with the buffer distance in meters. By default,
-no buffer is applied}
 }
 \value{
 An list with the retrieved OpenStreetMap data sets for the

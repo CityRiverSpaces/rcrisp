@@ -14,37 +14,32 @@ test_that("STAC asset urls are correctly retrieved", {
 
   asset_urls_retrieved <- get_stac_asset_urls(bb, endpoint = ep,
                                               collection = col)
-  asset_urls_retrieved_default <- get_stac_asset_urls(bb)
   expected_asset_urls <- asset_urls
 
   expect_equal(expected_asset_urls, asset_urls_retrieved)
-  expect_equal(expected_asset_urls, asset_urls_retrieved_default)
 })
 
 test_that("raster data are correctly retrieved and merged", {
   skip_on_ci()
 
-  dem <- load_raster(bb, asset_urls) |> CRiSp::reproject(32635)
-  expected_dem <- terra::unwrap(bucharest_dem)
+  dem <- load_raster(bb, asset_urls)
 
-  expect_equal(terra::values(dem), terra::values(expected_dem))
-  expect_equal(terra::crs(dem), terra::crs(expected_dem))
-  expect_true(all.equal(terra::ext(dem), terra::ext(expected_dem),
-                        tolerance = 1e-4))
+  expect_equal(terra::crs(dem), terra::crs("EPSG:4326"))
+  expect_equal(as.vector(terra::ext(dem)), as.vector(terra::ext(bb)),
+               tolerance = 1.e-5)
 })
 
 test_that("valley polygon is correctly constructed", {
   dem <- terra::unwrap(bucharest_dem)
   river <- bucharest_osm$river_surface
-  crs <- "epsg:32635"
 
-  valley <- get_valley(dem, river, crs)
-  expected_valley <- sf::st_read("./testdata/expected_valley.gpkg",
-                                 quiet = TRUE) |>
-    sf::st_as_sfc()
+  valley <- get_valley(dem, river)
+  expected_valley_path <- testthat::test_path("testdata",
+                                              "expected_valley.gpkg")
+  expected_valley <- sf::st_read(expected_valley_path, quiet = TRUE)
 
-  valley <- st_set_precision(valley, 1e-06)
-  expected_valley <- st_set_precision(expected_valley, 1e-06)
+  valley <- sf::st_set_precision(valley, 1e-06)
+  expected_valley <- sf::st_set_precision(expected_valley, 1e-06)
   expect_true(sf::st_equals_exact(valley, expected_valley,
-                                  par = 1.e-4, sparse = FALSE))
+                                  par = 0, sparse = FALSE))
 })

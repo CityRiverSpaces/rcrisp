@@ -5,8 +5,10 @@ epsg_code <- 32635
 bbox_buffer <- 2000
 
 # Fetch the OSM data
-bucharest_osm <- CRiSp::get_osmdata(city_name, river_name,
-                                    crs = epsg_code, buffer = bbox_buffer)
+bbox <- get_osm_bb(city_name)
+bbox_expanded <- buffer_bbox(bbox, bbox_buffer)
+bucharest_osm <- CRiSp::get_osmdata(bbox_expanded, city_name, river_name,
+                                    crs = epsg_code)
 
 # Fix encoding issue in the WKT strings
 fix_wkt_encoding <- function(x) {
