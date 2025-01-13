@@ -48,7 +48,9 @@ get_osm_bb <- function(city_name) {
 #' @export
 #'
 #' @examples
-#' get_osmdata("Bucharest", "Dambovita", buffer = 2000)
+#' bb <- get_osm_bb("Bucharest")
+#' crs <- get_utm_zone(bb)
+#' get_osmdata(bb, "Bucharest", "Dambovita", crs)
 get_osmdata <- function(bb, city_name, river_name, crs = NULL) {
   boundary <- get_osm_city_boundary(bb, city_name, crs = crs)
   river <- get_osm_river(bb, river_name, crs = crs)
