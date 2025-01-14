@@ -160,6 +160,7 @@ get_osm_river <- function(river_name, bb, crs) {
   river_centerline <- CRiSp::osmdata_as_sf("waterway", "river", bb)
   river_centerline <- river_centerline$osm_multilines |>
     dplyr::filter(.data$name == river_name) |>
+    sf::st_crop(bb) |>
     sf::st_transform(crs) |>
     sf::st_geometry()
 
