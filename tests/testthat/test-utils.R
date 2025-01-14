@@ -128,11 +128,9 @@ test_that("reproject works with raster data", {
 
   crs_expected <- terra::crs("EPSG:32602")
   crs_actual_int <- terra::crs(x_repr_int)
-  # expect_equal fails on windows
-  expect_identical(crs_actual_int, crs_expected)
+  expect_equal(crs_actual_int, crs_expected)
   crs_actual_str <- terra::crs(x_repr_str)
-  # expect_equal fails on windows
-  expect_identical(crs_actual_str, crs_expected)
+  expect_equal(crs_actual_str, crs_expected)
 })
 
 test_that("reproject works with vector data", {
