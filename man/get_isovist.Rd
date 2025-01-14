@@ -21,3 +21,8 @@ object of class sfc_POLYGON
 \description{
 Calculate isovist from a viewpoint
 }
+\examples{
+set.seed(32635)
+vpoint <- sample(get_viewpoints(bucharest_osm$river_centerline |> sf::st_cast("LINESTRING")), 1)
+get_isovist(occluders = bucharest_osm$buildings, vpoint = vpoint)
+}
