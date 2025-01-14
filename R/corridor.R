@@ -80,7 +80,7 @@ initial_corridor <- function(
     return(river_valley(river, dem, bbox = bbox))
   } else {
     stop(
-      sprintf("Unknown method to initialize river corridor: {method}", method)
+      sprintf("Unknown method to initialize river corridor: %s", method)
     )
   }
 }
