@@ -86,8 +86,9 @@ buffer_bbox <- function(bbox, buffer) {
 #' @export
 reproject <- function(x, crs, ...) {
   if (inherits(x, "SpatRaster")) {
-    wkt <- sf::st_crs(crs)$wkt
-    return(terra::project(x, wkt, ...))
+    # terra::crs does not support a numeric value as CRS, convert to character
+    if (inherits(crs, "numeric")) crs <- sprintf("EPSG:%s", crs)
+    return(terra::project(x, crs, ...))
   } else if (inherits(x, c("bbox", "sfc", "sf"))) {
     return(sf::st_transform(x, crs, ...))
   } else {
