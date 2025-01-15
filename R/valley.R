@@ -137,6 +137,8 @@ load_raster <- function(bb, raster_urlpaths) {
 #' @param output_directory where file should be written.
 #' If specified fpath is treated as filename only.
 #'
+#' @return The input DEM. This function is used for the side-effect of writing
+#'   values to a file.
 #' @export
 dem_to_cog <- function(dem, fpath, output_directory = NULL) {
   if (is.null(output_directory)) {
