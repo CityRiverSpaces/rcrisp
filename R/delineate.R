@@ -34,7 +34,7 @@ delineate_corridor <- function(
 ) {
   # Define the area of interest and (if not provided) the CRS
   bbox <- get_osm_bb(city_name)
-  bbox <- buffer_bbox(bbox, buffer = bbox_buffer)
+  if (!is.null(bbox_buffer)) bbox <- buffer_bbox(bbox, buffer = bbox_buffer)
   if (is.null(crs)) crs <- get_utm_zone(bbox)
 
   # Retrieve all relevant OSM datasets within the area of interest
