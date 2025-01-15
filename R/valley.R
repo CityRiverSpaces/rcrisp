@@ -85,8 +85,7 @@ get_valley <- function(dem, river, bbox = NULL) {
 
   cd_thresh <- get_cd_char(cd_masked)
 
-  valley <- get_valley_mask(cd_masked, cd_thresh) |>
-    get_valley_polygon()
+  valley <- get_valley_polygon(cd_masked < cd_thresh)
   return(valley)
 }
 
@@ -254,17 +253,6 @@ get_cd_char <- function(cd, method = "mean") {
   } else {
     #TODO
   }
-}
-
-#' Select valley pixels from cost distance based on threshold
-#'
-#' @param cd cost distance raster
-#' @param thresh threshold cost distance value below which pixels are assuemd
-#' to belong to the valley
-#' @export
-get_valley_mask <- function(cd, thresh) {
-  valley_mask <- (cd < thresh)
-  return(valley_mask)
 }
 
 #' Create vector/polygon representation of valley raster mask
