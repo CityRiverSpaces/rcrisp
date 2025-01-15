@@ -121,11 +121,15 @@ get_stac_asset_urls <- function(bb, endpoint, collection) {
 #' @export
 load_raster <- function(bb, raster_urlpaths) {
   bbox <- as_bbox(bb)
-  raster_urlpaths |>
+  cropped <- raster_urlpaths |>
     lapply(terra::rast) |>
     # snap spatial extent outward to include pixels crossed by the boundary
-    lapply(terra::crop, terra::ext(bbox), snap = "out") |>
-    do.call(terra::merge, args = _)
+    lapply(terra::crop, terra::ext(bbox), snap = "out")
+  if (length(cropped) > 1) {
+    return(do.call(terra::merge, args = cropped))
+  } else {
+    return(cropped[[1]])
+  }
 }
 
 #' Write DEM to cloud optimized GeoTiff file as specified location
