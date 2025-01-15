@@ -80,7 +80,25 @@
 <p>This is a basic example which shows you how to solve a common problem:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://cityriverspaces.github.io/CRiSp/">CRiSp</a></span><span class="op">)</span></span>
-<span><span class="co">## basic example code</span></span></code></pre></div>
+<span></span>
+<span><span class="co"># Set location parameters</span></span>
+<span><span class="va">city_name</span> <span class="op">&lt;-</span> <span class="st">"Bucharest"</span></span>
+<span><span class="va">river_name</span> <span class="op">&lt;-</span> <span class="st">"Dâmbovița"</span></span>
+<span><span class="va">epsg_code</span> <span class="op">&lt;-</span> <span class="fl">32635</span></span>
+<span></span>
+<span><span class="co"># Get base layer for plotting</span></span>
+<span><span class="va">bucharest_bb</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_osm_bb.html">get_osm_bb</a></span><span class="op">(</span><span class="va">city_name</span><span class="op">)</span> </span>
+<span><span class="va">bucharest_streets</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_osm_streets.html">get_osm_streets</a></span><span class="op">(</span><span class="va">bucharest_bb</span>, <span class="va">epsg_code</span><span class="op">)</span><span class="op">[</span>, <span class="st">"geometry"</span><span class="op">]</span></span>
+<span></span>
+<span><span class="co"># Delineate river corridor</span></span>
+<span><span class="va">bucharest_river</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/delineate_corridor.html">delineate_corridor</a></span><span class="op">(</span><span class="st">"Bucharest"</span>, <span class="st">"Dâmbovița"</span>, <span class="va">epsg_code</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: to_spatial_subdivision assumes attributes are constant over geometries</span></span>
+<span><span class="co">#&gt; Linking to GEOS 3.11.0, GDAL 3.5.3, PROJ 9.1.0; sf_use_s2() is TRUE</span></span>
+<span></span>
+<span><span class="co"># Plot results</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">bucharest_river</span>, border <span class="op">=</span> <span class="st">"orange"</span>, lwd <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">bucharest_streets</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-example-1.png" width="100%"></p>
 </div>
 <div class="section level2">
 <h2 id="contributing">Contributing<a class="anchor" aria-label="anchor" href="#contributing"></a>
