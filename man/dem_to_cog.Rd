@@ -16,6 +16,10 @@ the output directory}
 \item{output_directory}{where file should be written.
 If specified fpath is treated as filename only.}
 }
+\value{
+The input DEM. This function is used for the side-effect of writing
+values to a file.
+}
 \description{
 Write DEM to cloud optimized GeoTiff file as specified location
 }
