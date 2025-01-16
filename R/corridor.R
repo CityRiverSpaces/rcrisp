@@ -23,7 +23,8 @@ get_corridor <- function(
 ) {
 
   # Draw the initial corridor geometry within the area of interest
-  corridor_init <- initial_corridor(river_surface, method = initial_method,
+  river <- c(river_centerline, river_surface)
+  corridor_init <- initial_corridor(river, method = initial_method,
                                     buffer = buffer, dem = dem, bbox = bbox)
 
   # Find the corridor end points

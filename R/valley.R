@@ -204,11 +204,14 @@ mask_slope <- function(slope, river, lthresh = 1.e-3, target = 0) {
   slope_masked <- terra::mask(slope,
                               terra::ifel(slope <= lthresh, NA, 1),
                               updatevalue = lthresh)
-  slope_masked <- terra::mask(slope_masked,
-                              terra::vect(river),
-                              inverse = TRUE,
-                              updatevalue = target,
-                              touches = TRUE)
+  for (ngeom in seq_len(length(sf::st_geometry(river)))) {
+    slope_masked <- terra::mask(slope_masked,
+                                terra::vect(river[ngeom]),
+                                inverse = TRUE,
+                                updatevalue = target,
+                                touches = TRUE)
+  }
+  return(slope_masked)
 }
 
 #' Derive cost distance function from masked slope
