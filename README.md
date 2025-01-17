@@ -34,11 +34,11 @@ river_name <- "Dâmbovița"
 epsg_code <- 32635
 
 # Get base layer for plotting
-bucharest_bb <- get_osm_bb(city_name) 
+bucharest_bb <- get_osm_bb(city_name)
 bucharest_streets <- get_osm_streets(bucharest_bb, epsg_code)[, "geometry"]
 
 # Delineate river corridor
-bucharest_river <- delineate_corridor("Bucharest", "Dâmbovița", epsg_code)
+bucharest_river <- delineate_corridor("Bucharest", "Dâmbovița", crs = epsg_code)
 #> Warning: to_spatial_subdivision assumes attributes are constant over geometries
 #> Linking to GEOS 3.11.0, GDAL 3.5.3, PROJ 9.1.0; sf_use_s2() is TRUE
 
