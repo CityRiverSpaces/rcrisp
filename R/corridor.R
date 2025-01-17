@@ -18,7 +18,7 @@
 #' @return A simple feature geometry representing the river corridor
 #' @export
 get_corridor <- function(
-  network, river_centerline, river_surface, bbox, initial_method = "buffer",
+  network, river_centerline, river_surface, bbox, initial_method = "valley",
   buffer = 1000, dem = NULL, capping_method = "direct"
 ) {
 
@@ -55,8 +55,8 @@ get_corridor <- function(
 #'
 #' @param river A simple feature geometry representing the river
 #' @param method The method employed to draw the initial river corridor:
-#'   - "buffer" (default): add a fixed buffer region to the river geometry
-#'     (see [river_buffer()])
+#'   - "buffer": add a fixed buffer region to the river geometry (see
+#'     [river_buffer()])
 #'   - "valley": use the river valley boundary, as estimated from the provided
 #'     digital elevation model (DEM, see [river_valley()])
 #' @param buffer Buffer region to add to the river geometry (only used if
@@ -67,7 +67,7 @@ get_corridor <- function(
 #'
 #' @return A simple feature geometry
 initial_corridor <- function(
-  river, method = "buffer", buffer = NULL, dem = NULL, bbox = NULL
+  river, method = "valley", buffer = NULL, dem = NULL, bbox = NULL
 ) {
   if (method == "buffer") {
     if (is.null(buffer)) {

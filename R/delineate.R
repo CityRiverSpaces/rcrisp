@@ -28,7 +28,7 @@
 #' @export
 delineate_corridor <- function(
   city_name, river_name, crs = NULL, bbox_buffer = NULL,
-  initial_method = "buffer", initial_buffer = 1000, dem = NULL,
+  initial_method = "valley", initial_buffer = 1000, dem = NULL,
   capping_method = "direct", angle_threshold = 90, segments = FALSE,
   riverspace = FALSE, ...
 ) {
