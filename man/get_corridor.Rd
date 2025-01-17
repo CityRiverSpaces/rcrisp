@@ -9,7 +9,7 @@ get_corridor(
   river_centerline,
   river_surface,
   bbox,
-  initial_method = "buffer",
+  initial_method = "valley",
   buffer = 1000,
   dem = NULL,
   capping_method = "direct"

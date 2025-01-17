@@ -6,7 +6,7 @@
 \usage{
 initial_corridor(
   river,
-  method = "buffer",
+  method = "valley",
   buffer = NULL,
   dem = NULL,
   bbox = NULL
@@ -17,8 +17,8 @@ initial_corridor(
 
 \item{method}{The method employed to draw the initial river corridor:
 \itemize{
-\item "buffer" (default): add a fixed buffer region to the river geometry
-(see \code{\link[=river_buffer]{river_buffer()}})
+\item "buffer": add a fixed buffer region to the river geometry (see
+\code{\link[=river_buffer]{river_buffer()}})
 \item "valley": use the river valley boundary, as estimated from the provided
 digital elevation model (DEM, see \code{\link[=river_valley]{river_valley()}})
 }}

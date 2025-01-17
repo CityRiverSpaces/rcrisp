@@ -9,7 +9,7 @@ delineate_corridor(
   river_name,
   crs = NULL,
   bbox_buffer = NULL,
-  initial_method = "buffer",
+  initial_method = "valley",
   initial_buffer = 1000,
   dem = NULL,
   capping_method = "direct",
