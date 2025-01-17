@@ -10,7 +10,7 @@ get_corridor(
   river_surface,
   bbox,
   initial_method = "valley",
-  buffer = 1000,
+  buffer = NULL,
   dem = NULL,
   capping_method = "direct"
 )

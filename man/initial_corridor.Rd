@@ -19,8 +19,8 @@ initial_corridor(
 \itemize{
 \item "buffer": add a fixed buffer region to the river geometry (see
 \code{\link[=river_buffer]{river_buffer()}})
-\item "valley": use the river valley boundary, as estimated from the provided
-digital elevation model (DEM, see \code{\link[=river_valley]{river_valley()}})
+\item "valley" (default): use the river valley boundary, as estimated from the
+provided digital elevation model (DEM, see \code{\link[=river_valley]{river_valley()}})
 }}
 
 \item{buffer}{Buffer region to add to the river geometry (only used if

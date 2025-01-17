@@ -10,7 +10,7 @@ delineate_corridor(
   crs = NULL,
   bbox_buffer = NULL,
   initial_method = "valley",
-  initial_buffer = 1000,
+  initial_buffer = NULL,
   dem = NULL,
   capping_method = "direct",
   angle_threshold = 90,
