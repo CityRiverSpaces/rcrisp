@@ -57,8 +57,8 @@ get_corridor <- function(
 #' @param method The method employed to draw the initial river corridor:
 #'   - "buffer": add a fixed buffer region to the river geometry (see
 #'     [river_buffer()])
-#'   - "valley" (default): use the river valley boundary, as estimated from the provided
-#'     digital elevation model (DEM, see [river_valley()])
+#'   - "valley" (default): use the river valley boundary, as estimated from the
+#'     provided digital elevation model (DEM, see [river_valley()])
 #' @param buffer Buffer region to add to the river geometry (only used if
 #'   `initial_method` is `"buffer"`)
 #' @param dem Digital elevation model (DEM) of the region (only used if
