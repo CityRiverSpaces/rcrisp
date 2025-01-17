@@ -19,7 +19,7 @@
 #' @export
 get_corridor <- function(
   network, river_centerline, river_surface, bbox, initial_method = "valley",
-  buffer = 1000, dem = NULL, capping_method = "direct"
+  buffer = NULL, dem = NULL, capping_method = "direct"
 ) {
 
   # Draw the initial corridor geometry within the area of interest
