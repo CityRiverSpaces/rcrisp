@@ -1,7 +1,7 @@
 #' Endpoint and collection ID of the default STAC collection where to access
 #' digital elevation model (DEM) data. This is the global Copernicus DEM 30
 #' dataset hosted on AWS, as listed in the EarthSearch STAC API endpoint.
-#' Note that AWS credentials need to be setup in order to access the data (not
+#' Note that AWS credentials need to be set up in order to access the data (not
 #' the catalog).
 # nolint start
 #' References:
