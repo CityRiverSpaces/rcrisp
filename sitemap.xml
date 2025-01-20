@@ -18,11 +18,13 @@
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/as_network.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/bucharest_dem.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/bucharest_osm.html</loc></url>
+<url><loc>https://cityriverspaces.github.io/CRiSp/reference/buffer_bbox.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/cap_corridor.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/clean_network.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/clip_and_filter.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/corridor_edge.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/corridor_end_points.html</loc></url>
+<url><loc>https://cityriverspaces.github.io/CRiSp/reference/default_stac_dem.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/delineate_corridor.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/delineate_riverspace.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/dem_to_cog.html</loc></url>
@@ -45,7 +47,6 @@
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/get_stac_asset_urls.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/get_utm_zone.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/get_valley.html</loc></url>
-<url><loc>https://cityriverspaces.github.io/CRiSp/reference/get_valley_mask.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/get_valley_polygon.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/get_valley_polygon_no_hole.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/get_valley_polygon_raw.html</loc></url>
@@ -62,6 +63,7 @@
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/refine_segments.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/reproject.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/river_buffer.html</loc></url>
+<url><loc>https://cityriverspaces.github.io/CRiSp/reference/river_valley.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/set_units_like.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/shortest_path.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/simplify_network.html</loc></url>

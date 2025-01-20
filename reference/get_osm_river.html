@@ -51,19 +51,19 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_osm_river</span><span class="op">(</span><span class="va">river_name</span>, <span class="va">bb</span>, <span class="va">crs</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_osm_river</span><span class="op">(</span><span class="va">bb</span>, <span class="va">river_name</span>, crs <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
 
 
-<dl><dt id="arg-river-name">river_name<a class="anchor" aria-label="anchor" href="#arg-river-name"></a></dt>
-<dd><p>The name of the river</p></dd>
-
-
-<dt id="arg-bb">bb<a class="anchor" aria-label="anchor" href="#arg-bb"></a></dt>
+<dl><dt id="arg-bb">bb<a class="anchor" aria-label="anchor" href="#arg-bb"></a></dt>
 <dd><p>Bounding box of class <code>bbox</code></p></dd>
+
+
+<dt id="arg-river-name">river_name<a class="anchor" aria-label="anchor" href="#arg-river-name"></a></dt>
+<dd><p>The name of the river</p></dd>
 
 
 <dt id="arg-crs">crs<a class="anchor" aria-label="anchor" href="#arg-crs"></a></dt>
@@ -79,15 +79,14 @@
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">bb</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_osm_bb.html">get_osm_bb</a></span><span class="op">(</span><span class="st">"Bucharest"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">crs</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_utm_zone.html">get_utm_zone</a></span><span class="op">(</span><span class="va">bb</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">get_osm_river</span><span class="op">(</span><span class="st">"Dâmbovița"</span>, <span class="va">bb</span>, <span class="va">crs</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">get_osm_river</span><span class="op">(</span><span class="va">bb</span>, <span class="st">"Dâmbovița"</span>, <span class="va">crs</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $centerline</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Geometry set for 2 features </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Geometry set for 1 feature </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: MULTILINESTRING</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: 340587.5 ymin: 4897268 xmax: 457820 ymax: 5049892</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: 342590.9 ymin: 4897268 xmax: 457820 ymax: 5048321</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Projected CRS: WGS 84 / UTM zone 35N</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> MULTILINESTRING ((342590.9 5043751, 342603 5043...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> MULTILINESTRING ((340587.5 5041599, 340614.2 50...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $surface</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry set for 1 feature </span>
@@ -95,7 +94,7 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: 418720.8 ymin: 4915950 xmax: 438326.9 ymax: 4924248</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Projected CRS: WGS 84 / UTM zone 35N</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> MULTIPOLYGON (((438130.6 4916119, 438124.1 4916...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> MULTIPOLYGON (((427868.6 4920273, 427882.5 4920...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>
     </div>

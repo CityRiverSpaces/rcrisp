@@ -87,11 +87,11 @@
 <span><span class="va">epsg_code</span> <span class="op">&lt;-</span> <span class="fl">32635</span></span>
 <span></span>
 <span><span class="co"># Get base layer for plotting</span></span>
-<span><span class="va">bucharest_bb</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_osm_bb.html">get_osm_bb</a></span><span class="op">(</span><span class="va">city_name</span><span class="op">)</span> </span>
+<span><span class="va">bucharest_bb</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_osm_bb.html">get_osm_bb</a></span><span class="op">(</span><span class="va">city_name</span><span class="op">)</span></span>
 <span><span class="va">bucharest_streets</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_osm_streets.html">get_osm_streets</a></span><span class="op">(</span><span class="va">bucharest_bb</span>, <span class="va">epsg_code</span><span class="op">)</span><span class="op">[</span>, <span class="st">"geometry"</span><span class="op">]</span></span>
 <span></span>
 <span><span class="co"># Delineate river corridor</span></span>
-<span><span class="va">bucharest_river</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/delineate_corridor.html">delineate_corridor</a></span><span class="op">(</span><span class="st">"Bucharest"</span>, <span class="st">"Dâmbovița"</span>, <span class="va">epsg_code</span><span class="op">)</span></span>
+<span><span class="va">bucharest_river</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/delineate_corridor.html">delineate_corridor</a></span><span class="op">(</span><span class="st">"Bucharest"</span>, <span class="st">"Dâmbovița"</span>, crs <span class="op">=</span> <span class="va">epsg_code</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Warning: to_spatial_subdivision assumes attributes are constant over geometries</span></span>
 <span><span class="co">#&gt; Linking to GEOS 3.11.0, GDAL 3.5.3, PROJ 9.1.0; sf_use_s2() is TRUE</span></span>
 <span></span>

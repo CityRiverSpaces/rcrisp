@@ -65,7 +65,7 @@
           <code><a href="as_bbox.html">as_bbox()</a></code>
 
         </dt>
-        <dd>Get the bounding box from the x object. If the x does not have a CRS, WGS84 is assumed.</dd>
+        <dd>Get the bounding box from the x object</dd>
       </dl><dl><dt>
 
           <code><a href="as_network.html">as_network()</a></code>
@@ -84,6 +84,12 @@
 
         </dt>
         <dd>CRiSp example OSM data for Bucharest</dd>
+      </dl><dl><dt>
+
+          <code><a href="buffer_bbox.html">buffer_bbox()</a></code>
+
+        </dt>
+        <dd>Apply a buffer region to a bounding box</dd>
       </dl><dl><dt>
 
           <code><a href="cap_corridor.html">cap_corridor()</a></code>
@@ -116,6 +122,12 @@
         <dd>Find the corridor end points.</dd>
       </dl><dl><dt>
 
+          <code><a href="default_stac_dem.html">default_stac_dem</a></code>
+
+        </dt>
+        <dd>Endpoint and collection ID of the default STAC colleciton where to access digital elevation model (DEM) data. This is the global Copernicus DEM 30 dataset hosted on AWS, as listed in the EarthSearch STAC API endpoint. Note that AWS credentials need to be setup in order to access the data (not the catalog). References: <ul><li><p><a href="https://element84.com/earth-search/" class="external-link">EarthSearch STAC API</a></p></li> <li><p><a href="https://spacedata.copernicus.eu/collections/copernicus-digital-elevation-model" class="external-link">Copernicus DEM</a></p></li> <li><p><a href="https://copernicus-dem-30m.s3.amazonaws.com/readme.html" class="external-link">AWS Copernicus DEM datasets</a></p></li> <li><p><a href="https://docs.sentinel-hub.com/api/latest/static/files/data/dem/resources/license/License-COPDEM-30.pdf" class="external-link">Data license</a></p></li> </ul></dd>
+      </dl><dl><dt>
+
           <code><a href="delineate_corridor.html">delineate_corridor()</a></code>
 
         </dt>
@@ -131,7 +143,7 @@
           <code><a href="dem_to_cog.html">dem_to_cog()</a></code>
 
         </dt>
-        <dd>Write dem to cloud optimized GeoTiff file as specified location</dd>
+        <dd>Write DEM to cloud optimized GeoTiff file as specified location</dd>
       </dl><dl><dt>
 
           <code><a href="filter_clusters.html">filter_clusters()</a></code>
@@ -173,7 +185,7 @@
           <code><a href="get_dem.html">get_dem()</a></code>
 
         </dt>
-        <dd>Load dem from a STAC endpoint</dd>
+        <dd>Access digital elevation model (DEM) for a given region</dd>
       </dl><dl><dt>
 
           <code><a href="get_intersecting_edges.html">get_intersecting_edges()</a></code>
@@ -227,13 +239,13 @@
           <code><a href="get_slope.html">get_slope()</a></code>
 
         </dt>
-        <dd>Derive slope as percentage from dem This makes use of the terrain function of the terra package</dd>
+        <dd>Derive slope as percentage from DEM</dd>
       </dl><dl><dt>
 
           <code><a href="get_stac_asset_urls.html">get_stac_asset_urls()</a></code>
 
         </dt>
-        <dd>Retrieve asset urls for the intersection of a bounding box with a remote STAC endpoint</dd>
+        <dd>Retrieve the URLs of all the assets intersecting a bbox from a STAC API</dd>
       </dl><dl><dt>
 
           <code><a href="get_utm_zone.html">get_utm_zone()</a></code>
@@ -245,13 +257,7 @@
           <code><a href="get_valley.html">get_valley()</a></code>
 
         </dt>
-        <dd>Create vector/polygon representation of valley from dem and river polygon for a crs</dd>
-      </dl><dl><dt>
-
-          <code><a href="get_valley_mask.html">get_valley_mask()</a></code>
-
-        </dt>
-        <dd>Select valley pixels from cost distance based on threshold</dd>
+        <dd>Extract the river valley from the DEM</dd>
       </dl><dl><dt>
 
           <code><a href="get_valley_polygon.html">get_valley_polygon()</a></code>
@@ -342,6 +348,12 @@
 
         </dt>
         <dd>Draw a corridor as a fixed buffer region around a river.</dd>
+      </dl><dl><dt>
+
+          <code><a href="river_valley.html">river_valley()</a></code>
+
+        </dt>
+        <dd>Draw a corridor as an estimate of the river valley.</dd>
       </dl><dl><dt>
 
           <code><a href="set_units_like.html">set_units_like()</a></code>

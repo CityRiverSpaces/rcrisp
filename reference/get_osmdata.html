@@ -57,14 +57,18 @@ railways.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_osmdata</span><span class="op">(</span><span class="va">city_name</span>, <span class="va">river_name</span>, crs <span class="op">=</span> <span class="cn">NULL</span>, buffer <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_osmdata</span><span class="op">(</span><span class="va">bb</span>, <span class="va">city_name</span>, <span class="va">river_name</span>, crs <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
 
 
-<dl><dt id="arg-city-name">city_name<a class="anchor" aria-label="anchor" href="#arg-city-name"></a></dt>
+<dl><dt id="arg-bb">bb<a class="anchor" aria-label="anchor" href="#arg-bb"></a></dt>
+<dd><p>Bounding box defining the area of interest</p></dd>
+
+
+<dt id="arg-city-name">city_name<a class="anchor" aria-label="anchor" href="#arg-city-name"></a></dt>
 <dd><p>A character string with the name of the city.</p></dd>
 
 
@@ -76,11 +80,6 @@ railways.</p>
 <dd><p>An integer with the EPSG code for the projection. If no CRS is
 specified, the default is the UTM zone for the city.</p></dd>
 
-
-<dt id="arg-buffer">buffer<a class="anchor" aria-label="anchor" href="#arg-buffer"></a></dt>
-<dd><p>A numeric with the buffer distance in meters. By default,
-no buffer is applied</p></dd>
-
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -90,10 +89,12 @@ given location</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">get_osmdata</span><span class="op">(</span><span class="st">"Bucharest"</span>, <span class="st">"Dambovita"</span>, buffer <span class="op">=</span> <span class="fl">2000</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">bb</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_osm_bb.html">get_osm_bb</a></span><span class="op">(</span><span class="st">"Bucharest"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">crs</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_utm_zone.html">get_utm_zone</a></span><span class="op">(</span><span class="va">bb</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">get_osmdata</span><span class="op">(</span><span class="va">bb</span>, <span class="st">"Bucharest"</span>, <span class="st">"Dambovita"</span>, <span class="va">crs</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $bb</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     xmin     ymin     xmax     ymax </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 25.94150 44.31624 26.25075 44.55940 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 25.96667 44.33425 26.22558 44.54140 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $boundary</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry set for 1 feature </span>
@@ -109,15 +110,18 @@ given location</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Projected CRS: WGS 84 / UTM zone 35N</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $river_surface</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Geometry set for 0 features </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Geometry set for 1 feature  (with 1 geometry empty)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: GEOMETRYCOLLECTION</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: NA ymin: NA xmax: NA ymax: NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Projected CRS: WGS 84 / UTM zone 35N</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> GEOMETRYCOLLECTION EMPTY</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $streets</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 8427 features and 1 field</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 7906 features and 1 field</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: LINESTRING</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: 413508.8 ymin: 4905204 xmax: 442299.3 ymax: 4938941</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: 416680.4 ymin: 4907294 xmax: 439997 ymax: 4938941</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Projected CRS: WGS 84 / UTM zone 35N</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> First 10 features:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>              type                       geometry</span>
@@ -133,10 +137,10 @@ given location</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3058607   primary LINESTRING (426355.1 492506...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $railways</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 1116 features and 1 field</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 1032 features and 1 field</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: LINESTRING</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: 408330 ymin: 4901482 xmax: 456400 ymax: 4937371</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: 408330 ymin: 4901482 xmax: 439360.8 ymax: 4937371</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Projected CRS: WGS 84 / UTM zone 35N</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> First 10 features:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          type                       geometry</span>
