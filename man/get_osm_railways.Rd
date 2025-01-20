@@ -4,7 +4,7 @@
 \alias{get_osm_railways}
 \title{Get OpenStreetMap railways}
 \usage{
-get_osm_railways(bb, crs)
+get_osm_railways(bb, crs = NULL)
 }
 \arguments{
 \item{bb}{Bounding box of class \code{bbox}}

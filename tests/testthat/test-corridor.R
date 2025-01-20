@@ -1,11 +1,26 @@
-test_that("river_buffer parameters can be configured via initial_corridor", {
+test_that("proper parameters must be provided depending on selected method", {
   river <- bucharest_osm$river_centerline
-  actual <- initial_corridor(river, buffer = 1)
-  expected <- river_buffer(river, buffer = 1)
-  expect_setequal(actual, expected)
+
+  # for "buffer" method, we need the "buffer" parameter
+  expect_error(initial_corridor(river, method = "buffer"),
+               "Buffer should be provided if `method` is `'buffer'`")
+  with_mocked_bindings(river_buffer = function(...) NULL, {
+    expect_no_error(initial_corridor(river, method = "buffer", buffer = 42))
+  })
+
+  # for "valley" method, we need the "dem" parameter
+  expect_error(initial_corridor(river, method = "valley"),
+               "DEM should be provided if `method` is `'valley'`")
+  with_mocked_bindings(river_valley = function(...) NULL, {
+    expect_no_error(initial_corridor(river, method = "valley", dem = 42))
+  })
+
+  # inexistent method raise an error
+  expect_error(initial_corridor(river, method = "crisp"),
+               "Unknown method to initialize river corridor: crisp")
 })
 
-test_that("River buffer properly implements a buffer function", {
+test_that("River buffer implements a buffer function", {
   river <- bucharest_osm$river_centerline
   actual <- river_buffer(river, buffer = 0.5)
   expected <- sf::st_buffer(river, 0.5)

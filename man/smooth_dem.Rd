@@ -9,8 +9,8 @@ smooth_dem(dem, method = "median", window = 5)
 \arguments{
 \item{dem}{raster data of dem}
 
-\item{method}{smoothing function to be used, e.g. "median".
-As accepted by focal}
+\item{method}{smoothing function to be used, e.g. "median",
+as accepted by \code{\link[terra:focal]{terra::focal()}}}
 
 \item{window}{size of smoothing kernel}
 }

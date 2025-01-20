@@ -4,12 +4,12 @@
 \alias{get_osm_river}
 \title{Get the river centreline and surface from OpenStreetMap}
 \usage{
-get_osm_river(river_name, bb, crs)
+get_osm_river(bb, river_name, crs = NULL)
 }
 \arguments{
-\item{river_name}{The name of the river}
-
 \item{bb}{Bounding box of class \code{bbox}}
+
+\item{river_name}{The name of the river}
 
 \item{crs}{Coordinate reference system as EPSG code}
 }
@@ -22,5 +22,5 @@ Get the river centreline and surface from OpenStreetMap
 \examples{
 bb <- get_osm_bb("Bucharest")
 crs <- get_utm_zone(bb)
-get_osm_river("Dâmbovița", bb, crs)
+get_osm_river(bb, "Dâmbovița", crs)
 }

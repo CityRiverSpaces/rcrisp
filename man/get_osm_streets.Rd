@@ -4,7 +4,7 @@
 \alias{get_osm_streets}
 \title{Get OpenStreetMap streets}
 \usage{
-get_osm_streets(bb, crs, highway_values = NULL)
+get_osm_streets(bb, crs = NULL, highway_values = NULL)
 }
 \arguments{
 \item{bb}{Bounding box of class \code{bbox}}

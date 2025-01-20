@@ -277,6 +277,18 @@ test_that("Filter network properly splits network across adjacent regions", {
   expect_length(nodes_area_2, 2)
 })
 
+test_that("Filter network drops smallest disconnected components", {
+  # p4 is within the area, but it is left out since it remains disconnected
+  # from the main network component
+  area <- sf::st_as_sfc(sf::st_bbox(c(xmin = -1, xmax = 4,
+                                      ymin = 0, ymax = 2)))
+  network_filtered <- filter_network(network, area)
+  edges_area <- sf::st_geometry(sf::st_as_sf(network_filtered, "edges"))
+  nodes_area <- sf::st_geometry(sf::st_as_sf(network_filtered, "nodes"))
+  expect_length(edges_area, 2)
+  expect_length(nodes_area, 3)
+})
+
 test_that("Network setup with real data", {
   edges <- bucharest_osm$streets
   network <- as_network(edges, clean = FALSE, flatten = FALSE)

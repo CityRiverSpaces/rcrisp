@@ -2,20 +2,18 @@
 % Please edit documentation in R/utils.R
 \name{as_bbox}
 \alias{as_bbox}
-\title{Get the bounding box from the x object. If the x does not have a CRS, WGS84
-is assumed.}
+\title{Get the bounding box from the x object}
 \usage{
 as_bbox(x)
 }
 \arguments{
-\item{x}{Simple feature object or a bounding box, provided either as a
-matrix (with x, y as rows and min, max as columns) or as a vector (xmin,
-ymin, xmax, ymax)}
+\item{x}{Simple feature object (or compatible) or a bounding box, provided
+either as a matrix (with x, y as rows and min, max as columns) or as a
+vector (xmin, ymin, xmax, ymax)}
 }
 \value{
 A bounding box as returned by \code{\link[sf:st_bbox]{sf::st_bbox()}}
 }
 \description{
-Get the bounding box from the x object. If the x does not have a CRS, WGS84
-is assumed.
+If the x does not have a CRS, WGS84 is assumed.
 }
