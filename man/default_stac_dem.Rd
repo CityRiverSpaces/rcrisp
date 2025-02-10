@@ -3,10 +3,10 @@
 \docType{data}
 \name{default_stac_dem}
 \alias{default_stac_dem}
-\title{Endpoint and collection ID of the default STAC colleciton where to access
+\title{Endpoint and collection ID of the default STAC collection where to access
 digital elevation model (DEM) data. This is the global Copernicus DEM 30
 dataset hosted on AWS, as listed in the EarthSearch STAC API endpoint.
-Note that AWS credentials need to be setup in order to access the data (not
+Note that AWS credentials need to be set up in order to access the data (not
 the catalog).
 References:
 \itemize{
@@ -22,10 +22,10 @@ An object of class \code{list} of length 2.
 default_stac_dem
 }
 \description{
-Endpoint and collection ID of the default STAC colleciton where to access
+Endpoint and collection ID of the default STAC collection where to access
 digital elevation model (DEM) data. This is the global Copernicus DEM 30
 dataset hosted on AWS, as listed in the EarthSearch STAC API endpoint.
-Note that AWS credentials need to be setup in order to access the data (not
+Note that AWS credentials need to be set up in order to access the data (not
 the catalog).
 References:
 \itemize{
