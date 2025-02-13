@@ -67,6 +67,7 @@ get_corridor <- function(
 #'   `initial_method` is `"buffer"`)
 #' @param dem Digital elevation model (DEM) of the region (only used if
 #'   `initial_method` is `"valley"`)
+#' @param bbox Bounding box defining the extent of the area of interest
 #'
 #' @return A simple feature geometry
 initial_corridor <- function(

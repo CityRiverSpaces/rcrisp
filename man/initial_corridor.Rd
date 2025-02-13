@@ -29,6 +29,8 @@ the implementation)
 
 \item{dem}{Digital elevation model (DEM) of the region (only used if
 \code{initial_method} is \code{"valley"})}
+
+\item{bbox}{Bounding box defining the extent of the area of interest}
 }
 \value{
 A simple feature geometry
