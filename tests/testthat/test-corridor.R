@@ -11,7 +11,7 @@ test_that("proper parameters must be provided depending on selected method", {
   # for "valley" method, we need the "dem" parameter
   expect_error(initial_corridor(river, method = "valley"),
                "DEM should be provided if `method` is `'valley'`")
-  with_mocked_bindings(river_valley = function(...) NULL, {
+  with_mocked_bindings(get_valley = function(...) NULL, {
     expect_no_error(initial_corridor(river, method = "valley", dem = 42))
   })
 
@@ -40,21 +40,82 @@ test_that("River buffer can trim to the region of interest", {
   expect_true(all(actual_bbox[c("xmax", "ymax")] <= bbox[c("xmax", "ymax")]))
 })
 
-test_that("Endpoints are found for two point intersections with bbox", {
+test_that("Endpoints are found for two intersections with network edges", {
   river <- sf::st_sfc(sf::st_linestring(cbind(c(-2, 0, 0), c(0, 0, -2))))
-  bbox <- sf::st_bbox(c(xmin = -1, xmax = 1, ymin = -1, ymax = 1))
-  actual <- corridor_end_points(river, bbox)
-  expected <- sf::st_sfc(sf::st_point(c(-1, 0)), sf::st_point(c(0, -1)))
+  network_edges <- sf::st_sfc(
+    sf::st_linestring(cbind(c(1, -1), c(-0.5, -0.5))),
+    sf::st_linestring(cbind(c(1, -1), c(0.5, 0.5))),
+    sf::st_linestring(cbind(c(0.5, 0.5), c(1, -1))),
+    sf::st_linestring(cbind(c(-0.5, -0.5), c(1, -1)))
+  )
+  actual <- corridor_end_points(river, network_edges)
+  expected <- sf::st_sfc(sf::st_point(c(0, -0.5)), sf::st_point(c(-0.5, 0)))
   expect_setequal(actual, expected)
 })
 
-test_that("Endpoints are found even for multiple intersections with bbox", {
-  skip("river crossing AoI in multiple points not yet implemented")
-  river <- sf::st_sfc(sf::st_linestring(cbind(c(-2, 0, 0),
-                                              c(1, 1, -2))))
-  bbox <- sf::st_bbox(c(xmin = -1, xmax = 1, ymin = -1, ymax = 1))
-  actual <- corridor_end_points(river, bbox)
-  expected <- sf::st_sfc(sf::st_point(c(0, 1)), sf::st_point(c(0, -1)))
+test_that("Endpoints are found for more intersections with network edges", {
+  river <- sf::st_sfc(sf::st_linestring(cbind(c(-2, 0, 0), c(0, 0, -2))))
+  network_edges <- sf::st_sfc(
+    sf::st_linestring(cbind(c(1, -1), c(-0.5, -0.5))),
+    sf::st_linestring(cbind(c(1, -1), c(-0.25, -0.25))),
+    sf::st_linestring(cbind(c(-0.25, -0.25), c(1, -1))),
+    sf::st_linestring(cbind(c(-0.5, -0.5), c(1, -1)))
+  )
+  actual <- corridor_end_points(river, network_edges)
+  expected <- sf::st_sfc(sf::st_point(c(0, -0.5)), sf::st_point(c(-0.5, 0)))
+  expect_setequal(actual, expected)
+})
+
+test_that("An error is raised for a single intersection with network edge", {
+  river <- sf::st_sfc(sf::st_linestring(cbind(c(-2, 0, 0), c(0, 0, -2))))
+  network_edges <- sf::st_sfc(
+    sf::st_linestring(cbind(c(1, -1), c(-0.5, -0.5))),
+    sf::st_linestring(cbind(c(0.5, 0.5), c(1, -1)))
+  )
+  expect_error(corridor_end_points(river, network_edges), "coincide")
+})
+
+test_that("Endpoints are found when the river is a multilinestring", {
+  river <- sf::st_sfc(c(
+    sf::st_linestring(cbind(c(-2, 0, 0), c(0, 0, -2))),
+    sf::st_linestring(cbind(c(-0.25, -0.25, 0), c(0, -0.25, -0.25)))
+  ))
+  network_edges <- sf::st_sfc(
+    sf::st_linestring(cbind(c(1, -1), c(-0.5, -0.5))),
+    sf::st_linestring(cbind(c(1, -1), c(0.5, 0.5))),
+    sf::st_linestring(cbind(c(0.5, 0.5), c(1, -1))),
+    sf::st_linestring(cbind(c(-0.5, -0.5), c(1, -1)))
+  )
+  actual <- corridor_end_points(river, network_edges)
+  expected <- sf::st_sfc(sf::st_point(c(0, -0.5)), sf::st_point(c(-0.5, 0)))
+  expect_setequal(actual, expected)
+})
+
+test_that("Endpoints are found when sfnetwork object is provided", {
+  river <- sf::st_sfc(sf::st_linestring(cbind(c(-2, 0, 0), c(0, 0, -2))))
+  network_edges <- sf::st_sfc(
+    sf::st_linestring(cbind(c(1, -1), c(-0.5, -0.5))),
+    sf::st_linestring(cbind(c(1, -1), c(0.5, 0.5))),
+    sf::st_linestring(cbind(c(0.5, 0.5), c(1, -1))),
+    sf::st_linestring(cbind(c(-0.5, -0.5), c(1, -1)))
+  )
+  network <- sfnetworks::as_sfnetwork(network_edges, directed = FALSE)
+  actual <- corridor_end_points(river, network)
+  expected <- sf::st_sfc(sf::st_point(c(0, -0.5)), sf::st_point(c(-0.5, 0)))
+  expect_setequal(actual, expected)
+})
+
+test_that("Endpoints are found when a bounding box is specified", {
+  river <- sf::st_sfc(sf::st_linestring(cbind(c(-2, 0, 0), c(0, 0, -2))))
+  network_edges <- sf::st_sfc(
+    sf::st_linestring(cbind(c(1, -1), c(-0.5, -0.5))),
+    sf::st_linestring(cbind(c(1, -1), c(-0.25, -0.25))),
+    sf::st_linestring(cbind(c(-0.25, -0.25), c(1, -1))),
+    sf::st_linestring(cbind(c(-0.5, -0.5), c(1, -1)))
+  )
+  bbox <- sf::st_bbox(c(xmin = 0, xmax = 1, ymin = -1, ymax = 1))
+  actual <- corridor_end_points(river, network_edges, aoi = bbox)
+  expected <- sf::st_sfc(sf::st_point(c(0, -0.25)), sf::st_point(c(0, -0.5)))
   expect_setequal(actual, expected)
 })
 
