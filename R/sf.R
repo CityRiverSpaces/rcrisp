@@ -13,6 +13,15 @@ as_polygon <- function(lines) {
 }
 
 #' @noRd
+as_sfc <- function(x) {
+  if (inherits(x, "sfc")) {
+    return(x)
+  } else {
+    sf::st_as_sfc(x)
+  }
+}
+
+#' @noRd
 find_smallest <- function(geometry) {
   area <- sf::st_area(geometry)
   return(which.min(area))
