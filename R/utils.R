@@ -7,11 +7,11 @@ set_units_like <- function(x, y) {
   has_units_x <- inherits(x, "units")
   has_units_y <- inherits(y, "units")
   if ((!has_units_x) && (!has_units_y)) {
-    return(x)
+    x
   } else if (has_units_y) {
-    return(units::set_units(x, units(y), mode = "standard"))
+    units::set_units(x, units(y), mode = "standard")
   } else {
-    return(units::drop_units(x))
+    units::drop_units(x)
   }
 }
 
@@ -86,9 +86,9 @@ reproject <- function(x, crs, ...) {
   if (inherits(x, "SpatRaster")) {
     # terra::crs does not support a numeric value as CRS, convert to character
     if (inherits(crs, "numeric")) crs <- sprintf("EPSG:%s", crs)
-    return(terra::project(x, crs, ...))
+    terra::project(x, crs, ...)
   } else if (inherits(x, c("bbox", "sfc", "sf"))) {
-    return(sf::st_transform(x, crs, ...))
+    sf::st_transform(x, crs, ...)
   } else {
     stop(sprintf("Cannot reproject object type: %s", class(x)))
   }
