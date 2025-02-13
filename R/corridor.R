@@ -76,12 +76,12 @@ initial_corridor <- function(
     if (is.null(buffer)) {
       stop("Buffer should be provided if `method` is `'buffer'`")
     }
-    return(river_buffer(river, buffer, bbox = bbox))
+    river_buffer(river, buffer, bbox = bbox)
   } else if (method == "valley") {
     if (is.null(dem)) {
       stop("DEM should be provided if `method` is `'valley'`")
     }
-    return(get_valley(dem, river, bbox = bbox))
+    get_valley(dem, river, bbox = bbox)
   } else {
     stop(
       sprintf("Unknown method to initialize river corridor: %s", method)
@@ -103,9 +103,9 @@ river_buffer <- function(river, buffer, bbox = NULL) {
   river_buf <- sf::st_buffer(river, buffer)
   river_buf_union <- sf::st_union(river_buf)
   if (!is.null(bbox)) {
-    return(sf::st_crop(river_buf_union, bbox))
+    sf::st_crop(river_buf_union, bbox)
   } else {
-    return(river_buf_union)
+    river_buf_union
   }
 }
 
@@ -168,7 +168,7 @@ corridor_end_points <- function(river, network, aoi = NULL) {
   if (end_points[1] == end_points[2]) {
     stop("Corridor start- and end-points coincide!")
   }
-  return(end_points)
+  end_points
 }
 
 #' Split the area of interest (AoI) by a river.
@@ -191,9 +191,9 @@ split_aoi <- function(bbox, river) {
       dplyr::arrange(-.data$area)
 
     # Return the geometries of the two largest fragments
-    return(sf::st_geometry(regions_sorted[1:2, ]))
+    sf::st_geometry(regions_sorted[1:2, ])
   } else {
-    return(regions)
+    regions
   }
 }
 
