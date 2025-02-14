@@ -21,7 +21,7 @@ get_corridor <- function(
   network, river_centerline, river_surface, bbox, initial_method = "valley",
   buffer = NULL, dem = NULL, capping_method = "direct"
 ) {
-  # Drop all features of river centerline and surface but the geometries
+  # Drop all attributes of river centerline and surface but the geometries
   river_centerline <- sf::st_geometry(river_centerline)
   river_surface <- sf::st_geometry(river_surface)
 
