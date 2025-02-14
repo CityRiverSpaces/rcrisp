@@ -147,7 +147,7 @@ refine_segments <- function(blocks, river_centerline, corridor) {
     blocks <- merge_blocks(blocks, index_not_intersect_both_edges,
                            method = "smallest")
   }
-  return(blocks)
+  blocks
 }
 
 #' Merge a set of blocks to adjacent ones
@@ -207,5 +207,5 @@ merge_block <- function(targets, block, method = "longest-intersection") {
   }
   merged <- sf::st_union(targets[index_to_merge], block)
   others <- targets[!seq_along(targets) %in% index_to_merge]
-  return(c(others, merged))
+  c(others, merged)
 }

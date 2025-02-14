@@ -28,7 +28,7 @@ osmdata_as_sf <- function(key, value, bb) {
 #' get_osm_bb("Bucharest")
 get_osm_bb <- function(city_name) {
   bb <- osmdata::getbb(city_name)
-  return(as_bbox(bb))
+  as_bbox(bb)
 }
 
 #' Retrieve OpenStreetMap data for a given location
@@ -57,7 +57,7 @@ get_osmdata <- function(bb, city_name, river_name, crs = NULL) {
   srteets <- get_osm_streets(bb, crs = crs)
   railways <- get_osm_railways(bb, crs = crs)
 
-  osm_data <- list(
+  list(
     bb = bb,
     boundary = boundary,
     river_centerline = river$centerline,
@@ -65,8 +65,6 @@ get_osmdata <- function(bb, city_name, river_name, crs = NULL) {
     streets = srteets,
     railways = railways
   )
-
-  return(osm_data)
 }
 
 #' Get the city boundary from OpenStreetMap
@@ -166,8 +164,7 @@ get_osm_river <- function(bb, river_name, crs = NULL) {
     river_surface <- sf::st_transform(river_surface, crs)
   }
 
-  return(list(centerline = river_centerline,
-              surface = river_surface))
+  list(centerline = river_centerline, surface = river_surface)
 }
 
 #' Get OpenStreetMap streets
@@ -209,7 +206,7 @@ get_osm_streets <- function(bb, crs = NULL, highway_values = NULL) {
 
   if (!is.null(crs)) streets_lines <- sf::st_transform(streets_lines, crs)
 
-  return(streets_lines)
+  streets_lines
 }
 
 #' Get OpenStreetMap railways
@@ -233,5 +230,5 @@ get_osm_railways <- function(bb, crs = NULL) {
 
   if (!is.null(crs)) railways_lines <- sf::st_transform(railways_lines, crs)
 
-  return(railways_lines)
+  railways_lines
 }

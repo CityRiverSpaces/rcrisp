@@ -12,7 +12,7 @@ as_network <- function(edges, flatten = TRUE, clean = TRUE) {
   network <- sfnetworks::as_sfnetwork(edges, directed = FALSE)
   if (flatten) network <- flatten_network(network)
   if (clean) network <- clean_network(network)
-  return(network)
+  network
 }
 
 #' Flatten a network by adding points at apparent intersections.
@@ -271,7 +271,7 @@ shortest_path <- function(network, from, to, weights = "weight") {
       path <- sf::st_reverse(path)
     }
   }
-  return(path)
+  path
 }
 
 #' Find the node in a network that is closest to a target geometry.
@@ -317,8 +317,8 @@ get_intersecting_edges <- function(network, geometry, index = FALSE) {
   edges <- sf::st_as_sf(network, "edges")
   intersects <- sf::st_intersects(edges, geometry, sparse = FALSE)
   if (index) {
-    return(which(intersects))
+    which(intersects)
   } else {
-    return(edges[intersects, ])
+    edges[intersects, ]
   }
 }

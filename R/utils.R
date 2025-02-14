@@ -7,11 +7,11 @@ set_units_like <- function(x, y) {
   has_units_x <- inherits(x, "units")
   has_units_y <- inherits(y, "units")
   if ((!has_units_x) && (!has_units_y)) {
-    return(x)
+    x
   } else if (has_units_y) {
-    return(units::set_units(x, units(y), mode = "standard"))
+    units::set_units(x, units(y), mode = "standard")
   } else {
-    return(units::drop_units(x))
+    units::drop_units(x)
   }
 }
 
@@ -26,8 +26,7 @@ get_utm_zone <- function(x) {
   centroid_long <- (bb[["xmin"]] + bb[["xmax"]]) / 2
   centroid_lat <- (bb[["ymin"]] + bb[["ymax"]]) / 2
   base <- if (centroid_lat >= 0) 32600 else 32700
-  epsg_code <- base + floor((centroid_long + 180) / 6) + 1
-  return(epsg_code)
+  base + floor((centroid_long + 180) / 6) + 1
 }
 
 #' Get the bounding box from the x object
@@ -47,7 +46,7 @@ as_bbox <- function(x) {
   bbox <- sf::st_bbox(x)
   crs <- sf::st_crs(bbox)
   if (is.na(crs)) sf::st_crs(bbox) <- sf::st_crs("EPSG:4326")
-  return(bbox)
+  bbox
 }
 
 #' Apply a buffer region to a bounding box
@@ -71,8 +70,7 @@ buffer_bbox <- function(bbox, buffer) {
   if (is_bbox_longlat) {
     bbox_sfc_buffer <- sf::st_transform(bbox_sfc_buffer, sf::st_crs(bbox))
   }
-  bbox_buffer <- sf::st_bbox(bbox_sfc_buffer)
-  return(bbox_buffer)
+  sf::st_bbox(bbox_sfc_buffer)
 }
 
 #' Reproject a raster or vector dataset to the specified
@@ -88,9 +86,9 @@ reproject <- function(x, crs, ...) {
   if (inherits(x, "SpatRaster")) {
     # terra::crs does not support a numeric value as CRS, convert to character
     if (inherits(crs, "numeric")) crs <- sprintf("EPSG:%s", crs)
-    return(terra::project(x, crs, ...))
+    terra::project(x, crs, ...)
   } else if (inherits(x, c("bbox", "sfc", "sf"))) {
-    return(sf::st_transform(x, crs, ...))
+    sf::st_transform(x, crs, ...)
   } else {
     stop(sprintf("Cannot reproject object type: %s", class(x)))
   }

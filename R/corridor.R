@@ -21,14 +21,17 @@ get_corridor <- function(
   network, river_centerline, river_surface, bbox, initial_method = "valley",
   buffer = NULL, dem = NULL, capping_method = "direct"
 ) {
+  # Drop all attributes of river centerline and surface but the geometries
+  river_centerline <- sf::st_geometry(river_centerline)
+  river_surface <- sf::st_geometry(river_surface)
 
   # Draw the initial corridor geometry within the area of interest
   river <- c(river_centerline, river_surface)
   corridor_init <- initial_corridor(river, method = initial_method,
                                     buffer = buffer, dem = dem, bbox = bbox)
 
-  # Find the corridor end points
-  end_points <- corridor_end_points(river_centerline, bbox)
+  # Pick the corridor end points
+  end_points <- corridor_end_points(river_centerline, network, aoi = bbox)
 
   # Split the area of interest along the river centerline
   regions <- split_aoi(bbox, river_centerline)
@@ -58,7 +61,8 @@ get_corridor <- function(
 #'   - "buffer": add a fixed buffer region to the river geometry (see
 #'     [river_buffer()])
 #'   - "valley" (default): use the river valley boundary, as estimated from the
-#'     provided digital elevation model (DEM, see [river_valley()])
+#'     provided digital elevation model (DEM, see [get_valley()] for details on
+#'     the implementation)
 #' @param buffer Buffer region to add to the river geometry (only used if
 #'   `initial_method` is `"buffer"`)
 #' @param dem Digital elevation model (DEM) of the region (only used if
@@ -73,12 +77,12 @@ initial_corridor <- function(
     if (is.null(buffer)) {
       stop("Buffer should be provided if `method` is `'buffer'`")
     }
-    return(river_buffer(river, buffer, bbox = bbox))
+    river_buffer(river, buffer, bbox = bbox)
   } else if (method == "valley") {
     if (is.null(dem)) {
       stop("DEM should be provided if `method` is `'valley'`")
     }
-    return(river_valley(river, dem, bbox = bbox))
+    get_valley(dem, river, bbox = bbox)
   } else {
     stop(
       sprintf("Unknown method to initialize river corridor: %s", method)
@@ -87,6 +91,9 @@ initial_corridor <- function(
 }
 
 #' Draw a corridor as a fixed buffer region around a river.
+#'
+#' The river geometry may consist of multiple spatial features, these are merged
+#' after applying the buffer.
 #'
 #' @param river A simple feature geometry representing the river
 #' @param buffer Size of the buffer (in the river's CRS units)
@@ -97,40 +104,72 @@ river_buffer <- function(river, buffer, bbox = NULL) {
   river_buf <- sf::st_buffer(river, buffer)
   river_buf_union <- sf::st_union(river_buf)
   if (!is.null(bbox)) {
-    return(sf::st_crop(river_buf_union, bbox))
+    sf::st_crop(river_buf_union, bbox)
   } else {
-    return(river_buf_union)
+    river_buf_union
   }
-}
-
-#' Draw a corridor as an estimate of the river valley.
-#'
-#' The valley is drawn on a digital elevation model (DEM) of the area,
-#' see [get_valley()] for details on the implementation.
-#'
-#' @param river A simple feature geometry representing the river
-#' @param dem The DEM of the area as a terra SpatRaster object
-#' @param bbox Bounding box defining the extent of the area of interest
-#'
-#' @return A simple feature geometry
-river_valley <- function(river, dem, bbox = NULL) {
-  get_valley(dem, river, bbox = bbox)
 }
 
 #' Find the corridor end points.
 #'
-#' Using the river center line and the bounding box of the area of interest,
-#' determine the extremes (start and end point) of the river corridor.
+#' Determine the extremes (start and end point) of the river corridor
+#' using the river center line and the spatial network used for the delineation.
+#' The end points are selected as the most external river crossing edges of the
+#' network within the area of interest. If the river intersects the
+#' area of interest multiple times, only the longest intersecting segment is
+#' considered here.
 #'
 #' @param river A simple feature geometry representing the river centerline
-#' @param bbox Bounding box defining the extent of the area of interest
+#' @param network The spatial network used for the delineation, either provided
+#'   as an [`sfnetworks::sfnetwork`] or as an [`sf::sf`]/[`sf::sfc`] object
+#'   (edges only)
+#' @param aoi Area of interest, provided as a bounding box or as polygon. If not
+#'   given, it is taken as the bounding box of the spatial network
 #'
 #' @return A simple feature geometry including a pair of points
-corridor_end_points <- function(river, bbox) {
-  aoi <- sf::st_as_sfc(bbox)
-  aoi_boundary <- sf::st_boundary(aoi)
-  intersections <- sf::st_intersection(river, aoi_boundary)
-  sf::st_cast(intersections, "POINT")
+corridor_end_points <- function(river, network, aoi = NULL) {
+  # Only consider the edges of the spatial network
+  spat_net_edges <- sf::st_geometry(sf::st_as_sf(network, "edges"))
+
+  # Set area of interest as a polygon, even if not defined
+  if (is.null(aoi)) aoi <- sf::st_bbox(spat_net_edges)
+  aoi <- as_sfc(aoi)
+
+  # Clip the river geometry using the area of interest. This might lead to
+  # multiple river segments
+  river_segments <- sf::st_intersection(aoi, sf::st_cast(river, "LINESTRING"))
+
+  # Build a spatial network using the river segments and select the connected
+  # component with overall longest edge length
+  river_network <- as_network(river_segments, flatten = FALSE, clean = FALSE)
+  components <- tidygraph::morph(river_network, tidygraph::to_components)
+  sum_edge_lengths <- function(x) sum(sf::st_length(sf::st_as_sf(x, "edges")))
+  edge_lengths <- sapply(components, sum_edge_lengths)
+  river_network <- components[[which.max(edge_lengths)]]
+  river_network <- clean_network(river_network)
+
+  # Find intersections with the spatial network, and add these points as nodes
+  # to the river network. These nodes are the candidates corridor end points
+  river_network_edges <- sf::st_geometry(sf::st_as_sf(river_network, "edges"))
+  intersections <- sf::st_intersection(river_network_edges, spat_net_edges)
+  river_network <- sfnetworks::st_network_blend(river_network, intersections)
+  nodes <- nearest_node(river_network, intersections)
+
+  # Pick a reference point on the selected river segment, either up- or down-
+  # stream from all crossings. Pick this as the closest node to the aoi boundary
+  reference <- nearest_node(river_network, sf::st_boundary(aoi))
+
+  # Compute the network distance from the reference node to all candidate end
+  # points. The closest and furthest nodes are selected as corridor end points
+  river_network <- add_weights(river_network, weight_name = "weight")
+  distances <- sfnetworks::st_network_cost(river_network, from = reference,
+                                           to = nodes, weights = "weight")
+  end_points <- c(nodes[which.min(distances[1, ])],
+                  nodes[which.max(distances[1, ])])
+  if (end_points[1] == end_points[2]) {
+    stop("Corridor start- and end-points coincide!")
+  }
+  end_points
 }
 
 #' Split the area of interest (AoI) by a river.
@@ -153,9 +192,9 @@ split_aoi <- function(bbox, river) {
       dplyr::arrange(-.data$area)
 
     # Return the geometries of the two largest fragments
-    return(sf::st_geometry(regions_sorted[1:2, ]))
+    sf::st_geometry(regions_sorted[1:2, ])
   } else {
-    return(regions)
+    regions
   }
 }
 
