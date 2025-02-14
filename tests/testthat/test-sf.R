@@ -3,7 +3,7 @@ test_that("Splitting a geometry by a complex line returns more regions", {
                        sf::st_linestring(cbind(c(-0.5, 0, 0.5), c(0, 0.5, 0)))))
   geometry <- sf::st_sfc(sf::st_polygon(list(cbind(c(-1, -1, 1, 1, -1),
                                                    c(-1, 1, 1, -1, -1)))))
-  regions <- split(geometry, line)
+  regions <- split_by(geometry, line)
   expect_equal(length(regions), 3)
 })
 
@@ -12,6 +12,6 @@ test_that("Splitting a geometry by a complex line still returns two edges", {
                        sf::st_linestring(cbind(c(-0.5, 0, 0.5), c(0, 0.5, 0)))))
   geometry <- sf::st_sfc(sf::st_polygon(list(cbind(c(-1, -1, 1, 1, -1),
                                                    c(-1, 1, 1, -1, -1)))))
-  edges <- split(geometry, line, boundary = TRUE)
+  edges <- split_by(geometry, line, boundary = TRUE)
   expect_equal(length(edges), 2)
 })

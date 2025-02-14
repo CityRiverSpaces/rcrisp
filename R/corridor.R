@@ -144,7 +144,7 @@ corridor_end_points <- function(river, bbox) {
 #' @return A simple feature geometry set of two areas of interest
 #' @importFrom rlang .data
 split_aoi <- function(bbox, river) {
-  regions <- split(sf::st_as_sfc(bbox), river)
+  regions <- split_by(sf::st_as_sfc(bbox), river)
 
   if (length(regions) > 2) {
     # Sort fragments according to area in descending order
