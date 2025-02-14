@@ -53,7 +53,7 @@ delineate_corridor <- function(
   return(corridor)
 }
 
-#' Delineate riverspace surrounding a river
+#' Delineate the riverspace surrounding a river
 #'
 #' @param occluders Geometry of occluders
 #' @param river River centreline or surface

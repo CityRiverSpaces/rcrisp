@@ -2,13 +2,31 @@
 % Please edit documentation in R/delineate.R
 \name{delineate_riverspace}
 \alias{delineate_riverspace}
-\title{Delinate the riverspace.}
+\title{Delineate the riverspace surrounding a river}
 \usage{
-delineate_riverspace()
+delineate_riverspace(
+  occluders,
+  river,
+  density = 1/50,
+  rayno = 41,
+  raylen = 100
+)
+}
+\arguments{
+\item{occluders}{Geometry of occluders}
+
+\item{river}{River centreline or surface}
+
+\item{rayno}{Number of rays}
+
+\item{raylen}{Length of rays}
 }
 \value{
-A simple feature geometry
+Polygon geometry with the riverspace
 }
 \description{
-Delinate the riverspace.
+Delineate the riverspace surrounding a river
+}
+\examples{
+get_riverspace(bucharest_osm$buildings, bucharest_osm$river_surface)
 }
