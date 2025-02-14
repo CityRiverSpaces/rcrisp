@@ -115,7 +115,7 @@ river_buffer <- function(river, buffer, bbox = NULL) {
 #' Determine the extremes (start and end point) of the river corridor
 #' using the river center line and the spatial network used for the delineation.
 #' The end points are selected as the most external river crossing edges of the
-#' network within the area of interest. Note that if the river intersects the
+#' network within the area of interest. If the river intersects the
 #' area of interest multiple times, only the longest intersecting segment is
 #' considered here.
 #'
