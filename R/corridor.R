@@ -121,8 +121,8 @@ river_buffer <- function(river, buffer, bbox = NULL) {
 #'
 #' @param river A simple feature geometry representing the river centerline
 #' @param network The spatial network used for the delineation, either provided
-#'   as an [`sfnetworks::sfnetwork`] or as an [`sf::sf`]/[`sf::sfc`] object (edges
-#'   only)
+#'   as an [`sfnetworks::sfnetwork`] or as an [`sf::sf`]/[`sf::sfc`] object
+#'   (edges only)
 #' @param aoi Area of interest, provided as a bounding box or as polygon. If not
 #'   given, it is taken as the bounding box of the spatial network
 #'
