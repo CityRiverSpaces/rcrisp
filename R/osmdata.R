@@ -68,7 +68,7 @@ get_osmdata <- function(city_name, river_name, crs = NULL, buffer = NULL) {
   river <- get_osm_river(river_name, bb, crs)
   srteets <- get_osm_streets(bb, crs)
   railways <- get_osm_railways(bb, crs)
-  buildings <- get_osm_buildings(bb, crs)
+  buildings <- get_osm_buildings(river, crs)
 
   osm_data <- list(
     bb = bb,
@@ -245,15 +245,38 @@ get_osm_railways <- function(bb, crs) {
 
 #' Get OpenStreetMap buildings
 #'
-#' @param bb Bounding box of class `bbox`
+#' Get buildings from OpenStreetMap within a given buffer around a river.
+#'
+#' @param river An sf object with the river centreline, surface or a list
+#'              with both.
 #' @param crs Coordinate reference system as EPSG code
+#' @param buffer A numeric with the buffer distance in meters. By default,
+#'               it is 1000.
 #'
 #' @return An sf object with the buildings
 #' @export
-get_osm_buildings <- function(bb, crs) {
-  buildings <- osmdata_as_sf("building", "", bb)
-  buildings <- buildings$osm_polygons |>
+get_osm_buildings <- function(river, crs, buffer = 1000) {
+
+  if (is.list(river)) river <- do.call(c, river)
+
+  river_buffer <- river |>
+    sf::st_buffer(buffer) |>
+    sf::st_union() |>
+    sf::st_transform(4326)
+
+  river_bb <- river_buffer |>
+    sf::st_bbox()
+
+  river_buffer <- river_buffer |>
     sf::st_transform(crs)
+
+  buildings <- osmdata_as_sf("building", "", river_bb)
+
+  buildings <- buildings$osm_polygons |>
+    sf::st_transform(crs) |>
+    sf::st_filter(river_buffer, .predicate = sf::st_intersects) |>
+    dplyr::filter(building != "NULL") |>
+    sf::st_geometry()
 
   return(buildings)
 }
