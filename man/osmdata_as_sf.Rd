@@ -4,7 +4,7 @@
 \alias{osmdata_as_sf}
 \title{Retrieve OpenStreetMap data as sf object}
 \usage{
-osmdata_as_sf(key, value, bb)
+osmdata_as_sf(key, value, bb, force_download = FALSE)
 }
 \arguments{
 \item{key}{A character string with the key to filter the data}
@@ -13,10 +13,14 @@ osmdata_as_sf(key, value, bb)
 
 \item{bb}{A bounding box, provided either as a matrix (rows for "x", "y",
 columns for "min", "max") or as a vector ("xmin", "ymin", "xmax", "ymax")}
+
+\item{force_download}{Download data even cached data is available}
 }
 \value{
 An sf object with the retrieved OpenStreetMap data
 }
 \description{
-Query the Overpass API for a key:value pair within a given bounding box.
+Query the Overpass API for a key:value pair within a given bounding box
+(provided as lat/lon coordiates). Results are cached, so that new queries
+with the same input parameters will be loaded from disk.
 }

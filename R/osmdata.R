@@ -1,20 +1,35 @@
 #' Retrieve OpenStreetMap data as sf object
 #'
-#' Query the Overpass API for a key:value pair within a given bounding box.
+#' Query the Overpass API for a key:value pair within a given bounding box
+#' (provided as lat/lon coordiates). Results are cached, so that new queries
+#' with the same input parameters will be loaded from disk.
 #'
 #' @param key A character string with the key to filter the data
 #' @param value A character string with the value to filter the data
 #' @param bb A bounding box, provided either as a matrix (rows for "x", "y",
 #'   columns for "min", "max") or as a vector ("xmin", "ymin", "xmax", "ymax")
+#' @param force_download Download data even cached data is available
 #'
 #' @return An sf object with the retrieved OpenStreetMap data
 #' @export
-osmdata_as_sf <- function(key, value, bb) {
+osmdata_as_sf <- function(key, value, bb, force_download = FALSE) {
   bbox <- as_bbox(bb)
-  bbox |>
+
+  filepath <- get_osmdata_cache_filepath(key, value, bbox)
+
+  if (file.exists(filepath) && !force_download) {
+    osmdata_sf <- read_data_from_cache(filepath)
+    return(osmdata_sf)
+  }
+
+  osmdata_sf <- bb |>
     osmdata::opq() |>
     osmdata::add_osm_feature(key = key, value = value) |>
     osmdata::osmdata_sf()
+
+  write_data_to_cache(osmdata_sf, filepath)
+
+  osmdata_sf
 }
 
 #' Get the bounding box of a city

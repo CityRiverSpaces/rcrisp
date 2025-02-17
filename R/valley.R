@@ -107,27 +107,34 @@ get_stac_asset_urls <- function(bb, endpoint, collection) {
     rstac::assets_url()
 }
 
-#' Retrieve STAC records (of a DEM) corresponding to a list of asset urls,
-#' crop and merge with a specified bounding box to create a dem of the
-#' specified region
+#' Retrieve DEM data from a list of STAC assets
+#'
+#' Load DEM data from a list of tiles, crop and merge using a given bounding
+#' box to create a raster DEM for the specified region. Results are cached, so
+#' that new queries with the same input parameters will be loaded from disk.
 #'
 #' @param bb A bounding box, provided either as a matrix (rows for "x", "y",
 #'   columns for "min", "max") or as a vector ("xmin", "ymin", "xmax", "ymax")
-#' @param raster_urlpaths a list of STAC records to be retrieved
+#' @param tile_urls A list of tiles where to read the DEM data from
+#' @param force_download
 #'
-#' @return A a merged dem from retrieved assets cropped to the bounding box
+#' @return Raster DEM, retrieved and retiled to the given bounding box
 #' @export
-load_raster <- function(bb, raster_urlpaths) {
+load_dem <- function(bb, tile_urls, force_download = FALSE) {
   bbox <- as_bbox(bb)
-  cropped <- raster_urlpaths |>
-    lapply(terra::rast) |>
-    # snap spatial extent outward to include pixels crossed by the boundary
-    lapply(terra::crop, terra::ext(bbox), snap = "out")
-  if (length(cropped) > 1) {
-    do.call(terra::merge, args = cropped)
-  } else {
-    cropped[[1]]
+
+  filepath <- get_dem_cache_filepath(tile_urls, bbox)
+
+  if (file.exists(filepath) && !force_download) {
+    dem <- read_data_from_cache(filepath, unwrap = TRUE)
+    return(dem)
   }
+
+  dem <- load_raster(tile_urls, bbox = bb)
+
+  write_data_to_cache(dem, filepath, wrap = TRUE)
+
+  dem
 }
 
 #' Write DEM to cloud optimized GeoTiff file as specified location

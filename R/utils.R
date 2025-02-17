@@ -93,3 +93,25 @@ reproject <- function(x, crs, ...) {
     stop(sprintf("Cannot reproject object type: %s", class(x)))
   }
 }
+
+#' Load raster data from one or multiple (remote) files
+#'
+#' If a bounding box is provided, the file(s) are cropped for the given extent.
+#' The resulting rasters are then merged using [`terra::merge`].
+#'
+#' @param urlpaths Path or URL to the raster file(s)
+#' @param bbox A bounding box
+#'
+#' @return Raster data as a [`terra::SpatRaster`] object
+load_raster <- function(urlpaths, bbox = NULL) {
+  rasters <- lapply(urlpaths, terra::rast)
+  if (!is.null(bbox)) {
+    # snap spatial extent outward to include pixels crossed by the boundary
+    rasters <- lapply(terra::crop, terra::ext(bbox), snap = "out")
+  }
+  if (length(rasters) > 1) {
+    do.call(terra::merge, args = rasters)
+  } else {
+    rasters[[1]]
+  }
+}
