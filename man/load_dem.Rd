@@ -12,7 +12,7 @@ columns for "min", "max") or as a vector ("xmin", "ymin", "xmax", "ymax")}
 
 \item{tile_urls}{A list of tiles where to read the DEM data from}
 
-\item{force_download}{}
+\item{force_download}{Download data even if cached data is available}
 }
 \value{
 Raster DEM, retrieved and retiled to the given bounding box

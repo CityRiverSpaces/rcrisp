@@ -11,10 +11,10 @@ write_data_to_cache(x, filepath, wrap = FALSE, quiet = FALSE)
 
 \item{filepath}{Path where to serialize x, as a character string}
 
-\item{quiet}{Omit warning on cache file being written}
-
-\item{unwrap}{Whether the object should be "packed" before serialization (as
+\item{wrap}{Whether the object should be "packed" before serialization (as
 required by \code{\link[terra:SpatRaster-class]{terra::SpatRaster}} objects)}
+
+\item{quiet}{Omit warning on cache file being written}
 }
 \value{
 \code{NULL} invisibly

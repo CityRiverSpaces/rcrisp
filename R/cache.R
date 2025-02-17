@@ -25,7 +25,7 @@ cache_directory <- function() {
 #'
 #' @param key A character string with the key to filter the data
 #' @param value A character string with the value to filter the data
-#' @param bb A bounding box
+#' @param bbox A bounding box
 #'
 #' @return A character string representing the file path
 get_osmdata_cache_filepath <- function(key, value, bbox) {
@@ -104,7 +104,7 @@ read_data_from_cache <- function(filepath, unwrap = FALSE, quiet = FALSE) {
 #'
 #' @param x Object to serialize to a file
 #' @param filepath Path where to serialize x, as a character string
-#' @param unwrap Whether the object should be "packed" before serialization (as
+#' @param wrap Whether the object should be "packed" before serialization (as
 #'   required by [`terra::SpatRaster`] objects)
 #' @param quiet Omit warning on cache file being written
 #'

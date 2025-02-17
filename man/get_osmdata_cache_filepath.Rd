@@ -11,7 +11,7 @@ get_osmdata_cache_filepath(key, value, bbox)
 
 \item{value}{A character string with the value to filter the data}
 
-\item{bb}{A bounding box}
+\item{bbox}{A bounding box}
 }
 \value{
 A character string representing the file path

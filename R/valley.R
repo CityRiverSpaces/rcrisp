@@ -116,7 +116,7 @@ get_stac_asset_urls <- function(bb, endpoint, collection) {
 #' @param bb A bounding box, provided either as a matrix (rows for "x", "y",
 #'   columns for "min", "max") or as a vector ("xmin", "ymin", "xmax", "ymax")
 #' @param tile_urls A list of tiles where to read the DEM data from
-#' @param force_download
+#' @param force_download Download data even if cached data is available
 #'
 #' @return Raster DEM, retrieved and retiled to the given bounding box
 #' @export

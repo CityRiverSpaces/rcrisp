@@ -14,7 +14,7 @@ osmdata_as_sf(key, value, bb, force_download = FALSE)
 \item{bb}{A bounding box, provided either as a matrix (rows for "x", "y",
 columns for "min", "max") or as a vector ("xmin", "ymin", "xmax", "ymax")}
 
-\item{force_download}{Download data even cached data is available}
+\item{force_download}{Download data even if cached data is available}
 }
 \value{
 An sf object with the retrieved OpenStreetMap data

@@ -8,7 +8,7 @@
 #' @param value A character string with the value to filter the data
 #' @param bb A bounding box, provided either as a matrix (rows for "x", "y",
 #'   columns for "min", "max") or as a vector ("xmin", "ymin", "xmax", "ymax")
-#' @param force_download Download data even cached data is available
+#' @param force_download Download data even if cached data is available
 #'
 #' @return An sf object with the retrieved OpenStreetMap data
 #' @export
