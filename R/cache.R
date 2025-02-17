@@ -12,7 +12,7 @@ cache_directory <- function() {
   default_dir <- file.path(Sys.getenv("HOME", "."), ".cache", "CRiSp")
   cache_dir <- Sys.getenv("CRISP_CACHE_DIRECTORY", default_dir)
   if (!dir.exists(cache_dir)) {
-    dir.create(cache_dir)
+    dir.create(cache_dir, recursive = TRUE)
   }
   normalizePath(cache_dir)
 }
