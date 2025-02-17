@@ -90,7 +90,7 @@ get_osmdata <- function(bb, city_name, river_name, crs = NULL) {
 get_osm_city_boundary <- function(bb, city_name, crs = NULL, multiple = FALSE) {
   # Define a helper function to fetch the city boundary
   fetch_boundary <- function(key, value) {
-    CRiSp::osmdata_as_sf(key, value, bb)$osm_multipolygons |>
+    osmdata_as_sf(key, value, bb)$osm_multipolygons |>
       dplyr::filter(
         .data$`name:en` == stringr::str_extract(city_name, "^[^,]+") |
           .data$name == stringr::str_extract(city_name, "^[^,]+")
@@ -142,7 +142,7 @@ get_osm_city_boundary <- function(bb, city_name, crs = NULL, multiple = FALSE) {
 #' get_osm_river(bb, "Dâmbovița", crs)
 get_osm_river <- function(bb, river_name, crs = NULL) {
   # Get the river centreline
-  river_centerline <- CRiSp::osmdata_as_sf("waterway", "river", bb)
+  river_centerline <- osmdata_as_sf("waterway", "river", bb)
   river_centerline <- river_centerline$osm_multilines |>
     dplyr::filter(.data$name == river_name) |>
     # the query can return more features than actually intersecting the bb
@@ -150,7 +150,7 @@ get_osm_river <- function(bb, river_name, crs = NULL) {
     sf::st_geometry()
 
   # Get the river surface
-  river_surface <- CRiSp::osmdata_as_sf("natural", "water", bb)
+  river_surface <- osmdata_as_sf("natural", "water", bb)
   river_surface <- dplyr::bind_rows(river_surface$osm_polygons,
                                     river_surface$osm_multipolygons) |>
     sf::st_geometry() |>
