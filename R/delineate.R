@@ -64,7 +64,7 @@ delineate_corridor <- function(
 #' @export
 #'
 #' @examples
-#' get_riverspace(bucharest_osm$buildings, bucharest_osm$river_surface)
+#' delineate_riverspace(bucharest_osm$buildings, bucharest_osm$river_surface)
 delineate_riverspace <- function(occluders, river, density = 1/50,
                                  rayno = 41, raylen = 100) {
   vpoints <- visor::get_viewpoints(river, density = density)
