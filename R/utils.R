@@ -107,7 +107,7 @@ load_raster <- function(urlpaths, bbox = NULL) {
   rasters <- lapply(urlpaths, terra::rast)
   if (!is.null(bbox)) {
     # snap spatial extent outward to include pixels crossed by the boundary
-    rasters <- lapply(terra::crop, terra::ext(bbox), snap = "out")
+    rasters <- lapply(rasters, terra::crop, terra::ext(bbox), snap = "out")
   }
   if (length(rasters) > 1) {
     do.call(terra::merge, args = rasters)

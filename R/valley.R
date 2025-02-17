@@ -46,7 +46,7 @@ get_dem <- function(bb, dem_source = "STAC", stac_endpoint = NULL,
     }
     asset_urls <- get_stac_asset_urls(bbox, endpoint = stac_endpoint,
                                       collection = stac_collection)
-    dem <- load_raster(bbox, asset_urls)
+    dem <- load_dem(bbox, asset_urls)
   } else {
     stop(sprintf("DEM source %s unknown", dem_source))
   }

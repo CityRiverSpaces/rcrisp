@@ -54,7 +54,7 @@ get_dem_cache_filepath <- function(tile_urls, bbox) {
   tile_names <- sapply(
     tile_urls,
     # get the base name of the tile and strip its extension
-    \(x) sub(pattern = "(.*)\\..*$", replacement = "\\1", basename(x)),
+    \(x) sub(pattern = "(.*)\\..*$", replacement = "\\1", basename(x))
   )
   tiles_str <- paste(tile_names, collapse = "_")
 
