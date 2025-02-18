@@ -56,7 +56,7 @@ delineate_corridor <- function(
 #' Delineate the riverspace surrounding a river
 #'
 #' @param occluders Geometry of occluders
-#' @param river River centreline or surface
+#' @param river River surface
 #' @param rayno Number of rays
 #' @param raylen Length of rays
 #'
@@ -68,9 +68,10 @@ delineate_corridor <- function(
 delineate_riverspace <- function(occluders, river, density = 1/50,
                                  rayno = 41, raylen = 100) {
   vpoints <- visor::get_viewpoints(river, density = density)
-  isovists <- lapply(vpoints, \(vpoint) {
-    visor::get_isovist(occluders, vpoint, rayno, raylen)
-  })
-  sf::st_union(isovists)
+  isovists <- vector(mode = "list", length = length(vpoints))
+  for (i in seq_along(vpoints)) {
+    isovists[i] <- visor::get_isovist(occluders, vpoints[i], rayno, raylen)
+  }
+  sf::st_union(do.call(c, lapply(isovists, sf::st_sfc)))
 }
 
