@@ -25,12 +25,11 @@ interest
 }}
 
 \item{stac_endpoint}{URL of the STAC API endpoint (only used if \code{dem_source}
-is \code{"STAC"}). To be provided together with \code{stac_collection}, or leave
-blank to use defaults (see \code{\link{default_stac_dem}})}
+is \code{"STAC"}). For more info, see \code{\link[=get_stac_asset_urls]{get_stac_asset_urls()}}}
 
 \item{stac_collection}{Identifier of the STAC collection to be queried (only
-used if \code{dem_source} is \code{"STAC"}). To be provided together with
-\code{stac_endpoint}, or leave blank to use defaults (see \code{\link{default_stac_dem}})}
+used if \code{dem_source} is \code{"STAC"}). For more info, see
+\code{\link[=get_stac_asset_urls]{get_stac_asset_urls()}}}
 
 \item{crs}{Coordinate reference system (CRS) which to transform the DEM to}
 }
