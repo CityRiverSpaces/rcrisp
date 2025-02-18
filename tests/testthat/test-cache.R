@@ -5,7 +5,7 @@ temp_cache_dir <- function(env = parent.frame()) {
   # create temporary cache directory
   dir.create(cache_dir, recursive = TRUE)
   cache_dir <- normalizePath(cache_dir)
-  withr::defer(fs::dir_delete(cache_dir), env)
+  withr::defer(unlink(cache_dir, recursive = TRUE), env)
 
   # copy test files to the cache directory
   source_dir <- testthat::test_path("testdata", "cache")
