@@ -111,7 +111,7 @@ read_data_from_cache <- function(filepath, unwrap = FALSE, quiet = FALSE) {
 #' @return `NULL` invisibly
 write_data_to_cache <- function(x, filepath, wrap = FALSE, quiet = FALSE) {
   if (!quiet) {
-    warning(sprintf("Saving data to cache directory: %s", filepath))
+    message(sprintf("Saving data to cache directory: %s", filepath))
   }
   if (wrap) {
     x <- terra::wrap(x)
