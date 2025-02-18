@@ -100,7 +100,7 @@ read_data_from_cache <- function(filepath, unwrap = FALSE, quiet = FALSE) {
 
 #' Write data to the cache directory
 #'
-#' For the directory used for caching see [`cache_directory()`].
+#' Write object in a serialised form (RDS) to a cache directory. For the directory used for caching see [`cache_directory()`].
 #'
 #' @param x Object to serialize to a file
 #' @param filepath Path where to serialize x, as a character string
