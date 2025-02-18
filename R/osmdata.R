@@ -22,14 +22,25 @@ osmdata_as_sf <- function(key, value, bb, force_download = FALSE) {
     return(osmdata_sf)
   }
 
-  osmdata_sf <- bb |>
-    osmdata::opq() |>
-    osmdata::add_osm_feature(key = key, value = value) |>
-    osmdata::osmdata_sf()
+  osmdata_sf <- osmdata_query(key, value, bbox)
 
   write_data_to_cache(osmdata_sf, filepath)
 
   osmdata_sf
+}
+
+#' Query the Overpass API for a key:value pair within a bounding box
+#'
+#' @param key A character string with the key to filter the data
+#' @param value A character string with the value to filter the data
+#' @param bb A bounding box, in lat/lon coordinates
+#'
+#' @return An sf object with the retrieved OpenStreetMap data
+osmdata_query <- function(key, value, bb) {
+  bb |>
+    osmdata::opq() |>
+    osmdata::add_osm_feature(key = key, value = value) |>
+    osmdata::osmdata_sf()
 }
 
 #' Get the bounding box of a city
