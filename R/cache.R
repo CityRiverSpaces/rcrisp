@@ -106,7 +106,7 @@ read_data_from_cache <- function(filepath, unwrap = FALSE, quiet = FALSE) {
 #' @param filepath Path where to serialize x, as a character string
 #' @param wrap Whether the object should be "packed" before serialization (as
 #'   required by [`terra::SpatRaster`] objects)
-#' @param quiet Omit warning on cache file being written
+#' @param quiet Omit message on cache file being written
 #'
 #' @return `NULL` invisibly
 write_data_to_cache <- function(x, filepath, wrap = FALSE, quiet = FALSE) {
