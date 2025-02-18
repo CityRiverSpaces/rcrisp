@@ -74,11 +74,11 @@ test_that("Loading/saving warnings can be suppressed via argument", {
   # check whether we can write a test element to the cache, with and without
   # warnings
   x <- sf::st_sfc(sf::st_point(c(0, 1)))
-  expect_warning(
+  expect_message(
     write_data_to_cache(x, file.path(cache_dir, "point.rds")),
     "Saving data to cache directory"
   )
-  expect_no_warning(
+  expect_no_message(
     write_data_to_cache(x, file.path(cache_dir, "point.rds"), quiet = TRUE),
   )
 })
