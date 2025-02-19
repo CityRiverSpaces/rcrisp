@@ -30,16 +30,18 @@ default_stac_dem <- list(
 #'   used if `dem_source` is `"STAC"`). For more info, see
 #'   [`get_stac_asset_urls()`]
 #' @param crs Coordinate reference system (CRS) which to transform the DEM to
+#' @param force_download Download data even if cached data is available
 #'
 #' @return DEM as a terra SpatRaster object
 #' @export
 get_dem <- function(bb, dem_source = "STAC", stac_endpoint = NULL,
-                    stac_collection = NULL, crs = NULL) {
+                    stac_collection = NULL, crs = NULL,
+                    force_download = FALSE) {
   bbox <- as_bbox(bb)
   if (dem_source == "STAC") {
     asset_urls <- get_stac_asset_urls(bbox, endpoint = stac_endpoint,
                                       collection = stac_collection)
-    dem <- load_dem(bbox, asset_urls)
+    dem <- load_dem(bbox, asset_urls, force_download = force_download)
   } else {
     stop(sprintf("DEM source %s unknown", dem_source))
   }

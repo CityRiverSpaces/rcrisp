@@ -9,7 +9,8 @@ get_dem(
   dem_source = "STAC",
   stac_endpoint = NULL,
   stac_collection = NULL,
-  crs = NULL
+  crs = NULL,
+  force_download = FALSE
 )
 }
 \arguments{
@@ -32,6 +33,8 @@ used if \code{dem_source} is \code{"STAC"}). For more info, see
 \code{\link[=get_stac_asset_urls]{get_stac_asset_urls()}}}
 
 \item{crs}{Coordinate reference system (CRS) which to transform the DEM to}
+
+\item{force_download}{Download data even if cached data is available}
 }
 \value{
 DEM as a terra SpatRaster object

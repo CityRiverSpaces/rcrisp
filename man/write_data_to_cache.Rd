@@ -14,11 +14,12 @@ write_data_to_cache(x, filepath, wrap = FALSE, quiet = FALSE)
 \item{wrap}{Whether the object should be "packed" before serialization (as
 required by \code{\link[terra:SpatRaster-class]{terra::SpatRaster}} objects)}
 
-\item{quiet}{Omit warning on cache file being written}
+\item{quiet}{Omit message on cache file being written}
 }
 \value{
 \code{NULL} invisibly
 }
 \description{
-For the directory used for caching see \code{\link[=cache_directory]{cache_directory()}}.
+Write object in a serialised form (RDS) to a cache directory. For the
+directory used for caching see \code{\link[=cache_directory]{cache_directory()}}.
 }
