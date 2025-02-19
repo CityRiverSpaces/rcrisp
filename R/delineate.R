@@ -32,12 +32,13 @@ delineate_corridor <- function(
   capping_method = "direct", angle_threshold = 90, segments = FALSE,
   riverspace = FALSE, ...
 ) {
-  # Define the area of interest and (if not provided) the CRS
-  bbox <- get_osm_bb(city_name)
-  if (is.null(crs)) crs <- get_utm_zone(bbox)
 
-  # Retrieve all relevant OSM datasets within the area of interest
+  # Retrieve all relevant OSM datasets within the data_buffer
   osm_data <- get_osmdata(city_name, river_name, data_buffer, crs)
+
+  # Get the bounding box and (if not provided) the CRS
+  bbox <- as_bbox(osm_data$aoi)
+  if (is.null(crs)) crs <- get_utm_zone(osm_data$aoi)
 
   # If using the valley method, and the DEM is not provided, retrieve dataset
   if (initial_method == "valley" && is.null(dem)) {

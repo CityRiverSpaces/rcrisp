@@ -58,21 +58,25 @@ get_osmdata <- function(
   if (is.null(crs)) crs <- get_utm_zone(bb)
 
   boundary <- get_osm_city_boundary(bb, city_name, crs = crs)
+
+  # Retrieve the river center line and surface, cropped to bb
   river <- get_osm_river(bb, river_name, crs = crs)
 
   # Use the river center line as bounding object to retrieve streets and
   # railways
   bounding_obj <- sf::st_transform(river$centerline, sf::st_crs(bb))
 
-  # Define a buffer around the river center line
+  # Apply the buffer around the river center line
   if (!is.null(buffer_in_m)) {
     bounding_obj <- buffer_obj(bounding_obj, buffer_in_m)
   }
+
+  # Retrieve streets and railways
   streets <- get_osm_streets(bounding_obj, crs = crs)
   railways <- get_osm_railways(bounding_obj, crs = crs)
 
   list(
-    bb = bb,
+    aoi = bounding_obj,
     boundary = boundary,
     river_centerline = river$centerline,
     river_surface = river$surface,
