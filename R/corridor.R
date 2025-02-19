@@ -16,7 +16,7 @@
 #' @param dem Digital elevation model (DEM) of the region (only used if
 #'   `initial_method` is `"valley"`)
 #' @param max_iterations Maximum number of iterations employed to refine the
-#'   corridor edges (see [`corridor_edges()`]).
+#'   corridor edges (see [`corridor_edge()`]).
 #' @param capping_method The method employed to connect the corridor edge end
 #'   points (i.e. to "cap" the corridor). See [cap_corridor()] for
 #'   the available methods

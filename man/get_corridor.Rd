@@ -36,7 +36,7 @@ corridor (only used if \code{initial_method} is \code{"buffer"})}
 \code{initial_method} is \code{"valley"})}
 
 \item{max_iterations}{Maximum number of iterations employed to refine the
-corridor edges (see \code{\link[=corridor_edges]{corridor_edges()}}).}
+corridor edges (see \code{\link[=corridor_edge]{corridor_edge()}}).}
 
 \item{capping_method}{The method employed to connect the corridor edge end
 points (i.e. to "cap" the corridor). See \code{\link[=cap_corridor]{cap_corridor()}} for
