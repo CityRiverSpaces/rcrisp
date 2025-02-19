@@ -1,5 +1,9 @@
 #' Delineate a river corridor on a spatial network.
 #'
+#' The corridor edges on the two river banks are drawn on the provided spatial
+#' network starting from an initial definition of the corridor (based e.g. on
+#' the river valley).
+#'
 #' @param network The spatial network to be used for the delineation
 #' @param river_centerline A simple feature geometry representing the river
 #'   centerline
@@ -11,6 +15,8 @@
 #'   corridor (only used if `initial_method` is `"buffer"`)
 #' @param dem Digital elevation model (DEM) of the region (only used if
 #'   `initial_method` is `"valley"`)
+#' @param max_iterations Maximum number of iterations employed to refine the
+#'   corridor edges (see [`corridor_edges()`]).
 #' @param capping_method The method employed to connect the corridor edge end
 #'   points (i.e. to "cap" the corridor). See [cap_corridor()] for
 #'   the available methods
@@ -19,7 +25,7 @@
 #' @export
 get_corridor <- function(
   network, river_centerline, river_surface, bbox, initial_method = "valley",
-  buffer = NULL, dem = NULL, capping_method = "direct"
+  buffer = NULL, dem = NULL, max_iterations = 5, capping_method = "direct"
 ) {
   # Drop all attributes of river centerline and surface but the geometries
   river_centerline <- sf::st_geometry(river_centerline)
@@ -40,17 +46,17 @@ get_corridor <- function(
   # boundary through the just determined regions
   edges_init <- initial_edges(corridor_init, regions)
 
-  # Run the delineation, setting the initial corridor geometry as excluded area
+  # Also split the network over the two regions
   network_1 <- filter_network(network, regions[1])
-  edge_1 <- corridor_edge(network_1, end_points, edges_init[1], corridor_init)
   network_2 <- filter_network(network, regions[2])
-  edge_2 <- corridor_edge(network_2, end_points, edges_init[2], corridor_init)
 
-  # Run the delineation again, with the previously determined edges as targets.
-  # This refinement step has the effect of "smoothening" the edges
-  edge_1 <- corridor_edge(network_1, end_points, edge_1)
-  edge_2 <- corridor_edge(network_2, end_points, edge_2)
+  # Draw the edges on the spatial network
+  edge_1 <- corridor_edge(network_1, end_points, edges_init[1], corridor_init,
+                          max_iterations)
+  edge_2 <- corridor_edge(network_2, end_points, edges_init[2], corridor_init,
+                          max_iterations)
 
+  # Cap the corritor and return it
   cap_corridor(c(edge_1, edge_2), capping_method, network)
 }
 
@@ -217,18 +223,42 @@ initial_edges <- function(corridor_initial, regions) {
 
 #' Draw a corridor edge on the spatial network.
 #'
+#' The corridor edge is drawn on the network as a shortest-path link between a
+#' start- and an end-point. The weights in the shortest-path problem are set to
+#' account for a) network edge lengths, b) distance from an initial target edge
+#' geometry, and c) an excluded area where corridor edges are aimed not to go
+#' through. The procedure is iterative, with the identified corridor edge being
+#' used as target edge in the following iteration. This is found to result in
+#' "smoother" edges on the spatial network.
+#'
 #' @param network The spatial network used for the delineation
 #' @param end_points Target start- and end-point
 #' @param target_edge Target edge geometry to follow in the delineation
 #' @param exclude_area Region that we aim to exclude from the delineation
+#' @param max_iterations Maximum number of iterations employed to refine the
+#'   corridor edges
 #'
 #' @return A simple feature geometry representing the edge (i.e. a linestring)
-corridor_edge <- function(
-  network, end_points, target_edge, exclude_area = NULL
-) {
+corridor_edge <- function(network, end_points, target_edge, exclude_area = NULL,
+                          max_iterations = 5) {
+  # Identify nodes on the network that are closest to the target end points
   nodes <- nearest_node(network, end_points)
-  network <- add_weights(network, target_edge, exclude_area)
-  shortest_path(network, from = nodes[1], to = nodes[2])
+
+  # Iteratively refine
+  converged <- FALSE
+  niter <- 1
+  while (!converged || niter <= max_iterations) {
+    network <- add_weights(network, target_edge, exclude_area)
+    edge <- shortest_path(network, from = nodes[1], to = nodes[2])
+    converged <- edge == target_edge
+    target_edge <- edge
+  }
+
+  if (!converged) warning(sprintf(
+    "River corridor edge not converged within %s iterations", max_iterations
+  ))
+
+  edge
 }
 
 #' Cap the corridor by connecting the edge end points
