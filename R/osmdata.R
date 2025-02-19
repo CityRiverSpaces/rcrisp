@@ -52,17 +52,21 @@ get_osm_bb <- function(city_name) {
 #' get_osmdata("Bucharest", "Dambovita", 100, crs)
 
 get_osmdata <- function(
-  city_name, river_name, buffer_in_m, crs = NULL
+  city_name, river_name, buffer_in_m = NULL, crs = NULL
 ) {
   bb <- get_osm_bb(city_name)
+  if (is.null(crs)) crs <- get_utm_zone(bb)
 
   boundary <- get_osm_city_boundary(bb, city_name, crs = crs)
   river <- get_osm_river(bb, river_name, crs = crs)
 
-  # Define a buffer around the river center line
+  # Use the river center line as bounding object to retrieve streets and
+  # railways
   bounding_obj <- sf::st_transform(river$centerline, sf::st_crs(bb))
+
+  # Define a buffer around the river center line
   if (!is.null(buffer_in_m)) {
-    bounding_obj <- buffer_obj(bounding_obj, buffer = buffer_in_m)
+    bounding_obj <- buffer_obj(bounding_obj, buffer_in_m)
   }
   streets <- get_osm_streets(bounding_obj, crs = crs)
   railways <- get_osm_railways(bounding_obj, crs = crs)
