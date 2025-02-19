@@ -24,7 +24,7 @@ test_that("STAC asset urls are correctly retrieved", {
   expect_equal(expected_asset_urls, asset_urls_retrieved)
 })
 
-test_that("load_raster correctly retrieve and merge remote data", {
+test_that("load_dem correctly retrieve and merge remote data", {
   skip_on_ci()
 
   # setup cache directory
@@ -35,6 +35,25 @@ test_that("load_raster correctly retrieve and merge remote data", {
   expect_equal(terra::crs(dem), terra::crs("EPSG:4326"))
   expect_equal(as.vector(terra::ext(dem)), as.vector(terra::ext(bb)),
                tolerance = 1.e-5)
+})
+
+test_that("Download DEM data can be retrieved from the cache on new calls", {
+  skip_on_ci()
+
+  # setup cache directory
+  cache_dir <- temp_cache_dir()
+
+  # calling load_dem should create a file in the cache folder
+  expect_message(load_dem(bb, asset_urls, force_download = TRUE),
+                 "Saving data to cache directory")
+  cached_filename <- list.files(cache_dir, pattern = "^dem_")
+  cached_filepath <- file.path(cache_dir, cached_filename)
+  expect_true(file.exists(cached_filepath))
+
+  # calling load_dem again should read data from the cached file, raising a
+  # warning that includes the path to the cached file as well
+  expect_warning(load_dem(bb, asset_urls, force_download = TRUE),
+                 cached_filepath)
 })
 
 test_that("valley polygon is correctly constructed", {
