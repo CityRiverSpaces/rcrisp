@@ -13,9 +13,18 @@ temp_cache_dir <- function(env = parent.frame()) {
   file.copy(file.path(source_dir, filenames), cache_dir)
 
   # set environment variable
-  current_value <- Sys.getenv("CRISP_CACHE_DIRECTORY")
+  current_value <- Sys.getenv("CRISP_CACHE_DIRECTORY", unset = NA)
   Sys.setenv(CRISP_CACHE_DIRECTORY = cache_dir)
-  withr::defer(Sys.setenv(CRISP_CACHE_DIRECTORY = current_value), env)
+  withr::defer(
+    {
+      if (is.na(current_value)) {
+        Sys.unsetenv("CRISP_CACHE_DIRECTORY")
+      } else {
+        Sys.setenv(CRISP_CACHE_DIRECTORY = current_value)
+      }
+    },
+    env
+  )
 
   cache_dir
 }
