@@ -247,7 +247,7 @@ corridor_edge <- function(network, end_points, target_edge, exclude_area = NULL,
   # Iteratively refine
   converged <- FALSE
   niter <- 1
-  while (!converged || niter <= max_iterations) {
+  while (!converged && niter <= max_iterations) {
     network <- add_weights(network, target_edge, exclude_area)
     edge <- shortest_path(network, from = nodes[1], to = nodes[2])
     converged <- edge == target_edge
