@@ -1,34 +1,3 @@
-#' Fixture to setup temporary cache directory for testing
-temp_cache_dir <- function(env = parent.frame()) {
-  cache_dir <- file.path(tempdir(), "CRiSp-test-cache")
-
-  # create temporary cache directory
-  dir.create(cache_dir, recursive = TRUE)
-  cache_dir <- normalizePath(cache_dir)
-  withr::defer(unlink(cache_dir, recursive = TRUE), env)
-
-  # copy test files to the cache directory
-  source_dir <- testthat::test_path("testdata", "cache")
-  filenames <- list.files(source_dir)
-  file.copy(file.path(source_dir, filenames), cache_dir)
-
-  # set environment variable
-  current_value <- Sys.getenv("CRISP_CACHE_DIRECTORY", unset = NA)
-  Sys.setenv(CRISP_CACHE_DIRECTORY = cache_dir)
-  withr::defer(
-    {
-      if (is.na(current_value)) {
-        Sys.unsetenv("CRISP_CACHE_DIRECTORY")
-      } else {
-        Sys.setenv(CRISP_CACHE_DIRECTORY = current_value)
-      }
-    },
-    env
-  )
-
-  cache_dir
-}
-
 test_that("Cache directory is set via environmnent variable and created", {
   # create temporary folder
   root_dir <- withr::local_tempdir(pattern = "CRiSp-test-cache")
@@ -94,6 +63,11 @@ test_that("Loading/saving warnings can be suppressed via argument", {
 
 test_that("Cached objects can be properly read", {
   cache_dir <- temp_cache_dir()
+
+  # copy test files to the cache directory
+  source_dir <- testthat::test_path("testdata", "cache")
+  filenames <- list.files(source_dir)
+  file.copy(file.path(source_dir, filenames), cache_dir)
 
   # cached osmdata::osmdata_sf objects can be directly loaded
   filename <- list.files(cache_dir, pattern = "^osmdata*[.]rds$")[1]

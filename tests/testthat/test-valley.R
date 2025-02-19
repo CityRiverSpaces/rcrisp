@@ -1,3 +1,8 @@
+# All functions using [`load_dem()`] store data in a cache folder.
+# In order not to mess up with the user cache directory, we setup a temporary
+# cache folder only used for testing purposes. This is achieved via the
+# [`temp_cache_dir()`] helper function, which should be called in each test.
+
 bb <- bucharest_osm$bb
 asset_urls <- c(paste0("s3://copernicus-dem-30m/",
                        "Copernicus_DSM_COG_10_N44_00_E026_00_DEM/",
@@ -22,7 +27,10 @@ test_that("STAC asset urls are correctly retrieved", {
 test_that("load_raster correctly retrieve and merge remote data", {
   skip_on_ci()
 
-  dem <- load_dem(bb, asset_urls)
+  # setup cache directory
+  temp_cache_dir()
+
+  dem <- load_dem(bb, asset_urls, force_download = TRUE)
 
   expect_equal(terra::crs(dem), terra::crs("EPSG:4326"))
   expect_equal(as.vector(terra::ext(dem)), as.vector(terra::ext(bb)),
