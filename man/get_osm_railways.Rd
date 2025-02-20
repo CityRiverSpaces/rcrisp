@@ -4,12 +4,14 @@
 \alias{get_osm_railways}
 \title{Get OpenStreetMap railways}
 \usage{
-get_osm_railways(bb, crs = NULL)
+get_osm_railways(bb, crs = NULL, force_download = FALSE)
 }
 \arguments{
 \item{bb}{Bounding box of class \code{bbox}}
 
 \item{crs}{Coordinate reference system as EPSG code}
+
+\item{force_download}{Download data even if cached data is available}
 }
 \value{
 An sf object with the railways

@@ -4,7 +4,7 @@
 \alias{get_osm_river}
 \title{Get the river centreline and surface from OpenStreetMap}
 \usage{
-get_osm_river(bb, river_name, crs = NULL)
+get_osm_river(bb, river_name, crs = NULL, force_download = FALSE)
 }
 \arguments{
 \item{bb}{Bounding box of class \code{bbox}}
@@ -12,6 +12,8 @@ get_osm_river(bb, river_name, crs = NULL)
 \item{river_name}{The name of the river}
 
 \item{crs}{Coordinate reference system as EPSG code}
+
+\item{force_download}{Download data even if cached data is available}
 }
 \value{
 A list with the river centreline and surface

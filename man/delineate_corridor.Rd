@@ -17,6 +17,7 @@ delineate_corridor(
   angle_threshold = 90,
   segments = FALSE,
   riverspace = FALSE,
+  force_download = FALSE,
   ...
 )
 }
@@ -54,6 +55,8 @@ the available methods}
 \item{segments}{Whether to carry out the corridor segmentation}
 
 \item{riverspace}{Whether to carry out the riverspace delineation}
+
+\item{force_download}{Download data even if cached data is available}
 
 \item{...}{Additional (optional) input arguments for retrieving the DEM
 dataset (see \code{\link[=get_dem]{get_dem()}}). Only relevant if \code{initial_method} is \code{"valley"}
