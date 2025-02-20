@@ -56,7 +56,7 @@ delineate_corridor <- function(
   corridor <- get_corridor(
     network, osm_data$river_centerline, osm_data$river_surface, bbox_repr,
     initial_method = initial_method, buffer = initial_buffer, dem = dem,
-    capping_method = capping_method
+    max_iterations = max_iterations, capping_method = capping_method
   )
 
   if (segments) {
