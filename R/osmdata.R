@@ -86,7 +86,8 @@ get_osmdata <- function(bb, city_name, river_name, crs = NULL,
                          force_download = force_download)
   srteets <- get_osm_streets(bb, crs = crs, force_download = force_download)
   railways <- get_osm_railways(bb, crs = crs, force_download = force_download)
-  buildings <- get_osm_buildings(river, crs, force_download = force_download)
+  buildings <- get_osm_buildings(river, crs = crs,
+                                 force_download = force_download)
 
   list(
     bb = bb,
@@ -289,10 +290,11 @@ get_osm_railways <- function(bb, crs = NULL, force_download = FALSE) {
 #'
 #' @return An sf object with the buildings
 #' @export
-get_osm_buildings <- function(river, crs, buffer = 1000,
-                              force_download = force_download) {
+get_osm_buildings <- function(river, crs = NULL, buffer = 500,
+                              force_download = FALSE) {
 
   if (is.list(river)) river <- do.call(c, river)
+  crs <- sf::st_crs(river[1])$epsg
 
   river_buffer <- river |>
     sf::st_buffer(buffer) |>
@@ -314,5 +316,5 @@ get_osm_buildings <- function(river, crs, buffer = 1000,
     dplyr::filter(building != "NULL") |>
     sf::st_geometry()
 
-  return(buildings)
+  buildings
 }
