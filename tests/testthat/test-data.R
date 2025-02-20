@@ -1,7 +1,7 @@
 test_that("Bucharest dataset includes all elements", {
   expect_setequal(names(bucharest_osm),
                   c("bb", "boundary", "river_centerline", "river_surface",
-                    "streets", "railways"))
+                    "streets", "railways", "buildings"))
 })
 
 test_that("Bounding box has correct type", {
