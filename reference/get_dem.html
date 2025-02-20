@@ -56,7 +56,8 @@
 <span>  dem_source <span class="op">=</span> <span class="st">"STAC"</span>,</span>
 <span>  stac_endpoint <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  stac_collection <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  crs <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  crs <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  force_download <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -79,18 +80,21 @@ interest</p></li>
 
 <dt id="arg-stac-endpoint">stac_endpoint<a class="anchor" aria-label="anchor" href="#arg-stac-endpoint"></a></dt>
 <dd><p>URL of the STAC API endpoint (only used if <code>dem_source</code>
-is <code>"STAC"</code>). To be provided together with <code>stac_collection</code>, or leave
-blank to use defaults (see <code><a href="default_stac_dem.html">default_stac_dem</a></code>)</p></dd>
+is <code>"STAC"</code>). For more info, see <code><a href="get_stac_asset_urls.html">get_stac_asset_urls()</a></code></p></dd>
 
 
 <dt id="arg-stac-collection">stac_collection<a class="anchor" aria-label="anchor" href="#arg-stac-collection"></a></dt>
 <dd><p>Identifier of the STAC collection to be queried (only
-used if <code>dem_source</code> is <code>"STAC"</code>). To be provided together with
-<code>stac_endpoint</code>, or leave blank to use defaults (see <code><a href="default_stac_dem.html">default_stac_dem</a></code>)</p></dd>
+used if <code>dem_source</code> is <code>"STAC"</code>). For more info, see
+<code><a href="get_stac_asset_urls.html">get_stac_asset_urls()</a></code></p></dd>
 
 
 <dt id="arg-crs">crs<a class="anchor" aria-label="anchor" href="#arg-crs"></a></dt>
 <dd><p>Coordinate reference system (CRS) which to transform the DEM to</p></dd>
+
+
+<dt id="arg-force-download">force_download<a class="anchor" aria-label="anchor" href="#arg-force-download"></a></dt>
+<dd><p>Download data even if cached data is available</p></dd>
 
 </dl></div>
     <div class="section level2">

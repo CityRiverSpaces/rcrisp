@@ -19,6 +19,7 @@
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/bucharest_dem.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/bucharest_osm.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/buffer_bbox.html</loc></url>
+<url><loc>https://cityriverspaces.github.io/CRiSp/reference/cache_directory.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/cap_corridor.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/clean_network.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/clip_and_filter.html</loc></url>
@@ -35,6 +36,7 @@
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/get_corridor.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/get_cost_distance.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/get_dem.html</loc></url>
+<url><loc>https://cityriverspaces.github.io/CRiSp/reference/get_dem_cache_filepath.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/get_intersecting_edges.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/get_osm_bb.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/get_osm_city_boundary.html</loc></url>
@@ -42,6 +44,7 @@
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/get_osm_river.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/get_osm_streets.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/get_osmdata.html</loc></url>
+<url><loc>https://cityriverspaces.github.io/CRiSp/reference/get_osmdata_cache_filepath.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/get_segments.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/get_slope.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/get_stac_asset_urls.html</loc></url>
@@ -53,6 +56,7 @@
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/index.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/initial_corridor.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/initial_edges.html</loc></url>
+<url><loc>https://cityriverspaces.github.io/CRiSp/reference/load_dem.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/load_raster.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/mask_cost_distance.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/mask_slope.html</loc></url>
@@ -60,6 +64,8 @@
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/merge_blocks.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/nearest_node.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/osmdata_as_sf.html</loc></url>
+<url><loc>https://cityriverspaces.github.io/CRiSp/reference/osmdata_query.html</loc></url>
+<url><loc>https://cityriverspaces.github.io/CRiSp/reference/read_data_from_cache.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/refine_segments.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/reproject.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/river_buffer.html</loc></url>
@@ -69,5 +75,6 @@
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/smooth_dem.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/split_aoi.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/split_by.html</loc></url>
+<url><loc>https://cityriverspaces.github.io/CRiSp/reference/write_data_to_cache.html</loc></url>
 </urlset>
 
