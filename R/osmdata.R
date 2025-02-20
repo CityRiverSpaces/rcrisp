@@ -56,29 +56,9 @@ get_osmdata <- function(bb, city_name, river_name, crs = NULL) {
   river <- get_osm_river(bb, river_name, crs = crs)
   srteets <- get_osm_streets(bb, crs = crs)
   railways <- get_osm_railways(bb, crs = crs)
-
-<<<<<<< HEAD
-  if (is.null(crs)) crs <- get_utm_zone(bb)
-
-  if (!is.null(buffer)) {
-    bb <- bb |>
-      sf::st_as_sfc() |>
-      sf::st_transform(crs = crs) |>
-      sf::st_buffer(buffer) |>
-      sf::st_transform(crs = 4326) |>
-      sf::st_bbox()
-  }
-
-  boundary <- get_osm_city_boundary(city_name, bb, crs)
-  river <- get_osm_river(river_name, bb, crs)
-  srteets <- get_osm_streets(bb, crs)
-  railways <- get_osm_railways(bb, crs)
   buildings <- get_osm_buildings(river, crs)
 
-  osm_data <- list(
-=======
   list(
->>>>>>> main
     bb = bb,
     boundary = boundary,
     river_centerline = river$centerline,
