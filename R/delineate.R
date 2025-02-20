@@ -20,6 +20,7 @@
 #'  [get_segments()]  and [rcoins::stroke()]. Only used if `segments` is TRUE.
 #' @param segments Whether to carry out the corridor segmentation
 #' @param riverspace Whether to carry out the riverspace delineation
+#' @param force_download Download data even if cached data is available
 #' @param ... Additional (optional) input arguments for retrieving the DEM
 #'   dataset (see [get_dem()]). Only relevant if `initial_method` is `"valley"`
 #'   and `dem` is NULL
@@ -30,7 +31,7 @@ delineate_corridor <- function(
   city_name, river_name, crs = NULL, bbox_buffer = NULL,
   initial_method = "valley", initial_buffer = NULL, dem = NULL,
   capping_method = "direct", angle_threshold = 90, segments = FALSE,
-  riverspace = FALSE, ...
+  riverspace = FALSE, force_download = FALSE, ...
 ) {
   # Define the area of interest and (if not provided) the CRS
   bbox <- get_osm_bb(city_name)
@@ -38,11 +39,12 @@ delineate_corridor <- function(
   if (is.null(crs)) crs <- get_utm_zone(bbox)
 
   # Retrieve all relevant OSM datasets within the area of interest
-  osm_data <- get_osmdata(bbox, city_name, river_name, crs = crs)
+  osm_data <- get_osmdata(bbox, city_name, river_name, crs = crs,
+                          force_download = force_download)
 
   # If using the valley method, and the DEM is not provided, retrieve dataset
   if (initial_method == "valley" && is.null(dem)) {
-    dem <- get_dem(bbox, crs = crs, ...)
+    dem <- get_dem(bbox, crs = crs, force_download = force_download, ...)
   }
 
   # Set up the combined street and rail network for the delineation

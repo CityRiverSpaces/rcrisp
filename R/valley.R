@@ -25,28 +25,23 @@ default_stac_dem <- list(
 #'     Catalog (STAC) end point, then accessed and mosaicked to the area of
 #'     interest
 #' @param stac_endpoint URL of the STAC API endpoint (only used if `dem_source`
-#'   is `"STAC"`). To be provided together with `stac_collection`, or leave
-#'   blank to use defaults (see [`default_stac_dem`])
+#'   is `"STAC"`). For more info, see [`get_stac_asset_urls()`]
 #' @param stac_collection Identifier of the STAC collection to be queried (only
-#'   used if `dem_source` is `"STAC"`). To be provided together with
-#'   `stac_endpoint`, or leave blank to use defaults (see [`default_stac_dem`])
+#'   used if `dem_source` is `"STAC"`). For more info, see
+#'   [`get_stac_asset_urls()`]
 #' @param crs Coordinate reference system (CRS) which to transform the DEM to
+#' @param force_download Download data even if cached data is available
 #'
 #' @return DEM as a terra SpatRaster object
 #' @export
 get_dem <- function(bb, dem_source = "STAC", stac_endpoint = NULL,
-                    stac_collection = NULL, crs = NULL) {
+                    stac_collection = NULL, crs = NULL,
+                    force_download = FALSE) {
   bbox <- as_bbox(bb)
   if (dem_source == "STAC") {
-    if (is.null(stac_endpoint) && is.null(stac_collection)) {
-      stac_endpoint <- default_stac_dem$endpoint
-      stac_collection <- default_stac_dem$collection
-    } else if (is.null(stac_endpoint) || is.null(stac_collection)) {
-      stop("Provide both or neither of `stac_endpoint` and `stac_collection`")
-    }
     asset_urls <- get_stac_asset_urls(bbox, endpoint = stac_endpoint,
                                       collection = stac_collection)
-    dem <- load_raster(bbox, asset_urls)
+    dem <- load_dem(bbox, asset_urls, force_download = force_download)
   } else {
     stop(sprintf("DEM source %s unknown", dem_source))
   }
@@ -93,13 +88,23 @@ get_valley <- function(dem, river, bbox = NULL) {
 #' @param bb A bounding box, provided either as a matrix (rows for "x", "y",
 #'   columns for "min", "max") or as a vector ("xmin", "ymin", "xmax", "ymax"),
 #'   in lat/lon coordinates (WGS84 coordinate referece system)
-#' @param endpoint URL of the STAC API endpoint
-#' @param collection STAC collection to be queried
+#' @param endpoint URL of the STAC API endpoint. To be provided together with
+#'   `stac_collection`, or leave blank to use defaults (see
+#'   [`default_stac_dem`])
+#' @param collection Identifier of the STAC collection to be queried. To be
+#'   provided together with `stac_endpoint`, or leave blank to use defaults
+#'   (see [`default_stac_dem`])
 #'
 #' @return A list of URLs for the assets in the collection overlapping with
 #'   the specified bounding box
 #' @export
-get_stac_asset_urls <- function(bb, endpoint, collection) {
+get_stac_asset_urls <- function(bb, endpoint = NULL, collection = NULL) {
+  if (is.null(endpoint) && is.null(collection)) {
+    endpoint <- default_stac_dem$endpoint
+    collection <- default_stac_dem$collection
+  } else if (is.null(endpoint) || is.null(collection)) {
+    stop("Provide both or neither of STAC endpoint and collection")
+  }
   bbox <- as_bbox(bb)
   rstac::stac(endpoint) |>
     rstac::stac_search(collections = collection, bbox = bbox) |>
@@ -107,27 +112,34 @@ get_stac_asset_urls <- function(bb, endpoint, collection) {
     rstac::assets_url()
 }
 
-#' Retrieve STAC records (of a DEM) corresponding to a list of asset urls,
-#' crop and merge with a specified bounding box to create a dem of the
-#' specified region
+#' Retrieve DEM data from a list of STAC assets
+#'
+#' Load DEM data from a list of tiles, crop and merge using a given bounding
+#' box to create a raster DEM for the specified region. Results are cached, so
+#' that new queries with the same input parameters will be loaded from disk.
 #'
 #' @param bb A bounding box, provided either as a matrix (rows for "x", "y",
 #'   columns for "min", "max") or as a vector ("xmin", "ymin", "xmax", "ymax")
-#' @param raster_urlpaths a list of STAC records to be retrieved
+#' @param tile_urls A list of tiles where to read the DEM data from
+#' @param force_download Download data even if cached data is available
 #'
-#' @return A a merged dem from retrieved assets cropped to the bounding box
+#' @return Raster DEM, retrieved and retiled to the given bounding box
 #' @export
-load_raster <- function(bb, raster_urlpaths) {
+load_dem <- function(bb, tile_urls, force_download = FALSE) {
   bbox <- as_bbox(bb)
-  cropped <- raster_urlpaths |>
-    lapply(terra::rast) |>
-    # snap spatial extent outward to include pixels crossed by the boundary
-    lapply(terra::crop, terra::ext(bbox), snap = "out")
-  if (length(cropped) > 1) {
-    do.call(terra::merge, args = cropped)
-  } else {
-    cropped[[1]]
+
+  filepath <- get_dem_cache_filepath(tile_urls, bbox)
+
+  if (file.exists(filepath) && !force_download) {
+    dem <- read_data_from_cache(filepath, unwrap = TRUE)
+    return(dem)
   }
+
+  dem <- load_raster(tile_urls, bbox = bb)
+
+  write_data_to_cache(dem, filepath, wrap = TRUE)
+
+  dem
 }
 
 #' Write DEM to cloud optimized GeoTiff file as specified location

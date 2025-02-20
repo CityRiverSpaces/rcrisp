@@ -4,7 +4,13 @@
 \alias{get_osm_city_boundary}
 \title{Get the city boundary from OpenStreetMap}
 \usage{
-get_osm_city_boundary(bb, city_name, crs = NULL, multiple = FALSE)
+get_osm_city_boundary(
+  bb,
+  city_name,
+  crs = NULL,
+  multiple = FALSE,
+  force_download = FALSE
+)
 }
 \arguments{
 \item{bb}{Bounding box of class \code{bbox}}
@@ -15,6 +21,8 @@ get_osm_city_boundary(bb, city_name, crs = NULL, multiple = FALSE)
 
 \item{multiple}{A logical indicating if multiple city boundaries should be
 returned. By default, only the first one is returned.}
+
+\item{force_download}{Download data even if cached data is available}
 }
 \value{
 An sf object with the city boundary
