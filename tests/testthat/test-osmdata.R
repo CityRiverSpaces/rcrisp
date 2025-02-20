@@ -34,7 +34,7 @@ test_that("OSM data for Bucharest is correctly retreived", {
   skip_on_ci()
   bucharest <- get_osmdata("Bucharest", "Dâmbovița", buffer = 2000)
 
-  expect_length(bucharest, 6)
+  expect_length(bucharest, 7)
   expect_true(all(sapply(bucharest, function(x) length(x) >= 1)))
 })
 
