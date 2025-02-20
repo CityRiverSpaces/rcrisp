@@ -46,11 +46,20 @@ delineate_corridor <- function(
     corridor_buffer <- sf::st_buffer(corridor, buffer_corridor)
     network_filtered <- filter_network(network, corridor_buffer)
 
-    corridor <- get_segments(corridor, network_filtered,
+    segments <- get_segments(corridor, network_filtered,
                              osm_data$river_centerline, angle_threshold)
+  } else {
+    segments <- NULL
   }
-  if (riverspace) delineate_riverspace()
-  return(corridor)
+
+  if (riverspace) {
+    riverspace <- delineate_riverspace(osm_data$buildings,
+                                       osm_data$river_surface)
+  } else {
+    riverspace <- NULL
+  }
+
+  list(corridor, segments, riverspace)
 }
 
 #' Delineate the space surrounding a river
