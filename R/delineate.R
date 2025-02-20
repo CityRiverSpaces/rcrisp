@@ -84,10 +84,10 @@ delineate_riverspace <- function(occluders, river, density = 1/50,
     isovists[i] <- visor::get_isovist(occluders, vpoints[i], rayno, raylen)
   }
   sf::st_union(do.call(c, lapply(isovists, sf::st_sfc))) |>
-    sf::st_cast("LINESTRING") |>
     # Drop inner polygons from delineated riverspace
+    sf::st_cast("LINESTRING") |>
+    # The first item is the outer boundary
     dplyr::first() |>
-    # Return polygon
     sf::st_cast("POLYGON")
 }
 
