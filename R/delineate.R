@@ -83,6 +83,11 @@ delineate_riverspace <- function(occluders, river, density = 1/50,
   for (i in seq_along(vpoints)) {
     isovists[i] <- visor::get_isovist(occluders, vpoints[i], rayno, raylen)
   }
-  sf::st_union(do.call(c, lapply(isovists, sf::st_sfc)))
+  sf::st_union(do.call(c, lapply(isovists, sf::st_sfc))) |>
+    sf::st_cast("LINESTRING") |>
+    # Drop inner polygons from delineated riverspace
+    dplyr::first() |>
+    # Return polygon
+    sf::st_cast("POLYGON")
 }
 
