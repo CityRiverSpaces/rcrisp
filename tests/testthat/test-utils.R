@@ -89,3 +89,84 @@ test_that("a bbox object does not change class", {
   expect_true(all(as.vector(bbox) == c(0, 1, 2, 3)))
   expect_equal(sf::st_crs(bbox), sf::st_crs(crs))
 })
+
+test_that("buffering a bbox properly enlarge the area of interest", {
+  # bbox in UTM zone 2N
+  x <- c(xmin = 263554, xmax = 736446, ymin = 4987330, ymax = 5654109)
+  bbox_utm2n <- sf::st_bbox(x, crs = "EPSG:32602")
+
+  bbox_buffer_actual <- buffer_bbox(bbox_utm2n, 1000)
+
+  y <- c(x[c("xmin", "ymin")] - 1000, x[c("xmax", "ymax")] + 1000)
+  bbox_buffer_expected <- sf::st_bbox(y, crs = "EPSG:32602")
+
+  expect_equal(bbox_buffer_actual, bbox_buffer_expected)
+})
+
+test_that("buffering a bbox does not change its CRS", {
+  # bbox in WGS 84
+  x <- c(xmin = -174, xmax = -168, ymin = 45, ymax = 51)
+  bbox_wgs84 <- sf::st_bbox(x, crs = "EPSG:4326")
+
+  bbox_buffer <- buffer_bbox(bbox_wgs84, 1000)
+
+  crs_expected <- sf::st_crs(bbox_wgs84)
+  crs_actual <- sf::st_crs(bbox_buffer)
+  expect_equal(crs_actual, crs_expected)
+})
+
+test_that("reproject works with raster data", {
+  # raster in UTM zone 2 (lon between -174 and -168 deg), northern emisphere
+  x <- terra::rast(xmin = -174, xmax = -168, ymin = 45, ymax = 51, res = 1,
+                   vals = 1, crs = "EPSG:4326")
+
+  # reproject with integer (EPSG code)
+  x_repr_int <- reproject(x, 32602)
+
+  # reproject with string
+  x_repr_str <- reproject(x, "EPSG:32602")
+
+  crs_expected <- terra::crs("EPSG:32602")
+  crs_actual_int <- terra::crs(x_repr_int)
+  expect_equal(crs_actual_int, crs_expected)
+  crs_actual_str <- terra::crs(x_repr_str)
+  expect_equal(crs_actual_str, crs_expected)
+})
+
+test_that("reproject works with vector data", {
+  # polygon in UTM zone 2 (lon between -174 and -168 deg), northern emisphere
+  x <- sf::st_linestring(cbind(c(-174, -174, -168, -168, -174),
+                               c(45, 51, 51, 45, 45)))
+  x <- sf::st_polygon(list(x))
+  x <- sf::st_sfc(x, crs = "EPSG:4326")
+
+  # reproject with integer (EPSG code)
+  x_repr_int <- reproject(x, 32602)
+
+  # reproject with string
+  x_repr_str <- reproject(x, "EPSG:32602")
+
+  crs_expected <- sf::st_crs("EPSG:32602")
+  crs_actual_int <- sf::st_crs(x_repr_int)
+  expect_equal(crs_actual_int, crs_expected)
+  crs_actual_str <- sf::st_crs(x_repr_str)
+  expect_equal(crs_actual_str, crs_expected)
+})
+
+test_that("reproject works with bbox", {
+  # bbox in UTM zone 2 (lon between -174 and -168 deg), northern emisphere
+  x <- c(xmin = -174, xmax = -168, ymin = 45, ymax = 51)
+  x <- sf::st_bbox(x, crs = "EPSG:4326")
+
+  # reproject with integer (EPSG code)
+  x_repr_int <- reproject(x, 32602)
+
+  # reproject with string
+  x_repr_str <- reproject(x, "EPSG:32602")
+
+  crs_expected <- sf::st_crs("EPSG:32602")
+  crs_actual_int <- sf::st_crs(x_repr_int)
+  expect_equal(crs_actual_int, crs_expected)
+  crs_actual_str <- sf::st_crs(x_repr_str)
+  expect_equal(crs_actual_str, crs_expected)
+})

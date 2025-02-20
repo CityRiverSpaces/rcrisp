@@ -17,5 +17,6 @@ river_buffer(river, buffer, bbox = NULL)
 A simple feature geometry
 }
 \description{
-Draw a corridor as a fixed buffer region around a river.
+The river geometry may consist of multiple spatial features, these are merged
+after applying the buffer.
 }

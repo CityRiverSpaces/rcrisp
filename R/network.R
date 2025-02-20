@@ -12,7 +12,7 @@ as_network <- function(edges, flatten = TRUE, clean = TRUE) {
   network <- sfnetworks::as_sfnetwork(edges, directed = FALSE)
   if (flatten) network <- flatten_network(network)
   if (clean) network <- clean_network(network)
-  return(network)
+  network
 }
 
 #' Flatten a network by adding points at apparent intersections.
@@ -32,119 +32,110 @@ as_network <- function(edges, flatten = TRUE, clean = TRUE) {
 #' @return A network object with additional points at intersections
 #' @export
 flatten_network <- function(network) {
+  nodes <- sf::st_as_sf(network, "nodes")
+  edges <- sf::st_as_sf(network, "edges")
+
   # Determine intersection points between crossing edges
-  edges_cross <- get_crossing_edges(network)
-  pts_intersect <- get_intersection_points(edges_cross)
+  edges_cross <- get_crossing_edges(edges)
+  points_intersect <- get_intersection_points(edges_cross)
 
-  # Convert edge table to data.frame and add info on boundary points
-  edge_pts <- sfheaders::sf_to_df(edges_cross)
-  edge_idxs <- edge_pts$linestring_id
-  edge_pts$is_startpoint <- !duplicated(edge_idxs)
-  edge_pts$is_endpoint <- !duplicated(edge_idxs, fromLast = TRUE)
-
-  # Loop over all points, add them to the edge table
-  for (i in seq_len(nrow(pts_intersect))) {
-    point <- pts_intersect$geometry[[i]]
-    intersecting_edges <- unique(unlist(pts_intersect$origins[i]))
-    for (edge_id in intersecting_edges) {
-      edge_pts <- insert_intersection(edge_pts, point, edge_id)
-    }
-  }
-
-  # Convert back edge table to sfc object
-  edges_cross_new <- sfheaders::sfc_linestring(edge_pts, linestring_id = "id",
-                                               x = "x", y = "y")
-  sf::st_crs(edges_cross_new) <- sf::st_crs(edges_cross)
+  # Add target points to the edge geometries
+  edges_new <- insert_intersections(edges_cross, points_intersect)
 
   # Update the network with the new edge geometries
-  nodes <- network |> sf::st_as_sf("nodes")
-  edges <- network |> sf::st_as_sf("edges")
-  edges[edges_cross$id, ] <- edges[edges_cross$id, ] |>
-    sf::st_set_geometry(edges_cross_new)
-  network_new <- sfnetworks::sfnetwork(
-    nodes = nodes,
-    edges = edges,
-    directed = FALSE,
-    force = TRUE,  # skip checks
-  )
+  edges[edges_cross$id, ] <- sf::st_set_geometry(edges[edges_cross$id, ],
+                                                 edges_new)
+  network_new <- sfnetworks::sfnetwork(nodes = nodes,
+                                       edges = edges,
+                                       directed = FALSE,
+                                       force = TRUE)  # skip checks
   network_new
 }
 
-get_crossing_edges <- function(network) {
-  network |>
-    tidygraph::activate("edges") |>
-    # Add ID to ease replacement later on
-    dplyr::mutate(id = seq_len(dplyr::n())) |>
-    dplyr::filter(sfnetworks::edge_crosses(tidygraph::.E())) |>
-    sf::st_as_sf("edges")
+get_crossing_edges <- function(edges) {
+  geometry <- sf::st_geometry(edges)
+  crossings <- sf::st_crosses(geometry)
+  mask <- lengths(crossings) > 0
+  sf::st_sf(id = which(mask), geometry = geometry[mask])
 }
 
 get_intersection_points <- function(edges) {
-  pts_intersect <- edges |>
-    sf::st_intersection() |>
-    # Cast multipoint intersections into points
-    sf::st_collection_extract("POINT") |>
-    sfheaders::sf_cast(to = "POINT")
-
-  pts_intersect_agg <- aggregate(
-    pts_intersect,
-    by = sf::st_geometry(pts_intersect),
-    FUN = unique,
-    drop = TRUE
-  )
-
-  pts_intersect_unique <- pts_intersect_agg |> dplyr::distinct()
-  pts_intersect_unique
+  # make sure edges is an sf object, so st_intersection also returns origins
+  intersections <- sf::st_intersection(sf::st_sf(edges))
+  # only consider (multi-)point intersections
+  points <- sf::st_collection_extract(intersections, type = "POINT")
+  # cast multipoint intersections to points
+  sfheaders::sf_cast(points, to = "POINT")
 }
 
-distance <- function(x1, y1, x2, y2) {
-  sqrt((x2 - x1) ^ 2 + (y2 - y1) ^ 2)
-}
+insert_intersections <- function(edges, points, tol = 1.e-3) {
 
-insert_intersection <- function(edge_pts, point, line_id) {
-  line_pts <- subset(edge_pts, edge_pts$linestring_id == line_id)
-  pt_x <- point[[1]]
-  pt_y <- point[[2]]
-  is_point_in_line <- nrow(
-    subset(line_pts, line_pts$x == pt_x & line_pts$y == pt_y)
-  ) >= 1
-  if (!is_point_in_line) {
-    startpoint <- subset(line_pts, line_pts$is_startpoint == TRUE)
-    kk <- as.numeric(rownames(startpoint))
-    w_break <- FALSE
-    while (!w_break) {
-      # Consider the line segments a - b.
-      # x is a valid intersection if the following condition is true:
-      # distance(a, b) == distance(a, x) + distance(x, b)  # nolint
-      pt_a_x <- edge_pts[kk, ]$x
-      pt_a_y <- edge_pts[kk, ]$y
-      pt_b_x <- edge_pts[kk + 1, ]$x
-      pt_b_y <- edge_pts[kk + 1, ]$y
-      d_ab <- distance(pt_a_x, pt_a_y, pt_b_x, pt_b_y)
-      d_ax <- distance(pt_a_x, pt_a_y, pt_x, pt_y)
-      d_bx <- distance(pt_b_x, pt_b_y, pt_x, pt_y)
-      is_intersection <- dplyr::near(d_ab, d_ax + d_bx, tol = 1.e-3)
-      if (is_intersection) {
-        insertion <- tibble::tibble_row(
-          sfg_id = line_id,
-          linestring_id = line_id,
-          x = pt_x,
-          y = pt_y,
-          is_startpoint = FALSE,
-          is_endpoint = FALSE
-        )
-        edge_pts <- tibble::add_row(edge_pts, insertion, .after = kk)
-        w_break <- TRUE
-      } else {
-        if (edge_pts[kk + 1, ]$is_endpoint) {
-          warning("point is not added to the edge df.")
-          w_break <- TRUE
-        }
-      }
-      kk <- kk + 1
+  edge_geometry <- sf::st_geometry(edges)
+  edge_points <- sfheaders::sfc_to_df(edge_geometry)
+  edge_ids <- edge_points$linestring_id
+  edge_coords <- as.matrix(edge_points[c("x", "y")])
+
+  # invert mapping from "intersection point" -> "edges" (list `origins` below)
+  # to "edge" -> "intersection points" (`targets`). This way we can loop over
+  # edges without having to get back to the same edge twice
+  point_coords <- sf::st_coordinates(points)
+  npoints <- nrow(points)
+  origins <- points[["origins"]]
+  targets <- split(rep(seq_len(npoints), lengths(origins)), unlist(origins))
+
+  # create empty arrays where to store new edge coordinates and identifiers
+  coords <- matrix(, nrow = 0, ncol = 2)
+  linestring_ids <- c()
+
+  for (edge_id in seq_along(edge_geometry)) {
+    is_current_edge <- edge_ids == edge_id
+    edge <- edge_coords[is_current_edge, ]
+    for (point_id in targets[[edge_id]]) {
+      point <- point_coords[point_id, ]
+      if (is_point_in_edge(point, edge, tol = tol)) next
+      # calculate distance from the target point to all edge points
+      distances_from_target <- calc_distance(point, edge)
+      # by computing the rolling sum over `distances` we get the summed
+      # distances from the target to consecutive edge points
+      summed_distances_from_target <- calc_rolling_sum(distances_from_target)
+      # calculate length of line segments
+      segment_lengths <- sqrt(apply(diff(edge)^2, sum, MARGIN = 1))
+      # the point lies on the line segment for which the summed distances from
+      # the endpoints is equal to the segment length
+      index <- which(abs(summed_distances_from_target - segment_lengths) < tol)
+      # update the coordinates by adding the target at the identified position
+      edge <- rbind(head(edge, index),
+                    point,
+                    tail(edge, nrow(edge) - index))
     }
+    coords <- rbind(coords, edge)
+    linestring_ids <- c(linestring_ids, rep(edge_id, nrow(edge)))
   }
-  edge_pts
+
+  edges_new <- sfheaders::sfc_linestring(
+    data.frame(coords, linestring_id = linestring_ids),
+    x = "x", y = "y", linestring_id = "linestring_id"
+  )
+  sf::st_crs(edges_new) <- sf::st_crs(edges)
+  return(edges_new)
+}
+
+is_point_in_edge <- function(point, edge, tol) {
+  any(calc_distance(point, edge) < tol)
+}
+
+calc_distance <- function(point, edge) {
+  sqrt((edge[, "x"] - point["X"]) ^ 2 + (edge[, "y"] - point["Y"]) ^ 2)
+}
+
+calc_rolling_sum <- function(x, n = 2) {
+  cs <- cumsum(x)
+  # roll the cumsum array by adding `n` zeros at its beginning and dropping
+  # the last `n` elements
+  cs_roll <- head(c(rep(0, n), cs), length(x))
+  # the rolling sum is the difference between cumsum and its roll, after
+  # dropping the first element of the array
+  tail(cs - cs_roll, length(x) - 1)
 }
 
 #' Clean a spatial network.
@@ -280,7 +271,7 @@ shortest_path <- function(network, from, to, weights = "weight") {
       path <- sf::st_reverse(path)
     }
   }
-  return(path)
+  path
 }
 
 #' Find the node in a network that is closest to a target geometry.
@@ -298,6 +289,9 @@ nearest_node <- function(network, target) {
 
 #' Subset a network keeping the only nodes that intersect a target geometry.
 #'
+#' If subsetting results in multiple disconnected components, we keep the main
+#' one.
+#'
 #' @param network A network object
 #' @param target The target geometry
 #'
@@ -305,7 +299,10 @@ nearest_node <- function(network, target) {
 filter_network <- function(network, target) {
   network |>
     tidygraph::activate("nodes") |>
-    tidygraph::filter(sfnetworks::node_intersects(target))
+    tidygraph::filter(sfnetworks::node_intersects(target)) |>
+    # keep only the main connected component of the network
+    tidygraph::activate("nodes") |>
+    dplyr::filter(tidygraph::group_components() == 1)
 }
 
 #' Identify network edges that are intersecting a geometry
@@ -320,8 +317,8 @@ get_intersecting_edges <- function(network, geometry, index = FALSE) {
   edges <- sf::st_as_sf(network, "edges")
   intersects <- sf::st_intersects(edges, geometry, sparse = FALSE)
   if (index) {
-    return(which(intersects))
+    which(intersects)
   } else {
-    return(edges[intersects, ])
+    edges[intersects, ]
   }
 }

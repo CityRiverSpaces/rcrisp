@@ -9,11 +9,14 @@ delineate_corridor(
   river_name,
   crs = NULL,
   bbox_buffer = NULL,
-  initial_method = "buffer",
+  initial_method = "valley",
+  initial_buffer = NULL,
+  dem = NULL,
   capping_method = "direct",
   angle_threshold = 90,
   segments = FALSE,
-  riverspace = FALSE
+  riverspace = FALSE,
+  ...
 )
 }
 \arguments{
@@ -30,6 +33,12 @@ effects close to its limits}
 \item{initial_method}{The method employed to define the initial river
 corridor geometry. See \code{\link[=initial_corridor]{initial_corridor()}} for the available methods}
 
+\item{initial_buffer}{Buffer region to add to the river geometry to setup the
+initial corridor (only used if \code{initial_method} is \code{"buffer"})}
+
+\item{dem}{Digital elevation model (DEM) of the region (only used if
+\code{initial_method} is \code{"valley"})}
+
 \item{capping_method}{The method employed to connect the corridor edge end
 points (i.e. to "cap" the corridor). See \code{\link[=cap_corridor]{cap_corridor()}} for
 the available methods}
@@ -41,6 +50,10 @@ the available methods}
 \item{segments}{Whether to carry out the corridor segmentation}
 
 \item{riverspace}{Whether to carry out the riverspace delineation}
+
+\item{...}{Additional (optional) input arguments for retrieving the DEM
+dataset (see \code{\link[=get_dem]{get_dem()}}). Only relevant if \code{initial_method} is \code{"valley"}
+and \code{dem} is NULL}
 }
 \value{
 A simple feature geometry

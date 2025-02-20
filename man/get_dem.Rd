@@ -2,26 +2,41 @@
 % Please edit documentation in R/valley.R
 \name{get_dem}
 \alias{get_dem}
-\title{Load dem from a STAC endpoint}
+\title{Access digital elevation model (DEM) for a given region}
 \usage{
-get_dem(bb, resource = "STAC", ...)
+get_dem(
+  bb,
+  dem_source = "STAC",
+  stac_endpoint = NULL,
+  stac_collection = NULL,
+  crs = NULL
+)
 }
 \arguments{
 \item{bb}{A bounding box, provided either as a matrix (rows for "x", "y",
-columns for "min", "max") or as a vector ("xmin", "ymin", "xmax", "ymax")}
+columns for "min", "max") or as a vector ("xmin", "ymin", "xmax", "ymax"),
+in lat/lon coordinates (WGS84 coordinate referece system)}
 
-\item{resource}{from which to source dem. Can be "STAC".
-if "STAC" the parameters the following parameters
-must be supplied as named parameters. If omitted defaults
-will be used.}
+\item{dem_source}{Source of the DEM:
+\itemize{
+\item If "STAC" (default), DEM tiles are searched on a SpatioTemporal Asset
+Catalog (STAC) end point, then accessed and mosaicked to the area of
+interest
+}}
 
-\item{...}{Additional parameters to be passed depending on the resource.
-In case \code{resource = "STAC"}, the arguments \code{endpoint} and
-\code{collection} need to be passed to \code{get_stac_asset_urls()}.}
+\item{stac_endpoint}{URL of the STAC API endpoint (only used if \code{dem_source}
+is \code{"STAC"}). To be provided together with \code{stac_collection}, or leave
+blank to use defaults (see \code{\link{default_stac_dem}})}
+
+\item{stac_collection}{Identifier of the STAC collection to be queried (only
+used if \code{dem_source} is \code{"STAC"}). To be provided together with
+\code{stac_endpoint}, or leave blank to use defaults (see \code{\link{default_stac_dem}})}
+
+\item{crs}{Coordinate reference system (CRS) which to transform the DEM to}
 }
 \value{
-dem
+DEM as a terra SpatRaster object
 }
 \description{
-Load dem from a STAC endpoint
+Access digital elevation model (DEM) for a given region
 }

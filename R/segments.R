@@ -24,7 +24,7 @@ get_segments <- function(corridor, network, river_centerline,
   block_edges <- clip_and_filter(crossing_strokes, corridor, river_centerline)
 
   # Split the corridor into candidate segments ("blocks")
-  blocks <- split(corridor, block_edges)
+  blocks <- split_by(corridor, block_edges)
 
   # Refine the blocks to make sure that all segments touch the river and cross
   # the corridor from side to side
@@ -47,7 +47,7 @@ get_segments <- function(corridor, network, river_centerline,
 clip_and_filter <- function(lines, corridor, river_centerline) {
 
   # Split corridor along the river centerline to find edges on the two sides
-  corridor_edges <- split(corridor, river_centerline, boundary = TRUE)
+  corridor_edges <- split_by(corridor, river_centerline, boundary = TRUE)
 
   # Clip the lines, keeping the only fragments that intersect the river
   lines_clipped <- sf::st_intersection(lines, corridor) |>
@@ -118,7 +118,7 @@ filter_clusters <- function(crossings, river, eps = 100) {
 refine_segments <- function(blocks, river_centerline, corridor) {
 
   # Split corridor along the river centerline to find edges on the two sides
-  corridor_edges <- split(corridor, river_centerline, boundary = TRUE)
+  corridor_edges <- split_by(corridor, river_centerline, boundary = TRUE)
 
   # Recursively merge blocks until all blocks intersect the river
   not_intersect_river <- function(blocks) {
@@ -147,7 +147,7 @@ refine_segments <- function(blocks, river_centerline, corridor) {
     blocks <- merge_blocks(blocks, index_not_intersect_both_edges,
                            method = "smallest")
   }
-  return(blocks)
+  blocks
 }
 
 #' Merge a set of blocks to adjacent ones
@@ -207,5 +207,5 @@ merge_block <- function(targets, block, method = "longest-intersection") {
   }
   merged <- sf::st_union(targets[index_to_merge], block)
   others <- targets[!seq_along(targets) %in% index_to_merge]
-  return(c(others, merged))
+  c(others, merged)
 }

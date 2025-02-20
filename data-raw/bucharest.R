@@ -5,8 +5,10 @@ epsg_code <- 32635
 bbox_buffer <- 2000
 
 # Fetch the OSM data
-bucharest_osm <- CRiSp::get_osmdata(city_name, river_name,
-                                    crs = epsg_code, buffer = bbox_buffer)
+bbox <- get_osm_bb(city_name)
+bbox_expanded <- buffer_bbox(bbox, bbox_buffer)
+bucharest_osm <- get_osmdata(bbox_expanded, city_name, river_name,
+                             crs = epsg_code)
 
 # Fix encoding issue in the WKT strings
 fix_wkt_encoding <- function(x) {
@@ -17,8 +19,8 @@ fix_wkt_encoding <- function(x) {
 bucharest_osm <- lapply(bucharest_osm, fix_wkt_encoding)
 
 # Fetch the DEM data
-bucharest_dem <- CRiSp::get_dem(bucharest_osm$bb) |>
-  CRiSp::reproject(epsg_code) |>
+bucharest_dem <- get_dem(bucharest_osm$bb) |>
+  reproject(epsg_code) |>
   # SpatRaster objects cannot be directly serialized as RDS/RDA files
   terra::wrap()
 

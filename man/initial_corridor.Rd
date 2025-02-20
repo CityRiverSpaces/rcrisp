@@ -4,19 +4,31 @@
 \alias{initial_corridor}
 \title{Draw the initial geometry of a river corridor.}
 \usage{
-initial_corridor(river, method = "buffer", ..., bbox = NULL)
+initial_corridor(
+  river,
+  method = "valley",
+  buffer = NULL,
+  dem = NULL,
+  bbox = NULL
+)
 }
 \arguments{
 \item{river}{A simple feature geometry representing the river}
 
 \item{method}{The method employed to draw the initial river corridor:
 \itemize{
-\item "buffer" (default): add a fixed buffer region to the river geometry
-(see \code{\link[=river_buffer]{river_buffer()}})
+\item "buffer": add a fixed buffer region to the river geometry (see
+\code{\link[=river_buffer]{river_buffer()}})
+\item "valley" (default): use the river valley boundary, as estimated from the
+provided digital elevation model (DEM, see \code{\link[=get_valley]{get_valley()}} for details on
+the implementation)
 }}
 
-\item{...}{Additional arguments required by the function that implements the
-chosen method (see \code{method})}
+\item{buffer}{Buffer region to add to the river geometry (only used if
+\code{initial_method} is \code{"buffer"})}
+
+\item{dem}{Digital elevation model (DEM) of the region (only used if
+\code{initial_method} is \code{"valley"})}
 
 \item{bbox}{Bounding box defining the extent of the area of interest}
 }

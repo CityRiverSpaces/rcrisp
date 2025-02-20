@@ -9,7 +9,9 @@ get_corridor(
   river_centerline,
   river_surface,
   bbox,
-  initial_method = "buffer",
+  initial_method = "valley",
+  buffer = NULL,
+  dem = NULL,
   capping_method = "direct"
 )
 }
@@ -26,10 +28,15 @@ centerline}
 \item{initial_method}{The method employed to define the initial river
 corridor geometry. See \code{\link[=initial_corridor]{initial_corridor()}} for the available methods}
 
+\item{buffer}{Buffer region to add to the river geometry to setup the initial
+corridor (only used if \code{initial_method} is \code{"buffer"})}
+
+\item{dem}{Digital elevation model (DEM) of the region (only used if
+\code{initial_method} is \code{"valley"})}
+
 \item{capping_method}{The method employed to connect the corridor edge end
 points (i.e. to "cap" the corridor). See \code{\link[=cap_corridor]{cap_corridor()}} for
-the available methods
-TODO: add input arguments for the initialization method}
+the available methods}
 }
 \value{
 A simple feature geometry representing the river corridor

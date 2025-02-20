@@ -2,7 +2,7 @@
 % Please edit documentation in R/valley.R
 \name{dem_to_cog}
 \alias{dem_to_cog}
-\title{Write dem to cloud optimized GeoTiff file as specified location}
+\title{Write DEM to cloud optimized GeoTiff file as specified location}
 \usage{
 dem_to_cog(dem, fpath, output_directory = NULL)
 }
@@ -16,6 +16,10 @@ the output directory}
 \item{output_directory}{where file should be written.
 If specified fpath is treated as filename only.}
 }
+\value{
+The input DEM. This function is used for the side-effect of writing
+values to a file.
+}
 \description{
-Write dem to cloud optimized GeoTiff file as specified location
+Write DEM to cloud optimized GeoTiff file as specified location
 }

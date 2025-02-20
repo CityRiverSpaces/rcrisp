@@ -15,5 +15,6 @@ filter_network(network, target)
 A spatial network object
 }
 \description{
-Subset a network keeping the only nodes that intersect a target geometry.
+If subsetting results in multiple disconnected components, we keep the main
+one.
 }
