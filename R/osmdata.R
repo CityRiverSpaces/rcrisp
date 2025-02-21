@@ -292,6 +292,7 @@ get_osm_railways <- function(bb, crs = NULL, force_download = FALSE) {
 #'              with both.
 #' @param crs Coordinate reference system as EPSG code
 #' @param buffer A numeric with the buffer distance in meters.
+#' @param force_download Download data even if cached data is available
 #'
 #' @return An sf object with the buildings
 #' @export

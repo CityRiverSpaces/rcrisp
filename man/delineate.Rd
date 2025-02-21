@@ -49,6 +49,8 @@ the available methods}
 (in degrees) are considered when forming segment edges. See
 \code{\link[=get_segments]{get_segments()}}  and \code{\link[rcoins:stroke]{rcoins::stroke()}}. Only used if \code{segments} is TRUE.}
 
+\item{corridor}{Whether to carry out the corridor delineation}
+
 \item{segments}{Whether to carry out the corridor segmentation}
 
 \item{riverspace}{Whether to carry out the riverspace delineation}

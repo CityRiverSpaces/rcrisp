@@ -17,6 +17,8 @@ delineate_riverspace(
 
 \item{river}{List with river surface and centerline}
 
+\item{density}{Density of viewpoints}
+
 \item{ray_num}{Number of rays}
 
 \item{ray_length}{Length of rays in meters}

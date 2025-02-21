@@ -12,8 +12,9 @@ with both.}
 
 \item{crs}{Coordinate reference system as EPSG code}
 
-\item{buffer}{A numeric with the buffer distance in meters. By default,
-it is 1000.}
+\item{buffer}{A numeric with the buffer distance in meters.}
+
+\item{force_download}{Download data even if cached data is available}
 }
 \value{
 An sf object with the buildings

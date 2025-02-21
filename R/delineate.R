@@ -18,6 +18,7 @@
 #' @param angle_threshold Only network edges forming angles above this threshold
 #'   (in degrees) are considered when forming segment edges. See
 #'  [get_segments()]  and [rcoins::stroke()]. Only used if `segments` is TRUE.
+#' @param corridor Whether to carry out the corridor delineation
 #' @param segments Whether to carry out the corridor segmentation
 #' @param riverspace Whether to carry out the riverspace delineation
 #' @param force_download Download data even if cached data is available

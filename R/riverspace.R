@@ -2,6 +2,7 @@
 #'
 #' @param occluders Geometry of occluders
 #' @param river List with river surface and centerline
+#' @param density Density of viewpoints
 #' @param ray_num Number of rays
 #' @param ray_length Length of rays in meters
 #'
