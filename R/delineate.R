@@ -25,58 +25,73 @@
 #'   dataset (see [get_dem()]). Only relevant if `initial_method` is `"valley"`
 #'   and `dem` is NULL
 #'
-#' @return A simple feature geometry
+#' @return A list with the corridor, segments, and riverspace geometries
 #' @export
 delineate <- function(
   city_name, river_name, crs = NULL, bbox_buffer = NULL,
   initial_method = "valley", initial_buffer = NULL, dem = NULL,
-  capping_method = "direct", angle_threshold = 90, segments = FALSE,
-  riverspace = FALSE, force_download = FALSE, ...
+  capping_method = "direct", angle_threshold = 90, corridor = TRUE,
+  segments = FALSE, riverspace = FALSE, force_download = FALSE, ...
 ) {
   # Define the area of interest and (if not provided) the CRS
   bbox <- get_osm_bb(city_name)
   if (!is.null(bbox_buffer)) bbox <- buffer_bbox(bbox, buffer = bbox_buffer)
   if (is.null(crs)) crs <- get_utm_zone(bbox)
 
-  # Retrieve all relevant OSM datasets within the area of interest
-  osm_data <- get_osmdata(bbox, city_name, river_name, crs = crs,
-                          force_download = force_download)
+  # Retrieve OSM data needed for any delineation
+  river <- get_osm_river(bb = bbox, river_name, crs = crs,
+                         force_download = force_download)
+  city_boundary <- get_osm_city_boundary(bb = bbox, city_name, crs = crs,
+                                         force_download = force_download)
 
-  # If using the valley method, and the DEM is not provided, retrieve dataset
-  if (initial_method == "valley" && is.null(dem)) {
-    dem <- get_dem(bbox, crs = crs, force_download = force_download, ...)
+  if (corridor) {
+    # Retrieve the OSM data for corridor delineation
+    streets <- get_osm_streets(bb = bbox, crs = crs,
+                               force_download = force_download)
+    railways <- get_osm_railways(bb = bbox, crs = crs,
+                                 force_download = force_download)
+
+    # If using the valley method, and the DEM is not provided, retrieve dataset
+    if (initial_method == "valley" && is.null(dem)) {
+      dem <- get_dem(bbox, crs = crs, force_download = force_download, ...)
+    }
+
+    # Set up the combined street and rail network for the delineation
+    network_edges <- dplyr::bind_rows(osm_data$streets, osm_data$railways)
+    network <- as_network(network_edges)
+
+    # Run the corridor delineation on the spatial network
+    bbox_repr <- reproject(bbox, crs)
+    corridor <- delineate_corridor(
+      network, river$river_centerline, river$river_surface, bbox_repr,
+      initial_method = initial_method, buffer = initial_buffer, dem = dem,
+      capping_method = capping_method
+    )
+  } else {
+    corridor <- NULL
   }
 
-  # Set up the combined street and rail network for the delineation
-  network_edges <- dplyr::bind_rows(osm_data$streets, osm_data$railways)
-  network <- as_network(network_edges)
-
-  # Run the corridor delineation on the spatial network
-  bbox_repr <- reproject(bbox, crs)
-  corridor <- get_corridor(
-    network, osm_data$river_centerline, osm_data$river_surface, bbox_repr,
-    initial_method = initial_method, buffer = initial_buffer, dem = dem,
-    capping_method = capping_method
-  )
-
   if (segments) {
+    if (!corridor) stop("Corridor geometry required for segmentation.")
     # Select the relevant part of the network
     buffer_corridor <- 100  # TODO should this be an additional input parameter?
     corridor_buffer <- sf::st_buffer(corridor, buffer_corridor)
     network_filtered <- filter_network(network, corridor_buffer)
 
-    segments <- get_segments(corridor, network_filtered,
-                             osm_data$river_centerline, angle_threshold)
+    segments <- delineate_segments(corridor, network_filtered,
+                             river$river_centerline, angle_threshold)
   } else {
     segments <- NULL
   }
 
   if (riverspace) {
-    riverspace <- delineate_riverspace(osm_data$buildings,
-                                       osm_data$river_surface)
+    buildings <- get_osm_buildings(river = river, crs = crs,
+                                   force_download = force_download)
+    river <- do.call(c, river)
+    riverspace <- delineate_riverspace(buildings, river)
   } else {
     riverspace <- NULL
   }
 
-  list(corridor, segments, riverspace)
+  list(corridor = corridor, segments = segments, riverspace = riverspace)
 }
