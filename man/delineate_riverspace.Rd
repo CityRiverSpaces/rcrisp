@@ -2,7 +2,7 @@
 % Please edit documentation in R/delineate.R
 \name{delineate_riverspace}
 \alias{delineate_riverspace}
-\title{Delineate the riverspace surrounding a river}
+\title{Delineate the space surrounding a river}
 \usage{
 delineate_riverspace(
   occluders,
@@ -15,7 +15,7 @@ delineate_riverspace(
 \arguments{
 \item{occluders}{Geometry of occluders}
 
-\item{river}{River centreline or surface}
+\item{river}{List with river surface and centerline}
 
 \item{rayno}{Number of rays}
 
@@ -25,8 +25,10 @@ delineate_riverspace(
 Polygon geometry with the riverspace
 }
 \description{
-Delineate the riverspace surrounding a river
+Delineate the space surrounding a river
 }
 \examples{
-get_riverspace(bucharest_osm$buildings, bucharest_osm$river_surface)
+\dontrun{
+  delineate_riverspace(bucharest_osm$buildings, bucharest_osm$river_surface)
+}
 }

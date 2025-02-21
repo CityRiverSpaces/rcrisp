@@ -4,16 +4,20 @@
 \alias{get_osm_buildings}
 \title{Get OpenStreetMap buildings}
 \usage{
-get_osm_buildings(bb, crs)
+get_osm_buildings(river, crs = NULL, buffer = 500, force_download = FALSE)
 }
 \arguments{
-\item{bb}{Bounding box of class \code{bbox}}
+\item{river}{An sf object with the river centreline, surface or a list
+with both.}
 
 \item{crs}{Coordinate reference system as EPSG code}
+
+\item{buffer}{A numeric with the buffer distance in meters. By default,
+it is 1000.}
 }
 \value{
 An sf object with the buildings
 }
 \description{
-Get OpenStreetMap buildings
+Get buildings from OpenStreetMap within a given buffer around a river.
 }
