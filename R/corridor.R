@@ -257,6 +257,7 @@ corridor_edge <- function(network, end_points, target_edge, exclude_area = NULL,
     target_edge <- edge
     # The excluded area is only accounted for in the first iteration
     area <- NULL
+    niter <- niter + 1
   }
 
   if (!converged) warning(sprintf(
