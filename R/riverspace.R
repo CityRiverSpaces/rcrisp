@@ -21,9 +21,5 @@ delineate_riverspace <- function(occluders, river, density = 1 / 50,
       visor::get_isovist(occluders, vpoints[i], ray_num, ray_length)
   }
   sf::st_union(do.call(c, lapply(isovists, sf::st_sfc))) |>
-    # Drop inner polygons from delineated riverspace
-    sf::st_cast("LINESTRING") |>
-    # The first item is the outer boundary
-    dplyr::first() |>
-    sf::st_cast("POLYGON")
+    remove_holes()
 }

@@ -15,3 +15,13 @@ test_that("Splitting a geometry by a complex line still returns two edges", {
   edges <- split_by(geometry, line, boundary = TRUE)
   expect_equal(length(edges), 2)
 })
+
+test_that("Holes are removed from a geometry", {
+  geometry <-
+    sf::st_sfc(sf::st_polygon(list(cbind(c(-1, -1, 1, 1, -1),
+                                         c(-1, 1, 1, -1, -1)),
+                                   cbind(c(-0.5, -0.5, 0.5, 0.5, -0.5),
+                                         c(-0.5, 0.5, 0.5, -0.5, -0.5)))))
+  new_geometry <- remove_holes(st_multipolygon(geometry))
+  expect_equal(length(new_geometry), 1)
+})
