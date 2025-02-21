@@ -87,7 +87,7 @@ get_osmdata <- function(bb, city_name, river_name, crs = NULL,
                                     force_download = force_download)
   river <- get_osm_river(bb, river_name, crs = crs,
                          force_download = force_download)
-  srteets <- get_osm_streets(bb, crs = crs, force_download = force_download)
+  streets <- get_osm_streets(bb, crs = crs, force_download = force_download)
   railways <- get_osm_railways(bb, crs = crs, force_download = force_download)
   buildings <- get_osm_buildings(river, crs = crs, buffer = buildings_buffer,
                                  force_download = force_download)
@@ -97,7 +97,7 @@ get_osmdata <- function(bb, city_name, river_name, crs = NULL,
     boundary = boundary,
     river_centerline = river$centerline,
     river_surface = river$surface,
-    streets = srteets,
+    streets = streets,
     railways = railways,
     buildings = buildings
   )
