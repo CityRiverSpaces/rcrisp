@@ -57,13 +57,13 @@ delineate <- function(
     }
 
     # Set up the combined street and rail network for the delineation
-    network_edges <- dplyr::bind_rows(osm_data$streets, osm_data$railways)
+    network_edges <- dplyr::bind_rows(streets, railways)
     network <- as_network(network_edges)
 
     # Run the corridor delineation on the spatial network
     bbox_repr <- reproject(bbox, crs)
     corridor <- delineate_corridor(
-      network, river$river_centerline, river$river_surface, bbox_repr,
+      network, river[1], river[2], bbox_repr,
       initial_method = initial_method, buffer = initial_buffer, dem = dem,
       capping_method = capping_method
     )
@@ -72,14 +72,14 @@ delineate <- function(
   }
 
   if (segments) {
-    if (!corridor) stop("Corridor geometry required for segmentation.")
+    if (is.null(corridor)) stop("Corridor geometry required for segmentation.")
     # Select the relevant part of the network
     buffer_corridor <- 100  # TODO should this be an additional input parameter?
     corridor_buffer <- sf::st_buffer(corridor, buffer_corridor)
     network_filtered <- filter_network(network, corridor_buffer)
 
     segments <- delineate_segments(corridor, network_filtered,
-                             river$river_centerline, angle_threshold)
+                                   river[1], angle_threshold)
   } else {
     segments <- NULL
   }
@@ -87,8 +87,8 @@ delineate <- function(
   if (riverspace) {
     buildings <- get_osm_buildings(river = river, crs = crs,
                                    force_download = force_download)
-    river <- do.call(c, river)
-    riverspace <- delineate_riverspace(buildings, river)
+    # river <- do.call(c, river)
+    riverspace <- delineate_riverspace(buildings, river[2])
   } else {
     riverspace <- NULL
   }
