@@ -25,7 +25,7 @@
 #' @export
 get_corridor <- function(
   network, river_centerline, river_surface, bbox, initial_method = "valley",
-  buffer = NULL, dem = NULL, max_iterations = 5, capping_method = "direct"
+  buffer = NULL, dem = NULL, max_iterations = 10, capping_method = "direct"
 ) {
   # Drop all attributes of river centerline and surface but the geometries
   river_centerline <- sf::st_geometry(river_centerline)
@@ -242,7 +242,7 @@ initial_edges <- function(corridor_initial, regions) {
 #'
 #' @return A simple feature geometry representing the edge (i.e. a linestring)
 corridor_edge <- function(network, end_points, target_edge, exclude_area = NULL,
-                          max_iterations = 5) {
+                          max_iterations = 10) {
   # Identify nodes on the network that are closest to the target end points
   nodes <- nearest_node(network, end_points)
 
@@ -257,6 +257,7 @@ corridor_edge <- function(network, end_points, target_edge, exclude_area = NULL,
     target_edge <- edge
     # The excluded area is only accounted for in the first iteration
     area <- NULL
+    niter <- niter + 1
   }
 
   if (!converged) warning(sprintf(
