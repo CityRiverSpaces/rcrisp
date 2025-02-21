@@ -227,9 +227,11 @@ initial_edges <- function(corridor_initial, regions) {
 #' start- and an end-point. The weights in the shortest-path problem are set to
 #' account for a) network edge lengths, b) distance from an initial target edge
 #' geometry, and c) an excluded area where corridor edges are aimed not to go
-#' through. The procedure is iterative, with the identified corridor edge being
-#' used as target edge in the following iteration. This is found to result in
-#' "smoother" edges on the spatial network.
+#' through. The procedure is iterative, with the excluded area only being
+#' accounted for in the first iteration. The identified corridor edge is
+#' used as target edge in the following iteration, with the goal of prioritising
+#' the "straightening" of the edge (some overlap with the excluded area is
+#' allowed).
 #'
 #' @param network The spatial network used for the delineation
 #' @param end_points Target start- and end-point
@@ -247,11 +249,14 @@ corridor_edge <- function(network, end_points, target_edge, exclude_area = NULL,
   # Iteratively refine
   converged <- FALSE
   niter <- 1
+  area <- exclude_area
   while (!converged && niter <= max_iterations) {
-    network <- add_weights(network, target_edge, exclude_area)
+    network <- add_weights(network, target_edge, area)
     edge <- shortest_path(network, from = nodes[1], to = nodes[2])
     converged <- edge == target_edge
     target_edge <- edge
+    # The excluded area is only accounted for in the first iteration
+    area <- NULL
   }
 
   if (!converged) warning(sprintf(
