@@ -95,8 +95,8 @@ get_osmdata <- function(bb, city_name, river_name, crs = NULL,
   list(
     bb = bb,
     boundary = boundary,
-    river_centerline = river$centerline,
-    river_surface = river$surface,
+    river_centerline = river[1],
+    river_surface = river[2],
     streets = streets,
     railways = railways,
     buildings = buildings
@@ -209,7 +209,7 @@ get_osm_river <- function(bb, river_name, crs = NULL, force_download = FALSE) {
     river_surface <- sf::st_transform(river_surface, crs)
   }
 
-  list(centerline = river_centerline, surface = river_surface)
+  c(river_centerline, river_surface)
 }
 
 #' Get OpenStreetMap streets
@@ -299,9 +299,10 @@ get_osm_railways <- function(bb, crs = NULL, force_download = FALSE) {
 get_osm_buildings <- function(river, crs = NULL, buffer = 100,
                               force_download = FALSE) {
 
-  if (class(river)[1] != "list") river <- list(river)
-  river <- do.call(c, river)
-  crs <- sf::st_crs(river[1])$epsg
+  # if (class(river)[1] != "list") river <- list(river)
+  # river <- do.call(c, river)
+  # crs <- sf::st_crs(river[1])$epsg
+  crs <- sf::st_crs(river[1])
 
   river_buffer <- river |>
     sf::st_buffer(buffer) |>
