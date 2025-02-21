@@ -28,7 +28,6 @@ Imports:
     sfnetworks,
     stringr,
     terra,
-    tibble,
     tidygraph,
     units
 Suggests:
