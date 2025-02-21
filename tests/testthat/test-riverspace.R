@@ -1,5 +1,6 @@
 riverspace_actual <- delineate_riverspace(occluders = bucharest_osm$buildings,
-                                          river = bucharest_osm$river_surface)
+                                         river = bucharest_osm$river_surface,
+                                         raylen = 100)
 
 test_that("The riverspace of Dâmbovița within 100m is correctly returned", {
   actual_surface <- sf::st_area(riverspace_actual)
