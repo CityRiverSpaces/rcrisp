@@ -185,6 +185,9 @@ get_osm_river <- function(bb, river_name, crs = NULL, force_download = FALSE) {
     dplyr::filter(.data$name == river_name) |>
     # the query can return more features than actually intersecting the bb
     sf::st_filter(sf::st_as_sfc(bb), .predicate = sf::st_intersects) |>
+    # The buffer here is meant to ensure that the river is long enough
+    # before being intersected with the AOI in split_aoi()
+    sf::st_crop(buffer_bbox(bb, buffer = 1000)) |>
     sf::st_geometry()
 
   # Get the river surface
