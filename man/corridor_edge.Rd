@@ -9,7 +9,7 @@ corridor_edge(
   end_points,
   target_edge,
   exclude_area = NULL,
-  max_iterations = 5
+  max_iterations = 10
 )
 }
 \arguments{
@@ -32,7 +32,9 @@ The corridor edge is drawn on the network as a shortest-path link between a
 start- and an end-point. The weights in the shortest-path problem are set to
 account for a) network edge lengths, b) distance from an initial target edge
 geometry, and c) an excluded area where corridor edges are aimed not to go
-through. The procedure is iterative, with the identified corridor edge being
-used as target edge in the following iteration. This is found to result in
-"smoother" edges on the spatial network.
+through. The procedure is iterative, with the excluded area only being
+accounted for in the first iteration. The identified corridor edge is
+used as target edge in the following iteration, with the goal of prioritising
+the "straightening" of the edge (some overlap with the excluded area is
+allowed).
 }

@@ -12,7 +12,7 @@ get_corridor(
   initial_method = "valley",
   buffer = NULL,
   dem = NULL,
-  max_iterations = 5,
+  max_iterations = 10,
   capping_method = "direct"
 )
 }

@@ -32,7 +32,7 @@
 delineate_corridor <- function(
   city_name, river_name, crs = NULL, bbox_buffer = NULL,
   initial_method = "valley", initial_buffer = NULL, dem = NULL,
-  max_iterations = 5, capping_method = "direct", angle_threshold = 90,
+  max_iterations = 10, capping_method = "direct", angle_threshold = 90,
   segments = FALSE, riverspace = FALSE, force_download = FALSE, ...
 ) {
   # Define the area of interest and (if not provided) the CRS

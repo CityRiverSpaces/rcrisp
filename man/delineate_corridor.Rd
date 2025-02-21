@@ -12,7 +12,7 @@ delineate_corridor(
   initial_method = "valley",
   initial_buffer = NULL,
   dem = NULL,
-  max_iterations = 5,
+  max_iterations = 10,
   capping_method = "direct",
   angle_threshold = 90,
   segments = FALSE,
