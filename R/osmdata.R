@@ -296,7 +296,7 @@ get_osm_railways <- function(bb, crs = NULL, force_download = FALSE) {
 #'
 #' @return An sf object with the buildings
 #' @export
-get_osm_buildings <- function(river, crs = NULL, buffer = 500,
+get_osm_buildings <- function(river, crs = NULL, buffer = 100,
                               force_download = FALSE) {
 
   if (class(river)[1] != "list") river <- list(river)
