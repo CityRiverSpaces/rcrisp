@@ -17,7 +17,7 @@
 #'
 #' @return A simple feature geometry representing the river corridor
 #' @export
-get_corridor <- function(
+delineate_corridor <- function(
   network, river_centerline, river_surface, bbox, initial_method = "valley",
   buffer = NULL, dem = NULL, capping_method = "direct"
 ) {

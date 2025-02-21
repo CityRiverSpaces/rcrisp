@@ -27,7 +27,7 @@
 #'
 #' @return A simple feature geometry
 #' @export
-delineate_corridor <- function(
+delineate <- function(
   city_name, river_name, crs = NULL, bbox_buffer = NULL,
   initial_method = "valley", initial_buffer = NULL, dem = NULL,
   capping_method = "direct", angle_threshold = 90, segments = FALSE,

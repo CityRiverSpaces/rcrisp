@@ -12,7 +12,7 @@
 #'
 #' @return Segment polygons as a simple feature geometry
 #' @export
-get_segments <- function(corridor, network, river_centerline,
+delineate_segments <- function(corridor, network, river_centerline,
                          angle_threshold = 90) {
 
   # Find river crossings in the network and build continuous strokes from them
