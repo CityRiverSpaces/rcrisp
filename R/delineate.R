@@ -12,6 +12,8 @@
 #'   initial corridor (only used if `initial_method` is `"buffer"`)
 #' @param dem Digital elevation model (DEM) of the region (only used if
 #'   `initial_method` is `"valley"`)
+#' @param max_iterations Maximum number of iterations employed to refine the
+#'   corridor edges (see [`corridor_edge()`]).
 #' @param capping_method The method employed to connect the corridor edge end
 #'   points (i.e. to "cap" the corridor). See [cap_corridor()] for
 #'   the available methods
@@ -30,8 +32,8 @@
 delineate_corridor <- function(
   city_name, river_name, crs = NULL, bbox_buffer = NULL,
   initial_method = "valley", initial_buffer = NULL, dem = NULL,
-  capping_method = "direct", angle_threshold = 90, segments = FALSE,
-  riverspace = FALSE, force_download = FALSE, ...
+  max_iterations = 5, capping_method = "direct", angle_threshold = 90,
+  segments = FALSE, riverspace = FALSE, force_download = FALSE, ...
 ) {
   # Define the area of interest and (if not provided) the CRS
   bbox <- get_osm_bb(city_name)
@@ -56,7 +58,7 @@ delineate_corridor <- function(
   corridor <- get_corridor(
     network, osm_data$river_centerline, osm_data$river_surface, bbox_repr,
     initial_method = initial_method, buffer = initial_buffer, dem = dem,
-    capping_method = capping_method
+    max_iterations = max_iterations, capping_method = capping_method
   )
 
   if (segments) {

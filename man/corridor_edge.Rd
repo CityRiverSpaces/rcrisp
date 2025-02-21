@@ -4,7 +4,13 @@
 \alias{corridor_edge}
 \title{Draw a corridor edge on the spatial network.}
 \usage{
-corridor_edge(network, end_points, target_edge, exclude_area = NULL)
+corridor_edge(
+  network,
+  end_points,
+  target_edge,
+  exclude_area = NULL,
+  max_iterations = 5
+)
 }
 \arguments{
 \item{network}{The spatial network used for the delineation}
@@ -14,10 +20,19 @@ corridor_edge(network, end_points, target_edge, exclude_area = NULL)
 \item{target_edge}{Target edge geometry to follow in the delineation}
 
 \item{exclude_area}{Region that we aim to exclude from the delineation}
+
+\item{max_iterations}{Maximum number of iterations employed to refine the
+corridor edges}
 }
 \value{
 A simple feature geometry representing the edge (i.e. a linestring)
 }
 \description{
-Draw a corridor edge on the spatial network.
+The corridor edge is drawn on the network as a shortest-path link between a
+start- and an end-point. The weights in the shortest-path problem are set to
+account for a) network edge lengths, b) distance from an initial target edge
+geometry, and c) an excluded area where corridor edges are aimed not to go
+through. The procedure is iterative, with the identified corridor edge being
+used as target edge in the following iteration. This is found to result in
+"smoother" edges on the spatial network.
 }
