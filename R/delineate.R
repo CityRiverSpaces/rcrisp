@@ -78,7 +78,7 @@ delineate_corridor <- function(
     riverspace <- NULL
   }
 
-  list(corridor, segments, riverspace)
+  list(corridor = corridor, segments = segments, riverspace = riverspace)
 }
 
 #' Delineate the space surrounding a river
