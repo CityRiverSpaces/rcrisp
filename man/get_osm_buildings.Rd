@@ -4,7 +4,7 @@
 \alias{get_osm_buildings}
 \title{Get OpenStreetMap buildings}
 \usage{
-get_osm_buildings(river, crs = NULL, buffer = 500, force_download = FALSE)
+get_osm_buildings(river, crs = NULL, buffer = 100, force_download = FALSE)
 }
 \arguments{
 \item{river}{An sf object with the river centreline, surface or a list
