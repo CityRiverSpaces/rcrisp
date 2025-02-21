@@ -317,7 +317,7 @@ get_osm_buildings <- function(river, crs = NULL, buffer = 500,
   buildings <- buildings$osm_polygons |>
     sf::st_transform(crs) |>
     sf::st_filter(river_buffer, .predicate = sf::st_intersects) |>
-    dplyr::filter(building != "NULL") |>
+    dplyr::filter(.data$building != "NULL") |>
     sf::st_geometry()
 
   buildings

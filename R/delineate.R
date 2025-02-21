@@ -95,7 +95,7 @@ delineate_corridor <- function(
 #' \dontrun{
 #'   delineate_riverspace(bucharest_osm$buildings, bucharest_osm$river_surface)
 #' }
-delineate_riverspace <- function(occluders, river, density = 1/50,
+delineate_riverspace <- function(occluders, river, density = 1 / 50,
                                  rayno = 41, raylen = 100) {
   vpoints <- visor::get_viewpoints(river, density = density)
   isovists <- vector(mode = "list", length = length(vpoints))
@@ -109,4 +109,3 @@ delineate_riverspace <- function(occluders, river, density = 1/50,
     dplyr::first() |>
     sf::st_cast("POLYGON")
 }
-
