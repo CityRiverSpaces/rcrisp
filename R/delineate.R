@@ -41,8 +41,6 @@ delineate <- function(
   # Retrieve OSM data needed for any delineation
   river <- get_osm_river(bb = bbox, river_name, crs = crs,
                          force_download = force_download)
-  city_boundary <- get_osm_city_boundary(bb = bbox, city_name, crs = crs,
-                                         force_download = force_download)
 
   if (corridor) {
     # Retrieve the OSM data for corridor delineation
@@ -87,7 +85,6 @@ delineate <- function(
   if (riverspace) {
     buildings <- get_osm_buildings(river = river, crs = crs,
                                    force_download = force_download)
-    # river <- do.call(c, river)
     riverspace <- delineate_riverspace(buildings, river[2])
   } else {
     riverspace <- NULL
