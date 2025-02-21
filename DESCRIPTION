@@ -29,7 +29,8 @@ Imports:
     stringr,
     terra,
     tidygraph,
-    units
+    units,
+    visor
 Suggests:
     ggplot2,
     gridExtra,
