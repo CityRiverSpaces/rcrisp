@@ -68,6 +68,9 @@ get_osm_bb <- function(city_name) {
 #' @param river_name A character string with the name of the river.
 #' @param crs An integer with the EPSG code for the projection. If no CRS is
 #'            specified, the default is the UTM zone for the city.
+#' @param buildings_buffer A numeric with the buffer distance in meters around
+#'                         the river to retrieve buildings. By default, it is
+#'                         100.
 #' @param force_download Download data even if cached data is available
 #'
 #' @return An list with the retrieved OpenStreetMap data sets for the
@@ -79,14 +82,14 @@ get_osm_bb <- function(city_name) {
 #' crs <- get_utm_zone(bb)
 #' get_osmdata(bb, "Bucharest", "Dambovita", crs)
 get_osmdata <- function(bb, city_name, river_name, crs = NULL,
-                        force_download = FALSE) {
+                        buildings_buffer = 100, force_download = FALSE) {
   boundary <- get_osm_city_boundary(bb, city_name, crs = crs,
                                     force_download = force_download)
   river <- get_osm_river(bb, river_name, crs = crs,
                          force_download = force_download)
   srteets <- get_osm_streets(bb, crs = crs, force_download = force_download)
   railways <- get_osm_railways(bb, crs = crs, force_download = force_download)
-  buildings <- get_osm_buildings(river, crs = crs,
+  buildings <- get_osm_buildings(river, crs = crs, buffer = buildings_buffer,
                                  force_download = force_download)
 
   list(
