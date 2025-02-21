@@ -291,8 +291,7 @@ get_osm_railways <- function(bb, crs = NULL, force_download = FALSE) {
 #' @param river An sf object with the river centreline, surface or a list
 #'              with both.
 #' @param crs Coordinate reference system as EPSG code
-#' @param buffer A numeric with the buffer distance in meters. By default,
-#'               it is 1000.
+#' @param buffer A numeric with the buffer distance in meters.
 #'
 #' @return An sf object with the buildings
 #' @export
