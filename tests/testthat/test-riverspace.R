@@ -4,10 +4,10 @@ riverspace_actual <- delineate_riverspace(occluders = bucharest_osm$buildings,
 
 test_that("The riverspace of Dâmbovița within 100m is correctly returned", {
   actual_surface <- sf::st_area(riverspace_actual)
-  # The expected surface is rounded to the nearest 100,000 m^2
-  # to account for changes in input data (buildings added or removed in OSM)
-  expected_surface <- round(7742422, -5)
-  expect_equal(round(actual_surface, -5), expected_surface, )
+  # A tolerance of 100,000 m^2 is used to account for changes in input data
+  # (buildings added or removed in OSM)
+  expected_surface <- 7742422
+  expect_lt(abs(expected_surface - actual_surface), 1e05)
 })
 
 test_that(
