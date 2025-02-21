@@ -80,32 +80,3 @@ delineate <- function(
 
   list(corridor, segments, riverspace)
 }
-
-#' Delineate the space surrounding a river
-#'
-#' @param occluders Geometry of occluders
-#' @param river List with river surface and centerline
-#' @param rayno Number of rays
-#' @param raylen Length of rays
-#'
-#' @return Polygon geometry with the riverspace
-#' @export
-#'
-#' @examples
-#' \dontrun{
-#'   delineate_riverspace(bucharest_osm$buildings, bucharest_osm$river_surface)
-#' }
-delineate_riverspace <- function(occluders, river, density = 1 / 50,
-                                 rayno = 41, raylen = 100) {
-  vpoints <- visor::get_viewpoints(river, density = density)
-  isovists <- vector(mode = "list", length = length(vpoints))
-  for (i in seq_along(vpoints)) {
-    isovists[i] <- visor::get_isovist(occluders, vpoints[i], rayno, raylen)
-  }
-  sf::st_union(do.call(c, lapply(isovists, sf::st_sfc))) |>
-    # Drop inner polygons from delineated riverspace
-    sf::st_cast("LINESTRING") |>
-    # The first item is the outer boundary
-    dplyr::first() |>
-    sf::st_cast("POLYGON")
-}
