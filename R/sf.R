@@ -69,7 +69,7 @@ split_by <- function(geometry, line, boundary = FALSE) {
 #' @noRd
 remove_holes <- function(geometry) {
   new_geometry <- lapply(sf::st_geometry(geometry), \(poly) {
-    sf::st_multipolygon(lapply(poly, \(subpolygon) list(subpolygon[[1]])))
+    sf::st_multipolygon(lapply(poly, \(subpoly) list(subpoly[[1]])))
   })
   sf::st_sfc(new_geometry, crs = sf::st_crs(geometry))
 }
