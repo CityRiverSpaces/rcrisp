@@ -47,7 +47,8 @@ the available methods}
 
 \item{angle_threshold}{Only network edges forming angles above this threshold
 (in degrees) are considered when forming segment edges. See
-\code{\link[=delineate_segments]{delineate_segments()}}  and \code{\link[rcoins:stroke]{rcoins::stroke()}}. Only used if \code{segments} is TRUE.}
+\code{\link[=delineate_segments]{delineate_segments()}} and \code{\link[rcoins:stroke]{rcoins::stroke()}}. Only used if \code{segments} is
+TRUE.}
 
 \item{corridor}{Whether to carry out the corridor delineation}
 
