@@ -34,17 +34,15 @@ river_name <- "Dâmbovița"
 epsg_code <- 32635
 
 # Get base layer for plotting
-bucharest_bb <- get_osm_bb(city_name)
-bucharest_streets <- get_osm_streets(bucharest_bb, epsg_code)[, "geometry"]
+bb <- get_osm_bb(city_name)
+streets <- get_osm_streets(bb, epsg_code)$geometry
 
 # Delineate river corridor
-bucharest_river <- delineate_corridor("Bucharest", "Dâmbovița", crs = epsg_code)
-#> Warning: to_spatial_subdivision assumes attributes are constant over geometries
-#> Linking to GEOS 3.11.0, GDAL 3.5.3, PROJ 9.1.0; sf_use_s2() is TRUE
+corridor <- delineate_corridor(city_name, river_name)
 
 # Plot results
-plot(bucharest_river, border = "orange", lwd = 3)
-plot(bucharest_streets, add = TRUE)
+plot(corridor, border = "orange", lwd = 3)
+plot(streets, add = TRUE)
 ```
 
 <img src="man/figures/README-example-1.png" width="100%" />
@@ -57,4 +55,3 @@ We look very much forward to contributions to the package. See the
 This package is released with a [Contributor Code of
 Conduct](.github/CODE_OF_CONDUCT.md). By contributing to this project
 you agree to abide by its terms.
-
