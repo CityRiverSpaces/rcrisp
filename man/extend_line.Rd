@@ -9,7 +9,7 @@ extend_line(line, distance)
 \arguments{
 \item{line}{Linestring object}
 
-\item{dist}{Distance to extend the line}
+\item{distance}{Distance to extend the line}
 }
 \value{
 Extended linestring object

@@ -77,7 +77,7 @@ buffer_bbox <- function(bbox, buffer) {
 #' Extend a line by a given distance
 #'
 #' @param line Linestring object
-#' @param dist Distance to extend the line
+#' @param distance Distance to extend the line
 #'
 #' @return Extended linestring object
 extend_line <- function(line, distance) {
