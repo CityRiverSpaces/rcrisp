@@ -217,4 +217,3 @@ test_that("Extension with 0 works", {
 test_that("Extension with negative distance is not allowed", {
   expect_error(extend_line(line, -1))
 })
-
