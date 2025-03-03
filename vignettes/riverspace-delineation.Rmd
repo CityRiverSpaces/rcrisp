@@ -11,7 +11,7 @@ vignette: >
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  eval = FALSE
+  warning = FALSE
 )
 ```
 
@@ -30,4 +30,8 @@ The `delineate_riverspace()` function takes the building polygons and river spac
 
 ```{r riverspace}
 riverspace <- delineate_riverspace(buildings, river)
+```
+
+```{r plot-riverspace, echo=FALSE}
+plot(riverspace, col = "green", border = NA)
 ```
