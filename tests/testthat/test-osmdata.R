@@ -46,8 +46,7 @@ test_that("OSM data for Bucharest is correctly retreived", {
   # setup cache directory
   temp_cache_dir()
 
-  bb <- bucharest_osm$bb
-  bucharest <- get_osmdata(bb, "Bucharest", "Dâmbovița", force_download = TRUE)
+  bucharest <- get_osmdata("Bucharest", "Dâmbovița", force_download = TRUE)
 
   expect_length(bucharest, 6)
   expect_true(all(sapply(bucharest, function(x) length(x) >= 1)))
