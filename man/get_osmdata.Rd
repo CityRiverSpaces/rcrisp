@@ -4,14 +4,21 @@
 \alias{get_osmdata}
 \title{Retrieve OpenStreetMap data for a given location}
 \usage{
-get_osmdata(bb, city_name, river_name, crs = NULL, force_download = FALSE)
+get_osmdata(
+  city_name,
+  river_name,
+  buffer_in_m = NULL,
+  crs = NULL,
+  force_download = FALSE
+)
 }
 \arguments{
-\item{bb}{Bounding box defining the area of interest}
-
 \item{city_name}{A character string with the name of the city.}
 
 \item{river_name}{A character string with the name of the river.}
+
+\item{buffer_in_m}{An integer with the buffer size in meters
+around the river center line.}
 
 \item{crs}{An integer with the EPSG code for the projection. If no CRS is
 specified, the default is the UTM zone for the city.}
@@ -28,7 +35,5 @@ the city boundary, the river centreline and surface, the streets, and the
 railways.
 }
 \examples{
-bb <- get_osm_bb("Bucharest")
-crs <- get_utm_zone(bb)
-get_osmdata(bb, "Bucharest", "Dambovita", crs)
+get_osmdata("Bucharest", "Dambovita", 100, crs)
 }
