@@ -55,7 +55,7 @@ as_bbox <- function(x) {
 #' applied by first transforming the object in a suitable projected coordinate
 #' reference system, expanding it with the given buffer.
 #'
-#' @param a sf object
+#' @param obj A sf object
 #' @param buffer Buffer region in meters
 #' @return Expanded sf object
 buffer_obj <- function(obj, buffer) {

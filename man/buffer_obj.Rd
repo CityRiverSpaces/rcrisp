@@ -7,9 +7,9 @@
 buffer_obj(obj, buffer)
 }
 \arguments{
-\item{buffer}{Buffer region in meters}
+\item{obj}{A sf object}
 
-\item{a}{sf object}
+\item{buffer}{Buffer region in meters}
 }
 \value{
 Expanded sf object
