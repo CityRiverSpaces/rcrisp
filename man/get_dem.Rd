@@ -9,7 +9,8 @@ get_dem(
   dem_source = "STAC",
   stac_endpoint = NULL,
   stac_collection = NULL,
-  crs = NULL
+  crs = NULL,
+  force_download = FALSE
 )
 }
 \arguments{
@@ -25,14 +26,15 @@ interest
 }}
 
 \item{stac_endpoint}{URL of the STAC API endpoint (only used if \code{dem_source}
-is \code{"STAC"}). To be provided together with \code{stac_collection}, or leave
-blank to use defaults (see \code{\link{default_stac_dem}})}
+is \code{"STAC"}). For more info, see \code{\link[=get_stac_asset_urls]{get_stac_asset_urls()}}}
 
 \item{stac_collection}{Identifier of the STAC collection to be queried (only
-used if \code{dem_source} is \code{"STAC"}). To be provided together with
-\code{stac_endpoint}, or leave blank to use defaults (see \code{\link{default_stac_dem}})}
+used if \code{dem_source} is \code{"STAC"}). For more info, see
+\code{\link[=get_stac_asset_urls]{get_stac_asset_urls()}}}
 
 \item{crs}{Coordinate reference system (CRS) which to transform the DEM to}
+
+\item{force_download}{Download data even if cached data is available}
 }
 \value{
 DEM as a terra SpatRaster object

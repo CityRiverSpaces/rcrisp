@@ -1,17 +1,43 @@
 #' Retrieve OpenStreetMap data as sf object
 #'
-#' Query the Overpass API for a key:value pair within a given bounding box.
+#' Query the Overpass API for a key:value pair within a given bounding box
+#' (provided as lat/lon coordiates). Results are cached, so that new queries
+#' with the same input parameters will be loaded from disk.
 #'
 #' @param key A character string with the key to filter the data
 #' @param value A character string with the value to filter the data
 #' @param bb A bounding box, provided either as a matrix (rows for "x", "y",
 #'   columns for "min", "max") or as a vector ("xmin", "ymin", "xmax", "ymax")
+#' @param force_download Download data even if cached data is available
 #'
 #' @return An sf object with the retrieved OpenStreetMap data
 #' @export
-osmdata_as_sf <- function(key, value, bb) {
-  bbox <- as_bbox(bb)  # it should be in lat/lon
-  bbox |>
+osmdata_as_sf <- function(key, value, bb, force_download = FALSE) {
+  bbox <- as_bbox(bb) # it should be in lat/lon
+
+  filepath <- get_osmdata_cache_filepath(key, value, bbox)
+
+  if (file.exists(filepath) && !force_download) {
+    osmdata_sf <- read_data_from_cache(filepath)
+    return(osmdata_sf)
+  }
+
+  osmdata_sf <- osmdata_query(key, value, bbox)
+
+  write_data_to_cache(osmdata_sf, filepath)
+
+  osmdata_sf
+}
+
+#' Query the Overpass API for a key:value pair within a bounding box
+#'
+#' @param key A character string with the key to filter the data
+#' @param value A character string with the value to filter the data
+#' @param bb A bounding box, in lat/lon coordinates
+#'
+#' @return An sf object with the retrieved OpenStreetMap data
+osmdata_query <- function(key, value, bb) {
+  bb |>
     osmdata::opq() |>
     osmdata::add_osm_feature(key = key, value = value) |>
     osmdata::osmdata_sf()
@@ -43,6 +69,7 @@ get_osm_bb <- function(city_name) {
 #'             around the river center line.
 #' @param crs An integer with the EPSG code for the projection. If no CRS is
 #'            specified, the default is the UTM zone for the city.
+#' @param force_download Download data even if cached data is available
 #'
 #' @return An list with the retrieved OpenStreetMap data sets for the
 #'         given location
@@ -52,15 +79,20 @@ get_osm_bb <- function(city_name) {
 #' get_osmdata("Bucharest", "Dambovita", 100, crs)
 
 get_osmdata <- function(
-  city_name, river_name, buffer_in_m = NULL, crs = NULL
+  city_name, river_name, buffer_in_m = NULL, crs = NULL,
+  force_download = FALSE
 ) {
   bb <- get_osm_bb(city_name)
   if (is.null(crs)) crs <- get_utm_zone(bb)
 
-  boundary <- get_osm_city_boundary(bb, city_name, crs = crs)
+  boundary <- get_osm_city_boundary(
+    bb, city_name, crs = crs, force_download = force_download
+  )
 
   # Retrieve the river center line and surface, cropped to bb
-  river <- get_osm_river(bb, river_name, crs = crs)
+  river <- get_osm_river(
+    bb, river_name, crs = crs, force_download = force_download
+  )
 
   # Use the river center line as bounding object to retrieve streets and
   # railways
@@ -72,8 +104,12 @@ get_osmdata <- function(
   }
 
   # Retrieve streets and railways
-  streets <- get_osm_streets(bounding_obj, crs = crs)
-  railways <- get_osm_railways(bounding_obj, crs = crs)
+  streets <- get_osm_streets(
+    bounding_obj, crs = crs, force_download = force_download
+  )
+  railways <- get_osm_railways(
+    bounding_obj, crs = crs, force_download = force_download
+  )
 
   list(
     aoi = bounding_obj,
@@ -96,6 +132,7 @@ get_osmdata <- function(
 #' @param crs Coordinate reference system as EPSG code
 #' @param multiple A logical indicating if multiple city boundaries should be
 #'                 returned. By default, only the first one is returned.
+#' @param force_download Download data even if cached data is available
 #'
 #' @return An sf object with the city boundary
 #' @importFrom rlang .data
@@ -105,10 +142,12 @@ get_osmdata <- function(
 #' bb <- get_osm_bb("Bucharest")
 #' crs <- get_utm_zone(bb)
 #' get_osm_city_boundary(bb, "Bucharest", crs)
-get_osm_city_boundary <- function(bb, city_name, crs = NULL, multiple = FALSE) {
+get_osm_city_boundary <- function(bb, city_name, crs = NULL, multiple = FALSE,
+                                  force_download = FALSE) {
   # Define a helper function to fetch the city boundary
   fetch_boundary <- function(key, value) {
-    osmdata_as_sf(key, value, bb)$osm_multipolygons |>
+    osmdata_sf <- osmdata_as_sf(key, value, bb, force_download = force_download)
+    osmdata_sf$osm_multipolygons |>
       dplyr::filter(
         .data$`name:en` == stringr::str_extract(city_name, "^[^,]+") |
           .data$name == stringr::str_extract(city_name, "^[^,]+")
@@ -150,6 +189,7 @@ get_osm_city_boundary <- function(bb, city_name, crs = NULL, multiple = FALSE) {
 #' @param bb Bounding box of class `bbox`
 #' @param river_name The name of the river
 #' @param crs Coordinate reference system as EPSG code
+#' @param force_download Download data even if cached data is available
 #'
 #' @return A list with the river centreline and surface
 #' @export
@@ -158,9 +198,10 @@ get_osm_city_boundary <- function(bb, city_name, crs = NULL, multiple = FALSE) {
 #' bb <- get_osm_bb("Bucharest")
 #' crs <- get_utm_zone(bb)
 #' get_osm_river(bb, "Dâmbovița", crs)
-get_osm_river <- function(bb, river_name, crs = NULL) {
+get_osm_river <- function(bb, river_name, crs = NULL, force_download = FALSE) {
   # Get the river centreline
-  river_centerline <- osmdata_as_sf("waterway", "river", bb)
+  river_centerline <- osmdata_as_sf("waterway", "river", bb,
+                                    force_download = force_download)
   river_centerline <- river_centerline$osm_multilines |>
     dplyr::filter(.data$name == river_name) |>
     # the query can return more features than actually intersecting the bb
@@ -169,7 +210,8 @@ get_osm_river <- function(bb, river_name, crs = NULL) {
     sf::st_crop(bb)
 
   # Get the river surface
-  river_surface <- osmdata_as_sf("natural", "water", bb)
+  river_surface <- osmdata_as_sf("natural", "water", bb,
+                                 force_download = force_download)
   river_surface <- dplyr::bind_rows(river_surface$osm_polygons,
                                     river_surface$osm_multipolygons) |>
     sf::st_geometry() |>
@@ -193,6 +235,8 @@ get_osm_river <- function(bb, river_name, crs = NULL) {
 #' @param highway_values A character vector with the highway values to retrieve.
 #'             If left NULL, the function retrieves the following values:
 #'             "motorway", "trunk", "primary", "secondary", "tertiary"
+#' @param force_download Download data even if cached data is available
+#'
 #' @return An sf object with the streets
 #' @export
 #' @importFrom rlang !! sym
@@ -201,7 +245,8 @@ get_osm_river <- function(bb, river_name, crs = NULL) {
 #' bb <- get_osm_bb("Bucharest")
 #' crs <- get_utm_zone(bb)
 #' get_osm_streets(bb, crs)
-get_osm_streets <- function(bb, crs = NULL, highway_values = NULL) {
+get_osm_streets <- function(bb, crs = NULL, highway_values = NULL,
+                            force_download = FALSE) {
   if (is.null(highway_values)) {
     highway_values <- c("motorway", "trunk", "primary", "secondary", "tertiary")
   }
@@ -210,7 +255,8 @@ get_osm_streets <- function(bb, crs = NULL, highway_values = NULL) {
                         FUN = \(x) sprintf("%s_link", x),
                         USE.NAMES = FALSE)
 
-  streets <- osmdata_as_sf("highway", c(highway_values, link_values), bb)
+  streets <- osmdata_as_sf("highway", c(highway_values, link_values), bb,
+                           force_download = force_download)
 
   # Cast polygons (closed streets) into lines
   poly_to_lines <- suppressWarnings(
@@ -235,6 +281,7 @@ get_osm_streets <- function(bb, crs = NULL, highway_values = NULL) {
 #'
 #' @param bb Bounding box of class `bbox`
 #' @param crs Coordinate reference system as EPSG code
+#' @param force_download Download data even if cached data is available
 #'
 #' @return An sf object with the railways
 #' @export
@@ -244,8 +291,9 @@ get_osm_streets <- function(bb, crs = NULL, highway_values = NULL) {
 #' bb <- get_osm_bb("Bucharest")
 #' crs <- get_utm_zone(bb)
 #' get_osm_railways(bb, crs)
-get_osm_railways <- function(bb, crs = NULL) {
-  railways <- osmdata_as_sf("railway", "rail", bb)
+get_osm_railways <- function(bb, crs = NULL, force_download = FALSE) {
+  railways <- osmdata_as_sf("railway", "rail", bb,
+                            force_download = force_download)
   railways_lines <- railways$osm_lines |>
     dplyr::select("railway") |>
     dplyr::rename(!!sym("type") := !!sym("railway"))

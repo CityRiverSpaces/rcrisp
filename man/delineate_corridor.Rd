@@ -12,10 +12,12 @@ delineate_corridor(
   initial_method = "valley",
   initial_buffer = NULL,
   dem = NULL,
+  max_iterations = 10,
   capping_method = "direct",
   angle_threshold = 90,
   segments = FALSE,
   riverspace = FALSE,
+  force_download = FALSE,
   ...
 )
 }
@@ -39,6 +41,9 @@ initial corridor (only used if \code{initial_method} is \code{"buffer"})}
 \item{dem}{Digital elevation model (DEM) of the region (only used if
 \code{initial_method} is \code{"valley"})}
 
+\item{max_iterations}{Maximum number of iterations employed to refine the
+corridor edges (see \code{\link[=corridor_edge]{corridor_edge()}}).}
+
 \item{capping_method}{The method employed to connect the corridor edge end
 points (i.e. to "cap" the corridor). See \code{\link[=cap_corridor]{cap_corridor()}} for
 the available methods}
@@ -50,6 +55,8 @@ the available methods}
 \item{segments}{Whether to carry out the corridor segmentation}
 
 \item{riverspace}{Whether to carry out the riverspace delineation}
+
+\item{force_download}{Download data even if cached data is available}
 
 \item{...}{Additional (optional) input arguments for retrieving the DEM
 dataset (see \code{\link[=get_dem]{get_dem()}}). Only relevant if \code{initial_method} is \code{"valley"}

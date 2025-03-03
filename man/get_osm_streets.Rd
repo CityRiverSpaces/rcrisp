@@ -4,7 +4,7 @@
 \alias{get_osm_streets}
 \title{Get OpenStreetMap streets}
 \usage{
-get_osm_streets(bb, crs = NULL, highway_values = NULL)
+get_osm_streets(bb, crs = NULL, highway_values = NULL, force_download = FALSE)
 }
 \arguments{
 \item{bb}{Bounding box of class \code{bbox}}
@@ -14,6 +14,8 @@ get_osm_streets(bb, crs = NULL, highway_values = NULL)
 \item{highway_values}{A character vector with the highway values to retrieve.
 If left NULL, the function retrieves the following values:
 "motorway", "trunk", "primary", "secondary", "tertiary"}
+
+\item{force_download}{Download data even if cached data is available}
 }
 \value{
 An sf object with the streets
