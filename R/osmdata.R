@@ -270,6 +270,7 @@ get_osm_streets <- function(bb, crs = NULL, highway_values = NULL,
     dplyr::rename(!!sym("type") := !!sym("highway"))
 
   # Interscet with the bounding polygon
+  # this will return a warning, see https://github.com/r-spatial/sf/issues/406
   streets_lines <- sf::st_intersection(streets_lines, bb)
 
   if (!is.null(crs)) streets_lines <- sf::st_transform(streets_lines, crs)
