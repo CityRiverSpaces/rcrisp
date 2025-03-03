@@ -271,6 +271,7 @@ get_osm_streets <- function(bb, crs = NULL, highway_values = NULL,
 
   # Interscet with the bounding polygon
   # this will return a warning, see https://github.com/r-spatial/sf/issues/406
+  if (inherits(bb, "bbox")) bb <- sf::st_as_sfc(bb)
   streets_lines <- sf::st_intersection(streets_lines, bb)
 
   if (!is.null(crs)) streets_lines <- sf::st_transform(streets_lines, crs)
@@ -300,6 +301,7 @@ get_osm_railways <- function(bb, crs = NULL, force_download = FALSE) {
     dplyr::rename(!!sym("type") := !!sym("railway"))
 
   # Interscet with the bounding polygon
+  if (inherits(bb, "bbox")) bb <- sf::st_as_sfc(bb)
   railways_lines <- sf::st_intersection(railways_lines, bb)
 
   if (!is.null(crs)) railways_lines <- sf::st_transform(railways_lines, crs)
