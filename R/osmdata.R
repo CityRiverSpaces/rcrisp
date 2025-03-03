@@ -223,6 +223,9 @@ get_osm_streets <- function(bb, crs = NULL, highway_values = NULL) {
     dplyr::select("highway") |>
     dplyr::rename(!!sym("type") := !!sym("highway"))
 
+  # Interscet with the bounding polygon
+  streets_lines <- sf::st_intersection(streets_lines, bb)
+
   if (!is.null(crs)) streets_lines <- sf::st_transform(streets_lines, crs)
 
   streets_lines
@@ -246,6 +249,9 @@ get_osm_railways <- function(bb, crs = NULL) {
   railways_lines <- railways$osm_lines |>
     dplyr::select("railway") |>
     dplyr::rename(!!sym("type") := !!sym("railway"))
+
+  # Interscet with the bounding polygon
+  railways_lines <- sf::st_intersection(railways_lines, bb)
 
   if (!is.null(crs)) railways_lines <- sf::st_transform(railways_lines, crs)
 
