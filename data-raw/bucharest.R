@@ -10,6 +10,12 @@ bbox_expanded <- buffer_bbox(bbox, bbox_buffer)
 bucharest_osm <- get_osmdata(bbox_expanded, city_name, river_name,
                              crs = epsg_code, force_download = TRUE)
 
+# Add delineation to package data
+network <- rbind(bucharest_osm$streets, bucharest_osm$railways) |> as_network()
+bucharest_delineation <-
+  # TODO this should be done with `delineate_corridor()` instead
+  list(corridor = delineate(city_name, river_name, crs = epsg_code))$corridor
+
 # Fix encoding issue in the WKT strings
 fix_wkt_encoding <- function(x) {
   wkt <- sf::st_crs(x)$wkt
@@ -27,3 +33,4 @@ bucharest_dem <- get_dem(bucharest_osm$bb) |>
 # Save as package data
 usethis::use_data(bucharest_osm, overwrite = TRUE)
 usethis::use_data(bucharest_dem, overwrite = TRUE)
+usethis::use_data(bucharest_delineation, overwrite = TRUE)
