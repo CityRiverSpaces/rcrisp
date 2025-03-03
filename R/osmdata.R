@@ -76,7 +76,7 @@ get_osm_bb <- function(city_name) {
 #' @export
 #'
 #' @examples
-#' get_osmdata("Bucharest", "Dambovita", 100)
+#' get_osmdata("Bucharest", "Dâmbovița", 100)
 
 get_osmdata <- function(
   city_name, river_name, buffer_in_m = NULL, crs = NULL,
