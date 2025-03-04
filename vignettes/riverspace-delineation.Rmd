@@ -26,7 +26,7 @@ buildings <- bucharest_osm$buildings
 river <- bucharest_osm$river_surface
 ```
 
-The `delineate_riverspace()` function takes the building polygons and river space as input. If no river is found, it will return an error message. If buildings are not found, it will return an unobstructed buffer of a given radius with a warning message. The function returns an sf polygon.
+The `delineate_riverspace()` function takes the building polygons and the river surface polygons as input. If no river is provided, it will return an error message. If no buildings are provided, it will return an unobstructed buffer of a given radius with a warning message. The function returns an sf polygon.
 
 ```{r riverspace}
 riverspace <- delineate_riverspace(buildings, river)
