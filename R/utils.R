@@ -58,7 +58,7 @@ as_bbox <- function(x) {
 #' @param obj A sf object
 #' @param buffer Buffer region in meters
 #' @return Expanded sf object
-buffer_obj <- function(obj, buffer) {
+buffer <- function(obj, buffer) {
   is_obj_longlat <- sf::st_is_longlat(obj)
   is_obj_bbox <- FALSE
   dst_crs <- sf::st_crs(obj)

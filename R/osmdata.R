@@ -100,7 +100,7 @@ get_osmdata <- function(
 
   # Apply the buffer around the river center line
   if (!is.null(buffer_in_m)) {
-    bounding_obj <- buffer_obj(bounding_obj, buffer_in_m)
+    bounding_obj <- buffer(bounding_obj, buffer_in_m)
   }
 
   # Retrieve streets and railways
