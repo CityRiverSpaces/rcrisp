@@ -12,6 +12,7 @@ delineate_corridor(
   initial_method = "valley",
   buffer = NULL,
   dem = NULL,
+  max_iterations = 10,
   capping_method = "direct"
 )
 }
@@ -34,6 +35,9 @@ corridor (only used if \code{initial_method} is \code{"buffer"})}
 \item{dem}{Digital elevation model (DEM) of the region (only used if
 \code{initial_method} is \code{"valley"})}
 
+\item{max_iterations}{Maximum number of iterations employed to refine the
+corridor edges (see \code{\link[=corridor_edge]{corridor_edge()}}).}
+
 \item{capping_method}{The method employed to connect the corridor edge end
 points (i.e. to "cap" the corridor). See \code{\link[=cap_corridor]{cap_corridor()}} for
 the available methods}
@@ -42,5 +46,7 @@ the available methods}
 A simple feature geometry representing the river corridor
 }
 \description{
-Delineate a river corridor on a spatial network.
+The corridor edges on the two river banks are drawn on the provided spatial
+network starting from an initial definition of the corridor (based e.g. on
+the river valley).
 }
