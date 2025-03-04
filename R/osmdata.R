@@ -65,8 +65,8 @@ get_osm_bb <- function(city_name) {
 #'
 #' @param city_name A character string with the name of the city.
 #' @param river_name A character string with the name of the river.
-#' @param buffer_in_m An integer with the buffer size in meters
-#'             around the river center line.
+#' @param buffer_in_m An integer with the buffer size in meters around the river
+#'                    center line, defining the width of the area of interest
 #' @param crs An integer with the EPSG code for the projection. If no CRS is
 #'            specified, the default is the UTM zone for the city.
 #' @param force_download Download data even if cached data is available
