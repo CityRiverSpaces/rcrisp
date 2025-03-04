@@ -22,5 +22,5 @@ delineate_riverspace <- function(occluders, river, density = 1 / 50,
       visor::get_isovist(occluders, vpoints[i], ray_num, ray_length)
   }
   sf::st_union(do.call(c, lapply(isovists, sf::st_sfc))) |>
-    remove_holes()
+    sfheaders::sf_remove_holes()
 }

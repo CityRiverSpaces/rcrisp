@@ -22,6 +22,6 @@ test_that("Holes are removed from a geometry", {
                                          c(-1, 1, 1, -1, -1)),
                                    cbind(c(-0.5, -0.5, 0.5, 0.5, -0.5),
                                          c(-0.5, 0.5, 0.5, -0.5, -0.5)))))
-  new_geometry <- remove_holes(st_multipolygon(geometry))
+  new_geometry <- sfheaders::sf_remove_holes(st_multipolygon(geometry))
   expect_equal(length(new_geometry), 1)
 })
