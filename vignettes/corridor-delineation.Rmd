@@ -11,7 +11,8 @@ vignette: >
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  warning = FALSE
+  warning = FALSE,
+  eval = FALSE  #TODO remove this to enable code chunks after #87 is merged
 )
 ```
 
