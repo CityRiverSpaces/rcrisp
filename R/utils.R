@@ -61,7 +61,6 @@ as_bbox <- function(x) {
 #' @return Expanded sf object
 buffer <- function(obj, buffer) {
   is_obj_longlat <- sf::st_is_longlat(obj)
-  is_obj_bbox <- FALSE
   dst_crs <- sf::st_crs(obj)
   # check if obj is a bbox
   is_obj_bbox <- inherits(obj, "bbox")
