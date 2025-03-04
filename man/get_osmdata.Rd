@@ -7,7 +7,7 @@
 get_osmdata(
   city_name,
   river_name,
-  buffer_in_m = NULL,
+  buffer_distance = NULL,
   crs = NULL,
   force_download = FALSE
 )
@@ -17,8 +17,8 @@ get_osmdata(
 
 \item{river_name}{A character string with the name of the river.}
 
-\item{buffer_in_m}{An integer with the buffer size in meters
-around the river center line.}
+\item{buffer_distance}{Buffer distance in meters around the river
+center line, defining the width of the area of interest}
 
 \item{crs}{An integer with the EPSG code for the projection. If no CRS is
 specified, the default is the UTM zone for the city.}

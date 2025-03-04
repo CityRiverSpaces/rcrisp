@@ -95,7 +95,7 @@ test_that("buffering a bbox properly enlarge the area of interest", {
   x <- c(xmin = 263554, xmax = 736446, ymin = 4987330, ymax = 5654109)
   bbox_utm2n <- sf::st_bbox(x, crs = "EPSG:32602")
 
-  bbox_buffer_actual <- buffer_obj(bbox_utm2n, 1000)
+  bbox_buffer_actual <- buffer(bbox_utm2n, 1000)
 
   y <- c(x[c("xmin", "ymin")] - 1000, x[c("xmax", "ymax")] + 1000)
   bbox_buffer_expected <- sf::st_bbox(y, crs = "EPSG:32602")
@@ -108,7 +108,7 @@ test_that("buffering a bbox does not change its CRS", {
   x <- c(xmin = -174, xmax = -168, ymin = 45, ymax = 51)
   bbox_wgs84 <- sf::st_bbox(x, crs = "EPSG:4326")
 
-  bbox_buffer <- buffer_obj(bbox_wgs84, 1000)
+  bbox_buffer <- buffer(bbox_wgs84, 1000)
 
   crs_expected <- sf::st_crs(bbox_wgs84)
   crs_actual <- sf::st_crs(bbox_buffer)

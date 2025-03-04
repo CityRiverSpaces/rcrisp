@@ -65,7 +65,7 @@ get_osm_bb <- function(city_name) {
 #'
 #' @param city_name A character string with the name of the city.
 #' @param river_name A character string with the name of the river.
-#' @param buffer_in_m An integer with the buffer size in meters around the river
+#' @param buffer_distance Buffer distance in meters around the river
 #'                    center line, defining the width of the area of interest
 #' @param crs An integer with the EPSG code for the projection. If no CRS is
 #'            specified, the default is the UTM zone for the city.
@@ -79,7 +79,7 @@ get_osm_bb <- function(city_name) {
 #' get_osmdata("Bucharest", "Dâmbovița", 100)
 
 get_osmdata <- function(
-  city_name, river_name, buffer_in_m = NULL, crs = NULL,
+  city_name, river_name, buffer_distance = NULL, crs = NULL,
   force_download = FALSE
 ) {
   bb <- get_osm_bb(city_name)
@@ -99,8 +99,8 @@ get_osmdata <- function(
   bounding_obj <- sf::st_transform(river$centerline, sf::st_crs(bb))
 
   # Apply the buffer around the river center line
-  if (!is.null(buffer_in_m)) {
-    bounding_obj <- buffer(bounding_obj, buffer_in_m)
+  if (!is.null(buffer_distance)) {
+    bounding_obj <- buffer(bounding_obj, buffer_distance)
   }
 
   # Retrieve streets and railways

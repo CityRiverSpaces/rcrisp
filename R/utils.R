@@ -57,9 +57,9 @@ as_bbox <- function(x) {
 #' it back to the lat/lon system.
 #'
 #' @param obj A sf object
-#' @param buffer Buffer region in meters
+#' @param buffer_distance Buffer distance in meters
 #' @return Expanded sf object
-buffer <- function(obj, buffer) {
+buffer <- function(obj, buffer_distance) {
   is_obj_longlat <- sf::st_is_longlat(obj)
   dst_crs <- sf::st_crs(obj)
   # check if obj is a bbox
@@ -69,12 +69,12 @@ buffer <- function(obj, buffer) {
     crs_meters <- get_utm_zone(obj)
     obj <- sf::st_transform(obj, crs_meters)
   }
-  obj_buffer <- sf::st_buffer(obj, buffer)
+  expanded_obj <- sf::st_buffer(obj, buffer_distance)
   if (is_obj_longlat) {
-    obj_buffer <- sf::st_transform(obj_buffer, dst_crs)
+    expanded_obj <- sf::st_transform(expanded_obj, dst_crs)
   }
-  if (is_obj_bbox) obj_buffer <- sf::st_bbox(obj_buffer)
-  obj_buffer
+  if (is_obj_bbox) expanded_obj <- sf::st_bbox(expanded_obj)
+  expanded_obj
 }
 
 #' Reproject a raster or vector dataset to the specified
