@@ -103,7 +103,8 @@ get_stac_asset_urls <- function(bb, endpoint = NULL, collection = NULL) {
     endpoint <- default_stac_dem$endpoint
     collection <- default_stac_dem$collection
     # check if there is AWS credentials file, otherwise use unsigned requests
-    if (!file.exists("~/.aws/credentials")) {
+    aws_credentials_path <- file.path(Sys.getenv("HOME"), ".aws", "credentials")
+    if (!file.exists(aws_credentials_path)) {
       Sys.setenv("AWS_NO_SIGN_REQUEST" = "YES")
     }
   } else if (is.null(endpoint) || is.null(collection)) {
