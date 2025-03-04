@@ -57,7 +57,7 @@ bucharest_dambovita$riverspace
 
 # All three elements of delineation
 plot(bucharest_dambovita$corridor, border = NA)
-plot(bucharest_dambovita$riverspace, col = "green", border = NA, add = T)
+plot(bucharest_dambovita$riverspace, col = "green", border = NA, add = TRUE)
 plot(bucharest_osm$river_centerline, col = "blue", add = TRUE)
 plot(bucharest_dambovita$segments, border = "lightblue", add = TRUE)
 plot(bucharest_dambovita$corridor, border = "red", wt = 2, add = TRUE)
