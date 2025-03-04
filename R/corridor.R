@@ -55,6 +55,7 @@ delineate_corridor <- function(
                           max_iterations)
   edge_2 <- corridor_edge(network_2, end_points, edges_init[2], corridor_init,
                           max_iterations)
+
   # Cap the corritor and return it
   cap_corridor(c(edge_1, edge_2), capping_method, network)
 }
@@ -241,8 +242,7 @@ initial_edges <- function(corridor_initial, regions) {
 #'
 #' @return A simple feature geometry representing the edge (i.e. a linestring)
 corridor_edge <- function(network, end_points, target_edge, exclude_area = NULL,
-                          max_iterations = 10
-) {
+                          max_iterations = 10) {
   # Identify nodes on the network that are closest to the target end points
   nodes <- nearest_node(network, end_points)
 
