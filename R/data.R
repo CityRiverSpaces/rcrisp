@@ -32,7 +32,7 @@
 
 #' CRiSp example delineation data for Bucharest
 #'
-#' Delineation generated with [`bucharest_osm`] and [`bucharet_dem`] as input
+#' Delineation generated with [`bucharest_osm`] and [`bucharest_dem`] as input
 #'
 #' @format A list of sf objects representing:
 #' \describe{
