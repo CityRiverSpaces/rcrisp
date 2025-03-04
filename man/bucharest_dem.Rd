@@ -7,26 +7,15 @@
 \format{
 A PackedSpatRaster object. Run \code{\link[terra:wrap]{terra::unwrap()}} to extract the
 DEM as a SpatRaster object
-
-A list of sf objects representing:
-\describe{
-\item{corridor}{The corridor boundaries of river Dâmbovița.}
-\item{segments}{Corridor segments of river Dâmbovița.}
-\item{riverspace}{River space of Dâmbovița.}
-}
 }
 \source{
 \url{https://spacedata.copernicus.eu/collections/copernicus-digital-elevation-model}
 }
 \usage{
 bucharest_dem
-
-bucharest_dem
 }
 \description{
 Copernicus GLO-30 Digital Elevation Model (DEM) cropped and retiled to cover
 the city of Bucharest. Used for examples and vignettes in the CRiSp package.
-
-Delineation generated with \code{\link{bucharest_osm}} and \code{\link{bucharet_dem}} as input
 }
 \keyword{datasets}

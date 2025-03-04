@@ -40,4 +40,4 @@
 #'  \item{segments}{Corridor segments of river Dâmbovița.}
 #'  \item{riverspace}{River space of Dâmbovița.}
 #' }
-"bucharest_dem"
+"bucharest_delineation"
