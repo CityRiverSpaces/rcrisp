@@ -68,6 +68,9 @@ get_osm_bb <- function(city_name) {
 #' @param river_name A character string with the name of the river.
 #' @param crs An integer with the EPSG code for the projection. If no CRS is
 #'            specified, the default is the UTM zone for the city.
+#' @param buildings_buffer A numeric with the buffer distance in meters around
+#'                         the river to retrieve buildings. By default, it is
+#'                         100.
 #' @param force_download Download data even if cached data is available
 #'
 #' @return An list with the retrieved OpenStreetMap data sets for the
@@ -75,25 +78,30 @@ get_osm_bb <- function(city_name) {
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' bb <- get_osm_bb("Bucharest")
 #' crs <- get_utm_zone(bb)
 #' get_osmdata(bb, "Bucharest", "Dambovita", crs)
+#' }
 get_osmdata <- function(bb, city_name, river_name, crs = NULL,
-                        force_download = FALSE) {
+                        buildings_buffer = 100, force_download = FALSE) {
   boundary <- get_osm_city_boundary(bb, city_name, crs = crs,
                                     force_download = force_download)
   river <- get_osm_river(bb, river_name, crs = crs,
                          force_download = force_download)
-  srteets <- get_osm_streets(bb, crs = crs, force_download = force_download)
+  streets <- get_osm_streets(bb, crs = crs, force_download = force_download)
   railways <- get_osm_railways(bb, crs = crs, force_download = force_download)
+  buildings <- get_osm_buildings(river, crs = crs, buffer = buildings_buffer,
+                                 force_download = force_download)
 
   list(
     bb = bb,
     boundary = boundary,
-    river_centerline = river$centerline,
-    river_surface = river$surface,
-    streets = srteets,
-    railways = railways
+    river_centerline = river[1],
+    river_surface = river[2],
+    streets = streets,
+    railways = railways,
+    buildings = buildings
   )
 }
 
@@ -182,6 +190,9 @@ get_osm_river <- function(bb, river_name, crs = NULL, force_download = FALSE) {
     dplyr::filter(.data$name == river_name) |>
     # the query can return more features than actually intersecting the bb
     sf::st_filter(sf::st_as_sfc(bb), .predicate = sf::st_intersects) |>
+    # The buffer here is meant to ensure that the river is long enough
+    # before being intersected with the AOI in split_aoi()
+    sf::st_crop(buffer_bbox(bb, buffer = 1000)) |>
     sf::st_geometry()
 
   # Get the river surface
@@ -200,7 +211,7 @@ get_osm_river <- function(bb, river_name, crs = NULL, force_download = FALSE) {
     river_surface <- sf::st_transform(river_surface, crs)
   }
 
-  list(centerline = river_centerline, surface = river_surface)
+  c(river_centerline, river_surface)
 }
 
 #' Get OpenStreetMap streets
@@ -273,4 +284,43 @@ get_osm_railways <- function(bb, crs = NULL, force_download = FALSE) {
   if (!is.null(crs)) railways_lines <- sf::st_transform(railways_lines, crs)
 
   railways_lines
+}
+
+#' Get OpenStreetMap buildings
+#'
+#' Get buildings from OpenStreetMap within a given buffer around a river.
+#'
+#' @param river An sf object with the river centreline, surface or a list
+#'              with both.
+#' @param crs Coordinate reference system as EPSG code
+#' @param buffer A numeric with the buffer distance in meters.
+#' @param force_download Download data even if cached data is available
+#'
+#' @return An sf object with the buildings
+#' @export
+get_osm_buildings <- function(river, crs = NULL, buffer = 100,
+                              force_download = FALSE) {
+  crs <- sf::st_crs(river[1])
+
+  river_buffer <- river |>
+    sf::st_buffer(buffer) |>
+    sf::st_union() |>
+    sf::st_transform(4326)
+
+  river_bb <- river_buffer |>
+    sf::st_bbox()
+
+  river_buffer <- river_buffer |>
+    sf::st_transform(crs)
+
+  buildings <- osmdata_as_sf("building", "", river_bb,
+                             force_download = force_download)
+
+  buildings <- buildings$osm_polygons |>
+    sf::st_transform(crs) |>
+    sf::st_filter(river_buffer, .predicate = sf::st_intersects) |>
+    dplyr::filter(.data$building != "NULL") |>
+    sf::st_geometry()
+
+  buildings
 }

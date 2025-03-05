@@ -296,6 +296,7 @@ nearest_node <- function(network, target) {
 #' @param target The target geometry
 #'
 #' @return A spatial network object
+#' @export
 filter_network <- function(network, target) {
   network |>
     tidygraph::activate("nodes") |>
