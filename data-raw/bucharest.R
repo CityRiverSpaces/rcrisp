@@ -24,7 +24,9 @@ bucharest_osm <- lapply(bucharest_osm, fix_wkt_encoding)
 # Fetch the DEM data
 bbox <- as_bbox(bucharest_osm$aoi)
 crs <- get_utm_zone(bbox)
-bucharest_dem <- get_dem(bbox, crs = crs, force_download = TRUE)
+bucharest_dem <- get_dem(bbox, crs = crs, force_download = TRUE) |>
+  # SpatRaster objects cannot be directly serialized as RDS/RDA files
+  terra::wrap()
 
 # Save as package data
 usethis::use_data(bucharest_osm, overwrite = TRUE)
