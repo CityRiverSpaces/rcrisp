@@ -27,6 +27,7 @@
     <li><h6 class="dropdown-header" data-toc-skip>Delineation</h6></li>
     <li><a class="dropdown-item" href="../articles/corridor-delineation.html">4. Corridor delineation</a></li>
     <li><a class="dropdown-item" href="../articles/corridor-segmentation.html">5. Corridor segmentation</a></li>
+    <li><a class="dropdown-item" href="../articles/riverspace-delineation.html">6. Riverspace delineation</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -72,6 +73,12 @@
 
         </dt>
         <dd>Create a network from a collection of line strings.</dd>
+      </dl><dl><dt>
+
+          <code><a href="bucharest_delineation.html">bucharest_delineation</a></code>
+
+        </dt>
+        <dd>CRiSp example delineation data for Bucharest</dd>
       </dl><dl><dt>
 
           <code><a href="bucharest_dem.html">bucharest_dem</a></code>
@@ -134,16 +141,28 @@
         <dd>Endpoint and collection ID of the default STAC collection where to access digital elevation model (DEM) data. This is the global Copernicus DEM 30 dataset hosted on AWS, as listed in the EarthSearch STAC API endpoint. Note that AWS credentials need to be set up in order to access the data (not the catalog). References: <ul><li><p><a href="https://element84.com/earth-search/" class="external-link">EarthSearch STAC API</a></p></li> <li><p><a href="https://spacedata.copernicus.eu/collections/copernicus-digital-elevation-model" class="external-link">Copernicus DEM</a></p></li> <li><p><a href="https://copernicus-dem-30m.s3.amazonaws.com/readme.html" class="external-link">AWS Copernicus DEM datasets</a></p></li> <li><p><a href="https://docs.sentinel-hub.com/api/latest/static/files/data/dem/resources/license/License-COPDEM-30.pdf" class="external-link">Data license</a></p></li> </ul></dd>
       </dl><dl><dt>
 
-          <code><a href="delineate_corridor.html">delineate_corridor()</a></code>
+          <code><a href="delineate.html">delineate()</a></code>
 
         </dt>
         <dd>Delineate a corridor around a river.</dd>
       </dl><dl><dt>
 
+          <code><a href="delineate_corridor.html">delineate_corridor()</a></code>
+
+        </dt>
+        <dd>Delineate a river corridor on a spatial network.</dd>
+      </dl><dl><dt>
+
           <code><a href="delineate_riverspace.html">delineate_riverspace()</a></code>
 
         </dt>
-        <dd>Delinate the riverspace.</dd>
+        <dd>Delineate the space surrounding a river</dd>
+      </dl><dl><dt>
+
+          <code><a href="delineate_segments.html">delineate_segments()</a></code>
+
+        </dt>
+        <dd>Split a river corridor into segments</dd>
       </dl><dl><dt>
 
           <code><a href="dem_to_cog.html">dem_to_cog()</a></code>
@@ -176,12 +195,6 @@
         <dd>Get characteristic value of distribution of cost distance</dd>
       </dl><dl><dt>
 
-          <code><a href="get_corridor.html">get_corridor()</a></code>
-
-        </dt>
-        <dd>Delineate a river corridor on a spatial network.</dd>
-      </dl><dl><dt>
-
           <code><a href="get_cost_distance.html">get_cost_distance()</a></code>
 
         </dt>
@@ -210,6 +223,12 @@
 
         </dt>
         <dd>Get the bounding box of a city</dd>
+      </dl><dl><dt>
+
+          <code><a href="get_osm_buildings.html">get_osm_buildings()</a></code>
+
+        </dt>
+        <dd>Get OpenStreetMap buildings</dd>
       </dl><dl><dt>
 
           <code><a href="get_osm_city_boundary.html">get_osm_city_boundary()</a></code>
@@ -246,12 +265,6 @@
 
         </dt>
         <dd>Get the file path where to cache results of an Overpass API query</dd>
-      </dl><dl><dt>
-
-          <code><a href="get_segments.html">get_segments()</a></code>
-
-        </dt>
-        <dd>Split a river corridor into segments</dd>
       </dl><dl><dt>
 
           <code><a href="get_slope.html">get_slope()</a></code>

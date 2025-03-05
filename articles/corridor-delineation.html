@@ -42,6 +42,7 @@
     <li><h6 class="dropdown-header" data-toc-skip>Delineation</h6></li>
     <li><a class="dropdown-item" href="../articles/corridor-delineation.html">4. Corridor delineation</a></li>
     <li><a class="dropdown-item" href="../articles/corridor-segmentation.html">5. Corridor segmentation</a></li>
+    <li><a class="dropdown-item" href="../articles/riverspace-delineation.html">6. Riverspace delineation</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -81,11 +82,10 @@ area. We will use OpenStreetMap (OSM) data, first from the Overpass API
 and then from a local file.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">city_name</span> <span class="op">&lt;-</span> <span class="st">"Bucharest, Romania"</span>   <span class="co"># Be specific and spell as in OSM</span></span>
-<span><span class="va">river_name</span> <span class="op">&lt;-</span> <span class="st">"Dâmbovița"</span>           <span class="co"># Spell as in OSM</span></span>
-<span><span class="va">bbox_buffer</span> <span class="op">&lt;-</span> <span class="fl">2000</span>                 <span class="co"># Buffer distance in meters</span></span></code></pre></div>
+<span><span class="va">river_name</span> <span class="op">&lt;-</span> <span class="st">"Dâmbovița"</span>           <span class="co"># Spell as in OSM</span></span></code></pre></div>
 <p>We start by demonstrating the use of the all-in-one
-<code><a href="../reference/delineate_corridor.html">delineate_corridor()</a></code> function which does the following
-three steps:</p>
+<code><a href="../reference/delineate.html">delineate()</a></code> function which does the following three
+steps:</p>
 <ol style="list-style-type: decimal">
 <li><p>Fetches city boundary, street and rail network, as well as river
 centreline and surface data from the <a href="https://wiki.openstreetmap.org/wiki/Overpass_API" class="external-link">Overpass API</a>
@@ -95,7 +95,7 @@ as shown in <code><a href="../articles/getting-osm-data.html">vignette("getting-
 <li><p>Constructs the initial corridor based on the chosen method. If
 the <code>method = "buffer"</code> is chosen, the corridor is
 constructed by buffering the river centreline and surface data with a
-given buffer distance. If the <code>method = "dem"</code> is chosen
+given buffer distance. If the <code>method = "valley"</code> is chosen
 instead, the Cost Distance Accumulation algorithm is used to delineate
 the corridor based on the digital elevation model (DEM) of the area
 retrieved from the <a href="https://element84.com/earth-search/" class="external-link">Earth
@@ -104,19 +104,14 @@ Search API</a>.</p></li>
 initial corridor. Optionally, the corridor is split into segments based
 on the network and the river space is delineated.</p></li>
 </ol>
-<p>The <code><a href="../reference/delineate_corridor.html">delineate_corridor()</a></code> function carries out the above
-steps in one and returns a list that by default contains the following
-output elements: <code>corridor</code>, <code>segments</code>, and
+<p>The <code><a href="../reference/delineate.html">delineate()</a></code> function carries out the above steps in
+one and returns a list that by default contains the following output
+elements: <code>corridor</code>, <code>segments</code>, and
 <code>riverspace</code>.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># TODO remove eval=FALSE after segment and riverspace delineation are</span></span>
-<span><span class="co"># implemented and the delineate_corridor() function is updated to return a list</span></span>
-<span><span class="va">bucharest_dambovita</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/delineate_corridor.html">delineate_corridor</a></span><span class="op">(</span></span>
+<code class="sourceCode R"><span><span class="va">bucharest_dambovita</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/delineate.html">delineate</a></span><span class="op">(</span></span>
 <span>  <span class="va">city_name</span>,</span>
 <span>  <span class="va">river_name</span>,</span>
-<span>  bbox_buffer <span class="op">=</span> <span class="va">bbox_buffer</span>,</span>
-<span>  initial_method <span class="op">=</span> <span class="st">"buffer"</span>,</span>
-<span>  capping_method <span class="op">=</span> <span class="st">"direct"</span>,</span>
 <span>  segments <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  riverspace <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span>
@@ -131,10 +126,11 @@ output elements: <code>corridor</code>, <code>segments</code>, and
 <span><span class="va">bucharest_dambovita</span><span class="op">$</span><span class="va">riverspace</span></span>
 <span></span>
 <span><span class="co"># All three elements of delineation</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">urc</span><span class="op">$</span><span class="va">riverspace</span>, col <span class="op">=</span> <span class="st">"green"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">urc</span><span class="op">$</span><span class="va">river</span>, col <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">urc</span><span class="op">$</span><span class="va">segments</span>, col <span class="op">=</span> <span class="st">"lightblue"</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">urc</span><span class="op">$</span><span class="va">corridor</span>, add <span class="op">=</span> <span class="cn">TRUE</span>, col <span class="op">=</span> <span class="st">"red"</span>, wt <span class="op">=</span> <span class="fl">2</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">bucharest_dambovita</span><span class="op">$</span><span class="va">corridor</span>, border <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">bucharest_dambovita</span><span class="op">$</span><span class="va">riverspace</span>, col <span class="op">=</span> <span class="st">"green"</span>, border <span class="op">=</span> <span class="cn">NA</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">bucharest_osm</span><span class="op">$</span><span class="va">river_centerline</span>, col <span class="op">=</span> <span class="st">"blue"</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">bucharest_dambovita</span><span class="op">$</span><span class="va">segments</span>, border <span class="op">=</span> <span class="st">"lightblue"</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">bucharest_dambovita</span><span class="op">$</span><span class="va">corridor</span>, border <span class="op">=</span> <span class="st">"red"</span>, wt <span class="op">=</span> <span class="fl">2</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
   </main>
 </div>
 

@@ -27,6 +27,7 @@
     <li><h6 class="dropdown-header" data-toc-skip>Delineation</h6></li>
     <li><a class="dropdown-item" href="../articles/corridor-delineation.html">4. Corridor delineation</a></li>
     <li><a class="dropdown-item" href="../articles/corridor-segmentation.html">5. Corridor segmentation</a></li>
+    <li><a class="dropdown-item" href="../articles/riverspace-delineation.html">6. Riverspace delineation</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -85,23 +86,15 @@
 <span class="r-in"><span><span class="va">crs</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_utm_zone.html">get_utm_zone</a></span><span class="op">(</span><span class="va">bb</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">get_osm_river</span><span class="op">(</span><span class="va">bb</span>, <span class="st">"Dâmbovița"</span>, <span class="va">crs</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Saving data to cache directory: /home/runner/.cache/CRiSp/osmdata_waterway_river_25.967_44.334_26.226_44.541.rds</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>attribute variables are assumed to be spatially constant throughout all geometries</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Saving data to cache directory: /home/runner/.cache/CRiSp/osmdata_natural_water_25.967_44.334_26.226_44.541.rds</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $centerline</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Geometry set for 1 feature </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: MULTILINESTRING</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Geometry set for 2 features </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: GEOMETRY</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: 342590.9 ymin: 4897268 xmax: 457820 ymax: 5048321</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: 416796.9 ymin: 4915950 xmax: 439328.8 ymax: 4924248</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Projected CRS: WGS 84 / UTM zone 35N</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> MULTILINESTRING ((342590.9 5043751, 342603 5043...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $surface</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Geometry set for 1 feature </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: MULTIPOLYGON</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: 418720.8 ymin: 4915950 xmax: 438326.9 ymax: 4924248</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Projected CRS: WGS 84 / UTM zone 35N</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> LINESTRING (416796.9 4923612, 416839.2 4923623,...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> MULTIPOLYGON (((427868.6 4920273, 427882.5 4920...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
