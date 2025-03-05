@@ -23,6 +23,6 @@ the city
 }
 \examples{
 bb <- get_osm_bb("Bucharest")
-river <- get_osm_river(bb, "Dâmbovița", crs)
+river <- get_osm_river(bb, "Dâmbovița")
 get_river_aoi(river, bb, buffer_distance = 100)
 }

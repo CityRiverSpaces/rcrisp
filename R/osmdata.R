@@ -319,7 +319,7 @@ get_osm_railways <- function(aoi, crs = NULL, force_download = FALSE) {
 #'
 #' @examples
 #' bb <- get_osm_bb("Bucharest")
-#' river <- get_osm_river(bb, "Dâmbovița", crs)
+#' river <- get_osm_river(bb, "Dâmbovița")
 #' get_river_aoi(river, bb, buffer_distance = 100)
 get_river_aoi <- function(river, city_bbox, buffer_distance = NULL) {
   river <- c(river$centerline, river$surface)
