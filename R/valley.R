@@ -141,7 +141,7 @@ load_dem <- function(bb, tile_urls, force_download = FALSE) {
     return(dem)
   }
 
-  dem <- load_raster(tile_urls, bbox = bb)
+  dem <- load_raster(tile_urls, bbox = bbox)
 
   write_data_to_cache(dem, filepath, wrap = TRUE)
 

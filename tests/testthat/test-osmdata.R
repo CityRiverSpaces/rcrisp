@@ -73,7 +73,7 @@ test_that("Queried datasets can be retrieved from the cache on new calls", {
   # setup cache directory
   cache_dir <- temp_cache_dir()
 
-  bb <- bucharest_osm$bb
+  bb <- bucharest_osm$aoi
 
   # calling get_osm_railways should create a file in the cache folder
   expect_message(get_osm_railways(bb, force_download = TRUE),
