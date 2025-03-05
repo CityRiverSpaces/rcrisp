@@ -11,8 +11,8 @@ bucharest_osm <- get_osmdata(bbox_expanded, city_name, river_name,
                              crs = epsg_code, force_download = TRUE)
 
 # Add delineation to package data
-bucharest_delineation <- delineate(city_name, river_name, crs = epsg_code, 
-                                   corridor = TRUE, segments = TRUE, 
+bucharest_delineation <- delineate(city_name, river_name, crs = epsg_code,
+                                   corridor = TRUE, segments = TRUE,
                                    riverspace = TRUE)
 
 # Fix encoding issue in the WKT strings
