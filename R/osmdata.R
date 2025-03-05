@@ -6,14 +6,14 @@
 #'
 #' @param key A character string with the key to filter the data
 #' @param value A character string with the value to filter the data
-#' @param bb A bounding box, provided either as a matrix (rows for "x", "y",
-#'   columns for "min", "max") or as a vector ("xmin", "ymin", "xmax", "ymax")
+#' @param aoi An area of interest, provided either as as sf object or "bbox" or
+#' as a vector ("xmin", "ymin", "xmax", "ymax")
 #' @param force_download Download data even if cached data is available
 #'
 #' @return An sf object with the retrieved OpenStreetMap data
 #' @export
-osmdata_as_sf <- function(key, value, bb, force_download = FALSE) {
-  bbox <- as_bbox(bb) # it should be in lat/lon
+osmdata_as_sf <- function(key, value, aoi, force_download = FALSE) {
+  bbox <- as_bbox(aoi) # it should be in lat/lon
 
   filepath <- get_osmdata_cache_filepath(key, value, bbox)
 
@@ -225,7 +225,7 @@ get_osm_river <- function(bb, river_name, crs = NULL, force_download = FALSE) {
 
 #' Get OpenStreetMap streets
 #'
-#' @param bb Bounding box of class `bbox`
+#' @param aoi Area of interest as sf object or bbox
 #' @param crs Coordinate reference system as EPSG code
 #' @param highway_values A character vector with the highway values to retrieve.
 #'             If left NULL, the function retrieves the following values:
@@ -240,7 +240,7 @@ get_osm_river <- function(bb, river_name, crs = NULL, force_download = FALSE) {
 #' bb <- get_osm_bb("Bucharest")
 #' crs <- get_utm_zone(bb)
 #' get_osm_streets(bb, crs)
-get_osm_streets <- function(bb, crs = NULL, highway_values = NULL,
+get_osm_streets <- function(aoi, crs = NULL, highway_values = NULL,
                             force_download = FALSE) {
   if (is.null(highway_values)) {
     highway_values <- c("motorway", "trunk", "primary", "secondary", "tertiary")
@@ -250,7 +250,7 @@ get_osm_streets <- function(bb, crs = NULL, highway_values = NULL,
                         FUN = \(x) sprintf("%s_link", x),
                         USE.NAMES = FALSE)
 
-  streets <- osmdata_as_sf("highway", c(highway_values, link_values), bb,
+  streets <- osmdata_as_sf("highway", c(highway_values, link_values), aoi,
                            force_download = force_download)
 
   # Cast polygons (closed streets) into lines
@@ -266,8 +266,8 @@ get_osm_streets <- function(bb, crs = NULL, highway_values = NULL,
 
   # Interscet with the bounding polygon
   # this will return a warning, see https://github.com/r-spatial/sf/issues/406
-  if (inherits(bb, "bbox")) bb <- sf::st_as_sfc(bb)
-  mask <- sf::st_intersects(streets_lines, bb, sparse = FALSE)
+  if (inherits(aoi, "bbox")) aoi <- sf::st_as_sfc(aoi)
+  mask <- sf::st_intersects(streets_lines, aoi, sparse = FALSE)
   streets_lines <- streets_lines[mask, ]
 
   if (!is.null(crs)) streets_lines <- sf::st_transform(streets_lines, crs)
@@ -277,7 +277,7 @@ get_osm_streets <- function(bb, crs = NULL, highway_values = NULL,
 
 #' Get OpenStreetMap railways
 #'
-#' @param bb Bounding box of class `bbox`
+#' @param aoi Area of interest as sf object or bbox
 #' @param crs Coordinate reference system as EPSG code
 #' @param force_download Download data even if cached data is available
 #'
@@ -289,16 +289,16 @@ get_osm_streets <- function(bb, crs = NULL, highway_values = NULL,
 #' bb <- get_osm_bb("Bucharest")
 #' crs <- get_utm_zone(bb)
 #' get_osm_railways(bb, crs)
-get_osm_railways <- function(bb, crs = NULL, force_download = FALSE) {
-  railways <- osmdata_as_sf("railway", "rail", bb,
+get_osm_railways <- function(aoi, crs = NULL, force_download = FALSE) {
+  railways <- osmdata_as_sf("railway", "rail", aoi,
                             force_download = force_download)
   railways_lines <- railways$osm_lines |>
     dplyr::select("railway") |>
     dplyr::rename(!!sym("type") := !!sym("railway"))
 
   # Interscet with the bounding polygon
-  if (inherits(bb, "bbox")) bb <- sf::st_as_sfc(bb)
-  mask <- sf::st_intersects(railways_lines, bb, sparse = FALSE)
+  if (inherits(aoi, "bbox")) aoi <- sf::st_as_sfc(aoi)
+  mask <- sf::st_intersects(railways_lines, aoi, sparse = FALSE)
   railways_lines <- railways_lines[mask, ]
 
   if (!is.null(crs)) railways_lines <- sf::st_transform(railways_lines, crs)
