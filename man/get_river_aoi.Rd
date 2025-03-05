@@ -10,12 +10,12 @@ get_river_aoi(river, city_bbox, buffer_distance = NULL)
 \arguments{
 \item{river}{A list with the river centreline and surface}
 
-\item{buffer_distance}{Buffer size around the river}
+\item{city_bbox}{Bounding box around the city}
 
-\item{bbox}{Bounding box around the city}
+\item{buffer_distance}{Buffer size around the river}
 }
 \value{
-An sf object or bbox
+An sf or bbox object
 }
 \description{
 Get an area of interest (aoi) around a river, cropping to the bounding box of

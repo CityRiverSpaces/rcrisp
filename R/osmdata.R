@@ -310,10 +310,9 @@ get_osm_railways <- function(aoi, crs = NULL, force_download = FALSE) {
 #' the city
 #'
 #' @param river A list with the river centreline and surface
-#' @param bbox
-#' Bounding box around the city
+#' @param city_bbox Bounding box around the city
 #' @param buffer_distance Buffer size around the river
-#' @return An sf object or bbox
+#' @return An sf or bbox object
 #' @export
 #' @importFrom rlang !! sym
 #'
