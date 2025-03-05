@@ -115,6 +115,26 @@ test_that("buffering a bbox does not change its CRS", {
   expect_equal(crs_actual, crs_expected)
 })
 
+test_that("River buffer implements a buffer function", {
+  river <- bucharest_osm$river_centerline
+  actual <- river_buffer(river, buffer_distance = 0.5)
+  expected <- sf::st_buffer(river, 0.5)
+  expect_setequal(actual, expected)
+})
+
+test_that("River buffer can trim to the region of interest", {
+  river <- bucharest_osm$river_centerline
+  bbox <- sf::st_bbox(bucharest_osm$boundary)
+  actual <- river_buffer(river, buffer_distance = 0.5, bbox = bbox)
+  river_buffer <- sf::st_buffer(river, 0.5)
+  overlap_matrix <- sf::st_overlaps(river_buffer, actual, sparse = FALSE)
+  expect_equal(dim(overlap_matrix), c(1, 1))
+  expect_true(overlap_matrix[1, 1])
+  actual_bbox <- sf::st_bbox(actual)
+  expect_true(all(actual_bbox[c("xmin", "ymin")] >= bbox[c("xmin", "ymin")]))
+  expect_true(all(actual_bbox[c("xmax", "ymax")] <= bbox[c("xmax", "ymax")]))
+})
+
 test_that("reproject works with raster data", {
   # raster in UTM zone 2 (lon between -174 and -168 deg), northern emisphere
   x <- terra::rast(xmin = -174, xmax = -168, ymin = 45, ymax = 51, res = 1,

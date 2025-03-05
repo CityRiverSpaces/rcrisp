@@ -77,6 +77,26 @@ buffer <- function(obj, buffer_distance) {
   expanded_obj
 }
 
+#' Draw a corridor as a fixed buffer region around a river.
+#'
+#' The river geometry may consist of multiple spatial features, these are merged
+#' after applying the buffer.
+#'
+#' @param river A simple feature geometry representing the river
+#' @param buffer_distance Size of the buffer (in the river's CRS units)
+#' @param bbox Bounding box defining the extent of the area of interest
+#'
+#' @return A simple feature geometry
+river_buffer <- function(river, buffer_distance, bbox = NULL) {
+  river_buf <- buffer(river, buffer_distance)
+  river_buf_union <- sf::st_union(river_buf)
+  if (!is.null(bbox)) {
+    sf::st_crop(river_buf_union, bbox)
+  } else {
+    river_buf_union
+  }
+}
+
 #' Reproject a raster or vector dataset to the specified
 #' coordinate reference system (CRS)
 #'

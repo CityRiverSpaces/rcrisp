@@ -89,30 +89,26 @@ get_osmdata <- function(
     bb, city_name, crs = crs, force_download = force_download
   )
 
-  # Retrieve the river center line and surface, cropped to bb
+  # Retrieve the river center line and surface, but not cropped to bb
   river <- get_osm_river(
     bb, river_name, crs = crs, force_download = force_download
   )
 
-  # Use the river center line as bounding object to retrieve streets and
-  # railways
-  bounding_obj <- sf::st_transform(river$centerline, sf::st_crs(bb))
+  # Define the area of interest (aoi)
+  aoi <- get_river_aoi(
+    river, bb, buffer_distance = buffer_distance
+  )
 
-  # Apply the buffer around the river center line
-  if (!is.null(buffer_distance)) {
-    bounding_obj <- buffer(bounding_obj, buffer_distance)
-  }
-
-  # Retrieve streets and railways
+  # Retrieve streets and railways based on the aoi
   streets <- get_osm_streets(
-    bounding_obj, crs = crs, force_download = force_download
+    aoi, crs = crs, force_download = force_download
   )
   railways <- get_osm_railways(
-    bounding_obj, crs = crs, force_download = force_download
+    aoi, crs = crs, force_download = force_download
   )
 
   list(
-    aoi = bounding_obj,
+    aoi = aoi,
     boundary = boundary,
     river_centerline = river$centerline,
     river_surface = river$surface,
@@ -206,8 +202,7 @@ get_osm_river <- function(bb, river_name, crs = NULL, force_download = FALSE) {
     dplyr::filter(.data$name == river_name) |>
     # the query can return more features than actually intersecting the bb
     sf::st_filter(sf::st_as_sfc(bb), .predicate = sf::st_intersects) |>
-    sf::st_geometry() |>
-    sf::st_crop(bb)
+    sf::st_geometry()
 
   # Get the river surface
   river_surface <- osmdata_as_sf("natural", "water", bb,
@@ -307,4 +302,33 @@ get_osm_railways <- function(bb, crs = NULL, force_download = FALSE) {
   if (!is.null(crs)) railways_lines <- sf::st_transform(railways_lines, crs)
 
   railways_lines
+}
+
+#' Get an area of interest (aoi) around a river, cropping to the bounding box of
+#' the city
+#'
+#' @param river A list with the river centreline and surface @param bbox
+#' Bounding box around the city @param buffer_distance Buffer size around the
+#' river @return An sf object or bbox @export @importFrom rlang !! sym
+#'
+#' @examples bb <- get_osm_bb("Bucharest") river <- get_osm_river(bb,
+#' "Dâmbovița", crs) get_river_aoi(river, bb, buffer_distance = 100)
+get_river_aoi <- function(river, city_bbox, buffer_distance = NULL) {
+  river <- c(river$centerline, river$surface)
+
+  # Make sure crs are the same for cropping with bb
+  river <- sf::st_transform(river, sf::st_crs(city_bbox))
+
+  if (is.null(buffer_distance)) {
+    aoi <- sf::st_union(river) |>
+      sf::st_crop(city_bbox) |>
+      as_bbox()
+  } else {
+    aoi <- river_buffer(
+      river, buffer_distance, bbox = city_bbox
+    )
+  }
+
+  aoi
+
 }

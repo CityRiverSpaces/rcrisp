@@ -96,26 +96,6 @@ initial_corridor <- function(
   }
 }
 
-#' Draw a corridor as a fixed buffer region around a river.
-#'
-#' The river geometry may consist of multiple spatial features, these are merged
-#' after applying the buffer.
-#'
-#' @param river A simple feature geometry representing the river
-#' @param buffer Size of the buffer (in the river's CRS units)
-#' @param bbox Bounding box defining the extent of the area of interest
-#'
-#' @return A simple feature geometry
-river_buffer <- function(river, buffer, bbox = NULL) {
-  river_buf <- sf::st_buffer(river, buffer)
-  river_buf_union <- sf::st_union(river_buf)
-  if (!is.null(bbox)) {
-    sf::st_crop(river_buf_union, bbox)
-  } else {
-    river_buf_union
-  }
-}
-
 #' Find the corridor end points.
 #'
 #' Determine the extremes (start and end point) of the river corridor
