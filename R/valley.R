@@ -102,9 +102,15 @@ get_stac_asset_urls <- function(bb, endpoint = NULL, collection = NULL) {
   if (is.null(endpoint) && is.null(collection)) {
     endpoint <- default_stac_dem$endpoint
     collection <- default_stac_dem$collection
+    # check if there is AWS credentials file, otherwise use unsigned requests
+    aws_credentials_path <- file.path(Sys.getenv("HOME"), ".aws", "credentials")
+    if (!file.exists(aws_credentials_path)) {
+      Sys.setenv("AWS_NO_SIGN_REQUEST" = "YES")
+    }
   } else if (is.null(endpoint) || is.null(collection)) {
     stop("Provide both or neither of STAC endpoint and collection")
   }
+
   bbox <- as_bbox(bb)
   rstac::stac(endpoint) |>
     rstac::stac_search(collections = collection, bbox = bbox) |>
