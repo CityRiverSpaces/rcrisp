@@ -8,15 +8,21 @@ the city}
 get_river_aoi(river, city_bbox, buffer_distance = NULL)
 }
 \arguments{
-\item{river}{A list with the river centreline and surface @param bbox
-Bounding box around the city @param buffer_distance Buffer size around the
-river @return An sf object or bbox @export @importFrom rlang !! sym}
+\item{river}{A list with the river centreline and surface}
+
+\item{buffer_distance}{Buffer size around the river}
+
+\item{bbox}{Bounding box around the city}
+}
+\value{
+An sf object or bbox
 }
 \description{
 Get an area of interest (aoi) around a river, cropping to the bounding box of
 the city
 }
 \examples{
-bb <- get_osm_bb("Bucharest") river <- get_osm_river(bb,
-"Dâmbovița", crs) get_river_aoi(river, bb, buffer_distance = 100)
+bb <- get_osm_bb("Bucharest")
+river <- get_osm_river(bb, "Dâmbovița", crs)
+get_river_aoi(river, bb, buffer_distance = 100)
 }

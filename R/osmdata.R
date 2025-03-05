@@ -307,12 +307,18 @@ get_osm_railways <- function(bb, crs = NULL, force_download = FALSE) {
 #' Get an area of interest (aoi) around a river, cropping to the bounding box of
 #' the city
 #'
-#' @param river A list with the river centreline and surface @param bbox
-#' Bounding box around the city @param buffer_distance Buffer size around the
-#' river @return An sf object or bbox @export @importFrom rlang !! sym
+#' @param river A list with the river centreline and surface
+#' @param bbox
+#' Bounding box around the city
+#' @param buffer_distance Buffer size around the river
+#' @return An sf object or bbox
+#' @export
+#' @importFrom rlang !! sym
 #'
-#' @examples bb <- get_osm_bb("Bucharest") river <- get_osm_river(bb,
-#' "Dâmbovița", crs) get_river_aoi(river, bb, buffer_distance = 100)
+#' @examples
+#' bb <- get_osm_bb("Bucharest")
+#' river <- get_osm_river(bb, "Dâmbovița", crs)
+#' get_river_aoi(river, bb, buffer_distance = 100)
 get_river_aoi <- function(river, city_bbox, buffer_distance = NULL) {
   river <- c(river$centerline, river$surface)
 
