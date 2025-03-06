@@ -8,6 +8,8 @@ get_osmdata(
   city_name,
   river_name,
   buffer_distance = NULL,
+  network = TRUE,
+  buildings = TRUE,
   crs = NULL,
   force_download = FALSE
 )
@@ -20,6 +22,10 @@ get_osmdata(
 \item{buffer_distance}{Buffer distance in meters around the river
 center line, defining the width of the area of interest}
 
+\item{network}{Whether to download the streets and railways}
+
+\item{buildings}{Whether to download the buildings}
+
 \item{crs}{An integer with the EPSG code for the projection. If no CRS is
 specified, the default is the UTM zone for the city.}
 
@@ -31,8 +37,8 @@ given location
 }
 \description{
 Retrieve OpenStreetMap data for a given location, including
-the city boundary, the river centreline and surface, the streets, and the
-railways.
+the city boundary, the river centreline and surface, the streets, the
+railways, and the buildings
 }
 \examples{
 get_osmdata("Bucharest", "Dâmbovița", 100)

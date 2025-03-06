@@ -60,13 +60,15 @@ get_osm_bb <- function(city_name) {
 #' Retrieve OpenStreetMap data for a given location
 #'
 #' Retrieve OpenStreetMap data for a given location, including
-#' the city boundary, the river centreline and surface, the streets, and the
-#' railways.
+#' the city boundary, the river centreline and surface, the streets, the
+#' railways, and the buildings
 #'
 #' @param city_name A character string with the name of the city.
 #' @param river_name A character string with the name of the river.
 #' @param buffer_distance Buffer distance in meters around the river
 #'                    center line, defining the width of the area of interest
+#' @param network Whether to download the streets and railways
+#' @param buildings Whether to download the buildings
 #' @param crs An integer with the EPSG code for the projection. If no CRS is
 #'            specified, the default is the UTM zone for the city.
 #' @param force_download Download data even if cached data is available
@@ -79,8 +81,8 @@ get_osm_bb <- function(city_name) {
 #' get_osmdata("Bucharest", "Dâmbovița", 100)
 
 get_osmdata <- function(
-  city_name, river_name, buffer_distance = NULL, crs = NULL,
-  force_download = FALSE
+  city_name, river_name, buffer_distance = NULL, network = TRUE,
+  buildings = TRUE, crs = NULL, force_download = FALSE
 ) {
   bb <- get_osm_bb(city_name)
   if (is.null(crs)) crs <- get_utm_zone(bb)
@@ -99,22 +101,30 @@ get_osmdata <- function(
     river, bb, buffer_distance = buffer_distance
   )
 
-  # Retrieve streets and railways based on the aoi
-  streets <- get_osm_streets(
-    aoi, crs = crs, force_download = force_download
-  )
-  railways <- get_osm_railways(
-    aoi, crs = crs, force_download = force_download
-  )
-
-  list(
+  osm_data <- list(
     aoi = aoi,
     boundary = boundary,
     river_centerline = river$centerline,
-    river_surface = river$surface,
-    streets = streets,
-    railways = railways
+    river_surface = river$surface
   )
+
+  # Retrieve streets and railways based on the aoi
+  if (network) {
+    osm_data <- c(osm_data, streets = get_osm_streets(
+      aoi, crs = crs, force_download = force_download
+    ))
+    osm_data <- c(osm_data, railways = get_osm_railways(
+      aoi, crs = crs, force_download = force_download
+    ))
+  }
+
+  if (buildings) {
+    osm_data <- c(osm_data, buildings = get_osm_buildings(
+      aoi, crs = crs, force_download = force_download
+    ))
+  }
+
+  osm_data
 }
 
 #' Get the city boundary from OpenStreetMap
@@ -202,6 +212,9 @@ get_osm_river <- function(bb, river_name, crs = NULL, force_download = FALSE) {
     dplyr::filter(.data$name == river_name) |>
     # the query can return more features than actually intersecting the bb
     sf::st_filter(sf::st_as_sfc(bb), .predicate = sf::st_intersects) |>
+    # The buffer here is meant to ensure that the river is long enough
+    # before being intersected with the AOI in split_aoi()
+    sf::st_crop(buffer_bbox(bb, buffer = 1000)) |>
     sf::st_geometry()
 
   # Get the river surface
@@ -220,7 +233,7 @@ get_osm_river <- function(bb, river_name, crs = NULL, force_download = FALSE) {
     river_surface <- sf::st_transform(river_surface, crs)
   }
 
-  list(centerline = river_centerline, surface = river_surface)
+  list(river_centerline = river_centerline, river_surface = river_surface)
 }
 
 #' Get OpenStreetMap streets
@@ -304,6 +317,29 @@ get_osm_railways <- function(aoi, crs = NULL, force_download = FALSE) {
   if (!is.null(crs)) railways_lines <- sf::st_transform(railways_lines, crs)
 
   railways_lines
+}
+
+#' Get OpenStreetMap buildings
+#'
+#' Get buildings from OpenStreetMap within a given buffer around a river.
+#'
+#' @param aoi Area of interest as sf object or bbox
+#' @param crs Coordinate reference system as EPSG code
+#' @param force_download Download data even if cached data is available
+#'
+#' @return An sf object with the buildings
+#' @export
+get_osm_buildings <- function(aoi, crs = NULL, force_download = FALSE) {
+  buildings <- osmdata_as_sf("building", "", aoi,
+                             force_download = force_download)
+  buildings <- buildings$osm_polygons |>
+    sf::st_filter(aoi, .predicate = sf::st_intersects) |>
+    dplyr::filter(.data$building != "NULL") |>
+    sf::st_geometry()
+
+  if (!is.null(crs)) buildings <- sf::st_transform(buildings, crs)
+
+  buildings
 }
 
 #' Get an area of interest (aoi) around a river, cropping to the bounding box of
