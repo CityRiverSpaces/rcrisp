@@ -214,7 +214,7 @@ get_osm_river <- function(bb, river_name, crs = NULL, force_download = FALSE) {
     sf::st_filter(sf::st_as_sfc(bb), .predicate = sf::st_intersects) |>
     # The buffer here is meant to ensure that the river is long enough
     # before being intersected with the AOI in split_aoi()
-    sf::st_crop(buffer_bbox(bb, buffer = 1000)) |>
+    sf::st_crop(buffer(bb, buffer = 1000)) |>
     sf::st_geometry()
 
   # Get the river surface
@@ -233,7 +233,7 @@ get_osm_river <- function(bb, river_name, crs = NULL, force_download = FALSE) {
     river_surface <- sf::st_transform(river_surface, crs)
   }
 
-  list(river_centerline = river_centerline, river_surface = river_surface)
+  list(centerline = river_centerline, surface = river_surface)
 }
 
 #' Get OpenStreetMap streets

@@ -5,10 +5,13 @@ epsg_code <- 32635
 buffer_distance <- 2500
 
 # Fetch the OSM data
-bbox <- get_osm_bb(city_name)
-bbox_expanded <- buffer_bbox(bbox, bbox_buffer)
-bucharest_osm <- get_osmdata(bbox_expanded, city_name, river_name,
-                             crs = epsg_code, force_download = TRUE)
+bucharest_osm <- get_osmdata(
+  city_name,
+  river_name,
+  crs = epsg_code,
+  buffer_distance = buffer_distance,
+  force_download = TRUE
+)
 
 # Add delineation to package data
 bucharest_delineation <- delineate(city_name, river_name, crs = epsg_code,
