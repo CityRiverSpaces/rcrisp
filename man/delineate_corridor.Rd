@@ -8,7 +8,7 @@ delineate_corridor(
   city_name,
   river_name,
   crs = NULL,
-  buffer_distance = NULL,
+  buffer_distance = 2500,
   initial_method = "valley",
   initial_buffer = NULL,
   dem = NULL,

@@ -5,10 +5,7 @@ test_that("Bucharest dataset includes all elements", {
 })
 
 test_that("Bounding box has correct type", {
-  bb <- bucharest_osm$aoi
-  is_bbox <- inherits(bb, "bbox")
-  is_polygon <- sf::st_is(bb, "POLYGON")
-  expect_true(is_bbox | is_polygon)
+  expect_true(sf::st_is(bucharest_osm$aoi, "POLYGON"))
 })
 
 test_that("Only the bounding box has a geographic CRS", {

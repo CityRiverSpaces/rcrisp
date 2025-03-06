@@ -24,7 +24,7 @@
 #' @return A simple feature geometry representing the river corridor
 #' @export
 get_corridor <- function(
-  network, river_centerline, river_surface, bbox, initial_method = "valley",
+  network, river_centerline, river_surface, aoi, initial_method = "valley",
   buffer = NULL, dem = NULL, max_iterations = 10, capping_method = "direct"
 ) {
   # Drop all attributes of river centerline and surface but the geometries
@@ -34,13 +34,14 @@ get_corridor <- function(
   # Draw the initial corridor geometry within the area of interest
   river <- c(river_centerline, river_surface)
   corridor_init <- initial_corridor(river, method = initial_method,
-                                    buffer = buffer, dem = dem, bbox = bbox)
+                                    buffer = buffer, dem = dem,
+                                    bbox = as_bbox(aoi))
 
   # Pick the corridor end points
-  end_points <- corridor_end_points(river_centerline, network, aoi = bbox)
+  end_points <- corridor_end_points(river_centerline, network, aoi = aoi)
 
   # Split the area of interest along the river centerline
-  regions <- split_aoi(bbox, river_centerline)
+  regions <- split_aoi(aoi, river_centerline)
 
   # Determine the initial corridor edges by splitting the initial corridor
   # boundary through the just determined regions
@@ -88,7 +89,9 @@ initial_corridor <- function(
     if (is.null(dem)) {
       stop("DEM should be provided if `method` is `'valley'`")
     }
-    get_valley(dem, river, bbox = bbox)
+    valley <- get_valley(dem, river)
+    if (!is.null(bbox)) valley <- sf::st_crop(valley, bbox)
+    valley
   } else {
     stop(
       sprintf("Unknown method to initialize river corridor: %s", method)
@@ -169,7 +172,7 @@ corridor_end_points <- function(river, network, aoi = NULL) {
 #' @return A simple feature geometry set of two areas of interest
 #' @importFrom rlang .data
 split_aoi <- function(bbox, river) {
-  regions <- split_by(sf::st_as_sfc(bbox), river)
+  regions <- split_by(as_sfc(bbox), river)
 
   if (length(regions) > 2) {
     # Sort fragments according to area in descending order
