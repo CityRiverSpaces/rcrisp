@@ -41,7 +41,7 @@ osmdata_as_sf <- function(key, value, aoi, force_download = FALSE) {
 osmdata_query <- function(key, value, bb) {
   # this is needed because the add_osm_feature does not support
   # value as an empty string
-  if (value == "") value <- NULL
+  if (all(value == "")) value <- NULL
   bb |>
     osmdata::opq() |>
     osmdata::add_osm_feature(key = key, value = value) |>
