@@ -8,8 +8,8 @@ delineate(
   city_name,
   river_name,
   crs = NULL,
-  network_buffer = 2500,
-  buildings_buffer = 0,
+  network_buffer = NULL,
+  buildings_buffer = NULL,
   dem_buffer = 2500,
   initial_method = "valley",
   initial_buffer = NULL,
@@ -37,7 +37,7 @@ river to retrieve additional data (streets, railways, etc.).
 Default is 2500 m.}
 
 \item{buildings_buffer}{Add a buffer (an integer in meters) around the
-river to retrieve additional data (buildings). Default is 0 m.}
+river to retrieve additional data (buildings). Default is 100 m.}
 
 \item{dem_buffer}{Add a buffer (an integer in meters) around the
 river to retrieve the DEM. Default is 2500 m.}

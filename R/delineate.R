@@ -8,7 +8,7 @@
 #'   river to retrieve additional data (streets, railways, etc.).
 #'   Default is 2500 m.
 #' @param buildings_buffer Add a buffer (an integer in meters) around the
-#'   river to retrieve additional data (buildings). Default is 0 m.
+#'   river to retrieve additional data (buildings). Default is 100 m.
 #' @param dem_buffer Add a buffer (an integer in meters) for retrieving the DEM.
 #' @param initial_method The method employed to define the initial river
 #'   corridor geometry. See [initial_corridor()] for the available methods
@@ -47,9 +47,25 @@ delineate <- function(
 
   if (segments && !corridor) stop("Segmentation requires corridor delineation.")
 
-  # Set buffer values depending on what is delineated
-  if (corridor) network_buffer <- 2500
-  if (riverspace) buildings_buffer <- 100
+  # set default values for network_buffer and buildings_buffer
+  if (corridor && is.null(network_buffer)) {
+    network_buffer <- 2500
+    warning(sprintf(
+      "The default `network_buffer` of %d m is used for corridor delineation.",
+      network_buffer
+    ))
+  }
+
+  if (!riverspace && is.null(buildings_buffer)) {
+    buildings_buffer <- 100
+    warning(sprintf(
+      paste(
+        "The default `buildings_buffer` of %d m is used",
+        "for riverspace delineation."
+      ),
+      buildings_buffer
+    ))
+  }
 
   # Retrieve all relevant OSM datasets within the buffer_distance
   osm_data <- get_osmdata(

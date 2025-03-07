@@ -7,8 +7,8 @@
 get_osmdata(
   city_name,
   river_name,
-  network_buffer = 0,
-  buildings_buffer = 0,
+  network_buffer = NULL,
+  buildings_buffer = NULL,
   crs = NULL,
   force_download = FALSE
 )
