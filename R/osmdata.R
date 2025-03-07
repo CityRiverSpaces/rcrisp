@@ -32,11 +32,16 @@ osmdata_as_sf <- function(key, value, aoi, force_download = FALSE) {
 #' Query the Overpass API for a key:value pair within a bounding box
 #'
 #' @param key A character string with the key to filter the data
-#' @param value A character string with the value to filter the data
+#' @param value A character string with the value to filter the data. If
+#'  value = "" means that you get all features available in OSM for the
+#'  specified bounding box
 #' @param bb A bounding box, in lat/lon coordinates
 #'
 #' @return An sf object with the retrieved OpenStreetMap data
 osmdata_query <- function(key, value, bb) {
+  # this is needed because the add_osm_feature does not support
+  # value as an empty string
+  if (value == "") value <- NULL
   bb |>
     osmdata::opq() |>
     osmdata::add_osm_feature(key = key, value = value) |>
