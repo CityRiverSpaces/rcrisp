@@ -38,14 +38,18 @@
 #' @return A list with the corridor, segments, and riverspace geometries
 #' @export
 delineate <- function(
-  city_name, river_name, crs = NULL, network_buffer = 2500,
-  buildings_buffer = 0, dem_buffer = 2500, initial_method = "valley",
+  city_name, river_name, crs = NULL, network_buffer = NULL,
+  buildings_buffer = NULL, dem_buffer = 2500, initial_method = "valley",
   initial_buffer = NULL, dem = NULL, max_iterations = 10,
   capping_method = "direct", angle_threshold = 90, corridor = TRUE,
   segments = FALSE, riverspace = FALSE, force_download = FALSE, ...
 ) {
 
   if (segments && !corridor) stop("Segmentation requires corridor delineation.")
+
+  # Set buffer values depending on what is delineated
+  if (corridor) network_buffer <- 2500
+  if (riverspace) buildings_buffer <- 100
 
   # Retrieve all relevant OSM datasets within the buffer_distance
   osm_data <- get_osmdata(

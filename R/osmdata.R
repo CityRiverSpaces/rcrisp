@@ -88,7 +88,7 @@ get_osm_bb <- function(city_name) {
 #' get_osmdata("Bucharest", "Dâmbovița")
 
 get_osmdata <- function(
-  city_name, river_name, network_buffer = 0, buildings_buffer = 0,
+  city_name, river_name, network_buffer = NULL, buildings_buffer = NULL,
   crs = NULL, force_download = FALSE
 ) {
   bb <- get_osm_bb(city_name)
@@ -110,7 +110,7 @@ get_osmdata <- function(
   )
 
   # Retrieve streets and railways based on the aoi
-  if (network_buffer > 0) {
+  if (!is.null(network_buffer)) {
     aoi <- get_river_aoi(river, bb, buffer_distance = network_buffer)
     osm_data <- append(osm_data, list(aoi = aoi))
     osm_data <- append(osm_data, list(
@@ -123,7 +123,7 @@ get_osmdata <- function(
   }
 
   # Retrieve buildings based on a different aoi
-  if (buildings_buffer > 0) {
+  if (!is.null(buildings_buffer)) {
     aoi_buildings <- get_river_aoi(river, bb,
                                    buffer_distance = buildings_buffer)
     osm_data <- c(osm_data, list(
