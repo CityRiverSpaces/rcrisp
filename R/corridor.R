@@ -8,7 +8,7 @@
 #' @param river_centerline A simple feature geometry representing the river
 #'   centerline
 #' @param river_surface A simple feature geometry representing the river surface
-#' @param bbox Bounding box defining the extent of the area of interest
+#' @param aoi Area of interest as sf object or bbox
 #' @param initial_method The method employed to define the initial river
 #'   corridor geometry. See [initial_corridor()] for the available methods
 #' @param buffer Buffer region to add to the river geometry to setup the initial

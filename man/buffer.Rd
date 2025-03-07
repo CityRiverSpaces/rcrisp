@@ -16,7 +16,7 @@ Expanded sf object
 }
 \description{
 If the input object is in lat/lon coordinates, the buffer is approximately
-applied by first transforming the object in a suitable projected coordinate
-reference system, expanding it with the given buffer, and then transforming
+applied by first transforming the object in a suitable projected CRS,
+expanding it with the given buffer, and then transforming
 it back to the lat/lon system.
 }

@@ -24,6 +24,8 @@ centerline}
 
 \item{river_surface}{A simple feature geometry representing the river surface}
 
+\item{aoi}{Area of interest as sf object or bbox}
+
 \item{initial_method}{The method employed to define the initial river
 corridor geometry. See \code{\link[=initial_corridor]{initial_corridor()}} for the available methods}
 
@@ -39,8 +41,6 @@ corridor edges (see \code{\link[=corridor_edge]{corridor_edge()}}).}
 \item{capping_method}{The method employed to connect the corridor edge end
 points (i.e. to "cap" the corridor). See \code{\link[=cap_corridor]{cap_corridor()}} for
 the available methods}
-
-\item{bbox}{Bounding box defining the extent of the area of interest}
 }
 \value{
 A simple feature geometry representing the river corridor
