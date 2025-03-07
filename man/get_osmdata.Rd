@@ -41,5 +41,5 @@ the city boundary, the river centreline and surface, the streets, the
 railways, and the buildings
 }
 \examples{
-get_osmdata("Bucharest", "Dâmbovița", 100)
+get_osmdata("Bucharest", "Dâmbovița")
 }
