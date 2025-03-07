@@ -56,7 +56,7 @@ delineate <- function(
     ))
   }
 
-  if (!riverspace && is.null(buildings_buffer)) {
+  if (riverspace && is.null(buildings_buffer)) {
     buildings_buffer <- 100
     warning(sprintf(
       paste(
