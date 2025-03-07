@@ -81,8 +81,8 @@ get_osm_bb <- function(city_name) {
 #' get_osmdata("Bucharest", "Dâmbovița", 100)
 
 get_osmdata <- function(
-  city_name, river_name, buffer_distance = NULL, network = TRUE,
-  buildings = TRUE, crs = NULL, force_download = FALSE
+  city_name, river_name, network_buffer = 0, buildings_buffer = 0,
+  crs = NULL, force_download = FALSE
 ) {
   bb <- get_osm_bb(city_name)
   if (is.null(crs)) crs <- get_utm_zone(bb)
@@ -96,20 +96,16 @@ get_osmdata <- function(
     bb, river_name, crs = crs, force_download = force_download
   )
 
-  # Define the area of interest (aoi)
-  aoi <- get_river_aoi(
-    river, bb, buffer_distance = buffer_distance
-  )
-
   osm_data <- list(
-    aoi = aoi,
     boundary = boundary,
     river_centerline = river$centerline,
     river_surface = river$surface
   )
 
   # Retrieve streets and railways based on the aoi
-  if (network) {
+  if (network_buffer > 0) {
+    aoi <- get_river_aoi(river, bb, buffer_distance = network_buffer)
+    osm_data <- append(osm_data, list(aoi = aoi))
     osm_data <- append(osm_data, list(
       streets = get_osm_streets(aoi, crs = crs, force_download = force_download)
     ))
@@ -119,10 +115,12 @@ get_osmdata <- function(
     ))
   }
 
-  # Retrieve buildings based on the aoi
-  if (buildings) {
+  # Retrieve buildings based on a different aoi
+  if (buildings_buffer > 0) {
+    aoi_buildings <- get_river_aoi(river, bb,
+                                   buffer_distance = buildings_buffer)
     osm_data <- c(osm_data, list(
-      buildings = get_osm_buildings(aoi, crs = crs,
+      buildings = get_osm_buildings(aoi_buildings, crs = crs,
                                     force_download = force_download)
     ))
   }

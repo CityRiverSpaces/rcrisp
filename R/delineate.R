@@ -32,19 +32,20 @@
 #' @return A list with the corridor, segments, and riverspace geometries
 #' @export
 delineate <- function(
-  city_name, river_name, crs = NULL, buffer_distance = 2500,
-  initial_method = "valley", initial_buffer = NULL, dem = NULL,
-  max_iterations = 10, capping_method = "direct", angle_threshold = 90,
-  corridor = TRUE, segments = FALSE, riverspace = FALSE,
-  force_download = FALSE, ...
+  city_name, river_name, crs = NULL, network_buffer = 2500,
+  buildings_buffer = 0, dem_buffer = 2500, initial_method = "valley",
+  initial_buffer = NULL, dem = NULL, max_iterations = 10,
+  capping_method = "direct", angle_threshold = 90, corridor = TRUE,
+  segments = FALSE, riverspace = FALSE, force_download = FALSE, ...
 ) {
 
   if (segments && !corridor) stop("Segmentation requires corridor delineation.")
 
   # Retrieve all relevant OSM datasets within the buffer_distance
   osm_data <- get_osmdata(
-    city_name, river_name, buffer_distance = buffer_distance, crs = crs,
-    force_download = force_download, network = corridor, buildings = riverspace
+    city_name, river_name, network_buffer = network_buffer,
+    buildings_buffer = buildings_buffer, crs = crs,
+    force_download = force_download
   )
 
   # Get the bounding box and (if not provided) the CRS
@@ -54,7 +55,7 @@ delineate <- function(
 
     # If using the valley method, and the DEM is not provided, retrieve dataset
     if (initial_method == "valley" && is.null(dem)) {
-      aoi_buff <- buffer(osm_data$aoi, buffer_distance)
+      aoi_buff <- buffer(osm_data$aoi, dem_buffer)
       dem <- get_dem(aoi_buff, crs = crs, force_download = force_download, ...)
     }
 
