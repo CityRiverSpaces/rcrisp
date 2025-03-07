@@ -316,7 +316,7 @@ get_osm_railways <- function(aoi, crs = NULL, force_download = FALSE) {
     dplyr::select("railway") |>
     dplyr::rename(!!sym("type") := !!sym("railway"))
 
-  # Interscet with the bounding polygon
+  # Intersect with the bounding polygon
   if (inherits(aoi, "bbox")) aoi <- sf::st_as_sfc(aoi)
   mask <- sf::st_intersects(railways_lines, aoi, sparse = FALSE)
   railways_lines <- railways_lines[mask, ]
