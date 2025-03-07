@@ -8,7 +8,9 @@ delineate(
   city_name,
   river_name,
   crs = NULL,
-  buffer_distance = 2500,
+  network_buffer = 2500,
+  buildings_buffer = 0,
+  dem_buffer = 2500,
   initial_method = "valley",
   initial_buffer = NULL,
   dem = NULL,
@@ -30,8 +32,12 @@ delineate(
 \item{crs}{The projected Coordinate Reference System (CRS) to use. If not
 provided, the suitable Universal Transverse Mercator (UTM) CRS is selected}
 
-\item{buffer_distance}{Add a buffer (an integer in meters) around
-river centerline to retrieve additional data (streets, railways, etc.).}
+\item{network_buffer}{Add a buffer (an integer in meters) around
+river to retrieve additional data (streets, railways, etc.).
+Default is 2500 m.}
+
+\item{buildings_buffer}{Add a buffer (an integer in meters) around the
+river to retrieve additional data (buildings). Default is 0 m.}
 
 \item{initial_method}{The method employed to define the initial river
 corridor geometry. See \code{\link[=initial_corridor]{initial_corridor()}} for the available methods}

@@ -7,9 +7,8 @@
 get_osmdata(
   city_name,
   river_name,
-  buffer_distance = NULL,
-  network = TRUE,
-  buildings = TRUE,
+  network_buffer = 0,
+  buildings_buffer = 0,
   crs = NULL,
   force_download = FALSE
 )
@@ -19,12 +18,13 @@ get_osmdata(
 
 \item{river_name}{A character string with the name of the river.}
 
-\item{buffer_distance}{Buffer distance in meters around the river
-center line, defining the width of the area of interest}
+\item{network_buffer}{Buffer distance in meters around the river
+to get the streets and railways, default is 0 means no
+network data will be downloaded}
 
-\item{network}{Whether to download the streets and railways}
-
-\item{buildings}{Whether to download the buildings}
+\item{buildings_buffer}{Buffer distance in meters around the river
+to get the buildings, default is 0 means no
+buildings data will be downloaded}
 
 \item{crs}{An integer with the EPSG code for the projection. If no CRS is
 specified, the default is the UTM zone for the city.}

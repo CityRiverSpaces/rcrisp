@@ -4,8 +4,11 @@
 #' @param river_name A river name as a string
 #' @param crs The projected Coordinate Reference System (CRS) to use. If not
 #'   provided, the suitable Universal Transverse Mercator (UTM) CRS is selected
-#' @param buffer_distance Add a buffer (an integer in meters) around
-#'   river centerline to retrieve additional data (streets, railways, etc.).
+#' @param network_buffer Add a buffer (an integer in meters) around
+#'   river to retrieve additional data (streets, railways, etc.).
+#'   Default is 2500 m.
+#' @param buildings_buffer Add a buffer (an integer in meters) around the
+#'   river to retrieve additional data (buildings). Default is 0 m.
 #' @param initial_method The method employed to define the initial river
 #'   corridor geometry. See [initial_corridor()] for the available methods
 #' @param initial_buffer Buffer region to add to the river geometry to setup the

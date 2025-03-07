@@ -65,12 +65,14 @@ get_osm_bb <- function(city_name) {
 #'
 #' @param city_name A character string with the name of the city.
 #' @param river_name A character string with the name of the river.
-#' @param buffer_distance Buffer distance in meters around the river
-#'                    center line, defining the width of the area of interest
-#' @param network Whether to download the streets and railways
-#' @param buildings Whether to download the buildings
+#' @param network_buffer Buffer distance in meters around the river
+#'   to get the streets and railways, default is 0 means no
+#'   network data will be downloaded
+#' @param buildings_buffer Buffer distance in meters around the river
+#'   to get the buildings, default is 0 means no
+#'   buildings data will be downloaded
 #' @param crs An integer with the EPSG code for the projection. If no CRS is
-#'            specified, the default is the UTM zone for the city.
+#'   specified, the default is the UTM zone for the city.
 #' @param force_download Download data even if cached data is available
 #'
 #' @return An list with the retrieved OpenStreetMap data sets for the
