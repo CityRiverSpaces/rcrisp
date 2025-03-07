@@ -284,7 +284,7 @@ get_osm_streets <- function(aoi, crs = NULL, highway_values = NULL,
     dplyr::select("highway") |>
     dplyr::rename(!!sym("type") := !!sym("highway"))
 
-  # Interscet with the bounding polygon
+  # Intersect with the bounding polygon
   # this will return a warning, see https://github.com/r-spatial/sf/issues/406
   if (inherits(aoi, "bbox")) aoi <- sf::st_as_sfc(aoi)
   mask <- sf::st_intersects(streets_lines, aoi, sparse = FALSE)
