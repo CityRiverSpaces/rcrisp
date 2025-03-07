@@ -9,6 +9,7 @@
 #'   Default is 2500 m.
 #' @param buildings_buffer Add a buffer (an integer in meters) around the
 #'   river to retrieve additional data (buildings). Default is 0 m.
+#' @param dem_buffer Add a buffer (an integer in meters) for retrieving the DEM.
 #' @param initial_method The method employed to define the initial river
 #'   corridor geometry. See [initial_corridor()] for the available methods
 #' @param initial_buffer Buffer region to add to the river geometry to setup the
