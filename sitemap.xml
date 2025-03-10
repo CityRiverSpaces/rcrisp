@@ -20,7 +20,7 @@
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/bucharest_delineation.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/bucharest_dem.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/bucharest_osm.html</loc></url>
-<url><loc>https://cityriverspaces.github.io/CRiSp/reference/buffer_bbox.html</loc></url>
+<url><loc>https://cityriverspaces.github.io/CRiSp/reference/buffer.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/cache_directory.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/cap_corridor.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/clean_network.html</loc></url>
@@ -49,6 +49,7 @@
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/get_osm_streets.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/get_osmdata.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/get_osmdata_cache_filepath.html</loc></url>
+<url><loc>https://cityriverspaces.github.io/CRiSp/reference/get_river_aoi.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/get_slope.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/get_stac_asset_urls.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/get_utm_zone.html</loc></url>

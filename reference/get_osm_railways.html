@@ -52,15 +52,15 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_osm_railways</span><span class="op">(</span><span class="va">bb</span>, crs <span class="op">=</span> <span class="cn">NULL</span>, force_download <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_osm_railways</span><span class="op">(</span><span class="va">aoi</span>, crs <span class="op">=</span> <span class="cn">NULL</span>, force_download <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
 
 
-<dl><dt id="arg-bb">bb<a class="anchor" aria-label="anchor" href="#arg-bb"></a></dt>
-<dd><p>Bounding box of class <code>bbox</code></p></dd>
+<dl><dt id="arg-aoi">aoi<a class="anchor" aria-label="anchor" href="#arg-aoi"></a></dt>
+<dd><p>Area of interest as sf object or bbox</p></dd>
 
 
 <dt id="arg-crs">crs<a class="anchor" aria-label="anchor" href="#arg-crs"></a></dt>
@@ -82,7 +82,7 @@
 <span class="r-in"><span><span class="va">crs</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_utm_zone.html">get_utm_zone</a></span><span class="op">(</span><span class="va">bb</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">get_osm_railways</span><span class="op">(</span><span class="va">bb</span>, <span class="va">crs</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Saving data to cache directory: /home/runner/.cache/CRiSp/osmdata_railway_rail_25.967_44.334_26.226_44.541.rds</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 1030 features and 1 field</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 1031 features and 1 field</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: LINESTRING</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: 408330 ymin: 4901482 xmax: 439360.8 ymax: 4937371</span>
@@ -96,7 +96,7 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> 14449620 rail LINESTRING (427060.1 492640...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 14449623 rail LINESTRING (429683.8 492635...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 15238558 rail LINESTRING (425642.6 492596...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15238565 rail LINESTRING (424190.9 492513...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15238565 rail LINESTRING (424267.7 492519...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 15238574 rail LINESTRING (425392.8 492588...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 15243277 rail LINESTRING (435989.3 491190...</span>
 </code></pre></div>

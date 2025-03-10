@@ -56,7 +56,9 @@
 <span>  <span class="va">city_name</span>,</span>
 <span>  <span class="va">river_name</span>,</span>
 <span>  crs <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  bbox_buffer <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  network_buffer <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  buildings_buffer <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  dem_buffer <span class="op">=</span> <span class="fl">2500</span>,</span>
 <span>  initial_method <span class="op">=</span> <span class="st">"valley"</span>,</span>
 <span>  initial_buffer <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  dem <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -88,9 +90,20 @@
 provided, the suitable Universal Transverse Mercator (UTM) CRS is selected</p></dd>
 
 
-<dt id="arg-bbox-buffer">bbox_buffer<a class="anchor" aria-label="anchor" href="#arg-bbox-buffer"></a></dt>
-<dd><p>Add a buffer region to the city boundary to avoid edge
-effects close to its limits</p></dd>
+<dt id="arg-network-buffer">network_buffer<a class="anchor" aria-label="anchor" href="#arg-network-buffer"></a></dt>
+<dd><p>Add a buffer (an integer in meters) around
+river to retrieve additional data (streets, railways, etc.).
+Default is 2500 m.</p></dd>
+
+
+<dt id="arg-buildings-buffer">buildings_buffer<a class="anchor" aria-label="anchor" href="#arg-buildings-buffer"></a></dt>
+<dd><p>Add a buffer (an integer in meters) around the
+river to retrieve additional data (buildings). Default is 100 m.</p></dd>
+
+
+<dt id="arg-dem-buffer">dem_buffer<a class="anchor" aria-label="anchor" href="#arg-dem-buffer"></a></dt>
+<dd><p>Add a buffer (an integer in meters) around the
+river to retrieve the DEM. Default is 2500 m.</p></dd>
 
 
 <dt id="arg-initial-method">initial_method<a class="anchor" aria-label="anchor" href="#arg-initial-method"></a></dt>
