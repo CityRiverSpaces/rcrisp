@@ -113,11 +113,8 @@ delineate <- function(
   }
 
   if (riverspace) {
-    river_centerline_clipped <- osm_data$river_centerline |>
-      sf::st_difference(osm_data$river_surface)
-    river_combined <- c(river_centerline_clipped, osm_data$river_surface) |>
-      sf::st_cast("MULTILINESTRING") |>
-      sf::st_union()
+    river_combined <- combine_river_features(osm_data$river_centerline,
+                                             osm_data$river_surface)
     riverspace <- delineate_riverspace(osm_data$buildings,
                                        river_combined)
   } else {
