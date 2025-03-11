@@ -42,7 +42,8 @@ network_filtered_before <- rbind(streets, railways) |>
   as_network()
 
 # Build combined street and railway network
-network_filtered_after <- rbind(bucharest_osm$streets, bucharest_osm$railways) |>
+network_filtered_after <- rbind(bucharest_osm$streets,
+                                bucharest_osm$railways) |>
   as_network() |>
   tidygraph::activate("nodes") |>
   tidygraph::filter(sfnetworks::node_intersects(corridor_buffer)) |>
