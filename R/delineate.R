@@ -74,8 +74,8 @@ delineate <- function(
     force_download = force_download
   )
 
-  # Get the bounding box and (if not provided) the CRS
-  if (is.null(crs)) crs <- get_utm_zone(osm_data$aoi)
+  # If not provided, determine the CRS
+  if (is.null(crs)) crs <- get_utm_zone(osm_data$bb)
 
   if (corridor) {
 

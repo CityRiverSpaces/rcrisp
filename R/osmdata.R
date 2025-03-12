@@ -104,6 +104,7 @@ get_osmdata <- function(
   )
 
   osm_data <- list(
+    bb = bb,
     boundary = boundary,
     river_centerline = river$centerline,
     river_surface = river$surface
