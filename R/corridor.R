@@ -159,6 +159,8 @@ corridor_end_points <- function(river_network, spatial_network) {
   # to the river network. These nodes are the candidates corridor end points
   river_network_edges <- sf::st_geometry(sf::st_as_sf(river_network, "edges"))
   intersections <- sf::st_intersection(river_network_edges, spat_network_edges)
+  # Make sure they are "POINTS" (no "MULTIPOINTS")
+  intersections <- sfheaders::sfc_cast(intersections, "POINT")
   river_network <- sfnetworks::st_network_blend(river_network, intersections)
   nodes <- nearest_node(river_network, intersections)
 
