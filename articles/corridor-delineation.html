@@ -75,14 +75,14 @@
     
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://cityriverspaces.github.io/CRiSp/">CRiSp</a></span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://cityriverspaces.github.io/CRiSp/">CRiSp</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span></span></code></pre></div>
 <p>In this notebook we explore how to delineate an urban river corridor
-using river Dâmbovița in Bucharest, Romania’s capital, as the study
-area. We will use OpenStreetMap (OSM) data, first from the Overpass API
-and then from a local file.</p>
+using river Dâmbovița in Bucharest, Romania. We will use OpenStreetMap
+(OSM) data, first from the Overpass API and then from a local file.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">city_name</span> <span class="op">&lt;-</span> <span class="st">"Bucharest, Romania"</span>   <span class="co"># Be specific and spell as in OSM</span></span>
-<span><span class="va">river_name</span> <span class="op">&lt;-</span> <span class="st">"Dâmbovița"</span>           <span class="co"># Spell as in OSM</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">city_name</span> <span class="op">&lt;-</span> <span class="st">"Bucharest"</span></span>
+<span><span class="va">river_name</span> <span class="op">&lt;-</span> <span class="st">"Dâmbovița"</span></span></code></pre></div>
 <p>We start by demonstrating the use of the all-in-one
 <code><a href="../reference/delineate.html">delineate()</a></code> function which does the following three
 steps:</p>
@@ -90,16 +90,15 @@ steps:</p>
 <li><p>Fetches city boundary, street and rail network, as well as river
 centreline and surface data from the <a href="https://wiki.openstreetmap.org/wiki/Overpass_API" class="external-link">Overpass API</a>
 as shown in <code><a href="../articles/getting-osm-data.html">vignette("getting-osm-data")</a></code>;</p></li>
-<li><p>Pre-processes the street and rail network for delineation as in
-<code><a href="../articles/network-preparation.html">vignette("network-preparation")</a></code></p></li>
-<li><p>Constructs the initial corridor based on the chosen method. If
-the <code>method = "buffer"</code> is chosen, the corridor is
+<li><p>Pre-processes the street and rail network for delineation as
+shown in <code><a href="../articles/network-preparation.html">vignette("network-preparation")</a></code></p></li>
+<li><p>Constructs the initial corridor based on the chosen method. With
+the default <code>method = "valley"</code>, the Cost Distance
+Accumulation algorithm is used to delineate the corridor based on the
+digital elevation model (DEM) of the area retrieved from the <a href="https://element84.com/earth-search/" class="external-link">Earth Search API</a>. If the
+<code>method = "buffer"</code> is chosen instead, the corridor is
 constructed by buffering the river centreline and surface data with a
-given buffer distance. If the <code>method = "valley"</code> is chosen
-instead, the Cost Distance Accumulation algorithm is used to delineate
-the corridor based on the digital elevation model (DEM) of the area
-retrieved from the <a href="https://element84.com/earth-search/" class="external-link">Earth
-Search API</a>.</p></li>
+given buffer distance.</p></li>
 <li><p>Delineates the corridor based on the pre-processed network and
 initial corridor. Optionally, the corridor is split into segments based
 on the network and the river space is delineated.</p></li>
@@ -115,22 +114,19 @@ elements: <code>corridor</code>, <code>segments</code>, and
 <span>  segments <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  riverspace <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span>
+<span><span class="co">#&gt; Saving data to cache directory: /home/runner/.cache/CRiSp/osmdata_highway_motorway_trunk_primary_secondary_tertiary_motorway_link_trunk_link_primary_link_secondary_link_tertiary_link_25.967_44.371_26.226_44.49.rds</span></span>
+<span><span class="co">#&gt; Saving data to cache directory: /home/runner/.cache/CRiSp/osmdata_railway_rail_25.967_44.371_26.226_44.49.rds</span></span>
+<span><span class="co">#&gt; Saving data to cache directory: /home/runner/.cache/CRiSp/osmdata_building__25.967_44.393_26.226_44.468.rds</span></span>
+<span><span class="co">#&gt; Saving data to cache directory: /home/runner/.cache/CRiSp/dem_Copernicus_DSM_COG_10_N44_00_E026_00_DEM_Copernicus_DSM_COG_10_N44_00_E025_00_DEM_25.935_44.349_26.257_44.512.rds</span></span>
 <span></span>
-<span><span class="co"># `$corridor` of the resulting object is an sf polygon representing the corridor</span></span>
-<span><span class="va">bucharest_dambovita</span><span class="op">$</span><span class="va">corridor</span></span>
-<span></span>
-<span><span class="co"># `$segments` is an sf polygon representing the segments of the corridor</span></span>
-<span><span class="va">bucharest_dambovita</span><span class="op">$</span><span class="va">segments</span></span>
-<span></span>
-<span><span class="co"># `$riverspace` is an sf polygon representing the delineated river space</span></span>
-<span><span class="va">bucharest_dambovita</span><span class="op">$</span><span class="va">riverspace</span></span>
-<span></span>
-<span><span class="co"># All three elements of delineation</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">bucharest_dambovita</span><span class="op">$</span><span class="va">corridor</span>, border <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">bucharest_dambovita</span><span class="op">$</span><span class="va">riverspace</span>, col <span class="op">=</span> <span class="st">"green"</span>, border <span class="op">=</span> <span class="cn">NA</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co"># Plot all layers within the extent of the delineated corridor</span></span>
+<span><span class="va">bbox</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_bbox.html" class="external-link">st_bbox</a></span><span class="op">(</span><span class="va">bucharest_dambovita</span><span class="op">$</span><span class="va">corridor</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">bucharest_dambovita</span><span class="op">$</span><span class="va">riverspace</span>, col <span class="op">=</span> <span class="st">"green"</span>, border <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>     xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">bbox</span><span class="op">[</span><span class="st">"xmin"</span><span class="op">]</span>, <span class="va">bbox</span><span class="op">[</span><span class="st">"xmax"</span><span class="op">]</span><span class="op">)</span>, ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">bbox</span><span class="op">[</span><span class="st">"ymin"</span><span class="op">]</span>, <span class="va">bbox</span><span class="op">[</span><span class="st">"ymax"</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">bucharest_osm</span><span class="op">$</span><span class="va">river_centerline</span>, col <span class="op">=</span> <span class="st">"blue"</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">bucharest_dambovita</span><span class="op">$</span><span class="va">segments</span>, border <span class="op">=</span> <span class="st">"lightblue"</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">bucharest_dambovita</span><span class="op">$</span><span class="va">corridor</span>, border <span class="op">=</span> <span class="st">"red"</span>, wt <span class="op">=</span> <span class="fl">2</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<p><img src="corridor-delineation_files/figure-html/delineate-1.png" width="700"></p>
   </main>
 </div>
 
