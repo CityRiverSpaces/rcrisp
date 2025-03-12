@@ -22,9 +22,9 @@ knitr::include_graphics("img/method-diagram.png")
 
 The method consists of the following steps, each explained on this website in a separate article:
 
-1. The **valley** is delineated using a cost distance accumulation analysis on a Digital Elevation Model, as shown in `vignette("valley-delineation")`. The resulting *valley edge* is used as one of the inputs in the next step.
+1. The **valley** is delineated using a cost distance accumulation analysis on a Digital Elevation Model, as shown in `vignette("valley-delineation")`. The resulting valley edge is used as one of the inputs in the next step.
 
-2. The urban **corridor** surrounding the river is delineated on the street network along a path following road centrelines that is closest to the *valley edge*, as shown in `vignette("corridor-delineation")`.  
+2. The urban **corridor** surrounding the river is delineated on the street network along a path following road centrelines that is closest to the valley edge, as shown in `vignette("corridor-delineation")`.  
 
 3. The delineated corridor is divided into **corridor segments** bounded by the main transversal streets, as shown in `vignette("corridor-segmentation")`.  
 
