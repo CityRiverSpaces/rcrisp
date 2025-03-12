@@ -358,36 +358,22 @@ get_osm_buildings <- function(aoi, crs = NULL, force_download = FALSE) {
   buildings
 }
 
-#' Get an area of interest (aoi) around a river, cropping to the bounding box of
-#' the city
+#' Get an area of interest (AoI) around a river, cropping to the bounding box of
+#' a city
 #'
-#' @param river A list with the river centreline and surface
+#' @param river A simple feature geometry representing the river
 #' @param city_bbox Bounding box around the city
 #' @param buffer_distance Buffer size around the river
-#' @return An sf or bbox object
+#' @return An sf object in lat/lon coordinates
 #' @export
-#' @importFrom rlang !! sym
 #'
 #' @examples
 #' bb <- get_osm_bb("Bucharest")
 #' river <- get_osm_river(bb, "Dâmbovița")
 #' get_river_aoi(river, bb, buffer_distance = 100)
-get_river_aoi <- function(river, city_bbox, buffer_distance = NULL) {
-  river <- c(river$centerline, river$surface)
-
+get_river_aoi <- function(river, city_bbox, buffer_distance) {
   # Make sure crs are the same for cropping with bb
   river <- sf::st_transform(river, sf::st_crs(city_bbox))
 
-  if (is.null(buffer_distance)) {
-    aoi <- sf::st_union(river) |>
-      sf::st_crop(city_bbox) |>
-      as_bbox()
-  } else {
-    aoi <- river_buffer(
-      river, buffer_distance, bbox = city_bbox
-    )
-  }
-
-  aoi
-
+  river_buffer(river, buffer_distance, bbox = city_bbox)
 }
