@@ -231,7 +231,8 @@ get_osm_river <- function(bb, river_name, crs = NULL, force_download = FALSE) {
                                 \(x) x == river_name)) |>
     # the query can return more features than actually intersecting the bb
     sf::st_filter(sf::st_as_sfc(bb), .predicate = sf::st_intersects) |>
-    sf::st_geometry()
+    sf::st_geometry() |>
+    sf::st_union()
 
   # Get the river surface
   river_surface <- osmdata_as_sf("natural", "water", bb,
