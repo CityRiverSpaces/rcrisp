@@ -11,35 +11,35 @@ vignette: >
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  warning = FALSE,
-  eval = FALSE  #TODO remove this to enable code chunks after #87 is merged
+  warning = FALSE
 )
 ```
 
 ```{r setup, warning=FALSE, message=FALSE}
 library(CRiSp)
+library(sf)
 ```
 
-In this notebook we explore how to delineate an urban river corridor using river Dâmbovița in Bucharest, Romania's capital, as the study area. We will use OpenStreetMap (OSM) data, first from the Overpass API and then from a local file.
+In this notebook we explore how to delineate an urban river corridor using river Dâmbovița in Bucharest, Romania. We will use OpenStreetMap (OSM) data, first from the Overpass API and then from a local file.
 
 ```{r variables}
-city_name <- "Bucharest, Romania"   # Be specific and spell as in OSM
-river_name <- "Dâmbovița"           # Spell as in OSM
+city_name <- "Bucharest"
+river_name <- "Dâmbovița"
 ```
 
 We start by demonstrating the use of the all-in-one `delineate()` function which does the following three steps:
 
 1. Fetches city boundary, street and rail network, as well as river centreline and surface data from the [Overpass API](https://wiki.openstreetmap.org/wiki/Overpass_API) as shown in `vignette("getting-osm-data")`;
 
-2. Pre-processes the street and rail network for delineation as in `vignette("network-preparation")`
+2. Pre-processes the street and rail network for delineation as shown in `vignette("network-preparation")`
 
-3. Constructs the initial corridor based on the chosen method. If the `method = "buffer"` is chosen, the corridor is constructed by buffering the river centreline and surface data with a given buffer distance. If the `method = "valley"` is chosen instead, the Cost Distance Accumulation algorithm is used to delineate the corridor based on the digital elevation model (DEM) of the area retrieved from the [Earth Search API](https://element84.com/earth-search/).
+3. Constructs the initial corridor based on the chosen method. With the default `method = "valley"`, the Cost Distance Accumulation algorithm is used to delineate the corridor based on the digital elevation model (DEM) of the area retrieved from the [Earth Search API](https://element84.com/earth-search/). If the `method = "buffer"` is chosen instead, the corridor is constructed by buffering the river centreline and surface data with a given buffer distance. 
 
 4. Delineates the corridor based on the pre-processed network and initial corridor. Optionally, the corridor is split into segments based on the network and the river space is delineated.
 
 The `delineate()` function carries out the above steps in one and returns a list that by default contains the following output elements: `corridor`, `segments`, and `riverspace`.
 
-```{r}
+```{r delineate}
 bucharest_dambovita <- delineate(
   city_name,
   river_name,
@@ -47,18 +47,10 @@ bucharest_dambovita <- delineate(
   riverspace = TRUE
 )
 
-# `$corridor` of the resulting object is an sf polygon representing the corridor
-bucharest_dambovita$corridor
-
-# `$segments` is an sf polygon representing the segments of the corridor
-bucharest_dambovita$segments
-
-# `$riverspace` is an sf polygon representing the delineated river space
-bucharest_dambovita$riverspace
-
-# All three elements of delineation
-plot(bucharest_dambovita$corridor, border = NA)
-plot(bucharest_dambovita$riverspace, col = "green", border = NA, add = TRUE)
+# Plot all layers within the extent of the delineated corridor
+bbox <- st_bbox(bucharest_dambovita$corridor)
+plot(bucharest_dambovita$riverspace, col = "green", border = NA,
+     xlim = c(bbox["xmin"], bbox["xmax"]), ylim = c(bbox["ymin"], bbox["ymax"]))
 plot(bucharest_osm$river_centerline, col = "blue", add = TRUE)
 plot(bucharest_dambovita$segments, border = "lightblue", add = TRUE)
 plot(bucharest_dambovita$corridor, border = "red", wt = 2, add = TRUE)
