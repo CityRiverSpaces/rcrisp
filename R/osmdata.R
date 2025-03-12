@@ -226,7 +226,9 @@ get_osm_river <- function(bb, river_name, crs = NULL, force_download = FALSE) {
   river_centerline <- osmdata_as_sf("waterway", "river", bb,
                                     force_download = force_download)
   river_centerline <- river_centerline$osm_multilines |>
-    dplyr::filter(.data$name == river_name) |>
+    # filter using any of the "name" columns (matching different languages)
+    dplyr::filter(dplyr::if_any(dplyr::matches("name"),
+                                \(x) x == river_name)) |>
     # the query can return more features than actually intersecting the bb
     sf::st_filter(sf::st_as_sfc(bb), .predicate = sf::st_intersects) |>
     sf::st_geometry()
