@@ -58,8 +58,9 @@ as_bbox <- function(x) {
 #'
 #' @param obj A sf object
 #' @param buffer_distance Buffer distance in meters
+#' @param ... Optional parameters passed on to [`sf::st_buffer()`]
 #' @return Expanded sf object
-buffer <- function(obj, buffer_distance) {
+buffer <- function(obj, buffer_distance, ...) {
   is_obj_longlat <- sf::st_is_longlat(obj)
   dst_crs <- sf::st_crs(obj)
   # check if obj is a bbox
@@ -69,7 +70,7 @@ buffer <- function(obj, buffer_distance) {
     crs_meters <- get_utm_zone(obj)
     obj <- sf::st_transform(obj, crs_meters)
   }
-  expanded_obj <- sf::st_buffer(obj, buffer_distance)
+  expanded_obj <- sf::st_buffer(obj, buffer_distance, ...)
   if (is_obj_longlat) {
     expanded_obj <- sf::st_transform(expanded_obj, dst_crs)
   }
