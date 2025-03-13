@@ -41,7 +41,7 @@ delineate <- function(
   city_name, river_name, crs = NULL, network_buffer = NULL,
   buildings_buffer = NULL, dem_buffer = 2500, initial_method = "valley",
   initial_buffer = NULL, dem = NULL, max_iterations = 10,
-  capping_method = "direct", angle_threshold = 90, corridor = TRUE,
+  capping_method = "shortest-path", angle_threshold = 90, corridor = TRUE,
   segments = FALSE, riverspace = FALSE, force_download = FALSE, ...
 ) {
 
