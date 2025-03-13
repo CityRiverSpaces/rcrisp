@@ -113,9 +113,7 @@ get_osmdata <- function(
   # Retrieve streets and railways based on the aoi
   if (!is.null(network_buffer)) {
     aoi_network <- get_river_aoi(river, bb, buffer_distance = network_buffer)
-    osm_data <- append(osm_data, list(
-      aoi_network = reproject(aoi_network, crs)
-    ))
+    osm_data <- append(osm_data, list(aoi_network = aoi_network))
     osm_data <- append(osm_data, list(
       streets = get_osm_streets(aoi_network, crs = crs,
                                 force_download = force_download)
@@ -130,9 +128,7 @@ get_osmdata <- function(
   if (!is.null(buildings_buffer)) {
     aoi_buildings <- get_river_aoi(river, bb,
                                    buffer_distance = buildings_buffer)
-    osm_data <- append(osm_data, list(
-      aoi_buildings = reproject(aoi_buildings, crs)
-    ))
+    osm_data <- append(osm_data, list(aoi_buildings = aoi_buildings))
     osm_data <- c(osm_data, list(
       buildings = get_osm_buildings(aoi_buildings, crs = crs,
                                     force_download = force_download)
