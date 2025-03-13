@@ -115,6 +115,13 @@ test_that("buffering a bbox does not change its CRS", {
   expect_equal(crs_actual, crs_expected)
 })
 
+test_that("Buffer also works without a CRS", {
+  x <- sf::st_sfc(sf::st_linestring(cbind(c(-2, 0), c(0, -2))))
+  x_buff <- buffer(x, 1)
+  expect_true(is.na(sf::st_crs(x_buff)))
+  expect_equal(as.character(sf::st_geometry_type(x_buff)), "POLYGON")
+})
+
 test_that("River buffer implements a buffer function", {
   river <- bucharest_osm$river_centerline
   actual <- river_buffer(river, buffer_distance = 0.5)

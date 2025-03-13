@@ -66,12 +66,12 @@ buffer <- function(obj, buffer_distance, ...) {
   # check if obj is a bbox
   is_obj_bbox <- inherits(obj, "bbox")
   if (is_obj_bbox) obj <- sf::st_as_sfc(obj)
-  if (is_obj_longlat) {
+  if (!is.na(is_obj_longlat) && is_obj_longlat) {
     crs_meters <- get_utm_zone(obj)
     obj <- sf::st_transform(obj, crs_meters)
   }
   expanded_obj <- sf::st_buffer(obj, buffer_distance, ...)
-  if (is_obj_longlat) {
+  if (!is.na(is_obj_longlat) && is_obj_longlat) {
     expanded_obj <- sf::st_transform(expanded_obj, dst_crs)
   }
   if (is_obj_bbox) expanded_obj <- sf::st_bbox(expanded_obj)
