@@ -31,6 +31,7 @@ fix_wkt_encoding <- function(x) {
   x
 }
 bucharest_osm <- lapply(bucharest_osm, fix_wkt_encoding)
+bucharest_delineation <- lapply(bucharest_delineation, fix_wkt_encoding)
 
 # Fetch the DEM data
 aoi_buff <- buffer(bucharest_osm$aoi_network, dem_buffer)
