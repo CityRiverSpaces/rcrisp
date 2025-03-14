@@ -95,16 +95,18 @@ input.</p>
 that cover the river corridor plus a small buffer region (see also
 <code><a href="../articles/network-preparation.html">vignette("network-preparation")</a></code>):</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Build combined street and railway network</span></span>
-<span><span class="va">network</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">bucharest_osm</span><span class="op">$</span><span class="va">streets</span>, <span class="va">bucharest_osm</span><span class="op">$</span><span class="va">railways</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="../reference/as_network.html">as_network</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: to_spatial_subdivision assumes attributes are constant over geometries</span></span>
+<code class="sourceCode R"><span><span class="co"># Add a buffer region around the corridor</span></span>
+<span><span class="va">corridor_buffer</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_unary.html" class="external-link">st_buffer</a></span><span class="op">(</span><span class="va">bucharest_delineation</span><span class="op">$</span><span class="va">corridor</span>, <span class="fl">500</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Add a 100 meter buffer region to the corridor</span></span>
-<span><span class="va">corridor_buffer</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_unary.html" class="external-link">st_buffer</a></span><span class="op">(</span><span class="va">bucharest_delineation</span><span class="op">$</span><span class="va">corridor</span>, <span class="fl">100</span><span class="op">)</span></span>
+<span><span class="co"># Filter the streets and railwayas to the buffer area</span></span>
+<span><span class="va">streets</span> <span class="op">&lt;-</span> <span class="va">bucharest_osm</span><span class="op">$</span><span class="va">streets</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_join.html" class="external-link">st_filter</a></span><span class="op">(</span><span class="va">corridor_buffer</span>, .predicate <span class="op">=</span> <span class="fu">sf</span><span class="fu">::</span><span class="va"><a href="https://r-spatial.github.io/sf/reference/geos_binary_pred.html" class="external-link">st_covered_by</a></span><span class="op">)</span></span>
+<span><span class="va">railways</span> <span class="op">&lt;-</span> <span class="va">bucharest_osm</span><span class="op">$</span><span class="va">railways</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_join.html" class="external-link">st_filter</a></span><span class="op">(</span><span class="va">corridor_buffer</span>, .predicate <span class="op">=</span> <span class="fu">sf</span><span class="fu">::</span><span class="va"><a href="https://r-spatial.github.io/sf/reference/geos_binary_pred.html" class="external-link">st_covered_by</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Filter the network to the area of interest</span></span>
-<span><span class="va">network_filtered</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/filter_network.html">filter_network</a></span><span class="op">(</span><span class="va">network</span>, <span class="va">corridor_buffer</span><span class="op">)</span></span></code></pre></div>
+<span><span class="co"># Build combined street and railway network</span></span>
+<span><span class="va">network_filtered</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">streets</span>, <span class="va">railways</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="../reference/as_network.html">as_network</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>We then delineate segments in the corridor. The algorithm spits the
 corridor using river-crossing transversal edges that form continuous
 lines in the network:</p>
@@ -112,7 +114,10 @@ lines in the network:</p>
 <code class="sourceCode R"><span><span class="va">segmented_corridor</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/delineate_segments.html">delineate_segments</a></span><span class="op">(</span><span class="va">bucharest_delineation</span><span class="op">$</span><span class="va">corridor</span>,</span>
 <span>                                         <span class="va">network_filtered</span>,</span>
 <span>                                         <span class="va">bucharest_osm</span><span class="op">$</span><span class="va">river_centerline</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Linking to GEOS 3.12.1, GDAL 3.8.4, PROJ 9.4.0; sf_use_s2() is TRUE</span></span></code></pre></div>
+<span><span class="co">#&gt; Linking to GEOS 3.12.1, GDAL 3.8.4, PROJ 9.4.0; sf_use_s2() is TRUE</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">network_filtered</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">segmented_corridor</span>, border <span class="op">=</span> <span class="st">"orange"</span>, lwd <span class="op">=</span> <span class="fl">3</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<p><img src="corridor-segmentation_files/figure-html/segmentation-1.png" width="700"></p>
   </main>
 </div>
 
