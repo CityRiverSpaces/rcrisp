@@ -214,3 +214,41 @@ test_that("load_raster correctly retrieve and merge local data", {
     }
   )
 })
+
+test_that("River centerline and surface are combined without overlap", {
+  l_centerline <- sf::st_length(bucharest_osm$river_centerline)
+  l_surface <- bucharest_osm$river_surface |>
+    sf::st_cast("MULTILINESTRING") |>
+    sf::st_length()
+  l_overlap <- bucharest_osm$river_centerline |>
+    sf::st_intersection(bucharest_osm$river_surface) |>
+    sf::st_length()
+  l_combined_expected <- l_centerline + l_surface - l_overlap
+  l_combined_actual <- combine_river_features(bucharest_osm$river_centerline,
+                                              bucharest_osm$river_surface) |>
+    sf::st_length()
+  expect_equal(l_combined_actual, l_combined_expected)
+})
+
+test_that("When river surface is not available,
+  river centerline is used with warning",
+          {
+            expect_warning(
+              combine_river_features(bucharest_osm$river_centerline, NULL),
+              regexp = "*Calculating viewpoints along river centerline.*"
+            )
+          })
+
+test_that(
+  "When both river centerlin and river surface are used for setting viewpoints,
+  message is returned",
+  {
+    expect_message(
+      combine_river_features(
+        bucharest_osm$river_centerline,
+        bucharest_osm$river_surface
+      ),
+      "*Calculating viewpoints from both river edge and river centerline.*"
+    )
+  }
+)
