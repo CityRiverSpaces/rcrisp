@@ -27,23 +27,29 @@ To demonstrate this as a separate step, we will use the `bucharest_delineation$c
 
 We first prepare the network and select all the streets and railways that cover the river corridor plus a small buffer region (see also `vignette("network-preparation")`):
 
-```{r}
+```{r network, warning=FALSE}
+# Add a buffer region around the corridor
+corridor_buffer <- sf::st_buffer(bucharest_delineation$corridor, 500)
+
+# Filter the streets and railwayas to the buffer area
+streets <- bucharest_osm$streets |>
+  sf::st_filter(corridor_buffer, .predicate = sf::st_covered_by)
+railways <- bucharest_osm$railways |>
+  sf::st_filter(corridor_buffer, .predicate = sf::st_covered_by)
+
 # Build combined street and railway network
-network <- rbind(bucharest_osm$streets, bucharest_osm$railways) |>
+network_filtered <- rbind(streets, railways) |>
   as_network()
 
-# Add a 100 meter buffer region to the corridor
-corridor_buffer <- sf::st_buffer(bucharest_delineation$corridor, 100)
-
-# Filter the network to the area of interest
-network_filtered <- filter_network(network, corridor_buffer)
 ```
 
 We then delineate segments in the corridor. The algorithm spits the corridor using river-crossing transversal edges that form continuous lines in the network:
 
-```{r}
+```{r segmentation, warning=FALSE}
 segmented_corridor <- delineate_segments(bucharest_delineation$corridor,
                                          network_filtered,
                                          bucharest_osm$river_centerline)
+plot(network_filtered)
+plot(segmented_corridor, border = "orange", lwd = 3, add = TRUE)
 ```
 
