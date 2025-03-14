@@ -147,6 +147,11 @@ load_raster <- function(urlpaths, bbox = NULL) {
 #'
 #' @return Combined river as sfc_LINESTRING
 combine_river_features <- function(river_centerline, river_surface) {
+  if (is.null(river_surface)) {
+    warning("Calculating viewpoints along river centerline.")
+    return(river_centerline)
+  }
+  message("Calculating viewpoints from both river edge and river centerline.")
   river_centerline_clipped <- river_centerline |>
     sf::st_difference(river_surface)
   c(river_centerline_clipped, river_surface) |>
