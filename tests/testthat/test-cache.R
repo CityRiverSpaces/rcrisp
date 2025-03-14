@@ -98,3 +98,35 @@ test_that("Objects can be properly saved to cache", {
   write_data_to_cache(x, filepath, quiet = TRUE)
   expect_true(file.exists(filepath))
 })
+
+test_that("All cache is removed when no date is provided", {
+  cache_dir <- temp_cache_dir()
+
+  filepath1 <- file.path(cache_dir, "tmp1.rds")
+  filepath2 <- file.path(cache_dir, "tmp2.rds")
+  file.create(filepath1, filepath2)
+
+  expect_length(list.files(cache_dir), 2)
+  clear_cache()
+  expect_length(list.files(cache_dir), 0)
+})
+
+test_that("Only cache before given date is removed", {
+  cache_dir <- temp_cache_dir()
+
+  filepath1 <- file.path(cache_dir, "tmp1.rds")
+  filepath2 <- file.path(cache_dir, "tmp2.rds")
+  file.create(filepath1, filepath2)
+
+  new_date <- as.Date("1-1-1999", "%m-%d-%Y")
+  command <- paste("touch -t", format(as.POSIXct(new_date), "%Y%m%d%H%M"),
+                   filepath1)
+  system(command)
+
+  expect_length(list.files(cache_dir), 2)
+
+  before_date <- as.Date("1-1-2000", "%m-%d-%Y")
+  clear_cache(before_date = before_date)
+  expect_length(list.files(cache_dir), 1)
+  expect_true(grepl("tmp2", list.files(cache_dir)[1]))
+})

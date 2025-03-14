@@ -119,3 +119,32 @@ write_data_to_cache <- function(x, filepath, wrap = FALSE, quiet = FALSE) {
   }
   saveRDS(x, filepath)
 }
+
+#' Remove cache files
+#'
+#' Remove files from cache directory either before a given date or entirely.
+#'
+#' @param before_date Date before which cache files should be removed provided
+#'   as Date
+#'
+#' @return List of file paths of removed files
+#' @export
+clear_cache <- function(before_date = NULL) {
+  cache_dir <- cache_directory()
+  files <- list.files(cache_dir, full.names = TRUE)
+
+  if (!is.null(before_date)) {
+    file_info <- file.info(files)
+    files_before_date <- files[file_info$mtime < as.POSIXct(before_date)]
+    file.remove(files_before_date)
+    files_remaining <- list.files(cache_dir, full.names = TRUE)
+    if (all(!files_before_date %in% files_remaining)) {
+      message("Cache files successfully removed.")
+    }
+  } else {
+    file.remove(files)
+    if (length(list.files(cache_dir)) == 0) {
+      message("Cache files successfully removed.")
+    }
+  }
+}
