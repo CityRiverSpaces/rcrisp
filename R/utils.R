@@ -145,7 +145,7 @@ load_raster <- function(urlpaths, bbox = NULL) {
 #' @param river_centerline River line as sfc_LINESTRING or sfc_MULTILINESTRING
 #' @param river_surface River surface as sfc_POLYGON or sfc_MULTIPOLYGON
 #'
-#' @return Combined river as sfc_LINESTRING
+#' @return Combined river as sfc_MULTILINESTRING
 combine_river_features <- function(river_centerline, river_surface) {
   if (is.null(river_surface)) {
     warning("Calculating viewpoints along river centerline.")
