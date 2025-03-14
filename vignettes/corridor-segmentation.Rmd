@@ -28,40 +28,28 @@ To demonstrate this as a separate step, we will use the `bucharest_delineation$c
 We first prepare the network and select all the streets and railways that cover the river corridor plus a small buffer region (see also `vignette("network-preparation")`):
 
 ```{r network, warning=FALSE}
-# Add a 100 meter buffer region around the corridor
+# Add a buffer region around the corridor
 corridor_buffer <- sf::st_buffer(bucharest_delineation$corridor, 500)
 
 # Filter the streets and railwayas to the buffer area
 streets <- bucharest_osm$streets |>
-  sf::st_filter(corridor_buffer, .predicate = sf::st_intersects)
+  sf::st_filter(corridor_buffer, .predicate = sf::st_covered_by)
 railways <- bucharest_osm$railways |>
-  sf::st_filter(corridor_buffer, .predicate = sf::st_intersects)
+  sf::st_filter(corridor_buffer, .predicate = sf::st_covered_by)
 
 # Build combined street and railway network
-network_filtered_before <- rbind(streets, railways) |>
+network_filtered <- rbind(streets, railways) |>
   as_network()
 
-# Build combined street and railway network
-network_filtered_after <- rbind(bucharest_osm$streets,
-                                bucharest_osm$railways) |>
-  as_network() |>
-  tidygraph::activate("nodes") |>
-  tidygraph::filter(sfnetworks::node_intersects(corridor_buffer)) |>
-  # keep only the main connected component of the network
-  tidygraph::activate("nodes") |>
-  dplyr::filter(tidygraph::group_components() == 1)
 ```
 
 We then delineate segments in the corridor. The algorithm spits the corridor using river-crossing transversal edges that form continuous lines in the network:
 
 ```{r segmentation, warning=FALSE}
-segmented_corridor_1 <- delineate_segments(bucharest_delineation$corridor,
-                                           network_filtered_before,
-                                           bucharest_osm$river_centerline)
-segmented_corridor_2 <- delineate_segments(bucharest_delineation$corridor,
-                                           network_filtered_after,
-                                           bucharest_osm$river_centerline)
-plot(segmented_corridor_1, border = "orange", lwd = 3)
-plot(segmented_corridor_2, add = TRUE, border = "blue")
+segmented_corridor <- delineate_segments(bucharest_delineation$corridor,
+                                         network_filtered,
+                                         bucharest_osm$river_centerline)
+plot(network_filtered)
+plot(segmented_corridor, border = "orange", lwd = 3, add = TRUE)
 ```
 
