@@ -113,8 +113,10 @@ delineate <- function(
   }
 
   if (riverspace) {
+    river_combined <- combine_river_features(osm_data$river_centerline,
+                                             osm_data$river_surface)
     riverspace <- delineate_riverspace(osm_data$buildings,
-                                       osm_data$river_surface)
+                                       river_combined)
   } else {
     riverspace <- NULL
   }
