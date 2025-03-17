@@ -189,7 +189,7 @@ corridor_end_points <- function(river_network, spatial_network) {
 #'
 #' @param river River spatial features provided as a [`sfnetworks::sfnetwork`]
 #'   or [`sf::sf`]/[`sf::sfc`] object.
-#' @param width (Approximate) width of the regions
+#' @param width Width of the regions
 #' @return A [`sf::sfc`] object with two polygon features
 get_river_banks <- function(river, width) {
   if (inherits(river, "sfnetwork")) {
