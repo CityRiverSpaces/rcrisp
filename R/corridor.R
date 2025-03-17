@@ -110,7 +110,7 @@ initial_corridor <- function(
   }
 }
 
-#' Build a spatial network from the river center spatial features
+#' Build a spatial network from river centerlines
 #'
 #' If an area of interest (aoi) is provided, only the river segments that
 #' intersects it are considered. If the river intersects the area of interest
