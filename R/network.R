@@ -148,7 +148,8 @@ calc_rolling_sum <- function(x, n = 2) {
 # nolint end
 #'
 #' @param network A network object
-#' @param simplify Whether the network should be simplified with [`simplify_network()`]
+#' @param simplify Whether the network should be simplified with
+#'   [`simplify_network()`]
 #'
 #' @return A cleaned network object
 #' @export
