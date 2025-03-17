@@ -65,11 +65,7 @@ delineate_corridor <- function(
                           max_iterations)
 
   # Cap the corritor
-  corridor <- cap_corridor(c(edge_1, edge_2), capping_method, network)
-
-  # Loops along the edges (or capping segments) form additional polygons, that
-  # can be discarded by selecting only the largest feature
-  corridor[find_largest(corridor)]
+  cap_corridor(c(edge_1, edge_2), capping_method, network)
 }
 
 #' Draw the initial geometry of a river corridor.
@@ -305,5 +301,17 @@ cap_corridor <- function(edges, method = "direct", network = NULL) {
       sprintf("Unknown method to cap the river corridor: {method}", method)
     )
   }
-  as_polygon(c(edges, cap_edge_1, cap_edge_2))
+  polygon <- as_polygon(c(edges, cap_edge_1, cap_edge_2))
+
+  # If the capping edges intersect the given corridor edges in points other
+  # than the end points, the polygonization of the corridor boundary leads to
+  # small side polygons. We drop these, after raising a warning
+  if (length(polygon) > 1) {
+    warning(
+      "Corridor capping gives multiple polygons - selecting the largest one"
+    )
+    polygon <- polygon[find_largest(polygon)]
+  }
+
+  polygon
 }
