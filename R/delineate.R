@@ -79,7 +79,7 @@ delineate <- function(
 
   if (corridor) {
     # For the corridor delineation, the area of interest (aoi) is the one used
-    # to retrieve the network datasets (streets and railways), project to CRS
+    # to retrieve the network datasets (streets and railways), projected to CRS
     aoi <- reproject(osm_data$aoi_network, crs)
 
     # If using the valley method, and the DEM is not provided, retrieve dataset
