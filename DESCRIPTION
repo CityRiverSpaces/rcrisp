@@ -12,8 +12,12 @@ Authors@R: c(
            comment = c(ORCID = "0000-0002-5733-4795")),
     person("Netherlands eScience Center", , , "info@esciencecenter.nl", role = "fnd")
   )
-Description: CRiSp (City River Spaces) provides tools to automate the
-    morphological delineation of riverside urban areas.
+Description: 'CRiSp' (City River Spaces) provides tools to automate the
+    morphological delineation of riverside urban areas. Delineation entails
+    the identification of corridor boundaries, segmentation of the corridor,
+    and delineation of the river space. The resulting delineation can be used
+    to charactarise spatial phenomena that can be related to the river as a
+    central element.
 License: Apache License (>= 2)
 URL: https://cityriverspaces.github.io/CRiSp/
 BugReports: https://github.com/CityRiverSpaces/crisp/issues
