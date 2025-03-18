@@ -7,7 +7,7 @@
   "codeRepository": "https://github.com/CityRiverSpaces/CRiSp",
   "issueTracker": "https://github.com/CityRiverSpaces/crisp/issues",
   "license": "Apache License 2",
-  "version": "0.0.0.9000",
+  "version": "0.1.0",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
