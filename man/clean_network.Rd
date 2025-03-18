@@ -18,3 +18,8 @@ simplify the network (see \code{\link[=simplify_network]{simplify_network()}}), 
 \href{https://luukvdmeer.github.io/sfnetworks/articles/sfn02_preprocess_clean.html#smooth-pseudo-nodes}{pseudo-nodes},
 and discard all but the main connected component.
 }
+\examples{
+edges <- dplyr::bind_rows(bucharest_osm$streets, bucharest_osm$railways)
+network <- sfnetworks::as_sfnetwork(edges, directed = FALSE)
+clean_network(network)
+}

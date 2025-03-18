@@ -26,3 +26,9 @@ A simple feature geometry representing the corridor (i.e. a polygon)
 \description{
 Cap the corridor by connecting the edge end points
 }
+\examples{
+corridor_edge_1 <- sf::st_linestring(cbind(c(-1, 1), c(1, 1)))
+corridor_edge_2 <- sf::st_linestring(cbind(c(-1, 1), c(-1, -1)))
+edges <- sf::st_sfc(corridor_edge_1, corridor_edge_2)
+cap_corridor(edges, method = "direct")
+}

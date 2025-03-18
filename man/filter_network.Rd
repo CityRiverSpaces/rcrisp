@@ -18,3 +18,8 @@ A spatial network object
 If subsetting results in multiple disconnected components, we keep the main
 one.
 }
+\examples{
+network <- bucharest_osm$streets$geometry |> as_network()
+target <- sf::st_buffer(bucharest_osm$river_centerline, 1000)
+filter_network(network, target)
+}

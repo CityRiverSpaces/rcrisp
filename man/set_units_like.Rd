@@ -17,3 +17,6 @@ Object x with units of y
 \description{
 Set the units of x as the units of y
 }
+\examples{
+set_units_like(1, units::set_units(1, "m"))
+}

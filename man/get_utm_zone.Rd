@@ -15,3 +15,8 @@ The EPSG of the UTM zone
 \description{
 Get the UTM zone of a spatial object
 }
+\examples{
+# Get EPSG code for UTM zone of Bucharest
+bb <- get_osm_bb("Bucharest")
+get_utm_zone(bb)
+}

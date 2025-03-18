@@ -17,3 +17,6 @@ A bounding box as returned by \code{\link[sf:st_bbox]{sf::st_bbox()}}
 \description{
 If the x does not have a CRS, WGS84 is assumed.
 }
+\examples{
+as_bbox(c(1, 2, 3, 4))
+}
