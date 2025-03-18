@@ -6,6 +6,10 @@ Authors@R: c(
            comment = c(ORCID = "0000-0003-3218-5102")),
     person("Francesco", "Nattino", , "f.nattino@esciencecenter.nl", role = "aut",
            comment = c(ORCID = "0000-0003-3286-0139")),
+    person("Fakhereh", "Alidoost", , "f.alidoost@esciencecenter.nl", role = "ctb",
+           comment = c(ORCID = "0000-0001-8407-6472")),
+    person("Meiert Willem", "Grootes", , "m.grootes@esciencecenter.nl", role = "ctb",
+           comment = c(ORCID = "0000-0002-5733-4795")),
     person("Netherlands eScience Center", , , "info@esciencecenter.nl", role = "fnd")
   )
 Description: CRiSp (City River Spaces) provides tools to automate the

@@ -30,6 +30,22 @@
       "@id": "https://orcid.org/0000-0003-3286-0139"
     }
   ],
+  "contributor": [
+    {
+      "@type": "Person",
+      "givenName": "Fakhereh",
+      "familyName": "Alidoost",
+      "email": "f.alidoost@esciencecenter.nl",
+      "@id": "https://orcid.org/0000-0001-8407-6472"
+    },
+    {
+      "@type": "Person",
+      "givenName": "Meiert Willem",
+      "familyName": "Grootes",
+      "email": "m.grootes@esciencecenter.nl",
+      "@id": "https://orcid.org/0000-0002-5733-4795"
+    }
+  ],
   "funder": [
     {
       "@type": "Organization",
