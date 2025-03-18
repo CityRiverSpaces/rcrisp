@@ -46,6 +46,16 @@
       "@id": "https://orcid.org/0000-0002-5733-4795"
     }
   ],
+  "copyrightHolder": [
+    {
+      "@type": "Person",
+      "givenName": "Claudiu",
+      "familyName": "Forgaci",
+      "email": "c.forgaci@tudelft.nl",
+      "@id": "https://orcid.org/0000-0003-3218-5102"
+    }
+  ],
+  "copyrightYear": "2025",
   "funder": [
     {
       "@type": "Organization",
