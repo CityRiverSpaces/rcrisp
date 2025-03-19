@@ -159,12 +159,14 @@ calc_rolling_sum <- function(x, n = 2) {
 #'
 # nolint start
 #' Subdivide edges by [adding missing nodes](https://luukvdmeer.github.io/sfnetworks/articles/sfn02_preprocess_clean.html#subdivide-edges),
-#' simplify the network (see [`simplify_network()`]), remove
+#' (optionally) simplify the network (see [`simplify_network()`]), remove
 #' [pseudo-nodes](https://luukvdmeer.github.io/sfnetworks/articles/sfn02_preprocess_clean.html#smooth-pseudo-nodes),
 #' and discard all but the main connected component.
 # nolint end
 #'
 #' @param network A network object
+#' @param simplify Whether the network should be simplified with
+#'   [`simplify_network()`]
 #'
 #' @return A cleaned network object
 #' @export
@@ -172,15 +174,16 @@ calc_rolling_sum <- function(x, n = 2) {
 #' edges <- dplyr::bind_rows(bucharest_osm$streets, bucharest_osm$railways)
 #' network <- sfnetworks::as_sfnetwork(edges, directed = FALSE)
 #' clean_network(network)
-clean_network <- function(network) {
-  network |>
-    # subdivide edges by adding missing nodes
-    tidygraph::convert(sfnetworks::to_spatial_subdivision, .clean = TRUE) |>
-    # run simplification steps
-    simplify_network() |>
-    # remove pseudo-nodes
-    tidygraph::convert(sfnetworks::to_spatial_smooth, .clean = TRUE) |>
-    # keep only the main connected component of the network
+clean_network <- function(network, simplify = TRUE) {
+  # subdivide edges by adding missing nodes
+  net <- tidygraph::convert(network, sfnetworks::to_spatial_subdivision,
+                            .clean = TRUE)
+  # run simplification steps
+  if (simplify) net <- simplify_network(net)
+  # remove pseudo-nodes
+  net <- tidygraph::convert(net, sfnetworks::to_spatial_smooth, .clean = TRUE)
+  # keep only the main connected component of the network
+  net |>
     tidygraph::activate("nodes") |>
     dplyr::filter(tidygraph::group_components() == 1)
 }
@@ -326,11 +329,7 @@ nearest_node <- function(network, target) {
 #' @param target The target geometry
 #'
 #' @return A spatial network object
-#' @export
-#' @examples
-#' network <- bucharest_osm$streets$geometry |> as_network()
-#' target <- sf::st_buffer(bucharest_osm$river_centerline, 1000)
-#' filter_network(network, target)
+#' @keywords internal
 filter_network <- function(network, target) {
   network |>
     tidygraph::activate("nodes") |>
