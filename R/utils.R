@@ -44,7 +44,11 @@ get_utm_zone <- function(x) {
 #' @return A bounding box as returned by [`sf::st_bbox()`]
 #' @export
 #' @examples
-#' as_bbox(c(1, 2, 3, 4))
+#' library(sf)
+#' bounding_coords <- c(25.9, 44.3, 26.2, 44.5)
+#' bb <- as_bbox(bounding_coords)
+#' class(bb)
+#' st_crs(bb)
 as_bbox <- function(x) {
   if (inherits(x, c("numeric", "matrix"))) {
     x <- as.vector(x)
