@@ -14,9 +14,10 @@ test_that("Default network buffer is used with message", {
 
 test_that("Default buildings buffer is used for riverspace delineation
           with message", {
-  skip_on_ci()
-  expect_message(
-    suppressWarnings(delineate("Bucharest", "Dâmbovița", riverspace = TRUE)),
-    paste("The default `buildings_buffer` of 100 m is used",
-          "for riverspace delineation."))
+            skip_on_ci()
+            expect_message(
+              suppressWarnings(delineate("Bucharest", "Dâmbovița",
+                                         riverspace = TRUE)),
+              paste("The default `buildings_buffer` of 100 m is used",
+                    "for riverspace delineation."))
 })

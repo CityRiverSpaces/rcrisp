@@ -239,10 +239,11 @@ test_that("Capping a corridor with unknown method raises an error", {
 
 test_that("Capping with 'shortest-path' method raises an error if no network
           is provided", {
-  corridor_edge_1 <- sf::st_linestring(cbind(c(-1, 1), c(1, 1)))
-  corridor_edge_2 <- sf::st_linestring(cbind(c(-1, 1), c(-1, -1)))
-  edges <- sf::st_sfc(corridor_edge_1, corridor_edge_2)
-  expect_error(
-    cap_corridor(edges, method = "shortest-path"),
-    "A network should be provided if `capping_method = 'shortest-path'`")
+            corridor_edge_1 <- sf::st_linestring(cbind(c(-1, 1), c(1, 1)))
+            corridor_edge_2 <- sf::st_linestring(cbind(c(-1, 1), c(-1, -1)))
+            edges <- sf::st_sfc(corridor_edge_1, corridor_edge_2)
+            expect_error(
+              cap_corridor(edges, method = "shortest-path"),
+              paste("A network should be provided if",
+                    "`capping_method = 'shortest-path'`"))
 })
