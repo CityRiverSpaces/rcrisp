@@ -18,10 +18,4 @@ Raster data as a \code{\link[terra:SpatRaster-class]{terra::SpatRaster}} object
 If a bounding box is provided, the file(s) are cropped for the given extent.
 The resulting rasters are then merged using \code{\link[terra:merge]{terra::merge}}.
 }
-\examples{
-\dontrun{
-# Load a raster from a URL
-url <- "https://example.com/raster.tif"
-load_raster(url)
-}
-}
+\keyword{internal}

@@ -27,3 +27,4 @@ network within the area of interest. If the river intersects the
 area of interest multiple times, only the longest intersecting segment is
 considered here.
 }
+\keyword{internal}

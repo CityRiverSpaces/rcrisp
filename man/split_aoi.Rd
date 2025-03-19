@@ -18,3 +18,4 @@ A simple feature geometry set of two areas of interest
 Return the fragments produced. If more than two fragments are obtained, only
 return the two largest fragments.
 }
+\keyword{internal}

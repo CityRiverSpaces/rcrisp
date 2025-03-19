@@ -12,18 +12,9 @@ combine_river_features(river_centerline, river_surface)
 \item{river_surface}{River surface as sfc_POLYGON or sfc_MULTIPOLYGON}
 }
 \value{
-Combined river as sfc_LINESTRING
+Combined river as sfc_MULTILINESTRING
 }
 \description{
 Combine river centerline and surface
 }
-\examples{
-river_centerline <- sf::st_sfc(
-  sf::st_linestring(matrix(c(0, 0, 2, 2), ncol = 2, byrow = TRUE))
-)
-river_surface <- sf::st_sfc(
-  sf::st_polygon(list(matrix(c(0, 0, 1, 0, 1, 1, 0, 1, 0, 0),
-                             ncol = 2, byrow = TRUE)))
-)
-combine_river_features(river_centerline, river_surface)
-}
+\keyword{internal}

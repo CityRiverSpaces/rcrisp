@@ -23,6 +23,16 @@
 #'
 #' @return A simple feature geometry representing the river corridor
 #' @export
+#' @examples
+#' network <- rbind(bucharest_osm$streets, bucharest_osm$railways) |>
+#'   as_network()
+#' crs <- get_utm_zone(bucharest_osm$aoi)
+#' aoi <- reproject(bucharest_osm$aoi, crs)
+#' delineate_corridor(network,
+#'                    bucharest_osm$river_centerline,
+#'                    bucharest_osm$river_surface,
+#'                    aoi,
+#'                    dem = terra::unwrap(bucharest_dem))
 delineate_corridor <- function(
   network, river_centerline, river_surface, aoi, initial_method = "valley",
   buffer = NULL, dem = NULL, max_iterations = 10, capping_method = "direct"
@@ -77,6 +87,7 @@ delineate_corridor <- function(
 #' @param bbox Bounding box defining the extent of the area of interest
 #'
 #' @return A simple feature geometry
+#' @keywords internal
 initial_corridor <- function(
   river, method = "valley", buffer = NULL, dem = NULL, bbox = NULL
 ) {
@@ -116,6 +127,7 @@ initial_corridor <- function(
 #'   given, it is taken as the bounding box of the spatial network
 #'
 #' @return A simple feature geometry including a pair of points
+#' @keywords internal
 corridor_end_points <- function(river, network, aoi = NULL) {
   # Only consider the edges of the spatial network
   spat_net_edges <- sf::st_geometry(sf::st_as_sf(network, "edges"))
@@ -132,8 +144,8 @@ corridor_end_points <- function(river, network, aoi = NULL) {
   # component with overall longest edge length
   river_network <- as_network(river_segments, flatten = FALSE, clean = FALSE)
   components <- tidygraph::morph(river_network, tidygraph::to_components)
-  sum_edge_lengths <- function(x) sum(sf::st_length(sf::st_as_sf(x, "edges")))
-  edge_lengths <- sapply(components, sum_edge_lengths)
+  sum_edge_lengths <- \(x) sum(sf::st_length(sf::st_as_sf(x, "edges")))
+  edge_lengths <- vapply(components, sum_edge_lengths, numeric(1))
   river_network <- components[[which.max(edge_lengths)]]
   river_network <- clean_network(river_network)
 
@@ -171,6 +183,7 @@ corridor_end_points <- function(river, network, aoi = NULL) {
 #'
 #' @return A simple feature geometry set of two areas of interest
 #' @importFrom rlang .data
+#' @keywords internal
 split_aoi <- function(bbox, river) {
   regions <- split_by(as_sfc(bbox), river)
 
@@ -198,6 +211,7 @@ split_aoi <- function(bbox, river) {
 #'   by cutting the area of interest along the river
 #'
 #' @return A simple feature geometry representing the initial corridor edges
+#' @keywords internal
 initial_edges <- function(corridor_initial, regions) {
   corridor_split <- sf::st_intersection(regions, corridor_initial)
   boundaries <- sf::st_union(sf::st_boundary(regions))
@@ -224,6 +238,7 @@ initial_edges <- function(corridor_initial, regions) {
 #'   corridor edges
 #'
 #' @return A simple feature geometry representing the edge (i.e. a linestring)
+#' @keywords internal
 corridor_edge <- function(network, end_points, target_edge, exclude_area = NULL,
                           max_iterations = 10) {
   # Identify nodes on the network that are closest to the target end points
@@ -262,6 +277,7 @@ corridor_edge <- function(network, end_points, target_edge, exclude_area = NULL,
 #'   `method = 'shortest-path'`
 #'
 #' @return A simple feature geometry representing the corridor (i.e. a polygon)
+#' @keywords internal
 cap_corridor <- function(edges, method = "direct", network = NULL) {
 
   start_pts <- lwgeom::st_startpoint(edges)
@@ -280,7 +296,7 @@ cap_corridor <- function(edges, method = "direct", network = NULL) {
     # TODO: raise warning if lenght is 2 times longer than direct segment
   } else {
     stop(
-      sprintf("Unknown method to cap the river corridor: {method}", method)
+      sprintf("Unknown method to cap the river corridor: %s", method)
     )
   }
   as_polygon(c(edges, cap_edge_1, cap_edge_2))

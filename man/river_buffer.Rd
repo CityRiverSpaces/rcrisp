@@ -20,8 +20,4 @@ A simple feature geometry
 The river geometry may consist of multiple spatial features, these are merged
 after applying the buffer.
 }
-\examples{
-river <- sf::st_sfc(sf::st_linestring(matrix(c(0, 0, 1, 1), ncol = 2)))
-sf::st_crs(river) <- sf::st_crs("EPSG:4326")
-river_buffer(river, 100)
-}
+\keyword{internal}

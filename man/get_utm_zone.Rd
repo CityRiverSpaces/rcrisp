@@ -10,7 +10,7 @@ get_utm_zone(x)
 \item{x}{Bounding box or geometry object}
 }
 \value{
-The EPSG of the UTM zone
+The EPSG code of the UTM zone
 }
 \description{
 Get the UTM zone of a spatial object
