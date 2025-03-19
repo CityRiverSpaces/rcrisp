@@ -41,8 +41,6 @@ Imports:
     units,
     visor
 Suggests:
-    ggplot2,
-    gridExtra,
     knitr,
     purrr,
     rmarkdown,
