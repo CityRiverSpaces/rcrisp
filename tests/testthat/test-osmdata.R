@@ -49,7 +49,9 @@ test_that("OSM data for Bucharest is correctly retreived", {
   bucharest <- get_osmdata("Bucharest", "Dâmbovița", force_download = TRUE)
 
   expect_length(bucharest, 3)
-  expect_true(all(sapply(bucharest, function(x) length(x) >= 1)))
+  expect_true(all(vapply(X = bucharest,
+                         FUN = \(x) length(x) >= 1,
+                         FUN.VALUE = logical(1))))
 })
 
 test_that("Multiple boundaries are correcly retreived", {

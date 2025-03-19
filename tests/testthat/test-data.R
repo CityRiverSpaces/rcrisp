@@ -9,7 +9,7 @@ test_that("Bounding box has correct type", {
 })
 
 test_that("Only the bounding box has a geographic CRS", {
-  is_longlat <- sapply(bucharest_osm, sf::st_is_longlat)
+  is_longlat <- vapply(bucharest_osm, sf::st_is_longlat, logical(1))
   expect_true(is_longlat["aoi"])
   others <- is_longlat[names(bucharest_osm) != "aoi"]
   expect_true(!any(others))
