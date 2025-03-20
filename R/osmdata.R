@@ -176,15 +176,19 @@ get_osm_city_boundary <- function(bb, city_name, crs = NULL, multiple = FALSE,
   city_boundary <- tryCatch(fetch_boundary("boundary", "administrative"),
                             error = function(e) NULL)
 
-  # If not found, try again with the "place:city" tag
-  if (is.null(city_boundary)) {
+  if (!is.null(city_boundary)) {
+    message("City boundary found with 'boundary:administrative' tag.")
+  } else {
+    # If not found, try again with the "place:city" tag
     city_boundary <- tryCatch(fetch_boundary("place", "city"),
                               error = function(e) NULL)
-  }
 
-  # If still not found, throw an error
-  if (is.null(city_boundary)) {
-    stop("No city boundary found. The city name may be incorrect.")
+    if (!is.null(city_boundary)) {
+      message("City boundary found with 'place:city' tag.")
+    } else {
+      # If still not found, throw an error
+      stop("No city boundary found. The city name may be incorrect.")
+    }
   }
 
   if (!is.null(crs)) city_boundary <- sf::st_transform(city_boundary, crs)
