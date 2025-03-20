@@ -49,21 +49,13 @@ network_shortpath <- sfnetworks::sfnetwork(nodes = nodes_shortpath,
                                            directed = FALSE, force = TRUE,
                                            node_key = "x")
 
-#            p13
-#            |
-# p11 - p12  |
-#            |
-#            p14
-p11 <- sf::st_point(c(0, 0))
-p12 <- sf::st_point(c(1, 0))
-p13 <- sf::st_point(c(2, 1))
-p14 <- sf::st_point(c(2, -1))
-
-e5 <- sf::st_linestring(c(p11, p12))
-e6 <- sf::st_linestring(c(p13, p14))
-
-nodes_no_crossings <- sf::st_sfc(p11, p12, p13, p14)
-edges_no_crossings <- sf::st_as_sf(sf::st_sfc(e5, e6))
+#          p4
+#          |
+# p1 - p2  |
+#          |
+#          p5
+nodes_no_crossings <- sf::st_sfc(p1, p2, p4, p5)
+edges_no_crossings <- sf::st_as_sf(sf::st_sfc(e1, e3))
 edges_no_crossings$from <- c(1, 3)
 edges_no_crossings$to <- c(2, 4)
 network_no_crossings <- sfnetworks::sfnetwork(nodes = nodes_no_crossings,
