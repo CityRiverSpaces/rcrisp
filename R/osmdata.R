@@ -172,13 +172,13 @@ get_osm_city_boundary <- function(bb, city_name, crs = NULL, multiple = FALSE,
       sf::st_geometry()
   }
 
-  # Try to get the city boundary with the "place:city" tag
-  city_boundary <- tryCatch(fetch_boundary("place", "city"),
+  # Try to get the city boundary with the "boundary:administrative" tag
+  city_boundary <- tryCatch(fetch_boundary("boundary", "administrative"),
                             error = function(e) NULL)
 
-  # If not found, try again with the "boundary:administrative" tag
+  # If not found, try again with the "place:city" tag
   if (is.null(city_boundary)) {
-    city_boundary <- tryCatch(fetch_boundary("boundary", "administrative"),
+    city_boundary <- tryCatch(fetch_boundary("place", "city"),
                               error = function(e) NULL)
   }
 
