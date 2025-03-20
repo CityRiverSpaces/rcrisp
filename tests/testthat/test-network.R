@@ -49,6 +49,28 @@ network_shortpath <- sfnetworks::sfnetwork(nodes = nodes_shortpath,
                                            directed = FALSE, force = TRUE,
                                            node_key = "x")
 
+#            p13
+#            |
+# p11 - p12  |
+#            |
+#            p14
+p11 <- sf::st_point(c(0, 0))
+p12 <- sf::st_point(c(1, 0))
+p13 <- sf::st_point(c(2, 1))
+p14 <- sf::st_point(c(2, -1))
+
+e5 <- sf::st_linestring(c(p11, p12))
+e6 <- sf::st_linestring(c(p13, p14))
+
+nodes_no_crossings <- sf::st_sfc(p11, p12, p13, p14)
+edges_no_crossings <- sf::st_as_sf(sf::st_sfc(e5, e6))
+edges_no_crossings$from <- c(1, 3)
+edges_no_crossings$to <- c(2, 4)
+network_no_crossings <- sfnetworks::sfnetwork(nodes = nodes_no_crossings,
+                                              edges = edges_no_crossings,
+                                              directed = FALSE, force = TRUE,
+                                              node_key = "x")
+
 test_that("Network objects can be set up with no modifications", {
   edges <- sf::st_sfc(e1, e2, e3)
   network <- as_network(edges, flatten = FALSE, clean = FALSE)
@@ -295,4 +317,9 @@ test_that("Network setup with real data", {
   edges_actual <- sf::st_geometry(sf::st_as_sf(network, "edges"))
   edges_expected <- sf::st_geometry(edges)
   expect_setequal(edges_actual, edges_expected)
+})
+
+test_that("Flattening network with no crossings does not fail", {
+  network_no_crossings_flat <- flatten_network(network_no_crossings)
+  expect_true(inherits(network_no_crossings_flat, "sfnetwork"))
 })
