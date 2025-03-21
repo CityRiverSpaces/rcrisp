@@ -380,7 +380,7 @@ get_river_aoi <- function(river, city_bbox, buffer_distance) {
 #' @param osm_data An sf object with OpenStreetMap data
 #' @param name A character string with the name to match
 #'
-#' @return
+#' @return sf object containing only rows with filtered name
 #' @keywords internal
 match_osm_name <- function(osm_data, name) {
   osm_data |>

@@ -11,6 +11,9 @@ match_osm_name(osm_data, name)
 
 \item{name}{A character string with the name to match}
 }
+\value{
+sf object containing only rows with filtered name
+}
 \description{
 Match OpenStreetMap data by name
 }
