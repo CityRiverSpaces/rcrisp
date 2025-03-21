@@ -117,6 +117,7 @@ test_that("River is consistently retreived with alternative names", {
   alternative_names <- c("La Seine", "Seine River", "Seine, France")
   for (river_name in alternative_names) {
     river <- get_osm_river(bb_paris, river_name, force_download = TRUE)
-    expect_equal(as.numeric(bb_river), as.numeric(sf::st_bbox(river$centerline)))
+    expect_equal(as.numeric(bb_river),
+                 as.numeric(sf::st_bbox(river$centerline)))
   }
 })
