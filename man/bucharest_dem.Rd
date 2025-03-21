@@ -9,7 +9,7 @@ A PackedSpatRaster object. Run \code{\link[terra:wrap]{terra::unwrap()}} to extr
 DEM as a SpatRaster object
 }
 \source{
-\url{https://spacedata.copernicus.eu/collections/copernicus-digital-elevation-model}
+\url{https://dataspace.copernicus.eu/explore-data/data-collections/copernicus-contributing-missions/collections-description/COP-DEM}
 }
 \usage{
 bucharest_dem

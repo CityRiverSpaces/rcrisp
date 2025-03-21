@@ -6,7 +6,7 @@
 # nolint start
 #' References:
 #'  - [EarthSearch STAC API](https://element84.com/earth-search/)
-#'  - [Copernicus DEM](https://spacedata.copernicus.eu/collections/copernicus-digital-elevation-model)
+#'  - [Copernicus DEM](https://dataspace.copernicus.eu/explore-data/data-collections/copernicus-contributing-missions/collections-description/COP-DEM)
 #'  - [AWS Copernicus DEM datasets](https://copernicus-dem-30m.s3.amazonaws.com/readme.html)
 #'  - [Data license](https://docs.sentinel-hub.com/api/latest/static/files/data/dem/resources/license/License-COPDEM-30.pdf)
 # nolint end

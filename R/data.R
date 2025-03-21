@@ -26,7 +26,7 @@
 #' @format A PackedSpatRaster object. Run [`terra::unwrap()`] to extract the
 #'   DEM as a SpatRaster object
 # nolint start
-#' @source <https://spacedata.copernicus.eu/collections/copernicus-digital-elevation-model>
+#' @source <https://dataspace.copernicus.eu/explore-data/data-collections/copernicus-contributing-missions/collections-description/COP-DEM>
 # nolint end
 "bucharest_dem"
 
