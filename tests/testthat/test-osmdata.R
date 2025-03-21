@@ -82,7 +82,7 @@ test_that("Queried datasets can be retrieved from the cache on new calls", {
 
   # calling get_osm_railways again should read data from the cached file,
   # raising a warning that includes the path to the cached file as well
-  expect_warning(get_osm_railways(bb, force_download = FALSE), cached_filepath)
+  expect_warning(get_osm_railways(bucharest_osm$bb, force_download = FALSE), cached_filepath)
 })
 
 test_that("City boundary is retreived for alternative names", {
