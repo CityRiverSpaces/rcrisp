@@ -64,7 +64,7 @@ get_dem <- function(bb, dem_source = "STAC", stac_endpoint = NULL,
 #'
 #' @return River valley as a simple feature geometry
 #' @export
-get_valley <- function(dem, river) {
+delineate_valley <- function(dem, river) {
   if (!terra::same.crs(dem, sf::st_crs(river)$wkt)) {
     stop("DEM and river geometry should be in the same CRS")
   }
