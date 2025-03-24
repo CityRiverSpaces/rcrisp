@@ -1,0 +1,49 @@
+---
+title: "Valley delineation"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Valley delineation}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(CRiSp)
+library(terra)
+library(sf)
+```
+
+# Valley delineation
+
+When the parameter `method = "valley"` is set in `delineate_corridor()`, the initial valley is determined from a DEM, using the cost distance algorithm described in...
+
+```{r}
+dem <- unwrap(bucharest_dem)
+river_centerline <- st_geometry(bucharest_osm$river_centerline)
+river_surface <- st_geometry(bucharest_osm$river_surface)
+river <- c(river_centerline, river_surface)
+```
+
+```{r}
+#| echo: false
+#| fig.alt: "Digital Elevation Model of the area enclosing River Dâmbovița in Bucharest"
+plot(dem)
+plot(river, col = "white", border = NA, add = TRUE)
+```
+
+```{r}
+valley <- delineate_valley(dem, river)
+```
+
+```{r}
+#| echo: false
+#| fig.alt: "Valley polygon derived from the DEM"
+plot(valley)
+```
