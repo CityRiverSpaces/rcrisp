@@ -241,7 +241,6 @@ get_osm_river <- function(bb, river_name, crs = NULL, force_download = FALSE) {
     sf::st_as_sf() |>
     # natural:water retrieved some invalid polygons, fix these
     sf::st_make_valid() |>
-    sf::st_crop(bb) |>
     sf::st_filter(river_centerline, .predicate = sf::st_intersects) |>
     sf::st_union()
 
@@ -350,6 +349,8 @@ get_osm_buildings <- function(aoi, crs = NULL, force_download = FALSE) {
   buildings <- osmdata_as_sf("building", "", aoi,
                              force_download = force_download)
   buildings <- buildings$osm_polygons |>
+    # retreived buildings may contain invalid polygons, fix these
+    sf::st_make_valid() |>
     sf::st_filter(aoi, .predicate = sf::st_intersects) |>
     dplyr::filter(.data$building != "NULL") |>
     sf::st_geometry()
