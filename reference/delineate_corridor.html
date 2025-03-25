@@ -11,7 +11,7 @@ the river valley)."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">CRiSp</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -129,6 +129,21 @@ the available methods</p></dd>
     <p>A simple feature geometry representing the river corridor</p>
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># interactive()</span></span></span>
+<span class="r-in"><span><span class="va">network</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">bucharest_osm</span><span class="op">$</span><span class="va">streets</span>, <span class="va">bucharest_osm</span><span class="op">$</span><span class="va">railways</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="as_network.html">as_network</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">crs</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_utm_zone.html">get_utm_zone</a></span><span class="op">(</span><span class="va">bucharest_osm</span><span class="op">$</span><span class="va">aoi</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">aoi</span> <span class="op">&lt;-</span> <span class="fu"><a href="reproject.html">reproject</a></span><span class="op">(</span><span class="va">bucharest_osm</span><span class="op">$</span><span class="va">aoi</span>, <span class="va">crs</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">delineate_corridor</span><span class="op">(</span><span class="va">network</span>,</span></span>
+<span class="r-in"><span>                   <span class="va">bucharest_osm</span><span class="op">$</span><span class="va">river_centerline</span>,</span></span>
+<span class="r-in"><span>                   <span class="va">bucharest_osm</span><span class="op">$</span><span class="va">river_surface</span>,</span></span>
+<span class="r-in"><span>                   <span class="va">aoi</span>,</span></span>
+<span class="r-in"><span>                   dem <span class="op">=</span> <span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/wrap.html" class="external-link">unwrap</a></span><span class="op">(</span><span class="va">bucharest_dem</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 

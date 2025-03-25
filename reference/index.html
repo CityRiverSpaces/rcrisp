@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">CRiSp</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -93,28 +93,10 @@
         <dd>CRiSp example OSM data for Bucharest</dd>
       </dl><dl><dt>
 
-          <code><a href="buffer.html">buffer()</a></code>
-
-        </dt>
-        <dd>Apply a buffer region to a sf object</dd>
-      </dl><dl><dt>
-
-          <code><a href="build_river_network.html">build_river_network()</a></code>
-
-        </dt>
-        <dd>Build a spatial network from the river center spatial features</dd>
-      </dl><dl><dt>
-
           <code><a href="cache_directory.html">cache_directory()</a></code>
 
         </dt>
         <dd>Return the cache directory used by the package</dd>
-      </dl><dl><dt>
-
-          <code><a href="cap_corridor.html">cap_corridor()</a></code>
-
-        </dt>
-        <dd>Cap the corridor by connecting the edge end points</dd>
       </dl><dl><dt>
 
           <code><a href="clean_network.html">clean_network()</a></code>
@@ -129,24 +111,6 @@
         <dd>Remove cache files</dd>
       </dl><dl><dt>
 
-          <code><a href="clip_and_filter.html">clip_and_filter()</a></code>
-
-        </dt>
-        <dd>Clip lines to the extent of the corridor, and filter valid segment edges</dd>
-      </dl><dl><dt>
-
-          <code><a href="combine_river_features.html">combine_river_features()</a></code>
-
-        </dt>
-        <dd>Combine river centerline and surface</dd>
-      </dl><dl><dt>
-
-          <code><a href="corridor_edge.html">corridor_edge()</a></code>
-
-        </dt>
-        <dd>Draw a corridor edge on the spatial network.</dd>
-      </dl><dl><dt>
-
           <code><a href="corridor_end_points.html">corridor_end_points()</a></code>
 
         </dt>
@@ -156,7 +120,7 @@
           <code><a href="default_stac_dem.html">default_stac_dem</a></code>
 
         </dt>
-        <dd>Endpoint and collection ID of the default STAC collection where to access digital elevation model (DEM) data. This is the global Copernicus DEM 30 dataset hosted on AWS, as listed in the EarthSearch STAC API endpoint. Note that AWS credentials need to be set up in order to access the data (not the catalog). References: <ul><li><p><a href="https://element84.com/earth-search/" class="external-link">EarthSearch STAC API</a></p></li> <li><p><a href="https://spacedata.copernicus.eu/collections/copernicus-digital-elevation-model" class="external-link">Copernicus DEM</a></p></li> <li><p><a href="https://copernicus-dem-30m.s3.amazonaws.com/readme.html" class="external-link">AWS Copernicus DEM datasets</a></p></li> <li><p><a href="https://docs.sentinel-hub.com/api/latest/static/files/data/dem/resources/license/License-COPDEM-30.pdf" class="external-link">Data license</a></p></li> </ul></dd>
+        <dd>Endpoint and collection ID of the default STAC collection where to access digital elevation model (DEM) data. This is the global Copernicus DEM 30 dataset hosted on AWS, as listed in the EarthSearch STAC API endpoint. Note that AWS credentials need to be set up in order to access the data (not the catalog). References: <ul><li><p><a href="https://element84.com/earth-search/" class="external-link">EarthSearch STAC API</a></p></li> <li><p><a href="https://dataspace.copernicus.eu/explore-data/data-collections/copernicus-contributing-missions/collections-description/COP-DEM" class="external-link">Copernicus DEM</a></p></li> <li><p><a href="https://copernicus-dem-30m.s3.amazonaws.com/readme.html" class="external-link">AWS Copernicus DEM datasets</a></p></li> <li><p><a href="https://docs.sentinel-hub.com/api/latest/static/files/data/dem/resources/license/License-COPDEM-30.pdf" class="external-link">Data license</a></p></li> </ul></dd>
       </dl><dl><dt>
 
           <code><a href="delineate.html">delineate()</a></code>
@@ -189,52 +153,16 @@
         <dd>Write DEM to cloud optimized GeoTiff file as specified location</dd>
       </dl><dl><dt>
 
-          <code><a href="filter_clusters.html">filter_clusters()</a></code>
-
-        </dt>
-        <dd>Cluster the river crossings and select the shortest crossing per cluster</dd>
-      </dl><dl><dt>
-
-          <code><a href="filter_network.html">filter_network()</a></code>
-
-        </dt>
-        <dd>Subset a network keeping the only nodes that intersect a target geometry.</dd>
-      </dl><dl><dt>
-
           <code><a href="flatten_network.html">flatten_network()</a></code>
 
         </dt>
         <dd>Flatten a network by adding points at apparent intersections.</dd>
       </dl><dl><dt>
 
-          <code><a href="get_cd_char.html">get_cd_char()</a></code>
-
-        </dt>
-        <dd>Get characteristic value of distribution of cost distance</dd>
-      </dl><dl><dt>
-
-          <code><a href="get_cost_distance.html">get_cost_distance()</a></code>
-
-        </dt>
-        <dd>Derive cost distance function from masked slope</dd>
-      </dl><dl><dt>
-
           <code><a href="get_dem.html">get_dem()</a></code>
 
         </dt>
         <dd>Access digital elevation model (DEM) for a given region</dd>
-      </dl><dl><dt>
-
-          <code><a href="get_dem_cache_filepath.html">get_dem_cache_filepath()</a></code>
-
-        </dt>
-        <dd>Get file path where to cache digital elevation model (DEM) data</dd>
-      </dl><dl><dt>
-
-          <code><a href="get_intersecting_edges.html">get_intersecting_edges()</a></code>
-
-        </dt>
-        <dd>Identify network edges that are intersecting a geometry</dd>
       </dl><dl><dt>
 
           <code><a href="get_osm_bb.html">get_osm_bb()</a></code>
@@ -279,28 +207,10 @@
         <dd>Retrieve OpenStreetMap data for a given location</dd>
       </dl><dl><dt>
 
-          <code><a href="get_osmdata_cache_filepath.html">get_osmdata_cache_filepath()</a></code>
-
-        </dt>
-        <dd>Get the file path where to cache results of an Overpass API query</dd>
-      </dl><dl><dt>
-
           <code><a href="get_river_aoi.html">get_river_aoi()</a></code>
 
         </dt>
         <dd>Get an area of interest (AoI) around a river, cropping to the bounding box of a city</dd>
-      </dl><dl><dt>
-
-          <code><a href="get_river_banks.html">get_river_banks()</a></code>
-
-        </dt>
-        <dd>Draw the regions corresponding to the two river banks</dd>
-      </dl><dl><dt>
-
-          <code><a href="get_slope.html">get_slope()</a></code>
-
-        </dt>
-        <dd>Derive slope as percentage from DEM</dd>
       </dl><dl><dt>
 
           <code><a href="get_stac_asset_urls.html">get_stac_asset_urls()</a></code>
@@ -321,76 +231,10 @@
         <dd>Extract the river valley from the DEM</dd>
       </dl><dl><dt>
 
-          <code><a href="get_valley_polygon.html">get_valley_polygon()</a></code>
-
-        </dt>
-        <dd>Create vector/polygon representation of valley without holes from raster mask</dd>
-      </dl><dl><dt>
-
-          <code><a href="get_valley_polygon_no_hole.html">get_valley_polygon_no_hole()</a></code>
-
-        </dt>
-        <dd>Remove possible holes from valley geometry</dd>
-      </dl><dl><dt>
-
-          <code><a href="get_valley_polygon_raw.html">get_valley_polygon_raw()</a></code>
-
-        </dt>
-        <dd>Create vector/polygon representation of valley raster mask</dd>
-      </dl><dl><dt>
-
-          <code><a href="initial_corridor.html">initial_corridor()</a></code>
-
-        </dt>
-        <dd>Draw the initial geometry of a river corridor.</dd>
-      </dl><dl><dt>
-
-          <code><a href="initial_edges.html">initial_edges()</a></code>
-
-        </dt>
-        <dd>Identify the initial edges of the river corridor</dd>
-      </dl><dl><dt>
-
           <code><a href="load_dem.html">load_dem()</a></code>
 
         </dt>
         <dd>Retrieve DEM data from a list of STAC assets</dd>
-      </dl><dl><dt>
-
-          <code><a href="load_raster.html">load_raster()</a></code>
-
-        </dt>
-        <dd>Load raster data from one or multiple (remote) files</dd>
-      </dl><dl><dt>
-
-          <code><a href="mask_cost_distance.html">mask_cost_distance()</a></code>
-
-        </dt>
-        <dd>Mask out river regions incl. a buffer in cost distance raster data</dd>
-      </dl><dl><dt>
-
-          <code><a href="mask_slope.html">mask_slope()</a></code>
-
-        </dt>
-        <dd>Mask slope raster, setting the slope to zero for the pixels overlapping the river area.</dd>
-      </dl><dl><dt>
-
-          <code><a href="merge_block.html">merge_block()</a></code>
-
-        </dt>
-        <dd>Merge a block to one of the target geometries</dd>
-      </dl><dl><dt>
-
-          <code><a href="merge_blocks.html">merge_blocks()</a></code>
-
-        </dt>
-        <dd>Merge a set of blocks to adjacent ones</dd>
-      </dl><dl><dt>
-
-          <code><a href="nearest_node.html">nearest_node()</a></code>
-
-        </dt>
-        <dd>Find the node in a network that is closest to a target geometry.</dd>
       </dl><dl><dt>
 
           <code><a href="osmdata_as_sf.html">osmdata_as_sf()</a></code>
@@ -399,70 +243,10 @@
         <dd>Retrieve OpenStreetMap data as sf object</dd>
       </dl><dl><dt>
 
-          <code><a href="osmdata_query.html">osmdata_query()</a></code>
-
-        </dt>
-        <dd>Query the Overpass API for a key:value pair within a bounding box</dd>
-      </dl><dl><dt>
-
-          <code><a href="read_data_from_cache.html">read_data_from_cache()</a></code>
-
-        </dt>
-        <dd>Read data from the cache directory</dd>
-      </dl><dl><dt>
-
-          <code><a href="refine_segments.html">refine_segments()</a></code>
-
-        </dt>
-        <dd>Refine candidate segments via recursive merging</dd>
-      </dl><dl><dt>
-
           <code><a href="reproject.html">reproject()</a></code>
 
         </dt>
         <dd>Reproject a raster or vector dataset to the specified coordinate reference system (CRS)</dd>
-      </dl><dl><dt>
-
-          <code><a href="river_buffer.html">river_buffer()</a></code>
-
-        </dt>
-        <dd>Draw a corridor as a fixed buffer region around a river.</dd>
-      </dl><dl><dt>
-
-          <code><a href="set_units_like.html">set_units_like()</a></code>
-
-        </dt>
-        <dd>Set the units of x as the units of y</dd>
-      </dl><dl><dt>
-
-          <code><a href="shortest_path.html">shortest_path()</a></code>
-
-        </dt>
-        <dd>Find shortest path between a pair of nodes in the network.</dd>
-      </dl><dl><dt>
-
-          <code><a href="simplify_network.html">simplify_network()</a></code>
-
-        </dt>
-        <dd>Simplify a spatial network by removing multiple edges and loops.</dd>
-      </dl><dl><dt>
-
-          <code><a href="smooth_dem.html">smooth_dem()</a></code>
-
-        </dt>
-        <dd>Spatially smooth dem by (window) filtering</dd>
-      </dl><dl><dt>
-
-          <code><a href="split_by.html">split_by()</a></code>
-
-        </dt>
-        <dd>Split a geometry along a (multi)linestring.</dd>
-      </dl><dl><dt>
-
-          <code><a href="write_data_to_cache.html">write_data_to_cache()</a></code>
-
-        </dt>
-        <dd>Write data to the cache directory</dd>
       </dl></div>
   </main></div>
 

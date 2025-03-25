@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">CRiSp</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -166,6 +166,33 @@ and <code>dem</code> is NULL</p></dd>
     <p>A list with the corridor, segments, and riverspace geometries</p>
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">delineate</span><span class="op">(</span><span class="st">"Bucharest"</span>, <span class="st">"Dâmbovița"</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> The default `network_buffer` of 2500 m is used for corridor delineation.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Saving data to cache directory: /home/runner/.cache/CRiSp/osmdata_place_city_25.967_44.334_26.226_44.541.rds</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Saving data to cache directory: /home/runner/.cache/CRiSp/osmdata_waterway_river_25.967_44.334_26.226_44.541.rds</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Saving data to cache directory: /home/runner/.cache/CRiSp/osmdata_natural_water_25.967_44.334_26.226_44.541.rds</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Saving data to cache directory: /home/runner/.cache/CRiSp/osmdata_highway_motorway_trunk_primary_secondary_tertiary_motorway_link_trunk_link_primary_link_secondary_link_tertiary_link_25.935_44.371_26.257_44.49.rds</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Saving data to cache directory: /home/runner/.cache/CRiSp/osmdata_railway_rail_25.935_44.371_26.257_44.49.rds</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Saving data to cache directory: /home/runner/.cache/CRiSp/dem_Copernicus_DSM_COG_10_N44_00_E026_00_DEM_Copernicus_DSM_COG_10_N44_00_E025_00_DEM_25.904_44.349_26.288_44.512.rds</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>to_spatial_subdivision assumes attributes are constant over geometries</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $corridor</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Geometry set for 1 feature </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: POLYGON</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: 417802.4 ymin: 4914017 xmax: 438476.9 ymax: 4925645</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Projected CRS: WGS 84 / UTM zone 35N</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> POLYGON ((417802.4 4923131, 417818.1 4923203, 4...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $segments</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $riverspace</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 

@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">CRiSp</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -84,27 +84,11 @@ If left NULL, the function retrieves the following values:
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">bb</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_osm_bb.html">get_osm_bb</a></span><span class="op">(</span><span class="st">"Bucharest"</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># interactive()</span></span></span>
+<span class="r-in"><span><span class="va">bb</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_osm_bb.html">get_osm_bb</a></span><span class="op">(</span><span class="st">"Bucharest"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">crs</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_utm_zone.html">get_utm_zone</a></span><span class="op">(</span><span class="va">bb</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">get_osm_streets</span><span class="op">(</span><span class="va">bb</span>, <span class="va">crs</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Saving data to cache directory: /home/runner/.cache/CRiSp/osmdata_highway_motorway_trunk_primary_secondary_tertiary_motorway_link_trunk_link_primary_link_secondary_link_tertiary_link_25.967_44.334_26.226_44.541.rds</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 7937 features and 1 field</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: LINESTRING</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: 416680.4 ymin: 4907301 xmax: 439997 ymax: 4938941</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Projected CRS: WGS 84 / UTM zone 35N</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> First 10 features:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>              type                       geometry</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1349     tertiary LINESTRING (427899.3 492440...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1467     tertiary LINESTRING (427853.8 492445...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1760      primary LINESTRING (427348.7 492401...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1915      primary LINESTRING (432042.4 491860...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2955804  tertiary LINESTRING (432099.2 491999...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3039873   primary LINESTRING (435628.7 492117...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3043515 secondary LINESTRING (425064.1 491877...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3043519   primary LINESTRING (425537.9 491747...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3043522  tertiary LINESTRING (425078.3 491876...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3058607   primary LINESTRING (426355.1 492506...</span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

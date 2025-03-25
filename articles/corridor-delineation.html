@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">CRiSp</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -114,10 +114,9 @@ elements: <code>corridor</code>, <code>segments</code>, and
 <span>  segments <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  riverspace <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; Saving data to cache directory: /home/runner/.cache/CRiSp/osmdata_highway_motorway_trunk_primary_secondary_tertiary_motorway_link_trunk_link_primary_link_secondary_link_tertiary_link_25.935_44.371_26.257_44.49.rds</span></span>
-<span><span class="co">#&gt; Saving data to cache directory: /home/runner/.cache/CRiSp/osmdata_railway_rail_25.935_44.371_26.257_44.49.rds</span></span>
+<span><span class="co">#&gt; The default `network_buffer` of 2500 m is used for corridor delineation.</span></span>
+<span><span class="co">#&gt; The default `buildings_buffer` of 100 m is used for riverspace delineation.</span></span>
 <span><span class="co">#&gt; Saving data to cache directory: /home/runner/.cache/CRiSp/osmdata_building__25.965_44.393_26.227_44.468.rds</span></span>
-<span><span class="co">#&gt; Saving data to cache directory: /home/runner/.cache/CRiSp/dem_Copernicus_DSM_COG_10_N44_00_E026_00_DEM_Copernicus_DSM_COG_10_N44_00_E025_00_DEM_25.904_44.349_26.288_44.512.rds</span></span>
 <span><span class="co">#&gt; Calculating viewpoints from both river edge and river centerline.</span></span>
 <span></span>
 <span><span class="co"># Plot all layers within the extent of the delineated corridor</span></span>
@@ -127,7 +126,7 @@ elements: <code>corridor</code>, <code>segments</code>, and
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">bucharest_osm</span><span class="op">$</span><span class="va">river_centerline</span>, col <span class="op">=</span> <span class="st">"blue"</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">bucharest_dambovita</span><span class="op">$</span><span class="va">segments</span>, border <span class="op">=</span> <span class="st">"lightblue"</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">bucharest_dambovita</span><span class="op">$</span><span class="va">corridor</span>, border <span class="op">=</span> <span class="st">"red"</span>, wt <span class="op">=</span> <span class="fl">2</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="corridor-delineation_files/figure-html/delineate-1.png" width="700"></p>
+<p><img src="corridor-delineation_files/figure-html/delineate-1.png" alt="Delineation of the corridor of River Dâmbovița in Bucharest" width="700"></p>
   </main>
 </div>
 
