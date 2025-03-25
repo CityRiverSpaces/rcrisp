@@ -15,14 +15,7 @@
 #' }
 delineate_riverspace <- function(river, occluders = NULL, density = 1 / 50,
                                  ray_num = 41, ray_length = 100) {
-  vpoints <- visor::get_viewpoints(river, density = density)
-  isovists <- vector(mode = "list", length = length(vpoints))
-  for (i in seq_along(vpoints)) {
-    isovists[i] <-
-      visor::get_isovist(vpoints[i], occluders, ray_num, ray_length)
-  }
-  riverspace <- sf::st_union(do.call(c, lapply(isovists, sf::st_sfc))) |>
-    sfheaders::sf_remove_holes()
-  sf::st_crs(riverspace) <- sf::st_crs(river)
-  riverspace
+  viewpoints <- visor::get_viewpoints(river, density = density)
+  visor::get_isovist(viewpoints, occluders = occluders, ray_num = ray_num,
+                     ray_length = ray_length)
 }
