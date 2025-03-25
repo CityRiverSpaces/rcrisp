@@ -7,12 +7,16 @@
 #'
 #' @format A list of sf objects representing:
 #' \describe{
+#'  \item{bb}{The city bounding box.}
 #'  \item{boundary}{The administrative boundary of Bucharest.}
 #'  \item{river_centerline}{The Dâmbovița river centerline.}
 #'  \item{river_surface}{The Dâmbovița river area.}
-#'  \item{aoi}{The area of interest (AOI) for the city of Bucharest.}
+#'  \item{aoi_network}{The area of interest (AoI) to include the network around
+#'                     the river.}
 #'  \item{streets}{The street network.}
 #'  \item{railways}{The railway network.}
+#'  \item{aoi_buildings}{The area of interest (AoI) to include buildings around
+#'                       the river.}
 #'  \item{buildings}{The buildings in the corridor.}
 #' }
 #' @source <https://www.openstreetmap.org/about>

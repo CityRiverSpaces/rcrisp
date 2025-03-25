@@ -20,6 +20,4 @@ filtered dem
 \description{
 Spatially smooth dem by (window) filtering
 }
-\examples{
-smooth_dem(terra::unwrap(bucharest_dem))
-}
+\keyword{internal}

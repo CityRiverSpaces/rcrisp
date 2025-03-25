@@ -98,7 +98,7 @@ get_valley <- function(dem, river) {
 #' @return A list of URLs for the assets in the collection overlapping with
 #'   the specified bounding box
 #' @export
-#' @examples
+#' @examplesIf interactive()
 #' bb <- get_osm_bb("Bucharest")
 #' get_stac_asset_urls(bb)
 get_stac_asset_urls <- function(bb, endpoint = NULL, collection = NULL) {
@@ -193,9 +193,7 @@ dem_to_cog <- function(dem, fpath, output_directory = NULL) {
 #' @param window size of smoothing kernel
 #'
 #' @return filtered dem
-#' @export
-#' @examples
-#' smooth_dem(terra::unwrap(bucharest_dem))
+#' @keywords internal
 smooth_dem <- function(dem, method = "median", window = 5) {
   dem_smoothed <- terra::focal(dem, w = window, fun = method)
   names(dem_smoothed) <- "dem_smoothed"
