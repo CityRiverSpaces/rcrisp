@@ -40,8 +40,8 @@ river <- c(river_centerline, river_surface)
 
 ```{r}
 #| echo: false
-#| fig.alt: "Digital Elevation Model of the area enclosing River Dâmbovița in Bucharest"
-#| fig.cap: "Digital Elevation Model of the area enclosing River Dâmbovița in Bucharest"
+#| fig.alt: "DEM of the area enclosing River Dâmbovița in Bucharest"
+#| fig.cap: "DEM of the area enclosing River Dâmbovița in Bucharest"
 plot(dem)
 plot(river, col = "white", border = NA, add = TRUE)
 ```
