@@ -25,7 +25,7 @@
 #'
 #' @return A simple feature geometry representing the river corridor
 #' @export
-#' @examples
+#' @examplesIf interactive()
 #' network <- rbind(bucharest_osm$streets, bucharest_osm$railways) |>
 #'   as_network()
 #' crs <- get_utm_zone(bucharest_osm$aoi)
