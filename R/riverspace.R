@@ -14,7 +14,7 @@
 #'   delineate_riverspace(bucharest_osm$river_surface, bucharest_osm$buildings)
 #' }
 delineate_riverspace <- function(river, occluders = NULL, density = 1 / 50,
-                                 ray_num = 41, ray_length = 100) {
+                                 ray_num = 40, ray_length = 100) {
   viewpoints <- visor::get_viewpoints(river, density = density)
   visor::get_isovist(viewpoints, occluders = occluders, ray_num = ray_num,
                      ray_length = ray_length)
