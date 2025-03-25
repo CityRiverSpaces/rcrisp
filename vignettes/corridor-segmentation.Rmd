@@ -17,6 +17,7 @@ knitr::opts_chunk$set(
 
 ```{r setup}
 library(CRiSp)
+library(CRiSpData)
 ```
 
 For a more detailed analysis of an urban river corridor, corridor-level delineation may not be sufficient. The corridor needs to be subdivided into smaller morphological units. Segmentation is a process of subdividing the corridor by using major transversal road or rail infrastructure lines.

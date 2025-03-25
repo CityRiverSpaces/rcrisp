@@ -49,6 +49,7 @@ Suggests:
 VignetteBuilder:
     knitr
 Remotes:
+    github::CityRiverSpaces/CRiSpData,
     github::CityRiverSpaces/rcoins,
     github::CityRiverSpaces/visor
 Config/testthat/edition: 3

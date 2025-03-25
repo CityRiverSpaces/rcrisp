@@ -16,6 +16,7 @@ knitr::opts_chunk$set(
 
 ```{r setup, message=FALSE}
 library(CRiSp)
+library(CRiSpData)
 library(dplyr)
 library(sf)
 library(sfnetworks)
@@ -23,7 +24,7 @@ library(sfnetworks)
 
 ## 1. Input data
 
-In this article we show how to set up the spatial network for a city before using it for urban river corridor delineation. We work with the OSM data for the city of Bucharest provided by the CRiSp package. See how to get your own OSM data in `vignette("getting-osm-data")`.
+In this article we show how to set up the spatial network for a city before using it for urban river corridor delineation. We work with the OSM data for the city of Bucharest provided by the CRiSpData package. See how to get your own OSM data in `vignette("getting-osm-data")`.
 
 We start by loading the OSM data. According to the delineation method, all persistent physical structures need to be considered. Therefore, the network will contain both streets and railways from OSM.
 
