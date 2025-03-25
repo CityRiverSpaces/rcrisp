@@ -1,5 +1,5 @@
-riverspace_actual <- delineate_riverspace(occluders = bucharest_osm$buildings,
-                                          river = bucharest_osm$river_surface,
+riverspace_actual <- delineate_riverspace(river = bucharest_osm$river_surface,
+                                          occluders = bucharest_osm$buildings,
                                           ray_length = 100)
 sf::st_crs(riverspace_actual) <- 32635
 
