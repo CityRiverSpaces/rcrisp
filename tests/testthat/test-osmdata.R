@@ -100,3 +100,16 @@ test_that("All geometries retrieved from OSM are valid", {
                          \(x) if (!inherits(x, "bbox")) all(sf::st_is_valid(x)),
                          logical(1))))
 })
+
+test_that("All geometries retrieved from OSM are valid", {
+  skip_on_ci()
+
+  # setup cache directory
+  temp_cache_dir()
+
+  bucharest_osm <- get_osmdata("Bucharest", "Dâmbovița", force_download = TRUE)
+
+  expect_true(all(vapply(bucharest_osm[!names(bucharest_osm) %in% "bb"],
+                         \(x) if (!inherits(x, "bbox")) all(sf::st_is_valid(x)),
+                         logical(1))))
+})

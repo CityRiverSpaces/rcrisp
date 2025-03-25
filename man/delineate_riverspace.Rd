@@ -5,17 +5,17 @@
 \title{Delineate the space surrounding a river}
 \usage{
 delineate_riverspace(
-  occluders,
   river,
+  occluders = NULL,
   density = 1/50,
   ray_num = 41,
   ray_length = 100
 )
 }
 \arguments{
-\item{occluders}{Geometry of occluders}
-
 \item{river}{List with river surface and centerline}
+
+\item{occluders}{Geometry of occluders}
 
 \item{density}{Density of viewpoints}
 
@@ -31,6 +31,6 @@ Delineate the space surrounding a river
 }
 \examples{
 \dontrun{
-delineate_riverspace(bucharest_osm$buildings, bucharest_osm$river_surface)
+  delineate_riverspace(bucharest_osm$river_surface, bucharest_osm$buildings)
 }
 }
