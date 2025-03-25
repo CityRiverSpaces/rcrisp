@@ -16,5 +16,7 @@ A bbox object with the bounding box of the city
 Get the bounding box of a city
 }
 \examples{
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 get_osm_bb("Bucharest")
+\dontshow{\}) # examplesIf}
 }

@@ -55,6 +55,7 @@ network starting from an initial definition of the corridor (based e.g. on
 the river valley).
 }
 \examples{
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 network <- rbind(bucharest_osm$streets, bucharest_osm$railways) |>
   as_network()
 crs <- get_utm_zone(bucharest_osm$aoi)
@@ -64,4 +65,5 @@ delineate_corridor(network,
                    bucharest_osm$river_surface,
                    aoi,
                    dem = terra::unwrap(bucharest_dem))
+\dontshow{\}) # examplesIf}
 }
