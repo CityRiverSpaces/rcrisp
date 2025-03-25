@@ -1,7 +1,8 @@
 test_that("Bucharest dataset includes all elements", {
   expect_setequal(names(bucharest_osm),
-                  c("boundary", "river_centerline", "river_surface",
-                    "aoi", "streets", "railways", "buildings"))
+                  c("bb", "boundary", "river_centerline", "river_surface",
+                    "aoi_network", "streets", "railways", "aoi_buildings",
+                    "buildings"))
 })
 
 test_that("AoI has correct type", {
