@@ -41,5 +41,7 @@ the city boundary, the river centreline and surface, the streets, the
 railways, and the buildings
 }
 \examples{
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 get_osmdata("Bucharest", "Dâmbovița")
+\dontshow{\}) # examplesIf}
 }

@@ -20,3 +20,4 @@ filtered dem
 \description{
 Spatially smooth dem by (window) filtering
 }
+\keyword{internal}

@@ -20,7 +20,9 @@ An sf object with the railways
 Get OpenStreetMap railways
 }
 \examples{
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 bb <- get_osm_bb("Bucharest")
 crs <- get_utm_zone(bb)
 get_osm_railways(bb, crs)
+\dontshow{\}) # examplesIf}
 }
