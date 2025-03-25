@@ -6,13 +6,17 @@ test_that("Bucharest dataset includes all elements", {
 })
 
 test_that("AoI has correct type", {
-  expect_true(inherits(bucharest_osm$aoi, "sfc_POLYGON"))
+  expect_true(inherits(bucharest_osm$aoi_network, "sfc_POLYGON"))
+  expect_true(inherits(bucharest_osm$aoi_buildings, "sfc_POLYGON"))
 })
 
 test_that("Only the bbox and the AoI's have a geographic CRS", {
   is_longlat <- vapply(bucharest_osm, sf::st_is_longlat, logical(1))
-  expect_true(is_longlat["aoi"])
-  others <- is_longlat[!(names(bucharest_osm) == "aoi")]
+  expect_true(is_longlat["bb"])
+  expect_true(is_longlat["aoi_network"])
+  expect_true(is_longlat["aoi_buildings"])
+  others <- is_longlat[!(names(bucharest_osm) %in%
+                           c("bb", "aoi_network", "aoi_buildings"))]
   expect_true(!any(others))
 })
 
