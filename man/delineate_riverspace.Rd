@@ -8,7 +8,7 @@ delineate_riverspace(
   river,
   occluders = NULL,
   density = 1/50,
-  ray_num = 41,
+  ray_num = 40,
   ray_length = 100
 )
 }
