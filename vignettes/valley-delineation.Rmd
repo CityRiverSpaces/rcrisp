@@ -19,7 +19,7 @@ knitr::opts_chunk$set(
 
 In a typical CRiSp workflow, valley delineation is used in the context of corridor delineation. When the parameter `method = "valley"` is set (this is the default value) in `delineate_corridor()`, first the river valley is extracted from a Digital Elevation Model (DEM) with `delineate_valley()` and then the resulting valley edge is used to "guide" the delineation of the corridor on the street network, as shown in `vignette("corridor-delineation")`.
 
-In this article, we describe how `delineate_valley()` works and how it can be used independently. `delineate_valley()` uses a Cost Distance algorithm, variants of which are mostly used for the delineation of wet area mapping and valley bottom delineation in non-urban contexts [@agren2014; @white2012].
+In this article, we describe how `delineate_valley()` works and how it can be used independently. `delineate_valley()` uses a Cost Distance algorithm, variants of which are mostly used for the delineation of wet area mapping and valley bottom delineation in non-urban contexts [@agren2014; @murphy2009; @white2012].
 
 As the resulting valley boundary is only used as an intermediate step in `delineate_corridor()`, valley delineation does not require high-resolution DEM data, as required for non-urban applications [e.g., @lidberg2020; @nardi2019]. By default, the valley is delineated on the openly available 30m-resolution [Copernicus DEM GLO-30](https://dataspace.copernicus.eu/explore-data/data-collections/copernicus-contributing-missions/collections-description/COP-DEM).
 
