@@ -84,6 +84,19 @@ test_that("Queried datasets can be retrieved from the cache on new calls", {
 
   # calling get_osm_railways again should read data from the cached file,
   # raising a warning that includes the path to the cached file as well
-  expect_warning(get_osm_railways(bucharest_osm$aoi, force_download = FALSE),
+  expect_warning(get_osm_railways(bucharest_osm$bb, force_download = FALSE),
                  cached_filepath)
+})
+
+test_that("All geometries retrieved from OSM are valid", {
+  skip_on_ci()
+
+  # setup cache directory
+  temp_cache_dir()
+
+  bucharest_osm <- get_osmdata("Bucharest", "Dâmbovița", force_download = TRUE)
+
+  expect_true(all(vapply(bucharest_osm[!names(bucharest_osm) %in% "bb"],
+                         \(x) if (!inherits(x, "bbox")) all(sf::st_is_valid(x)),
+                         logical(1))))
 })
