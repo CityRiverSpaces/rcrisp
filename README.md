@@ -28,8 +28,8 @@ You can install the development version of CRiSp from
 [GitHub](https://github.com/) with:
 
 ``` r
-# install.packages("devtools")
-devtools::install_github("CityRiverSpaces/CRiSp")
+# install.packages("pak")
+pak::pak("CityRiverSpaces/CRiSp")
 ```
 
 ## Example
