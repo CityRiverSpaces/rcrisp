@@ -20,7 +20,6 @@ You can install the released version of CRiSp from
 [CRAN](https://cran.r-project.org) with:
 
 ``` r
-# Install from CRAN
 install.packages("CRiSp")
 ```
 
