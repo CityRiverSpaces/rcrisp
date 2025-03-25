@@ -33,7 +33,8 @@ test_that("load_dem correctly retrieve and merge remote data", {
   dem <- load_dem(bb, asset_urls, force_download = TRUE)
 
   expect_equal(terra::crs(dem), terra::crs("EPSG:4326"))
-  expect_equal(as.vector(terra::ext(dem)), as.vector(terra::ext(bb)),
+  expect_equal(as.vector(terra::ext(dem)),
+               as.vector(terra::ext(sf::st_bbox(bb))),
                tolerance = 1.e-5)
 })
 
@@ -63,7 +64,8 @@ test_that("valley polygon is correctly constructed", {
   valley <- delineate_valley(dem, river)
   expected_valley_path <- testthat::test_path("testdata",
                                               "expected_valley.gpkg")
-  expected_valley <- sf::st_read(expected_valley_path, quiet = TRUE)
+  expected_valley <- sf::st_read(expected_valley_path, quiet = TRUE) |>
+    sf::st_geometry()
 
   valley <- sf::st_set_precision(valley, 1e-06)
   expected_valley <- sf::st_set_precision(expected_valley, 1e-06)

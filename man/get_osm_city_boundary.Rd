@@ -33,7 +33,9 @@ bounding box with the OSM tags "place:city" and "boundary:administrative".
 The result is filtered by the city name.
 }
 \examples{
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 bb <- get_osm_bb("Bucharest")
 crs <- get_utm_zone(bb)
 get_osm_city_boundary(bb, "Bucharest", crs)
+\dontshow{\}) # examplesIf}
 }

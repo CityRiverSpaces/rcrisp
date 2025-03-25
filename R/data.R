@@ -11,8 +11,12 @@
 #'  \item{boundary}{The administrative boundary of Bucharest.}
 #'  \item{river_centerline}{The Dâmbovița river centerline.}
 #'  \item{river_surface}{The Dâmbovița river area.}
+#'  \item{aoi_network}{The area of interest (AoI) to include the network around
+#'                     the river.}
 #'  \item{streets}{The street network.}
 #'  \item{railways}{The railway network.}
+#'  \item{aoi_buildings}{The area of interest (AoI) to include buildings around
+#'                       the river.}
 #'  \item{buildings}{The buildings in the corridor.}
 #' }
 #' @source <https://www.openstreetmap.org/about>
@@ -26,7 +30,7 @@
 #' @format A PackedSpatRaster object. Run [`terra::unwrap()`] to extract the
 #'   DEM as a SpatRaster object
 # nolint start
-#' @source <https://spacedata.copernicus.eu/collections/copernicus-digital-elevation-model>
+#' @source <https://dataspace.copernicus.eu/explore-data/data-collections/copernicus-contributing-missions/collections-description/COP-DEM>
 # nolint end
 "bucharest_dem"
 

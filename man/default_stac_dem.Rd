@@ -11,7 +11,7 @@ the catalog).
 References:
 \itemize{
 \item \href{https://element84.com/earth-search/}{EarthSearch STAC API}
-\item \href{https://spacedata.copernicus.eu/collections/copernicus-digital-elevation-model}{Copernicus DEM}
+\item \href{https://dataspace.copernicus.eu/explore-data/data-collections/copernicus-contributing-missions/collections-description/COP-DEM}{Copernicus DEM}
 \item \href{https://copernicus-dem-30m.s3.amazonaws.com/readme.html}{AWS Copernicus DEM datasets}
 \item \href{https://docs.sentinel-hub.com/api/latest/static/files/data/dem/resources/license/License-COPDEM-30.pdf}{Data license}
 }}
@@ -30,7 +30,7 @@ the catalog).
 References:
 \itemize{
 \item \href{https://element84.com/earth-search/}{EarthSearch STAC API}
-\item \href{https://spacedata.copernicus.eu/collections/copernicus-digital-elevation-model}{Copernicus DEM}
+\item \href{https://dataspace.copernicus.eu/explore-data/data-collections/copernicus-contributing-missions/collections-description/COP-DEM}{Copernicus DEM}
 \item \href{https://copernicus-dem-30m.s3.amazonaws.com/readme.html}{AWS Copernicus DEM datasets}
 \item \href{https://docs.sentinel-hub.com/api/latest/static/files/data/dem/resources/license/License-COPDEM-30.pdf}{Data license}
 }

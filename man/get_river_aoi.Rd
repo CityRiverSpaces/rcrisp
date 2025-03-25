@@ -22,7 +22,9 @@ Get an area of interest (AoI) around a river, cropping to the bounding box of
 a city
 }
 \examples{
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 bb <- get_osm_bb("Bucharest")
 river <- get_osm_river(bb, "Dâmbovița")
 get_river_aoi(river, bb, buffer_distance = 100)
+\dontshow{\}) # examplesIf}
 }
