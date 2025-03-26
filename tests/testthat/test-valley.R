@@ -61,7 +61,7 @@ test_that("valley polygon is correctly constructed", {
   dem <- terra::unwrap(bucharest_dem)
   river <- bucharest_osm$river_surface
 
-  valley <- get_valley(dem, river)
+  valley <- delineate_valley(dem, river)
   expected_valley_path <- testthat::test_path("testdata",
                                               "expected_valley.gpkg")
   expected_valley <- sf::st_read(expected_valley_path, quiet = TRUE) |>
