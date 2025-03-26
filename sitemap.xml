@@ -11,6 +11,7 @@
 <url><loc>https://cityriverspaces.github.io/CRiSp/articles/method.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/articles/network-preparation.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/articles/riverspace-delineation.html</loc></url>
+<url><loc>https://cityriverspaces.github.io/CRiSp/articles/valley-delineation.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/authors.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/index.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/news/index.html</loc></url>
@@ -35,6 +36,7 @@
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/delineate_corridor.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/delineate_riverspace.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/delineate_segments.html</loc></url>
+<url><loc>https://cityriverspaces.github.io/CRiSp/reference/delineate_valley.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/dem_to_cog.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/filter_clusters.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/filter_network.html</loc></url>
@@ -57,7 +59,6 @@
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/get_slope.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/get_stac_asset_urls.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/get_utm_zone.html</loc></url>
-<url><loc>https://cityriverspaces.github.io/CRiSp/reference/get_valley.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/get_valley_polygon.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/get_valley_polygon_no_hole.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/get_valley_polygon_raw.html</loc></url>
