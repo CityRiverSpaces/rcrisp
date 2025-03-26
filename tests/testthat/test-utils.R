@@ -123,15 +123,15 @@ test_that("Buffer also works without a CRS", {
 })
 
 test_that("River buffer implements a buffer function", {
-  river <- bucharest_osm$river_centerline
+  river <- CRiSpData::bucharest_osm$river_centerline
   actual <- river_buffer(river, buffer_distance = 0.5)
   expected <- sf::st_buffer(river, 0.5)
   expect_setequal(actual, expected)
 })
 
 test_that("River buffer can trim to the region of interest", {
-  river <- bucharest_osm$river_centerline
-  bbox <- sf::st_bbox(bucharest_osm$boundary)
+  river <- CRiSpData::bucharest_osm$river_centerline
+  bbox <- sf::st_bbox(CRiSpData::bucharest_osm$boundary)
   actual <- river_buffer(river, buffer_distance = 10, bbox = bbox)
   river_buffer <- sf::st_buffer(river, 10)
   # set precision to bypass numerical issues
@@ -222,16 +222,17 @@ test_that("load_raster correctly retrieve and merge local data", {
 })
 
 test_that("River centerline and surface are combined without overlap", {
-  l_centerline <- sf::st_length(bucharest_osm$river_centerline)
-  l_surface <- bucharest_osm$river_surface |>
+  l_centerline <- sf::st_length(CRiSpData::bucharest_osm$river_centerline)
+  l_surface <- CRiSpData::bucharest_osm$river_surface |>
     sf::st_cast("MULTILINESTRING") |>
     sf::st_length()
-  l_overlap <- bucharest_osm$river_centerline |>
-    sf::st_intersection(bucharest_osm$river_surface) |>
+  l_overlap <- CRiSpData::bucharest_osm$river_centerline |>
+    sf::st_intersection(CRiSpData::bucharest_osm$river_surface) |>
     sf::st_length()
   l_combined_expected <- l_centerline + l_surface - l_overlap
-  l_combined_actual <- combine_river_features(bucharest_osm$river_centerline,
-                                              bucharest_osm$river_surface) |>
+  l_combined_actual <-
+    combine_river_features(CRiSpData::bucharest_osm$river_centerline,
+                           CRiSpData::bucharest_osm$river_surface) |>
     sf::st_length()
   expect_equal(l_combined_actual, l_combined_expected)
 })
@@ -240,7 +241,8 @@ test_that("When river surface is not available,
   river centerline is used with warning",
           {
             expect_warning(
-              combine_river_features(bucharest_osm$river_centerline, NULL),
+              combine_river_features(CRiSpData::bucharest_osm$river_centerline,
+                                     NULL),
               regexp = "*Calculating viewpoints along river centerline.*"
             )
           })
@@ -251,8 +253,8 @@ test_that(
   {
     expect_message(
       combine_river_features(
-        bucharest_osm$river_centerline,
-        bucharest_osm$river_surface
+        CRiSpData::bucharest_osm$river_centerline,
+        CRiSpData::bucharest_osm$river_surface
       ),
       "*Calculating viewpoints from both river edge and river centerline.*"
     )

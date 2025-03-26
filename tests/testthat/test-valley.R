@@ -3,7 +3,7 @@
 # cache folder only used for testing purposes. This is achieved via the
 # [`temp_cache_dir()`] helper function, which should be called in each test.
 
-bb <- bucharest_osm$bb
+bb <- CRiSpData::bucharest_osm$bb
 asset_urls <- c(paste0("s3://copernicus-dem-30m/",
                        "Copernicus_DSM_COG_10_N44_00_E026_00_DEM/",
                        "Copernicus_DSM_COG_10_N44_00_E026_00_DEM.tif"),
@@ -58,8 +58,8 @@ test_that("Download DEM data can be retrieved from the cache on new calls", {
 })
 
 test_that("valley polygon is correctly constructed", {
-  dem <- terra::unwrap(bucharest_dem)
-  river <- bucharest_osm$river_surface
+  dem <- terra::unwrap(CRiSpData::bucharest_dem)
+  river <- CRiSpData::bucharest_osm$river_surface
 
   valley <- get_valley(dem, river)
   expected_valley_path <- testthat::test_path("testdata",
