@@ -163,6 +163,7 @@ build_river_network <- function(river, aoi = NULL) {
 #'   spatial network used for the delineation
 #'
 #' @return A simple feature geometry including a pair of points
+#' @keywords internal
 corridor_end_points <- function(river_network, spatial_network) {
   # Only consider the edges of the spatial network
   spat_network_edges <- sf::st_geometry(sf::st_as_sf(spatial_network, "edges"))
