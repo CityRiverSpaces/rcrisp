@@ -28,6 +28,7 @@ We demonstrate valley delineation using CRiSp package data, namely the DEM of Bu
 ```{r setup}
 # Attach required packages
 library(CRiSp)
+library(CRiSpData)
 library(terra)
 library(sf)
 
