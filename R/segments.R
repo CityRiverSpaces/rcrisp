@@ -14,9 +14,10 @@
 #' @export
 #' @examples
 #' corridor <- bucharest_delineation$corridor
-#' network <- rbind(bucharest_osm$streets, bucharest_osm$railways) |>
+#' network <- rbind(CRiSpData::bucharest_osm$streets,
+#'                  CRiSpData::bucharest_osm$railways) |>
 #'   as_network()
-#' river_centerline <- bucharest_osm$river_centerline
+#' river_centerline <- CRiSpData::bucharest_osm$river_centerline
 #' delineate_segments(corridor, network, river_centerline)
 delineate_segments <- function(corridor, network, river_centerline,
                                angle_threshold = 90) {

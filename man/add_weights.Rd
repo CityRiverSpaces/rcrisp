@@ -51,9 +51,11 @@ Shortest paths calculated on the resulting network will thus tend to prefer
 edges close to \code{target} and to avoid edges within \code{exclude_area}.
 }
 \examples{
-edges <- rbind(bucharest_osm$streets, bucharest_osm$railways)
+edges <- rbind(CRiSpData::bucharest_osm$streets,
+               CRiSpData::bucharest_osm$railways)
 network <- sfnetworks::as_sfnetwork(edges, directed = FALSE)
-target <- sf::st_centroid(bucharest_osm$river_centerline)
-exclude_area <- sf::st_buffer(bucharest_osm$river_centerline, 1000)
+target <- sf::st_centroid(CRiSpData::bucharest_osm$river_centerline)
+exclude_area <- sf::st_buffer(CRiSpData::bucharest_osm$river_centerline,
+                              1000)
 add_weights(network, target, exclude_area)
 }

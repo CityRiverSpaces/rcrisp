@@ -16,6 +16,7 @@ A list of sf objects representing:
 bucharest_delineation
 }
 \description{
-Delineation generated with \code{\link{bucharest_osm}} and \code{\link{bucharest_dem}} as input
+Delineation generated with \code{\link[CRiSpData:bucharest_osm]{CRiSpData::bucharest_osm}} and
+\code{\link[CRiSpData:bucharest_dem]{CRiSpData::bucharest_dem}} as input
 }
 \keyword{datasets}
