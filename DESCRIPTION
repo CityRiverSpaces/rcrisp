@@ -42,6 +42,7 @@ Imports:
     visor
 Suggests:
     CRiSpData,
+    ggplot2,
     knitr,
     purrr,
     rmarkdown,
