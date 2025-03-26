@@ -85,8 +85,8 @@ delineate_corridor <- function(
 #'   - "buffer": add a fixed buffer region to the river geometry (see
 #'     [river_buffer()])
 #'   - "valley" (default): use the river valley boundary, as estimated from the
-#'     provided digital elevation model (DEM, see [get_valley()] for details on
-#'     the implementation)
+#'     provided digital elevation model (DEM, see [delineate_valley()] for
+#'     details on the implementation)
 #' @param buffer Buffer region to add to the river geometry (only used if
 #'   `initial_method` is `"buffer"`)
 #' @param dem Digital elevation model (DEM) of the region (only used if
@@ -107,7 +107,7 @@ initial_corridor <- function(
     if (is.null(dem)) {
       stop("DEM should be provided if `method` is `'valley'`")
     }
-    valley <- get_valley(dem, river)
+    valley <- delineate_valley(dem, river)
     if (!is.null(bbox)) valley <- sf::st_crop(valley, bbox)
     valley
   } else {
