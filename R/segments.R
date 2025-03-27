@@ -64,18 +64,12 @@ clip_and_filter <- function(lines, corridor, river_centerline) {
     sf::st_filter(river_centerline, .predicate = sf::st_intersects) |>
     sf::st_geometry()
 
-  # Select the fragments that cross the river only once and intersect both
-  # sides of the corridor
-  river_intersections <- sf::st_intersection(lines_clipped, river_centerline)
-  # TODO: we could generalize the following to allow for more complex river
-  # geometries (e.g. for river islands)
-  intersects_river <- sf::st_is(river_intersections, "POINT")
+  # Select the fragments intersect both sides of the corridor
   intersects_side_1 <- sf::st_intersects(lines_clipped, corridor_edges[[1]],
                                          sparse = FALSE)
   intersects_side_2 <- sf::st_intersects(lines_clipped, corridor_edges[[2]],
                                          sparse = FALSE)
-  is_valid <- intersects_river & intersects_side_1 & intersects_side_2
-  lines_valid <- lines_clipped[is_valid]
+  lines_valid <- lines_clipped[intersects_side_1 & intersects_side_2]
 
   # Cluster valid segment edges and select the shortest line per cluster
   filter_clusters(lines_valid, river_centerline)
