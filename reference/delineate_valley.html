@@ -93,14 +93,14 @@ simple feature geometry.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">delineate_valley</span><span class="op">(</span><span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/wrap.html" class="external-link">unwrap</a></span><span class="op">(</span><span class="va">bucharest_dem</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>                 <span class="va">bucharest_osm</span><span class="op">$</span><span class="va">river_centerline</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">delineate_valley</span><span class="op">(</span><span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/wrap.html" class="external-link">unwrap</a></span><span class="op">(</span><span class="fu">CRiSpData</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/CRiSpData/man/bucharest_dem.html" class="external-link">bucharest_dem</a></span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                 <span class="fu">CRiSpData</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/CRiSpData/man/bucharest_osm.html" class="external-link">bucharest_osm</a></span><span class="op">$</span><span class="va">river_centerline</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry set for 1 feature </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: MULTIPOLYGON</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: 412625.5 ymin: 4914219 xmax: 443449.4 ymax: 4928319</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: 412402.4 ymin: 4910692 xmax: 448052.6 ymax: 4928318</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Projected CRS: WGS 84 / UTM zone 35N</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> MULTIPOLYGON (((417995.4 4926024, 417995.4 4926...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> MULTIPOLYGON (((445998.1 4912232, 445998.1 4912...</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

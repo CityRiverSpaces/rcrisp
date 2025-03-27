@@ -76,7 +76,8 @@
     
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://cityriverspaces.github.io/CRiSp/">CRiSp</a></span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://cityriverspaces.github.io/CRiSp/">CRiSp</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/CityRiverSpaces/CRiSpData" class="external-link">CRiSpData</a></span><span class="op">)</span></span></code></pre></div>
 <p>For a more detailed analysis of an urban river corridor,
 corridor-level delineation may not be sufficient. The corridor needs to
 be subdivided into smaller morphological units. Segmentation is a
@@ -88,10 +89,10 @@ setting the argument <code>segments = TRUE</code> in
 <code><a href="../reference/delineate.html">delineate()</a></code> or by using the
 <code><a href="../reference/delineate_segments.html">delineate_segments()</a></code> function in a separate step.</p>
 <p>To demonstrate this as a separate step, we will use the
-<code>bucharest_delineation$corridor</code>,
-<code>bucharest_osm$streets</code> and
-<code>bucharest_osm$railways</code> layers from the package data as
-input.</p>
+<code>bucharest_delineation$corridor</code> from the package data, as
+well as <code>bucharest_osm$streets</code> and
+<code>bucharest_osm$railways</code> from the <code>CRiSpData</code>
+package as input.</p>
 <p>We first prepare the network and select all the streets and railways
 that cover the river corridor plus a small buffer region (see also
 <code><a href="../articles/network-preparation.html">vignette("network-preparation")</a></code>):</p>
@@ -116,7 +117,7 @@ lines in the network:</p>
 <span>                                         <span class="va">network_filtered</span>,</span>
 <span>                                         <span class="va">bucharest_osm</span><span class="op">$</span><span class="va">river_centerline</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Linking to GEOS 3.12.1, GDAL 3.8.4, PROJ 9.4.0; sf_use_s2() is TRUE</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">network_filtered</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">streets</span><span class="op">$</span><span class="va">geometry</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">segmented_corridor</span>, border <span class="op">=</span> <span class="st">"orange"</span>, lwd <span class="op">=</span> <span class="fl">3</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p><img src="corridor-segmentation_files/figure-html/segmentation-1.png" width="700"></p>
   </main>
