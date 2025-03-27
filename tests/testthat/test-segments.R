@@ -1,5 +1,24 @@
 river <- sf::st_sfc(sf::st_linestring(cbind(c(-6, 6), c(0, 0))))
 
+test_that("Splitting the corridor works with a complex river geometry", {
+  river_multilinestring <- sf::st_sfc(c(
+    sf::st_linestring(cbind(c(-4, 6), c(0, 0))),
+    sf::st_linestring(cbind(c(-6, -4), c(1, 0))),
+    sf::st_linestring(cbind(c(-6, -4), c(-1, 0)))
+  ))
+  corridor <- sf::st_sfc(sf::st_polygon(list(cbind(c(-5, 5, 5, -5, -5),
+                                                   c(1, 1, -1, -1, 1)))))
+  edges <- get_corridor_edges(corridor, river_multilinestring)
+  expect_length(edges, 2)
+})
+
+test_that("If the corridor cannot be split in two edges, an error is raised", {
+  corridor <- sf::st_sfc(sf::st_polygon(list(cbind(c(-5, 5, 5, -5, -5),
+                                                   c(2, 2, 1, 1, 2)))))
+  expect_error(get_corridor_edges(corridor, river),
+               "Cannot identify corridor edges")
+})
+
 test_that("Candidate segments boundaries are properly grouped and filtered", {
   e1 <- sf::st_linestring(cbind(c(-3, -3), c(-1, 1)))  # group 1 <--
   e2 <- sf::st_linestring(cbind(c(-3.1, -2.9), c(-1, 1)))  # group 1

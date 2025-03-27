@@ -55,7 +55,7 @@ delineate_segments <- function(corridor, network, river_centerline,
 clip_and_filter <- function(lines, corridor, river_centerline) {
 
   # Split corridor along the river centerline to find edges on the two sides
-  corridor_edges <- split_by(corridor, river_centerline, boundary = TRUE)
+  corridor_edges <- get_corridor_edges(corridor, river_centerline)
 
   # Clip the lines, keeping the only fragments that intersect the river
   lines_clipped <- sf::st_intersection(lines, corridor) |>
@@ -80,6 +80,21 @@ clip_and_filter <- function(lines, corridor, river_centerline) {
 
   # Cluster valid segment edges and select the shortest line per cluster
   filter_clusters(lines_valid, river_centerline)
+}
+
+#' Split corridor along the river to find edges on the two banks
+#'
+#' @param corridor The river corridor as a simple feature geometry
+#' @param river_centerline The river centerline as a simple feature geometry
+#'
+#' @return Corridor edges as a simple feature geometry
+#' @keywords internal
+get_corridor_edges <- function(corridor, river_centerline) {
+  corridor_edges <- split_by(corridor, river_centerline, boundary = TRUE)
+  #' For complex river geometries, splitting the corridor might actually return
+  #' multiple linestrings - select here the two longest segments
+  if (length(corridor_edges) < 2) stop("Cannot identify corridor edges")
+  corridor_edges[find_longest(corridor_edges, n = 2)]
 }
 
 #' Cluster the river crossings and select the shortest crossing per cluster
@@ -128,7 +143,7 @@ filter_clusters <- function(crossings, river, eps = 100) {
 refine_segments <- function(blocks, river_centerline, corridor) {
 
   # Split corridor along the river centerline to find edges on the two sides
-  corridor_edges <- split_by(corridor, river_centerline, boundary = TRUE)
+  corridor_edges <- get_corridor_edges(corridor, river_centerline)
 
   # Recursively merge blocks until all blocks intersect the river
   not_intersect_river <- function(blocks) {

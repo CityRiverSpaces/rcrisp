@@ -22,3 +22,4 @@ built from the river center line features (see \code{\link[=build_river_network]
 the spatial network used for the delineation. The end points are selected as
 the two furthest river crossings of the spatial network.
 }
+\keyword{internal}
