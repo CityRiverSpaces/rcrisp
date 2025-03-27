@@ -39,7 +39,8 @@ as_network <- function(edges, flatten = TRUE, clean = TRUE) {
 #' @return A network object with additional points at intersections
 #' @export
 #' @examples
-#' edges <- dplyr::bind_rows(bucharest_osm$streets, bucharest_osm$railways)
+#' edges <- dplyr::bind_rows(CRiSpData::bucharest_osm$streets,
+#'                           CRiSpData::bucharest_osm$railways)
 #' network <- sfnetworks::as_sfnetwork(edges, directed = FALSE)
 #' flatten_network(network)
 flatten_network <- function(network) {
@@ -172,7 +173,8 @@ calc_rolling_sum <- function(x, n = 2) {
 #' @return A cleaned network object
 #' @export
 #' @examples
-#' edges <- dplyr::bind_rows(bucharest_osm$streets, bucharest_osm$railways)
+#' edges <- dplyr::bind_rows(CRiSpData::bucharest_osm$streets,
+#'                           CRiSpData::bucharest_osm$railways)
 #' network <- sfnetworks::as_sfnetwork(edges, directed = FALSE)
 #' clean_network(network)
 clean_network <- function(network, simplify = TRUE) {
@@ -243,10 +245,12 @@ simplify_network <- function(network) {
 #' @importFrom rlang :=
 #' @export
 #' @examples
-#' edges <- rbind(bucharest_osm$streets, bucharest_osm$railways)
+#' edges <- rbind(CRiSpData::bucharest_osm$streets,
+#'                CRiSpData::bucharest_osm$railways)
 #' network <- sfnetworks::as_sfnetwork(edges, directed = FALSE)
-#' target <- sf::st_centroid(bucharest_osm$river_centerline)
-#' exclude_area <- sf::st_buffer(bucharest_osm$river_centerline, 1000)
+#' target <- sf::st_centroid(CRiSpData::bucharest_osm$river_centerline)
+#' exclude_area <- sf::st_buffer(CRiSpData::bucharest_osm$river_centerline,
+#'                               1000)
 #' add_weights(network, target, exclude_area)
 add_weights <- function(network, target = NULL, exclude_area = NULL,
                         penalty = 1000., weight_name = "weight") {

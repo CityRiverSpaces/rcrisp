@@ -22,7 +22,8 @@ Subdivide edges by \href{https://luukvdmeer.github.io/sfnetworks/articles/sfn02_
 and discard all but the main connected component.
 }
 \examples{
-edges <- dplyr::bind_rows(bucharest_osm$streets, bucharest_osm$railways)
+edges <- dplyr::bind_rows(CRiSpData::bucharest_osm$streets,
+                          CRiSpData::bucharest_osm$railways)
 network <- sfnetworks::as_sfnetwork(edges, directed = FALSE)
 clean_network(network)
 }

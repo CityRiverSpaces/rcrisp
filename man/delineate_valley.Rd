@@ -24,6 +24,6 @@ The resulting area is then "polygonized" to obtain the valley boundary as a
 simple feature geometry.
 }
 \examples{
-delineate_valley(terra::unwrap(bucharest_dem),
-                 bucharest_osm$river_centerline)
+delineate_valley(terra::unwrap(CRiSpData::bucharest_dem),
+                 CRiSpData::bucharest_osm$river_centerline)
 }
