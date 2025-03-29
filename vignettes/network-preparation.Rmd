@@ -12,9 +12,13 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+if (!requireNamespace("CRiSpData", quietly = TRUE)) {
+  message("Package 'CRiSpData' is required for this vignette but not installed. Install it from GitHub using pak::pak('CityRiverSpaces/CRiSpData')")
+  knitr::knit_exit()
+}
 ```
 
-```{r setup, message=FALSE}
+```{r message=FALSE}
 library(CRiSp)
 library(CRiSpData)
 library(dplyr)

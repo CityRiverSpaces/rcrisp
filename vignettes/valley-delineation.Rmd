@@ -15,6 +15,10 @@ knitr::opts_chunk$set(
   comment = "#>",
   message = FALSE
 )
+if (!requireNamespace("CRiSpData", quietly = TRUE)) {
+  message("Package 'CRiSpData' is required for this vignette but not installed. Install it from GitHub using pak::pak('CityRiverSpaces/CRiSpData')")
+  knitr::knit_exit()
+}
 ```
 
 In a typical CRiSp workflow, valley delineation is used in the context of corridor delineation. When the parameter `method = "valley"` is set (this is the default value) in `delineate_corridor()`, first the river valley is extracted from a Digital Elevation Model (DEM) with `delineate_valley()` and then the resulting valley edge is used to "guide" the delineation of the corridor on the street network, as shown in `vignette("corridor-delineation")`.
