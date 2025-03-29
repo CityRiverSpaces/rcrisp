@@ -123,6 +123,8 @@ test_that("Buffer also works without a CRS", {
 })
 
 test_that("River buffer implements a buffer function", {
+  skip_if_not_installed("CRiSpData")
+
   river <- CRiSpData::bucharest_osm$river_centerline
   actual <- river_buffer(river, buffer_distance = 0.5)
   expected <- sf::st_buffer(river, 0.5)
@@ -130,6 +132,8 @@ test_that("River buffer implements a buffer function", {
 })
 
 test_that("River buffer can trim to the region of interest", {
+  skip_if_not_installed("CRiSpData")
+
   river <- CRiSpData::bucharest_osm$river_centerline
   bbox <- sf::st_bbox(CRiSpData::bucharest_osm$boundary)
   actual <- river_buffer(river, buffer_distance = 10, bbox = bbox)
@@ -222,6 +226,8 @@ test_that("load_raster correctly retrieve and merge local data", {
 })
 
 test_that("River centerline and surface are combined without overlap", {
+  skip_if_not_installed("CRiSpData")
+
   l_centerline <- sf::st_length(CRiSpData::bucharest_osm$river_centerline)
   l_surface <- CRiSpData::bucharest_osm$river_surface |>
     sf::st_cast("MULTILINESTRING") |>
@@ -240,6 +246,8 @@ test_that("River centerline and surface are combined without overlap", {
 test_that("When river surface is not available,
   river centerline is used with warning",
           {
+            skip_if_not_installed("CRiSpData")
+
             expect_warning(
               combine_river_features(CRiSpData::bucharest_osm$river_centerline,
                                      NULL),
@@ -251,6 +259,8 @@ test_that(
   "When both river centerlin and river surface are used for setting viewpoints,
   message is returned",
   {
+    skip_if_not_installed("CRiSpData")
+
     expect_message(
       combine_river_features(
         CRiSpData::bucharest_osm$river_centerline,
