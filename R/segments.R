@@ -13,12 +13,16 @@
 #' @return Segment polygons as a simple feature geometry
 #' @export
 #' @examples
-#' corridor <- bucharest_delineation$corridor
-#' network <- rbind(CRiSpData::bucharest_osm$streets,
-#'                  CRiSpData::bucharest_osm$railways) |>
-#'   as_network()
-#' river_centerline <- CRiSpData::bucharest_osm$river_centerline
-#' delineate_segments(corridor, network, river_centerline)
+#' if (!requireNamespace("CRiSpData", quietly = TRUE)) {
+#'   message("Install CRiSpData from GitHub to run this example.")
+#' } else {
+#'   corridor <- bucharest_delineation$corridor
+#'   network <- rbind(CRiSpData::bucharest_osm$streets,
+#'                    CRiSpData::bucharest_osm$railways) |>
+#'     as_network()
+#'   river_centerline <- CRiSpData::bucharest_osm$river_centerline
+#'   delineate_segments(corridor, network, river_centerline)
+#' }
 delineate_segments <- function(corridor, network, river_centerline,
                                angle_threshold = 90) {
 
