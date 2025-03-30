@@ -24,17 +24,13 @@ if (!requireNamespace("CRiSpData", quietly = TRUE)) {
 ```{r setup, include = FALSE}
 library(CRiSp)
 library(CRiSpData)
+library(purrr)
 
 city_boundary <- bucharest_osm$boundary
 river_surface <- bucharest_osm$river_surface
 river_centerline <- bucharest_osm$river_centerline
 railways <- bucharest_osm$railways
 streets <- bucharest_osm$streets
-```
-
-```{r packages}
-library(CRiSp)
-library(purrr)
 ```
 
 In this notebook we download OSM data needed for the delineation of the urban river corridor of River Dâmbovița in Bucharest, Romania. We make sure that we include a given area around the city boundaries.
