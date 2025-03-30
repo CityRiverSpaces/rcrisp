@@ -27,7 +27,7 @@ In this article, we describe how `delineate_valley()` works and how it can be us
 
 As the resulting valley boundary is only used as an intermediate step in `delineate_corridor()`, valley delineation does not require high-resolution DEM data, as required for non-urban applications [e.g., @lidberg2020; @nardi2019]. By default, the valley is delineated on the openly available 30m-resolution [Copernicus DEM GLO-30](https://dataspace.copernicus.eu/explore-data/data-collections/copernicus-contributing-missions/collections-description/COP-DEM).
 
-We demonstrate valley delineation using CRiSp package data, namely the DEM of Bucharest as the input raster and the river centerline and surface as the source for which the Cost Distance is calculated.
+We demonstrate valley delineation using data from the CRiSpData package, namely the DEM of Bucharest as the input raster and the river centerline and surface as the source for which the Cost Distance is calculated.
 
 ```{r setup}
 # Attach required packages
