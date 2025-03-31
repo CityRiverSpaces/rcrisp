@@ -195,3 +195,16 @@ combine_river_features <- function(river_centerline, river_surface) {
     sf::st_cast("MULTILINESTRING") |>
     sf::st_union()
 }
+
+#' Check and fix invalid geometries
+#'
+#' @param sf_obj sf object
+#'
+#' @return sf object with valid geometries
+#' @keywords internal
+check_invalid_geometry <- function(sf_obj) {
+  if (!all(sf::st_is_valid(sf_obj))) {
+    message("Invalid geometries detected! Fixing them...")
+  }
+  sf::st_make_valid(sf_obj) # if input valid, it remains unchanged
+}
