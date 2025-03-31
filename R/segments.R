@@ -144,7 +144,7 @@ select_nonintersecting_lines <- function(lines, corridor) {
   intersections <- intersections[intersections[["n.overlaps"]] > 1, ]
   # Drop intersections lying on the corridor boundary
   idx <- unlist(sf::st_contains(sf::st_boundary(corridor), intersections))
-  intersections <- intersections[-idx, ]
+  if (length(idx) > 0) intersections <- intersections[-idx, ]
   # If we are left with no intersections, return lines. If we still have
   # intersections, we recursively exclude lines until no intersection is found
   if (nrow(intersections) == 0) {
