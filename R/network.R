@@ -88,6 +88,7 @@ get_intersection_points <- function(edges) {
 }
 
 #' @noRd
+#' @importFrom utils head tail
 insert_intersections <- function(edges, points, tol = 1.e-3) {
 
   edge_geometry <- sf::st_geometry(edges)
@@ -151,6 +152,7 @@ calc_distance <- function(point, edge) {
 }
 
 #' @noRd
+#' @importFrom utils head tail
 calc_rolling_sum <- function(x, n = 2) {
   cs <- cumsum(x)
   # roll the cumsum array by adding `n` zeros at its beginning and dropping
