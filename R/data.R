@@ -1,7 +1,7 @@
 #' CRiSp example delineation data for Bucharest
 #'
-#' Delineation generated with [`CRiSpData::bucharest_osm`] and
-#' [`CRiSpData::bucharest_dem`] as input
+#' Delineation generated with `CRiSpData::bucharest_osm` and
+#' `CRiSpData::bucharest_dem` as input
 #'
 #' @format A list of sf objects representing:
 #' \describe{

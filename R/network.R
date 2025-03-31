@@ -39,10 +39,14 @@ as_network <- function(edges, flatten = TRUE, clean = TRUE) {
 #' @return A network object with additional points at intersections
 #' @export
 #' @examples
-#' edges <- dplyr::bind_rows(CRiSpData::bucharest_osm$streets,
-#'                           CRiSpData::bucharest_osm$railways)
-#' network <- sfnetworks::as_sfnetwork(edges, directed = FALSE)
-#' flatten_network(network)
+#' if (!requireNamespace("CRiSpData", quietly = TRUE)) {
+#'   message("Install CRiSpData from GitHub to run this example.")
+#' } else {
+#'   edges <- dplyr::bind_rows(CRiSpData::bucharest_osm$streets,
+#'                             CRiSpData::bucharest_osm$railways)
+#'   network <- sfnetworks::as_sfnetwork(edges, directed = FALSE)
+#'   flatten_network(network)
+#' }
 flatten_network <- function(network) {
   nodes <- sf::st_as_sf(network, "nodes")
   edges <- sf::st_as_sf(network, "edges")
@@ -84,6 +88,7 @@ get_intersection_points <- function(edges) {
 }
 
 #' @noRd
+#' @importFrom utils head tail
 insert_intersections <- function(edges, points, tol = 1.e-3) {
 
   edge_geometry <- sf::st_geometry(edges)
@@ -147,6 +152,7 @@ calc_distance <- function(point, edge) {
 }
 
 #' @noRd
+#' @importFrom utils head tail
 calc_rolling_sum <- function(x, n = 2) {
   cs <- cumsum(x)
   # roll the cumsum array by adding `n` zeros at its beginning and dropping
@@ -173,10 +179,14 @@ calc_rolling_sum <- function(x, n = 2) {
 #' @return A cleaned network object
 #' @export
 #' @examples
-#' edges <- dplyr::bind_rows(CRiSpData::bucharest_osm$streets,
-#'                           CRiSpData::bucharest_osm$railways)
-#' network <- sfnetworks::as_sfnetwork(edges, directed = FALSE)
-#' clean_network(network)
+#' if (!requireNamespace("CRiSpData", quietly = TRUE)) {
+#'   message("Install CRiSpData from GitHub to run this example.")
+#' } else {
+#'   edges <- dplyr::bind_rows(CRiSpData::bucharest_osm$streets,
+#'                             CRiSpData::bucharest_osm$railways)
+#'   network <- sfnetworks::as_sfnetwork(edges, directed = FALSE)
+#'   clean_network(network)
+#' }
 clean_network <- function(network, simplify = TRUE) {
   # subdivide edges by adding missing nodes
   net <- tidygraph::convert(network, sfnetworks::to_spatial_subdivision,
@@ -245,13 +255,17 @@ simplify_network <- function(network) {
 #' @importFrom rlang :=
 #' @export
 #' @examples
-#' edges <- rbind(CRiSpData::bucharest_osm$streets,
-#'                CRiSpData::bucharest_osm$railways)
-#' network <- sfnetworks::as_sfnetwork(edges, directed = FALSE)
-#' target <- sf::st_centroid(CRiSpData::bucharest_osm$river_centerline)
-#' exclude_area <- sf::st_buffer(CRiSpData::bucharest_osm$river_centerline,
-#'                               1000)
-#' add_weights(network, target, exclude_area)
+#' if (!requireNamespace("CRiSpData", quietly = TRUE)) {
+#'   message("Install CRiSpData from GitHub to run this example.")
+#' } else {
+#'   edges <- rbind(CRiSpData::bucharest_osm$streets,
+#'                 CRiSpData::bucharest_osm$railways)
+#'   network <- sfnetworks::as_sfnetwork(edges, directed = FALSE)
+#'   target <- sf::st_centroid(CRiSpData::bucharest_osm$river_centerline)
+#'   exclude_area <- sf::st_buffer(CRiSpData::bucharest_osm$river_centerline,
+#'                                 1000)
+#'   add_weights(network, target, exclude_area)
+#' }
 add_weights <- function(network, target = NULL, exclude_area = NULL,
                         penalty = 1000., weight_name = "weight") {
   edges <- sf::st_geometry(sf::st_as_sf(network, "edges"))

@@ -7,7 +7,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r setup, include = FALSE}
+```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
@@ -15,20 +15,26 @@ knitr::opts_chunk$set(
   message = FALSE,
   warning = FALSE
 )
+if (!requireNamespace("CRiSpData", quietly = TRUE)) {
+  # nolint start
+  message("Package 'CRiSpData' is required for this vignette but not installed. Install it from GitHub using pak::pak('CityRiverSpaces/CRiSpData')")
+  # nolint end
+  knitr::knit_exit()
+} else {
+  library(CRiSpData)
+}
+```
 
+```{r setup, include = FALSE}
 library(CRiSp)
 library(CRiSpData)
+library(purrr)
 
 city_boundary <- bucharest_osm$boundary
 river_surface <- bucharest_osm$river_surface
 river_centerline <- bucharest_osm$river_centerline
 railways <- bucharest_osm$railways
 streets <- bucharest_osm$streets
-```
-
-```{r packages}
-library(CRiSp)
-library(purrr)
 ```
 
 In this notebook we download OSM data needed for the delineation of the urban river corridor of River Dâmbovița in Bucharest, Romania. We make sure that we include a given area around the city boundaries.
@@ -81,7 +87,7 @@ walk2(
 
 The above layers can also be obtained with the all-in-one function `get_osmdata()`. Optionally, a bounding box buffer can be specified to expand the bounding box.
 
-```{r eval=FALSE}
+```{r}
 bucharest_osm <- get_osmdata(city_name, river_name, buffer = bbox_buffer)
 ```
 

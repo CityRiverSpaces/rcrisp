@@ -13,12 +13,16 @@
 #' @return Segment polygons as a simple feature geometry
 #' @export
 #' @examples
-#' corridor <- bucharest_delineation$corridor
-#' network <- rbind(CRiSpData::bucharest_osm$streets,
-#'                  CRiSpData::bucharest_osm$railways) |>
-#'   as_network()
-#' river_centerline <- CRiSpData::bucharest_osm$river_centerline
-#' delineate_segments(corridor, network, river_centerline)
+#' if (!requireNamespace("CRiSpData", quietly = TRUE)) {
+#'   message("Install CRiSpData from GitHub to run this example.")
+#' } else {
+#'   corridor <- bucharest_delineation$corridor
+#'   network <- rbind(CRiSpData::bucharest_osm$streets,
+#'                    CRiSpData::bucharest_osm$railways) |>
+#'     as_network()
+#'   river_centerline <- CRiSpData::bucharest_osm$river_centerline
+#'   delineate_segments(corridor, network, river_centerline)
+#' }
 delineate_segments <- function(corridor, network, river_centerline,
                                angle_threshold = 90) {
 
@@ -91,8 +95,8 @@ clip_and_filter <- function(lines, corridor, river_centerline) {
 #' @keywords internal
 get_corridor_edges <- function(corridor, river_centerline) {
   corridor_edges <- split_by(corridor, river_centerline, boundary = TRUE)
-  #' For complex river geometries, splitting the corridor might actually return
-  #' multiple linestrings - select here the two longest segments
+  # For complex river geometries, splitting the corridor might actually return
+  # multiple linestrings - select here the two longest segments
   if (length(corridor_edges) < 2) stop("Cannot identify corridor edges")
   corridor_edges[find_longest(corridor_edges, n = 2)]
 }

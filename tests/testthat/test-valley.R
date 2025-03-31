@@ -3,6 +3,8 @@
 # cache folder only used for testing purposes. This is achieved via the
 # [`temp_cache_dir()`] helper function, which should be called in each test.
 
+skip_if_not_installed("CRiSpData")
+
 bb <- CRiSpData::bucharest_osm$bb
 asset_urls <- c(paste0("s3://copernicus-dem-30m/",
                        "Copernicus_DSM_COG_10_N44_00_E026_00_DEM/",

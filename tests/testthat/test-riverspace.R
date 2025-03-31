@@ -1,3 +1,5 @@
+skip_if_not_installed("CRiSpData")
+
 riverspace_actual <-
   delineate_riverspace(river = CRiSpData::bucharest_osm$river_surface,
                        occluders = CRiSpData::bucharest_osm$buildings,

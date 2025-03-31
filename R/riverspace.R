@@ -11,7 +11,12 @@
 #'
 #' @examples
 #' \dontrun{
-#'   delineate_riverspace(bucharest_osm$river_surface, bucharest_osm$buildings)
+#'   if (!requireNamespace("CRiSpData", quietly = TRUE)) {
+#'     message("Install CRiSpData from GitHub to run this example.")
+#'   } else {
+#'     delineate_riverspace(CRiSpData::bucharest_osm$river_surface,
+#'                         CRiSpData::bucharest_osm$buildings)
+#'   }
 #' }
 delineate_riverspace <- function(river, occluders = NULL, density = 1 / 50,
                                  ray_num = 40, ray_length = 100) {

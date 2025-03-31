@@ -71,6 +71,7 @@ test_that("Multiple boundaries are correcly retreived", {
 
 test_that("Queried datasets can be retrieved from the cache on new calls", {
   skip_on_ci()
+  skip_if_not_installed("CRiSpData")
 
   # setup cache directory
   cache_dir <- temp_cache_dir()
