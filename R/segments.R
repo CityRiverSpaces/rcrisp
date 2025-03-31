@@ -148,7 +148,7 @@ select_nonintersecting_lines <- function(lines, corridor) {
   # If we are left with no intersections, return lines. If we still have
   # intersections, we recursively exclude lines until no intersection is found
   if (nrow(intersections) == 0) {
-    return(lines)
+    lines
   } else {
     # Identify the line with maximum number of intersections
     intersecting_lines <- intersections[["origins"]]
@@ -162,6 +162,6 @@ select_nonintersecting_lines <- function(lines, corridor) {
     idx_line_to_drop <- idx_line_max_intersections[idx_line_longest]
     new_lines <- lines[-idx_line_to_drop]
     # Recursively check for intersections in the remaining lines
-    return(select_nonintersecting_lines(new_lines, corridor))
+    select_nonintersecting_lines(new_lines, corridor)
   }
 }
