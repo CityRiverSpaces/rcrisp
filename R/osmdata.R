@@ -225,11 +225,20 @@ get_osm_river <- function(bb, river_name, crs = NULL, force_download = FALSE) {
   river_centerline <- river_centerline$osm_multilines |>
     # filter using any of the "name" columns (matching different languages)
     dplyr::filter(dplyr::if_any(dplyr::matches("name"),
-                                \(x) x == river_name)) |>
+                                \(x) x == river_name))
+
+  if (!all(sf::st_is_valid(river_centerline))) {
+    message("Invalid geometries detected! Switching to GEOS...")
+    sf::sf_use_s2(FALSE)
+  }
+  river_centerline <- river_centerline |>
     # the query can return more features than actually intersecting the bb
     sf::st_filter(sf::st_as_sfc(bb), .predicate = sf::st_intersects) |>
     sf::st_geometry() |>
     sf::st_union()
+
+  # Switch back to s2
+  sf::sf_use_s2(TRUE)
 
   # Get the river surface
   river_surface <- osmdata_as_sf("natural", "water", bb,
@@ -237,11 +246,20 @@ get_osm_river <- function(bb, river_name, crs = NULL, force_download = FALSE) {
   river_surface <- dplyr::bind_rows(river_surface$osm_polygons,
                                     river_surface$osm_multipolygons) |>
     sf::st_geometry() |>
-    sf::st_as_sf() |>
-    # natural:water retrieved some invalid polygons, fix these
-    sf::st_make_valid() |>
+    sf::st_as_sf()
+
+  # natural:water retrieved some invalid polygons, switch to GEOS before spatial
+  # operations
+  if (!all(sf::st_is_valid(river_surface))) {
+    message("Invalid geometries detected! Switching to GEOS...")
+    sf::sf_use_s2(FALSE)
+  }
+  river_surface <- river_surface |>
     sf::st_filter(river_centerline, .predicate = sf::st_intersects) |>
     sf::st_union()
+
+  # Switch back to s2
+  sf::sf_use_s2(TRUE)
 
   if (!is.null(crs)) {
     river_centerline <- sf::st_transform(river_centerline, crs)
@@ -352,12 +370,19 @@ get_osm_railways <- function(aoi, crs = NULL, force_download = FALSE) {
 get_osm_buildings <- function(aoi, crs = NULL, force_download = FALSE) {
   buildings <- osmdata_as_sf("building", "", aoi,
                              force_download = force_download)
-  buildings <- buildings$osm_polygons |>
-    # retreived buildings may contain invalid polygons, fix these
-    sf::st_make_valid() |>
+  buildings <- buildings$osm_polygons
+
+  if (!all(sf::st_is_valid(buildings))) {
+    message("Invalid geometries detected! Switching to GEOS...")
+    sf::sf_use_s2(FALSE)
+  }
+  buildings <- buildings |>
     sf::st_filter(aoi, .predicate = sf::st_intersects) |>
     dplyr::filter(.data$building != "NULL") |>
     sf::st_geometry()
+
+  # Switch back to s2
+  sf::sf_use_s2(TRUE)
 
   if (!is.null(crs)) buildings <- sf::st_transform(buildings, crs)
 
