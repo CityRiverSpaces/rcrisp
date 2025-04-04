@@ -150,17 +150,25 @@ test_that("reproject works with raster data", {
   x <- terra::rast(xmin = -174, xmax = -168, ymin = 45, ymax = 51, res = 1,
                    vals = 1, crs = "EPSG:4326")
 
-  # reproject with integer (EPSG code)
-  x_repr_int <- reproject(x, 32602)
+  # reproject with integer/numeric (EPSG code)
+  x_repr_num <- reproject(x, 32602)
+  x_repr_int <- reproject(x, as.integer(32602))
 
   # reproject with string
   x_repr_str <- reproject(x, "EPSG:32602")
 
+  # reproject with sf::crs object
+  x_repr_crs <- reproject(x, sf::st_crs(32602))
+
   crs_expected <- terra::crs("EPSG:32602")
+  crs_actual_num <- terra::crs(x_repr_num)
+  expect_equal(crs_actual_num, crs_expected)
   crs_actual_int <- terra::crs(x_repr_int)
   expect_equal(crs_actual_int, crs_expected)
   crs_actual_str <- terra::crs(x_repr_str)
   expect_equal(crs_actual_str, crs_expected)
+  crs_actual_crs <- terra::crs(x_repr_crs)
+  expect_equal(crs_actual_crs, crs_expected)
 })
 
 test_that("reproject works with vector data", {

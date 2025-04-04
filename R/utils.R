@@ -143,8 +143,13 @@ river_buffer <- function(river, buffer_distance, bbox = NULL, side = NULL) {
 #' reproject(r, 4326)
 reproject <- function(x, crs, ...) {
   if (inherits(x, "SpatRaster")) {
-    # terra::crs does not support a numeric value as CRS, convert to character
-    if (inherits(crs, "numeric")) crs <- sprintf("EPSG:%s", crs)
+    if (inherits(crs, c("integer", "numeric"))) {
+      # terra::crs does not support a numeric value as CRS, convert to character
+      crs <- sprintf("EPSG:%s", crs)
+    } else if (inherits(crs, "crs")) {
+      # terra::crs also does not understand sf::crs objects
+      crs <- sprintf("EPSG:%s", crs$epsg)
+    }
     terra::project(x, crs, ...)
   } else if (inherits(x, c("bbox", "sfc", "sf"))) {
     sf::st_transform(x, crs, ...)
