@@ -226,6 +226,7 @@ get_osm_river <- function(bb, river_name, crs = NULL, force_download = FALSE) {
     # filter using any of the "name" columns (matching different languages)
     dplyr::filter(dplyr::if_any(dplyr::matches("name"),
                                 \(x) x == river_name)) |>
+    check_invalid_geometry() |> # fix invalid geometries, if any
     # the query can return more features than actually intersecting the bb
     sf::st_filter(sf::st_as_sfc(bb), .predicate = sf::st_intersects) |>
     sf::st_geometry() |>
@@ -237,9 +238,8 @@ get_osm_river <- function(bb, river_name, crs = NULL, force_download = FALSE) {
   river_surface <- dplyr::bind_rows(river_surface$osm_polygons,
                                     river_surface$osm_multipolygons) |>
     sf::st_geometry() |>
+    check_invalid_geometry() |> # fix invalid geometries, if any
     sf::st_as_sf() |>
-    # natural:water retrieved some invalid polygons, fix these
-    sf::st_make_valid() |>
     sf::st_filter(river_centerline, .predicate = sf::st_intersects) |>
     sf::st_union()
 
@@ -353,8 +353,7 @@ get_osm_buildings <- function(aoi, crs = NULL, force_download = FALSE) {
   buildings <- osmdata_as_sf("building", "", aoi,
                              force_download = force_download)
   buildings <- buildings$osm_polygons |>
-    # retreived buildings may contain invalid polygons, fix these
-    sf::st_make_valid() |>
+    check_invalid_geometry() |> # fix invalid geometries, if any
     sf::st_filter(aoi, .predicate = sf::st_intersects) |>
     dplyr::filter(.data$building != "NULL") |>
     sf::st_geometry()
