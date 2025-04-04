@@ -51,7 +51,11 @@ delineate_corridor <- function(
 
   # Draw the initial corridor geometry within the area of interest
   river <- c(river_centerline, river_surface)
-  if (!is.null(aoi)) bbox <- as_bbox(aoi)
+  if (is.null(aoi)) {
+    bbox <- NULL
+  } else {
+    bbox <- as_bbox(aoi)
+  }
   corridor_init <- initial_corridor(river, method = initial_method,
                                     buffer = buffer, dem = dem,
                                     bbox = bbox)
