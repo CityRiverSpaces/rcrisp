@@ -14,7 +14,7 @@ delineate_corridor(
   buffer = NULL,
   dem = NULL,
   max_iterations = 10,
-  capping_method = "direct"
+  capping_method = "shortest-path"
 )
 }
 \arguments{
