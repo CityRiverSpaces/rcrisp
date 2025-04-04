@@ -43,7 +43,7 @@
 delineate_corridor <- function(
   network, river_centerline, river_surface, aoi = NULL, max_width = 2500,
   initial_method = "valley", buffer = NULL, dem = NULL, max_iterations = 10,
-  capping_method = "direct"
+  capping_method = "shortest-path"
 ) {
   # Drop all attributes of river centerline and surface but the geometries
   river_centerline <- sf::st_geometry(river_centerline)
@@ -298,16 +298,16 @@ corridor_edge <- function(network, end_points, target_edge, exclude_area = NULL,
 #'
 #' @param edges A simple feature geometry representing the corridor edges
 #' @param method The method employed for the capping:
-#'   - `direct` (default): connect the start points and the end points of the
+#'   - `shortest-path` (default): find the network-based shortest-path
+#'     connections between the edge end points.
+#'   - `direct`: connect the start points and the end points of the
 #'     edges via straight segments
-#'   - `shortest-path`: find the network-based shortest-path connections
-#'     between the edge end points.
 #' @param network A spatial network object, only required if
 #'   `method = 'shortest-path'`
 #'
 #' @return A simple feature geometry representing the corridor (i.e. a polygon)
 #' @keywords internal
-cap_corridor <- function(edges, method = "direct", network = NULL) {
+cap_corridor <- function(edges, method = "shortest-path", network = NULL) {
 
   start_pts <- lwgeom::st_startpoint(edges)
   end_pts <- lwgeom::st_endpoint(edges)
