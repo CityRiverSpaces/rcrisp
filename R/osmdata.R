@@ -164,14 +164,14 @@ get_osmdata <- function(
 #' get_osm_city_boundary(bb, "Bucharest", crs)
 get_osm_city_boundary <- function(bb, city_name, crs = NULL, multiple = FALSE,
                                   force_download = FALSE) {
+  # Drop country if specified after comma
+  city_name_clean <- stringr::str_extract(city_name, "^[^,]+")
   # Define a helper function to fetch the city boundary
   fetch_boundary <- function(key, value) {
     osmdata_sf <- osmdata_as_sf(key, value, bb, force_download = force_download)
     osmdata_sf$osm_multipolygons |>
-      dplyr::filter(
-        .data$`name:en` == stringr::str_extract(city_name, "^[^,]+") |
-          .data$name == stringr::str_extract(city_name, "^[^,]+")
-      ) |>
+      # filter using any of the "name" columns (matching different languages)
+      match_osm_name(city_name_clean) |>
       sf::st_geometry()
   }
 
@@ -224,8 +224,7 @@ get_osm_river <- function(bb, river_name, crs = NULL, force_download = FALSE) {
                                     force_download = force_download)
   river_centerline <- river_centerline$osm_multilines |>
     # filter using any of the "name" columns (matching different languages)
-    dplyr::filter(dplyr::if_any(dplyr::matches("name"),
-                                \(x) x == river_name)) |>
+    match_osm_name(river_name) |>
     check_invalid_geometry() |> # fix invalid geometries, if any
     # the query can return more features than actually intersecting the bb
     sf::st_filter(sf::st_as_sfc(bb), .predicate = sf::st_intersects) |>
@@ -383,4 +382,17 @@ get_river_aoi <- function(river, city_bbox, buffer_distance) {
   river <- sf::st_transform(river, sf::st_crs(city_bbox))
 
   river_buffer(river, buffer_distance, bbox = city_bbox)
+}
+
+
+#' Match OpenStreetMap data by name
+#'
+#' @param osm_data An sf object with OpenStreetMap data
+#' @param match A character string with the name to match
+#'
+#' @return sf object containing only rows with filtered name
+#' @keywords internal
+match_osm_name <- function(osm_data, match) {
+  dplyr::filter(osm_data, dplyr::if_any(dplyr::matches("name"),
+                                        \(x) x == match))
 }
