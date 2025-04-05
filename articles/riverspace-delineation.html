@@ -93,7 +93,7 @@ provided, it will return an error message. If no buildings are provided,
 it will return an unobstructed buffer of a given radius with a warning
 message. The function returns an sf polygon.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">riverspace</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/delineate_riverspace.html">delineate_riverspace</a></span><span class="op">(</span><span class="va">buildings</span>, <span class="va">river</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">riverspace</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/delineate_riverspace.html">delineate_riverspace</a></span><span class="op">(</span><span class="va">river</span>, <span class="va">buildings</span><span class="op">)</span></span></code></pre></div>
 <p>We visualise the riverspace in a subset of segments.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">riverspace_segment_2_4</span> <span class="op">&lt;-</span> <span class="va">riverspace</span> <span class="op">|&gt;</span></span>
