@@ -101,24 +101,11 @@ test_that("City boundary is retreived for alternative names", {
   bb <- get_osm_bb(city_name)
 
   # test alternative names
-  alternative_names <- c("Köln", "Cologne", "Koeln", "Koeln, Germany")
+  alternative_names <- c("Köln", "Cologne", "Colonia")
   for (name in alternative_names) {
     bucharest_boundary <- get_osm_city_boundary(bb, name, force_download = TRUE)
     expect_equal(as.numeric(bb), as.numeric(sf::st_bbox(bucharest_boundary)))
   }
-})
-
-test_that("All geometries retrieved from OSM are valid", {
-  skip_on_ci()
-
-  # setup cache directory
-  temp_cache_dir()
-
-  bucharest_osm <- get_osmdata("Bucharest", "Dâmbovița", force_download = TRUE)
-
-  expect_true(all(vapply(bucharest_osm[!names(bucharest_osm) %in% "bb"],
-                         \(x) if (!inherits(x, "bbox")) all(sf::st_is_valid(x)),
-                         logical(1))))
 })
 
 test_that("River is consistently retreived with alternative names", {
@@ -133,10 +120,23 @@ test_that("River is consistently retreived with alternative names", {
   bb_river <- sf::st_bbox(river$centerline)
 
   # test alternative names
-  alternative_names <- c("La Seine", "Seine River", "Seine, France")
+  alternative_names <- c("La Seine", "Seine", "Senna")
   for (river_name in alternative_names) {
     river <- get_osm_river(bb_paris, river_name, force_download = TRUE)
     expect_equal(as.numeric(bb_river),
                  as.numeric(sf::st_bbox(river$centerline)))
   }
+})
+
+test_that("All geometries retrieved from OSM are valid", {
+  skip_on_ci()
+
+  # setup cache directory
+  temp_cache_dir()
+
+  bucharest_osm <- get_osmdata("Bucharest", "Dâmbovița", force_download = TRUE)
+
+  expect_true(all(vapply(bucharest_osm[!names(bucharest_osm) %in% "bb"],
+                         \(x) if (!inherits(x, "bbox")) all(sf::st_is_valid(x)),
+                         logical(1))))
 })
