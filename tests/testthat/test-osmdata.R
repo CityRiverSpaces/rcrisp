@@ -103,8 +103,8 @@ test_that("City boundary is retreived for alternative names", {
   # test alternative names
   alternative_names <- c("Köln", "Cologne", "Colonia")
   for (name in alternative_names) {
-    bucharest_boundary <- get_osm_city_boundary(bb, name, force_download = TRUE)
-    expect_equal(as.numeric(bb), as.numeric(sf::st_bbox(bucharest_boundary)))
+    city_boundary <- get_osm_city_boundary(bb, name, force_download = TRUE)
+    expect_equal(as.numeric(bb), as.numeric(sf::st_bbox(city_boundary)))
   }
 })
 
