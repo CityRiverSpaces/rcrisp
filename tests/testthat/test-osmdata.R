@@ -113,7 +113,7 @@ test_that("All geometries retrieved from OSM are valid", {
 
   # setup cache directory
   temp_cache_dir()
-  
+
   bucharest_osm <- get_osmdata("Bucharest", "Dâmbovița", force_download = TRUE)
 
   expect_true(all(vapply(bucharest_osm[!names(bucharest_osm) %in% "bb"],
