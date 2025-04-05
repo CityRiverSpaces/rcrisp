@@ -22,7 +22,9 @@ A list with the river centreline and surface
 Get the river centreline and surface from OpenStreetMap
 }
 \examples{
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 bb <- get_osm_bb("Bucharest")
 crs <- get_utm_zone(bb)
 get_osm_river(bb, "Dâmbovița", crs)
+\dontshow{\}) # examplesIf}
 }

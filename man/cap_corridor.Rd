@@ -4,17 +4,17 @@
 \alias{cap_corridor}
 \title{Cap the corridor by connecting the edge end points}
 \usage{
-cap_corridor(edges, method = "direct", network = NULL)
+cap_corridor(edges, method = "shortest-path", network = NULL)
 }
 \arguments{
 \item{edges}{A simple feature geometry representing the corridor edges}
 
 \item{method}{The method employed for the capping:
 \itemize{
-\item \code{direct} (default): connect the start points and the end points of the
+\item \code{shortest-path} (default): find the network-based shortest-path
+connections between the edge end points.
+\item \code{direct}: connect the start points and the end points of the
 edges via straight segments
-\item \code{shortest-path}: find the network-based shortest-path connections
-between the edge end points.
 }}
 
 \item{network}{A spatial network object, only required if
@@ -26,3 +26,4 @@ A simple feature geometry representing the corridor (i.e. a polygon)
 \description{
 Cap the corridor by connecting the edge end points
 }
+\keyword{internal}

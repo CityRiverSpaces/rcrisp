@@ -8,6 +8,13 @@
 #'
 #' @return A spatial network object
 #' @export
+#' @examples
+#' edges <- sf::st_sfc(
+#'   sf::st_linestring(matrix(c(0, 0, 1, 1), ncol = 2, byrow = TRUE)),
+#'   sf::st_linestring(matrix(c(0, 1, 1, 0), ncol = 2, byrow = TRUE))
+#' )
+#' sf::st_crs(edges) <- sf::st_crs("EPSG:4326")
+#' as_network(edges)
 as_network <- function(edges, flatten = TRUE, clean = TRUE) {
   network <- sfnetworks::as_sfnetwork(edges, directed = FALSE)
   if (flatten) network <- flatten_network(network)
@@ -31,12 +38,22 @@ as_network <- function(edges, flatten = TRUE, clean = TRUE) {
 #'
 #' @return A network object with additional points at intersections
 #' @export
+#' @examples
+#' if (!requireNamespace("CRiSpData", quietly = TRUE)) {
+#'   message("Install CRiSpData from GitHub to run this example.")
+#' } else {
+#'   edges <- dplyr::bind_rows(CRiSpData::bucharest_osm$streets,
+#'                             CRiSpData::bucharest_osm$railways)
+#'   network <- sfnetworks::as_sfnetwork(edges, directed = FALSE)
+#'   flatten_network(network)
+#' }
 flatten_network <- function(network) {
   nodes <- sf::st_as_sf(network, "nodes")
   edges <- sf::st_as_sf(network, "edges")
 
   # Determine intersection points between crossing edges
   edges_cross <- get_crossing_edges(edges)
+  if (nrow(edges_cross) == 0) return(network)
   points_intersect <- get_intersection_points(edges_cross)
 
   # Add target points to the edge geometries
@@ -52,6 +69,7 @@ flatten_network <- function(network) {
   network_new
 }
 
+#' @noRd
 get_crossing_edges <- function(edges) {
   geometry <- sf::st_geometry(edges)
   crossings <- sf::st_crosses(geometry)
@@ -59,6 +77,7 @@ get_crossing_edges <- function(edges) {
   sf::st_sf(id = which(mask), geometry = geometry[mask])
 }
 
+#' @noRd
 get_intersection_points <- function(edges) {
   # make sure edges is an sf object, so st_intersection also returns origins
   intersections <- sf::st_intersection(sf::st_sf(edges))
@@ -68,6 +87,8 @@ get_intersection_points <- function(edges) {
   sfheaders::sf_cast(points, to = "POINT")
 }
 
+#' @noRd
+#' @importFrom utils head tail
 insert_intersections <- function(edges, points, tol = 1.e-3) {
 
   edge_geometry <- sf::st_geometry(edges)
@@ -120,14 +141,18 @@ insert_intersections <- function(edges, points, tol = 1.e-3) {
   return(edges_new)
 }
 
+#' @noRd
 is_point_in_edge <- function(point, edge, tol) {
   any(calc_distance(point, edge) < tol)
 }
 
+#' @noRd
 calc_distance <- function(point, edge) {
   sqrt((edge[, "x"] - point["X"]) ^ 2 + (edge[, "y"] - point["Y"]) ^ 2)
 }
 
+#' @noRd
+#' @importFrom utils head tail
 calc_rolling_sum <- function(x, n = 2) {
   cs <- cumsum(x)
   # roll the cumsum array by adding `n` zeros at its beginning and dropping
@@ -153,6 +178,15 @@ calc_rolling_sum <- function(x, n = 2) {
 #'
 #' @return A cleaned network object
 #' @export
+#' @examples
+#' if (!requireNamespace("CRiSpData", quietly = TRUE)) {
+#'   message("Install CRiSpData from GitHub to run this example.")
+#' } else {
+#'   edges <- dplyr::bind_rows(CRiSpData::bucharest_osm$streets,
+#'                             CRiSpData::bucharest_osm$railways)
+#'   network <- sfnetworks::as_sfnetwork(edges, directed = FALSE)
+#'   clean_network(network)
+#' }
 clean_network <- function(network, simplify = TRUE) {
   # subdivide edges by adding missing nodes
   net <- tidygraph::convert(network, sfnetworks::to_spatial_subdivision,
@@ -178,6 +212,7 @@ clean_network <- function(network, simplify = TRUE) {
 #' @param network A network object
 #'
 #' @return A simplifed network object
+#' @keywords internal
 simplify_network <- function(network) {
   network |>
     sfnetworks::activate("edges") |>
@@ -219,6 +254,18 @@ simplify_network <- function(network) {
 #' @return A network object with weights added as a column in the edge table
 #' @importFrom rlang :=
 #' @export
+#' @examples
+#' if (!requireNamespace("CRiSpData", quietly = TRUE)) {
+#'   message("Install CRiSpData from GitHub to run this example.")
+#' } else {
+#'   edges <- rbind(CRiSpData::bucharest_osm$streets,
+#'                 CRiSpData::bucharest_osm$railways)
+#'   network <- sfnetworks::as_sfnetwork(edges, directed = FALSE)
+#'   target <- sf::st_centroid(CRiSpData::bucharest_osm$river_centerline)
+#'   exclude_area <- sf::st_buffer(CRiSpData::bucharest_osm$river_centerline,
+#'                                 1000)
+#'   add_weights(network, target, exclude_area)
+#' }
 add_weights <- function(network, target = NULL, exclude_area = NULL,
                         penalty = 1000., weight_name = "weight") {
   edges <- sf::st_geometry(sf::st_as_sf(network, "edges"))
@@ -258,6 +305,7 @@ add_weights <- function(network, target = NULL, exclude_area = NULL,
 #'
 #' @return A simple feature geometry
 #' @importFrom rlang .data
+#' @keywords internal
 shortest_path <- function(network, from, to, weights = "weight") {
   paths <- sfnetworks::st_network_paths(
     network, from = from, to = to, weights = weights, type = "shortest",
@@ -283,6 +331,7 @@ shortest_path <- function(network, from, to, weights = "weight") {
 #' @param target The target geometry
 #'
 #' @return A node in the network as a simple feature geometry
+#' @keywords internal
 nearest_node <- function(network, target) {
   nodes <- sf::st_as_sf(network, "nodes") |>
     sf::st_geometry()
@@ -299,6 +348,7 @@ nearest_node <- function(network, target) {
 #' @param target The target geometry
 #'
 #' @return A spatial network object
+#' @keywords internal
 filter_network <- function(network, target) {
   network |>
     tidygraph::activate("nodes") |>
@@ -316,6 +366,7 @@ filter_network <- function(network, target) {
 #'   geometries
 #'
 #' @return Indices or geometries of the edges intersecting the given geometry
+#' @keywords internal
 get_intersecting_edges <- function(network, geometry, index = FALSE) {
   edges <- sf::st_as_sf(network, "edges")
   intersects <- sf::st_intersects(edges, geometry, sparse = FALSE)

@@ -1,5 +1,7 @@
 test_that("proper parameters must be provided depending on selected method", {
-  river <- bucharest_osm$river_centerline
+  skip_if_not_installed("CRiSpData")
+
+  river <- CRiSpData::bucharest_osm$river_centerline
 
   # for "buffer" method, we need the "buffer" parameter
   expect_error(initial_corridor(river, method = "buffer"),
@@ -11,7 +13,7 @@ test_that("proper parameters must be provided depending on selected method", {
   # for "valley" method, we need the "dem" parameter
   expect_error(initial_corridor(river, method = "valley"),
                "DEM should be provided if `method` is `'valley'`")
-  with_mocked_bindings(get_valley = function(...) NULL, {
+  with_mocked_bindings(delineate_valley = function(...) NULL, {
     expect_no_error(initial_corridor(river, method = "valley", dem = 42))
   })
 
@@ -124,7 +126,9 @@ test_that("River banks for a more complex river still gives two regions", {
 })
 
 test_that("River banks works with real data", {
-  river <- bucharest_osm$river_centerline
+  skip_if_not_installed("CRiSpData")
+
+  river <- CRiSpData::bucharest_osm$river_centerline
   regions <- get_river_banks(river, width = 2500)
   expect_equal(length(regions), 2)
 })
@@ -228,3 +232,21 @@ test_that("Capping a corridor with 'shortest_path' uses network paths", {
   # we verify that the corridor includes all the nodes of the network
   expect_setequal(pts_corridor, nodes)
 })
+
+test_that("Capping a corridor with unknown method raises an error", {
+  corridor_edge_1 <- sf::st_linestring(cbind(c(-1, 1), c(1, 1)))
+  corridor_edge_2 <- sf::st_linestring(cbind(c(-1, 1), c(-1, -1)))
+  edges <- sf::st_sfc(corridor_edge_1, corridor_edge_2)
+  expect_error(cap_corridor(edges, method = "crisp"),
+               "Unknown method to cap the river corridor: crisp")
+})
+
+test_that("Capping with 'shortest-path' method raises an error if no network
+          is provided", {
+            corridor_edge_1 <- sf::st_linestring(cbind(c(-1, 1), c(1, 1)))
+            corridor_edge_2 <- sf::st_linestring(cbind(c(-1, 1), c(-1, -1)))
+            edges <- sf::st_sfc(corridor_edge_1, corridor_edge_2)
+            expect_error(cap_corridor(edges, method = "shortest-path"),
+                         paste("A network should be provided if",
+                               "`capping_method = 'shortest-path'`"))
+          })

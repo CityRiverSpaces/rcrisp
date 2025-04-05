@@ -1,0 +1,68 @@
+---
+title: "Valley delineation"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Valley delineation}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+bibliography: references.bib
+csl: apa.csl
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  message = FALSE
+)
+if (!requireNamespace("CRiSpData", quietly = TRUE)) {
+  # nolint start
+  message("Package 'CRiSpData' is required for this vignette but not installed. Install it from GitHub using pak::pak('CityRiverSpaces/CRiSpData')")
+  # nolint end
+  knitr::knit_exit()
+}
+```
+
+In a typical CRiSp workflow, valley delineation is used in the context of corridor delineation. When the parameter `method = "valley"` is set (this is the default value) in `delineate_corridor()`, first the river valley is extracted from a Digital Elevation Model (DEM) with `delineate_valley()` and then the resulting valley edge is used to "guide" the delineation of the corridor on the street network, as shown in `vignette("corridor-delineation")`.
+
+In this article, we describe how `delineate_valley()` works and how it can be used independently. `delineate_valley()` uses a Cost Distance algorithm, variants of which are mostly used for the delineation of wet area mapping and valley bottom delineation in non-urban contexts [@agren2014; @murphy2009; @white2012].
+
+As the resulting valley boundary is only used as an intermediate step in `delineate_corridor()`, valley delineation does not require high-resolution DEM data, as required for non-urban applications [e.g., @lidberg2020; @nardi2019]. By default, the valley is delineated on the openly available 30m-resolution [Copernicus DEM GLO-30](https://dataspace.copernicus.eu/explore-data/data-collections/copernicus-contributing-missions/collections-description/COP-DEM).
+
+We demonstrate valley delineation using data from the CRiSpData package, namely the DEM of Bucharest as the input raster and the river centerline and surface as the source for which the Cost Distance is calculated.
+
+```{r setup}
+# Attach required packages
+library(CRiSp)
+library(CRiSpData)
+library(terra)
+library(sf)
+
+# Load data for valley delineation
+dem <- unwrap(bucharest_dem)
+river_centerline <- st_geometry(bucharest_osm$river_centerline)
+river_surface <- st_geometry(bucharest_osm$river_surface)
+river <- c(river_centerline, river_surface)
+```
+
+```{r}
+#| echo: false
+#| fig.alt: "DEM of the area enclosing River Dâmbovița in Bucharest"
+#| fig.cap: "DEM of the area enclosing River Dâmbovița in Bucharest"
+plot(dem)
+plot(river, col = "white", border = NA, add = TRUE)
+```
+
+```{r}
+valley <- delineate_valley(dem, river)
+```
+
+```{r}
+#| echo: false
+#| fig.alt: "Valley polygon derived from the DEM"
+#| fig.cap: "Valley polygon derived from the DEM"
+plot(dem)
+plot(valley, border = "white", add = TRUE)
+```
+
+## References

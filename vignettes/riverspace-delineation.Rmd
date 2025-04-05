@@ -13,10 +13,17 @@ knitr::opts_chunk$set(
   comment = "#>",
   warning = FALSE
 )
+if (!requireNamespace("CRiSpData", quietly = TRUE)) {
+  # nolint start
+  message("Package 'CRiSpData' is required for this vignette but not installed. Install it from GitHub using pak::pak('CityRiverSpaces/CRiSpData')")
+  # nolint end
+  knitr::knit_exit()
+}
 ```
 
 ```{r setup}
 library(CRiSp)
+library(CRiSpData)
 library(sf)
 ```
 
@@ -30,12 +37,12 @@ river <- bucharest_osm$river_surface
 The `delineate_riverspace()` function takes the building polygons and the river surface polygons as input. If no river is provided, it will return an error message. If no buildings are provided, it will return an unobstructed buffer of a given radius with a warning message. The function returns an sf polygon.
 
 ```{r riverspace}
-riverspace <- delineate_riverspace(buildings, river)
+riverspace <- delineate_riverspace(river, buildings)
 ```
 
 We visualise the riverspace in a subset of segments.
 
-```{r plot-riverspace}
+```{r plot-riverspace, fig.alt="Riverspace delineation"}
 riverspace_segment_2_4 <- riverspace |>
   st_intersection(bucharest_delineation$segments[2:4])
 

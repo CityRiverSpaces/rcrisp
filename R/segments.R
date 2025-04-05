@@ -12,6 +12,17 @@
 #'
 #' @return Segment polygons as a simple feature geometry
 #' @export
+#' @examples
+#' if (!requireNamespace("CRiSpData", quietly = TRUE)) {
+#'   message("Install CRiSpData from GitHub to run this example.")
+#' } else {
+#'   corridor <- bucharest_delineation$corridor
+#'   network <- rbind(CRiSpData::bucharest_osm$streets,
+#'                    CRiSpData::bucharest_osm$railways) |>
+#'     as_network()
+#'   river_centerline <- CRiSpData::bucharest_osm$river_centerline
+#'   delineate_segments(corridor, network, river_centerline)
+#' }
 delineate_segments <- function(corridor, network, river_centerline,
                                angle_threshold = 90) {
 
@@ -44,10 +55,11 @@ delineate_segments <- function(corridor, network, river_centerline,
 #'
 #' @return Candidate segment edges as a simple feature geometry
 #' @importFrom rlang .data
+#' @keywords internal
 clip_and_filter <- function(lines, corridor, river_centerline) {
 
   # Split corridor along the river centerline to find edges on the two sides
-  corridor_edges <- split_by(corridor, river_centerline, boundary = TRUE)
+  corridor_edges <- get_corridor_edges(corridor, river_centerline)
 
   # Clip the lines, keeping the only fragments that intersect the river
   lines_clipped <- sf::st_intersection(lines, corridor) |>
@@ -74,6 +86,21 @@ clip_and_filter <- function(lines, corridor, river_centerline) {
   filter_clusters(lines_valid, river_centerline)
 }
 
+#' Split corridor along the river to find edges on the two banks
+#'
+#' @param corridor The river corridor as a simple feature geometry
+#' @param river_centerline The river centerline as a simple feature geometry
+#'
+#' @return Corridor edges as a simple feature geometry
+#' @keywords internal
+get_corridor_edges <- function(corridor, river_centerline) {
+  corridor_edges <- split_by(corridor, river_centerline, boundary = TRUE)
+  # For complex river geometries, splitting the corridor might actually return
+  # multiple linestrings - select here the two longest segments
+  if (length(corridor_edges) < 2) stop("Cannot identify corridor edges")
+  corridor_edges[find_longest(corridor_edges, n = 2)]
+}
+
 #' Cluster the river crossings and select the shortest crossing per cluster
 #'
 #' Create groups of edges that are crossing the river in nearby locations,
@@ -88,6 +115,7 @@ clip_and_filter <- function(lines, corridor, river_centerline) {
 #'   to consider as a single river crossing
 #'
 #' @return A simple feature geometry including the shortest edge per cluster
+#' @keywords internal
 filter_clusters <- function(crossings, river, eps = 100) {
   intersections <- sf::st_intersection(crossings, river)
   # By computing centroids we make sure we only have POINT geometries here
@@ -115,10 +143,11 @@ filter_clusters <- function(crossings, river, eps = 100) {
 #' @param corridor The river corridor as a simple feature geometry
 #'
 #' @return Refined corridor segments as a simple feature geometry
+#' @keywords internal
 refine_segments <- function(blocks, river_centerline, corridor) {
 
   # Split corridor along the river centerline to find edges on the two sides
-  corridor_edges <- split_by(corridor, river_centerline, boundary = TRUE)
+  corridor_edges <- get_corridor_edges(corridor, river_centerline)
 
   # Recursively merge blocks until all blocks intersect the river
   not_intersect_river <- function(blocks) {
@@ -162,6 +191,7 @@ refine_segments <- function(blocks, river_centerline, corridor) {
 #' @param method Strategy for merging, see [merge_block()]
 #'
 #' @return Blocks merged to the specified ones as a simple feature geometry
+#' @keywords internal
 merge_blocks <- function(blocks, to_merge, method = "longest-intersection") {
   if (length(to_merge) == 0) {
     return(blocks)
@@ -193,6 +223,7 @@ merge_blocks <- function(blocks, to_merge, method = "longest-intersection") {
 #'   it shares the longest intersection with)
 #'
 #' @return Blocks merged to the specified one as a simple feature geometry
+#' @keywords internal
 merge_block <- function(targets, block, method = "longest-intersection") {
   index_adjacent <- find_adjacent(targets, block)
   if (method == "longest-intersection") {

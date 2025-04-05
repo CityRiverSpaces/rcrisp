@@ -37,6 +37,8 @@
 #'
 #' @return A list with the corridor, segments, and riverspace geometries
 #' @export
+#' @examples
+#' delineate("Bucharest", "Dâmbovița")
 delineate <- function(
   city_name, river_name, crs = NULL, network_buffer = NULL,
   buildings_buffer = NULL, dem_buffer = 2500, initial_method = "valley",
@@ -50,7 +52,7 @@ delineate <- function(
   # set default values for network_buffer and buildings_buffer
   if (corridor && is.null(network_buffer)) {
     network_buffer <- 2500
-    warning(sprintf(
+    message(sprintf(
       "The default `network_buffer` of %d m is used for corridor delineation.",
       network_buffer
     ))
@@ -58,7 +60,7 @@ delineate <- function(
 
   if (riverspace && is.null(buildings_buffer)) {
     buildings_buffer <- 100
-    warning(sprintf(
+    message(sprintf(
       paste(
         "The default `buildings_buffer` of %d m is used",
         "for riverspace delineation."
@@ -117,10 +119,12 @@ delineate <- function(
   }
 
   if (riverspace) {
-    river_combined <- combine_river_features(osm_data$river_centerline,
+    river_centerline_clipped <- sf::st_intersection(
+      osm_data$river_centerline, osm_data$aoi_buildings |> sf::st_transform(crs)
+    )
+    river_combined <- combine_river_features(river_centerline_clipped,
                                              osm_data$river_surface)
-    riverspace <- delineate_riverspace(osm_data$buildings,
-                                       river_combined)
+    riverspace <- delineate_riverspace(river_combined, osm_data$buildings)
   } else {
     riverspace <- NULL
   }

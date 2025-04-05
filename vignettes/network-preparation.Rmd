@@ -12,20 +12,25 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+if (!requireNamespace("CRiSpData", quietly = TRUE)) {
+  # nolint start
+  message("Package 'CRiSpData' is required for this vignette but not installed. Install it from GitHub using pak::pak('CityRiverSpaces/CRiSpData')")
+  # nolint end
+  knitr::knit_exit()
+}
 ```
 
-```{r setup, message=FALSE}
+```{r message=FALSE}
 library(CRiSp)
+library(CRiSpData)
 library(dplyr)
-library(ggplot2)
-library(gridExtra)
 library(sf)
 library(sfnetworks)
 ```
 
 ## 1. Input data
 
-In this article we show how to set up the spatial network for a city before using it for urban river corridor delineation. We work with the OSM data for the city of Bucharest provided by the CRiSp package. See how to get your own OSM data in `vignette("getting-osm-data")`.
+In this article we show how to set up the spatial network for a city before using it for urban river corridor delineation. We work with the OSM data for the city of Bucharest provided by the CRiSpData package. See how to get your own OSM data in `vignette("getting-osm-data")`.
 
 We start by loading the OSM data. According to the delineation method, all persistent physical structures need to be considered. Therefore, the network will contain both streets and railways from OSM.
 
@@ -42,7 +47,9 @@ After combining the streets and railway lines, we create a network object.
 
 ```{r}
 network <- bind_rows(streets, railways) |>
-  as_sfnetwork(directed = FALSE)
+  as_sfnetwork(directed = FALSE) |>
+  activate("nodes") |>
+  mutate(node_id = row_number())
 ```
 
 To be able to use the network for delineation, we need to flatten it (that is, project bridges to the ground surface) and add nodes at all intersections between edges.
@@ -68,23 +75,31 @@ network_cleaned <- clean_network(network_new)
 Visualize cleaned network:
 
 ```{r, fig.alt="The network before and after preprocessing."}
-p_before <- ggplot() +
-  geom_sf(data = st_as_sf(network, "edges"), col = "grey50") +
-  geom_sf(data = st_as_sf(network, "nodes"), col = "red", size = 0.7) +
-  ggtitle("Network before preprocessing\n") +
-  coord_sf(xlim = c(425000, 426000),
-           ylim = c(4922200, 4923200),
-           expand = FALSE) +
-  theme_void()
+network_new_nodes <- network_cleaned |>
+  activate("nodes") |>
+  filter(is.na(node_id)) |>
+  activate("edges") |>
+  filter(is.na(from) & is.na(to))
 
-p_after <- ggplot() +
-  geom_sf(data = st_as_sf(network_cleaned, "edges"), col = "grey50") +
-  geom_sf(data = st_as_sf(network_cleaned, "nodes"), col = "red", size = 0.7) +
-  ggtitle("Network after preprocessing\n") +
-  coord_sf(xlim = c(425000, 426000),
-           ylim = c(4922200, 4923200),
-           expand = FALSE) +
-  theme_void()
+network_removed_nodes <- network |>
+  activate("nodes") |>
+  filter(!node_id %in% (activate(network_cleaned, "nodes") |>
+                          pull(node_id))) |>
+  activate("edges") |>
+  filter(is.na(from) & is.na(to))
 
-grid.arrange(p_before, p_after, ncol = 2)
+par(mfrow = c(1, 2))
+plot(network, col = "grey50",
+     xlim = c(425100, 425400), ylim = c(4922400, 4923000),
+     main = "Network before preprocessing")
+plot(network_cleaned |> activate("nodes"), col = "grey50",
+     xlim = c(425100, 425400), ylim = c(4922400, 4923000),
+     main = "Network after preprocessing")
+plot(network_new_nodes, col = "darkgreen",
+     xlim = c(425100, 425400), ylim = c(4922400, 4923000),
+     main = "Network after preprocessing", add = TRUE)
+plot(network_removed_nodes, col = "red", pch = 4,
+     xlim = c(425100, 425400), ylim = c(4922400, 4923000),
+     main = "Network after preprocessing", add = TRUE)
 ```
+

@@ -23,3 +23,12 @@ values to a file.
 \description{
 Write DEM to cloud optimized GeoTiff file as specified location
 }
+\examples{
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+if (!requireNamespace("CRiSpData", quietly = TRUE)) {
+  message("Install CRiSpData from GitHub to run this example.")
+} else {
+  dem_to_cog(terra::unwrap(CRiSpData::bucharest_dem), "bucharest_dem.tif")
+}
+\dontshow{\}) # examplesIf}
+}

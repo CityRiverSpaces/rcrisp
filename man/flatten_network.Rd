@@ -24,3 +24,13 @@ The functionality is similar to sfnetworks'
 \code{\link[sfnetworks:st_network_blend]{sfnetworks::st_network_blend()}}, but in that case an external point is
 only injected to the closest edge.
 }
+\examples{
+if (!requireNamespace("CRiSpData", quietly = TRUE)) {
+  message("Install CRiSpData from GitHub to run this example.")
+} else {
+  edges <- dplyr::bind_rows(CRiSpData::bucharest_osm$streets,
+                            CRiSpData::bucharest_osm$railways)
+  network <- sfnetworks::as_sfnetwork(edges, directed = FALSE)
+  flatten_network(network)
+}
+}

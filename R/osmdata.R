@@ -12,6 +12,9 @@
 #'
 #' @return An sf object with the retrieved OpenStreetMap data
 #' @export
+#' @examplesIf interactive()
+#' bb <- get_osm_bb("Bucharest")
+#' osmdata_as_sf("highway", "motorway", bb)
 osmdata_as_sf <- function(key, value, aoi, force_download = FALSE) {
   bbox <- as_bbox(aoi) # it should be in lat/lon
 
@@ -38,6 +41,7 @@ osmdata_as_sf <- function(key, value, aoi, force_download = FALSE) {
 #' @param bb A bounding box, in lat/lon coordinates
 #'
 #' @return An sf object with the retrieved OpenStreetMap data
+#' @keywords internal
 osmdata_query <- function(key, value, bb) {
   # this is needed because the add_osm_feature does not support
   # value as an empty string
@@ -55,7 +59,7 @@ osmdata_query <- function(key, value, bb) {
 #' @return A bbox object with the bounding box of the city
 #' @export
 #'
-#' @examples
+#' @examplesIf interactive()
 #' get_osm_bb("Bucharest")
 get_osm_bb <- function(city_name) {
   bb <- osmdata::getbb(city_name)
@@ -84,9 +88,8 @@ get_osm_bb <- function(city_name) {
 #'         given location
 #' @export
 #'
-#' @examples
+#' @examplesIf interactive()
 #' get_osmdata("Bucharest", "Dâmbovița")
-
 get_osmdata <- function(
   city_name, river_name, network_buffer = NULL, buildings_buffer = NULL,
   crs = NULL, force_download = FALSE
@@ -155,7 +158,7 @@ get_osmdata <- function(
 #' @importFrom rlang .data
 #' @export
 #'
-#' @examples
+#' @examplesIf interactive()
 #' bb <- get_osm_bb("Bucharest")
 #' crs <- get_utm_zone(bb)
 #' get_osm_city_boundary(bb, "Bucharest", crs)
@@ -209,7 +212,7 @@ get_osm_city_boundary <- function(bb, city_name, crs = NULL, multiple = FALSE,
 #' @return A list with the river centreline and surface
 #' @export
 #'
-#' @examples
+#' @examplesIf interactive()
 #' bb <- get_osm_bb("Bucharest")
 #' crs <- get_utm_zone(bb)
 #' get_osm_river(bb, "Dâmbovița", crs)
@@ -220,6 +223,7 @@ get_osm_river <- function(bb, river_name, crs = NULL, force_download = FALSE) {
   river_centerline <- river_centerline$osm_multilines |>
     # filter using any of the "name" columns (matching different languages)
     match_osm_name(river_name) |>
+    check_invalid_geometry() |> # fix invalid geometries, if any
     # the query can return more features than actually intersecting the bb
     sf::st_filter(sf::st_as_sfc(bb), .predicate = sf::st_intersects) |>
     sf::st_geometry() |>
@@ -231,10 +235,8 @@ get_osm_river <- function(bb, river_name, crs = NULL, force_download = FALSE) {
   river_surface <- dplyr::bind_rows(river_surface$osm_polygons,
                                     river_surface$osm_multipolygons) |>
     sf::st_geometry() |>
+    check_invalid_geometry() |> # fix invalid geometries, if any
     sf::st_as_sf() |>
-    # natural:water retrieved some invalid polygons, fix these
-    sf::st_make_valid() |>
-    sf::st_crop(bb) |>
     sf::st_filter(river_centerline, .predicate = sf::st_intersects) |>
     sf::st_union()
 
@@ -259,7 +261,7 @@ get_osm_river <- function(bb, river_name, crs = NULL, force_download = FALSE) {
 #' @export
 #' @importFrom rlang !! sym
 #'
-#' @examples
+#' @examplesIf interactive()
 #' bb <- get_osm_bb("Bucharest")
 #' crs <- get_utm_zone(bb)
 #' get_osm_streets(bb, crs)
@@ -269,8 +271,9 @@ get_osm_streets <- function(aoi, crs = NULL, highway_values = NULL,
     highway_values <- c("motorway", "trunk", "primary", "secondary", "tertiary")
   }
 
-  link_values <- sapply(X = highway_values,
+  link_values <- vapply(X = highway_values,
                         FUN = \(x) sprintf("%s_link", x),
+                        FUN.VALUE = character(1),
                         USE.NAMES = FALSE)
 
   streets <- osmdata_as_sf("highway", c(highway_values, link_values), aoi,
@@ -308,7 +311,7 @@ get_osm_streets <- function(aoi, crs = NULL, highway_values = NULL,
 #' @export
 #' @importFrom rlang !! sym
 #'
-#' @examples
+#' @examplesIf interactive()
 #' bb <- get_osm_bb("Bucharest")
 #' crs <- get_utm_zone(bb)
 #' get_osm_railways(bb, crs)
@@ -339,10 +342,15 @@ get_osm_railways <- function(aoi, crs = NULL, force_download = FALSE) {
 #'
 #' @return An sf object with the buildings
 #' @export
+#' @examplesIf interactive()
+#' bb <- get_osm_bb("Bucharest")
+#' crs <- get_utm_zone(bb)
+#' get_osm_buildings(bb, crs)
 get_osm_buildings <- function(aoi, crs = NULL, force_download = FALSE) {
   buildings <- osmdata_as_sf("building", "", aoi,
                              force_download = force_download)
   buildings <- buildings$osm_polygons |>
+    check_invalid_geometry() |> # fix invalid geometries, if any
     sf::st_filter(aoi, .predicate = sf::st_intersects) |>
     dplyr::filter(.data$building != "NULL") |>
     sf::st_geometry()
@@ -361,7 +369,7 @@ get_osm_buildings <- function(aoi, crs = NULL, force_download = FALSE) {
 #' @return An sf object in lat/lon coordinates
 #' @export
 #'
-#' @examples
+#' @examplesIf interactive()
 #' bb <- get_osm_bb("Bucharest")
 #' river <- get_osm_river(bb, "Dâmbovița")
 #' get_river_aoi(river, bb, buffer_distance = 100)

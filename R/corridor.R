@@ -25,10 +25,25 @@
 #'
 #' @return A simple feature geometry representing the river corridor
 #' @export
+#' @examplesIf interactive()
+#' if (!requireNamespace("CRiSpData", quietly = TRUE)) {
+#'   message("Install CRiSpData from GitHub to run this example.")
+#' } else {
+#'   network <- rbind(CRiSpData::bucharest_osm$streets,
+#'                    CRiSpData::bucharest_osm$railways) |>
+#'     as_network()
+#'   crs <- get_utm_zone(CRiSpData::bucharest_osm$bb)
+#'   aoi <- reproject(CRiSpData::bucharest_osm$bb, crs)
+#'   delineate_corridor(network,
+#'                      CRiSpData::bucharest_osm$river_centerline,
+#'                      CRiSpData::bucharest_osm$river_surface,
+#'                      aoi,
+#'                      dem = terra::unwrap(CRiSpData::bucharest_dem))
+#' }
 delineate_corridor <- function(
   network, river_centerline, river_surface, aoi = NULL, max_width = 2500,
   initial_method = "valley", buffer = NULL, dem = NULL, max_iterations = 10,
-  capping_method = "direct"
+  capping_method = "shortest-path"
 ) {
   # Drop all attributes of river centerline and surface but the geometries
   river_centerline <- sf::st_geometry(river_centerline)
@@ -36,9 +51,14 @@ delineate_corridor <- function(
 
   # Draw the initial corridor geometry within the area of interest
   river <- c(river_centerline, river_surface)
+  if (is.null(aoi)) {
+    bbox <- NULL
+  } else {
+    bbox <- as_bbox(aoi)
+  }
   corridor_init <- initial_corridor(river, method = initial_method,
                                     buffer = buffer, dem = dem,
-                                    bbox = as_bbox(aoi))
+                                    bbox = bbox)
 
   # Build river network in the defined area of interest
   river_network <- build_river_network(river_centerline, aoi = aoi)
@@ -75,8 +95,8 @@ delineate_corridor <- function(
 #'   - "buffer": add a fixed buffer region to the river geometry (see
 #'     [river_buffer()])
 #'   - "valley" (default): use the river valley boundary, as estimated from the
-#'     provided digital elevation model (DEM, see [get_valley()] for details on
-#'     the implementation)
+#'     provided digital elevation model (DEM, see [delineate_valley()] for
+#'     details on the implementation)
 #' @param buffer Buffer region to add to the river geometry (only used if
 #'   `initial_method` is `"buffer"`)
 #' @param dem Digital elevation model (DEM) of the region (only used if
@@ -84,6 +104,7 @@ delineate_corridor <- function(
 #' @param bbox Bounding box defining the extent of the area of interest
 #'
 #' @return A simple feature geometry
+#' @keywords internal
 initial_corridor <- function(
   river, method = "valley", buffer = NULL, dem = NULL, bbox = NULL
 ) {
@@ -96,7 +117,7 @@ initial_corridor <- function(
     if (is.null(dem)) {
       stop("DEM should be provided if `method` is `'valley'`")
     }
-    valley <- get_valley(dem, river)
+    valley <- delineate_valley(dem, river)
     if (!is.null(bbox)) valley <- sf::st_crop(valley, bbox)
     valley
   } else {
@@ -116,6 +137,7 @@ initial_corridor <- function(
 #' @param aoi Area of interest, provided as a bounding box or as a polygon.
 #'
 #' @return A [`sfnetworks::sfnetwork`] object
+#' @keywords internal
 build_river_network <- function(river, aoi = NULL) {
   # Clip the river geometry using the area of interest (if provided)
   if (!is.null(aoi)) {
@@ -132,8 +154,8 @@ build_river_network <- function(river, aoi = NULL) {
   # component with overall longest edge length
   river_network <- as_network(river_segments, flatten = FALSE, clean = FALSE)
   components <- tidygraph::morph(river_network, tidygraph::to_components)
-  sum_edge_lengths <- function(x) sum(sf::st_length(sf::st_as_sf(x, "edges")))
-  edge_lengths <- sapply(components, sum_edge_lengths)
+  sum_edge_lengths <- \(x) sum(sf::st_length(sf::st_as_sf(x, "edges")))
+  edge_lengths <- vapply(components, sum_edge_lengths, numeric(1))
   river_network <- components[[which.max(edge_lengths)]]
   river_network <- clean_network(river_network, simplify = FALSE)  # keep loops
 }
@@ -151,6 +173,7 @@ build_river_network <- function(river, aoi = NULL) {
 #'   spatial network used for the delineation
 #'
 #' @return A simple feature geometry including a pair of points
+#' @keywords internal
 corridor_end_points <- function(river_network, spatial_network) {
   # Only consider the edges of the spatial network
   spat_network_edges <- sf::st_geometry(sf::st_as_sf(spatial_network, "edges"))
@@ -187,6 +210,7 @@ corridor_end_points <- function(river_network, spatial_network) {
 #'   or [`sf::sf`]/[`sf::sfc`] object.
 #' @param width Width of the regions
 #' @return A [`sf::sfc`] object with two polygon features
+#' @keywords internal
 get_river_banks <- function(river, width) {
   if (inherits(river, "sfnetwork")) {
     river <- sf::st_as_sf(river, "edges")
@@ -216,6 +240,7 @@ get_river_banks <- function(river, width) {
 #'   by cutting the area of interest along the river
 #'
 #' @return A simple feature geometry representing the initial corridor edges
+#' @keywords internal
 initial_edges <- function(corridor_initial, regions) {
   corridor_split <- sf::st_intersection(regions, corridor_initial)
   boundaries <- sf::st_union(sf::st_boundary(regions))
@@ -242,6 +267,7 @@ initial_edges <- function(corridor_initial, regions) {
 #'   corridor edges
 #'
 #' @return A simple feature geometry representing the edge (i.e. a linestring)
+#' @keywords internal
 corridor_edge <- function(network, end_points, target_edge, exclude_area = NULL,
                           max_iterations = 10) {
   # Identify nodes on the network that are closest to the target end points
@@ -272,15 +298,16 @@ corridor_edge <- function(network, end_points, target_edge, exclude_area = NULL,
 #'
 #' @param edges A simple feature geometry representing the corridor edges
 #' @param method The method employed for the capping:
-#'   - `direct` (default): connect the start points and the end points of the
+#'   - `shortest-path` (default): find the network-based shortest-path
+#'     connections between the edge end points.
+#'   - `direct`: connect the start points and the end points of the
 #'     edges via straight segments
-#'   - `shortest-path`: find the network-based shortest-path connections
-#'     between the edge end points.
 #' @param network A spatial network object, only required if
 #'   `method = 'shortest-path'`
 #'
 #' @return A simple feature geometry representing the corridor (i.e. a polygon)
-cap_corridor <- function(edges, method = "direct", network = NULL) {
+#' @keywords internal
+cap_corridor <- function(edges, method = "shortest-path", network = NULL) {
 
   start_pts <- lwgeom::st_startpoint(edges)
   end_pts <- lwgeom::st_endpoint(edges)
@@ -298,7 +325,7 @@ cap_corridor <- function(edges, method = "direct", network = NULL) {
     # TODO: raise warning if lenght is 2 times longer than direct segment
   } else {
     stop(
-      sprintf("Unknown method to cap the river corridor: {method}", method)
+      sprintf("Unknown method to cap the river corridor: %s", method)
     )
   }
   polygon <- as_polygon(c(edges, cap_edge_1, cap_edge_2))
