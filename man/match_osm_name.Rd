@@ -4,12 +4,12 @@
 \alias{match_osm_name}
 \title{Match OpenStreetMap data by name}
 \usage{
-match_osm_name(osm_data, name)
+match_osm_name(osm_data, match)
 }
 \arguments{
 \item{osm_data}{An sf object with OpenStreetMap data}
 
-\item{name}{A character string with the name to match}
+\item{match}{A character string with the name to match}
 }
 \value{
 sf object containing only rows with filtered name
