@@ -164,12 +164,14 @@ get_osmdata <- function(
 #' get_osm_city_boundary(bb, "Bucharest", crs)
 get_osm_city_boundary <- function(bb, city_name, crs = NULL, multiple = FALSE,
                                   force_download = FALSE) {
+  # Drop country if specified after comma
+  city_name_clean <- stringr::str_extract(city_name, "^[^,]+")
   # Define a helper function to fetch the city boundary
   fetch_boundary <- function(key, value) {
     osmdata_sf <- osmdata_as_sf(key, value, bb, force_download = force_download)
     osmdata_sf$osm_multipolygons |>
       # filter using any of the "name" columns (matching different languages)
-      match_osm_name(city_name) |>
+      match_osm_name(city_name_clean) |>
       sf::st_geometry()
   }
 
