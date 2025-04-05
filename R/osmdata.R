@@ -386,12 +386,11 @@ get_river_aoi <- function(river, city_bbox, buffer_distance) {
 #' Match OpenStreetMap data by name
 #'
 #' @param osm_data An sf object with OpenStreetMap data
-#' @param name A character string with the name to match
+#' @param match A character string with the name to match
 #'
 #' @return sf object containing only rows with filtered name
 #' @keywords internal
-match_osm_name <- function(osm_data, name) {
-  osm_data |>
-    dplyr::filter(dplyr::if_any(dplyr::matches("name"),
-                                \(x) x == name))
+match_osm_name <- function(osm_data, match) {
+  dplyr::filter(osm_data, dplyr::if_any(dplyr::matches("name"),
+                                        \(x) x == match))
 }
