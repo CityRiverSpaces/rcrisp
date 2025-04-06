@@ -128,6 +128,17 @@ test_that("River is consistently retreived with alternative names", {
   }
 })
 
+test_that("River retrieval raise error if no geometry is found", {
+  skip_on_ci()
+
+  # setup cache directory
+  temp_cache_dir()
+
+  bb <- get_osm_bb("Paris, France")
+  expect_error(get_osm_river(bb, "Thames", force_download = TRUE),
+               "Thames")
+})
+
 test_that("All geometries retrieved from OSM are valid", {
   skip_on_ci()
 
