@@ -231,6 +231,10 @@ get_osm_river <- function(bb, river_name, crs = NULL, force_download = FALSE) {
     sf::st_geometry() |>
     sf::st_union()
 
+  if (sf::st_is_empty(river_centerline)) stop(
+    sprintf("No river geometry found for %s", river_name)
+  )
+
   # Get the river surface
   river_surface <- osmdata_as_sf("natural", "water", bb,
                                  force_download = force_download)
