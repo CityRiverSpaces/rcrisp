@@ -139,6 +139,25 @@ test_that("River retrieval raise error if no geometry is found", {
                "Thames")
 })
 
+test_that("The correct OSM line feature is chosen for river centerline", {
+  skip_on_ci()
+
+  # setup cache directory
+  temp_cache_dir()
+
+  bb <- get_osm_bb("Rio de Janeiro")
+  crs <- get_utm_zone(bb)
+  expect_message(get_osm_river(bb, "Rio Guandu",
+                               crs = crs, force_download = TRUE),
+                 "Using OSM lines for river centerline")
+
+  bb <- get_osm_bb("Bucharest")
+  crs <- get_utm_zone(bb)
+  expect_message(get_osm_river(bb, "Dâmbovița",
+                               crs = crs, force_download = TRUE),
+                 "Using OSM multilines for river centerline")
+})
+
 test_that("All geometries retrieved from OSM are valid", {
   skip_on_ci()
 
