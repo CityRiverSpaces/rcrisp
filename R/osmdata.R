@@ -229,31 +229,10 @@ get_osm_river <- function(bb, river_name, crs = NULL, force_download = FALSE) {
     stop(sprintf("No waterway geometries found within given boundig box"))
   }
 
-  # Use longest OSM river centerline geometry
-  sum_osm_lines <- function(x, osm_layer) {
-    tryCatch(
-      x[[osm_layer]] |>
-        match_osm_name(river_name) |>
-        sf::st_geometry() |>
-        sf::st_transform(crs) |>
-        sf::st_intersection(sf::st_as_sfc(bb) |>
-                              sf::st_transform(crs)) |>
-        sf::st_length() |>
-        sum(na.rm = TRUE),
-      error = \(e) 0
-    )
-  }
-
-  length_lines <- sum_osm_lines(river_centerline_all, "osm_lines")
-  length_multilines <- sum_osm_lines(river_centerline_all, "osm_multilines")
-
-  if (length_lines > length_multilines) {
-    river_centerline_all <- river_centerline_all$osm_lines
-    message("Using OSM lines for river centerline")
-  } else {
-    river_centerline_all <- river_centerline_all$osm_multilines
-    message("Using OSM multilines for river centerline")
-  }
+  river_centerline_all <- dplyr::bind_rows(
+    river_centerline_all$osm_lines,
+    river_centerline_all$osm_multilines
+  )
 
   # Retrieve river centerline of interest
   river_centerline <- river_centerline_all |>

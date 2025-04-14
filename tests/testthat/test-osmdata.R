@@ -139,25 +139,6 @@ test_that("River retrieval raise error if no geometry is found", {
                "Thames")
 })
 
-test_that("The correct OSM line feature is chosen for river centerline", {
-  skip_on_ci()
-
-  # setup cache directory
-  temp_cache_dir()
-
-  bb <- get_osm_bb("Rio de Janeiro")
-  crs <- get_utm_zone(bb)
-  expect_message(get_osm_river(bb, "Rio Guandu",
-                               crs = crs, force_download = TRUE),
-                 "Using OSM lines for river centerline")
-
-  bb <- get_osm_bb("Bucharest")
-  crs <- get_utm_zone(bb)
-  expect_message(get_osm_river(bb, "Dâmbovița",
-                               crs = crs, force_download = TRUE),
-                 "Using OSM multilines for river centerline")
-})
-
 test_that("All geometries retrieved from OSM are valid", {
   skip_on_ci()
 
@@ -169,4 +150,24 @@ test_that("All geometries retrieved from OSM are valid", {
   expect_true(all(vapply(bucharest_osm[!names(bucharest_osm) %in% "bb"],
                          \(x) if (!inherits(x, "bbox")) all(sf::st_is_valid(x)),
                          logical(1))))
+})
+
+test_that("Both lines and multilines are retreived from river Dâmbovița", {
+  skip_on_ci()
+
+  # setup cache directory
+  temp_cache_dir()
+
+  city_names <- c("Bucharest", "Rio de Janeiro")
+  river_names <- c("Dâmbovița", "Rio Guandu")
+
+  for (i in seq_along(city_names)) {
+    city_name <- city_names[i]
+    river_name <- river_names[i]
+
+    bb <- get_osm_bb(city_name)
+    river <- get_osm_river(bb, river_name, force_download = TRUE)
+
+    expect_true(length(river) > 0)
+  }
 })
