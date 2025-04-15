@@ -71,7 +71,7 @@ delineate <- function(
   osm_data <- get_osmdata(
     city_name, river_name, network_buffer = network_buffer,
     buildings_buffer = buildings_buffer, crs = crs,
-    force_download = force_download
+    city_boundary = FALSE, force_download = force_download
   )
 
   # If not provided, determine the CRS
