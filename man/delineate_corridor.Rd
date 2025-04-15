@@ -7,7 +7,6 @@
 delineate_corridor(
   network,
   river_centerline,
-  river_surface,
   aoi = NULL,
   max_width = 2500,
   initial_method = "valley",
@@ -22,8 +21,6 @@ delineate_corridor(
 
 \item{river_centerline}{A simple feature geometry representing the river
 centerline}
-
-\item{river_surface}{A simple feature geometry representing the river surface}
 
 \item{aoi}{Area of interest as sf object or bbox}
 
@@ -66,7 +63,6 @@ if (!requireNamespace("CRiSpData", quietly = TRUE)) {
   aoi <- reproject(CRiSpData::bucharest_osm$bb, crs)
   delineate_corridor(network,
                      CRiSpData::bucharest_osm$river_centerline,
-                     CRiSpData::bucharest_osm$river_surface,
                      aoi,
                      dem = terra::unwrap(CRiSpData::bucharest_dem))
 }
