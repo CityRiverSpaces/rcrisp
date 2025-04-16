@@ -64,6 +64,7 @@ railways, and the buildings</p>
 <span>  <span class="va">river_name</span>,</span>
 <span>  network_buffer <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  buildings_buffer <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  city_boundary <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  crs <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  force_download <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -91,6 +92,11 @@ network data will be downloaded</p></dd>
 <dd><p>Buffer distance in meters around the river
 to get the buildings, default is 0 means no
 buildings data will be downloaded</p></dd>
+
+
+<dt id="arg-city-boundary">city_boundary<a class="anchor" aria-label="anchor" href="#arg-city-boundary"></a></dt>
+<dd><p>A logical indicating if the city boundary should be
+retrieved. Default is TRUE.</p></dd>
 
 
 <dt id="arg-crs">crs<a class="anchor" aria-label="anchor" href="#arg-crs"></a></dt>
