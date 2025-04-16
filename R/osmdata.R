@@ -80,6 +80,8 @@ get_osm_bb <- function(city_name) {
 #' @param buildings_buffer Buffer distance in meters around the river
 #'   to get the buildings, default is 0 means no
 #'   buildings data will be downloaded
+#' @param city_boundary A logical indicating if the city boundary should be
+#'   retrieved. Default is TRUE.
 #' @param crs An integer with the EPSG code for the projection. If no CRS is
 #'   specified, the default is the UTM zone for the city.
 #' @param force_download Download data even if cached data is available
@@ -92,14 +94,10 @@ get_osm_bb <- function(city_name) {
 #' get_osmdata("Bucharest", "Dâmbovița")
 get_osmdata <- function(
   city_name, river_name, network_buffer = NULL, buildings_buffer = NULL,
-  crs = NULL, force_download = FALSE
+  city_boundary = TRUE, crs = NULL, force_download = FALSE
 ) {
   bb <- get_osm_bb(city_name)
   if (is.null(crs)) crs <- get_utm_zone(bb)
-
-  boundary <- get_osm_city_boundary(
-    bb, city_name, crs = crs, force_download = force_download
-  )
 
   # Retrieve the river center line and surface
   river <- get_osm_river(
@@ -108,7 +106,6 @@ get_osmdata <- function(
 
   osm_data <- list(
     bb = bb,
-    boundary = boundary,
     river_centerline = river$centerline,
     river_surface = river$surface
   )
@@ -135,6 +132,13 @@ get_osmdata <- function(
     osm_data <- c(osm_data, list(
       buildings = get_osm_buildings(aoi_buildings, crs = crs,
                                     force_download = force_download)
+    ))
+  }
+
+  if (city_boundary) {
+    osm_data <- c(osm_data, list(
+      boundary = get_osm_city_boundary(bb, city_name, crs = crs,
+                                       force_download = force_download)
     ))
   }
 
@@ -175,18 +179,13 @@ get_osm_city_boundary <- function(bb, city_name, crs = NULL, multiple = FALSE,
       sf::st_geometry()
   }
 
-  # Try to get the city boundary with the "place:city" tag
-  city_boundary <- tryCatch(fetch_boundary("place", "city"),
+  # Try to get the city boundary with the "boundary:administrative" tag
+  city_boundary <- tryCatch(fetch_boundary("boundary", "administrative"),
                             error = function(e) NULL)
 
-  # If not found, try again with the "boundary:administrative" tag
-  if (is.null(city_boundary)) {
-    city_boundary <- tryCatch(fetch_boundary("boundary", "administrative"),
-                              error = function(e) NULL)
-  }
-
-  # If still not found, throw an error
-  if (is.null(city_boundary)) {
+  if (!is.null(city_boundary)) {
+    message("City boundary found with 'boundary:administrative' tag.")
+  } else {
     stop("No city boundary found. The city name may be incorrect.")
   }
 
