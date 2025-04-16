@@ -225,8 +225,8 @@ get_osm_river <- function(bb, river_name, crs = NULL, force_download = FALSE) {
 
   # Check that waterway geometries are found within bb
   if (is.null(river_centerline_all$osm_lines) &&
-        is.null(river_centerline_all$osm_multilines) == 0) {
-    stop(sprintf("No waterway geometries found within given boundig box"))
+        is.null(river_centerline_all$osm_multilines)) {
+    stop(sprintf("No waterway geometries found within given bounding box"))
   }
 
   river_centerline_all <- dplyr::bind_rows(
