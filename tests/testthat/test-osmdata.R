@@ -151,3 +151,23 @@ test_that("All geometries retrieved from OSM are valid", {
                          \(x) if (!inherits(x, "bbox")) all(sf::st_is_valid(x)),
                          logical(1))))
 })
+
+test_that("Both lines and multilines are retreived from river Dâmbovița", {
+  skip_on_ci()
+
+  # setup cache directory
+  temp_cache_dir()
+
+  city_names <- c("Bucharest", "Rio de Janeiro")
+  river_names <- c("Dâmbovița", "Rio Guandu")
+
+  for (i in seq_along(city_names)) {
+    city_name <- city_names[i]
+    river_name <- river_names[i]
+
+    bb <- get_osm_bb(city_name)
+    river <- get_osm_river(bb, river_name, force_download = TRUE)
+
+    expect_true(length(river) > 0)
+  }
+})

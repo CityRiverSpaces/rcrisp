@@ -220,9 +220,22 @@ get_osm_city_boundary <- function(bb, city_name, crs = NULL, multiple = FALSE,
 #' get_osm_river(bb, "Dâmbovița", crs)
 get_osm_river <- function(bb, river_name, crs = NULL, force_download = FALSE) {
   # Get the river centreline
-  river_centerline <- osmdata_as_sf("waterway", "river", bb,
-                                    force_download = force_download)
-  river_centerline <- river_centerline$osm_multilines |>
+  river_centerline_all <- osmdata_as_sf("waterway", "", bb,
+                                        force_download = force_download)
+
+  # Check that waterway geometries are found within bb
+  if (is.null(river_centerline_all$osm_lines) &&
+        is.null(river_centerline_all$osm_multilines)) {
+    stop(sprintf("No waterway geometries found within given bounding box"))
+  }
+
+  river_centerline_all <- dplyr::bind_rows(
+    river_centerline_all$osm_lines,
+    river_centerline_all$osm_multilines
+  )
+
+  # Retrieve river centerline of interest
+  river_centerline <- river_centerline_all |>
     # filter using any of the "name" columns (matching different languages)
     match_osm_name(river_name) |>
     check_invalid_geometry() |> # fix invalid geometries, if any
