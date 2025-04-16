@@ -103,16 +103,9 @@ get_osmdata <- function(
 
   osm_data <- list(
     bb = bb,
-    boundary = boundary,
     river_centerline = river$centerline,
     river_surface = river$surface
   )
-
-  if (city_boundary) {
-    boundary <- get_osm_city_boundary(
-      bb, city_name, crs = crs, force_download = force_download
-    )
-  }
 
   # Retrieve streets and railways based on the aoi
   if (!is.null(network_buffer)) {
@@ -136,6 +129,13 @@ get_osmdata <- function(
     osm_data <- c(osm_data, list(
       buildings = get_osm_buildings(aoi_buildings, crs = crs,
                                     force_download = force_download)
+    ))
+  }
+
+  if (city_boundary) {
+    osm_data <- c(osm_data, list(
+      boundary = get_osm_city_boundary(
+        bb, city_name, crs = crs, force_download = force_download)
     ))
   }
 
