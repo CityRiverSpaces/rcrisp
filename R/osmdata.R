@@ -134,8 +134,8 @@ get_osmdata <- function(
 
   if (city_boundary) {
     osm_data <- c(osm_data, list(
-      boundary = get_osm_city_boundary(
-        bb, city_name, crs = crs, force_download = force_download)
+      boundary = get_osm_city_boundary(bb, city_name, crs = crs,
+                                       force_download = force_download)
     ))
   }
 
