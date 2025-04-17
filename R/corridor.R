@@ -7,7 +7,6 @@
 #' @param network The spatial network to be used for the delineation
 #' @param river_centerline A simple feature geometry representing the river
 #'   centerline
-#' @param river_surface A simple feature geometry representing the river surface
 #' @param aoi Area of interest as sf object or bbox
 #' @param max_width (Approximate) maximum width of the regions considered on the
 #'   two river banks
@@ -36,21 +35,18 @@
 #'   aoi <- reproject(CRiSpData::bucharest_osm$bb, crs)
 #'   delineate_corridor(network,
 #'                      CRiSpData::bucharest_osm$river_centerline,
-#'                      CRiSpData::bucharest_osm$river_surface,
 #'                      aoi,
 #'                      dem = terra::unwrap(CRiSpData::bucharest_dem))
 #' }
 delineate_corridor <- function(
-  network, river_centerline, river_surface, aoi = NULL, max_width = 2500,
+  network, river_centerline, aoi = NULL, max_width = 2500,
   initial_method = "valley", buffer = NULL, dem = NULL, max_iterations = 10,
   capping_method = "shortest-path"
 ) {
   # Drop all attributes of river centerline and surface but the geometries
-  river_centerline <- sf::st_geometry(river_centerline)
-  river_surface <- sf::st_geometry(river_surface)
+  river <- sf::st_geometry(river_centerline)
 
   # Draw the initial corridor geometry within the area of interest
-  river <- c(river_centerline, river_surface)
   if (is.null(aoi)) {
     bbox <- NULL
   } else {
@@ -61,7 +57,7 @@ delineate_corridor <- function(
                                     bbox = bbox)
 
   # Build river network in the defined area of interest
-  river_network <- build_river_network(river_centerline, aoi = aoi)
+  river_network <- build_river_network(river, aoi = aoi)
 
   # Pick the corridor end points as the two furthest crossings between the
   # spatial network and the river
