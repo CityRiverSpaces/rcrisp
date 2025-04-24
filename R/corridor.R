@@ -7,7 +7,6 @@
 #' @param network The spatial network to be used for the delineation
 #' @param river_centerline A simple feature geometry representing the river
 #'   centerline
-#' @param river_surface A simple feature geometry representing the river surface
 #' @param aoi Area of interest as sf object or bbox
 #' @param max_width (Approximate) maximum width of the regions considered on the
 #'   two river banks
@@ -26,32 +25,39 @@
 #' @return A simple feature geometry representing the river corridor
 #' @export
 #' @examplesIf interactive()
-#' network <- rbind(bucharest_osm$streets, bucharest_osm$railways) |>
-#'   as_network()
-#' crs <- get_utm_zone(bucharest_osm$aoi)
-#' aoi <- reproject(bucharest_osm$aoi, crs)
-#' delineate_corridor(network,
-#'                    bucharest_osm$river_centerline,
-#'                    bucharest_osm$river_surface,
-#'                    aoi,
-#'                    dem = terra::unwrap(bucharest_dem))
+#' if (!requireNamespace("CRiSpData", quietly = TRUE)) {
+#'   message("Install CRiSpData from GitHub to run this example.")
+#' } else {
+#'   network <- rbind(CRiSpData::bucharest_osm$streets,
+#'                    CRiSpData::bucharest_osm$railways) |>
+#'     as_network()
+#'   crs <- get_utm_zone(CRiSpData::bucharest_osm$bb)
+#'   aoi <- reproject(CRiSpData::bucharest_osm$bb, crs)
+#'   delineate_corridor(network,
+#'                      CRiSpData::bucharest_osm$river_centerline,
+#'                      aoi,
+#'                      dem = terra::unwrap(CRiSpData::bucharest_dem))
+#' }
 delineate_corridor <- function(
-  network, river_centerline, river_surface, aoi = NULL, max_width = 2500,
+  network, river_centerline, aoi = NULL, max_width = 2500,
   initial_method = "valley", buffer = NULL, dem = NULL, max_iterations = 10,
-  capping_method = "direct"
+  capping_method = "shortest-path"
 ) {
   # Drop all attributes of river centerline and surface but the geometries
-  river_centerline <- sf::st_geometry(river_centerline)
-  river_surface <- sf::st_geometry(river_surface)
+  river <- sf::st_geometry(river_centerline)
 
   # Draw the initial corridor geometry within the area of interest
-  river <- c(river_centerline, river_surface)
+  if (is.null(aoi)) {
+    bbox <- NULL
+  } else {
+    bbox <- as_bbox(aoi)
+  }
   corridor_init <- initial_corridor(river, method = initial_method,
                                     buffer = buffer, dem = dem,
-                                    bbox = as_bbox(aoi))
+                                    bbox = bbox)
 
   # Build river network in the defined area of interest
-  river_network <- build_river_network(river_centerline, aoi = aoi)
+  river_network <- build_river_network(river, aoi = aoi)
 
   # Pick the corridor end points as the two furthest crossings between the
   # spatial network and the river
@@ -288,16 +294,16 @@ corridor_edge <- function(network, end_points, target_edge, exclude_area = NULL,
 #'
 #' @param edges A simple feature geometry representing the corridor edges
 #' @param method The method employed for the capping:
-#'   - `direct` (default): connect the start points and the end points of the
+#'   - `shortest-path` (default): find the network-based shortest-path
+#'     connections between the edge end points.
+#'   - `direct`: connect the start points and the end points of the
 #'     edges via straight segments
-#'   - `shortest-path`: find the network-based shortest-path connections
-#'     between the edge end points.
 #' @param network A spatial network object, only required if
 #'   `method = 'shortest-path'`
 #'
 #' @return A simple feature geometry representing the corridor (i.e. a polygon)
 #' @keywords internal
-cap_corridor <- function(edges, method = "direct", network = NULL) {
+cap_corridor <- function(edges, method = "shortest-path", network = NULL) {
 
   start_pts <- lwgeom::st_startpoint(edges)
   end_pts <- lwgeom::st_endpoint(edges)

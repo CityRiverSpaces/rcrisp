@@ -304,7 +304,9 @@ test_that("Filter network drops smallest disconnected components", {
 })
 
 test_that("Network setup with real data", {
-  edges <- bucharest_osm$streets
+  skip_if_not_installed("CRiSpData")
+
+  edges <- CRiSpData::bucharest_osm$streets
   network <- as_network(edges, clean = FALSE, flatten = FALSE)
   edges_actual <- sf::st_geometry(sf::st_as_sf(network, "edges"))
   edges_expected <- sf::st_geometry(edges)

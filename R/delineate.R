@@ -73,7 +73,7 @@ delineate <- function(
   osm_data <- get_osmdata(
     city_name, river_name, network_buffer = network_buffer,
     buildings_buffer = buildings_buffer, crs = crs,
-    force_download = force_download
+    city_boundary = FALSE, force_download = force_download
   )
 
   # If not provided, determine the CRS
@@ -97,7 +97,7 @@ delineate <- function(
 
     # Run the corridor delineation on the spatial network
     corridor <- delineate_corridor(
-      network, osm_data$river_centerline, osm_data$river_surface, aoi = aoi,
+      network, osm_data$river_centerline, aoi = aoi,
       max_width = network_buffer, initial_method = initial_method,
       buffer = initial_buffer, dem = dem, max_iterations = max_iterations,
       capping_method = capping_method

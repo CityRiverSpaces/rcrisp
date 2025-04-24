@@ -25,7 +25,12 @@ The functionality is similar to sfnetworks'
 only injected to the closest edge.
 }
 \examples{
-edges <- dplyr::bind_rows(bucharest_osm$streets, bucharest_osm$railways)
-network <- sfnetworks::as_sfnetwork(edges, directed = FALSE)
-flatten_network(network)
+if (!requireNamespace("CRiSpData", quietly = TRUE)) {
+  message("Install CRiSpData from GitHub to run this example.")
+} else {
+  edges <- dplyr::bind_rows(CRiSpData::bucharest_osm$streets,
+                            CRiSpData::bucharest_osm$railways)
+  network <- sfnetworks::as_sfnetwork(edges, directed = FALSE)
+  flatten_network(network)
+}
 }

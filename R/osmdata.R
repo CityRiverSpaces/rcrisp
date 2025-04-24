@@ -80,6 +80,8 @@ get_osm_bb <- function(city_name) {
 #' @param buildings_buffer Buffer distance in meters around the river
 #'   to get the buildings, default is 0 means no
 #'   buildings data will be downloaded
+#' @param city_boundary A logical indicating if the city boundary should be
+#'   retrieved. Default is TRUE.
 #' @param crs An integer with the EPSG code for the projection. If no CRS is
 #'   specified, the default is the UTM zone for the city.
 #' @param force_download Download data even if cached data is available
@@ -92,14 +94,10 @@ get_osm_bb <- function(city_name) {
 #' get_osmdata("Bucharest", "Dâmbovița")
 get_osmdata <- function(
   city_name, river_name, network_buffer = NULL, buildings_buffer = NULL,
-  crs = NULL, force_download = FALSE
+  city_boundary = TRUE, crs = NULL, force_download = FALSE
 ) {
   bb <- get_osm_bb(city_name)
   if (is.null(crs)) crs <- get_utm_zone(bb)
-
-  boundary <- get_osm_city_boundary(
-    bb, city_name, crs = crs, force_download = force_download
-  )
 
   # Retrieve the river center line and surface
   river <- get_osm_river(
@@ -108,7 +106,6 @@ get_osmdata <- function(
 
   osm_data <- list(
     bb = bb,
-    boundary = boundary,
     river_centerline = river$centerline,
     river_surface = river$surface
   )
@@ -138,6 +135,13 @@ get_osmdata <- function(
     ))
   }
 
+  if (city_boundary) {
+    osm_data <- c(osm_data, list(
+      boundary = get_osm_city_boundary(bb, city_name, crs = crs,
+                                       force_download = force_download)
+    ))
+  }
+
   osm_data
 }
 
@@ -164,29 +168,24 @@ get_osmdata <- function(
 #' get_osm_city_boundary(bb, "Bucharest", crs)
 get_osm_city_boundary <- function(bb, city_name, crs = NULL, multiple = FALSE,
                                   force_download = FALSE) {
+  # Drop country if specified after comma
+  city_name_clean <- stringr::str_extract(city_name, "^[^,]+")
   # Define a helper function to fetch the city boundary
   fetch_boundary <- function(key, value) {
     osmdata_sf <- osmdata_as_sf(key, value, bb, force_download = force_download)
     osmdata_sf$osm_multipolygons |>
-      dplyr::filter(
-        .data$`name:en` == stringr::str_extract(city_name, "^[^,]+") |
-          .data$name == stringr::str_extract(city_name, "^[^,]+")
-      ) |>
+      # filter using any of the "name" columns (matching different languages)
+      match_osm_name(city_name_clean) |>
       sf::st_geometry()
   }
 
-  # Try to get the city boundary with the "place:city" tag
-  city_boundary <- tryCatch(fetch_boundary("place", "city"),
+  # Try to get the city boundary with the "boundary:administrative" tag
+  city_boundary <- tryCatch(fetch_boundary("boundary", "administrative"),
                             error = function(e) NULL)
 
-  # If not found, try again with the "boundary:administrative" tag
-  if (is.null(city_boundary)) {
-    city_boundary <- tryCatch(fetch_boundary("boundary", "administrative"),
-                              error = function(e) NULL)
-  }
-
-  # If still not found, throw an error
-  if (is.null(city_boundary)) {
+  if (!is.null(city_boundary)) {
+    message("City boundary found with 'boundary:administrative' tag.")
+  } else {
     stop("No city boundary found. The city name may be incorrect.")
   }
 
@@ -220,16 +219,33 @@ get_osm_city_boundary <- function(bb, city_name, crs = NULL, multiple = FALSE,
 #' get_osm_river(bb, "Dâmbovița", crs)
 get_osm_river <- function(bb, river_name, crs = NULL, force_download = FALSE) {
   # Get the river centreline
-  river_centerline <- osmdata_as_sf("waterway", "river", bb,
-                                    force_download = force_download)
-  river_centerline <- river_centerline$osm_multilines |>
+  river_centerline_all <- osmdata_as_sf("waterway", "", bb,
+                                        force_download = force_download)
+
+  # Check that waterway geometries are found within bb
+  if (is.null(river_centerline_all$osm_lines) &&
+        is.null(river_centerline_all$osm_multilines)) {
+    stop(sprintf("No waterway geometries found within given bounding box"))
+  }
+
+  river_centerline_all <- dplyr::bind_rows(
+    river_centerline_all$osm_lines,
+    river_centerline_all$osm_multilines
+  )
+
+  # Retrieve river centerline of interest
+  river_centerline <- river_centerline_all |>
     # filter using any of the "name" columns (matching different languages)
-    dplyr::filter(dplyr::if_any(dplyr::matches("name"),
-                                \(x) x == river_name)) |>
+    match_osm_name(river_name) |>
+    check_invalid_geometry() |> # fix invalid geometries, if any
     # the query can return more features than actually intersecting the bb
     sf::st_filter(sf::st_as_sfc(bb), .predicate = sf::st_intersects) |>
     sf::st_geometry() |>
     sf::st_union()
+
+  if (sf::st_is_empty(river_centerline)) stop(
+    sprintf("No river geometry found for %s", river_name)
+  )
 
   # Get the river surface
   river_surface <- osmdata_as_sf("natural", "water", bb,
@@ -237,9 +253,8 @@ get_osm_river <- function(bb, river_name, crs = NULL, force_download = FALSE) {
   river_surface <- dplyr::bind_rows(river_surface$osm_polygons,
                                     river_surface$osm_multipolygons) |>
     sf::st_geometry() |>
+    check_invalid_geometry() |> # fix invalid geometries, if any
     sf::st_as_sf() |>
-    # natural:water retrieved some invalid polygons, fix these
-    sf::st_make_valid() |>
     sf::st_filter(river_centerline, .predicate = sf::st_intersects) |>
     sf::st_union()
 
@@ -353,8 +368,7 @@ get_osm_buildings <- function(aoi, crs = NULL, force_download = FALSE) {
   buildings <- osmdata_as_sf("building", "", aoi,
                              force_download = force_download)
   buildings <- buildings$osm_polygons |>
-    # retreived buildings may contain invalid polygons, fix these
-    sf::st_make_valid() |>
+    check_invalid_geometry() |> # fix invalid geometries, if any
     sf::st_filter(aoi, .predicate = sf::st_intersects) |>
     dplyr::filter(.data$building != "NULL") |>
     sf::st_geometry()
@@ -384,4 +398,17 @@ get_river_aoi <- function(river, city_bbox, buffer_distance) {
   river <- sf::st_transform(river, sf::st_crs(city_bbox))
 
   river_buffer(river, buffer_distance, bbox = city_bbox)
+}
+
+
+#' Match OpenStreetMap data by name
+#'
+#' @param osm_data An sf object with OpenStreetMap data
+#' @param match A character string with the name to match
+#'
+#' @return sf object containing only rows with filtered name
+#' @keywords internal
+match_osm_name <- function(osm_data, match) {
+  dplyr::filter(osm_data, dplyr::if_any(dplyr::matches("name"),
+                                        \(x) x == match))
 }

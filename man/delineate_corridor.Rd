@@ -7,14 +7,13 @@
 delineate_corridor(
   network,
   river_centerline,
-  river_surface,
   aoi = NULL,
   max_width = 2500,
   initial_method = "valley",
   buffer = NULL,
   dem = NULL,
   max_iterations = 10,
-  capping_method = "direct"
+  capping_method = "shortest-path"
 )
 }
 \arguments{
@@ -22,8 +21,6 @@ delineate_corridor(
 
 \item{river_centerline}{A simple feature geometry representing the river
 centerline}
-
-\item{river_surface}{A simple feature geometry representing the river surface}
 
 \item{aoi}{Area of interest as sf object or bbox}
 
@@ -56,14 +53,18 @@ the river valley).
 }
 \examples{
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-network <- rbind(bucharest_osm$streets, bucharest_osm$railways) |>
-  as_network()
-crs <- get_utm_zone(bucharest_osm$aoi)
-aoi <- reproject(bucharest_osm$aoi, crs)
-delineate_corridor(network,
-                   bucharest_osm$river_centerline,
-                   bucharest_osm$river_surface,
-                   aoi,
-                   dem = terra::unwrap(bucharest_dem))
+if (!requireNamespace("CRiSpData", quietly = TRUE)) {
+  message("Install CRiSpData from GitHub to run this example.")
+} else {
+  network <- rbind(CRiSpData::bucharest_osm$streets,
+                   CRiSpData::bucharest_osm$railways) |>
+    as_network()
+  crs <- get_utm_zone(CRiSpData::bucharest_osm$bb)
+  aoi <- reproject(CRiSpData::bucharest_osm$bb, crs)
+  delineate_corridor(network,
+                     CRiSpData::bucharest_osm$river_centerline,
+                     aoi,
+                     dem = terra::unwrap(CRiSpData::bucharest_dem))
+}
 \dontshow{\}) # examplesIf}
 }
