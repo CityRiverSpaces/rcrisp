@@ -6,8 +6,7 @@
 \usage{
 delineate_corridor(
   network,
-  river_centerline,
-  aoi = NULL,
+  river,
   max_width = 2500,
   initial_method = "valley",
   buffer = NULL,
@@ -19,22 +18,20 @@ delineate_corridor(
 \arguments{
 \item{network}{The spatial network to be used for the delineation}
 
-\item{river_centerline}{A simple feature geometry representing the river
-centerline}
+\item{river}{A (MULTI)LINESTRING simple feature geometry representing the
+river centerline}
 
-\item{aoi}{Area of interest as sf object or bbox}
-
-\item{max_width}{(Approximate) maximum width of the regions considered on the
-two river banks}
+\item{max_width}{(Approximate) maximum width of the corridor. The spatial
+network is trimmed by a buffer region of this size around the river}
 
 \item{initial_method}{The method employed to define the initial river
 corridor geometry. See \code{\link[=initial_corridor]{initial_corridor()}} for the available methods}
 
-\item{buffer}{Buffer region to add to the river geometry to setup the initial
-corridor (only used if \code{initial_method} is \code{"buffer"})}
+\item{buffer}{Initial width of the corridor (only used if \code{initial_method}
+is \code{"buffer"})}
 
 \item{dem}{Digital elevation model (DEM) of the region (only used if
-\code{initial_method} is \code{"valley"})}
+\code{initial_method} is \code{"valley"}) as a \code{\link[terra:SpatRaster-class]{terra::SpatRaster}} object}
 
 \item{max_iterations}{Maximum number of iterations employed to refine the
 corridor edges (see \code{\link[=corridor_edge]{corridor_edge()}}).}
@@ -48,8 +45,8 @@ A simple feature geometry representing the river corridor
 }
 \description{
 The corridor edges on the two river banks are drawn on the provided spatial
-network starting from an initial definition of the corridor (based e.g. on
-the river valley).
+network starting from an initial guess of the corridor (based e.g. on the
+river valley).
 }
 \examples{
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
