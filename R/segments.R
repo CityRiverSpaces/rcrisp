@@ -24,7 +24,7 @@
 #'   delineate_segments(corridor, network, river_centerline)
 #' }
 delineate_segments <- function(corridor, network, river_centerline,
-                               angle_threshold = 90) {
+                               angle_threshold = 100) {
 
   # Find river crossings in the network and build continuous strokes from them
   crossings <- get_intersecting_edges(network, river_centerline, index = TRUE)
