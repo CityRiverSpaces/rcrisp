@@ -220,9 +220,13 @@ get_river_banks <- function(river, width) {
   river_merged <- sf::st_line_merge(river_merged)
   river_segments <- sfheaders::sfc_cast(river_merged, "LINESTRING")
 
+  # Single-sided buffers can have problems at discontinuities - build river
+  # segments that are as long as possible on the basis of continuity
+  continous_river_segments <- rcoins::stroke(river_segments)
+
   # Define the two river bank regions as single-sided buffers
-  c(river_buffer(river_segments, width, side = "right"),
-    river_buffer(river_segments, width, side = "left"))
+  c(river_buffer(continous_river_segments, width, side = "right"),
+    river_buffer(continous_river_segments, width, side = "left"))
 }
 
 #' Identify the initial edges of the river corridor
