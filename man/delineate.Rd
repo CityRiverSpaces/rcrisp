@@ -34,7 +34,7 @@ provided, the suitable Universal Transverse Mercator (UTM) CRS is selected}
 
 \item{network_buffer}{Add a buffer (an integer in meters) around
 river to retrieve additional data (streets, railways, etc.).
-Default is 2500 m.}
+Default is 3000 m.}
 
 \item{buildings_buffer}{Add a buffer (an integer in meters) around the
 river to retrieve additional data (buildings). Default is 100 m.}
