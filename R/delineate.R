@@ -13,7 +13,7 @@
 #' @param initial_method The method employed to define the initial river
 #'   corridor geometry. See [initial_corridor()] for the available methods
 #' @param dem_buffer Add a buffer (an integer in meters) around the
-#'   river to retrieve the DEM. Default is 2500 m.
+#'   river to retrieve the DEM.
 #' @param initial_buffer Buffer region to add to the river geometry to setup the
 #'   initial corridor (only used if `initial_method` is `"buffer"`)
 #' @param dem Digital elevation model (DEM) of the region (only used if

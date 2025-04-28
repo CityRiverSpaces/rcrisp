@@ -40,7 +40,7 @@ Default is 3000 m.}
 river to retrieve additional data (buildings). Default is 100 m.}
 
 \item{dem_buffer}{Add a buffer (an integer in meters) around the
-river to retrieve the DEM. Default is 2500 m.}
+river to retrieve the DEM.}
 
 \item{initial_method}{The method employed to define the initial river
 corridor geometry. See \code{\link[=initial_corridor]{initial_corridor()}} for the available methods}
