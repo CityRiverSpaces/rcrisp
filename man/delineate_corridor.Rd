@@ -8,7 +8,7 @@ delineate_corridor(
   network,
   river_centerline,
   aoi = NULL,
-  max_width = 2500,
+  max_width = 3000,
   initial_method = "valley",
   buffer = NULL,
   dem = NULL,

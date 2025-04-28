@@ -6,14 +6,14 @@
 #'   provided, the suitable Universal Transverse Mercator (UTM) CRS is selected
 #' @param network_buffer Add a buffer (an integer in meters) around
 #'   river to retrieve additional data (streets, railways, etc.).
-#'   Default is 2500 m.
+#'   Default is 3000 m.
 #' @param buildings_buffer Add a buffer (an integer in meters) around the
 #'   river to retrieve additional data (buildings). Default is 100 m.
 #' @param dem_buffer Add a buffer (an integer in meters) for retrieving the DEM.
 #' @param initial_method The method employed to define the initial river
 #'   corridor geometry. See [initial_corridor()] for the available methods
 #' @param dem_buffer Add a buffer (an integer in meters) around the
-#'   river to retrieve the DEM. Default is 2500 m.
+#'   river to retrieve the DEM.
 #' @param initial_buffer Buffer region to add to the river geometry to setup the
 #'   initial corridor (only used if `initial_method` is `"buffer"`)
 #' @param dem Digital elevation model (DEM) of the region (only used if
@@ -51,7 +51,7 @@ delineate <- function(
 
   # set default values for network_buffer and buildings_buffer
   if (corridor && is.null(network_buffer)) {
-    network_buffer <- 2500
+    network_buffer <- 3000
     message(sprintf(
       "The default `network_buffer` of %d m is used for corridor delineation.",
       network_buffer

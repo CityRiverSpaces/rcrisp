@@ -39,7 +39,7 @@
 #'                      dem = terra::unwrap(CRiSpData::bucharest_dem))
 #' }
 delineate_corridor <- function(
-  network, river_centerline, aoi = NULL, max_width = 2500,
+  network, river_centerline, aoi = NULL, max_width = 3000,
   initial_method = "valley", buffer = NULL, dem = NULL, max_iterations = 10,
   capping_method = "shortest-path"
 ) {
