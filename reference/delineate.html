@@ -94,7 +94,7 @@ provided, the suitable Universal Transverse Mercator (UTM) CRS is selected</p></
 <dt id="arg-network-buffer">network_buffer<a class="anchor" aria-label="anchor" href="#arg-network-buffer"></a></dt>
 <dd><p>Add a buffer (an integer in meters) around
 river to retrieve additional data (streets, railways, etc.).
-Default is 2500 m.</p></dd>
+Default is 3000 m.</p></dd>
 
 
 <dt id="arg-buildings-buffer">buildings_buffer<a class="anchor" aria-label="anchor" href="#arg-buildings-buffer"></a></dt>
@@ -104,7 +104,7 @@ river to retrieve additional data (buildings). Default is 100 m.</p></dd>
 
 <dt id="arg-dem-buffer">dem_buffer<a class="anchor" aria-label="anchor" href="#arg-dem-buffer"></a></dt>
 <dd><p>Add a buffer (an integer in meters) around the
-river to retrieve the DEM. Default is 2500 m.</p></dd>
+river to retrieve the DEM.</p></dd>
 
 
 <dt id="arg-initial-method">initial_method<a class="anchor" aria-label="anchor" href="#arg-initial-method"></a></dt>
@@ -170,20 +170,20 @@ and <code>dem</code> is NULL</p></dd>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">delineate</span><span class="op">(</span><span class="st">"Bucharest"</span>, <span class="st">"Dâmbovița"</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> The default `network_buffer` of 2500 m is used for corridor delineation.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> The default `network_buffer` of 3000 m is used for corridor delineation.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Saving data to cache directory: /home/runner/.cache/CRiSp/osmdata_waterway__25.967_44.334_26.226_44.541.rds</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Saving data to cache directory: /home/runner/.cache/CRiSp/osmdata_natural_water_25.967_44.334_26.226_44.541.rds</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Saving data to cache directory: /home/runner/.cache/CRiSp/osmdata_highway_motorway_trunk_primary_secondary_tertiary_motorway_link_trunk_link_primary_link_secondary_link_tertiary_link_25.935_44.371_26.257_44.49.rds</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Saving data to cache directory: /home/runner/.cache/CRiSp/osmdata_railway_rail_25.935_44.371_26.257_44.49.rds</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Saving data to cache directory: /home/runner/.cache/CRiSp/dem_Copernicus_DSM_COG_10_N44_00_E026_00_DEM_Copernicus_DSM_COG_10_N44_00_E025_00_DEM_25.904_44.349_26.288_44.512.rds</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Saving data to cache directory: /home/runner/.cache/CRiSp/osmdata_highway_motorway_trunk_primary_secondary_tertiary_motorway_link_trunk_link_primary_link_secondary_link_tertiary_link_25.929_44.367_26.263_44.494.rds</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Saving data to cache directory: /home/runner/.cache/CRiSp/osmdata_railway_rail_25.929_44.367_26.263_44.494.rds</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Saving data to cache directory: /home/runner/.cache/CRiSp/dem_Copernicus_DSM_COG_10_N44_00_E026_00_DEM_Copernicus_DSM_COG_10_N44_00_E025_00_DEM_25.898_44.344_26.295_44.517.rds</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>to_spatial_subdivision assumes attributes are constant over geometries</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $corridor</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry set for 1 feature </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: POLYGON</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: 417802.4 ymin: 4914017 xmax: 438476.9 ymax: 4925645</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: 417802.4 ymin: 4914017 xmax: 439005.3 ymax: 4925645</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Projected CRS: WGS 84 / UTM zone 35N</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> POLYGON ((417802.4 4923131, 417818.1 4923203, 4...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> POLYGON ((438366.8 4915261, 438406 4915128, 438...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $segments</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
