@@ -15,12 +15,6 @@ knitr::opts_chunk$set(
   comment = "#>",
   message = FALSE
 )
-if (!requireNamespace("CRiSpData", quietly = TRUE)) {
-  # nolint start
-  message("Package 'CRiSpData' is required for this vignette but not installed. Install it from GitHub using pak::pak('CityRiverSpaces/CRiSpData')")
-  # nolint end
-  knitr::knit_exit()
-}
 ```
 
 In a typical CRiSp workflow, valley delineation is used in the context of corridor delineation. When the parameter `method = "valley"` is set (this is the default value) in `delineate_corridor()`, first the river valley is extracted from a Digital Elevation Model (DEM) with `delineate_valley()` and then the resulting valley edge is used to "guide" the delineation of the corridor on the street network, as shown in `vignette("corridor-delineation")`.
@@ -29,17 +23,18 @@ In this article, we describe how `delineate_valley()` works and how it can be us
 
 As the resulting valley boundary is only used as an intermediate step in `delineate_corridor()`, valley delineation does not require high-resolution DEM data, as required for non-urban applications [e.g., @lidberg2020; @nardi2019]. By default, the valley is delineated on the openly available 30m-resolution [Copernicus DEM GLO-30](https://dataspace.copernicus.eu/explore-data/data-collections/copernicus-contributing-missions/collections-description/COP-DEM).
 
-We demonstrate valley delineation using data from the CRiSpData package, namely the DEM of Bucharest as the input raster and the river centerline and surface as the source for which the Cost Distance is calculated.
+We demonstrate valley delineation using data from CRiSp example data, namely the DEM of Bucharest as the input raster and the river centerline and surface as the source for which the Cost Distance is calculated.
 
 ```{r setup}
 # Attach required packages
 library(CRiSp)
-library(CRiSpData)
-library(terra)
 library(sf)
 
+bucharest_osm <- get_osm_example_data()
+bucharest_dem <- get_dem_example_data()
+
 # Load data for valley delineation
-dem <- unwrap(bucharest_dem)
+dem <- bucharest_dem
 river_centerline <- st_geometry(bucharest_osm$river_centerline)
 river_surface <- st_geometry(bucharest_osm$river_surface)
 river <- c(river_centerline, river_surface)
