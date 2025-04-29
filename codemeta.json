@@ -2,8 +2,8 @@
   "@context": "https://doi.org/10.5063/schema/codemeta-2.0",
   "@type": "SoftwareSourceCode",
   "identifier": "CRiSp",
-  "name": "CRiSp: Automate the Delineation of Urban River Spaces",
   "description": "Provides tools to automate the morphological delineation of riverside urban areas, based on a method introduced in Forgaci (2018) <doi:10.7480/abe.2018.31>. Delineation entails the identification of corridor boundaries, segmentation of the corridor, and delineation of the river space. The resulting delineation can be used to charactarise spatial phenomena that can be related to the river as a central element.",
+  "name": "CRiSp: Automate the Delineation of Urban River Spaces",
   "codeRepository": "https://github.com/CityRiverSpaces/CRiSp",
   "issueTracker": "https://github.com/CityRiverSpaces/crisp/issues",
   "license": "Apache License 2",
@@ -319,11 +319,17 @@
       "@type": "SoftwareApplication",
       "identifier": "visor",
       "name": "visor",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
       "sameAs": "https://github.com/CityRiverSpaces/visor"
     },
     "SystemRequirements": null
   },
-  "fileSize": "1597.711KB",
+  "fileSize": "1599.96KB",
   "relatedLink": "https://cityriverspaces.github.io/CRiSp/",
   "releaseNotes": "https://github.com/CityRiverSpaces/CRiSp/blob/master/NEWS.md",
   "readme": "https://github.com/CityRiverSpaces/CRiSp/blob/main/README.md",
