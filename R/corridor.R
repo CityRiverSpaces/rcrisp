@@ -7,7 +7,6 @@
 #' @param network The spatial network to be used for the delineation
 #' @param river_centerline A simple feature geometry representing the river
 #'   centerline
-#' @param river_surface A simple feature geometry representing the river surface
 #' @param aoi Area of interest as sf object or bbox
 #' @param max_width (Approximate) maximum width of the regions considered on the
 #'   two river banks
@@ -35,20 +34,17 @@
 #'   as_network()
 #' delineate_corridor(network,
 #'                    bucharest_osm$river_centerline,
-#'                    bucharest_osm$river_surface,
 #'                    aoi,
 #'                    dem = bucharest_dem)
 delineate_corridor <- function(
-  network, river_centerline, river_surface, aoi = NULL, max_width = 2500,
+  network, river_centerline, aoi = NULL, max_width = 3000,
   initial_method = "valley", buffer = NULL, dem = NULL, max_iterations = 10,
   capping_method = "shortest-path"
 ) {
   # Drop all attributes of river centerline and surface but the geometries
-  river_centerline <- sf::st_geometry(river_centerline)
-  river_surface <- sf::st_geometry(river_surface)
+  river <- sf::st_geometry(river_centerline)
 
   # Draw the initial corridor geometry within the area of interest
-  river <- c(river_centerline, river_surface)
   if (is.null(aoi)) {
     bbox <- NULL
   } else {
@@ -59,7 +55,7 @@ delineate_corridor <- function(
                                     bbox = bbox)
 
   # Build river network in the defined area of interest
-  river_network <- build_river_network(river_centerline, aoi = aoi)
+  river_network <- build_river_network(river, aoi = aoi)
 
   # Pick the corridor end points as the two furthest crossings between the
   # spatial network and the river
@@ -222,9 +218,13 @@ get_river_banks <- function(river, width) {
   river_merged <- sf::st_line_merge(river_merged)
   river_segments <- sfheaders::sfc_cast(river_merged, "LINESTRING")
 
+  # Single-sided buffers can have problems at discontinuities - build river
+  # segments that are as long as possible on the basis of continuity
+  continous_river_segments <- rcoins::stroke(river_segments)
+
   # Define the two river bank regions as single-sided buffers
-  c(river_buffer(river_segments, width, side = "right"),
-    river_buffer(river_segments, width, side = "left"))
+  c(river_buffer(continous_river_segments, width, side = "right"),
+    river_buffer(continous_river_segments, width, side = "left"))
 }
 
 #' Identify the initial edges of the river corridor

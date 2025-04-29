@@ -7,9 +7,8 @@
 delineate_corridor(
   network,
   river_centerline,
-  river_surface,
   aoi = NULL,
-  max_width = 2500,
+  max_width = 3000,
   initial_method = "valley",
   buffer = NULL,
   dem = NULL,
@@ -22,8 +21,6 @@ delineate_corridor(
 
 \item{river_centerline}{A simple feature geometry representing the river
 centerline}
-
-\item{river_surface}{A simple feature geometry representing the river surface}
 
 \item{aoi}{Area of interest as sf object or bbox}
 
@@ -65,7 +62,6 @@ network <- rbind(bucharest_osm$streets, bucharest_osm$railways) |>
   as_network()
 delineate_corridor(network,
                    bucharest_osm$river_centerline,
-                   bucharest_osm$river_surface,
                    aoi,
                    dem = bucharest_dem)
 \dontshow{\}) # examplesIf}
