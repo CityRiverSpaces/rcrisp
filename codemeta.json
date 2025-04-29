@@ -74,12 +74,6 @@
   "softwareSuggestions": [
     {
       "@type": "SoftwareApplication",
-      "identifier": "CRiSpData",
-      "name": "CRiSpData",
-      "sameAs": "https://github.com/CityRiverSpaces/CRiSpData"
-    },
-    {
-      "@type": "SoftwareApplication",
       "identifier": "ggplot2",
       "name": "ggplot2",
       "provider": {
