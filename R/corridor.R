@@ -26,20 +26,18 @@
 #' @return A simple feature geometry representing the river corridor
 #' @export
 #' @examplesIf interactive()
-#' if (!requireNamespace("CRiSpData", quietly = TRUE)) {
-#'   message("Install CRiSpData from GitHub to run this example.")
-#' } else {
-#'   network <- rbind(CRiSpData::bucharest_osm$streets,
-#'                    CRiSpData::bucharest_osm$railways) |>
-#'     as_network()
-#'   crs <- get_utm_zone(CRiSpData::bucharest_osm$bb)
-#'   aoi <- reproject(CRiSpData::bucharest_osm$bb, crs)
-#'   delineate_corridor(network,
-#'                      CRiSpData::bucharest_osm$river_centerline,
-#'                      CRiSpData::bucharest_osm$river_surface,
-#'                      aoi,
-#'                      dem = terra::unwrap(CRiSpData::bucharest_dem))
-#' }
+#' bb <- get_osm_bb("Bucharest")
+#' crs <- get_utm_zone(bb)
+#' aoi <- reproject(bb, crs)
+#' bucharest_osm <- get_osm_example_data()
+#' bucharest_dem <- get_dem_example_data()
+#' network <- rbind(bucharest_osm$streets, bucharest_osm$railways) |>
+#'   as_network()
+#' delineate_corridor(network,
+#'                    bucharest_osm$river_centerline,
+#'                    bucharest_osm$river_surface,
+#'                    aoi,
+#'                    dem = bucharest_dem)
 delineate_corridor <- function(
   network, river_centerline, river_surface, aoi = NULL, max_width = 2500,
   initial_method = "valley", buffer = NULL, dem = NULL, max_iterations = 10,
