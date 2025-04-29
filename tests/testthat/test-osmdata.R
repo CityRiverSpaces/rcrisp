@@ -3,6 +3,8 @@
 # cache folder only used for testing purposes. This is achieved via the
 # [`temp_cache_dir()`] helper function, which should be called in each test.
 
+bb <- get_osm_bb("Bucharest")
+
 test_that("City boundary of Bucharest is correctly retreived", {
   skip_on_ci()
 
@@ -73,14 +75,12 @@ test_that("Multiple boundaries are correcly retreived", {
 
 test_that("Queried datasets can be retrieved from the cache on new calls", {
   skip_on_ci()
-  skip_if_not_installed("CRiSpData")
 
   # setup cache directory
   cache_dir <- temp_cache_dir()
 
   # calling get_osm_railways should create a file in the cache folder
-  expect_message(get_osm_railways(CRiSpData::bucharest_osm$bb,
-                                  force_download = TRUE),
+  expect_message(get_osm_railways(bb, force_download = TRUE),
                  "Saving data to cache directory")
   cached_filename <- list.files(cache_dir, pattern = "^osmdata_railway_rail")
   cached_filepath <- file.path(cache_dir, cached_filename)
@@ -88,8 +88,7 @@ test_that("Queried datasets can be retrieved from the cache on new calls", {
 
   # calling get_osm_railways again should read data from the cached file,
   # raising a warning that includes the path to the cached file as well
-  expect_warning(get_osm_railways(CRiSpData::bucharest_osm$bb,
-                                  force_download = FALSE),
+  expect_warning(get_osm_railways(bb, force_download = FALSE),
                  cached_filepath)
 })
 

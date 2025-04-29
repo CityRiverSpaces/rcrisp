@@ -1,8 +1,8 @@
-skip_if_not_installed("CRiSpData")
+bucharest_osm <- get_osm_example_data()
 
 riverspace_actual <-
-  delineate_riverspace(river = CRiSpData::bucharest_osm$river_surface,
-                       occluders = CRiSpData::bucharest_osm$buildings,
+  delineate_riverspace(river = bucharest_osm$river_surface,
+                       occluders = bucharest_osm$buildings,
                        ray_length = 100)
 sf::st_crs(riverspace_actual) <- 32635
 
@@ -21,9 +21,9 @@ test_that(
   {
     actual_surface <- sf::st_area(riverspace_actual)
     river_surface_buffer <-
-      sf::st_buffer(CRiSpData::bucharest_osm$river_surface, 100)
+      sf::st_buffer(bucharest_osm$river_surface, 100)
     river_surface_buffer_area <- sf::st_area(river_surface_buffer)
-    river_surface_area <- sf::st_area(CRiSpData::bucharest_osm$river_surface)
+    river_surface_area <- sf::st_area(bucharest_osm$river_surface)
     expect_lt(actual_surface, river_surface_buffer_area)
     expect_gt(actual_surface, river_surface_area)
   }
