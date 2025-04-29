@@ -2,14 +2,17 @@
 % Please edit documentation in R/network.R
 \name{filter_network}
 \alias{filter_network}
-\title{Subset a network keeping the only nodes that intersect a target geometry.}
+\title{Subset a network keeping the components that intersect a target geometry.}
 \usage{
-filter_network(network, target)
+filter_network(network, target, component = "nodes")
 }
 \arguments{
 \item{network}{A network object}
 
 \item{target}{The target geometry}
+
+\item{component}{The components of the network to filter. It can be "nodes"
+or "edges"}
 }
 \value{
 A spatial network object
