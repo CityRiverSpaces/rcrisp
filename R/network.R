@@ -339,20 +339,30 @@ nearest_node <- function(network, target) {
   nodes[idx]
 }
 
-#' Subset a network keeping the only nodes that intersect a target geometry.
+#' Subset a network keeping the components that intersect a target geometry.
 #'
 #' If subsetting results in multiple disconnected components, we keep the main
 #' one.
 #'
 #' @param network A network object
 #' @param target The target geometry
+#' @param component The components of the network to filter. It can be "nodes"
+#'   or "edges"
 #'
 #' @return A spatial network object
+#' @importFrom rlang !!
 #' @keywords internal
-filter_network <- function(network, target) {
+filter_network <- function(network, target, component = "nodes") {
+  if (component == "nodes") {
+    intersect_func <- sfnetworks::node_intersects
+  } else if (component == "edges") {
+    intersect_func <- sfnetworks::edge_intersects
+  } else {
+    stop("Unknown component - choose beetween 'nodes' and 'edges'")
+  }
   network |>
-    tidygraph::activate("nodes") |>
-    tidygraph::filter(sfnetworks::node_intersects(target)) |>
+    tidygraph::activate(!!component) |>
+    tidygraph::filter(intersect_func(target)) |>
     # keep only the main connected component of the network
     tidygraph::activate("nodes") |>
     dplyr::filter(tidygraph::group_components() == 1)
@@ -375,4 +385,14 @@ get_intersecting_edges <- function(network, geometry, index = FALSE) {
   } else {
     edges[intersects, ]
   }
+}
+
+#' Find intersections between the edges of two networks
+#'
+#' @param network1,network2 The two spatial network objects
+#' @return A simple feature object
+#' @keywords internal
+find_intersections <- function(network_1, network_2) {
+  sf::st_intersection(sf::st_geometry(sf::st_as_sf(network_1, "edges")),
+                      sf::st_geometry(sf::st_as_sf(network_2, "edges")))
 }

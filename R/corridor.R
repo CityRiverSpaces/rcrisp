@@ -59,10 +59,6 @@ delineate_corridor <- function(
   # Build river network in the defined area of interest
   river_network <- build_river_network(river, aoi = aoi)
 
-  # Pick the corridor end points as the two furthest crossings between the
-  # spatial network and the river
-  end_points <- corridor_end_points(river_network, network)
-
   # Define the spatial regions corresponding to the two river banks
   regions <- get_river_banks(river_network, max_width)
 
@@ -73,6 +69,11 @@ delineate_corridor <- function(
   # Also split the network over the two regions
   network_1 <- filter_network(network, regions[1])
   network_2 <- filter_network(network, regions[2])
+
+  # Pick the corridor end points from all the intersection between the spatial
+  # network and the river. The two furthest points that connect the sub-networks
+  # on the two river sides are selected
+  end_points <- corridor_end_points(river_network, network, regions)
 
   # Draw the edges on the spatial network
   edge_1 <- corridor_edge(network_1, end_points, edges_init[1], corridor_init,
@@ -161,25 +162,31 @@ build_river_network <- function(river, aoi = NULL) {
 #' Determine the extremes (end points) of the river corridor using the network
 #' built from the river center line features (see [`build_river_network()`] and
 #' the spatial network used for the delineation. The end points are selected as
-#' the two furthest river crossings of the spatial network.
+#' the two furthest river crossings of the spatial network that connect the
+#' sub-networks for each river sides.
 #'
 #' @param river_network A [`sfnetworks::sfnetwork`] object representing the
 #'   river centerline
 #' @param spatial_network A [`sfnetworks::sfnetwork`] object representing the
 #'   spatial network used for the delineation
+#' @param regions A simple feature geometry representing the two river sides
 #'
 #' @return A simple feature geometry including a pair of points
 #' @keywords internal
-corridor_end_points <- function(river_network, spatial_network) {
-  # Only consider the edges of the spatial network
-  spat_network_edges <- sf::st_geometry(sf::st_as_sf(spatial_network, "edges"))
-
-  # Find intersections with the spatial network, and add these points as nodes
-  # to the river network. These nodes are the candidates corridor end points
-  river_network_edges <- sf::st_geometry(sf::st_as_sf(river_network, "edges"))
-  intersections <- sf::st_intersection(river_network_edges, spat_network_edges)
+corridor_end_points <- function(river_network, spatial_network, regions) {
+  # Find intersections between the spatial network and the river network, after
+  # splitting the former into the sub-networks for each river side
+  network_1 <- filter_network(spatial_network, regions[1], component = "edges")
+  inters_reg_1 <- find_intersections(network_1, river_network)
+  network_2 <- filter_network(spatial_network, regions[2], component = "edges")
+  inters_reg_2 <- find_intersections(network_2, river_network)
+  # Identify common intersections between the two sub-networks
+  intersections <- inters_reg_1[inters_reg_1 %in% inters_reg_2]
   # Make sure they are "POINTS" (no "MULTIPOINTS")
   intersections <- sfheaders::sfc_cast(intersections, "POINT")
+
+  # Add the intersections as nodes to the river network. These nodes are the
+  # candidates corridor end points
   river_network <- sfnetworks::st_network_blend(river_network, intersections)
   nodes <- nearest_node(river_network, intersections)
 
