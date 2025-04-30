@@ -5,6 +5,8 @@
 #' list of sf objects, which can be used in examples and tests.
 #'
 #' @return A list of sf objects containing the OSM data.
+#' @importFrom utils download.file
+#' @importFrom stats setNames
 #' @export
 #'
 #' @examplesIf interactive()
