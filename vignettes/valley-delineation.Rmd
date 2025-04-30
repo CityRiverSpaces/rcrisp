@@ -44,7 +44,7 @@ river <- c(river_centerline, river_surface)
 #| echo: false
 #| fig.alt: "DEM of the area enclosing River Dâmbovița in Bucharest"
 #| fig.cap: "DEM of the area enclosing River Dâmbovița in Bucharest"
-plot(dem)
+terra::plot(dem)
 plot(river, col = "white", border = NA, add = TRUE)
 ```
 
