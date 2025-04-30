@@ -125,7 +125,7 @@ test_that("Buffer also works without a CRS", {
 })
 
 test_that("River buffer implements a buffer function", {
-  river <- bucharest_osm$river_centerline
+  river <- bucharest_osm$river_centerline |> sf::st_geometry()
   actual <- river_buffer(river, buffer_distance = 0.5)
   expected <- sf::st_buffer(river, 0.5)
   expect_setequal(actual, expected)
@@ -241,8 +241,8 @@ test_that("River centerline and surface are combined without overlap", {
     sf::st_length()
   l_combined_expected <- l_centerline + l_surface - l_overlap
   l_combined_actual <-
-    combine_river_features(bucharest_osm$river_centerline,
-                           bucharest_osm$river_surface) |>
+    combine_river_features(bucharest_osm$river_centerline |> sf::st_geometry(),
+                           bucharest_osm$river_surface |> sf::st_geometry()) |>
     sf::st_length()
   expect_equal(l_combined_actual, l_combined_expected)
 })
@@ -262,8 +262,8 @@ test_that(
   {
     expect_message(
       combine_river_features(
-        bucharest_osm$river_centerline,
-        bucharest_osm$river_surface
+        bucharest_osm$river_centerline |> sf::st_geometry(),
+        bucharest_osm$river_surface |> sf::st_geometry()
       ),
       "*Calculating viewpoints from both river edge and river centerline.*"
     )
