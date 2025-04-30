@@ -15,6 +15,9 @@ knitr::opts_chunk$set(
   message = FALSE,
   warning = FALSE
 )
+
+bucharest_osm <- get_osm_example_data()
+bucharest_dem <- get_dem_example_data()
 ```
 
 ```{r setup, include = FALSE}
