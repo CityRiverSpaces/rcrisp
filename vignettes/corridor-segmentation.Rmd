@@ -17,6 +17,7 @@ knitr::opts_chunk$set(
 
 ```{r setup}
 library(CRiSp)
+library(sf)
 
 bucharest_osm <- get_osm_example_data()
 bucharest_dem <- get_dem_example_data()
@@ -51,8 +52,8 @@ We then delineate segments in the corridor. The algorithm spits the corridor usi
 ```{r segmentation, warning=FALSE}
 segmented_corridor <- delineate_segments(bucharest_delineation$corridor,
                                          network_filtered,
-                                         sf::st_geometry(bucharest_osm$river_centerline))
-plot(streets$geom)
+                                         st_geometry(bucharest_osm$river_centerline))
+plot(st_geometry(streets))
 plot(segmented_corridor, border = "orange", lwd = 3, add = TRUE)
 ```
 
