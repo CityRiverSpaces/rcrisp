@@ -50,9 +50,10 @@ network_filtered <- rbind(streets, railways) |>
 We then delineate segments in the corridor. The algorithm spits the corridor using river-crossing transversal edges that form continuous lines in the network:
 
 ```{r segmentation, warning=FALSE}
-segmented_corridor <- delineate_segments(bucharest_delineation$corridor,
-                                         network_filtered,
-                                         st_geometry(bucharest_osm$river_centerline))
+segmented_corridor <-
+  delineate_segments(bucharest_delineation$corridor,
+                     network_filtered,
+                     st_geometry(bucharest_osm$river_centerline))
 plot(st_geometry(streets))
 plot(segmented_corridor, border = "orange", lwd = 3, add = TRUE)
 ```
