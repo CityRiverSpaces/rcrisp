@@ -241,8 +241,8 @@ test_that("River centerline and surface are combined without overlap", {
     sf::st_length()
   l_combined_expected <- l_centerline + l_surface - l_overlap
   l_combined_actual <-
-    combine_river_features(bucharest_osm$river_centerline |> sf::st_geometry(),
-                           bucharest_osm$river_surface |> sf::st_geometry()) |>
+    combine_river_features(sf::st_geometry(bucharest_osm$river_centerline),
+                           sf::st_geometry(bucharest_osm$river_surface)) |>
     sf::st_length()
   expect_equal(l_combined_actual, l_combined_expected)
 })
