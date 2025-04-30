@@ -56,7 +56,7 @@ valley <- delineate_valley(dem, river)
 #| echo: false
 #| fig.alt: "Valley polygon derived from the DEM"
 #| fig.cap: "Valley polygon derived from the DEM"
-plot(dem)
+terra::plot(dem)
 plot(valley, border = "white", add = TRUE)
 ```
 
