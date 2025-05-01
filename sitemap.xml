@@ -71,15 +71,13 @@
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/mask_cost_distance.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/mask_slope.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/match_osm_name.html</loc></url>
-<url><loc>https://cityriverspaces.github.io/CRiSp/reference/merge_block.html</loc></url>
-<url><loc>https://cityriverspaces.github.io/CRiSp/reference/merge_blocks.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/nearest_node.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/osmdata_as_sf.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/osmdata_query.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/read_data_from_cache.html</loc></url>
-<url><loc>https://cityriverspaces.github.io/CRiSp/reference/refine_segments.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/reproject.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/river_buffer.html</loc></url>
+<url><loc>https://cityriverspaces.github.io/CRiSp/reference/select_nonintersecting_lines.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/set_units_like.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/shortest_path.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/CRiSp/reference/simplify_network.html</loc></url>
