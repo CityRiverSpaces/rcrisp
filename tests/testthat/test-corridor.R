@@ -1,5 +1,3 @@
-bucharest_osm <- get_osm_example_data()
-
 test_that("proper parameters must be provided depending on selected method", {
   river <- bucharest_osm$river_centerline
 

@@ -1,5 +1,3 @@
-bucharest_osm <- get_osm_example_data()
-
 test_that("setting units works if x is unitless", {
   x <- 1
   y <- 2

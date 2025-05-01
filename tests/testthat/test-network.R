@@ -63,8 +63,6 @@ network_no_crossings <- sfnetworks::sfnetwork(nodes = nodes_no_crossings,
                                               directed = FALSE, force = TRUE,
                                               node_key = "x")
 
-bucharest_osm <- get_osm_example_data()
-
 test_that("Network objects can be set up with no modifications", {
   edges <- sf::st_sfc(e1, e2, e3)
   network <- as_network(edges, flatten = FALSE, clean = FALSE)

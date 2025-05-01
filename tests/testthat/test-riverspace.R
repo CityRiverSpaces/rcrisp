@@ -1,5 +1,3 @@
-bucharest_osm <- get_osm_example_data()
-
 riverspace_actual <-
   delineate_riverspace(river = bucharest_osm$river_surface,
                        occluders = bucharest_osm$buildings,

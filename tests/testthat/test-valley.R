@@ -3,9 +3,6 @@
 # cache folder only used for testing purposes. This is achieved via the
 # [`temp_cache_dir()`] helper function, which should be called in each test.
 
-bucharest_dem <- get_dem_example_data()
-bucharest_osm <- get_osm_example_data()
-
 bb <- get_osm_bb("Bucharest")
 asset_urls <- c(paste0("s3://copernicus-dem-30m/",
                        "Copernicus_DSM_COG_10_N44_00_E026_00_DEM/",
