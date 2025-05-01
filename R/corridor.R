@@ -25,16 +25,12 @@
 #' @return A simple feature geometry representing the river corridor
 #' @export
 #' @examplesIf interactive()
-#' bb <- get_osm_bb("Bucharest")
-#' crs <- get_utm_zone(bb)
-#' aoi <- reproject(bb, crs)
 #' bucharest_osm <- get_osm_example_data()
 #' bucharest_dem <- get_dem_example_data()
 #' network <- rbind(bucharest_osm$streets, bucharest_osm$railways) |>
 #'   as_network()
 #' delineate_corridor(network,
 #'                    bucharest_osm$river_centerline,
-#'                    aoi,
 #'                    dem = bucharest_dem)
 delineate_corridor <- function(
   network, river_centerline, aoi = NULL, max_width = 3000,
