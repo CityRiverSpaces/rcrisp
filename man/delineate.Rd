@@ -16,7 +16,7 @@ delineate(
   dem = NULL,
   max_iterations = 10,
   capping_method = "shortest-path",
-  angle_threshold = 90,
+  angle_threshold = 100,
   corridor = TRUE,
   segments = FALSE,
   riverspace = FALSE,

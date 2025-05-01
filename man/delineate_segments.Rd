@@ -4,7 +4,7 @@
 \alias{delineate_segments}
 \title{Split a river corridor into segments}
 \usage{
-delineate_segments(corridor, network, river_centerline, angle_threshold = 90)
+delineate_segments(corridor, network, river_centerline, angle_threshold = 100)
 }
 \arguments{
 \item{corridor}{The river corridor as a simple feature geometry}
