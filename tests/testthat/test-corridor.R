@@ -62,7 +62,7 @@ test_that("Build river network only select longest segment within AoI", {
     sf::st_linestring(cbind(c(-2, 0, 0, -1), c(0, 0, -1, -1)))
   )
   bbox <- sf::st_bbox(c(xmin = -1.5, ymin = -2, xmax = -0.5, ymax = 2))
-  river_network <- build_river_network(river, aoi = bbox)
+  river_network <- build_river_network(river, bbox = bbox)
   actual_edges <- sf::st_geometry(sf::st_as_sf(river_network, "edges"))
   expected_edges <- sf::st_sfc(sf::st_linestring(cbind(c(-1.5, -0.5), c(0, 0))))
   expect_setequal(expected_edges, actual_edges)

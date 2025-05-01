@@ -4,19 +4,20 @@
 \alias{build_river_network}
 \title{Build a spatial network from river centerlines}
 \usage{
-build_river_network(river, aoi = NULL)
+build_river_network(river, bbox = NULL)
 }
 \arguments{
-\item{river}{A simple feature geometry representing the river centerline}
+\item{river}{A (MULTI)LINESTRING simple feature geometry representing the
+river centerline}
 
-\item{aoi}{Area of interest, provided as a bounding box or as a polygon.}
+\item{bbox}{Bounding box of the area of interest}
 }
 \value{
 A \code{\link[sfnetworks:sfnetwork]{sfnetworks::sfnetwork}} object
 }
 \description{
-If an area of interest (aoi) is provided, only the river segments that
-intersects it are considered. If the river intersects the area of interest
-multiple times, only the longest intersecting segment will be considered.
+If a bounding box is provided, only the river segments that intersect it are
+considered. If the river intersects the bounding box multiple times, only the
+longest intersecting segment will be considered.
 }
 \keyword{internal}
