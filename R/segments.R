@@ -31,7 +31,7 @@ delineate_segments <- function(corridor, network, river_centerline,
   crossing_strokes <- rcoins::stroke(network, from_edge = crossings,
                                      angle_threshold = angle_threshold)
 
-  # Clip strokes to the corridor extend and select non-intersecting strokes as
+  # Clip strokes to the corridor extent and select non-intersecting strokes as
   # segment boundaries
   segment_edges <- clip_and_filter(crossing_strokes, corridor, river_centerline)
 
