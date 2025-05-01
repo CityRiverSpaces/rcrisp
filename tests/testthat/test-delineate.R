@@ -8,7 +8,7 @@ test_that("Segmentation without corridor raises error", {
 test_that("Default network buffer is used with message", {
   skip_on_ci()
   expect_message(suppressWarnings(delineate("Bucharest", "Dâmbovița")),
-                 paste("The default `network_buffer` of 2500 m is used",
+                 paste("The default `network_buffer` of 3000 m is used",
                        "for corridor delineation."))
 })
 
