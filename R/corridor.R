@@ -176,9 +176,9 @@ build_river_network <- function(river, aoi = NULL) {
 corridor_end_points <- function(river_network, spatial_network, regions) {
   # Find intersections between the spatial network and the river network, after
   # splitting the former into the sub-networks for each river side
-  network_1 <- filter_network(spatial_network, regions[1], component = "edges")
+  network_1 <- filter_network(spatial_network, regions[1], elements = "edges")
   inters_reg_1 <- find_intersections(network_1, river_network)
-  network_2 <- filter_network(spatial_network, regions[2], component = "edges")
+  network_2 <- filter_network(spatial_network, regions[2], elements = "edges")
   inters_reg_2 <- find_intersections(network_2, river_network)
   # Identify common intersections between the two sub-networks
   intersections <- inters_reg_1[inters_reg_1 %in% inters_reg_2]

@@ -346,22 +346,22 @@ nearest_node <- function(network, target) {
 #'
 #' @param network A network object
 #' @param target The target geometry
-#' @param component The components of the network to filter. It can be "nodes"
+#' @param element The elements of the network to filter. It can be "nodes"
 #'   or "edges"
 #'
 #' @return A spatial network object
 #' @importFrom rlang !!
 #' @keywords internal
-filter_network <- function(network, target, component = "nodes") {
-  if (component == "nodes") {
+filter_network <- function(network, target, elements = "nodes") {
+  if (elements == "nodes") {
     intersect_func <- sfnetworks::node_intersects
-  } else if (component == "edges") {
+  } else if (elements == "edges") {
     intersect_func <- sfnetworks::edge_intersects
   } else {
-    stop("Unknown component - choose beetween 'nodes' and 'edges'")
+    stop("Unknown elements - choose beetween 'nodes' and 'edges'")
   }
   network |>
-    tidygraph::activate(!!component) |>
+    tidygraph::activate(!!elements) |>
     tidygraph::filter(intersect_func(target)) |>
     # keep only the main connected component of the network
     tidygraph::activate("nodes") |>
