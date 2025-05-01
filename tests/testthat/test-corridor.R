@@ -70,43 +70,73 @@ test_that("Build river network only select longest segment within AoI", {
 
 test_that("Endpoints are found for two intersections with network edges", {
   river <- sf::st_sfc(sf::st_linestring(cbind(c(-2, 0, 0), c(0, 0, -2))))
+  regions <- c(sf::st_buffer(river, 2, singleSide = TRUE),
+               sf::st_buffer(river, -2, singleSide = TRUE))
   network_edges <- sf::st_sfc(
-    sf::st_linestring(cbind(c(1, -1), c(-0.5, -0.5))),
-    sf::st_linestring(cbind(c(1, -1), c(0.5, 0.5))),
-    sf::st_linestring(cbind(c(0.5, 0.5), c(1, -1))),
-    sf::st_linestring(cbind(c(-0.5, -0.5), c(1, -1)))
+    sf::st_linestring(cbind(c(1, -1), c(-1, -1))),
+    sf::st_linestring(cbind(c(1, -1), c(1, 1))),
+    sf::st_linestring(cbind(c(1, 1), c(1, -1))),
+    sf::st_linestring(cbind(c(-1, -1), c(1, -1)))
   )
   river_network <- sfnetworks::as_sfnetwork(river, directed = FALSE)
   spatial_network <- sfnetworks::as_sfnetwork(network_edges, directed = FALSE)
-  actual <- corridor_end_points(river_network, spatial_network)
-  expected <- sf::st_sfc(sf::st_point(c(0, -0.5)), sf::st_point(c(-0.5, 0)))
+  actual <- corridor_end_points(river_network, spatial_network, regions)
+  expected <- sf::st_sfc(sf::st_point(c(0, -1)), sf::st_point(c(-1, 0)))
   expect_setequal(actual, expected)
 })
 
 test_that("Endpoints are found for more intersections with network edges", {
-  river <- sf::st_sfc(sf::st_linestring(cbind(c(-2, 0, 0), c(0, 0, -2))))
+  river <- sf::st_sfc(sf::st_linestring(cbind(c(-3, 3), c(0, 0))))
+  regions <- c(sf::st_buffer(river, 2, singleSide = TRUE),
+               sf::st_buffer(river, -2, singleSide = TRUE))
   network_edges <- sf::st_sfc(
-    sf::st_linestring(cbind(c(1, -1), c(-0.5, -0.5))),
-    sf::st_linestring(cbind(c(1, -1), c(-0.25, -0.25))),
-    sf::st_linestring(cbind(c(-0.25, -0.25), c(1, -1))),
-    sf::st_linestring(cbind(c(-0.5, -0.5), c(1, -1)))
+    sf::st_linestring(cbind(c(1, -1), c(-1, -1))),
+    sf::st_linestring(cbind(c(1, -1), c(1, 1))),
+    sf::st_linestring(cbind(c(-1, -2), c(1, 1))),
+    sf::st_linestring(cbind(c(1, 1), c(1, -1))),
+    sf::st_linestring(cbind(c(-1, -1), c(1, -1))),
+    sf::st_linestring(cbind(c(-2, -2), c(1, -1))),
+    sf::st_linestring(cbind(c(-1, -2), c(-1, -1)))
   )
   river_network <- sfnetworks::as_sfnetwork(river, directed = FALSE)
   spatial_network <- sfnetworks::as_sfnetwork(network_edges, directed = FALSE)
-  actual <- corridor_end_points(river_network, spatial_network)
-  expected <- sf::st_sfc(sf::st_point(c(0, -0.5)), sf::st_point(c(-0.5, 0)))
+  actual <- corridor_end_points(river_network, spatial_network, regions)
+  expected <- sf::st_sfc(sf::st_point(c(-2, 0)), sf::st_point(c(1, 0)))
+  expect_setequal(actual, expected)
+
+})
+
+test_that("Isolated crossings are dropped when selecting end points", {
+  river <- sf::st_sfc(sf::st_linestring(cbind(c(-3, 3), c(0, 0))))
+  regions <- c(sf::st_buffer(river, 2, singleSide = TRUE),
+               sf::st_buffer(river, -2, singleSide = TRUE))
+  network_edges <- sf::st_sfc(
+    sf::st_linestring(cbind(c(1, -1), c(-1, -1))),
+    sf::st_linestring(cbind(c(1, -1), c(1, 1))),
+    sf::st_linestring(cbind(c(-1, -2), c(1, 1))),
+    sf::st_linestring(cbind(c(1, 1), c(1, -1))),
+    sf::st_linestring(cbind(c(-1, -1), c(1, -1))),
+    sf::st_linestring(cbind(c(-2, -2), c(1, -1)))
+  )
+  river_network <- sfnetworks::as_sfnetwork(river, directed = FALSE)
+  spatial_network <- sfnetworks::as_sfnetwork(network_edges, directed = FALSE)
+  actual <- corridor_end_points(river_network, spatial_network, regions)
+  expected <- sf::st_sfc(sf::st_point(c(-1, 0)), sf::st_point(c(1, 0)))
   expect_setequal(actual, expected)
 })
 
 test_that("An error is raised for a single intersection with network edge", {
   river <- sf::st_sfc(sf::st_linestring(cbind(c(-2, 0, 0), c(0, 0, -2))))
+  regions <- c(sf::st_buffer(river, 2, singleSide = TRUE),
+               sf::st_buffer(river, -2, singleSide = TRUE))
   network_edges <- sf::st_sfc(
     sf::st_linestring(cbind(c(1, -1), c(-0.5, -0.5))),
     sf::st_linestring(cbind(c(0.5, 0.5), c(1, -1)))
   )
   river_network <- sfnetworks::as_sfnetwork(river, directed = FALSE)
   spatial_network <- sfnetworks::as_sfnetwork(network_edges, directed = FALSE)
-  expect_error(corridor_end_points(river_network, spatial_network), "coincide")
+  expect_error(corridor_end_points(river_network, spatial_network, regions),
+               "coincide")
 })
 
 test_that("River banks for a simple river gives two regions", {
