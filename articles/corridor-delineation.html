@@ -77,8 +77,10 @@
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://cityriverspaces.github.io/CRiSp/">CRiSp</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/CityRiverSpaces/CRiSpData" class="external-link">CRiSpData</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span></span></code></pre></div>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">bucharest_osm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_osm_example_data.html">get_osm_example_data</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">bucharest_dem</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_dem_example_data.html">get_dem_example_data</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>In this notebook we explore how to delineate an urban river corridor
 using river Dâmbovița in Bucharest, Romania. We will use OpenStreetMap
 (OSM) data, first from the Overpass API and then from a local file.</p>

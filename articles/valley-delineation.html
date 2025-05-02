@@ -96,19 +96,19 @@ require high-resolution DEM data, as required for non-urban applications
 2019)</span>. By default, the valley is delineated on the openly
 available 30m-resolution <a href="https://dataspace.copernicus.eu/explore-data/data-collections/copernicus-contributing-missions/collections-description/COP-DEM" class="external-link">Copernicus
 DEM GLO-30</a>.</p>
-<p>We demonstrate valley delineation using data from the CRiSpData
-package, namely the DEM of Bucharest as the input raster and the river
-centerline and surface as the source for which the Cost Distance is
-calculated.</p>
+<p>We demonstrate valley delineation using data from CRiSp example data,
+namely the DEM of Bucharest as the input raster and the river centerline
+and surface as the source for which the Cost Distance is calculated.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Attach required packages</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://cityriverspaces.github.io/CRiSp/">CRiSp</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/CityRiverSpaces/CRiSpData" class="external-link">CRiSpData</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/" class="external-link">terra</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span></span>
 <span></span>
+<span><span class="va">bucharest_osm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_osm_example_data.html">get_osm_example_data</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">bucharest_dem</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_dem_example_data.html">get_dem_example_data</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
 <span><span class="co"># Load data for valley delineation</span></span>
-<span><span class="va">dem</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/wrap.html" class="external-link">unwrap</a></span><span class="op">(</span><span class="va">bucharest_dem</span><span class="op">)</span></span>
+<span><span class="va">dem</span> <span class="op">&lt;-</span> <span class="va">bucharest_dem</span></span>
 <span><span class="va">river_centerline</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_geometry</a></span><span class="op">(</span><span class="va">bucharest_osm</span><span class="op">$</span><span class="va">river_centerline</span><span class="op">)</span></span>
 <span><span class="va">river_surface</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_geometry</a></span><span class="op">(</span><span class="va">bucharest_osm</span><span class="op">$</span><span class="va">river_surface</span><span class="op">)</span></span>
 <span><span class="va">river</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">river_centerline</span>, <span class="va">river_surface</span><span class="op">)</span></span></code></pre></div>
