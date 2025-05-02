@@ -1,7 +1,5 @@
 test_that("proper parameters must be provided depending on selected method", {
-  skip_if_not_installed("CRiSpData")
-
-  river <- CRiSpData::bucharest_osm$river_centerline
+  river <- bucharest_osm$river_centerline
 
   # for "buffer" method, we need the "buffer" parameter
   expect_error(initial_corridor(river, method = "buffer"),
@@ -156,9 +154,7 @@ test_that("River banks for a more complex river still gives two regions", {
 })
 
 test_that("River banks works with real data", {
-  skip_if_not_installed("CRiSpData")
-
-  river <- CRiSpData::bucharest_osm$river_centerline
+  river <- bucharest_osm$river_centerline
   regions <- get_river_banks(river, width = 2500)
   expect_equal(length(regions), 2)
 })

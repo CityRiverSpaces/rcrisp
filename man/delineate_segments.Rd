@@ -25,14 +25,10 @@ Segments are defined as corridor subregions separated by river-crossing
 transversal lines that form continuous strokes in the network.
 }
 \examples{
-if (!requireNamespace("CRiSpData", quietly = TRUE)) {
-  message("Install CRiSpData from GitHub to run this example.")
-} else {
-  corridor <- bucharest_delineation$corridor
-  network <- rbind(CRiSpData::bucharest_osm$streets,
-                   CRiSpData::bucharest_osm$railways) |>
-    as_network()
-  river_centerline <- CRiSpData::bucharest_osm$river_centerline
-  delineate_segments(corridor, network, river_centerline)
-}
+bucharest_osm <- get_osm_example_data()
+corridor <- bucharest_delineation$corridor
+network <- rbind(bucharest_osm$streets, bucharest_osm$railways) |>
+  as_network()
+river_centerline <- bucharest_osm$river_centerline |> sf::st_geometry()
+delineate_segments(corridor, network, river_centerline)
 }

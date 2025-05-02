@@ -15,20 +15,17 @@ knitr::opts_chunk$set(
   message = FALSE,
   warning = FALSE
 )
-if (!requireNamespace("CRiSpData", quietly = TRUE)) {
-  # nolint start
-  message("Package 'CRiSpData' is required for this vignette but not installed. Install it from GitHub using pak::pak('CityRiverSpaces/CRiSpData')")
-  # nolint end
-  knitr::knit_exit()
-} else {
-  library(CRiSpData)
-}
+
+bucharest_osm <- CRiSp::get_osm_example_data()
+bucharest_dem <- CRiSp::get_dem_example_data()
 ```
 
 ```{r setup, include = FALSE}
 library(CRiSp)
-library(CRiSpData)
 library(purrr)
+
+bucharest_osm <- get_osm_example_data()
+bucharest_dem <- get_dem_example_data()
 
 city_boundary <- bucharest_osm$boundary
 river_surface <- bucharest_osm$river_surface
