@@ -247,14 +247,7 @@ simplify_network <- function(network) {
 #'
 #' @return A network object with weights added as a column in the edge table
 #' @importFrom rlang :=
-#' @export
-#' @examples
-#' bucharest_osm <- get_osm_example_data()
-#' edges <- rbind(bucharest_osm$streets, bucharest_osm$railways)
-#' network <- sfnetworks::as_sfnetwork(edges, directed = FALSE)
-#' target <- sf::st_centroid(bucharest_osm$river_centerline)
-#' exclude_area <- sf::st_buffer(bucharest_osm$river_centerline, 1000)
-#' add_weights(network, target, exclude_area)
+#' @keywords internal
 add_weights <- function(network, target = NULL, exclude_area = NULL,
                         penalty = 1000., weight_name = "weight") {
   edges <- sf::st_geometry(sf::st_as_sf(network, "edges"))
