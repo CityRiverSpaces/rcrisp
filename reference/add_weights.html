@@ -118,40 +118,6 @@ that is added if the centroid of the edge falls within a specified region
 edges close to <code>target</code> and to avoid edges within <code>exclude_area</code>.</p>
     </div>
 
-    <div class="section level2">
-    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">bucharest_osm</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_osm_example_data.html">get_osm_example_data</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">edges</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">bucharest_osm</span><span class="op">$</span><span class="va">streets</span>, <span class="va">bucharest_osm</span><span class="op">$</span><span class="va">railways</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">network</span> <span class="op">&lt;-</span> <span class="fu">sfnetworks</span><span class="fu">::</span><span class="fu"><a href="https://luukvdmeer.github.io/sfnetworks/reference/as_sfnetwork.html" class="external-link">as_sfnetwork</a></span><span class="op">(</span><span class="va">edges</span>, directed <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">target</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_unary.html" class="external-link">st_centroid</a></span><span class="op">(</span><span class="va">bucharest_osm</span><span class="op">$</span><span class="va">river_centerline</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">exclude_area</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_unary.html" class="external-link">st_buffer</a></span><span class="op">(</span><span class="va">bucharest_osm</span><span class="op">$</span><span class="va">river_centerline</span>, <span class="fl">1000</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">add_weights</span><span class="op">(</span><span class="va">network</span>, <span class="va">target</span>, <span class="va">exclude_area</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"># A sfnetwork with</span> <span style="color: #555555;">9350</span> <span style="color: #555555;">nodes and</span> <span style="color: #555555;">9684</span> <span style="color: #555555;">edges</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">#</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"># CRS: </span> <span style="color: #555555;">WGS 84 / UTM zone 35N</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">#</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"># An undirected multigraph with 937 components with spatially explicit edges</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">#</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Edge data: 9,684 × 5 (active)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    from    to type                                                   geom weight</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                      <span style="color: #949494; font-style: italic;">&lt;LINESTRING [m]&gt;</span>    <span style="color: #949494;">[m]</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>     1     2 tertiary (427899.3 4924401, 427901.6 4924397, 427911.8 492… <span style="text-decoration: underline;">59</span>839.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span>     3     4 tertiary (427853.8 4924451, 427842.3 4924442, 427797.7 492… <span style="text-decoration: underline;">59</span>559.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span>     5     6 primary  (427348.7 4924016, 427360 4924008, 427382.4 49239… <span style="text-decoration: underline;">59</span>388.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span>     7     8 primary  (432042.4 4918609, 432051.4 4918605, 432065 49185… <span style="text-decoration: underline;">67</span>098.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span>     9    10 tertiary (432099.2 4919990, 432100.5 4919987, 432101.6 491… <span style="text-decoration: underline;">66</span>002.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span>    11    12 primary  (435628.7 4921177, 435651.9 4921179, 435682.8 492… <span style="text-decoration: underline;">67</span>143.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 9,678 more rows</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">#</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Node data: 9,350 × 1</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                 geom</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;POINT [m]&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> (427899.3 4924401)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> (428081.7 4924019)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> (427853.8 4924451)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 9,347 more rows</span></span>
-</code></pre></div>
-    </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 
