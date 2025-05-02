@@ -1,5 +1,8 @@
-dem <- terra::unwrap(CRiSpData::bucharest_dem)
-river <- CRiSpData::bucharest_osm$river_surface
+bucharest_dem <- get_dem_example_data()
+bucharest_osm <- get_osm_example_data()
+
+dem <- bucharest_dem
+river <- bucharest_osm$river_surface
 
 valley <- CRiSp::delineate_valley(dem, river)
 

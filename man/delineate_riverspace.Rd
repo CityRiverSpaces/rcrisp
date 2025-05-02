@@ -31,11 +31,7 @@ Delineate the space surrounding a river
 }
 \examples{
 \dontrun{
-  if (!requireNamespace("CRiSpData", quietly = TRUE)) {
-    message("Install CRiSpData from GitHub to run this example.")
-  } else {
-    delineate_riverspace(CRiSpData::bucharest_osm$river_surface,
-                        CRiSpData::bucharest_osm$buildings)
-  }
+  bucharest_osm <- get_osm_example_data()
+  delineate_riverspace(bucharest_osm$river_surface, bucharest_osm$buildings)
 }
 }

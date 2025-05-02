@@ -13,24 +13,21 @@ knitr::opts_chunk$set(
   comment = "#>",
   warnings = FALSE
 )
-if (!requireNamespace("CRiSpData", quietly = TRUE)) {
-  # nolint start
-  message("Package 'CRiSpData' is required for this vignette but not installed. Install it from GitHub using pak::pak('CityRiverSpaces/CRiSpData')")
-  # nolint end
-  knitr::knit_exit()
-}
 ```
 
 ```{r setup}
 library(CRiSp)
-library(CRiSpData)
+library(sf)
+
+bucharest_osm <- get_osm_example_data()
+bucharest_dem <- get_dem_example_data()
 ```
 
 For a more detailed analysis of an urban river corridor, corridor-level delineation may not be sufficient. The corridor needs to be subdivided into smaller morphological units. Segmentation is a process of subdividing the corridor by using major transversal road or rail infrastructure lines.
 
 By default, the all-in-one function `delineate()` only returns the corridor boundary. The corridor can be segmented either by setting the argument `segments = TRUE` in `delineate()` or by using the `delineate_segments()` function in a separate step.
 
-To demonstrate this as a separate step, we will use the `bucharest_delineation$corridor` from the package data, as well as `bucharest_osm$streets` and `bucharest_osm$railways` from the `CRiSpData` package as input.
+To demonstrate this as a separate step, we will use the `bucharest_delineation$corridor` from the package data, as well as `bucharest_osm$streets` and `bucharest_osm$railways` from CRiSp example data as input.
 
 We first prepare the network and select all the streets and railways that cover the river corridor plus a small buffer region (see also `vignette("network-preparation")`):
 
@@ -53,10 +50,11 @@ network_filtered <- rbind(streets, railways) |>
 We then delineate segments in the corridor. The algorithm spits the corridor using river-crossing transversal edges that form continuous lines in the network:
 
 ```{r segmentation, warning=FALSE}
-segmented_corridor <- delineate_segments(bucharest_delineation$corridor,
-                                         network_filtered,
-                                         bucharest_osm$river_centerline)
-plot(streets$geometry)
+segmented_corridor <-
+  delineate_segments(bucharest_delineation$corridor,
+                     network_filtered,
+                     st_geometry(bucharest_osm$river_centerline))
+plot(st_geometry(streets))
 plot(segmented_corridor, border = "orange", lwd = 3, add = TRUE)
 ```
 

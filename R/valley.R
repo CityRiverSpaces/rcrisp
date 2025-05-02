@@ -68,12 +68,9 @@ get_dem <- function(bb, dem_source = "STAC", stac_endpoint = NULL,
 #' @return River valley as a simple feature geometry
 #' @export
 #' @examples
-#' if (!requireNamespace("CRiSpData", quietly = TRUE)) {
-#'   message("Install CRiSpData from GitHub to run this example.")
-#' } else {
-#'   delineate_valley(terra::unwrap(CRiSpData::bucharest_dem),
-#'                    CRiSpData::bucharest_osm$river_centerline)
-#' }
+#' bucharest_osm <- get_osm_example_data()
+#' bucharest_dem <- get_dem_example_data()
+#' delineate_valley(bucharest_dem, bucharest_osm$river_centerline)
 delineate_valley <- function(dem, river) {
   if (!terra::same.crs(dem, sf::st_crs(river)$wkt)) {
     stop("DEM and river geometry should be in the same CRS")
@@ -173,11 +170,8 @@ load_dem <- function(bb, tile_urls, force_download = FALSE) {
 #'   values to a file.
 #' @export
 #' @examplesIf interactive()
-#' if (!requireNamespace("CRiSpData", quietly = TRUE)) {
-#'   message("Install CRiSpData from GitHub to run this example.")
-#' } else {
-#'   dem_to_cog(terra::unwrap(CRiSpData::bucharest_dem), "bucharest_dem.tif")
-#' }
+#' bucharest_dem <- get_dem_example_data()
+#' dem_to_cog(bucharest_dem, "bucharest_dem.tif")
 dem_to_cog <- function(dem, fpath, output_directory = NULL) {
   if (is.null(output_directory)) {
     filename <- basename(fpath)

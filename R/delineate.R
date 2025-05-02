@@ -43,7 +43,7 @@ delineate <- function(
   city_name, river_name, crs = NULL, network_buffer = NULL,
   buildings_buffer = NULL, dem_buffer = 2500, initial_method = "valley",
   initial_buffer = NULL, dem = NULL, max_iterations = 10,
-  capping_method = "shortest-path", angle_threshold = 90, corridor = TRUE,
+  capping_method = "shortest-path", angle_threshold = 100, corridor = TRUE,
   segments = FALSE, riverspace = FALSE, force_download = FALSE, ...
 ) {
 
@@ -80,10 +80,6 @@ delineate <- function(
   if (is.null(crs)) crs <- get_utm_zone(osm_data$bb)
 
   if (corridor) {
-    # For the corridor delineation, the area of interest (aoi) is the one used
-    # to retrieve the network datasets (streets and railways), projected to CRS
-    aoi <- reproject(osm_data$aoi_network, crs)
-
     # If using the valley method, and the DEM is not provided, retrieve dataset
     # on a larger aoi to limit edge effects while determining the valley
     if (initial_method == "valley" && is.null(dem)) {
@@ -97,10 +93,9 @@ delineate <- function(
 
     # Run the corridor delineation on the spatial network
     corridor <- delineate_corridor(
-      network, osm_data$river_centerline, aoi = aoi,
-      max_width = network_buffer, initial_method = initial_method,
-      buffer = initial_buffer, dem = dem, max_iterations = max_iterations,
-      capping_method = capping_method
+      network, osm_data$river_centerline, max_width = network_buffer,
+      initial_method = initial_method, buffer = initial_buffer, dem = dem,
+      max_iterations = max_iterations, capping_method = capping_method
     )
   } else {
     corridor <- NULL

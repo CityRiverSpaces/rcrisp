@@ -4,7 +4,7 @@
 \alias{corridor_end_points}
 \title{Find the corridor end points.}
 \usage{
-corridor_end_points(river_network, spatial_network)
+corridor_end_points(river_network, spatial_network, regions)
 }
 \arguments{
 \item{river_network}{A \code{\link[sfnetworks:sfnetwork]{sfnetworks::sfnetwork}} object representing the
@@ -12,6 +12,8 @@ river centerline}
 
 \item{spatial_network}{A \code{\link[sfnetworks:sfnetwork]{sfnetworks::sfnetwork}} object representing the
 spatial network used for the delineation}
+
+\item{regions}{A simple feature geometry representing the two river sides}
 }
 \value{
 A simple feature geometry including a pair of points
@@ -20,6 +22,7 @@ A simple feature geometry including a pair of points
 Determine the extremes (end points) of the river corridor using the network
 built from the river center line features (see \code{\link[=build_river_network]{build_river_network()}} and
 the spatial network used for the delineation. The end points are selected as
-the two furthest river crossings of the spatial network.
+the two furthest river crossings of the spatial network that connect the
+sub-networks for each river sides.
 }
 \keyword{internal}
