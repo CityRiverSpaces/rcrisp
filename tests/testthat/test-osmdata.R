@@ -172,3 +172,14 @@ test_that("Both lines and multilines are retreived from river Dâmbovița", {
     expect_true(length(river) > 0)
   }
 })
+
+test_that("If no railways are found, an empty sf object is returned", {
+  crs <- sf::st_crs("EPSG:32632")
+  aoi <- sf::st_bbox(c(xlim = 1, xmax = 2, ylim = 1, ymax = 2))
+  mocked_osmdata_response <- list(osm_lines = NULL)
+  with_mocked_bindings(osmdata_as_sf = function(...) mocked_osmdata_response, {
+    railways <- get_osm_railways(aoi, crs = crs, force_download = FALSE)
+  })
+  expect_equal(nrow(railways), 0)
+  expect_equal(sf::st_crs(railways), crs)
+})

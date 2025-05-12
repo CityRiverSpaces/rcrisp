@@ -336,6 +336,13 @@ get_osm_streets <- function(aoi, crs = NULL, highway_values = NULL,
 get_osm_railways <- function(aoi, crs = NULL, force_download = FALSE) {
   railways <- osmdata_as_sf("railway", "rail", aoi,
                             force_download = force_download)
+  # If no railways are found, return an empty sf object
+  if (is.null(railways$osm_lines)) {
+    if (is.null(crs)) crs <- sf::st_crs("EPSG:4326")
+    empty_sf <- sf::st_sf(geometry = sf::st_sfc(crs = crs))
+    return(empty_sf)
+  }
+
   railways_lines <- railways$osm_lines |>
     dplyr::select("railway") |>
     dplyr::rename(!!sym("type") := !!sym("railway"))
