@@ -416,6 +416,9 @@ get_river_aoi <- function(river, city_bbox, buffer_distance) {
 #' @return sf object containing only rows with filtered name
 #' @keywords internal
 match_osm_name <- function(osm_data, match) {
-  dplyr::filter(osm_data, dplyr::if_any(dplyr::matches("name"),
-                                        \(x) x == match))
+  # Function to find partial matches across rows of a data frame
+  includes_match <- \(x) grepl(match, x, ignore.case = TRUE)
+  # Apply function above to all columns whose name starts with "name", thus
+  # checking for matches in all listed languages
+  dplyr::filter(osm_data, dplyr::if_any(dplyr::matches("name"), includes_match))
 }
