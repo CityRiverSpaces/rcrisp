@@ -183,9 +183,7 @@ get_osm_city_boundary <- function(bb, city_name, crs = NULL, multiple = FALSE,
   city_boundary <- tryCatch(fetch_boundary("boundary", "administrative"),
                             error = function(e) NULL)
 
-  if (!is.null(city_boundary)) {
-    message("City boundary found with 'boundary:administrative' tag.")
-  } else {
+  if (is.null(city_boundary)) {
     stop("No city boundary found. The city name may be incorrect.")
   }
 
