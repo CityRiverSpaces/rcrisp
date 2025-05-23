@@ -173,7 +173,7 @@ get_osm_city_boundary <- function(bb, city_name, crs = NULL, multiple = FALSE,
   # Define a helper function to fetch the city boundary
   fetch_boundary <- function(key, value) {
     osmdata_sf <- osmdata_as_sf(key, value, bb, force_download = force_download)
-    osmdata_sf$osm_multipolygons |>
+    dplyr::bind_rows(osmdata_sf$osm_polygons, osmdata_sf$osm_multipolygons) |>
       # filter using any of the "name" columns (matching different languages)
       match_osm_name(city_name_clean) |>
       sf::st_geometry()
@@ -183,9 +183,7 @@ get_osm_city_boundary <- function(bb, city_name, crs = NULL, multiple = FALSE,
   city_boundary <- tryCatch(fetch_boundary("boundary", "administrative"),
                             error = function(e) NULL)
 
-  if (!is.null(city_boundary)) {
-    message("City boundary found with 'boundary:administrative' tag.")
-  } else {
+  if (is.null(city_boundary)) {
     stop("No city boundary found. The city name may be incorrect.")
   }
 
@@ -416,6 +414,9 @@ get_river_aoi <- function(river, city_bbox, buffer_distance) {
 #' @return sf object containing only rows with filtered name
 #' @keywords internal
 match_osm_name <- function(osm_data, match) {
-  dplyr::filter(osm_data, dplyr::if_any(dplyr::matches("name"),
-                                        \(x) x == match))
+  # Function to find partial matches across rows of a data frame
+  includes_match <- \(x) grepl(match, x, ignore.case = TRUE)
+  # Apply function above to all columns whose name starts with "name", thus
+  # checking for matches in all listed languages
+  dplyr::filter(osm_data, dplyr::if_any(dplyr::matches("name"), includes_match))
 }

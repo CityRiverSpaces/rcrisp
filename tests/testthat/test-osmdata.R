@@ -183,3 +183,18 @@ test_that("If no railways are found, an empty sf object is returned", {
   expect_equal(nrow(railways), 0)
   expect_equal(sf::st_crs(railways), crs)
 })
+
+test_that("Partial matches of names are accounted for", {
+  data <- data.frame(
+    name = c("match", "xxx", "xxx", "xxx"),
+    `name:xx` = c("xxx", "This is also a match", "xxx", "xxx"),
+    `name:yy` = c("xxx", "xxx", "THIS IS ALSO A MATCH", "xxx"),
+    discarded = c("xxx", "xxx", "xxx", "This is not a match")
+  )
+  res <- match_osm_name(data, "match")
+  # Partial matches allowed, not case-sensitive. However, "name"
+  # should be in the column name
+  expect_equal(nrow(res), 3)
+  # All columns are returned
+  expect_equal(ncol(res), 4)
+})
