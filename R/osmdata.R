@@ -173,7 +173,7 @@ get_osm_city_boundary <- function(bb, city_name, crs = NULL, multiple = FALSE,
   # Define a helper function to fetch the city boundary
   fetch_boundary <- function(key, value) {
     osmdata_sf <- osmdata_as_sf(key, value, bb, force_download = force_download)
-    osmdata_sf$osm_multipolygons |>
+    dplyr::bind_rows(osmdata_sf$osm_polygons, osmdata_sf$osm_multipolygons) |>
       # filter using any of the "name" columns (matching different languages)
       match_osm_name(city_name_clean) |>
       sf::st_geometry()
