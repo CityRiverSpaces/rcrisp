@@ -205,7 +205,13 @@
       "@type": "SoftwareApplication",
       "identifier": "rcoins",
       "name": "rcoins",
-      "sameAs": "https://github.com/CityRiverSpaces/rcoins"
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=rcoins"
     },
     "7": {
       "@type": "SoftwareApplication",
@@ -325,11 +331,11 @@
         "name": "Comprehensive R Archive Network (CRAN)",
         "url": "https://cran.r-project.org"
       },
-      "sameAs": "https://github.com/CityRiverSpaces/visor"
+      "sameAs": "https://CRAN.R-project.org/package=visor"
     },
     "SystemRequirements": null
   },
-  "fileSize": "1599.96KB",
+  "fileSize": "1609.573KB",
   "relatedLink": "https://cityriverspaces.github.io/CRiSp/",
   "releaseNotes": "https://github.com/CityRiverSpaces/CRiSp/blob/master/NEWS.md",
   "readme": "https://github.com/CityRiverSpaces/CRiSp/blob/main/README.md",
