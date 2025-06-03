@@ -97,12 +97,16 @@
 <span><span class="va">railways</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_osm_railways.html">get_osm_railways</a></span><span class="op">(</span><span class="va">bb</span>, <span class="va">epsg_code</span><span class="op">)</span><span class="op">$</span><span class="va">geometry</span></span>
 <span></span>
 <span><span class="co"># Delineate river corridor</span></span>
-<span><span class="va">corridor</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/delineate.html">delineate</a></span><span class="op">(</span><span class="va">city_name</span>, <span class="va">river_name</span><span class="op">)</span><span class="op">$</span><span class="va">corridor</span></span>
+<span><span class="va">bd</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/delineate.html">delineate</a></span><span class="op">(</span><span class="va">city_name</span>, <span class="va">river_name</span>, segments <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">corridor</span> <span class="op">&lt;-</span> <span class="va">bd</span><span class="op">$</span><span class="va">corridor</span></span>
+<span><span class="va">segments</span> <span class="op">&lt;-</span> <span class="va">bd</span><span class="op">$</span><span class="va">segments</span></span>
 <span></span>
 <span><span class="co"># Plot results</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">corridor</span>, border <span class="op">=</span> <span class="st">"orange"</span>, lwd <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">railways</span>, add <span class="op">=</span> <span class="cn">TRUE</span>, lwd <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">streets</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">corridor</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">railways</span>, col <span class="op">=</span> <span class="st">"darkgrey"</span>, add <span class="op">=</span> <span class="cn">TRUE</span>, lwd <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">streets</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">segments</span>, border <span class="op">=</span> <span class="st">"orange"</span>, add <span class="op">=</span> <span class="cn">TRUE</span>, lwd <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">corridor</span>, border <span class="op">=</span> <span class="st">"red"</span>, add <span class="op">=</span> <span class="cn">TRUE</span>, lwd <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-example-1.png" width="100%"></p>
 </div>
 <div class="section level2">
