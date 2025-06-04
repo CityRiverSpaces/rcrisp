@@ -25,6 +25,7 @@ Write DEM to cloud optimized GeoTiff file as specified location
 }
 \examples{
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-dem_to_cog(terra::unwrap(CRiSpData::bucharest_dem), "bucharest_dem.tif")
+bucharest_dem <- get_dem_example_data()
+dem_to_cog(bucharest_dem, "bucharest_dem.tif")
 \dontshow{\}) # examplesIf}
 }

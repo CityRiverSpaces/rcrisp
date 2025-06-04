@@ -23,17 +23,18 @@ In this article, we describe how `delineate_valley()` works and how it can be us
 
 As the resulting valley boundary is only used as an intermediate step in `delineate_corridor()`, valley delineation does not require high-resolution DEM data, as required for non-urban applications [e.g., @lidberg2020; @nardi2019]. By default, the valley is delineated on the openly available 30m-resolution [Copernicus DEM GLO-30](https://dataspace.copernicus.eu/explore-data/data-collections/copernicus-contributing-missions/collections-description/COP-DEM).
 
-We demonstrate valley delineation using CRiSp package data, namely the DEM of Bucharest as the input raster and the river centerline and surface as the source for which the Cost Distance is calculated.
+We demonstrate valley delineation using data from CRiSp example data, namely the DEM of Bucharest as the input raster and the river centerline and surface as the source for which the Cost Distance is calculated.
 
 ```{r setup}
 # Attach required packages
 library(rcrisp)
-library(CRiSpData)
-library(terra)
 library(sf)
 
+bucharest_osm <- get_osm_example_data()
+bucharest_dem <- get_dem_example_data()
+
 # Load data for valley delineation
-dem <- unwrap(bucharest_dem)
+dem <- bucharest_dem
 river_centerline <- st_geometry(bucharest_osm$river_centerline)
 river_surface <- st_geometry(bucharest_osm$river_surface)
 river <- c(river_centerline, river_surface)
@@ -43,7 +44,7 @@ river <- c(river_centerline, river_surface)
 #| echo: false
 #| fig.alt: "DEM of the area enclosing River Dâmbovița in Bucharest"
 #| fig.cap: "DEM of the area enclosing River Dâmbovița in Bucharest"
-plot(dem)
+terra::plot(dem)
 plot(river, col = "white", border = NA, add = TRUE)
 ```
 
@@ -55,7 +56,7 @@ valley <- delineate_valley(dem, river)
 #| echo: false
 #| fig.alt: "Valley polygon derived from the DEM"
 #| fig.cap: "Valley polygon derived from the DEM"
-plot(dem)
+terra::plot(dem)
 plot(valley, border = "white", add = TRUE)
 ```
 

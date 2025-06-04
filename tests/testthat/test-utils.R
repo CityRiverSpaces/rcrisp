@@ -123,15 +123,15 @@ test_that("Buffer also works without a CRS", {
 })
 
 test_that("River buffer implements a buffer function", {
-  river <- CRiSpData::bucharest_osm$river_centerline
+  river <- bucharest_osm$river_centerline |> sf::st_geometry()
   actual <- river_buffer(river, buffer_distance = 0.5)
   expected <- sf::st_buffer(river, 0.5)
   expect_setequal(actual, expected)
 })
 
 test_that("River buffer can trim to the region of interest", {
-  river <- CRiSpData::bucharest_osm$river_centerline
-  bbox <- sf::st_bbox(CRiSpData::bucharest_osm$boundary)
+  river <- bucharest_osm$river_centerline
+  bbox <- sf::st_bbox(bucharest_osm$boundary)
   actual <- river_buffer(river, buffer_distance = 10, bbox = bbox)
   river_buffer <- sf::st_buffer(river, 10)
   # set precision to bypass numerical issues
@@ -146,17 +146,25 @@ test_that("reproject works with raster data", {
   x <- terra::rast(xmin = -174, xmax = -168, ymin = 45, ymax = 51, res = 1,
                    vals = 1, crs = "EPSG:4326")
 
-  # reproject with integer (EPSG code)
-  x_repr_int <- reproject(x, 32602)
+  # reproject with integer/numeric (EPSG code)
+  x_repr_num <- reproject(x, 32602)
+  x_repr_int <- reproject(x, as.integer(32602))
 
   # reproject with string
   x_repr_str <- reproject(x, "EPSG:32602")
 
+  # reproject with sf::crs object
+  x_repr_crs <- reproject(x, sf::st_crs(32602))
+
   crs_expected <- terra::crs("EPSG:32602")
+  crs_actual_num <- terra::crs(x_repr_num)
+  expect_equal(crs_actual_num, crs_expected)
   crs_actual_int <- terra::crs(x_repr_int)
   expect_equal(crs_actual_int, crs_expected)
   crs_actual_str <- terra::crs(x_repr_str)
   expect_equal(crs_actual_str, crs_expected)
+  crs_actual_crs <- terra::crs(x_repr_crs)
+  expect_equal(crs_actual_crs, crs_expected)
 })
 
 test_that("reproject works with vector data", {
@@ -222,17 +230,17 @@ test_that("load_raster correctly retrieve and merge local data", {
 })
 
 test_that("River centerline and surface are combined without overlap", {
-  l_centerline <- sf::st_length(CRiSpData::bucharest_osm$river_centerline)
-  l_surface <- CRiSpData::bucharest_osm$river_surface |>
+  l_centerline <- sf::st_length(bucharest_osm$river_centerline)
+  l_surface <- bucharest_osm$river_surface |>
     sf::st_cast("MULTILINESTRING") |>
     sf::st_length()
-  l_overlap <- CRiSpData::bucharest_osm$river_centerline |>
-    sf::st_intersection(CRiSpData::bucharest_osm$river_surface) |>
+  l_overlap <- bucharest_osm$river_centerline |>
+    sf::st_intersection(bucharest_osm$river_surface) |>
     sf::st_length()
   l_combined_expected <- l_centerline + l_surface - l_overlap
   l_combined_actual <-
-    combine_river_features(CRiSpData::bucharest_osm$river_centerline,
-                           CRiSpData::bucharest_osm$river_surface) |>
+    combine_river_features(sf::st_geometry(bucharest_osm$river_centerline),
+                           sf::st_geometry(bucharest_osm$river_surface)) |>
     sf::st_length()
   expect_equal(l_combined_actual, l_combined_expected)
 })
@@ -241,8 +249,7 @@ test_that("When river surface is not available,
   river centerline is used with warning",
           {
             expect_warning(
-              combine_river_features(CRiSpData::bucharest_osm$river_centerline,
-                                     NULL),
+              combine_river_features(bucharest_osm$river_centerline, NULL),
               regexp = "*Calculating viewpoints along river centerline.*"
             )
           })
@@ -253,8 +260,8 @@ test_that(
   {
     expect_message(
       combine_river_features(
-        CRiSpData::bucharest_osm$river_centerline,
-        CRiSpData::bucharest_osm$river_surface
+        bucharest_osm$river_centerline |> sf::st_geometry(),
+        bucharest_osm$river_surface |> sf::st_geometry()
       ),
       "*Calculating viewpoints from both river edge and river centerline.*"
     )

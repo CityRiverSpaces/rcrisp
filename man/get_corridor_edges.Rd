@@ -17,22 +17,4 @@ Corridor edges as a simple feature geometry
 \description{
 Split corridor along the river to find edges on the two banks
 }
-\keyword{-}
-\keyword{For}
-\keyword{actually}
-\keyword{complex}
-\keyword{corridor}
-\keyword{geometries,}
-\keyword{here}
 \keyword{internal}
-\keyword{linestrings}
-\keyword{longest}
-\keyword{might}
-\keyword{multiple}
-\keyword{return}
-\keyword{river}
-\keyword{segments}
-\keyword{select}
-\keyword{splitting}
-\keyword{the}
-\keyword{two}

@@ -39,8 +39,9 @@ as_network <- function(edges, flatten = TRUE, clean = TRUE) {
 #' @return A network object with additional points at intersections
 #' @export
 #' @examples
-#' edges <- dplyr::bind_rows(CRiSpData::bucharest_osm$streets,
-#'                           CRiSpData::bucharest_osm$railways)
+#' bucharest_osm <- get_osm_example_data()
+#' edges <- dplyr::bind_rows(bucharest_osm$streets,
+#'                           bucharest_osm$railways)
 #' network <- sfnetworks::as_sfnetwork(edges, directed = FALSE)
 #' flatten_network(network)
 flatten_network <- function(network) {
@@ -84,6 +85,7 @@ get_intersection_points <- function(edges) {
 }
 
 #' @noRd
+#' @importFrom utils head tail
 insert_intersections <- function(edges, points, tol = 1.e-3) {
 
   edge_geometry <- sf::st_geometry(edges)
@@ -147,6 +149,7 @@ calc_distance <- function(point, edge) {
 }
 
 #' @noRd
+#' @importFrom utils head tail
 calc_rolling_sum <- function(x, n = 2) {
   cs <- cumsum(x)
   # roll the cumsum array by adding `n` zeros at its beginning and dropping
@@ -173,8 +176,9 @@ calc_rolling_sum <- function(x, n = 2) {
 #' @return A cleaned network object
 #' @export
 #' @examples
-#' edges <- dplyr::bind_rows(CRiSpData::bucharest_osm$streets,
-#'                           CRiSpData::bucharest_osm$railways)
+#' bucharest_osm <- get_osm_example_data()
+#' edges <- dplyr::bind_rows(bucharest_osm$streets,
+#'                           bucharest_osm$railways)
 #' network <- sfnetworks::as_sfnetwork(edges, directed = FALSE)
 #' clean_network(network)
 clean_network <- function(network, simplify = TRUE) {
@@ -243,15 +247,7 @@ simplify_network <- function(network) {
 #'
 #' @return A network object with weights added as a column in the edge table
 #' @importFrom rlang :=
-#' @export
-#' @examples
-#' edges <- rbind(CRiSpData::bucharest_osm$streets,
-#'                CRiSpData::bucharest_osm$railways)
-#' network <- sfnetworks::as_sfnetwork(edges, directed = FALSE)
-#' target <- sf::st_centroid(CRiSpData::bucharest_osm$river_centerline)
-#' exclude_area <- sf::st_buffer(CRiSpData::bucharest_osm$river_centerline,
-#'                               1000)
-#' add_weights(network, target, exclude_area)
+#' @keywords internal
 add_weights <- function(network, target = NULL, exclude_area = NULL,
                         penalty = 1000., weight_name = "weight") {
   edges <- sf::st_geometry(sf::st_as_sf(network, "edges"))
@@ -325,20 +321,30 @@ nearest_node <- function(network, target) {
   nodes[idx]
 }
 
-#' Subset a network keeping the only nodes that intersect a target geometry.
+#' Subset a network keeping the components that intersect a target geometry.
 #'
 #' If subsetting results in multiple disconnected components, we keep the main
 #' one.
 #'
 #' @param network A network object
 #' @param target The target geometry
+#' @param element The elements of the network to filter. It can be "nodes"
+#'   or "edges"
 #'
 #' @return A spatial network object
+#' @importFrom rlang !!
 #' @keywords internal
-filter_network <- function(network, target) {
+filter_network <- function(network, target, elements = "nodes") {
+  if (elements == "nodes") {
+    intersect_func <- sfnetworks::node_intersects
+  } else if (elements == "edges") {
+    intersect_func <- sfnetworks::edge_intersects
+  } else {
+    stop("Unknown elements - choose beetween 'nodes' and 'edges'")
+  }
   network |>
-    tidygraph::activate("nodes") |>
-    tidygraph::filter(sfnetworks::node_intersects(target)) |>
+    tidygraph::activate(!!elements) |>
+    tidygraph::filter(intersect_func(target)) |>
     # keep only the main connected component of the network
     tidygraph::activate("nodes") |>
     dplyr::filter(tidygraph::group_components() == 1)
@@ -361,4 +367,14 @@ get_intersecting_edges <- function(network, geometry, index = FALSE) {
   } else {
     edges[intersects, ]
   }
+}
+
+#' Find intersections between the edges of two networks
+#'
+#' @param network1,network2 The two spatial network objects
+#' @return A simple feature object
+#' @keywords internal
+find_intersections <- function(network_1, network_2) {
+  sf::st_intersection(sf::st_geometry(sf::st_as_sf(network_1, "edges")),
+                      sf::st_geometry(sf::st_as_sf(network_2, "edges")))
 }

@@ -6,14 +6,14 @@
 #'   provided, the suitable Universal Transverse Mercator (UTM) CRS is selected
 #' @param network_buffer Add a buffer (an integer in meters) around
 #'   river to retrieve additional data (streets, railways, etc.).
-#'   Default is 2500 m.
+#'   Default is 3000 m.
 #' @param buildings_buffer Add a buffer (an integer in meters) around the
 #'   river to retrieve additional data (buildings). Default is 100 m.
 #' @param dem_buffer Add a buffer (an integer in meters) for retrieving the DEM.
 #' @param initial_method The method employed to define the initial river
 #'   corridor geometry. See [initial_corridor()] for the available methods
 #' @param dem_buffer Add a buffer (an integer in meters) around the
-#'   river to retrieve the DEM. Default is 2500 m.
+#'   river to retrieve the DEM.
 #' @param initial_buffer Buffer region to add to the river geometry to setup the
 #'   initial corridor (only used if `initial_method` is `"buffer"`)
 #' @param dem Digital elevation model (DEM) of the region (only used if
@@ -43,7 +43,7 @@ delineate <- function(
   city_name, river_name, crs = NULL, network_buffer = NULL,
   buildings_buffer = NULL, dem_buffer = 2500, initial_method = "valley",
   initial_buffer = NULL, dem = NULL, max_iterations = 10,
-  capping_method = "shortest-path", angle_threshold = 90, corridor = TRUE,
+  capping_method = "shortest-path", angle_threshold = 100, corridor = TRUE,
   segments = FALSE, riverspace = FALSE, force_download = FALSE, ...
 ) {
 
@@ -51,7 +51,7 @@ delineate <- function(
 
   # set default values for network_buffer and buildings_buffer
   if (corridor && is.null(network_buffer)) {
-    network_buffer <- 2500
+    network_buffer <- 3000
     message(sprintf(
       "The default `network_buffer` of %d m is used for corridor delineation.",
       network_buffer
@@ -73,17 +73,13 @@ delineate <- function(
   osm_data <- get_osmdata(
     city_name, river_name, network_buffer = network_buffer,
     buildings_buffer = buildings_buffer, crs = crs,
-    force_download = force_download
+    city_boundary = FALSE, force_download = force_download
   )
 
   # If not provided, determine the CRS
   if (is.null(crs)) crs <- get_utm_zone(osm_data$bb)
 
   if (corridor) {
-    # For the corridor delineation, the area of interest (aoi) is the one used
-    # to retrieve the network datasets (streets and railways), projected to CRS
-    aoi <- reproject(osm_data$aoi_network, crs)
-
     # If using the valley method, and the DEM is not provided, retrieve dataset
     # on a larger aoi to limit edge effects while determining the valley
     if (initial_method == "valley" && is.null(dem)) {
@@ -97,10 +93,9 @@ delineate <- function(
 
     # Run the corridor delineation on the spatial network
     corridor <- delineate_corridor(
-      network, osm_data$river_centerline, osm_data$river_surface, aoi = aoi,
-      max_width = network_buffer, initial_method = initial_method,
-      buffer = initial_buffer, dem = dem, max_iterations = max_iterations,
-      capping_method = capping_method
+      network, osm_data$river_centerline, max_width = network_buffer,
+      initial_method = initial_method, buffer = initial_buffer, dem = dem,
+      max_iterations = max_iterations, capping_method = capping_method
     )
   } else {
     corridor <- NULL

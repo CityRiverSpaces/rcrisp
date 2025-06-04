@@ -4,13 +4,7 @@
 \alias{initial_corridor}
 \title{Draw the initial geometry of a river corridor.}
 \usage{
-initial_corridor(
-  river,
-  method = "valley",
-  buffer = NULL,
-  dem = NULL,
-  bbox = NULL
-)
+initial_corridor(river, method = "valley", buffer = NULL, dem = NULL)
 }
 \arguments{
 \item{river}{A simple feature geometry representing the river}
@@ -29,8 +23,6 @@ details on the implementation)
 
 \item{dem}{Digital elevation model (DEM) of the region (only used if
 \code{initial_method} is \code{"valley"})}
-
-\item{bbox}{Bounding box defining the extent of the area of interest}
 }
 \value{
 A simple feature geometry

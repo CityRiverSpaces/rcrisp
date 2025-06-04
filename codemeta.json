@@ -2,7 +2,7 @@
   "@context": "https://doi.org/10.5063/schema/codemeta-2.0",
   "@type": "SoftwareSourceCode",
   "identifier": "rcrisp",
-  "description": "'CRiSp' (City River Spaces) provides tools to automate the morphological delineation of riverside urban areas, based on a method introduced in Forgaci (2018) <doi:10.7480/abe.2018.31>. Delineation entails the identification of corridor boundaries, segmentation of the corridor, and delineation of the river space. The resulting delineation can be used to charactarise spatial phenomena that can be related to the river as a central element.",
+  "description": "Provides tools to automate the morphological delineation of riverside urban areas, based on a method introduced in Forgaci (2018) <doi:10.7480/abe.2018.31>. Delineation entails the identification of corridor boundaries, segmentation of the corridor, and delineation of the river space. The resulting delineation can be used to charactarise spatial phenomena that can be related to the river as a central element.",
   "name": "rcrisp: Automate the Delineation of Urban River Spaces",
   "codeRepository": "https://github.com/CityRiverSpaces/CRiSp",
   "issueTracker": "https://github.com/CityRiverSpaces/crisp/issues",
@@ -72,12 +72,6 @@
     }
   ],
   "softwareSuggestions": [
-    {
-      "@type": "SoftwareApplication",
-      "identifier": "CRiSpData",
-      "name": "CRiSpData",
-      "sameAs": "https://github.com/CityRiverSpaces/CRiSpData"
-    },
     {
       "@type": "SoftwareApplication",
       "identifier": "ggplot2",
@@ -217,7 +211,7 @@
         "name": "Comprehensive R Archive Network (CRAN)",
         "url": "https://cran.r-project.org"
       },
-      "sameAs": "https://github.com/CityRiverSpaces/rcoins"
+      "sameAs": "https://CRAN.R-project.org/package=rcoins"
     },
     "7": {
       "@type": "SoftwareApplication",
@@ -337,11 +331,11 @@
         "name": "Comprehensive R Archive Network (CRAN)",
         "url": "https://cran.r-project.org"
       },
-      "sameAs": "https://github.com/CityRiverSpaces/visor"
+      "sameAs": "https://CRAN.R-project.org/package=visor"
     },
     "SystemRequirements": null
   },
-  "fileSize": "1593.683KB",
+  "fileSize": "1609.573KB",
   "relatedLink": "https://cityriverspaces.github.io/CRiSp/",
   "releaseNotes": "https://github.com/CityRiverSpaces/CRiSp/blob/master/NEWS.md",
   "readme": "https://github.com/CityRiverSpaces/CRiSp/blob/main/README.md",

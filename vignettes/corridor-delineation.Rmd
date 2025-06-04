@@ -17,8 +17,10 @@ knitr::opts_chunk$set(
 
 ```{r setup, warning=FALSE, message=FALSE}
 library(rcrisp)
-library(CRiSpData)
 library(sf)
+
+bucharest_osm <- get_osm_example_data()
+bucharest_dem <- get_dem_example_data()
 ```
 
 In this notebook we explore how to delineate an urban river corridor using river Dâmbovița in Bucharest, Romania. We will use OpenStreetMap (OSM) data, first from the Overpass API and then from a local file.

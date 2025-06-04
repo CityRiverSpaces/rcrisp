@@ -17,8 +17,10 @@ knitr::opts_chunk$set(
 
 ```{r setup}
 library(rcrisp)
-library(CRiSpData)
 library(sf)
+
+bucharest_osm <- get_osm_example_data()
+bucharest_dem <- get_dem_example_data()
 ```
 
 River space delineation is a delineation step that uses the river and buildings as input to generate a polygon representing the space between the river and the first line of buildings. We will use River Dâmbovița of Bucharest as the river and the buildings surrounding it as input.
@@ -31,7 +33,7 @@ river <- bucharest_osm$river_surface
 The `delineate_riverspace()` function takes the building polygons and the river surface polygons as input. If no river is provided, it will return an error message. If no buildings are provided, it will return an unobstructed buffer of a given radius with a warning message. The function returns an sf polygon.
 
 ```{r riverspace}
-riverspace <- delineate_riverspace(buildings, river)
+riverspace <- delineate_riverspace(river, buildings)
 ```
 
 We visualise the riverspace in a subset of segments.
