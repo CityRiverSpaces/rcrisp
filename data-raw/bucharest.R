@@ -10,7 +10,7 @@ dem_buffer <- 2500
 bucharest_delineation <- delineate(city_name, river_name, crs = epsg_code,
                                    network_buffer = network_buffer,
                                    buildings_buffer = buildings_buffer,
-                                   dem_buffer = dem_buffer,
+                                   dem_buffer = dem_buffer, valley = TRUE,
                                    corridor = TRUE, segments = TRUE,
                                    riverspace = TRUE)
 
