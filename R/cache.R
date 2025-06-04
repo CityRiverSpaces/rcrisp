@@ -6,7 +6,7 @@
 #' line to the `.Renviron` file:
 #' `CRISP_CACHE_DIRECTORY=/path/to/crisp/cache/dir`.
 #'
-#' @return The cache directory used by CRiSp.
+#' @return The cache directory used by rcrisp.
 #' @export
 #' @examplesIf interactive()
 #' cache_directory()

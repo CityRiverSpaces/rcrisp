@@ -26,7 +26,7 @@ bucharest_dem <- get_dem_example_data()
 
 ## 1. Input data
 
-In this article we show how to set up the spatial network for a city before using it for urban river corridor delineation. We work with the OSM data for the city of Bucharest provided in CRiSp example data. See how to get your own OSM data in `vignette("getting-osm-data")`.
+In this article we show how to set up the spatial network for a city before using it for urban river corridor delineation. We work with the OSM data for the city of Bucharest provided in rcrisp example data. See how to get your own OSM data in `vignette("getting-osm-data")`.
 
 We start by loading the OSM data. According to the delineation method, all persistent physical structures need to be considered. Therefore, the network will contain both streets and railways from OSM.
 

@@ -7,7 +7,7 @@
 cache_directory()
 }
 \value{
-The cache directory used by CRiSp.
+The cache directory used by rcrisp.
 }
 \description{
 By default, the cache directory is equal to \verb{$\{HOME\}/.cache/CRiSp}. A

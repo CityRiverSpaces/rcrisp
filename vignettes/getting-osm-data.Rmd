@@ -16,8 +16,8 @@ knitr::opts_chunk$set(
   warning = FALSE
 )
 
-bucharest_osm <- CRiSp::get_osm_example_data()
-bucharest_dem <- CRiSp::get_dem_example_data()
+bucharest_osm <- rcrisp::get_osm_example_data()
+bucharest_dem <- rcrisp::get_dem_example_data()
 ```
 
 ```{r setup, include = FALSE}
