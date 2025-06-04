@@ -1,4 +1,4 @@
-#' CRiSpDelineation example data for Bucharest
+#' rcrisp example data for Bucharest
 #'
 #' Delineation generated with [`CRiSpData::bucharest_osm`] and
 #' [`CRiSpData::bucharest_dem`] as input

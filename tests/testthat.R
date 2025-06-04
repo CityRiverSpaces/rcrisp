@@ -7,6 +7,6 @@
 # * https://testthat.r-lib.org/articles/special-files.html
 
 library(testthat)
-library(CRiSpDelineation)
+library(rcrisp)
 
-test_check("CRiSpDelineation")
+test_check("rcrisp")

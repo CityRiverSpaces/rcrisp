@@ -2,7 +2,7 @@
 # Visit https://bit.ly/cffinit to generate yours today!
 
 cff-version: 1.2.0
-title: CRiSpDelineation
+title: rcrisp
 message: >-
   If you use this software, please cite it using the
   metadata from this file.
@@ -31,8 +31,8 @@ contributors:
     orcid: 'https://orcid.org/0000-0002-5733-4795'
 repository-code: 'https://github.com/CityRiverSpaces/CRiSp'
 abstract: >-
-  The CRiSpDelineation (City River Space Delineation) open-source software
-  automates the process of urban river space delineation.
+  Automates the process of urban river space delineation
+  using the CRiSp (City River Spaces) method.
 keywords:
   - urban rivers
   - geospatial data
