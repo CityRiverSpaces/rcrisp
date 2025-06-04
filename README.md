@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# CRiSpDelineation
+# rcrisp
 
 <!-- badges: start -->
 
@@ -11,19 +11,19 @@ state and is being actively
 developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 <!-- badges: end -->
 
-CRiSpDelineation (City River Space Delineation) provides tools to
-automate the morphological delineation of riverside urban areas.
+rcrisp provides tools to automate the morphological delineation of
+riverside urban areas following the CRiSp (City River Spaces) method.
 
 ## Installation
 
-You can install the released version of CRiSpDelineation from
+You can install the released version of rcrisp from
 [CRAN](https://cran.r-project.org) with:
 
 ``` r
-install.packages("CRiSpDelineation")
+install.packages("rcrisp")
 ```
 
-You can install the development version of CRiSpDelineation from
+You can install the development version of rcrisp from
 [GitHub](https://github.com/) with:
 
 ``` r
@@ -36,7 +36,7 @@ pak::pak("CityRiverSpaces/CRiSp")
 This is a basic example which shows you how to solve a common problem:
 
 ``` r
-library(CRiSpDelineation)
+library(rcrisp)
 
 # Set location parameters
 city_name <- "Bucharest"
