@@ -41,6 +41,6 @@ test_that("Throw error if valley is requested with wrong initial_method", {
   expect_error(suppressWarnings(delineate("Bucharest", "Dâmbovița",
                                           initial_method = "buffer",
                                           valley = TRUE)),
-               paste('The valley can only be returned if `initial_method` is',
-                     '`"valley"`'))
+               paste("The valley can only be returned if `initial_method` is",
+                     "`\"valley\"`"))
 })
