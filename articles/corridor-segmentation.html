@@ -93,8 +93,8 @@ setting the argument <code>segments = TRUE</code> in
 <code><a href="../reference/delineate.html">delineate()</a></code> or by using the
 <code><a href="../reference/delineate_segments.html">delineate_segments()</a></code> function in a separate step.</p>
 <p>To demonstrate this as a separate step, we will use the
-<code>bucharest_delineation$corridor</code> from the package data, as
-well as <code>bucharest_osm$streets</code> and
+<code>bucharest_dambovita$corridor</code> from the package data, as well
+as <code>bucharest_osm$streets</code> and
 <code>bucharest_osm$railways</code> from CRiSp example data as
 input.</p>
 <p>We first prepare the network and select all the streets and railways
@@ -102,7 +102,7 @@ that cover the river corridor plus a small buffer region (see also
 <code><a href="../articles/network-preparation.html">vignette("network-preparation")</a></code>):</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Add a buffer region around the corridor</span></span>
-<span><span class="va">corridor_buffer</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_unary.html" class="external-link">st_buffer</a></span><span class="op">(</span><span class="va">bucharest_delineation</span><span class="op">$</span><span class="va">corridor</span>, <span class="fl">500</span><span class="op">)</span></span>
+<span><span class="va">corridor_buffer</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_unary.html" class="external-link">st_buffer</a></span><span class="op">(</span><span class="va">bucharest_dambovita</span><span class="op">$</span><span class="va">corridor</span>, <span class="fl">500</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Filter the streets and railwayas to the buffer area</span></span>
 <span><span class="va">streets</span> <span class="op">&lt;-</span> <span class="va">bucharest_osm</span><span class="op">$</span><span class="va">streets</span> <span class="op">|&gt;</span></span>
@@ -118,7 +118,7 @@ corridor using river-crossing transversal edges that form continuous
 lines in the network:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">segmented_corridor</span> <span class="op">&lt;-</span></span>
-<span>  <span class="fu"><a href="../reference/delineate_segments.html">delineate_segments</a></span><span class="op">(</span><span class="va">bucharest_delineation</span><span class="op">$</span><span class="va">corridor</span>,</span>
+<span>  <span class="fu"><a href="../reference/delineate_segments.html">delineate_segments</a></span><span class="op">(</span><span class="va">bucharest_dambovita</span><span class="op">$</span><span class="va">corridor</span>,</span>
 <span>                     <span class="va">network_filtered</span>,</span>
 <span>                     <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_geometry</a></span><span class="op">(</span><span class="va">bucharest_osm</span><span class="op">$</span><span class="va">river_centerline</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_geometry</a></span><span class="op">(</span><span class="va">streets</span><span class="op">)</span><span class="op">)</span></span>
