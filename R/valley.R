@@ -69,7 +69,7 @@ get_dem <- function(bb, dem_source = "STAC", stac_endpoint = NULL,
 #'
 #' @return River valley as a simple feature geometry
 #' @export
-#' @examples
+#' @examplesIf interactive()
 #' bucharest_osm <- get_osm_example_data()
 #' bucharest_dem <- get_dem_example_data()
 #' delineate_valley(bucharest_dem, bucharest_osm$river_centerline)

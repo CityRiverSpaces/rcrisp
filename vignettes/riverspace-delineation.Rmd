@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 ```
 
 ```{r setup}
-library(CRiSp)
+library(rcrisp)
 library(sf)
 
 bucharest_osm <- get_osm_example_data()

@@ -4,14 +4,14 @@
 \alias{clip_and_filter}
 \title{Clip lines to the extent of the corridor, and select valid segment edges}
 \usage{
-clip_and_filter(lines, corridor, river_centerline)
+clip_and_filter(lines, corridor, river)
 }
 \arguments{
 \item{lines}{Candidate segment edges as a simple feature geometry}
 
 \item{corridor}{The river corridor as a simple feature geometry}
 
-\item{river_centerline}{The river centerline as a simple feature geometry}
+\item{river}{The river centerline as a simple feature geometry}
 }
 \value{
 Candidate segment edges as a simple feature geometry

@@ -82,5 +82,7 @@ A list with the corridor, segments, and riverspace geometries
 Delineate a corridor around a river.
 }
 \examples{
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 delineate("Bucharest", "Dâmbovița")
+\dontshow{\}) # examplesIf}
 }
