@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>3. Preparing the network for delineation • CRiSp</title>
+<title>3. Preparing the network for delineation • rcrisp</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
@@ -18,7 +18,7 @@
 
     <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
 
-    <a class="navbar-brand me-2" href="../index.html">CRiSp</a>
+    <a class="navbar-brand me-2" href="../index.html">rcrisp</a>
 
     <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
 
@@ -52,7 +52,7 @@
 <li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json">
 </form></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://github.com/CityRiverSpaces/crisp/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/CityRiverSpaces/rcrisp/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul>
 </div>
 
@@ -69,14 +69,14 @@
       <h1>3. Preparing the network for delineation</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/CityRiverSpaces/crisp/blob/main/vignettes/network-preparation.Rmd" class="external-link"><code>vignettes/network-preparation.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/CityRiverSpaces/rcrisp/blob/main/vignettes/network-preparation.Rmd" class="external-link"><code>vignettes/network-preparation.Rmd</code></a></small>
       <div class="d-none name"><code>network-preparation.Rmd</code></div>
     </div>
 
     
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://cityriverspaces.github.io/CRiSp/">CRiSp</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://cityriverspaces.github.io/rcrisp/">rcrisp</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://luukvdmeer.github.io/sfnetworks/" class="external-link">sfnetworks</a></span><span class="op">)</span></span>
@@ -88,7 +88,7 @@
 </h2>
 <p>In this article we show how to set up the spatial network for a city
 before using it for urban river corridor delineation. We work with the
-OSM data for the city of Bucharest provided in CRiSp example data. See
+OSM data for the city of Bucharest provided in rcrisp example data. See
 how to get your own OSM data in
 <code><a href="../articles/getting-osm-data.html">vignette("getting-osm-data")</a></code>.</p>
 <p>We start by loading the OSM data. According to the delineation
@@ -167,7 +167,7 @@ the main component of the network.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">network_removed_nodes</span>, col <span class="op">=</span> <span class="st">"red"</span>, pch <span class="op">=</span> <span class="fl">4</span>,</span>
 <span>     xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">425100</span>, <span class="fl">425400</span><span class="op">)</span>, ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4922400</span>, <span class="fl">4923000</span><span class="op">)</span>,</span>
 <span>     main <span class="op">=</span> <span class="st">"Network after preprocessing"</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="network-preparation_files/figure-html/unnamed-chunk-7-1.png" alt="The network before and after preprocessing." width="700"></p>
+<p><img src="network-preparation_files/figure-html/unnamed-chunk-6-1.png" alt="The network before and after preprocessing." width="700"></p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
