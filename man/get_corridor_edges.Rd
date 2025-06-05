@@ -4,12 +4,12 @@
 \alias{get_corridor_edges}
 \title{Split corridor along the river to find edges on the two banks}
 \usage{
-get_corridor_edges(corridor, river_centerline)
+get_corridor_edges(corridor, river)
 }
 \arguments{
 \item{corridor}{The river corridor as a simple feature geometry}
 
-\item{river_centerline}{The river centerline as a simple feature geometry}
+\item{river}{The river centerline as a simple feature geometry}
 }
 \value{
 Corridor edges as a simple feature geometry
