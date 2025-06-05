@@ -3,7 +3,7 @@
 \docType{data}
 \name{bucharest_dambovita}
 \alias{bucharest_dambovita}
-\title{CRiSp example delineation data for Bucharest}
+\title{rcrisp example delineation data for Bucharest}
 \format{
 A list of sf objects representing:
 \describe{
@@ -16,7 +16,7 @@ A list of sf objects representing:
 bucharest_dambovita
 }
 \description{
-Delineation generated with CRiSp example data found at
+Delineation generated with rcrisp example data found at
 \url{https://data.4tu.nl/datasets/f5d5e118-b5bd-4dfb-987f-fe10d1b9b386}
 }
 \keyword{datasets}
