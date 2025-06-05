@@ -1,7 +1,7 @@
 test_that("Cache directory is set via environmnent variable and created", {
   # create temporary folder
-  root_dir <- withr::local_tempdir(pattern = "CRiSp-test-cache")
-  cache_dir <- file.path(root_dir, ".cache", "CRiSp")
+  root_dir <- withr::local_tempdir(pattern = "rcrisp-test-cache")
+  cache_dir <- file.path(root_dir, ".cache", "rcrisp")
   withr::with_envvar(new = c("CRISP_CACHE_DIRECTORY" = cache_dir), {
     actual <- cache_directory()
     expected <- normalizePath(cache_dir)

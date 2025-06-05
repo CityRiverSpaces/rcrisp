@@ -1,6 +1,6 @@
 #' Return the cache directory used by the package
 #'
-#' By default, the cache directory is equal to `${HOME}/.cache/CRiSp`. A
+#' By default, the cache directory is equal to `${HOME}/.cache/rcrisp`. A
 #' different directory can be used by setting the environment variable
 #' `CRISP_CACHE_DIRECTORY`. This can also be done by adding the following
 #' line to the `.Renviron` file:
@@ -11,7 +11,7 @@
 #' @examplesIf interactive()
 #' cache_directory()
 cache_directory <- function() {
-  default_dir <- file.path(Sys.getenv("HOME", "."), ".cache", "CRiSp")
+  default_dir <- file.path(Sys.getenv("HOME", "."), ".cache", "rcrisp")
   cache_dir <- Sys.getenv("CRISP_CACHE_DIRECTORY", default_dir)
   if (!dir.exists(cache_dir)) {
     dir.create(cache_dir, recursive = TRUE)
