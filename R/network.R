@@ -371,8 +371,7 @@ get_intersecting_edges <- function(network, geometry, index = FALSE) {
 
 #' Find intersections between the edges of two networks
 #'
-#' @param network_1 The first spatial network object
-#' @param network_2 The second spatial network object
+#' @param network_1,network_2 The two spatial network objects
 #' @return A simple feature object
 #' @keywords internal
 find_intersections <- function(network_1, network_2) {

@@ -7,9 +7,7 @@
 find_intersections(network_1, network_2)
 }
 \arguments{
-\item{network_1}{The first spatial network object}
-
-\item{network_2}{The second spatial network object}
+\item{network_1, network_2}{The two spatial network objects}
 }
 \value{
 A simple feature object
