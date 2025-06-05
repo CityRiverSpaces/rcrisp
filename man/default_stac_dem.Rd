@@ -3,18 +3,7 @@
 \docType{data}
 \name{default_stac_dem}
 \alias{default_stac_dem}
-\title{Endpoint and collection ID of the default STAC collection where to access
-digital elevation model (DEM) data. This is the global Copernicus DEM 30
-dataset hosted on AWS, as listed in the EarthSearch STAC API endpoint.
-Note that AWS credentials need to be set up in order to access the data (not
-the catalog).
-References:
-\itemize{
-\item \href{https://element84.com/earth-search/}{EarthSearch STAC API}
-\item \href{https://dataspace.copernicus.eu/explore-data/data-collections/copernicus-contributing-missions/collections-description/COP-DEM}{Copernicus DEM}
-\item \href{https://copernicus-dem-30m.s3.amazonaws.com/readme.html}{AWS Copernicus DEM datasets}
-\item \href{https://docs.sentinel-hub.com/api/latest/static/files/data/dem/resources/license/License-COPDEM-30.pdf}{Data license}
-}}
+\title{Default STAC collection}
 \format{
 An object of class \code{list} of length 2.
 }
