@@ -12,7 +12,7 @@
 #'
 #' @return Segment polygons as a simple feature geometry
 #' @export
-#' @examples
+#' @examplesIf interactive()
 #' bucharest_osm <- get_osm_example_data()
 #' corridor <- bucharest_dambovita$corridor
 #' network <- rbind(bucharest_osm$streets, bucharest_osm$railways) |>
