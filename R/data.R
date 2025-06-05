@@ -1,4 +1,4 @@
-#' rcrisp example data for Bucharest
+#' rcrisp example delineation data for Bucharest
 #'
 #' Delineation generated with rcrisp example data found at
 #' <https://data.4tu.nl/datasets/f5d5e118-b5bd-4dfb-987f-fe10d1b9b386>
