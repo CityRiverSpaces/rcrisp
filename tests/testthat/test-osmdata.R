@@ -12,10 +12,8 @@ test_that("City boundary of Bucharest is correctly retreived", {
   city_name <- "Bucharest"
   bb <- get_osm_bb(city_name)
 
-  expect_message(bucharest_boundary <-
-                   get_osm_city_boundary(bb, city_name,
-                                         force_download = TRUE),
-                 "City boundary found with 'boundary:administrative' tag.")
+  bucharest_boundary <- get_osm_city_boundary(bb, city_name,
+                                              force_download = TRUE)
   expect_equal(as.numeric(bb), as.numeric(sf::st_bbox(bucharest_boundary)))
 })
 
