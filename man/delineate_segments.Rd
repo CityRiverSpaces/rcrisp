@@ -4,14 +4,14 @@
 \alias{delineate_segments}
 \title{Split a river corridor into segments}
 \usage{
-delineate_segments(corridor, network, river_centerline, angle_threshold = 100)
+delineate_segments(corridor, network, river, angle_threshold = 100)
 }
 \arguments{
 \item{corridor}{The river corridor as a simple feature geometry}
 
 \item{network}{The spatial network to be used for the segmentation}
 
-\item{river_centerline}{The river centerline as a simple feature geometry}
+\item{river}{The river centerline as a simple feature geometry}
 
 \item{angle_threshold}{Only consider angles above this threshold (in degrees)
 to form continuous strokes in the network. See \code{\link[rcoins:stroke]{rcoins::stroke()}} for
@@ -30,7 +30,7 @@ bucharest_osm <- get_osm_example_data()
 corridor <- bucharest_dambovita$corridor
 network <- rbind(bucharest_osm$streets, bucharest_osm$railways) |>
   as_network()
-river_centerline <- bucharest_osm$river_centerline |> sf::st_geometry()
-delineate_segments(corridor, network, river_centerline)
+river <- bucharest_osm$river_centerline |> sf::st_geometry()
+delineate_segments(corridor, network, river)
 \dontshow{\}) # examplesIf}
 }
