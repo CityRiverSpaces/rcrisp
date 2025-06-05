@@ -29,7 +29,7 @@ contributors:
     email: m.grootes@esciencecenter.nl
     affiliation: Netherlands eScience Center
     orcid: 'https://orcid.org/0000-0002-5733-4795'
-repository-code: 'https://github.com/CityRiverSpaces/CRiSp'
+repository-code: 'https://github.com/CityRiverSpaces/rcrisp'
 abstract: >-
   Automates the process of urban river space delineation
   using the CRiSp (City River Spaces) method.

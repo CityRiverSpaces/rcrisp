@@ -5,7 +5,7 @@
 
 <!-- badges: start -->
 
-[![R-CMD-check](https://github.com/CityRiverSpaces/CRiSp/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/CityRiverSpaces/CRiSp/actions/workflows/R-CMD-check.yaml)
+[![R-CMD-check](https://github.com/CityRiverSpaces/rcrisp/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/CityRiverSpaces/rcrisp/actions/workflows/R-CMD-check.yaml)
 [![Project Status: Active – The project has reached a stable, usable
 state and is being actively
 developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
@@ -28,7 +28,7 @@ You can install the development version of rcrisp from
 
 ``` r
 # install.packages("pak")
-pak::pak("CityRiverSpaces/CRiSp")
+pak::pak("CityRiverSpaces/rcrisp")
 ```
 
 ## Example
