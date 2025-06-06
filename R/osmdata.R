@@ -285,14 +285,14 @@ get_osm_streets <- function(aoi, crs = NULL, highway_values = NULL,
                             force_download = FALSE) {
   if (is.null(highway_values)) {
     highway_values <- c("motorway", "trunk", "primary", "secondary", "tertiary")
+    link_values <- vapply(X = highway_values,
+                          FUN = \(x) sprintf("%s_link", x),
+                          FUN.VALUE = character(1),
+                          USE.NAMES = FALSE)
+    highway_values <- c(highway_values, link_values)
   }
 
-  link_values <- vapply(X = highway_values,
-                        FUN = \(x) sprintf("%s_link", x),
-                        FUN.VALUE = character(1),
-                        USE.NAMES = FALSE)
-
-  streets <- osmdata_as_sf("highway", c(highway_values, link_values), aoi,
+  streets <- osmdata_as_sf("highway", highway_values, aoi,
                            force_download = force_download)
 
   # Cast polygons (closed streets) into lines
@@ -321,6 +321,8 @@ get_osm_streets <- function(aoi, crs = NULL, highway_values = NULL,
 #'
 #' @param aoi Area of interest as sf object or bbox
 #' @param crs Coordinate reference system as EPSG code
+#' @param railway_values A character or character vector with the highway values
+#'   to retrieve.
 #' @param force_download Download data even if cached data is available
 #'
 #' @return An sf object with the railways
@@ -331,8 +333,9 @@ get_osm_streets <- function(aoi, crs = NULL, highway_values = NULL,
 #' bb <- get_osm_bb("Bucharest")
 #' crs <- get_utm_zone(bb)
 #' get_osm_railways(bb, crs)
-get_osm_railways <- function(aoi, crs = NULL, force_download = FALSE) {
-  railways <- osmdata_as_sf("railway", "rail", aoi,
+get_osm_railways <- function(aoi, crs = NULL, railway_values = "rail",
+                             force_download = FALSE) {
+  railways <- osmdata_as_sf("railway", railway_values, aoi,
                             force_download = force_download)
   # If no railways are found, return an empty sf object
   if (is.null(railways$osm_lines)) {
