@@ -327,7 +327,7 @@ get_osm_streets <- function(aoi, crs = NULL, highway_values = NULL,
 #'
 #' @param aoi Area of interest as sf object or bbox
 #' @param crs Coordinate reference system as EPSG code
-#' @param railway_values A character or character vector with the highway values
+#' @param railway_values A character or character vector with the railway values
 #'   to retrieve.
 #' @param force_download Download data even if cached data is available
 #'
