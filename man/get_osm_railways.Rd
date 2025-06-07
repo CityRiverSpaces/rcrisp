@@ -16,7 +16,7 @@ get_osm_railways(
 
 \item{crs}{Coordinate reference system as EPSG code}
 
-\item{railway_values}{A character or character vector with the highway values
+\item{railway_values}{A character or character vector with the railway values
 to retrieve.}
 
 \item{force_download}{Download data even if cached data is available}
