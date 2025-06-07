@@ -217,22 +217,23 @@ get_osm_city_boundary <- function(bb, city_name, crs = NULL, multiple = FALSE,
 #' get_osm_river(bb, "Dâmbovița", crs)
 get_osm_river <- function(bb, river_name, crs = NULL, force_download = FALSE) {
   # Get the river centreline
-  river_centerline_all <- osmdata_as_sf("waterway", "", bb,
-                                        force_download = force_download)
+  river_centerline <- osmdata_as_sf("waterway", "", bb,
+                                    force_download = force_download)
 
   # Check that waterway geometries are found within bb
-  if (is.null(river_centerline_all$osm_lines) &&
-        is.null(river_centerline_all$osm_multilines)) {
+  if (is.null(river_centerline$osm_lines) &&
+        is.null(river_centerline$osm_multilines)) {
     stop(sprintf("No waterway geometries found within given bounding box"))
   }
 
-  river_centerline_all <- dplyr::bind_rows(
-    river_centerline_all$osm_lines,
-    river_centerline_all$osm_multilines
-  )
+  river_centerline_lines <- river_centerline$osm_lines
+  if (!is.null(river_centerline$osm_multilines)) {
+    river_centerline_lines <- dplyr::bind_rows(river_centerline_lines,
+                                               river_centerline$osm_multilines)
+  }
 
   # Retrieve river centerline of interest
-  river_centerline <- river_centerline_all |>
+  river_centerline <- river_centerline_lines |>
     # filter using any of the "name" columns (matching different languages)
     match_osm_name(river_name) |>
     check_invalid_geometry() |> # fix invalid geometries, if any
@@ -248,8 +249,13 @@ get_osm_river <- function(bb, river_name, crs = NULL, force_download = FALSE) {
   # Get the river surface
   river_surface <- osmdata_as_sf("natural", "water", bb,
                                  force_download = force_download)
-  river_surface <- dplyr::bind_rows(river_surface$osm_polygons,
-                                    river_surface$osm_multipolygons) |>
+  river_surface_polygons <- river_surface$osm_polygons
+  if (!is.null(river_surface$osm_multipolygons)) {
+    river_surface_polygons <- dplyr::bind_rows(river_surface_polygons,
+                                               river_surface$osm_multipolygons)
+  }
+
+  river_surface <- river_surface_polygons |>
     sf::st_geometry() |>
     check_invalid_geometry() |> # fix invalid geometries, if any
     sf::st_as_sf() |>
