@@ -328,7 +328,7 @@ nearest_node <- function(network, target) {
 #'
 #' @param network A network object
 #' @param target The target geometry
-#' @param element The elements of the network to filter. It can be "nodes"
+#' @param elements The elements of the network to filter. It can be "nodes"
 #'   or "edges"
 #'
 #' @return A spatial network object
@@ -371,7 +371,7 @@ get_intersecting_edges <- function(network, geometry, index = FALSE) {
 
 #' Find intersections between the edges of two networks
 #'
-#' @param network1,network2 The two spatial network objects
+#' @param network_1,network_2 The two spatial network objects
 #' @return A simple feature object
 #' @keywords internal
 find_intersections <- function(network_1, network_2) {

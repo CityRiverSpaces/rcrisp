@@ -1,34 +1,34 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# CRiSp
+# rcrisp
 
 <!-- badges: start -->
 
-[![R-CMD-check](https://github.com/CityRiverSpaces/CRiSp/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/CityRiverSpaces/CRiSp/actions/workflows/R-CMD-check.yaml)
+[![R-CMD-check](https://github.com/CityRiverSpaces/rcrisp/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/CityRiverSpaces/rcrisp/actions/workflows/R-CMD-check.yaml)
 [![Project Status: Active – The project has reached a stable, usable
 state and is being actively
 developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 <!-- badges: end -->
 
-CRiSp (City River Spaces) provides tools to automate the morphological
-delineation of riverside urban areas.
+rcrisp provides tools to automate the morphological delineation of
+riverside urban areas following the CRiSp (City River Spaces) method.
 
 ## Installation
 
-You can install the released version of CRiSp from
+You can install the released version of rcrisp from
 [CRAN](https://cran.r-project.org) with:
 
 ``` r
-install.packages("CRiSp")
+install.packages("rcrisp")
 ```
 
-You can install the development version of CRiSp from
+You can install the development version of rcrisp from
 [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("pak")
-pak::pak("CityRiverSpaces/CRiSp")
+pak::pak("CityRiverSpaces/rcrisp")
 ```
 
 ## Example
@@ -36,7 +36,7 @@ pak::pak("CityRiverSpaces/CRiSp")
 This is a basic example which shows you how to solve a common problem:
 
 ``` r
-library(CRiSp)
+library(rcrisp)
 
 # Set location parameters
 city_name <- "Bucharest"

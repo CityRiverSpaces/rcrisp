@@ -2,9 +2,9 @@
 For Work In Progress Pull Requests, please use the Draft PR feature,
 see https://github.blog/2019-02-14-introducing-draft-pull-requests/ for further details.
 
-Before submitting a Pull Request, please ensure you've read the CRiSp
-[Contributing Guide](https://cityriverspaces.github.io/CRiSp/CONTRIBUTING.html)
-and [Code of Conduct](https://cityriverspaces.github.io/CRiSp/CODE_OF_CONDUCT.html)
+Before submitting a Pull Request, please ensure you've read the rcrisp
+[Contributing Guide](https://cityriverspaces.github.io/rcrisp/CONTRIBUTING.html)
+and [Code of Conduct](https://cityriverspaces.github.io/rcrisp/CODE_OF_CONDUCT.html)
 -->
 
 ## What type of PR is this? (check all applicable)

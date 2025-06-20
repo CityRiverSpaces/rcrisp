@@ -7,10 +7,10 @@
 cache_directory()
 }
 \value{
-The cache directory used by CRiSp.
+The cache directory used by rcrisp.
 }
 \description{
-By default, the cache directory is equal to \verb{$\{HOME\}/.cache/CRiSp}. A
+By default, the cache directory is equal to \verb{$\{HOME\}/.cache/rcrisp}. A
 different directory can be used by setting the environment variable
 \code{CRISP_CACHE_DIRECTORY}. This can also be done by adding the following
 line to the \code{.Renviron} file:

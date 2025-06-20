@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 ```
 
 ```{r setup}
-library(CRiSp)
+library(rcrisp)
 library(sf)
 
 bucharest_osm <- get_osm_example_data()
@@ -40,11 +40,11 @@ We visualise the riverspace in a subset of segments.
 
 ```{r plot-riverspace, fig.alt="Riverspace delineation"}
 riverspace_segment_2_4 <- riverspace |>
-  st_intersection(bucharest_delineation$segments[2:4])
+  st_intersection(bucharest_dambovita$segments[2:4])
 
 buildings_segment_2_4 <- buildings |>
   st_sf() |>
-  st_filter(bucharest_delineation$segments[2:4], .predicate = st_intersects) |>
+  st_filter(bucharest_dambovita$segments[2:4], .predicate = st_intersects) |>
   st_filter(riverspace_segment_2_4, .predicate = st_intersects)
 
 plot(riverspace_segment_2_4, col = "orange", border = NA)

@@ -11,8 +11,8 @@ A SpatRaster object containing the DEM data.
 }
 \description{
 This function retrieves example Digital Elevation Model (DEM) data from a
-persistent URL on the 4TU.ResearchData data repository. The data is in the
-form of a SpatRaster object, which can be used in examples and tests.
+persistent URL on the 4TU.ResearchData data repository, and it can be used
+in examples and tests.
 }
 \examples{
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
