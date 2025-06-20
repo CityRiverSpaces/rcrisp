@@ -11,7 +11,7 @@ filter_network(network, target, elements = "nodes")
 
 \item{target}{The target geometry}
 
-\item{element}{The elements of the network to filter. It can be "nodes"
+\item{elements}{The elements of the network to filter. It can be "nodes"
 or "edges"}
 }
 \value{

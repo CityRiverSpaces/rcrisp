@@ -1,10 +1,10 @@
 {
   "@context": "https://doi.org/10.5063/schema/codemeta-2.0",
   "@type": "SoftwareSourceCode",
-  "identifier": "CRiSp",
+  "identifier": "rcrisp",
   "description": "Provides tools to automate the morphological delineation of riverside urban areas, based on a method introduced in Forgaci (2018) <doi:10.7480/abe.2018.31>. Delineation entails the identification of corridor boundaries, segmentation of the corridor, and delineation of the river space. The resulting delineation can be used to charactarise spatial phenomena that can be related to the river as a central element.",
-  "name": "CRiSp: Automate the Delineation of Urban River Spaces",
-  "codeRepository": "https://github.com/CityRiverSpaces/CRiSp",
+  "name": "rcrisp: Automate the Delineation of Urban River Spaces",
+  "codeRepository": "https://github.com/CityRiverSpaces/rcrisp",
   "issueTracker": "https://github.com/CityRiverSpaces/crisp/issues",
   "license": "Apache License 2",
   "version": "0.1.0",
@@ -13,7 +13,7 @@
     "name": "R",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 4.4.2 (2024-10-31)",
+  "runtimePlatform": "R version 4.5.0 (2025-04-11)",
   "author": [
     {
       "@type": "Person",
@@ -336,9 +336,9 @@
     "SystemRequirements": null
   },
   "fileSize": "1609.573KB",
-  "relatedLink": "https://cityriverspaces.github.io/CRiSp/",
-  "releaseNotes": "https://github.com/CityRiverSpaces/CRiSp/blob/master/NEWS.md",
-  "readme": "https://github.com/CityRiverSpaces/CRiSp/blob/main/README.md",
-  "contIntegration": "https://github.com/CityRiverSpaces/CRiSp/actions/workflows/R-CMD-check.yaml",
+  "relatedLink": "https://cityriverspaces.github.io/rcrisp/",
+  "releaseNotes": "https://github.com/CityRiverSpaces/rcrisp/blob/master/NEWS.md",
+  "readme": "https://github.com/CityRiverSpaces/rcrisp/blob/main/README.md",
+  "contIntegration": "https://github.com/CityRiverSpaces/rcrisp/actions/workflows/R-CMD-check.yaml",
   "developmentStatus": "https://www.repostatus.org/#active"
 }

@@ -1,6 +1,6 @@
 #' Fixture to setup temporary cache directory for tests
 temp_cache_dir <- function(env = parent.frame()) {
-  cache_dir <- file.path(tempdir(), "CRiSp-test-cache")
+  cache_dir <- file.path(tempdir(), "rcrisp-test-cache")
 
   # create temporary cache directory
   dir.create(cache_dir, recursive = TRUE)

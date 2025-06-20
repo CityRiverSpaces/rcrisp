@@ -5,31 +5,33 @@
 #'
 #' @param corridor The river corridor as a simple feature geometry
 #' @param network The spatial network to be used for the segmentation
-#' @param river_centerline The river centerline as a simple feature geometry
+#' @param river The river centerline as a simple feature geometry
 #' @param angle_threshold Only consider angles above this threshold (in degrees)
 #'   to form continuous strokes in the network. See [`rcoins::stroke()`] for
 #'   more details.
 #'
 #' @return Segment polygons as a simple feature geometry
 #' @export
-#' @examples
+#' @examplesIf interactive()
 #' bucharest_osm <- get_osm_example_data()
-#' corridor <- bucharest_delineation$corridor
+#' corridor <- bucharest_dambovita$corridor
 #' network <- rbind(bucharest_osm$streets, bucharest_osm$railways) |>
 #'   as_network()
-#' river_centerline <- bucharest_osm$river_centerline |> sf::st_geometry()
-#' delineate_segments(corridor, network, river_centerline)
-delineate_segments <- function(corridor, network, river_centerline,
+#' river <- bucharest_osm$river_centerline |> sf::st_geometry()
+#' delineate_segments(corridor, network, river)
+delineate_segments <- function(corridor, network, river,
                                angle_threshold = 100) {
+  # Drop all attributes of river but its geometry
+  river <- sf::st_geometry(river)
 
   # Find river crossings in the network and build continuous strokes from them
-  crossings <- get_intersecting_edges(network, river_centerline, index = TRUE)
+  crossings <- get_intersecting_edges(network, river, index = TRUE)
   crossing_strokes <- rcoins::stroke(network, from_edge = crossings,
                                      angle_threshold = angle_threshold)
 
   # Clip strokes to the corridor extent and select non-intersecting strokes as
   # segment boundaries
-  segment_edges <- clip_and_filter(crossing_strokes, corridor, river_centerline)
+  segment_edges <- clip_and_filter(crossing_strokes, corridor, river)
 
   # Split the corridor into the segments using the selected boundaries
   split_by(corridor, segment_edges)
@@ -46,22 +48,22 @@ delineate_segments <- function(corridor, network, river_centerline,
 #'
 #' @param lines Candidate segment edges as a simple feature geometry
 #' @param corridor The river corridor as a simple feature geometry
-#' @param river_centerline The river centerline as a simple feature geometry
+#' @param river The river centerline as a simple feature geometry
 #'
 #' @return Candidate segment edges as a simple feature geometry
 #' @importFrom rlang .data
 #' @keywords internal
-clip_and_filter <- function(lines, corridor, river_centerline) {
+clip_and_filter <- function(lines, corridor, river) {
 
   # Split corridor along the river centerline to find edges on the two sides
-  corridor_edges <- get_corridor_edges(corridor, river_centerline)
+  corridor_edges <- get_corridor_edges(corridor, river)
 
   # Clip the lines, keeping the only fragments that intersect the river
   lines_clipped <- sf::st_intersection(lines, corridor) |>
     sf::st_as_sf() |>
     dplyr::filter(sf::st_is(.data$x, c("MULTILINESTRING", "LINESTRING"))) |>
     sfheaders::sf_cast("LINESTRING") |>
-    sf::st_filter(river_centerline, .predicate = sf::st_intersects) |>
+    sf::st_filter(river, .predicate = sf::st_intersects) |>
     sf::st_geometry()
 
   # Select the fragments intersecting both sides of the corridor
@@ -72,7 +74,7 @@ clip_and_filter <- function(lines, corridor, river_centerline) {
   lines_valid <- lines_clipped[intersects_side_1 & intersects_side_2]
 
   # Cluster valid segment edges and select the shortest line per cluster
-  lines_shortest <- filter_clusters(lines_valid, river_centerline)
+  lines_shortest <- filter_clusters(lines_valid, river)
 
   # Drop intersecting lines, starting from the longest line with most
   # intersections with other lines
@@ -82,12 +84,12 @@ clip_and_filter <- function(lines, corridor, river_centerline) {
 #' Split corridor along the river to find edges on the two banks
 #'
 #' @param corridor The river corridor as a simple feature geometry
-#' @param river_centerline The river centerline as a simple feature geometry
+#' @param river The river centerline as a simple feature geometry
 #'
 #' @return Corridor edges as a simple feature geometry
 #' @keywords internal
-get_corridor_edges <- function(corridor, river_centerline) {
-  corridor_edges <- split_by(corridor, river_centerline, boundary = TRUE)
+get_corridor_edges <- function(corridor, river) {
+  corridor_edges <- split_by(corridor, river, boundary = TRUE)
   # For complex river geometries, splitting the corridor might actually return
   # multiple linestrings - select here the two longest segments
   if (length(corridor_edges) < 2) stop("Cannot identify corridor edges")

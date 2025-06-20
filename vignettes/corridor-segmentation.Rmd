@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 ```
 
 ```{r setup}
-library(CRiSp)
+library(rcrisp)
 library(sf)
 
 bucharest_osm <- get_osm_example_data()
@@ -27,13 +27,13 @@ For a more detailed analysis of an urban river corridor, corridor-level delineat
 
 By default, the all-in-one function `delineate()` only returns the corridor boundary. The corridor can be segmented either by setting the argument `segments = TRUE` in `delineate()` or by using the `delineate_segments()` function in a separate step.
 
-To demonstrate this as a separate step, we will use the `bucharest_delineation$corridor` from the package data, as well as `bucharest_osm$streets` and `bucharest_osm$railways` from CRiSp example data as input.
+To demonstrate this as a separate step, we will use the `bucharest_dambovita$corridor` from the package data, as well as `bucharest_osm$streets` and `bucharest_osm$railways` from rcrisp example data as input.
 
 We first prepare the network and select all the streets and railways that cover the river corridor plus a small buffer region (see also `vignette("network-preparation")`):
 
 ```{r network, warning=FALSE}
 # Add a buffer region around the corridor
-corridor_buffer <- sf::st_buffer(bucharest_delineation$corridor, 500)
+corridor_buffer <- sf::st_buffer(bucharest_dambovita$corridor, 500)
 
 # Filter the streets and railwayas to the buffer area
 streets <- bucharest_osm$streets |>
@@ -51,7 +51,7 @@ We then delineate segments in the corridor. The algorithm spits the corridor usi
 
 ```{r segmentation, warning=FALSE}
 segmented_corridor <-
-  delineate_segments(bucharest_delineation$corridor,
+  delineate_segments(bucharest_dambovita$corridor,
                      network_filtered,
                      st_geometry(bucharest_osm$river_centerline))
 plot(st_geometry(streets))

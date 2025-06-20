@@ -1,6 +1,6 @@
-# Contributing to CRiSp
+# Contributing to rcrisp
 
-This outlines how to propose a change to CRiSp.
+This outlines how to propose a change to rcrisp.
 For a detailed discussion on contributing to packages, please see the tidyverse [development contributing guide](https://rstd.io/tidy-contrib) and [code review principles](https://code-review.tidyverse.org/).
 
 ## Fixing typos
@@ -18,7 +18,7 @@ See our guide on [how to create a great issue](https://code-review.tidyverse.org
 
 ### Pull request process
 
-*   Fork the package and clone onto your computer. If you haven't done this before, we recommend using `usethis::create_from_github("CityRiverSpaces/CRiSp", fork = TRUE)`.
+*   Fork the package and clone onto your computer. If you haven't done this before, we recommend using `usethis::create_from_github("CityRiverSpaces/rcrisp", fork = TRUE)`.
 
 *   Install all development dependencies with `devtools::install_dev_deps()`, and then make sure the package passes R CMD check by running `devtools::check()`. 
     If R CMD check doesn't pass cleanly, it's a good idea to ask for help before continuing. 
@@ -42,6 +42,6 @@ See our guide on [how to create a great issue](https://code-review.tidyverse.org
 
 ## Code of Conduct
 
-Please note that the CRiSp project is released with a
+Please note that the rcrisp project is released with a
 [Contributor Code of Conduct](CODE_OF_CONDUCT.md). By contributing to this
 project you agree to abide by its terms.

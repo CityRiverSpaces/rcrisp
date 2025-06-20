@@ -1,6 +1,6 @@
 ^renv$
 ^renv\.lock$
-^CRiSp\.Rproj$
+^rcrisp\.Rproj$
 ^\.Rproj\.user$
 ^LICENSE\.md$
 ^data-raw$

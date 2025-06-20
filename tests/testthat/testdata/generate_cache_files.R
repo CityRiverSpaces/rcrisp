@@ -1,4 +1,4 @@
-# Directory where to save the files to test the caching mechanism of CRiSp
+# Directory where to save the files to test the caching mechanism of rcrisp
 test_cache_dir <- testthat::test_path("testdata", "cache")
 if (!dir.exists(test_cache_dir)) {
   dir.create(test_cache_dir, recursive = TRUE)

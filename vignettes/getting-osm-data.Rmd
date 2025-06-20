@@ -16,12 +16,12 @@ knitr::opts_chunk$set(
   warning = FALSE
 )
 
-bucharest_osm <- CRiSp::get_osm_example_data()
-bucharest_dem <- CRiSp::get_dem_example_data()
+bucharest_osm <- rcrisp::get_osm_example_data()
+bucharest_dem <- rcrisp::get_dem_example_data()
 ```
 
 ```{r setup, include = FALSE}
-library(CRiSp)
+library(rcrisp)
 library(purrr)
 
 bucharest_osm <- get_osm_example_data()
@@ -49,7 +49,7 @@ We start by getting the bounding box for the study area:
 bb <- get_osm_bb(city_name)
 ```
 
-Using the obtained bounding box, we get the different layers of OSM data needed for the delineation of the urban river corridor. We will get the city boundary, the waterways, the street network, and the rail network using built-in functions from the `CRiSp` package.
+Using the obtained bounding box, we get the different layers of OSM data needed for the delineation of the urban river corridor. We will get the city boundary, the waterways, the street network, and the rail network using built-in functions from the `rcrisp` package.
 
 ```{r}
 city_boundary <- get_osm_city_boundary(city_name, bb, crs)

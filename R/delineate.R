@@ -39,7 +39,7 @@
 #'
 #' @return A list with the corridor, segments, and riverspace geometries
 #' @export
-#' @examples
+#' @examplesIf interactive()
 #' delineate("Bucharest", "Dâmbovița")
 delineate <- function(
   city_name, river_name, crs = NULL, network_buffer = NULL,

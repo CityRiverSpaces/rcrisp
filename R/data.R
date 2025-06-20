@@ -1,6 +1,6 @@
-#' CRiSp example delineation data for Bucharest
+#' rcrisp example delineation data for Bucharest
 #'
-#' Delineation generated with CRiSp example data found at
+#' Delineation generated with rcrisp example data found at
 #' <https://data.4tu.nl/datasets/f5d5e118-b5bd-4dfb-987f-fe10d1b9b386>
 #'
 #' @format A list of sf objects representing:
@@ -10,4 +10,4 @@
 #'  \item{segments}{Corridor segments of river Dâmbovița.}
 #'  \item{riverspace}{River space of Dâmbovița.}
 #' }
-"bucharest_delineation"
+"bucharest_dambovita"
