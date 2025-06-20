@@ -93,7 +93,7 @@ delineate <- function(
         dem <- get_dem(aoi_dem, crs = crs, force_download = force_download, ...)
       }
       corridor_init <- delineate_valley(dem, osm_data$river_centerline)
-      delineations["valley"] <- corridor_init
+      delineations$valley <- corridor_init
     }
 
     # Set up the combined street and rail network for the delineation
@@ -101,7 +101,7 @@ delineate <- function(
     network <- as_network(network_edges)
 
     # Run the corridor delineation on the spatial network
-    delineations["corridor"] <- delineate_corridor(
+    delineations$corridor <- delineate_corridor(
       network, osm_data$river_centerline, max_width = network_buffer,
       corridor_init = corridor_init, max_iterations = max_iterations,
       capping_method = capping_method
@@ -111,13 +111,13 @@ delineate <- function(
   if (segments) {
     # Select the relevant part of the network
     buffer_corridor <- 100  # TODO should this be an additional input parameter?
-    corridor_buffer <- sf::st_buffer(delineations["corridor"], buffer_corridor)
+    corridor_buffer <- sf::st_buffer(delineations$corridor, buffer_corridor)
     network_filtered <- filter_network(network, corridor_buffer)
 
-    delineations["segments"] <- delineate_segments(delineations["corridor"],
-                                                   network_filtered,
-                                                   osm_data$river_centerline,
-                                                   angle_threshold)
+    delineations$segments <- delineate_segments(delineations$corridor,
+                                                network_filtered,
+                                                osm_data$river_centerline,
+                                                angle_threshold)
   }
 
   if (riverspace) {
@@ -126,8 +126,8 @@ delineate <- function(
     )
     river_combined <- combine_river_features(river_centerline_clipped,
                                              osm_data$river_surface)
-    delineations["riverspace"] <- delineate_riverspace(river_combined,
-                                                       osm_data$buildings)
+    delineations$riverspace <- delineate_riverspace(river_combined,
+                                                    osm_data$buildings)
   }
 
   delineations
