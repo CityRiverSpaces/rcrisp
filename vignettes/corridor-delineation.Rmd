@@ -36,7 +36,7 @@ We start by demonstrating the use of the all-in-one `delineate()` function which
 
 2. Pre-processes the street and rail network for delineation as shown in `vignette("network-preparation")`
 
-3. Constructs the initial corridor based on the chosen method. With the default `method = "valley"`, the Cost Distance Accumulation algorithm is used to delineate the corridor based on the digital elevation model (DEM) of the area retrieved from the [Earth Search API](https://element84.com/earth-search/). If the `method = "buffer"` is chosen instead, the corridor is constructed by buffering the river centreline and surface data with a given buffer distance. 
+3. Constructs the initial corridor based on the chosen method. With the default `method = "valley"`, the Cost Distance Accumulation algorithm is used to delineate the corridor based on the digital elevation model (DEM) of the area retrieved from the [Earth Search API](https://element84.com/earth-search/). If the `method = "buffer"` is chosen instead, the corridor is constructed by buffering the river centreline and surface data with a given buffer distance.
 
 4. Delineates the corridor based on the pre-processed network and initial corridor. Optionally, the corridor is split into segments based on the network and the river space is delineated.
 
@@ -46,7 +46,6 @@ The `delineate()` function carries out the above steps in one and returns a list
 bucharest_dambovita <- delineate(
   city_name,
   river_name,
-  valley = TRUE,
   segments = TRUE,
   riverspace = TRUE
 )
