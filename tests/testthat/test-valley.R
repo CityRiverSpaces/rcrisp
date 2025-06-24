@@ -54,7 +54,7 @@ test_that("Download DEM data can be retrieved from the cache on new calls", {
   # calling load_dem again should read data from the cached file, raising a
   # warning that includes the path to the cached file as well
   expect_warning(load_dem(bb, asset_urls, force_download = FALSE),
-                 cached_filepath)
+                 cached_filepath, fixed = TRUE)
 })
 
 test_that("valley polygon is correctly constructed", {
