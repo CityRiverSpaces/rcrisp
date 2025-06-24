@@ -19,7 +19,7 @@ simple feature geometry.'></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">rcrisp</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -93,15 +93,11 @@ simple feature geometry.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">bucharest_osm</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_osm_example_data.html">get_osm_example_data</a></span><span class="op">(</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># interactive()</span></span></span>
+<span class="r-in"><span><span class="va">bucharest_osm</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_osm_example_data.html">get_osm_example_data</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">bucharest_dem</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_dem_example_data.html">get_dem_example_data</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">delineate_valley</span><span class="op">(</span><span class="va">bucharest_dem</span>, <span class="va">bucharest_osm</span><span class="op">$</span><span class="va">river_centerline</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Geometry set for 1 feature </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: MULTIPOLYGON</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: 412402.4 ymin: 4910692 xmax: 448052.6 ymax: 4928318</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Projected CRS: WGS 84 / UTM zone 35N</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> MULTIPOLYGON (((445998.1 4912232, 445998.1 4912...</span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
