@@ -24,7 +24,9 @@ The resulting area is then "polygonized" to obtain the valley boundary as a
 simple feature geometry.
 }
 \examples{
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 bucharest_osm <- get_osm_example_data()
 bucharest_dem <- get_dem_example_data()
 delineate_valley(bucharest_dem, bucharest_osm$river_centerline)
+\dontshow{\}) # examplesIf}
 }

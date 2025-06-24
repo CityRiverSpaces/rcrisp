@@ -175,7 +175,7 @@ calc_rolling_sum <- function(x, n = 2) {
 #'
 #' @return A cleaned network object
 #' @export
-#' @examples
+#' @examplesIf interactive()
 #' bucharest_osm <- get_osm_example_data()
 #' edges <- dplyr::bind_rows(bucharest_osm$streets,
 #'                           bucharest_osm$railways)
