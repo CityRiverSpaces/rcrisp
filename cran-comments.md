@@ -8,5 +8,6 @@
 
 This is a resubmission. In this version:
 
-* The example of `clean_network()` flagged as taking too long
-is run only in interactive mode.
+* The default cache directory has been moved to the path given by
+  `tools::R_user_dir()`. Checks for the cache directory size and
+  outdated files are now included on package load.
