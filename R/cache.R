@@ -173,7 +173,11 @@ check_cache <- function() {
   cache_size <- sum(file_info$size) / 2 ** 20 # to MB
   is_too_big <- cache_size > 100
   date_oldest_file <- sort(file_info$mtime)[1]
-  is_too_old <- (Sys.time() - date_oldest_file) > "30 days"
+  if (is.na(date_oldest_file)) {
+    is_too_old <- FALSE
+  } else {
+    is_too_old <- (Sys.time() - date_oldest_file) > "30 days"
+  }
   if (is_too_big || is_too_old) {
     warning(sprintf(paste0(
       "Cache dir: %s - size: %.0f MB - oldest file from: %s.\n",
