@@ -3,6 +3,7 @@
 export(as_bbox)
 export(as_network)
 export(cache_directory)
+export(check_cache)
 export(clean_network)
 export(clear_cache)
 export(delineate)
