@@ -149,7 +149,7 @@ test_that("Cache checks raise warnings when old cached files are found", {
                        expect_warning(check_cache()))
 })
 
-test_that("Cache checks raise warnings when old cached files are found", {
+test_that("Cache checks raise warnings when large cached files are found", {
   mocked_file_info_response <- data.frame(
     mtime = Sys.time(),
     size = 10000000000
