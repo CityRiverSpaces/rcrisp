@@ -5,6 +5,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 # [Unreleased]
 
+## Changed
+
+- The default cache directory has been moved to the path given by `tools::R_user_dir()`.
+  Checks for the cache directory size and outdated files are now included on package load.
+
 # Version 0.1.1 - 2025-06-24
 
 ## Fixed
