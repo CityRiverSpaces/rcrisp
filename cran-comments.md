@@ -11,3 +11,5 @@ This is a resubmission. In this version:
 * The default cache directory has been moved to the path given by
   `tools::R_user_dir()`. Checks for the cache directory size and
   outdated files are now included on package load.
+* Tests have been partly rewritten, so that they use less resources and they
+  complete in a reasonable amount of time.

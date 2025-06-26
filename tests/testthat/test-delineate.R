@@ -1,43 +1,48 @@
 test_that("Segmentation without corridor raises error", {
-  skip_on_ci()
   expect_error(delineate("Bucharest", "Dâmbovița",
                          corridor = FALSE, segment = TRUE),
                "Segmentation requires corridor delineation.")
 })
 
-test_that("Default network buffer is used with message", {
-  skip_on_ci()
-  expect_message(suppressWarnings(delineate("Bucharest", "Dâmbovița")),
-                 paste("The default `network_buffer` of 3000 m is used",
-                       "for corridor delineation."))
+test_that("Delineate returns all required delineation units", {
+  # Input arguments should mimic as much as possible the input used to setup
+  # the example datasets, see:
+  # https://github.com/CityRiverSpaces/CRiSpExampleData/blob/main/data-raw/bucharest.R  # nolint
+  with_mocked_bindings(get_osmdata = function(...) bucharest_osm,
+                       get_dem = function(...) bucharest_dem,
+                       delineations <- delineate(city_name = "Bucharest",
+                                                 river_name = "Dâmbovița",
+                                                 crs = 32635,
+                                                 network_buffer = 2500,
+                                                 buildings_buffer = 100,
+                                                 dem_buffer = 2500,
+                                                 corridor_init = "valley",
+                                                 corridor = TRUE,
+                                                 segments = TRUE,
+                                                 riverspace = TRUE))
+  expect_setequal(names(delineations),
+                  c("valley", "corridor", "segments", "riverspace"))
+  geometry_types <- sapply(delineations, sf::st_geometry_type)
+  # segments include multiple geometries, flatten array for comparison
+  expect_in(do.call(c, geometry_types), c("POLYGON", "MULTIPOLYGON"))
 })
 
-test_that("Default buildings buffer is used for riverspace delineation
-          with message", {
-            skip_on_ci()
-            expect_message(suppressWarnings(delineate("Bucharest", "Dâmbovița",
-                                                      riverspace = TRUE)),
-                           paste("The default `buildings_buffer` of 100 m is",
-                                 "used for riverspace delineation."))
-          })
-
-test_that("Valley is returned", {
-  skip_on_ci()
-  delineations <- suppressWarnings(delineate("Bucharest", "Dâmbovița",
-                                             corridor_init = "valley",
-                                             corridor = TRUE))
-  valley <- delineations$valley
-
-  expect_true(inherits(valley, "sfc"))
-  expect_true(inherits(valley, "sfc_POLYGON") ||
-                inherits(valley, "sfc_MULTIPOLYGON"))
-  expect_equal(length(valley), 1)
-})
-
-test_that("No valley is returned if buffer is used as initial corridor", {
-  skip_on_ci()
-  delineations <- suppressWarnings(delineate("Bucharest", "Dâmbovița",
-                                             corridor_init = 1500))
-  expect_equal("corridor", names(delineations))
-
+test_that("Delineate does not return the valley if the buffer method is used", {
+  # Input arguments should mimic as much as possible the input used to setup
+  # the example datasets, see:
+  # https://github.com/CityRiverSpaces/CRiSpExampleData/blob/main/data-raw/bucharest.R  # nolint
+  with_mocked_bindings(get_osmdata = function(...) bucharest_osm,
+                       get_dem = function(...) bucharest_dem,
+                       delineations <- delineate(city_name = "Bucharest",
+                                                 river_name = "Dâmbovița",
+                                                 crs = 32635,
+                                                 network_buffer = 2500,
+                                                 buildings_buffer = 100,
+                                                 dem_buffer = 2500,
+                                                 corridor_init = 1000,
+                                                 corridor = TRUE,
+                                                 # only compute corridor here
+                                                 segments = FALSE,
+                                                 riverspace = FALSE))
+  expect_equal(names(delineations), "corridor")
 })

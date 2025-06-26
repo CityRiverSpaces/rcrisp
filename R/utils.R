@@ -194,9 +194,9 @@ combine_river_features <- function(river_centerline, river_surface) {
     return(river_centerline)
   }
   message("Calculating viewpoints from both river edge and river centerline.")
-  river_centerline_clipped <- river_centerline |>
+  river_centerline_clipped <- sf::st_geometry(river_centerline) |>
     sf::st_difference(river_surface)
-  c(river_centerline_clipped, river_surface) |>
+  c(river_centerline_clipped, sf::st_geometry(river_surface)) |>
     sf::st_cast("MULTILINESTRING") |>
     sf::st_union()
 }

@@ -1,174 +1,239 @@
-# All functions using [`osmdata_as_sf()`] store data in a cache folder.
-# In order not to mess up with the user cache directory, we setup a temporary
-# cache folder only used for testing purposes. This is achieved via the
-# [`temp_cache_dir()`] helper function, which should be called in each test.
+# All functions using [`osmdata_as_sf()`] store and data in a cache folder and
+# read data from there when already available. In order not to mess up with the
+# user cache directory, we setup a temporary cache folder that already contains
+# some datasets, only used for testing purposes. This is achieved via the
+# [`temp_cache_dir()`] helper function, which should be called in each test that
+# does not mock [`osmdata_as_sf()`].
 
-test_that("City boundary of Bucharest is correctly retreived", {
-  skip_on_ci()
+# setup mock test dataset
+bb_bucharest <- sf::st_bbox(c(xmin = 25.967,
+                              ymin = 44.334,
+                              xmax = 26.226,
+                              ymax = 44.541),
+                            crs = "EPSG:4326")
+mock_river_lines_geom <- sf::st_sfc(
+  sf::st_linestring(matrix(c(26.0, 26.1, 44.3, 44.4), ncol = 2)),
+  sf::st_linestring(matrix(c(26.2, 26.3, 44.5, 44.6), ncol = 2)),
+  sf::st_linestring(matrix(c(26.2, 26.3, 44.3, 44.4), ncol = 2)),
+  sf::st_linestring(matrix(c(26.0, 26.1, 44.5, 44.6), ncol = 2)),
+  crs = "EPSG:4326"
+)
+mock_river_lines <- sf::st_sf(
+  name = c("Dâmbovița", "Dâmbovița", "Colentina", "Colentina"),
+  geometry = mock_river_lines_geom
+)
+mock_river_polygons <- sf::st_buffer(mock_river_lines, 10)
+mock_city_boundary_geom <- sf::st_as_sfc(bb_bucharest)
+mock_city_boundary <- sf::st_sf(
+  name = "Bucharest",
+  `name:ro` = "București",
+  geometry = mock_city_boundary_geom
+)
 
-  # setup cache directory
-  temp_cache_dir()
-
-  city_name <- "Bucharest"
-  bb <- get_osm_bb(city_name)
-
-  bucharest_boundary <- get_osm_city_boundary(bb, city_name,
-                                              force_download = TRUE)
-  expect_equal(as.numeric(bb), as.numeric(sf::st_bbox(bucharest_boundary)))
-})
-
-test_that("City boundary of Paris is returned without error", {
-  skip_on_ci()
-
-  # setup cache directory
-  temp_cache_dir()
-
-  city_name <- "Paris, France"
-  bb <- get_osm_bb(city_name)
-  crs <- get_utm_zone(bb)
-
-  boundary <- get_osm_city_boundary(bb, city_name, crs, force_download = TRUE)
-  expect_true(!sf::st_is_empty(boundary))
-})
-
-test_that("Wrong city name throws error", {
-  skip_on_ci()
-
-  # setup cache directory
-  temp_cache_dir()
-
-  expect_error(get_osm_city_boundary("Buhcarest", force_download = TRUE))
-})
-
-test_that("OSM data for Bucharest is correctly retreived", {
-  skip_on_ci()
-
-  # setup cache directory
-  temp_cache_dir()
-
-  bucharest <- get_osmdata("Bucharest", "Dâmbovița", force_download = TRUE)
-
-  expect_length(bucharest, 4)
-  expect_true(all(vapply(X = bucharest,
-                         FUN = \(x) length(x) >= 1,
-                         FUN.VALUE = logical(1))))
-})
-
-test_that("Multiple boundaries are correcly retreived", {
-  skip_on_ci()
-
-  # setup cache directory
-  temp_cache_dir()
-
-  city_name <- "Paris, France"
-  bb <- get_osm_bb(city_name)
-  crs <- get_utm_zone(bb)
-
-  city_boundary <- get_osm_city_boundary(bb, city_name, crs, multiple = TRUE,
-                                         force_download = TRUE)
-  expect_gt(length(city_boundary), 1)
-})
-
-test_that("Queried datasets can be retrieved from the cache on new calls", {
-  skip_on_ci()
+test_that("OSM queries are stored to and retrieved from the cache", {
 
   # setup cache directory
   cache_dir <- temp_cache_dir()
 
-  bb <- get_osm_bb("Bucharest")
-
-  # calling get_osm_railways should create a file in the cache folder
-  expect_message(get_osm_railways(bb, force_download = TRUE),
-                 "Saving data to cache directory")
-  cached_filename <- list.files(cache_dir, pattern = "^osmdata_railway_rail")
-  cached_filepath <- file.path(cache_dir, cached_filename)
-  expect_true(file.exists(cached_filepath))
-
-  # calling get_osm_railways again should read data from the cached file,
-  # raising a warning that includes the path to the cached file as well
-  expect_warning(get_osm_railways(bb, force_download = FALSE),
-                 cached_filepath, fixed = TRUE)
+  # test that content if first saved and then retrieved from the cache
+  with_mocked_bindings(
+    osmdata_query = function(...) "mock osmdata response",
+    {
+      # the first call to osmdata_as_sf saves data to cache
+      expect_message(
+        osmdata_as_sf("key", "value", bb_bucharest, force_download = TRUE),
+        "Saving data to cache directory"
+      )
+      # check that file is in the cache
+      cached_filename <- list.files(cache_dir, pattern = "^osmdata_key_value")
+      cached_filepath <- file.path(cache_dir, cached_filename)
+      expect_true(file.exists(cached_filepath))
+      # subsequent calls read data from the file
+      expect_warning(
+        osmdata_as_sf("key", "value", bb_bucharest, force_download = FALSE),
+        cached_filepath,
+        fixed = TRUE
+      )
+    }
+  )
 })
 
-test_that("City boundary is retreived for alternative names", {
-  skip_on_ci()
+test_that("OSM queries are always performed if force_download is set to TRUE", {
 
   # setup cache directory
-  temp_cache_dir()
+  cache_dir <- temp_cache_dir()
 
-  city_name <- "Köln"
-  bb <- get_osm_bb(city_name)
-
-  # test alternative names
-  alternative_names <- c("Köln", "Cologne", "Colonia")
-  for (name in alternative_names) {
-    city_boundary <- get_osm_city_boundary(bb, name, force_download = TRUE)
-    expect_equal(as.numeric(bb), as.numeric(sf::st_bbox(city_boundary)))
-  }
+  # test that cache data is not read if force_download = TRUE
+  with_mocked_bindings(
+    osmdata_query = function(...) "mock osmdata response",
+    {
+      # both calls to osmdata_as_sf save data to cache
+      expect_message(
+        osmdata_as_sf("key", "value", bb_bucharest, force_download = TRUE),
+        "Saving data to cache directory"
+      )
+      expect_message(
+        osmdata_as_sf("key", "value", bb_bucharest, force_download = TRUE),
+        "Saving data to cache directory"
+      )
+    }
+  )
 })
 
-test_that("River is consistently retreived with alternative names", {
-  skip_on_ci()
-
-  # setup cache directory
+test_that("The correct OSM data elements are retrieved", {
+  # setup cache directory, even though it shold not be used
   temp_cache_dir()
 
-  river_name <- "Seine"
-  bb_paris <- get_osm_bb("Paris, France")
-  river <- get_osm_river(bb_paris, river_name, force_download = TRUE)
-  bb_river <- sf::st_bbox(river$centerline)
+  # mock all functions that actually retrieve data from OSM. The only actual
+  # data that is needed is the river centerline, which is used to setup the
+  # areas of interest used for the network and building retrieval.
+  river_centerline <- sf::st_geometry(mock_river_lines)[1]
+  river <- list(centerline = river_centerline, surface = NULL)
+  with_mocked_bindings(
+    get_osm_bb = function(...) bb_bucharest,
+    get_osm_river = function(...) river,
+    get_osm_streets = function(...) NULL,
+    get_osm_railways = function(...) NULL,
+    get_osm_buildings = function(...) NULL,
+    get_osm_city_boundary = function(...) NULL,
+    {
+      # By default, the bb, river, river suf
+      osmdata_default <- get_osmdata("Bucharest",
+                                     "Dâmbovița",
+                                     force_download = TRUE)
+      osmdata_nobound <- get_osmdata("Bucharest",
+                                     "Dâmbovița",
+                                     city_boundary = FALSE,
+                                     force_download = TRUE)
+      osmdata_network <- get_osmdata("Bucharest",
+                                     "Dâmbovița",
+                                     network_buffer = 3000,
+                                     force_download = TRUE)
+      osmdata_buildings <- get_osmdata("Bucharest",
+                                       "Dâmbovița",
+                                       buildings_buffer = 100,
+                                       force_download = TRUE)
+      osmdata_all <- get_osmdata("Bucharest",
+                                 "Dâmbovița",
+                                 network_buffer = 3000,
+                                 buildings_buffer = 100,
+                                 force_download = TRUE)
 
-  # test alternative names
-  alternative_names <- c("La Seine", "Seine", "Senna")
-  for (river_name in alternative_names) {
-    river <- get_osm_river(bb_paris, river_name, force_download = TRUE)
-    expect_equal(as.numeric(bb_river),
-                 as.numeric(sf::st_bbox(river$centerline)))
-  }
+    }
+  )
+
+  # verify that the correct elements are returned
+  expect_setequal(
+    names(osmdata_default),
+    c("bb", "river_centerline", "river_surface", "boundary")
+  )
+  expect_setequal(
+    names(osmdata_nobound),
+    c("bb", "river_centerline", "river_surface")
+  )
+  expect_setequal(
+    names(osmdata_network),
+    c(
+      "bb", "river_centerline", "river_surface", "boundary", "aoi_network",
+      "streets", "railways"
+    )
+  )
+  expect_setequal(
+    names(osmdata_buildings),
+    c(
+      "bb", "river_centerline", "river_surface", "boundary", "aoi_buildings",
+      "buildings"
+    )
+  )
+  expect_setequal(
+    names(osmdata_all),
+    c(
+      "bb", "river_centerline", "river_surface", "boundary", "aoi_network",
+      "streets", "railways", "aoi_buildings", "buildings"
+    )
+  )
 })
 
-test_that("River retrieval raise error if no geometry is found", {
-  skip_on_ci()
-
-  # setup cache directory
-  temp_cache_dir()
-
-  bb <- get_osm_bb("Paris, France")
-  expect_error(get_osm_river(bb, "Thames", force_download = TRUE),
-               "Thames")
+test_that("City boundary of Bucharest is correctly retrieved", {
+  with_mocked_bindings(
+    osmdata_as_sf = function(...) list(osm_polygons = mock_city_boundary),
+    expect_no_message(
+      city_boundary <- get_osm_city_boundary(bb_bucharest, "Bucharest")
+    )
+  )
+  expect_true(inherits(city_boundary, "sfc"))
 })
 
-test_that("All geometries retrieved from OSM are valid", {
-  skip_on_ci()
-
-  # setup cache directory
-  temp_cache_dir()
-
-  bucharest_osm <- get_osmdata("Bucharest", "Dâmbovița", force_download = TRUE)
-
-  expect_true(all(vapply(bucharest_osm[!names(bucharest_osm) %in% "bb"],
-                         \(x) if (!inherits(x, "bbox")) all(sf::st_is_valid(x)),
-                         logical(1))))
+test_that("Wrong city name returns an empty sfc object", {
+  with_mocked_bindings(
+    osmdata_as_sf = function(...) list(osm_polygons = mock_city_boundary),
+    city_boundary <- get_osm_city_boundary(bb_bucharest, "Buhcarest")
+  )
+  expect_equal(length(city_boundary), 0)
 })
 
-test_that("Both lines and multilines are retreived from river Dâmbovița", {
-  skip_on_ci()
+test_that("Multiple boundaries are retreived when requested", {
+  mock_city_boundary_multiple <- dplyr::bind_rows(mock_city_boundary,
+                                                  mock_city_boundary)
+  with_mocked_bindings(
+    osmdata_as_sf = function(...) {
+      list(osm_polygons = mock_city_boundary_multiple)
+    },
+    {
+      city_boundary_multiple <- get_osm_city_boundary(
+        bb_bucharest, "Bucharest", multiple = TRUE
+      )
+      city_boundary_single <- get_osm_city_boundary(
+        bb_bucharest, "București", multiple = FALSE
+      )
+    }
+  )
 
-  # setup cache directory
-  temp_cache_dir()
+  expect_equal(length(city_boundary_multiple), 2)
+  expect_equal(length(city_boundary_single), 1)
+})
 
-  city_names <- c("Bucharest", "Rio de Janeiro")
-  river_names <- c("Dâmbovița", "Rio Guandu")
+test_that("City boundary is retrieved for alternative names", {
+  with_mocked_bindings(
+    osmdata_as_sf = function(...) list(osm_polygons = mock_city_boundary),
+    {
+      city_boundary_eng <- get_osm_city_boundary(bb_bucharest, "Bucharest")
+      city_boundary_ro <- get_osm_city_boundary(bb_bucharest, "București")
+    }
+  )
+  expect_equal(city_boundary_eng, city_boundary_ro)
+})
 
-  for (i in seq_along(city_names)) {
-    city_name <- city_names[i]
-    river_name <- river_names[i]
+test_that("River retrieval raise error if no river is found in the bb", {
+  with_mocked_bindings(
+    osmdata_as_sf = function(...) list(osm_lines = NULL),
+    expect_error(
+      get_osm_river(bb_bucharest, "Thames", force_download = TRUE),
+      "No waterway geometries found"
+    )
+  )
+})
 
-    bb <- get_osm_bb(city_name)
-    river <- get_osm_river(bb, river_name, force_download = TRUE)
+test_that("River retrieval raise error if river is not found in the bb", {
+  with_mocked_bindings(
+    osmdata_as_sf = function(...) list(osm_lines = mock_river_lines),
+    expect_error(
+      get_osm_river(bb_bucharest, "Thames", force_download = TRUE),
+      "Thames"
+    )
+  )
+})
 
-    expect_true(length(river) > 0)
-  }
+test_that("River lines and surface are properly set up", {
+  with_mocked_bindings(
+    osmdata_as_sf = function(...) {
+      list(osm_lines = mock_river_lines, osm_polygons = mock_river_polygons)
+    },
+    river <- get_osm_river(bb_bucharest, "Dâmbovița", force_download = TRUE)
+  )
+  expect_setequal(names(river), c("centerline", "surface"))
+  expect_true(sf::st_is(river$centerline, "MULTILINESTRING"))
+  expect_true(sf::st_is(river$surface, "MULTIPOLYGON"))
 })
 
 test_that("If no railways are found, an empty sf object is returned", {
