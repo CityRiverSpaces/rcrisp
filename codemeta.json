@@ -7,7 +7,7 @@
   "codeRepository": "https://github.com/CityRiverSpaces/rcrisp",
   "issueTracker": "https://github.com/CityRiverSpaces/rcrisp/issues",
   "license": "Apache License 2",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
@@ -335,7 +335,7 @@
     },
     "SystemRequirements": null
   },
-  "fileSize": "1249.308KB",
+  "fileSize": "1257.03KB",
   "relatedLink": "https://cityriverspaces.github.io/rcrisp/",
   "releaseNotes": "https://github.com/CityRiverSpaces/rcrisp/blob/master/NEWS.md",
   "readme": "https://github.com/CityRiverSpaces/rcrisp/blob/main/README.md",
