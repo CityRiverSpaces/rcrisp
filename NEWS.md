@@ -5,6 +5,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 # [Unreleased]
 
+## Changed
+
+- Tests in `test-delineate.R` and `test-osmdata.R` have been partly rewritten, so that they use less resources and they complete in a reasonable amount of time.
+
 # Version 0.1.1 - 2025-06-24
 
 ## Fixed

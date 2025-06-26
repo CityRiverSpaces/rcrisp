@@ -8,5 +8,5 @@
 
 This is a resubmission. In this version:
 
-* The example of `clean_network()` flagged as taking too long
-is run only in interactive mode.
+* Tests have been partly rewritten, so that they use less resources and they
+  complete in a reasonable amount of time.
