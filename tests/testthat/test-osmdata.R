@@ -20,9 +20,9 @@ mock_river_lines_geom <- sf::st_sfc(
 )
 mock_river_lines <- sf::st_sf(
   name = c("Dâmbovița", "Dâmbovița", "Colentina", "Colentina"),
-  geometry = mock_river_centerline_geom
+  geometry = mock_river_lines_geom
 )
-mock_river_polygons <- sf::st_buffer(mock_river_centerline, 10)
+mock_river_polygons <- sf::st_buffer(mock_river_lines, 10)
 mock_city_boundary_geom <- sf::st_as_sfc(bb_bucharest)
 mock_city_boundary <- sf::st_sf(
   name = "Bucharest",
