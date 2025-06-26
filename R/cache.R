@@ -164,6 +164,7 @@ clear_cache <- function(before_date = NULL) {
 #' older than 30 days.
 #'
 #' @export
+#' @return `NULL`
 #' @examplesIf interactive()
 #' check_cache()
 check_cache <- function() {
