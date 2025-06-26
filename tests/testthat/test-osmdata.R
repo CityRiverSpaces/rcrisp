@@ -224,7 +224,7 @@ test_that("River retrieval raise error if river is not found in the bb", {
   )
 })
 
-test_that("River lines and surface and properly setup", {
+test_that("River lines and surface are properly set up", {
   with_mocked_bindings(
     osmdata_as_sf = function(...) {
       list(osm_lines = mock_river_lines, osm_polygons = mock_river_polygons)
