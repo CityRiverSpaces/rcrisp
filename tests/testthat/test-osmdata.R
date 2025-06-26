@@ -51,7 +51,8 @@ test_that("OSM queries are stored to and retrieved from the cache", {
       # subsequent calls read data from the file
       expect_warning(
         osmdata_as_sf("key", "value", bb_bucharest, force_download = FALSE),
-        cached_filepath
+        cached_filepath,
+        fixed = TRUE
       )
     }
   )
