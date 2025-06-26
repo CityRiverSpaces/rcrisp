@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Changed
 
+- The default cache directory has been moved to the path given by `tools::R_user_dir()`.
+  Checks for the cache directory size and outdated files are now included on package load.
 - Tests in `test-delineate.R` and `test-osmdata.R` have been partly rewritten, so that they use less resources and they complete in a reasonable amount of time.
 
 # Version 0.1.1 - 2025-06-24

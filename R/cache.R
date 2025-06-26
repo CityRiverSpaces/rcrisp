@@ -1,9 +1,9 @@
 #' Return the cache directory used by the package
 #'
-#' By default, the cache directory is equal to `${HOME}/.cache/rcrisp`. A
-#' different directory can be used by setting the environment variable
-#' `CRISP_CACHE_DIRECTORY`. This can also be done by adding the following
-#' line to the `.Renviron` file:
+#' By default, the user-specific directory as returned by
+#' [`tools::R_user_dir()`] is used. A different directory can be used by
+#' setting the environment variable `CRISP_CACHE_DIRECTORY`. This can also be
+#' done by adding the following line to the `.Renviron` file:
 #' `CRISP_CACHE_DIRECTORY=/path/to/crisp/cache/dir`.
 #'
 #' @return The cache directory used by rcrisp.
@@ -11,7 +11,7 @@
 #' @examplesIf interactive()
 #' cache_directory()
 cache_directory <- function() {
-  default_dir <- file.path(Sys.getenv("HOME", "."), ".cache", "rcrisp")
+  default_dir <- tools::R_user_dir("rcrisp", which = "cache")
   cache_dir <- Sys.getenv("CRISP_CACHE_DIRECTORY", default_dir)
   if (!dir.exists(cache_dir)) {
     dir.create(cache_dir, recursive = TRUE)
@@ -155,5 +155,36 @@ clear_cache <- function(before_date = NULL) {
     if (length(list.files(cache_dir)) == 0) {
       message("Cache files successfully removed.")
     }
+  }
+}
+
+#' Check cache
+#'
+#' A warning is raised if the cache size is > 100 MB or if it includes files
+#' older than 30 days.
+#'
+#' @export
+#' @return `NULL`
+#' @examplesIf interactive()
+#' check_cache()
+check_cache <- function() {
+  cache_dir <- cache_directory()
+  files <- list.files(cache_dir, full.names = TRUE, recursive = TRUE)
+  file_info <- file.info(files)
+  cache_size <- sum(file_info$size) / 2 ** 20 # to MB
+  is_too_big <- cache_size > 100
+  date_oldest_file <- sort(file_info$mtime)[1]
+  if (is.na(date_oldest_file)) {
+    is_too_old <- FALSE
+  } else {
+    is_too_old <- (Sys.time() - date_oldest_file) > "30 days"
+  }
+  if (is_too_big || is_too_old) {
+    warning(sprintf(paste0(
+      "Cache dir: %s - size: %.0f MB - oldest file from: %s.\n",
+      "Clean up files older than 30 days with: `rcrisp::clear_cache('%s')` ",
+      "(or remove all cached files with: `rcrisp::clear_cache()`."
+    ), cache_dir, cache_size, as.Date(date_oldest_file), Sys.Date() - 30
+    ))
   }
 }
