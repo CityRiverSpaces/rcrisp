@@ -130,3 +130,31 @@ test_that("Only cache before given date is removed", {
   expect_length(list.files(cache_dir), 1)
   expect_true(grepl("tmp2", list.files(cache_dir)[1]))
 })
+
+test_that("Cache checks raise no wornings for small, recent files", {
+  cache_dir <- temp_cache_dir()
+
+  expect_no_warning(check_cache())
+})
+
+test_that("Cache checks raise warnings when old cached files are found", {
+  cache_dir <- temp_cache_dir()
+
+  mocked_file_info_response <- data.frame(
+    mtime = as.POSIXlt(c("2000-01-01 10:00:00", "2000-01-02 11:00:00")),
+    size = c(1, 1)
+  )
+  with_mocked_bindings(file.info = function(...) mocked_file_info_response,
+                       .package = "base",
+                       expect_warning(check_cache()))
+})
+
+test_that("Cache checks raise warnings when large cached files are found", {
+  mocked_file_info_response <- data.frame(
+    mtime = Sys.time(),
+    size = 10000000000
+  )
+  with_mocked_bindings(file.info = function(...) mocked_file_info_response,
+                       .package = "base",
+                       expect_warning(check_cache()))
+})
