@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 # Version 0.1.3 - 2025-06-27
 
-# Fixed
+## Fixed
 
 - Tests retrieving DEM data from AWS have been either removed or mocked to avoid issues with the AWS API.
 - Warnings in delineation tests are safely suppressed.
