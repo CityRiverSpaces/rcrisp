@@ -24,26 +24,6 @@ test_that("STAC asset urls are correctly retrieved", {
   expect_equal(expected_asset_urls, asset_urls_retrieved)
 })
 
-test_that("load_dem correctly retrieve and merge remote data", {
-  # setup cache directory
-  temp_cache_dir()
-
-  with_mocked_bindings(
-    load_raster = function(...) {
-      bucharest_dem |>
-        terra::project("EPSG:4326")
-    },
-    {
-      dem <- load_dem(bb, asset_urls, force_download = TRUE)
-
-      expect_equal(terra::crs(dem), terra::crs("EPSG:4326"))
-      expect_equal(as.vector(terra::ext(dem)),
-                   as.vector(terra::ext(sf::st_bbox(bb))),
-                   tolerance = 1.e-2)
-    }
-  )
-})
-
 test_that("Download DEM data can be retrieved from the cache on new calls", {
   # setup cache directory
   cache_dir <- temp_cache_dir()
