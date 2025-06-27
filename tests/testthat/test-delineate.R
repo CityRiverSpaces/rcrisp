@@ -19,7 +19,8 @@ test_that("Delineate returns all required delineation units", {
                                                  corridor_init = "valley",
                                                  corridor = TRUE,
                                                  segments = TRUE,
-                                                 riverspace = TRUE))
+                                                 riverspace = TRUE) |>
+                         suppressWarnings())
   expect_setequal(names(delineations),
                   c("valley", "corridor", "segments", "riverspace"))
   geometry_types <- sapply(delineations, sf::st_geometry_type)
@@ -43,6 +44,7 @@ test_that("Delineate does not return the valley if the buffer method is used", {
                                                  corridor = TRUE,
                                                  # only compute corridor here
                                                  segments = FALSE,
-                                                 riverspace = FALSE))
+                                                 riverspace = FALSE) |>
+                         suppressWarnings())
   expect_equal(names(delineations), "corridor")
 })

@@ -13,3 +13,6 @@ This is a resubmission. In this version:
   outdated files are now included on package load.
 * Tests have been partly rewritten, so that they use less resources and they
   complete in a reasonable amount of time.
+* Tests retrieving DEM data from AWS have been either removed or mocked
+  to avoid issues with the AWS API.
+* Warnings in delineation tests are safely suppressed
