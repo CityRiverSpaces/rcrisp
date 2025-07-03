@@ -158,4 +158,3 @@ test_that("Cache checks raise warnings when large cached files are found", {
                        .package = "base",
                        expect_type(check_cache(), "character"))
 })
-
