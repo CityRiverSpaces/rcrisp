@@ -2,17 +2,13 @@
 
 0 errors | 0 warnings | 1 note
 
-* This is a new release.
+Days since last update: 1
 
 ## Resubmission
 
-This is a resubmission. In this version:
+This is a resubmission in response to a problem pointed out on CRAN.
+In this version:
 
-* The default cache directory has been moved to the path given by
-  `tools::R_user_dir()`. Checks for the cache directory size and
-  outdated files are now included on package load.
-* Tests have been partly rewritten, so that they use less resources and they
-  complete in a reasonable amount of time.
-* Tests retrieving DEM data from AWS have been either removed or mocked
-  to avoid issues with the AWS API.
-* Warnings in delineation tests are safely suppressed
+* `check_cache()` is moved from `.onLoad()` to `.onAttach()` to comply with
+  CRAN policy on namespace loading.
+* The NOTE on namespace load is resolved.
