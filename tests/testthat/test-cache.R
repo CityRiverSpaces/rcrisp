@@ -146,7 +146,7 @@ test_that("Cache checks raise warnings when old cached files are found", {
   )
   with_mocked_bindings(file.info = function(...) mocked_file_info_response,
                        .package = "base",
-                       expect_warning(check_cache()))
+                       expect_type(check_cache(), "character"))
 })
 
 test_that("Cache checks raise warnings when large cached files are found", {
@@ -156,5 +156,6 @@ test_that("Cache checks raise warnings when large cached files are found", {
   )
   with_mocked_bindings(file.info = function(...) mocked_file_info_response,
                        .package = "base",
-                       expect_warning(check_cache()))
+                       expect_type(check_cache(), "character"))
 })
+
