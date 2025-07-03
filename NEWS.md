@@ -5,6 +5,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 # [Unreleased]
 
+# Version 0.1.4
+
+## Fixed
+
+- `check_cache()` is only run when the package is attached, not when it is loaded to avoid namespace issues.
+
 # Version 0.1.3 - 2025-06-27
 
 ## Fixed
