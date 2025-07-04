@@ -32,7 +32,7 @@ contributors:
 repository-code: 'https://github.com/CityRiverSpaces/rcrisp'
 identifiers:
   - type: doi
-    value: 10.5281/zenodo.15793527
+    value: 10.5281/zenodo.15793526
 abstract: >-
   Automates the process of urban river space delineation
   using the CRiSp (City River Spaces) method.
