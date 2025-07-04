@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - The CRAN badge has been added to the README.
 
+## Added
+
+- DOI is added to CITATION.cff, DESCRIPTION and README (badge)
+
 # Version 0.1.3 - 2025-06-27
 
 ## Fixed

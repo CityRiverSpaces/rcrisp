@@ -19,7 +19,7 @@ Description: Provides tools to automate the morphological delineation of
     the river space. The resulting delineation can be used to characterise
     spatial phenomena that can be related to the river as a central element.
 License: Apache License (>= 2)
-URL: https://cityriverspaces.github.io/rcrisp/
+URL: https://cityriverspaces.github.io/rcrisp/, https://doi.org/10.5281/zenodo.15793526
 BugReports: https://github.com/CityRiverSpaces/rcrisp/issues
 Depends:
     R (>= 4.1.0)

@@ -4,6 +4,7 @@
   "identifier": "rcrisp",
   "description": "Provides tools to automate the morphological delineation of riverside urban areas, based on a method introduced in Forgaci (2018) <doi:10.7480/abe.2018.31>. Delineation entails the identification of corridor boundaries, segmentation of the corridor, and delineation of the river space. The resulting delineation can be used to characterise spatial phenomena that can be related to the river as a central element.",
   "name": "rcrisp: Automate the Delineation of Urban River Spaces",
+  "relatedLink": ["https://cityriverspaces.github.io/rcrisp/", "https://CRAN.R-project.org/package=rcrisp", "https://doi.org/10.5281/zenodo.15793526"],
   "codeRepository": "https://github.com/CityRiverSpaces/rcrisp",
   "issueTracker": "https://github.com/CityRiverSpaces/rcrisp/issues",
   "license": "Apache License 2",
@@ -341,8 +342,7 @@
     },
     "SystemRequirements": null
   },
-  "fileSize": "6590.113KB",
-  "relatedLink": "https://cityriverspaces.github.io/rcrisp/",
+  "fileSize": "4761.964KB",
   "releaseNotes": "https://github.com/CityRiverSpaces/rcrisp/blob/master/NEWS.md",
   "readme": "https://github.com/CityRiverSpaces/rcrisp/blob/main/README.md",
   "contIntegration": "https://github.com/CityRiverSpaces/rcrisp/actions/workflows/R-CMD-check.yaml",
