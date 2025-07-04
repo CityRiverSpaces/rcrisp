@@ -14,6 +14,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `check_cache()` is only run when the package is attached, not when it is loaded to avoid namespace issues.
 
+## Changed
+
+- Vignette file names are updated to ensure they are listed in order on CRAN.
+
 # Version 0.1.3 - 2025-06-27
 
 ## Fixed
