@@ -1,4 +1,9 @@
 .onAttach <- function(libname, pkgname) {
-  msg <- check_cache()
-  if (!is.null(msg)) packageStartupMessage(msg)
+  withCallingHandlers(
+    check_cache(),
+    warning = function(w) {
+      packageStartupMessage(conditionMessage(w))
+      invokeRestart("muffleWarning")
+    }
+  )
 }

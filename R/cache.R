@@ -179,13 +179,11 @@ check_cache <- function() {
   } else {
     is_too_old <- (Sys.time() - date_oldest_file) > "30 days"
   }
-  msg <- NULL
   if (is_too_big || is_too_old) {
-    msg <- sprintf(paste0(
+    warning(sprintf(paste0(
       "Cache dir: %s - size: %.0f MB - oldest file from: %s.\n",
       "Clean up files older than 30 days with: `rcrisp::clear_cache('%s')` ",
       "(or remove all cached files with: `rcrisp::clear_cache()`."
-    ), cache_dir, cache_size, as.Date(date_oldest_file), Sys.Date() - 30)
+    ), cache_dir, cache_size, as.Date(date_oldest_file), Sys.Date() - 30))
   }
-  msg
 }
