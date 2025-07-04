@@ -10,6 +10,8 @@
 state and is being actively
 developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.15793526.svg)](https://doi.org/10.5281/zenodo.15793526)
+[![CRAN
+status](https://www.r-pkg.org/badges/version/rcrisp)](https://CRAN.R-project.org/package=rcrisp)
 <!-- badges: end -->
 
 rcrisp provides tools to automate the morphological delineation of
