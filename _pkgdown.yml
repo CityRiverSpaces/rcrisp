@@ -10,41 +10,33 @@ articles:
 - title: Articles
   navbar: ~
   contents:
-  - method
-  - getting-osm-data
-  - network-preparation
-  - valley-delineation
-  - corridor-delineation
-  - corridor-segmentation
-  - riverspace-delineation
-  # - multiple-cities
-  # - poi-study-area
+  - vig_01-method
+  - vig_02-getting-osm-data
+  - vig_03-network-preparation
+  - vig_04-valley-delineation
+  - vig_05-corridor-delineation
+  - vig_06-corridor-segmentation
+  - vig_07-riverspace-delineation
 navbar:
   components:
     articles:
       text: Articles
       menu:
         - text: The method
-          href: articles/method.html
+          href: articles/vig_01-method.html
         - text: -------
         - text: Preparation
         - text: Getting OSM data for delineation
-          href: articles/getting-osm-data.html
+          href: articles/vig_02-getting-osm-data.html
         - text: Preparing the network for delineation
-          href: articles/network-preparation.html
+          href: articles/vig_03-network-preparation.html
         - text: -------
         - text: Delineation
         - text: Valley delineation
-          href: articles/valley-delineation.html
+          href: articles/vig_04-valley-delineation.html
         - text: Corridor delineation
-          href: articles/corridor-delineation.html
+          href: articles/vig_05-corridor-delineation.html
         - text: Corridor segmentation
-          href: articles/corridor-segmentation.html
+          href: articles/vig_06-corridor-segmentation.html
         - text: Riverspace delineation
-          href: articles/riverspace-delineation.html
-        # - text: -------
-        # - text: Use cases
-        # - text: 7. Multiple delineations
-        #   href: articles/multiple-cities.html
-        # - text: 8. Study area around a POI
-        #   href: articles/poi-study-area.html
+          href: articles/vig_07-riverspace-delineation.html
