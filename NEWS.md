@@ -3,16 +3,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-# Version 0.1.4
-
-## Fixed
-
-- `check_cache()` is only run when the package is attached, not when it is loaded to avoid namespace issues.
+# Version 0.1.4 - 2025-07-04
 
 ## Added
 
 - The CRAN badge has been added to the README.
 - DOI is added to CITATION.cff, DESCRIPTION and README (badge)
+
+## Fixed
+
+- `check_cache()` is only run when the package is attached, not when it is loaded to avoid namespace issues.
 
 # Version 0.1.3 - 2025-06-27
 
