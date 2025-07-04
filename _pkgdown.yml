@@ -10,13 +10,13 @@ articles:
 - title: Articles
   navbar: ~
   contents:
-  - method
-  - getting-osm-data
-  - network-preparation
-  - valley-delineation
-  - corridor-delineation
-  - corridor-segmentation
-  - riverspace-delineation
+  - 1-method
+  - 2-getting-osm-data
+  - 3-network-preparation
+  - 4-valley-delineation
+  - 5-corridor-delineation
+  - 6-corridor-segmentation
+  - 7-riverspace-delineation
   # - multiple-cities
   # - poi-study-area
 navbar:
