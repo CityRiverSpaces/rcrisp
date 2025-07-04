@@ -1,8 +1,8 @@
 ---
-title: "Valley delineation"
+title: "4. Valley delineation"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Valley delineation}
+  %\VignetteIndexEntry{4. Valley delineation}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 bibliography: references.bib

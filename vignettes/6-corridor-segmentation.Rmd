@@ -1,8 +1,8 @@
 ---
-title: "5. Corridor segmentation"
+title: "6. Corridor segmentation"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{5. Corridor segmentation}
+  %\VignetteIndexEntry{6. Corridor segmentation}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
