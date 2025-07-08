@@ -48,3 +48,10 @@ test_that("Delineate does not return the valley if the buffer method is used", {
                          suppressWarnings())
   expect_equal(names(delineations), "corridor")
 })
+
+test_that("Only one city and one river can be delineated at a time", {
+  expect_error(delineate(c("Bucharest", "Cluj-Napoca"), "Dâmbovița"),
+               "Only one city and one river can be delineated at a time.")
+  expect_error(delineate("Bucharest", c("Dâmbovița", "SomeOtherRiver")),
+               "Only one city and one river can be delineated at a time.")
+})

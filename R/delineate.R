@@ -42,6 +42,9 @@
 #' @export
 #' @examplesIf interactive()
 #' delineate("Bucharest", "Dâmbovița")
+#'
+#' @srrstats {G2.0} The function asserts that only one city and one river can
+#'   be delineated at a time.
 delineate <- function(
   city_name, river_name, crs = NULL, network_buffer = NULL,
   buildings_buffer = NULL, corridor_init = "valley", dem = NULL,
@@ -51,6 +54,10 @@ delineate <- function(
 ) {
 
   delineations <- list()
+
+  if (length(city_name) > 1 || length(river_name) > 1) {
+    stop("Only one city and one river can be delineated at a time.")
+  }
 
   if (segments && !corridor) stop("Segmentation requires corridor delineation.")
 
