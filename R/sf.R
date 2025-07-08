@@ -1,9 +1,13 @@
+#' Convert points to linestring
+#'
 #' @noRd
 as_linestring <- function(points) {
   points_union <- sf::st_union(points)
   sf::st_cast(points_union, "LINESTRING")
 }
 
+#' Convert linestring to polygon
+#'
 #' @noRd
 as_polygon <- function(lines) {
   lines_union <- sf::st_union(lines)
@@ -12,6 +16,8 @@ as_polygon <- function(lines) {
     sf::st_collection_extract()
 }
 
+#' Convert a geometry to a simple feature collection
+#'
 #' @noRd
 as_sfc <- function(x) {
   if (inherits(x, "sfc")) {
@@ -22,6 +28,7 @@ as_sfc <- function(x) {
 }
 
 #' Get the index of the n geometries with largest area
+#'
 #' @noRd
 find_largest <- function(geometry, n = 1) {
   area <- sf::st_area(geometry)
@@ -29,6 +36,7 @@ find_largest <- function(geometry, n = 1) {
 }
 
 #' Get the index of the n geometries with highest length
+#'
 #' @noRd
 find_longest <- function(geometry, n = 1) {
   length <- sf::st_length(geometry)

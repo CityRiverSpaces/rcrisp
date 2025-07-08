@@ -18,27 +18,51 @@ See our guide on [how to create a great issue](https://code-review.tidyverse.org
 
 ### Pull request process
 
-*   Fork the package and clone onto your computer. If you haven't done this before, we recommend using `usethis::create_from_github("CityRiverSpaces/rcrisp", fork = TRUE)`.
+*  Fork the package and clone onto your computer. If you haven't done this before, we recommend using `usethis::create_from_github("CityRiverSpaces/rcrisp", fork = TRUE)`.
 
-*   Install all development dependencies with `devtools::install_dev_deps()`, and then make sure the package passes R CMD check by running `devtools::check()`. 
-    If R CMD check doesn't pass cleanly, it's a good idea to ask for help before continuing. 
-*   Create a Git branch for your pull request (PR). We recommend using `usethis::pr_init("brief-description-of-change")`.
+*  Install all development dependencies with `devtools::install_dev_deps()`, and then make sure the package passes R CMD check by running `devtools::check()`. 
+   If R CMD check doesn't pass cleanly, it's a good idea to ask for help before continuing.
+   
+*  Create a Git branch for your pull request (PR). We recommend using `usethis::pr_init("brief-description-of-change")`.
 
-*   Make your changes, commit to git, and then create a PR by running `usethis::pr_push()`, and following the prompts in your browser.
-    The title of your PR should briefly describe the change.
-    The body of your PR should contain `Fixes #issue-number`.
+*  Make your changes, commit to git, and then create a PR by running `usethis::pr_push()`, and following the prompts in your browser.
+   The title of your PR should briefly describe the change.
+   The body of your PR should contain `Fixes #issue-number`.
 
 *  For user-facing changes, add a bullet to the top of `NEWS.md` (i.e. just below the first header). Follow the style described in <https://style.tidyverse.org/news.html>.
 
 ### Code style
 
-*   New code should follow the tidyverse [style guide](https://style.tidyverse.org). 
-    You can use the [styler](https://CRAN.R-project.org/package=styler) package to apply these styles, but please don't restyle code that has nothing to do with your PR.  
+*  New code should follow the tidyverse [style guide](https://style.tidyverse.org). 
+   You can use the [styler](https://CRAN.R-project.org/package=styler) package to apply these styles, but please don't restyle code that has nothing to do with your PR.  
 
 *  We use [roxygen2](https://cran.r-project.org/package=roxygen2), with [Markdown syntax](https://cran.r-project.org/web/packages/roxygen2/vignettes/rd-formatting.html), for documentation.  
 
 *  We use [testthat](https://cran.r-project.org/package=testthat) for unit tests. 
    Contributions with test cases included are easier to accept.  
+
+## Roadmap
+
+We strive to develop `rcrisp` into a robust tool for delineation. Although the
+package already produces reliable delineations, we do see room for improvement.
+
+We plan to:
+
+*  Expand the use of input data from OpenStreetMap to Overture Maps and from
+   Copernicus GLO-30 Digital Elevation Models to Global Digital Terrain Models
+   from OpenTopography.
+*  Improve segmentation (1) by merging neighbouring corridor segments using
+   morphological similarity learned from segment-level morphometrics through
+   clustering and (2) by splitting large segments based on potential river
+   crossings identified in the street network.
+*  Improve the user interface of `rcrisp` and validate its output while building
+   an inventory of use cases to meet the needs of a broad research community.
+   
+We will not:
+
+*  Develop `rcrisp` into a package for urban river space analysis, but maintain
+   its focus on providing morphologically grounded boundaries to be adopted in
+   subsequent analyses using other domain-specific tools.
 
 ## Code of Conduct
 

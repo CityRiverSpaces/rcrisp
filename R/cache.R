@@ -70,12 +70,16 @@ get_dem_cache_filepath <- function(tile_urls, bbox) {
   file.path(cache_directory(), filename)
 }
 
+#' Convert a bounding box to a string
+#'
 #' @noRd
 bbox_as_str <- function(bbox, digits = 3) {
   bbox_rounded <- round(bbox, digits)
   paste(as.character(bbox_rounded), collapse = "_")
 }
 
+#' Get RDS filename
+#'
 #' @noRd
 get_rds_filename <- function(...) {
   stem <- paste(..., sep = "_")
