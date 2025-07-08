@@ -66,6 +66,8 @@ flatten_network <- function(network) {
   network_new
 }
 
+#' Get edges that cross each other.
+#'
 #' @noRd
 get_crossing_edges <- function(edges) {
   geometry <- sf::st_geometry(edges)
@@ -74,6 +76,8 @@ get_crossing_edges <- function(edges) {
   sf::st_sf(id = which(mask), geometry = geometry[mask])
 }
 
+#' Get intersection points between edges.
+#'
 #' @noRd
 get_intersection_points <- function(edges) {
   # make sure edges is an sf object, so st_intersection also returns origins
@@ -84,8 +88,11 @@ get_intersection_points <- function(edges) {
   sfheaders::sf_cast(points, to = "POINT")
 }
 
-#' @noRd
+#' Insert intersection points into edges.
+#'
 #' @importFrom utils head tail
+#'
+#' @noRd
 insert_intersections <- function(edges, points, tol = 1.e-3) {
 
   edge_geometry <- sf::st_geometry(edges)
@@ -138,18 +145,25 @@ insert_intersections <- function(edges, points, tol = 1.e-3) {
   return(edges_new)
 }
 
+#' Check if a point is within a given edge.
+#'
 #' @noRd
 is_point_in_edge <- function(point, edge, tol) {
   any(calc_distance(point, edge) < tol)
 }
 
+#' Calculate the distance from a point to an edge.
+#'
 #' @noRd
 calc_distance <- function(point, edge) {
   sqrt((edge[, "x"] - point["X"]) ^ 2 + (edge[, "y"] - point["Y"]) ^ 2)
 }
 
-#' @noRd
+#' Calculate the rolling sum of a vector.
+#'
 #' @importFrom utils head tail
+#'
+#' @noRd
 calc_rolling_sum <- function(x, n = 2) {
   cs <- cumsum(x)
   # roll the cumsum array by adding `n` zeros at its beginning and dropping
