@@ -19,9 +19,6 @@
 #' @srrstatsTODO {G2.4a} *explicit conversion to `integer` via `as.integer()`*
 #' @srrstatsTODO {G2.4b} *explicit conversion to continuous via `as.numeric()`*
 #' @srrstatsTODO {G2.4c} *explicit conversion to character via `as.character()` (and not `paste` or `paste0`)*
-#' @srrstatsTODO {G2.4d} *explicit conversion to factor via `as.factor()`*
-#' @srrstatsTODO {G2.4e} *explicit conversion from factor via `as...()` functions*
-#' @srrstatsTODO {G2.5} *Where inputs are expected to be of `factor` type, secondary documentation should explicitly state whether these should be `ordered` or not, and those inputs should provide appropriate error or other routines to ensure inputs follow these expectations.*
 #' @srrstatsTODO {G2.6} *Software which accepts one-dimensional input should ensure values are appropriately pre-processed regardless of class structures.*
 #' @srrstatsTODO {G2.7} *Software should accept as input as many of the above standard tabular forms as possible, including extension to domain-specific forms.*
 #' @srrstatsTODO {G2.8} *Software should provide appropriate conversion or dispatch routines as part of initial pre-processing to ensure that all other sub-functions of a package receive inputs of a single defined class or type.*
@@ -122,5 +119,6 @@ NULL
 #'   and no performance claims are made.
 #' @srrstatsNA {G1.6} As there are no alternative implementations, no
 #'   performance claims are made in this package.
+#' @srrstatsNA {G2.4d, G2.4e, G2.5} This package does not make use of factors.
 #' @noRd
 NULL
