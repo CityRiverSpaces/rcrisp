@@ -1,7 +1,7 @@
 #' srr_stats
 #'
 #' @srrstatsVerbose TRUE
-#'
+# nolint start
 #' @srrstats {G1.2} The package includes a Roadmap in the CONTRIBUTING.md file.
 #' @srrstats {G1.4} The package uses [`roxygen2`](https://roxygen2.r-lib.org/) to document all functions.
 #' @srrstats {G1.4a} All internal functions are documented with [`roxygen2`](https://roxygen2.r-lib.org/) and use the `@noRd` tag.
@@ -110,6 +110,7 @@
 #' @srrstatsTODO {SP6.4} *Spatial Software which considers spatial neighbours should explicitly test effects of different schemes to weight neighbours by spatial proximity.*
 #' @srrstatsTODO {SP6.5} *Spatial Unsupervised Learning Software which uses clustering algorithms should implement tests which explicitly compare results with equivalent results obtained with a non-spatial clustering algorithm.*
 #' @srrstatsTODO {SP6.6} *Spatial Machine Learning Software should implement tests which explicitly demonstrate the detrimental consequences of sampling test and training data from the same spatial region, rather than from spatially distinct regions.
+# nolint end
 #' @noRd
 NULL
 
