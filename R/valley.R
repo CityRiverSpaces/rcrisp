@@ -64,6 +64,8 @@ get_dem <- function(bb, dem_source = "STAC", stac_endpoint = NULL,
 #' The resulting area is then "polygonized" to obtain the valley boundary as a
 #' simple feature geometry.
 #'
+#' @srrstats {G1.3} The Cost Distance algorithm is explained here.
+#'
 #' @param dem Digital elevation model of the region
 #' @param river A simple feature geometry representing the river
 #'
