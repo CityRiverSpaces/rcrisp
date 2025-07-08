@@ -31,8 +31,6 @@ cache_directory <- function() {
 #'
 #' @return A character string representing the file path
 #' @keywords internal
-#'
-#' @noRd
 get_osmdata_cache_filepath <- function(key, value, bbox) {
   # collapse `value` (which might be a vector) to a character string
   value_str <- paste(value, collapse = "_")
@@ -99,8 +97,6 @@ get_rds_filename <- function(...) {
 #'
 #' @return Object deserialized
 #' @keywords internal
-#'
-#' @noRd
 read_data_from_cache <- function(filepath, unwrap = FALSE, quiet = FALSE) {
   if (!quiet) {
     warning(sprintf("Loading data from cache directory: %s", filepath))
@@ -125,8 +121,6 @@ read_data_from_cache <- function(filepath, unwrap = FALSE, quiet = FALSE) {
 #'
 #' @return `NULL` invisibly
 #' @keywords internal
-#'
-#' @noRd
 write_data_to_cache <- function(x, filepath, wrap = FALSE, quiet = FALSE) {
   if (!quiet) {
     message(sprintf("Saving data to cache directory: %s", filepath))

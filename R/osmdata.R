@@ -42,8 +42,6 @@ osmdata_as_sf <- function(key, value, aoi, force_download = FALSE) {
 #'
 #' @return An sf object with the retrieved OpenStreetMap data
 #' @keywords internal
-#'
-#' @noRd
 osmdata_query <- function(key, value, bb) {
   # this is needed because the add_osm_feature does not support
   # value as an empty string
@@ -424,8 +422,6 @@ get_river_aoi <- function(river, city_bbox, buffer_distance) {
 #'
 #' @return sf object containing only rows with filtered name
 #' @keywords internal
-#'
-#' @noRd
 match_osm_name <- function(osm_data, match) {
   # Function to find partial matches across rows of a data frame
   includes_match <- \(x) grepl(match, x, ignore.case = TRUE)

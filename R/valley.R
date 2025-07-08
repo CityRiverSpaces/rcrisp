@@ -201,9 +201,6 @@ dem_to_cog <- function(dem, fpath, output_directory = NULL) {
 #'
 #' @return filtered dem
 #' @keywords internal
-#'
-#' @srrstats {G1.4a} Internal function documented in standard Roxygen format.
-#' @noRd
 smooth_dem <- function(dem, method = "median", window = 5) {
   dem_smoothed <- terra::focal(dem, w = window, fun = method)
   names(dem_smoothed) <- "dem_smoothed"
@@ -218,9 +215,6 @@ smooth_dem <- function(dem, method = "median", window = 5) {
 #'
 #' @return raster of derived slope over dem extent
 #' @keywords internal
-#'
-#' @srrstats {G1.4a} Internal function documented in standard Roxygen format.
-#' @noRd
 get_slope <- function(dem) {
   slope_radians <- terra::terrain(dem, v = "slope", unit = "radians")
   tan(slope_radians)
@@ -236,9 +230,6 @@ get_slope <- function(dem) {
 #'
 #' @return updated slope raster
 #' @keywords internal
-#'
-#' @srrstats {G1.4a} Internal function documented in standard Roxygen format.
-#' @noRd
 mask_slope <- function(slope, river, lthresh = 1.e-3, target = 0) {
   slope_masked <- terra::mask(slope,
                               terra::ifel(slope <= lthresh, NA, 1),
@@ -261,9 +252,6 @@ mask_slope <- function(slope, river, lthresh = 1.e-3, target = 0) {
 #'
 #' @return raster of cost distance
 #' @keywords internal
-#'
-#' @srrstats {G1.4a} Internal function documented in standard Roxygen format.
-#' @noRd
 get_cost_distance <- function(slope, river, target = 0) {
   slope_masked <- mask_slope(slope, river, target = target)
   cd <- terra::costDist(slope_masked, target = target)
@@ -279,9 +267,6 @@ get_cost_distance <- function(slope, river, target = 0) {
 #'
 #' @return cd raster with river+BUFFER pixels masked
 #' @keywords internal
-#'
-#' @srrstats {G1.4a} Internal function documented in standard Roxygen format.
-#' @noRd
 mask_cost_distance <- function(cd, river, buffer = 2000) {
   river_buffer <- sf::st_buffer(river, buffer) |> terra::vect()
   terra::mask(
@@ -299,9 +284,6 @@ mask_cost_distance <- function(cd, river, buffer = 2000) {
 #'
 #' @return characteristic value of cd raster
 #' @keywords internal
-#'
-#' @srrstats {G1.4a} Internal function documented in standard Roxygen format.
-#' @noRd
 get_cd_char <- function(cd, method = "mean") {
   if (method == "mean") {
     mean(terra::values(cd), na.rm = TRUE)
@@ -317,9 +299,6 @@ get_cd_char <- function(cd, method = "mean") {
 #' @return polygon representation of valley area as st_geometry
 #' @importFrom rlang .data
 #' @keywords internal
-#'
-#' @srrstats {G1.4a} Internal function documented in standard Roxygen format.
-#' @noRd
 get_valley_polygon_raw <- function(valley_mask) {
   terra::as.polygons(valley_mask, dissolve = TRUE) |>
     sf::st_as_sf() |>
@@ -333,9 +312,6 @@ get_valley_polygon_raw <- function(valley_mask) {
 #'
 #' @return (multi)polygon geometry of valley
 #' @keywords internal
-#'
-#' @srrstats {G1.4a} Internal function documented in standard Roxygen format.
-#' @noRd
 get_valley_polygon_no_hole <- function(valley_polygon) {
   valley_polygon |>
     sf::st_cast("POLYGON") |>
@@ -351,9 +327,6 @@ get_valley_polygon_no_hole <- function(valley_polygon) {
 #' @return (multi)polygon representation of valley area as a simple feature
 #'   geometry without holes
 #' @keywords internal
-#'
-#' @srrstats {G1.4a} Internal function documented in standard Roxygen format.
-#' @noRd
 get_valley_polygon <- function(valley_mask) {
   get_valley_polygon_raw(valley_mask) |>
     get_valley_polygon_no_hole()

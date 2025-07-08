@@ -51,8 +51,6 @@ find_longest <- function(geometry, n = 1) {
 #'
 #' @return A simple feature object
 #' @keywords internal
-#'
-#' @noRd
 split_by <- function(geometry, line, boundary = FALSE) {
   regions <- lwgeom::st_split(geometry, line) |>
     sf::st_collection_extract()

@@ -221,8 +221,6 @@ clean_network <- function(network, simplify = TRUE) {
 #'
 #' @return A simplifed network object
 #' @keywords internal
-#'
-#' @noRd
 simplify_network <- function(network) {
   network |>
     sfnetworks::activate("edges") |>
@@ -264,8 +262,6 @@ simplify_network <- function(network) {
 #' @return A network object with weights added as a column in the edge table
 #' @importFrom rlang :=
 #' @keywords internal
-#'
-#' @noRd
 add_weights <- function(network, target = NULL, exclude_area = NULL,
                         penalty = 1000., weight_name = "weight") {
   edges <- sf::st_geometry(sf::st_as_sf(network, "edges"))
@@ -306,8 +302,6 @@ add_weights <- function(network, target = NULL, exclude_area = NULL,
 #' @return A simple feature geometry
 #' @importFrom rlang .data
 #' @keywords internal
-#'
-#' @noRd
 shortest_path <- function(network, from, to, weights = "weight") {
   paths <- sfnetworks::st_network_paths(
     network, from = from, to = to, weights = weights, type = "shortest",
@@ -334,8 +328,6 @@ shortest_path <- function(network, from, to, weights = "weight") {
 #'
 #' @return A node in the network as a simple feature geometry
 #' @keywords internal
-#'
-#' @noRd
 nearest_node <- function(network, target) {
   nodes <- sf::st_as_sf(network, "nodes") |>
     sf::st_geometry()
@@ -356,8 +348,6 @@ nearest_node <- function(network, target) {
 #' @return A spatial network object
 #' @importFrom rlang !!
 #' @keywords internal
-#'
-#' @noRd
 filter_network <- function(network, target, elements = "nodes") {
   if (elements == "nodes") {
     intersect_func <- sfnetworks::node_intersects
@@ -383,8 +373,6 @@ filter_network <- function(network, target, elements = "nodes") {
 #'
 #' @return Indices or geometries of the edges intersecting the given geometry
 #' @keywords internal
-#'
-#' @noRd
 get_intersecting_edges <- function(network, geometry, index = FALSE) {
   edges <- sf::st_as_sf(network, "edges")
   intersects <- sf::st_intersects(edges, geometry, sparse = FALSE)
@@ -400,8 +388,6 @@ get_intersecting_edges <- function(network, geometry, index = FALSE) {
 #' @param network_1,network_2 The two spatial network objects
 #' @return A simple feature object
 #' @keywords internal
-#'
-#' @noRd
 find_intersections <- function(network_1, network_2) {
   sf::st_intersection(sf::st_geometry(sf::st_as_sf(network_1, "edges")),
                       sf::st_geometry(sf::st_as_sf(network_2, "edges")))
