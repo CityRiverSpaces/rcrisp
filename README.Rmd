@@ -13,6 +13,10 @@ knitr::opts_chunk$set(
 )
 ```
 
+```{r srr-tags, eval=FALSE, echo=FALSE}
+#' @srrstats {G1.2} Lifecycle badge added in the README
+```
+
 # rcrisp
 
 <!-- badges: start -->
@@ -20,6 +24,7 @@ knitr::opts_chunk$set(
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.15793526.svg)](https://doi.org/10.5281/zenodo.15793526)
 [![CRAN status](https://www.r-pkg.org/badges/version/rcrisp)](https://CRAN.R-project.org/package=rcrisp)
+[![](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 <!-- badges: end -->
 
 rcrisp provides tools to automate the morphological delineation of riverside urban areas following the CRiSp (City River Spaces) method.
