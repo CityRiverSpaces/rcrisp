@@ -69,8 +69,10 @@ plot(corridor, border = "red", add = TRUE, lwd = 3)
 
 ## Contributing
 
-We look very much forward to contributions to the package. See the
-[Contributing
+rcrisp is in a stable state of development, with some degree of active
+subsequent development as envisioned by the primary authors.
+
+We also look very much forward to contributions. See the [Contributing
 Guide](https://github.com/CityRiverSpaces/rcrisp/blob/main/.github/CONTRIBUTING.md)
 for further details.
 
