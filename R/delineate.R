@@ -1,7 +1,7 @@
 #' Delineate a corridor around a river.
 #'
-#' @param city_name A place name as a string
-#' @param river_name A river name as a string
+#' @param city_name A place name as a string (a character vector of length one)
+#' @param river_name A river name as a string (a character vector of length one)
 #' @param crs The projected Coordinate Reference System (CRS) to use. If not
 #'   provided, the suitable Universal Transverse Mercator (UTM) CRS is selected
 #' @param network_buffer Add a buffer (an integer in meters) around
@@ -44,7 +44,8 @@
 #' delineate("Bucharest", "Dâmbovița")
 #'
 #' @srrstats {G2.0} The function asserts that only one city and one river can
-#'   be delineated at a time.
+#'   be delineated at a time. It is made explicit in the description of those
+#'   two parameters that they should be of length one.
 delineate <- function(
   city_name, river_name, crs = NULL, network_buffer = NULL,
   buildings_buffer = NULL, corridor_init = "valley", dem = NULL,
