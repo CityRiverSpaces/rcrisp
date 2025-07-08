@@ -5,7 +5,6 @@
 #' @return Object x with units of y
 #' @keywords internal
 #'
-#' @srrstats {G1.4a} Internal function documented in standard Roxygen format.
 #' @noRd
 set_units_like <- function(x, y) {
   has_units_x <- inherits(x, "units")
@@ -76,7 +75,6 @@ as_bbox <- function(x) {
 #' @return Expanded sf object
 #' @keywords internal
 #'
-#' @srrstats {G1.4a} Internal function documented in standard Roxygen format.
 #' @noRd
 buffer <- function(obj, buffer_distance, ...) {
   is_obj_longlat <- sf::st_is_longlat(obj)
@@ -112,7 +110,6 @@ buffer <- function(obj, buffer_distance, ...) {
 #' @return A simple feature geometry
 #' @keywords internal
 #'
-#' @srrstats {G1.4a} Internal function documented in standard Roxygen format.
 #' @noRd
 river_buffer <- function(river, buffer_distance, bbox = NULL, side = NULL) {
   if (!is.null(bbox)) river <- sf::st_crop(river, bbox)
@@ -178,7 +175,6 @@ reproject <- function(x, crs, ...) {
 #' @return Raster data as a [`terra::SpatRaster`] object
 #' @keywords internal
 #'
-#' @srrstats {G1.4a} Internal function documented in standard Roxygen format.
 #' @noRd
 load_raster <- function(urlpaths, bbox = NULL) {
   rasters <- lapply(urlpaths, terra::rast)
@@ -201,7 +197,6 @@ load_raster <- function(urlpaths, bbox = NULL) {
 #' @return Combined river as sfc_MULTILINESTRING
 #' @keywords internal
 #'
-#' @srrstats {G1.4a} Internal function documented in standard Roxygen format.
 #' @noRd
 combine_river_features <- function(river_centerline, river_surface) {
   if (is.null(river_surface)) {
@@ -223,7 +218,6 @@ combine_river_features <- function(river_centerline, river_surface) {
 #' @return sf object with valid geometries
 #' @keywords internal
 #'
-#' @srrstats {G1.4a} Internal function documented in standard Roxygen format.
 #' @noRd
 check_invalid_geometry <- function(sf_obj) {
   if (!all(sf::st_is_valid(sf_obj))) {

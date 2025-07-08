@@ -32,7 +32,6 @@ cache_directory <- function() {
 #' @return A character string representing the file path
 #' @keywords internal
 #'
-#' @srrstats {G1.4a} Internal function documented in standard Roxygen format.
 #' @noRd
 get_osmdata_cache_filepath <- function(key, value, bbox) {
   # collapse `value` (which might be a vector) to a character string
@@ -75,7 +74,6 @@ get_dem_cache_filepath <- function(tile_urls, bbox) {
 
 #' Convert a bounding box to a string
 #'
-#' @srrstats {G1.4a} Internal function documented in standard roxygen format.
 #' @noRd
 bbox_as_str <- function(bbox, digits = 3) {
   bbox_rounded <- round(bbox, digits)
@@ -84,7 +82,6 @@ bbox_as_str <- function(bbox, digits = 3) {
 
 #' Get RDS filename
 #'
-#' @srrstats {G1.4a} Internal function documented in standard Roxygen format.
 #' @noRd
 get_rds_filename <- function(...) {
   stem <- paste(..., sep = "_")
@@ -103,7 +100,6 @@ get_rds_filename <- function(...) {
 #' @return Object deserialized
 #' @keywords internal
 #'
-#' @srrstats {G1.4a} Internal function documented in standard Roxygen format.
 #' @noRd
 read_data_from_cache <- function(filepath, unwrap = FALSE, quiet = FALSE) {
   if (!quiet) {
@@ -130,7 +126,6 @@ read_data_from_cache <- function(filepath, unwrap = FALSE, quiet = FALSE) {
 #' @return `NULL` invisibly
 #' @keywords internal
 #'
-#' @srrstats {G1.4a} Internal function documented in standard Roxygen format.
 #' @noRd
 write_data_to_cache <- function(x, filepath, wrap = FALSE, quiet = FALSE) {
   if (!quiet) {

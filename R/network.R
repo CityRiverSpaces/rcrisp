@@ -68,7 +68,6 @@ flatten_network <- function(network) {
 
 #' Get edges that cross each other.
 #'
-#' @srrstats {G1.4a} Internal function documented in standard Roxygen format.
 #' @noRd
 get_crossing_edges <- function(edges) {
   geometry <- sf::st_geometry(edges)
@@ -79,7 +78,6 @@ get_crossing_edges <- function(edges) {
 
 #' Get intersection points between edges.
 #'
-#' @srrstats {G1.4a} Internal function documented in standard Roxygen format.
 #' @noRd
 get_intersection_points <- function(edges) {
   # make sure edges is an sf object, so st_intersection also returns origins
@@ -94,7 +92,6 @@ get_intersection_points <- function(edges) {
 #'
 #' @importFrom utils head tail
 #'
-#' @srrstats {G1.4a} Internal function documented in standard Roxygen format.
 #' @noRd
 insert_intersections <- function(edges, points, tol = 1.e-3) {
 
@@ -150,7 +147,6 @@ insert_intersections <- function(edges, points, tol = 1.e-3) {
 
 #' Check if a point is within a given edge.
 #'
-#' @srrstats {G1.4a} Internal function documented in standard Roxygen format.
 #' @noRd
 is_point_in_edge <- function(point, edge, tol) {
   any(calc_distance(point, edge) < tol)
@@ -158,7 +154,6 @@ is_point_in_edge <- function(point, edge, tol) {
 
 #' Calculate the distance from a point to an edge.
 #'
-#' @srrstats {G1.4a} Internal function documented in standard Roxygen format.
 #' @noRd
 calc_distance <- function(point, edge) {
   sqrt((edge[, "x"] - point["X"]) ^ 2 + (edge[, "y"] - point["Y"]) ^ 2)
@@ -168,7 +163,6 @@ calc_distance <- function(point, edge) {
 #'
 #' @importFrom utils head tail
 #'
-#' @srrstats {G1.4a} Internal function documented in standard Roxygen format.
 #' @noRd
 calc_rolling_sum <- function(x, n = 2) {
   cs <- cumsum(x)
@@ -228,7 +222,6 @@ clean_network <- function(network, simplify = TRUE) {
 #' @return A simplifed network object
 #' @keywords internal
 #'
-#' @srrstats {G1.4a} Internal function documented in standard Roxygen format.
 #' @noRd
 simplify_network <- function(network) {
   network |>
@@ -272,7 +265,6 @@ simplify_network <- function(network) {
 #' @importFrom rlang :=
 #' @keywords internal
 #'
-#' @srrstats {G1.4a} Internal function documented in standard Roxygen format.
 #' @noRd
 add_weights <- function(network, target = NULL, exclude_area = NULL,
                         penalty = 1000., weight_name = "weight") {
@@ -315,7 +307,6 @@ add_weights <- function(network, target = NULL, exclude_area = NULL,
 #' @importFrom rlang .data
 #' @keywords internal
 #'
-#' @srrstats {G1.4a} Internal function documented in standard Roxygen format.
 #' @noRd
 shortest_path <- function(network, from, to, weights = "weight") {
   paths <- sfnetworks::st_network_paths(
@@ -344,7 +335,6 @@ shortest_path <- function(network, from, to, weights = "weight") {
 #' @return A node in the network as a simple feature geometry
 #' @keywords internal
 #'
-#' @srrstats {G1.4a} Internal function documented in standard Roxygen format.
 #' @noRd
 nearest_node <- function(network, target) {
   nodes <- sf::st_as_sf(network, "nodes") |>
@@ -367,7 +357,6 @@ nearest_node <- function(network, target) {
 #' @importFrom rlang !!
 #' @keywords internal
 #'
-#' @srrstats {G1.4a} Internal function documented in standard Roxygen format.
 #' @noRd
 filter_network <- function(network, target, elements = "nodes") {
   if (elements == "nodes") {
@@ -395,7 +384,6 @@ filter_network <- function(network, target, elements = "nodes") {
 #' @return Indices or geometries of the edges intersecting the given geometry
 #' @keywords internal
 #'
-#' @srrstats {G1.4a} Internal function documented in standard Roxygen format.
 #' @noRd
 get_intersecting_edges <- function(network, geometry, index = FALSE) {
   edges <- sf::st_as_sf(network, "edges")
@@ -413,7 +401,6 @@ get_intersecting_edges <- function(network, geometry, index = FALSE) {
 #' @return A simple feature object
 #' @keywords internal
 #'
-#' @srrstats {G1.4a} Internal function documented in standard Roxygen format.
 #' @noRd
 find_intersections <- function(network_1, network_2) {
   sf::st_intersection(sf::st_geometry(sf::st_as_sf(network_1, "edges")),

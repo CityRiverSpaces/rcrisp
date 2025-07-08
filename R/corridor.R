@@ -81,7 +81,6 @@ delineate_corridor <- function(
 #' @return A [`sfnetworks::sfnetwork`] object
 #' @keywords internal
 #'
-#' @srrstats {G1.4a} Internal function documented in standard Roxygen format.
 #' @noRd
 build_river_network <- function(river, bbox = NULL) {
   # Clip the river geometry using the bounding box (if provided)
@@ -119,7 +118,6 @@ build_river_network <- function(river, bbox = NULL) {
 #' @return A simple feature geometry including a pair of points
 #' @keywords internal
 #'
-#' @srrstats {G1.4a} Internal function documented in standard Roxygen format.
 #' @noRd
 corridor_end_points <- function(river_network, spatial_network, regions) {
   # Find intersections between the spatial network and the river network, after
@@ -163,7 +161,6 @@ corridor_end_points <- function(river_network, spatial_network, regions) {
 #' @return A [`sf::sfc`] object with two polygon features
 #' @keywords internal
 #'
-#' @srrstats {G1.4a} Internal function documented in standard Roxygen format.
 #' @noRd
 get_river_banks <- function(river, width) {
   if (inherits(river, "sfnetwork")) {
@@ -200,7 +197,6 @@ get_river_banks <- function(river, width) {
 #' @return A simple feature geometry representing the initial corridor edges
 #' @keywords internal
 #'
-#' @srrstats {G1.4a} Internal function documented in standard Roxygen format.
 #' @noRd
 initial_edges <- function(corridor_initial, regions) {
   corridor_split <- sf::st_intersection(regions, corridor_initial)
@@ -230,7 +226,6 @@ initial_edges <- function(corridor_initial, regions) {
 #' @return A simple feature geometry representing the edge (i.e. a linestring)
 #' @keywords internal
 #'
-#' @srrstats {G1.4a} Internal function documented in standard Roxygen format.
 #' @noRd
 corridor_edge <- function(network, end_points, target_edge, exclude_area = NULL,
                           max_iterations = 10) {
@@ -272,7 +267,6 @@ corridor_edge <- function(network, end_points, target_edge, exclude_area = NULL,
 #' @return A simple feature geometry representing the corridor (i.e. a polygon)
 #' @keywords internal
 #'
-#' @srrstats {G1.4a} Internal function documented in standard Roxygen format.
 #' @noRd
 cap_corridor <- function(edges, method = "shortest-path", network = NULL) {
 

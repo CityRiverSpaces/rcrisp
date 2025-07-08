@@ -11,6 +11,7 @@
 #'
 #' @srrstats {G1.2} The package includes a Roadmap in the CONTRIBUTING.md file.
 #' @srrstats {G1.4} The package uses [`roxygen2`](https://roxygen2.r-lib.org/) to document all functions.
+#' @srrstats {G1.4a} All internal functions are documented with [`roxygen2`](https://roxygen2.r-lib.org/) and use the `@noRd` tag.
 #' @srrstatsTODO {G2.0} *Implement assertions on lengths of inputs, particularly through asserting that inputs expected to be single- or multi-valued are indeed so.*
 #' @srrstatsTODO {G2.0a} Provide explicit secondary documentation of any expectations on lengths of inputs
 #' @srrstatsTODO {G2.1} *Implement assertions on types of inputs (see the initial point on nomenclature above).*

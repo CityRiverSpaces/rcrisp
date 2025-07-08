@@ -54,7 +54,6 @@ delineate_segments <- function(corridor, network, river,
 #' @importFrom rlang .data
 #' @keywords internal
 #'
-#' @srrstats {G1.4a} Internal function documented in standard Roxygen format.
 #' @noRd
 clip_and_filter <- function(lines, corridor, river) {
 
@@ -92,7 +91,6 @@ clip_and_filter <- function(lines, corridor, river) {
 #' @return Corridor edges as a simple feature geometry
 #' @keywords internal
 #'
-#' @srrstats {G1.4a} Internal function documented in standard Roxygen format.
 #' @noRd
 get_corridor_edges <- function(corridor, river) {
   corridor_edges <- split_by(corridor, river, boundary = TRUE)
@@ -118,7 +116,6 @@ get_corridor_edges <- function(corridor, river) {
 #' @return A simple feature geometry including the shortest edge per cluster
 #' @keywords internal
 #'
-#' @srrstats {G1.4a} Internal function documented in standard Roxygen format.
 #' @noRd
 filter_clusters <- function(crossings, river, eps = 100) {
   intersections <- sf::st_intersection(crossings, river)
@@ -150,7 +147,6 @@ filter_clusters <- function(crossings, river, eps = 100) {
 #'   as a simple feature geometry
 #' @keywords internal
 #'
-#' @srrstats {G1.4a} Internal function documented in standard Roxygen format.
 #' @noRd
 select_nonintersecting_lines <- function(lines, corridor) {
   # Determine intersections among the lines provided

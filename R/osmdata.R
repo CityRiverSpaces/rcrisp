@@ -43,7 +43,6 @@ osmdata_as_sf <- function(key, value, aoi, force_download = FALSE) {
 #' @return An sf object with the retrieved OpenStreetMap data
 #' @keywords internal
 #'
-#' @srrstats {G1.4a} Internal function documented in standard Roxygen format.
 #' @noRd
 osmdata_query <- function(key, value, bb) {
   # this is needed because the add_osm_feature does not support
@@ -426,7 +425,6 @@ get_river_aoi <- function(river, city_bbox, buffer_distance) {
 #' @return sf object containing only rows with filtered name
 #' @keywords internal
 #'
-#' @srrstats {G1.4a} Internal function documented in standard Roxygen format.
 #' @noRd
 match_osm_name <- function(osm_data, match) {
   # Function to find partial matches across rows of a data frame
