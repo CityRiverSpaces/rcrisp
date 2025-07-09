@@ -4,6 +4,14 @@
 #' URL on the 4TU.ResearchData data repository, and it can be used in examples
 #' and tests.
 #'
+#' @srrstats {G5.0} The dataset used in examples, tests and vignettes is
+#'   retrieved from a persistent location on a data repository. The dataset
+#'   follows FAIR data standards and thus its properties are described in
+#'   detail.
+#' @srrstats {G5.1} The example dataset is made generally available to users
+#'   through the `get_osm_example_data()` function which retrieves the data
+#'   from a persistent URL.
+#'
 #' @return A list of sf objects containing the OSM data.
 #' @importFrom utils download.file
 #' @importFrom stats setNames
