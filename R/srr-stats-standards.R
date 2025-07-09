@@ -117,7 +117,6 @@ NULL
 #'   spatial neighbours.
 #' @srrstatsNA {SP3.2} The package does not rely on sampling from input data.
 #' @srrstatsNA {SP3.3} The package does not employ regression.
-#' @srrstatsNA {SP3.4} The package does not use any kind of clustering.
 #' @srrstatsNA {SP3.5, SP3.6} The package does not implement any kind of
 #'   machine learning.
 
