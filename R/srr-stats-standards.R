@@ -83,15 +83,6 @@
 #' @srrstatsTODO {SP2.7} *Spatial Software should implement validation routines to confirm that inputs are of acceptable classes (or represented in otherwise appropriate ways for software which does not use class systems).*
 #' @srrstatsTODO {SP2.8} *Spatial Software should implement a single pre-processing routine to validate input data, and to appropriately transform it to a single uniform type to be passed to all subsequent data-processing functions.*
 #' @srrstatsTODO {SP2.9} *The pre-processing function described above should maintain those metadata attributes of input data which are relevant or important to core algorithms or return values.*
-#' @srrstatsTODO {SP3.0} *Spatial software which considers spatial neighbours should enable user control over neighbourhood forms and sizes. In particular:*
-#' @srrstatsTODO {SP3.0a} *Neighbours (able to be expressed) on regular grids should be able to be considered in both rectangular only, or rectangular and diagonal (respectively "rook" and "queen" by analogy to chess).*
-#' @srrstatsTODO {SP3.0b} *Neighbourhoods in irregular spaces should be minimally able to be controlled via an integer number of neighbours, an area (or equivalent distance defining an area) in which to include neighbours, or otherwise equivalent user-controlled value.*
-#' @srrstatsTODO {SP3.1} *Spatial software which considers spatial neighbours should wherever possible enable neighbour contributions to be weighted by distance (or other continuous weighting variable), and not rely exclusively on a uniform-weight rectangular cut-off.*
-#' @srrstatsTODO {SP3.2} *Spatial software which relies on sampling from input data (even if only of spatial coordinates) should enable sampling procedures to be based on local spatial densities of those input data.*
-#' @srrstatsTODO {SP3.3} *Spatial regression software should explicitly quantify and distinguish autocovariant or autoregressive processes from those covariant or regressive processes not directly related to spatial structure alone.*
-#' @srrstatsTODO {SP3.4} *Where possible, spatial clustering software should avoid using standard non-spatial clustering algorithms in which spatial proximity is merely represented by an additional weighting factor in favour of explicitly spatial algorithms.*
-#' @srrstatsTODO {SP3.5} *Spatial machine learning software should ensure that broadcasting procedures for reconciling inputs of different dimensions are **not** applied*.
-#' @srrstatsTODO {SP3.6} *Spatial machine learning software should document (and, where possible, test) the potential effects of different sampling procedures*
 #' @srrstatsTODO {SP4.0} *Return values should either:*
 #' @srrstatsTODO {SP4.0a} *Be in same class as input data, or*
 #' @srrstatsTODO {SP4.0b} *Be in a unique, preferably class-defined, format.*
@@ -122,5 +113,11 @@ NULL
 #'   performance claims are made in this package.
 #' @srrstatsNA {G3.1, G3.1a} This package does not perform covariance
 #'   calculations.
+#' @srrstatsNA {SP3.0, SP3.0a, SP3.0b, SP3.1} The package does not consider
+#'   spatial neighbours.
+#' @srrstatsNA {SP3.2} The package does not rely on sampling from input data.
+#' @srrstatsNA {SP3.3} The package does not employ regression.
+#' @srrstatsNA {SP3.5, SP3.6} The package does not implement any kind of
+#'   machine learning.
 #' @noRd
 NULL

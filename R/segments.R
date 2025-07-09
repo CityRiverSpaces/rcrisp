@@ -103,6 +103,9 @@ get_corridor_edges <- function(corridor, river) {
 #' edges representing e.g. different lanes of the same street are treated as
 #' part of the same crossing. For each cluster, select the shortest edge.
 #'
+#' @srrstats {SP3.4} This function uses DBSCAN to cluster nearby river
+#'   crossings.
+#'
 #' @param crossings Crossing edge geometries as a simple feature object
 #' @param river The river geometry as a simple feature object
 #' @param eps DBSCAN parameter referring to the size (radius) distance of the
