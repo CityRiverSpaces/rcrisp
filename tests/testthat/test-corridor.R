@@ -260,7 +260,8 @@ test_that("Warning is raised if the river corridor edge did not converge in
             # These lines reproduce the steps run in delineate_corridor()
             # before corridor_edge() can be called.
             network <- rbind(bucharest_osm$streets, bucharest_osm$railways) |>
-              as_network() |> suppressWarnings()
+              as_network() |>
+              suppressWarnings()
             river <- sf::st_geometry(bucharest_osm$river_centerline)
             corridor_init <- river_buffer(river, 1000)
             river_network <- build_river_network(river,
