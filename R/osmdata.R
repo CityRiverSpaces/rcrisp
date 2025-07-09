@@ -15,6 +15,8 @@
 #' @examplesIf interactive()
 #' bb <- get_osm_bb("Bucharest")
 #' osmdata_as_sf("highway", "motorway", bb)
+#' @srrstats {G4.0} OSM data is saved with a file name concatenated from the
+#'   OSM "key", "value" and "bbox" coordinates.
 osmdata_as_sf <- function(key, value, aoi, force_download = FALSE) {
   bbox <- as_bbox(aoi) # it should be in lat/lon
 
