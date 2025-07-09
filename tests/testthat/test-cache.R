@@ -107,7 +107,8 @@ test_that("All cache is removed when no date is provided", {
   file.create(filepath1, filepath2)
 
   expect_length(list.files(cache_dir), 2)
-  clear_cache()
+  expect_message(clear_cache(),
+                 "Cache files successfully removed.")
   expect_length(list.files(cache_dir), 0)
 })
 
@@ -126,7 +127,8 @@ test_that("Only cache before given date is removed", {
   expect_length(list.files(cache_dir), 2)
 
   before_date <- as.Date("1-1-2000", "%m-%d-%Y")
-  clear_cache(before_date = before_date)
+  expect_message(clear_cache(before_date = before_date),
+                 "Cache files before date successfully removed.")
   expect_length(list.files(cache_dir), 1)
   expect_true(grepl("tmp2", list.files(cache_dir)[1]))
 })
@@ -146,7 +148,8 @@ test_that("Cache checks raise warnings when old cached files are found", {
   )
   with_mocked_bindings(file.info = function(...) mocked_file_info_response,
                        .package = "base",
-                       expect_type(check_cache(), "character"))
+                       expect_warning(check_cache(),
+                                      "Clean up files older than 30 days"))
 })
 
 test_that("Cache checks raise warnings when large cached files are found", {
@@ -156,5 +159,6 @@ test_that("Cache checks raise warnings when large cached files are found", {
   )
   with_mocked_bindings(file.info = function(...) mocked_file_info_response,
                        .package = "base",
-                       expect_type(check_cache(), "character"))
+                       expect_warning(check_cache(),
+                                      "Clean up files older than 30 days"))
 })

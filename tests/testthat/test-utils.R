@@ -141,6 +141,15 @@ test_that("River buffer can trim to the region of interest", {
   expect_true(covers)
 })
 
+test_that("River buffer throws error if wrong 'side' value is provided", {
+  river <- bucharest_osm$river_centerline
+  bbox <- sf::st_bbox(bucharest_osm$boundary)
+  expect_error(
+    river_buffer(river, buffer_distance = 10, bbox = bbox, side = "wrong"),
+    "If specified, 'side' should be either 'right' or 'left'"
+  )
+})
+
 test_that("reproject works with raster data", {
   # raster in UTM zone 2 (lon between -174 and -168 deg), northern emisphere
   x <- terra::rast(xmin = -174, xmax = -168, ymin = 45, ymax = 51, res = 1,
@@ -205,6 +214,10 @@ test_that("reproject works with bbox", {
   expect_equal(crs_actual_str, crs_expected)
 })
 
+test_that("reproject does not work with objects of unknown type", {
+  expect_error(reproject(1, 4326), "Cannot reproject object type: numeric")
+})
+
 test_that("load_raster correctly retrieve and merge local data", {
 
   write_local_raster <- function(fname, xmin, xmax, ymin, ymax) {
@@ -267,3 +280,12 @@ test_that(
     )
   }
 )
+
+test_that("Invalid geometry input produces message", {
+  invalid_geom <-
+    st_polygon(list(rbind(c(0, 0), c(1, 1), c(1, 0), c(0, 1), c(0, 0))))
+  expect_message(
+    check_invalid_geometry(invalid_geom),
+    "Invalid geometries detected! Fixing them..."
+  )
+})
