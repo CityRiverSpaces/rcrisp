@@ -87,7 +87,7 @@ test_that("The first segment boundary is discarded when length is equal", {
 # Correctness tests ----
 #' @srrstats {G5.4, G5.4a} The correctness of DBSCAN clustering is tested
 #'   against a simple, trivial case.
-#' @srrstats {G5.5} The correctness of DBSCAN clustering is run with a fixed
+#' @srrstats {G5.5} Correctness tests for DBSCAN clustering are run with a fixed
 #'   random seed.
 
 crossings <- st_sfc(
