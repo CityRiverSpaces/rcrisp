@@ -82,7 +82,7 @@ delineate <- function(
   )
 
   # If not provided, determine the CRS
-  if (is.null(crs)) crs <- get_utm_zone(osm_data$boundary)
+  if (is.null(crs)) crs <- get_utm_zone(osm_data$bb)
 
   if (corridor) {
     # If using the valley method, and the DEM is not provided, retrieve dataset

@@ -53,7 +53,8 @@ test_that("If `network_buffer` is not specified, the default value is used", {
   expect_message(with_mocked_bindings(get_osmdata = \(...) bucharest_osm,
                                       get_dem = \(...) bucharest_dem,
                                       delineate(city_name = "Bucharest",
-                                                river_name = "Dâmbovița") |>
+                                                river_name = "Dâmbovița",
+                                                crs = 32635) |>
                                         suppressWarnings()),
                  paste0("The default `network_buffer` of 3000 m ",
                         "is used for corridor delineation."))
