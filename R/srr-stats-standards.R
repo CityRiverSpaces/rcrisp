@@ -64,6 +64,7 @@
 #' @srrstatsTODO {G5.11} *Where extended tests require large data sets or other assets, these should be provided for downloading and fetched as part of the testing workflow.*
 #' @srrstatsTODO {G5.11a} *When any downloads of additional data necessary for extended tests fail, the tests themselves should not fail, rather be skipped and implicitly succeed with an appropriate diagnostic message.*
 #' @srrstatsTODO {G5.12} *Any conditions necessary to run extended tests such as platform requirements, memory, expected runtime, and artefacts produced that may need manual inspection, should be described in developer documentation such as a `CONTRIBUTING.md` or `tests/README.md` file.*
+#'
 #' @srrstatsTODO {SP1.0} *Spatial software should explicitly indicate its domain of applicability, and in particular distinguish whether the software may be applied in Cartesian/rectilinear/geometric domains, curvilinear/geographic domains, or both.*
 #' @srrstatsTODO {SP1.1} *Spatial software should explicitly indicate its dimensional domain of applicability, in particular through identifying whether it is applicable to two or three dimensions only, or whether there are any other restrictions on dimensionality.*
 #' @srrstatsTODO {SP2.0} *Spatial software should only accept input data of one or more classes explicitly developed to represent such data.*
@@ -115,6 +116,7 @@ NULL
 #'   calculations.
 #' @srrstatsNA {G5.3} This package does not return objects which explicitly
 #'   contain no missing (`NA`) or undefined (`NaN`, `Inf`) values.
+#'
 #  Not applicable spatial software standards ----
 #' @srrstatsNA {SP3.0, SP3.0a, SP3.0b, SP3.1} The package does not consider
 #'   spatial neighbours.
