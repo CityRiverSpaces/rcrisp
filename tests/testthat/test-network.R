@@ -303,6 +303,11 @@ test_that("Filter network drops smallest disconnected components", {
   expect_length(nodes_area, 3)
 })
 
+test_that("Filter network raises error if elements argument is unknown", {
+  expect_error(filter_network(network, elements = "unknown"),
+               "Unknown elements")
+})
+
 test_that("Network setup with real data", {
   edges <- bucharest_osm$streets
   network <- as_network(edges, clean = FALSE, flatten = FALSE)

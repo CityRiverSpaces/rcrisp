@@ -64,3 +64,24 @@ test_that("valley polygon is correctly constructed", {
   expect_true(sf::st_equals_exact(valley, expected_valley,
                                   par = 0, sparse = FALSE))
 })
+
+test_that("Unknown DEM source throws error", {
+  expect_error(get_dem(bb, dem_source = "CATS")) # :)
+})
+
+test_that("Mismatch between DEM CRS and river CRS throws error", {
+  expect_error(delineate_valley(bucharest_dem,
+                                st_transform(bucharest_osm$river_centerline,
+                                             4326)),
+               "DEM and river geometry should be in the same CRS")
+})
+
+test_that("Incorrect STAC endpoint and collection throws error", {
+  expect_error(get_stac_asset_urls(bb, endpoint = "only endpoint"))
+  expect_error(get_stac_asset_urls(bb, collection = "only collection"))
+})
+
+test_that("Unimplemented function used to derive characteristic value throws
+          error", {
+            expect_error(get_cd_char(cd, "max"))
+          })
