@@ -106,6 +106,7 @@ NULL
 
 #' NA_standards
 #'
+#  Not applicable general software standards ---
 #' @srrstatsNA {G1.5} There is no associated publication for this package yet,
 #'   and no performance claims are made.
 #' @srrstatsNA {G1.6} As there are no alternative implementations, no
@@ -114,6 +115,7 @@ NULL
 #'   calculations.
 #' @srrstatsNA {G5.3} This package does not return objects which explicitly
 #'   contain no missing (`NA`) or undefined (`NaN`, `Inf`) values.
+#  Not applicable spatial software standards ----
 #' @srrstatsNA {SP3.0, SP3.0a, SP3.0b, SP3.1} The package does not consider
 #'   spatial neighbours.
 #' @srrstatsNA {SP3.2} The package does not rely on sampling from input data.
