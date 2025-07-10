@@ -110,7 +110,7 @@ river_sf <- st_sfc(
 )
 
 set.seed(1)
-selected_crossings <- filter_clusters(segments_sf, river_sf, eps = 1) |>
+selected_crossings <- filter_clusters(crossings_sf, river_sf, eps = 1) |>
   suppressWarnings()
 
 test_that("Expected number of clusters is correct", {
