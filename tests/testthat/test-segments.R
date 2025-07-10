@@ -83,3 +83,40 @@ test_that("The first segment boundary is discarded when length is equal", {
   expected <- sf::st_sfc(e3, e4)
   expect_setequal(actual, expected)
 })
+
+# Correctness tests ----
+#' @srrstats {G5.4, G5.4a} The correctness of DBSCAN clustering is tested
+#'   against a simple, trivial case.
+#' @srrstats {G5.5} The correctness of DBSCAN clustering is run with a fixed
+#'   random seed.
+
+crossings <- st_sfc(
+  # Three crossings -> should be clustered
+  st_linestring(matrix(c(0.0, 0.0, 0.0, 1.0), ncol = 2, byrow = TRUE)),
+  st_linestring(matrix(c(0.1, 0.0, 0.1, 1.3), ncol = 2, byrow = TRUE)),
+  st_linestring(matrix(c(0.2, 0.0, 0.2, 0.8), ncol = 2, byrow = TRUE)),
+
+  # Two crossings -> should be clustered
+  st_linestring(matrix(c(5.0, 0.0, 5.0, 1.1), ncol = 2, byrow = TRUE)),
+  st_linestring(matrix(c(5.15, 0.0, 5.15, 0.9), ncol = 2, byrow = TRUE)),
+
+  # Single crossing
+  st_linestring(matrix(c(10.0, 0.0, 10.0, 1.5), ncol = 2, byrow = TRUE))
+)
+crossings_sf <- st_sf(id = 1:6, geometry = crossings)
+
+river_sf <- st_sfc(
+  st_linestring(matrix(c(-1.0, 0.3, 11.0, 0.3), ncol = 2, byrow = TRUE))
+)
+
+set.seed(1)
+selected_crossings <- filter_clusters(segments_sf, river_sf, eps = 1) |>
+  suppressWarnings()
+
+test_that("Expected number of clusters is correct", {
+  expect_equal(length(selected_crossings), 3)
+})
+
+test_that("The correct crossing segments are selected", {
+  expect_equal(st_length(selected_crossings), c(0.8, 0.9, 1.5))
+})

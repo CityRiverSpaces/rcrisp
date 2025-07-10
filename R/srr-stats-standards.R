@@ -43,10 +43,6 @@
 #'   `warning()`, and `message()` is unique.
 #' @srrstats {G5.2b} For all messages, conditions triggering them are
 #'   demonstrated and the result are compared with expected values.
-#' @srrstatsTODO {G5.4} **Correctness tests** *to test that statistical algorithms produce expected results to some fixed test data sets (potentially through comparisons using binding frameworks such as [RStata](https://github.com/lbraglia/RStata)).*
-#' @srrstatsTODO {G5.4a} *For new methods, it can be difficult to separate out correctness of the method from the correctness of the implementation, as there may not be reference for comparison. In this case, testing may be implemented against simple, trivial cases or against multiple implementations such as an initial R implementation compared with results from a C/C++ implementation.*
-#' @srrstatsTODO {G5.4b} *For new implementations of existing methods, correctness tests should include tests against previous implementations. Such testing may explicitly call those implementations in testing, preferably from fixed-versions of other software, or use stored outputs from those where that is not possible.*
-#' @srrstatsTODO {G5.4c} *Where applicable, stored values may be drawn from published paper outputs when applicable and where code from original implementations is not available*
 #' @srrstatsTODO {G5.5} *Correctness tests should be run with a fixed random seed*
 #' @srrstatsTODO {G5.6} **Parameter recovery tests** *to test that the implementation produce expected results given data with known properties. For instance, a linear regression algorithm should return expected coefficient values for a simulated data set generated from a linear model.*
 #' @srrstatsTODO {G5.6a} *Parameter recovery tests should generally be expected to succeed within a defined tolerance rather than recovering exact values.*
@@ -116,6 +112,7 @@ NULL
 #'   calculations.
 #' @srrstatsNA {G5.3} This package does not return objects which explicitly
 #'   contain no missing (`NA`) or undefined (`NaN`, `Inf`) values.
+#' @srrstatsNA {G5.4b, G5.4c} This package implements a new method.
 #'
 #  Not applicable spatial software standards ----
 #' @srrstatsNA {SP3.0, SP3.0a, SP3.0b, SP3.1} The package does not consider
