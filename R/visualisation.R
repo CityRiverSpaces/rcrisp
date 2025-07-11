@@ -52,10 +52,10 @@ plot.delineation <- function(x, ...) {
     plot(x$river_centerline, col = "blue", add = TRUE)
   }
   if (!is.null(x$railways)) {
-    plot(x$railways$geometry, add = TRUE, lwd = 0.5)
+    plot(x$railways, add = TRUE, lwd = 0.5)
   }
   if (!is.null(x$streets)) {
-    plot(x$streets$geometry, add = TRUE)
+    plot(x$streets, add = TRUE)
   }
   if (!is.null(x$segments)) {
     plot(x$segments, ..., add = TRUE, lwd = 2)
