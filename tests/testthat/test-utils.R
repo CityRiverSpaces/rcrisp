@@ -143,8 +143,9 @@ test_that("River buffer can trim to the region of interest", {
   expect_true(covers)
 })
 
-#' @srrstatsTODO {G2.4, G2.4a} Explicit conversion to integer with `as.integer()`
-#'   used to test `reproject()` with different ways of providing CRS input.
+#' @srrstatsTODO {G2.4, G2.4a} Explicit conversion to integer with
+#'   `as.integer()` used to test `reproject()` with different ways of providing
+#'   CRS input.
 test_that("reproject works with raster data", {
   # raster in UTM zone 2 (lon between -174 and -168 deg), northern emisphere
   x <- terra::rast(xmin = -174, xmax = -168, ymin = 45, ymax = 51, res = 1,
