@@ -115,7 +115,7 @@ test_that("buffering a bbox does not change its CRS", {
   expect_equal(crs_actual, crs_expected)
 })
 
-#' @srrstats {G2.4, G2.4c} Explicit conversion to character with
+#' @srrstatsTODO {G2.4, G2.4c} Explicit conversion to character with
 #'   `as.character()` used to test the output type of `buffer()`.
 test_that("Buffer also works without a CRS", {
   x <- sf::st_sfc(sf::st_linestring(cbind(c(-2, 0), c(0, -2))))
@@ -143,7 +143,7 @@ test_that("River buffer can trim to the region of interest", {
   expect_true(covers)
 })
 
-#' @srrstats {G2.4, G2.4a} Explicit conversion to integer with `as.integer()`
+#' @srrstatsTODO {G2.4, G2.4a} Explicit conversion to integer with `as.integer()`
 #'   used to test `reproject()` with different ways of providing CRS input.
 test_that("reproject works with raster data", {
   # raster in UTM zone 2 (lon between -174 and -168 deg), northern emisphere
