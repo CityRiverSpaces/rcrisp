@@ -23,16 +23,38 @@ plot.delineation <- function(x) {
 
   x <- unclass(x)
 
-  plot(x$corridor)
+  # Set plot extent with first layer
+  if (!is.null(x$corridor)) {
+    plot(x$corridor)
+  } else if (!is.null(x$riverspace)) {
+    # The only case when corridor may be absent
+    plot(x$riverspace, col = "lightblue", border = NA, add = TRUE)
+  } else {
+    stop("No delineation layers present in the delineation object.")
+  }
+
+  base_layers <- c("streets", "railways", "river_centerline")
+  if (!all(base_layers %in% names(x))) {
+    warning(paste("Not all base layers found in the delineation object.",
+                  "Plotting without those."))
+  }
+
+  # Plot the layers
   if (!is.null(x$valley)) {
     plot(x$valley, col = "yellow", border = NA, add = TRUE)
   }
-  if (!is.null(x$riverspace)) {
-    plot(x$riverspace, col = "lightblue", border = NA, add = TRUE)
+  if (!is.null(x$river_surface)) {
+    plot(x$river_surface, col = "turquoise", border = NA, add = TRUE)
   }
-  plot(x$river_centerline, col = "blue", add = TRUE)
-  plot(x$railways, col = "darkgrey", add = TRUE, lwd = 0.5)
-  plot(x$streets$geometry, add = TRUE)
+  if (!is.null(x$river_centerline)) {
+    plot(x$river_centerline, col = "blue", add = TRUE)
+  }
+  if (!is.null(x$railways)) {
+    plot(x$railways, col = "darkgrey", add = TRUE, lwd = 0.5)
+  }
+  if (!is.null(x$streets)) {
+    plot(x$streets, col = "black", add = TRUE)
+  }
   if (!is.null(x$segments)) {
     plot(x$segments, border = "orange", add = TRUE, lwd = 3)
   }
