@@ -16,7 +16,7 @@
 #' @examplesIf interactive()
 #' bd <- delineate("Bucharest", "Dâmbovița")
 #' plot(bd)
-plot.delineation <- function(x) {
+plot.delineation <- function(x, ...) {
   if (!inherits(x, "delineation")) {
     stop("The object is not of class 'delineation'")
   }
@@ -41,24 +41,24 @@ plot.delineation <- function(x) {
 
   # Plot the layers
   if (!is.null(x$valley)) {
-    plot(x$valley, col = "yellow", border = NA, add = TRUE)
+    plot(x$valley, col = "grey80", border = NA, add = TRUE)
   }
   if (!is.null(x$river_surface)) {
-    plot(x$river_surface, col = "turquoise", border = NA, add = TRUE)
+    plot(x$river_surface, col = "blue", border = NA, add = TRUE)
   }
   if (!is.null(x$river_centerline)) {
     plot(x$river_centerline, col = "blue", add = TRUE)
   }
   if (!is.null(x$railways)) {
-    plot(x$railways, col = "darkgrey", add = TRUE, lwd = 0.5)
+    plot(x$railways$geometry, add = TRUE, lwd = 0.5)
   }
   if (!is.null(x$streets)) {
-    plot(x$streets, col = "black", add = TRUE)
+    plot(x$streets$geometry, add = TRUE)
   }
   if (!is.null(x$segments)) {
-    plot(x$segments, border = "orange", add = TRUE, lwd = 3)
+    plot(x$segments, ..., add = TRUE, lwd = 2)
   }
   if (!is.null(x$corridor)) {
-    plot(x$corridor, border = "red", add = TRUE, lwd = 3)
+    plot(x$corridor, ..., add = TRUE, lwd = 3)
   }
 }
