@@ -9,6 +9,8 @@
 #'
 #' @param x An object of class `delineation`. This is typically the output
 #'   of the `delineate()` function.
+#' @param ... Additional arguments passed to the `plot()` function for
+#'   the `segments` and `corridor` layers.
 #'
 #' @returns A plot visualizing the delineation object.
 #' @export

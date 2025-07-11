@@ -9,6 +9,9 @@
 \arguments{
 \item{x}{An object of class \code{delineation}. This is typically the output
 of the \code{delineate()} function.}
+
+\item{...}{Additional arguments passed to the \code{plot()} function for
+the \code{segments} and \code{corridor} layers.}
 }
 \value{
 A plot visualizing the delineation object.
