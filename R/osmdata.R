@@ -23,6 +23,9 @@ osmdata_as_sf <- function(key, value, aoi, force_download = FALSE) {
 
   bbox <- as_bbox(aoi) # it should be in lat/lon
 
+  key <- tolower(key)
+  value <- tolower(value)
+
   filepath <- get_osmdata_cache_filepath(key, value, bbox)
 
   if (file.exists(filepath) && !force_download) {
