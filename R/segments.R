@@ -3,9 +3,12 @@
 #' Segments are defined as corridor subregions separated by river-crossing
 #' transversal lines that form continuous strokes in the network.
 #'
-#' @param corridor The river corridor as a simple feature geometry
-#' @param network The spatial network to be used for the segmentation
-#' @param river The river centerline as a simple feature geometry
+#' @param corridor The river corridor as a simple feature geometry of class
+#'   `sfc_POLYGON`
+#' @param network The spatial network of class `sfnetwork` to be used for the
+#'   segmentation
+#' @param river The river centerline as a simple feature geometry of class
+#'   `sfc_LINESTRING` or `sfc_MULTILINESTRING`
 #' @param angle_threshold Only consider angles above this threshold (in degrees)
 #'   to form continuous strokes in the network. See [`rcoins::stroke()`] for
 #'   more details.

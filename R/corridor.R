@@ -4,9 +4,10 @@
 #' network starting from an initial guess of the corridor (based e.g. on the
 #' river valley).
 #'
-#' @param network The spatial network to be used for the delineation
-#' @param river A (MULTI)LINESTRING simple feature geometry representing the
-#'   river centerline
+#' @param network The spatial network of class `sfnetwork` to be used for the
+#'   delineation
+#' @param river A (MULTI)LINESTRING simple feature geometry of class `sf`
+#'   representing the river centerline
 #' @param corridor_init How to estimate the initial guess of the river corridor.
 #'   It can take the following values:
 #'   * numeric or integer: use a buffer region of the given size (in meters)
