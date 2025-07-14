@@ -17,7 +17,7 @@
 #' as_network(edges)
 as_network <- function(edges, flatten = TRUE, clean = TRUE) {
   # Check input
-  checkmate::assert_class(edges, "sfc")
+  checkmate::assert_true(inherits(x, c("sf", "sfc")))
   checkmate::assert_logical(flatten, len = 1)
   checkmate::assert_logical(clean, len = 1)
 
