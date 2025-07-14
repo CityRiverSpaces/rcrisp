@@ -45,8 +45,10 @@ get_dem <- function(bb, dem_source = "STAC", stac_endpoint = NULL,
   # Check input
   checkmate::assert_logical(force_download, len = 1)
 
+  dem_source <- toupper(dem_source)
+
   bbox <- as_bbox(bb)
-  if (toupper(dem_source) == "STAC") {
+  if (dem_source == "STAC") {
     asset_urls <- get_stac_asset_urls(bbox, endpoint = stac_endpoint,
                                       collection = stac_collection)
     dem <- load_dem(bbox, asset_urls, force_download = force_download)
