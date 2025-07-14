@@ -9,7 +9,7 @@ get_stac_asset_urls(bb, endpoint = NULL, collection = NULL)
 \arguments{
 \item{bb}{A bounding box, provided either as a matrix (rows for "x", "y",
 columns for "min", "max") or as a vector ("xmin", "ymin", "xmax", "ymax"),
-in lat/lon coordinates (WGS84 coordinate referece system)}
+in lat/lon coordinates (WGS84 coordinate referece system) of class \code{bbox}}
 
 \item{endpoint}{URL of the STAC API endpoint. To be provided together with
 \code{stac_collection}, or leave blank to use defaults (see

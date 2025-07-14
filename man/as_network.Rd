@@ -7,7 +7,7 @@
 as_network(edges, flatten = TRUE, clean = TRUE)
 }
 \arguments{
-\item{edges}{A data frame with the network edges}
+\item{edges}{An \code{sfc_LINESTRING} object with the network edges}
 
 \item{flatten}{Whether all intersections between edges should be
 converted to nodes}
@@ -16,7 +16,7 @@ converted to nodes}
 network (see \code{\link[=clean_network]{clean_network()}} for the description of tasks)}
 }
 \value{
-A spatial network object
+A spatial network object of class \code{sfnetwork}
 }
 \description{
 Create a network from a collection of line strings.
@@ -24,8 +24,8 @@ Create a network from a collection of line strings.
 \examples{
 edges <- sf::st_sfc(
   sf::st_linestring(matrix(c(0, 0, 1, 1), ncol = 2, byrow = TRUE)),
-  sf::st_linestring(matrix(c(0, 1, 1, 0), ncol = 2, byrow = TRUE))
+  sf::st_linestring(matrix(c(0, 1, 1, 0), ncol = 2, byrow = TRUE)),
+  crs = sf::st_crs("EPSG:4326")
 )
-sf::st_crs(edges) <- sf::st_crs("EPSG:4326")
 as_network(edges)
 }

@@ -7,10 +7,10 @@
 flatten_network(network)
 }
 \arguments{
-\item{network}{A network object}
+\item{network}{A network object of class \code{sfnetwork}}
 }
 \value{
-A network object with additional points at intersections
+An \code{sfnetwork} object with additional points at intersections
 }
 \description{
 All crossing edges are identified, and the points of intersections are

@@ -8,7 +8,8 @@ load_dem(bb, tile_urls, force_download = FALSE)
 }
 \arguments{
 \item{bb}{A bounding box, provided either as a matrix (rows for "x", "y",
-columns for "min", "max") or as a vector ("xmin", "ymin", "xmax", "ymax")}
+columns for "min", "max") or as a vector ("xmin", "ymin", "xmax", "ymax")
+of class \code{bbox}.}
 
 \item{tile_urls}{A list of tiles where to read the DEM data from}
 

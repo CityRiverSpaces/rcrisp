@@ -2,26 +2,24 @@
 % Please edit documentation in R/valley.R
 \name{dem_to_cog}
 \alias{dem_to_cog}
-\title{Write DEM to cloud optimized GeoTiff file as specified location}
+\title{Write DEM to cloud optimized GeoTIFF file as specified location}
 \usage{
 dem_to_cog(dem, fpath, output_directory = NULL)
 }
 \arguments{
-\item{dem}{to write to file}
+\item{dem}{DEM of class \code{SpatRaster} to write to file}
 
 \item{fpath}{filepath for output. If no output directory is specified
-(see below) fpath is parsed to determine
-the output directory}
+(see below) fpath is parsed to determine the output directory}
 
 \item{output_directory}{where file should be written.
 If specified fpath is treated as filename only.}
 }
 \value{
-The input DEM. This function is used for the side-effect of writing
-values to a file.
+\code{SpatRaster} object of cloud optimised GeoTIFF
 }
 \description{
-Write DEM to cloud optimized GeoTiff file as specified location
+Write DEM to cloud optimized GeoTIFF file as specified location
 }
 \examples{
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
