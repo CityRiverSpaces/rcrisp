@@ -31,9 +31,8 @@ delineate_corridor <- function(
   network, river, corridor_init = 1000, max_width = 3000, max_iterations = 10,
   capping_method = "shortest-path"
 ) {
-  if (!inherits(river, "sf")) {
-    stop("river must be a simple features geometry")
-  }
+  # Check input
+  checkmate::assert_true(inherits(river, c("sf", "sfc")))
 
   # Drop all attributes of river but its geometry
   river <- sf::st_geometry(river)
