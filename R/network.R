@@ -16,6 +16,11 @@
 #' sf::st_crs(edges) <- sf::st_crs("EPSG:4326")
 #' as_network(edges)
 as_network <- function(edges, flatten = TRUE, clean = TRUE) {
+  # Check input
+  checkmate::assert_class(edges, "sfc")
+  checkmate::assert_logical(flatten, len = 1)
+  checkmate::assert_logical(clean, len = 1)
+
   network <- sfnetworks::as_sfnetwork(edges, directed = FALSE)
   if (flatten) network <- flatten_network(network)
   if (clean) network <- clean_network(network)
@@ -196,6 +201,10 @@ calc_rolling_sum <- function(x, n = 2) {
 #' network <- sfnetworks::as_sfnetwork(edges, directed = FALSE)
 #' clean_network(network)
 clean_network <- function(network, simplify = TRUE) {
+  # Check input
+  checkmate::assert_class(network, "sfnetwork")
+  checkmate::assert_logical(simplify, len = 1)
+
   # subdivide edges by adding missing nodes
   net <- tidygraph::convert(network, sfnetworks::to_spatial_subdivision,
                             .clean = TRUE)

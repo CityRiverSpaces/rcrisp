@@ -143,6 +143,9 @@ write_data_to_cache <- function(x, filepath, wrap = FALSE, quiet = FALSE) {
 #' @examplesIf interactive()
 #' clear_cache()
 clear_cache <- function(before_date = NULL) {
+  # Check input
+  assert_date(before_date, null.ok = TRUE)
+
   cache_dir <- cache_directory()
   files <- list.files(cache_dir, full.names = TRUE)
 

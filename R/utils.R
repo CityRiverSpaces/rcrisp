@@ -50,6 +50,11 @@ get_utm_zone <- function(x) {
 #' class(bb)
 #' st_crs(bb)
 as_bbox <- function(x) {
+  # Check input
+  checkmate::assert_true(
+    inherits(x, c("sf", "sfc", "numeric", "matrix", "bbox"))
+  )
+
   if (inherits(x, c("numeric", "matrix"))) {
     x <- as.vector(x)
     names(x) <- c("xmin", "ymin", "xmax", "ymax")

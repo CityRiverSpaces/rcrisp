@@ -42,6 +42,9 @@ default_stac_dem <- list(
 get_dem <- function(bb, dem_source = "STAC", stac_endpoint = NULL,
                     stac_collection = NULL, crs = NULL,
                     force_download = FALSE) {
+  # Check input
+  checkmate::assert_logical(force_download, len = 1)
+
   bbox <- as_bbox(bb)
   if (dem_source == "STAC") {
     asset_urls <- get_stac_asset_urls(bbox, endpoint = stac_endpoint,
@@ -76,6 +79,10 @@ get_dem <- function(bb, dem_source = "STAC", stac_endpoint = NULL,
 #' bucharest_dem <- get_dem_example_data()
 #' delineate_valley(bucharest_dem, bucharest_osm$river_centerline)
 delineate_valley <- function(dem, river) {
+  # Check input
+  checkmate::assert_class(dem, "SpatRaster")
+  checkmate::assert_class(river, "sfc")
+
   if (!terra::same.crs(dem, sf::st_crs(river)$wkt)) {
     stop("DEM and river geometry should be in the same CRS")
   }
@@ -147,6 +154,9 @@ get_stac_asset_urls <- function(bb, endpoint = NULL, collection = NULL) {
 #' @srrstats {G4.0} DEM data is written to cache with a file name concatenated
 #'   from tile names and boundig box coordinates.
 load_dem <- function(bb, tile_urls, force_download = FALSE) {
+  # Check input
+  checkmate::assert_logical(force_download, len = 1)
+
   bbox <- as_bbox(bb)
 
   filepath <- get_dem_cache_filepath(tile_urls, bbox)

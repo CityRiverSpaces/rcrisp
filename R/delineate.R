@@ -49,6 +49,11 @@ delineate <- function(
   angle_threshold = 100, corridor = TRUE, segments = FALSE,
   riverspace = FALSE, force_download = FALSE, ...
 ) {
+  # Check input
+  checkmate::assert_logical(corridor, len = 1)
+  checkmate::assert_logical(segments, len = 1)
+  checkmate::assert_logical(riverspace, len = 1)
+  checkmate::assert_logical(force_download, len = 1)
 
   delineations <- list()
 

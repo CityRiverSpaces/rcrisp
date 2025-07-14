@@ -18,6 +18,9 @@
 #' @srrstats {G4.0} OSM data is saved with a file name concatenated from the
 #'   OSM "key", "value" and "bbox" coordinates.
 osmdata_as_sf <- function(key, value, aoi, force_download = FALSE) {
+  # Check input
+  checkmate::assert_logical(force_download, len = 1)
+
   bbox <- as_bbox(aoi) # it should be in lat/lon
 
   filepath <- get_osmdata_cache_filepath(key, value, bbox)
@@ -98,6 +101,10 @@ get_osmdata <- function(
   city_name, river_name, network_buffer = NULL, buildings_buffer = NULL,
   city_boundary = TRUE, crs = NULL, force_download = FALSE
 ) {
+  # Check input
+  checkmate::assert_logical(force_download, len = 1)
+  checkmate::assert_logical(city_boundary, len = 1)
+
   bb <- get_osm_bb(city_name)
   if (is.null(crs)) crs <- get_utm_zone(bb)
 
@@ -170,6 +177,10 @@ get_osmdata <- function(
 #' get_osm_city_boundary(bb, "Bucharest", crs)
 get_osm_city_boundary <- function(bb, city_name, crs = NULL, multiple = FALSE,
                                   force_download = FALSE) {
+  # Check input
+  checkmate::assert_logical(multiple, len = 1)
+  checkmate::assert_logical(force_download, len = 1)
+
   # Drop country if specified after comma
   city_name_clean <- stringr::str_extract(city_name, "^[^,]+")
   # Define a helper function to fetch the city boundary
@@ -218,6 +229,9 @@ get_osm_city_boundary <- function(bb, city_name, crs = NULL, multiple = FALSE,
 #' crs <- get_utm_zone(bb)
 #' get_osm_river(bb, "Dâmbovița", crs)
 get_osm_river <- function(bb, river_name, crs = NULL, force_download = FALSE) {
+  # Check input
+  checkmate::assert_logical(force_download, len = 1)
+
   # Get the river centreline
   river_centerline <- osmdata_as_sf("waterway", "", bb,
                                     force_download = force_download)
@@ -291,6 +305,9 @@ get_osm_river <- function(bb, river_name, crs = NULL, force_download = FALSE) {
 #' get_osm_streets(bb, crs)
 get_osm_streets <- function(aoi, crs = NULL, highway_values = NULL,
                             force_download = FALSE) {
+  # Check input
+  checkmate::assert_logical(force_download, len = 1)
+
   if (is.null(highway_values)) {
     highway_values <- c("motorway", "trunk", "primary", "secondary", "tertiary")
     link_values <- vapply(X = highway_values,
@@ -343,6 +360,9 @@ get_osm_streets <- function(aoi, crs = NULL, highway_values = NULL,
 #' get_osm_railways(bb, crs)
 get_osm_railways <- function(aoi, crs = NULL, railway_values = "rail",
                              force_download = FALSE) {
+  # Check input
+  checkmate::assert_logical(force_download, len = 1)
+
   railways <- osmdata_as_sf("railway", railway_values, aoi,
                             force_download = force_download)
   # If no railways are found, return an empty sf object
@@ -381,6 +401,9 @@ get_osm_railways <- function(aoi, crs = NULL, railway_values = "rail",
 #' crs <- get_utm_zone(bb)
 #' get_osm_buildings(bb, crs)
 get_osm_buildings <- function(aoi, crs = NULL, force_download = FALSE) {
+  # Check input
+  checkmate::assert_logical(force_download, len = 1)
+
   buildings <- osmdata_as_sf("building", "", aoi,
                              force_download = force_download)
   buildings <- buildings$osm_polygons |>
