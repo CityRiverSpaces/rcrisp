@@ -21,7 +21,8 @@
 #'   points (i.e. to "cap" the corridor). See [cap_corridor()] for
 #'   the available methods
 #'
-#' @return A simple feature geometry representing the river corridor
+#' @return A simple feature geometry of class `sfc_POLYGON` representing the
+#'   river corridor
 #' @export
 #' @examplesIf interactive()
 #' bucharest_osm <- get_osm_example_data()

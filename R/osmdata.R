@@ -94,7 +94,7 @@ get_osm_bb <- function(city_name) {
 #'   specified, the default is the UTM zone for the city.
 #' @param force_download Download data even if cached data is available
 #'
-#' @return An list with the retrieved OpenStreetMap data sets for the
+#' @return A list with the retrieved OpenStreetMap data sets for the
 #'         given location
 #' @export
 #'

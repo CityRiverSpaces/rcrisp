@@ -13,7 +13,7 @@
 #'   to form continuous strokes in the network. See [`rcoins::stroke()`] for
 #'   more details.
 #'
-#' @return Segment polygons as a simple feature geometry
+#' @return Segment polygons as a simple feature geometry of class `sfc_POLYGON`
 #' @export
 #' @examplesIf interactive()
 #' bucharest_osm <- get_osm_example_data()
