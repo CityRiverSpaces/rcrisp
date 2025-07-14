@@ -11,9 +11,9 @@
 #' @examples
 #' edges <- sf::st_sfc(
 #'   sf::st_linestring(matrix(c(0, 0, 1, 1), ncol = 2, byrow = TRUE)),
-#'   sf::st_linestring(matrix(c(0, 1, 1, 0), ncol = 2, byrow = TRUE))
+#'   sf::st_linestring(matrix(c(0, 1, 1, 0), ncol = 2, byrow = TRUE)),
+#'   crs = sf::st_crs("EPSG:4326")
 #' )
-#' sf::st_crs(edges) <- sf::st_crs("EPSG:4326")
 #' as_network(edges)
 as_network <- function(edges, flatten = TRUE, clean = TRUE) {
   # Check input
