@@ -37,8 +37,20 @@ default_stac_dem <- list(
 #' @return DEM as a terra `SpatRaster` object
 #' @export
 #' @examplesIf interactive()
+#' # Get DEM with default values
 #' bb <- get_osm_bb("Bucharest")
+#' crs <- 31600  # National projected CRS
+#'
+#' # Get DEM with default values
 #' get_dem(bb)
+#'
+#' # Get DEM from custom STAC endpoint
+#' get_dem(bb,
+#'         stac_endpoint = "some endpoint",
+#'         stac_collection = "some collection")
+#'
+#' # Specify CRS
+#' get_dem(bb, crs = crs)
 get_dem <- function(bb, dem_source = "STAC", stac_endpoint = NULL,
                     stac_collection = NULL, crs = NULL,
                     force_download = FALSE) {
@@ -116,6 +128,11 @@ delineate_valley <- function(dem, river) {
 #' @examplesIf interactive()
 #' bb <- get_osm_bb("Bucharest")
 #' get_stac_asset_urls(bb)
+#'
+#' # Use non-default STAC API
+#' get_stac_asset_urls(bb,
+#'                     endpoint = "some endpoint",
+#'                     collection = "some collection")
 get_stac_asset_urls <- function(bb, endpoint = NULL, collection = NULL) {
   if (is.null(endpoint) && is.null(collection)) {
     endpoint <- default_stac_dem$endpoint
@@ -188,7 +205,7 @@ load_dem <- function(bb, tile_urls, force_download = FALSE) {
 #' @export
 #' @examplesIf interactive()
 #' bucharest_dem <- get_dem_example_data()
-#' dem_to_cog(bucharest_dem, "bucharest_dem.tif")
+#' dem_to_cog(bucharest_dem, "bucharest_dem.tif", output_directory = ".")
 dem_to_cog <- function(dem, fpath, output_directory = NULL) {
   if (is.null(output_directory)) {
     filename <- basename(fpath)

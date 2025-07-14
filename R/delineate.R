@@ -41,7 +41,27 @@
 #' @return A list with the corridor, segments, and riverspace geometries
 #' @export
 #' @examplesIf interactive()
-#' delineate("Bucharest", "Dâmbovița")
+#' # Set parameters
+#' city <- "Bucharest"
+#' river <- "Dâmbovița"
+#'
+#' # Delineate with defaults
+#' delineate(city, river)
+#'
+#' # Use custom CRS
+#' bb <- get_osm_bb(city)
+#' crs <- 31600  # National projected CRS
+#' get_osmdata(city, river, crs = crs)
+#'
+#' # Use custom network buffer
+#' delineate(city, river, network_buffer = 3500)
+#'
+#' # Use custom buildings buffer
+#' delineate(city, river, buildings_buffer = 150, riverspace = TRUE)
+#'
+#' # Provide DEM as input
+#' bucharest_dem <- get_dem_example_data()
+#' delineate(city, river, dem = bucharest_dem)
 delineate <- function(
   city_name, river_name, crs = NULL, network_buffer = NULL,
   buildings_buffer = NULL, corridor_init = "valley", dem = NULL,

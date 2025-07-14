@@ -99,7 +99,23 @@ get_osm_bb <- function(city_name) {
 #' @export
 #'
 #' @examplesIf interactive()
-#' get_osmdata("Bucharest", "Dâmbovița")
+#' # Set parameters
+#' city <- "Bucharest"
+#' river <- "Dâmbovița"
+#'
+#' # Get OSM data with defaults
+#' get_osmdata(city, river)
+#'
+#' # Use custom network buffer
+#' get_osmdata(city, river, network_buffer = 3500)
+#'
+#' # Use custom buildings buffer
+#' get_osmdata(city, river, buildings_buffer = 150)
+#'
+#' # Use custom CRS
+#' bb <- get_osm_bb(city)
+#' crs <- 31600  # National projected CRS
+#' get_osmdata(city, river, crs = crs)
 get_osmdata <- function(
   city_name, river_name, network_buffer = NULL, buildings_buffer = NULL,
   city_boundary = TRUE, crs = NULL, force_download = FALSE
@@ -303,9 +319,19 @@ get_osm_river <- function(bb, river_name, crs = NULL, force_download = FALSE) {
 #' @importFrom rlang !! sym
 #'
 #' @examplesIf interactive()
+#' # Set parameters
 #' bb <- get_osm_bb("Bucharest")
-#' crs <- get_utm_zone(bb)
+#' crs <- 31600  # National projected CRS
+#'
+#' # Get streets with default values
 #' get_osm_streets(bb, crs)
+#'
+#' # Specify street categories to be retrieved
+#' highway_values <- "primary"
+#' get_osm_streets(bb, crs, highway_values = highway_values)
+#'
+#' # Ensure that data is not retrieved from cache
+#' get_osm_streets(bb, crs, force_download = TRUE)
 get_osm_streets <- function(aoi, crs = NULL, highway_values = NULL,
                             force_download = FALSE) {
   # Check input
