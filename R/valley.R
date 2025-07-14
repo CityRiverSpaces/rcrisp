@@ -83,7 +83,7 @@ get_dem <- function(bb, dem_source = "STAC", stac_endpoint = NULL,
 delineate_valley <- function(dem, river) {
   # Check input
   checkmate::assert_class(dem, "SpatRaster")
-  checkmate::assert_class(river, "sfc")
+  checkmate::assert_true(inherits(river, c("sf", "sfc")))
 
   if (!terra::same.crs(dem, sf::st_crs(river)$wkt)) {
     stop("DEM and river geometry should be in the same CRS")
