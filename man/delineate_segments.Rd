@@ -7,18 +7,21 @@
 delineate_segments(corridor, network, river, angle_threshold = 100)
 }
 \arguments{
-\item{corridor}{The river corridor as a simple feature geometry}
+\item{corridor}{The river corridor as a simple feature geometry of class
+\code{sfc_POLYGON}}
 
-\item{network}{The spatial network to be used for the segmentation}
+\item{network}{The spatial network of class \code{sfnetwork} to be used for the
+segmentation}
 
-\item{river}{The river centerline as a simple feature geometry}
+\item{river}{The river centerline as a simple feature geometry of class
+\code{sfc_LINESTRING} or \code{sfc_MULTILINESTRING}}
 
 \item{angle_threshold}{Only consider angles above this threshold (in degrees)
 to form continuous strokes in the network. See \code{\link[rcoins:stroke]{rcoins::stroke()}} for
 more details.}
 }
 \value{
-Segment polygons as a simple feature geometry
+Segment polygons as a simple feature geometry of class \code{sfc_POLYGON}
 }
 \description{
 Segments are defined as corridor subregions separated by river-crossing

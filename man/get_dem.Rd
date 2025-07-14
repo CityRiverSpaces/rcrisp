@@ -44,7 +44,19 @@ Access digital elevation model (DEM) for a given region
 }
 \examples{
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+# Get DEM with default values
 bb <- get_osm_bb("Bucharest")
+crs <- 31600  # National projected CRS
+
+# Get DEM with default values
 get_dem(bb)
+
+# Get DEM from custom STAC endpoint
+get_dem(bb,
+        stac_endpoint = "some endpoint",
+        stac_collection = "some collection")
+
+# Specify CRS
+get_dem(bb, crs = crs)
 \dontshow{\}) # examplesIf}
 }

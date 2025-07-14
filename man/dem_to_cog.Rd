@@ -24,6 +24,6 @@ Write DEM to cloud optimized GeoTIFF file as specified location
 \examples{
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 bucharest_dem <- get_dem_example_data()
-dem_to_cog(bucharest_dem, "bucharest_dem.tif")
+dem_to_cog(bucharest_dem, "bucharest_dem.tif", output_directory = ".")
 \dontshow{\}) # examplesIf}
 }

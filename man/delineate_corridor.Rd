@@ -14,10 +14,11 @@ delineate_corridor(
 )
 }
 \arguments{
-\item{network}{The spatial network to be used for the delineation}
+\item{network}{The spatial network of class \code{sfnetwork} to be used for the
+delineation}
 
-\item{river}{A (MULTI)LINESTRING simple feature geometry representing the
-river centerline}
+\item{river}{A (MULTI)LINESTRING simple feature geometry of class \code{sf}
+representing the river centerline}
 
 \item{corridor_init}{How to estimate the initial guess of the river corridor.
 It can take the following values:
@@ -38,7 +39,8 @@ points (i.e. to "cap" the corridor). See \code{\link[=cap_corridor]{cap_corridor
 the available methods}
 }
 \value{
-A simple feature geometry representing the river corridor
+A simple feature geometry of class \code{sfc_POLYGON} representing the
+river corridor
 }
 \description{
 The corridor edges on the two river banks are drawn on the provided spatial
