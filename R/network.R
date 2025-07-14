@@ -1,12 +1,12 @@
 #' Create a network from a collection of line strings.
 #'
-#' @param edges A data frame with the network edges
+#' @param edges An `sfc_LINESTRING` object with the network edges
 #' @param flatten Whether all intersections between edges should be
 #'   converted to nodes
 #' @param clean Whether general cleaning tasks should be run on the generated
 #'   network (see [`clean_network()`] for the description of tasks)
 #'
-#' @return A spatial network object
+#' @return A spatial network object of class `sfnetwork`
 #' @export
 #' @examples
 #' edges <- sf::st_sfc(
@@ -39,9 +39,9 @@ as_network <- function(edges, flatten = TRUE, clean = TRUE) {
 #' [`sfnetworks::st_network_blend()`], but in that case an external point is
 #' only injected to the closest edge.
 #'
-#' @param network A network object
+#' @param network A network object of class `sfnetwork`
 #'
-#' @return A network object with additional points at intersections
+#' @return An `sfnetwork` object with additional points at intersections
 #' @export
 #' @examples
 #' bucharest_osm <- get_osm_example_data()
@@ -188,11 +188,11 @@ calc_rolling_sum <- function(x, n = 2) {
 #' and discard all but the main connected component.
 # nolint end
 #'
-#' @param network A network object
+#' @param network A network object of class `sfnetwork`
 #' @param simplify Whether the network should be simplified with
 #'   [`simplify_network()`]
 #'
-#' @return A cleaned network object
+#' @return A cleaned network object of class `sfnetwork`
 #' @export
 #' @examplesIf interactive()
 #' bucharest_osm <- get_osm_example_data()

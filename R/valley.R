@@ -21,7 +21,7 @@ default_stac_dem <- list(
 #'
 #' @param bb A bounding box, provided either as a matrix (rows for "x", "y",
 #'   columns for "min", "max") or as a vector ("xmin", "ymin", "xmax", "ymax"),
-#'   in lat/lon coordinates (WGS84 coordinate referece system)
+#'   in lat/lon coordinates (WGS84 coordinate reference system) of class `bbox`
 #' @param dem_source Source of the DEM:
 #'   - If "STAC" (default), DEM tiles are searched on a SpatioTemporal Asset
 #'     Catalog (STAC) end point, then accessed and mosaicked to the area of
@@ -34,7 +34,7 @@ default_stac_dem <- list(
 #' @param crs Coordinate reference system (CRS) which to transform the DEM to
 #' @param force_download Download data even if cached data is available
 #'
-#' @return DEM as a terra SpatRaster object
+#' @return DEM as a terra `SpatRaster` object
 #' @export
 #' @examplesIf interactive()
 #' bb <- get_osm_bb("Bucharest")
@@ -69,10 +69,10 @@ get_dem <- function(bb, dem_source = "STAC", stac_endpoint = NULL,
 #'
 #' @srrstats {G1.3} The Cost Distance algorithm is explained here.
 #'
-#' @param dem Digital elevation model of the region
-#' @param river A simple feature geometry representing the river
+#' @param dem `SpatRaster` object with the digital elevation model of the region
+#' @param river An object of class `sfc_MULTILINESTRING` representing the river
 #'
-#' @return River valley as a simple feature geometry
+#' @return River valley as a simple feature geometry of class `sfc_MULTIPOLYGON`
 #' @export
 #' @examplesIf interactive()
 #' bucharest_osm <- get_osm_example_data()
@@ -100,7 +100,7 @@ delineate_valley <- function(dem, river) {
 #'
 #' @param bb A bounding box, provided either as a matrix (rows for "x", "y",
 #'   columns for "min", "max") or as a vector ("xmin", "ymin", "xmax", "ymax"),
-#'   in lat/lon coordinates (WGS84 coordinate referece system)
+#'   in lat/lon coordinates (WGS84 coordinate referece system) of class `bbox`
 #' @param endpoint URL of the STAC API endpoint. To be provided together with
 #'   `stac_collection`, or leave blank to use defaults (see
 #'   [`default_stac_dem`])
@@ -142,6 +142,7 @@ get_stac_asset_urls <- function(bb, endpoint = NULL, collection = NULL) {
 #'
 #' @param bb A bounding box, provided either as a matrix (rows for "x", "y",
 #'   columns for "min", "max") or as a vector ("xmin", "ymin", "xmax", "ymax")
+#'   of class `bbox`.
 #' @param tile_urls A list of tiles where to read the DEM data from
 #' @param force_download Download data even if cached data is available
 #'
@@ -173,17 +174,15 @@ load_dem <- function(bb, tile_urls, force_download = FALSE) {
   dem
 }
 
-#' Write DEM to cloud optimized GeoTiff file as specified location
+#' Write DEM to cloud optimized GeoTIFF file as specified location
 #'
-#' @param dem to write to file
+#' @param dem DEM of class `SpatRaster` to write to file
 #' @param fpath filepath for output. If no output directory is specified
-#' (see below) fpath is parsed to determine
-#' the output directory
+#'   (see below) fpath is parsed to determine the output directory
 #' @param output_directory where file should be written.
-#' If specified fpath is treated as filename only.
+#'   If specified fpath is treated as filename only.
 #'
-#' @return The input DEM. This function is used for the side-effect of writing
-#'   values to a file.
+#' @return `SpatRaster` object of cloud optimised GeoTIFF
 #' @export
 #' @examplesIf interactive()
 #' bucharest_dem <- get_dem_example_data()
