@@ -269,6 +269,8 @@ cap_corridor <- function(edges, method = "shortest-path", network = NULL) {
   start_pts <- lwgeom::st_startpoint(edges)
   end_pts <- lwgeom::st_endpoint(edges)
 
+  method <- tolower(method)
+
   if (method == "direct") {
     cap_edge_1 <- as_linestring(start_pts)
     cap_edge_2 <- as_linestring(end_pts)

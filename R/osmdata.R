@@ -396,6 +396,7 @@ get_osm_railways <- function(aoi, crs = NULL, railway_values = "rail",
   checkmate::assert_character(railway_values)
   checkmate::assert_logical(force_download, len = 1)
 
+  railway_values <- tolower(railway_values)
   railways <- osmdata_as_sf("railway", railway_values, aoi,
                             force_download = force_download)
   # If no railways are found, return an empty sf object
