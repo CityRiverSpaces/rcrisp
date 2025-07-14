@@ -34,7 +34,10 @@ delineate_corridor <- function(
   capping_method = "shortest-path"
 ) {
   # Check input
+  checkmate::assert_class(network, "sfnetwork")
   checkmate::assert_true(inherits(river, c("sf", "sfc")))
+  checkmate::assert_numeric(corridor_init, len = 1)
+  checkmate::assert_numeric(max_width, len = 1)
 
   # Drop all attributes of river but its geometry
   river <- sf::st_geometry(river)

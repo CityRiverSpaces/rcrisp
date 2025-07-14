@@ -309,6 +309,9 @@ get_osm_river <- function(bb, river_name, crs = NULL, force_download = FALSE) {
 get_osm_streets <- function(aoi, crs = NULL, highway_values = NULL,
                             force_download = FALSE) {
   # Check input
+  checkmate::assert_true(inherits(aoi, c("sf", "sfc", "bbox")))
+  checkmate::assert_numeric(crs, null.ok = TRUE)
+  checkmate::assert_character(highway_values, null.ok = TRUE)
   checkmate::assert_logical(force_download, len = 1)
 
   if (is.null(highway_values)) {
@@ -364,6 +367,7 @@ get_osm_streets <- function(aoi, crs = NULL, highway_values = NULL,
 get_osm_railways <- function(aoi, crs = NULL, railway_values = "rail",
                              force_download = FALSE) {
   # Check input
+  checkmate::assert_character(railway_values)
   checkmate::assert_logical(force_download, len = 1)
 
   railways <- osmdata_as_sf("railway", railway_values, aoi,
@@ -434,6 +438,9 @@ get_osm_buildings <- function(aoi, crs = NULL, force_download = FALSE) {
 #' river <- get_osm_river(bb, "Dâmbovița")
 #' get_river_aoi(river, bb, buffer_distance = 100)
 get_river_aoi <- function(river, city_bbox, buffer_distance) {
+  # Check input
+  checkmate::assert_numeric(buffer_distance, len = 1)
+
   river <- c(river$centerline, river$surface)
 
   # Make sure crs are the same for cropping with bb

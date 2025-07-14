@@ -24,6 +24,11 @@
 #' delineate_segments(corridor, network, river)
 delineate_segments <- function(corridor, network, river,
                                angle_threshold = 100) {
+  # Check input
+  checkmate::assert_true(
+    inherits(river, c("sfc_LINESTRING", "sfc_MULTILINESTRING"))
+  )
+
   # Drop all attributes of river but its geometry
   river <- sf::st_geometry(river)
 
