@@ -17,8 +17,9 @@ segmentation}
 \code{sfc_LINESTRING} or \code{sfc_MULTILINESTRING}}
 
 \item{angle_threshold}{Only consider angles above this threshold (in degrees)
-to form continuous strokes in the network. See \code{\link[rcoins:stroke]{rcoins::stroke()}} for
-more details.}
+to form continuous strokes in the network. A meaningful angle is between
+90 and 180, with the default set to 100. See \code{\link[rcoins:stroke]{rcoins::stroke()}} for more
+details.}
 }
 \value{
 Segment polygons as a simple feature geometry of class \code{sfc_POLYGON}

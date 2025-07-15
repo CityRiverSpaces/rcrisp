@@ -27,6 +27,6 @@ with the same input parameters will be loaded from disk.
 \examples{
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 bb <- get_osm_bb("Bucharest")
-osmdata_as_sf("highway", "motorway", bb)
+osmdata_as_sf("highway", "motorway", bb, force_download = TRUE)
 \dontshow{\}) # examplesIf}
 }

@@ -9,7 +9,7 @@ delineate_valley(dem, river)
 \arguments{
 \item{dem}{\code{SpatRaster} object with the digital elevation model of the region}
 
-\item{river}{An object of class \code{sfc_MULTILINESTRING} representing the river}
+\item{river}{An object of class \code{sf} or \code{sfc} representing the river}
 }
 \value{
 River valley as a simple feature geometry of class \code{sfc_MULTIPOLYGON}

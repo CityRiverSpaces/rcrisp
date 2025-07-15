@@ -27,5 +27,10 @@ edges <- sf::st_sfc(
   sf::st_linestring(matrix(c(0, 1, 1, 0), ncol = 2, byrow = TRUE)),
   crs = sf::st_crs("EPSG:4326")
 )
+
+# Run with default values
 as_network(edges)
+
+# Run with custom values
+as_network(edges, flatten = FALSE, clean = FALSE)
 }

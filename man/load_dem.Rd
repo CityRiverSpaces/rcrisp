@@ -27,6 +27,6 @@ that new queries with the same input parameters will be loaded from disk.
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 bb <- get_osm_bb("Bucharest")
 tile_urls <- get_stac_asset_urls(bb)
-load_dem(bb, tile_urls)
+load_dem(bb, tile_urls, force_download = TRUE)
 \dontshow{\}) # examplesIf}
 }
