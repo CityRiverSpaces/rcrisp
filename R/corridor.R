@@ -26,9 +26,19 @@
 #' @export
 #' @examplesIf interactive()
 #' bucharest_osm <- get_osm_example_data()
-#' network <- rbind(bucharest_osm$streets, bucharest_osm$railways) |>
-#'   as_network()
-#' delineate_corridor(network, bucharest_osm$river_centerline)
+#' streets <- bucharest_osm$streets
+#' railways <- bucharest_osm$railways
+#' river <- bucharest_osm$river_centerline
+#'
+#' # Delineate with default values
+#' network <- rbind(streets, railways) |> as_network()
+#' delineate_corridor(network, river)
+#'
+#' # Delineate with user-specified parameters
+#' bucharest_dem <- get_dem_example_data()
+#' corridor_init <- delineate_valley(bucharest_dem, river)
+#' delineate_corridor(network, river, corridor_init = corridor_init,
+#'                    max_width = 4000, max_iterations = 5, capping = "direct")
 delineate_corridor <- function(
   network, river, corridor_init = 1000, max_width = 3000, max_iterations = 10,
   capping_method = "shortest-path"

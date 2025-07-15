@@ -141,7 +141,12 @@ write_data_to_cache <- function(x, filepath, wrap = FALSE, quiet = FALSE) {
 #' @return List of file paths of removed files
 #' @export
 #' @examplesIf interactive()
+#' # Clear all cache
 #' clear_cache()
+#'
+#' # Clear cache before given date
+#' before_date <- as.Date("1-1-1999", "%m-%d-%Y")
+#' clear_cache(before_date)
 clear_cache <- function(before_date = NULL) {
   # Check input
   checkmate::assert_date(before_date, null.ok = TRUE)

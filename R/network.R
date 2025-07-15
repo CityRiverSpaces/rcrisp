@@ -14,7 +14,12 @@
 #'   sf::st_linestring(matrix(c(0, 1, 1, 0), ncol = 2, byrow = TRUE)),
 #'   crs = sf::st_crs("EPSG:4326")
 #' )
+#'
+#' # Run with default values
 #' as_network(edges)
+#'
+#' # Run with custom values
+#' as_network(edges, flatten = FALSE, clean = FALSE)
 as_network <- function(edges, flatten = TRUE, clean = TRUE) {
   # Check input
   checkmate::assert_true(inherits(edges, c("sf", "sfc")))
