@@ -18,7 +18,7 @@ set_units_like <- function(x, y) {
 
 #' Get the UTM zone of a spatial object
 #'
-#' @param x Bounding box of class `bbox` or geometry object
+#' @param x Object in any class accepted by [`as_bbox()`]
 #' @return The EPSG code of the UTM zone
 #' @export
 #' @examples
