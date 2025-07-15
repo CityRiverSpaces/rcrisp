@@ -149,7 +149,7 @@ write_data_to_cache <- function(x, filepath, wrap = FALSE, quiet = FALSE) {
 #' clear_cache(before_date)
 clear_cache <- function(before_date = NULL) {
   # Check input
-  before_date <- as.Date(before_date)
+  before_date <- if (!is.null(before_date)) as.Date(before_date)
   checkmate::assert_date(before_date, null.ok = TRUE, len = 1)
 
   cache_dir <- cache_directory()
