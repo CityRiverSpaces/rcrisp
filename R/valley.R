@@ -193,35 +193,6 @@ load_dem <- function(bb, tile_urls, force_download = FALSE) {
   dem
 }
 
-#' Write DEM to cloud optimized GeoTIFF file as specified location
-#'
-#' @param dem DEM of class `SpatRaster` to write to file
-#' @param fpath filepath for output. If no output directory is specified
-#'   (see below) fpath is parsed to determine the output directory
-#' @param output_directory where file should be written.
-#'   If specified fpath is treated as filename only.
-#'
-#' @return `SpatRaster` object of cloud optimised GeoTIFF
-#' @export
-#' @examplesIf interactive()
-#' bucharest_dem <- get_dem_example_data()
-#' dem_to_cog(bucharest_dem, "bucharest_dem.tif", output_directory = ".")
-dem_to_cog <- function(dem, fpath, output_directory = NULL) {
-  if (is.null(output_directory)) {
-    filename <- basename(fpath)
-    directory_name <- dirname(fpath)
-  } else {
-    filename <- fpath
-    directory_name <- output_directory
-  }
-  data_dir <- directory_name
-  terra::writeRaster(
-                     x = dem,
-                     filename = sprintf("%s/%s", data_dir, filename),
-                     filetype = "COG",
-                     overwrite = TRUE)
-}
-
 #' Spatially smooth dem by (window) filtering
 #'
 #' @param dem raster data of dem
