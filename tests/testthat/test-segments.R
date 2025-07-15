@@ -90,33 +90,33 @@ test_that("The first segment boundary is discarded when length is equal", {
 #' @srrstats {G5.5} Correctness tests for DBSCAN clustering are run with a fixed
 #'   random seed.
 
-crossings <- st_sfc(
-  # Three crossings -> should be clustered
-  st_linestring(matrix(c(0.0, 0.0, 0.0, 1.0), ncol = 2, byrow = TRUE)),
-  st_linestring(matrix(c(0.1, 0.0, 0.1, 1.3), ncol = 2, byrow = TRUE)),
-  st_linestring(matrix(c(0.2, 0.0, 0.2, 0.8), ncol = 2, byrow = TRUE)),
-
-  # Two crossings -> should be clustered
-  st_linestring(matrix(c(5.0, 0.0, 5.0, 1.1), ncol = 2, byrow = TRUE)),
-  st_linestring(matrix(c(5.15, 0.0, 5.15, 0.9), ncol = 2, byrow = TRUE)),
-
-  # Single crossing
-  st_linestring(matrix(c(10.0, 0.0, 10.0, 1.5), ncol = 2, byrow = TRUE))
-)
-crossings_sf <- st_sf(id = 1:6, geometry = crossings)
-
-river_sf <- st_sfc(
-  st_linestring(matrix(c(-1.0, 0.3, 11.0, 0.3), ncol = 2, byrow = TRUE))
-)
-
-set.seed(1)
-selected_crossings <- filter_clusters(crossings_sf, river_sf, eps = 1) |>
-  suppressWarnings()
-
-test_that("Expected number of clusters is correct", {
-  expect_equal(length(selected_crossings), 3)
-})
-
 test_that("The correct crossing segments are selected", {
-  expect_equal(st_length(selected_crossings), c(0.8, 0.9, 1.5))
+  crossings <- sf::st_sfc(
+    # Three crossings -> should be clustered
+    sf::st_linestring(matrix(c(0.0, 0.0, 0.0, 1.0), ncol = 2, byrow = TRUE)),
+    sf::st_linestring(matrix(c(0.1, 0.0, 0.1, 1.3), ncol = 2, byrow = TRUE)),
+    sf::st_linestring(matrix(c(0.2, 0.0, 0.2, 0.8), ncol = 2, byrow = TRUE)),
+
+    # Two crossings -> should be clustered
+    sf::st_linestring(matrix(c(5.0, 0.0, 5.0, 1.1), ncol = 2, byrow = TRUE)),
+    sf::st_linestring(matrix(c(5.15, 0.0, 5.15, 0.9), ncol = 2, byrow = TRUE)),
+
+    # Single crossing
+    sf::st_linestring(matrix(c(10.0, 0.0, 10.0, 1.5), ncol = 2, byrow = TRUE))
+  )
+  crossings_sf <- sf::st_sf(id = 1:6, geometry = crossings)
+
+  river_sf <- sf::st_sfc(
+    sf::st_linestring(matrix(c(-1.0, 0.3, 11.0, 0.3), ncol = 2, byrow = TRUE))
+  )
+
+  withr::with_seed(
+    seed = 1,
+    code = {
+      selected_crossings <- filter_clusters(crossings_sf, river_sf, eps = 1) |>
+        suppressWarnings()
+    }
+  )
+  expect_equal(length(selected_crossings), 3)
+  expect_equal(sf::st_length(selected_crossings), c(0.8, 0.9, 1.5))
 })
