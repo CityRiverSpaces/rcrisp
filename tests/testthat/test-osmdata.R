@@ -164,7 +164,7 @@ test_that("City boundary of Bucharest is correctly retrieved", {
   expect_true(inherits(city_boundary, "sfc"))
 })
 
-test_that("Wrong city name returns an empty sfc object", {
+test_that("Wrong city name raises an error", {
   expect_error(
     with_mocked_bindings(
       osmdata_as_sf = function(...) list(osm_polygons = mock_city_boundary),
