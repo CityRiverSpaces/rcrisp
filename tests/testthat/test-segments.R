@@ -29,7 +29,12 @@ test_that("Candidate segments boundaries are properly grouped and filtered", {
   e7 <- sf::st_linestring(cbind(c(1, 1), c(-1, 1)))  #  group 4 <--
   crossings <- sf::st_sfc(e1, e2, e3, e4, e5, e6, e7)
   expected <- sf::st_sfc(e1, e4, e5, e7)
-  actual <- filter_clusters(crossings, river, eps = 0.2)
+  withr::with_seed(
+    seed = 1,
+    code = {
+      actual <- filter_clusters(crossings, river, eps = 0.2)
+    }
+  )
   expect_setequal(expected, actual)
 })
 
