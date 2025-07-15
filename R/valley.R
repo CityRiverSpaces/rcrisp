@@ -175,7 +175,7 @@ get_stac_asset_urls <- function(bb, endpoint = NULL, collection = NULL) {
 #' @examplesIf interactive()
 #' bb <- get_osm_bb("Bucharest")
 #' tile_urls <- get_stac_asset_urls(bb)
-#' load_dem(bb, tile_urls)
+#' load_dem(bb, tile_urls, force_download = TRUE)
 #' @srrstats {G4.0} DEM data is written to cache with a file name concatenated
 #'   from tile names and boundig box coordinates.
 load_dem <- function(bb, tile_urls, force_download = FALSE) {
