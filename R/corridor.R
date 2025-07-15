@@ -36,7 +36,9 @@ delineate_corridor <- function(
   # Check input
   checkmate::assert_class(network, "sfnetwork")
   checkmate::assert_true(inherits(river, c("sf", "sfc")))
-  checkmate::assert_numeric(corridor_init, len = 1)
+  checkmate::assert_true(
+    inherits(corridor_init, c("numeric", "sfc_POLYGON", "sfc_MULTIPOLYGON"))
+  )
   checkmate::assert_numeric(max_width, len = 1)
 
   # Drop all attributes of river but its geometry
