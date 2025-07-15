@@ -115,13 +115,11 @@ test_that("buffering a bbox does not change its CRS", {
   expect_equal(crs_actual, crs_expected)
 })
 
-#' @srrstatsTODO {G2.4, G2.4c} Explicit conversion to character with
-#'   `as.character()` used to test the output type of `buffer()`.
 test_that("Buffer also works without a CRS", {
   x <- sf::st_sfc(sf::st_linestring(cbind(c(-2, 0), c(0, -2))))
   x_buff <- buffer(x, 1)
   expect_true(is.na(sf::st_crs(x_buff)))
-  expect_equal(as.character(sf::st_geometry_type(x_buff)), "POLYGON")
+  expect_true(inherits(x_buff, c("sfc_POLYGON", "sfc_MULTIPOLYGON")))
 })
 
 test_that("River buffer implements a buffer function", {
