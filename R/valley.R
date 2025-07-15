@@ -84,7 +84,7 @@ get_dem <- function(bb, dem_source = "STAC", stac_endpoint = NULL,
 #' @srrstats {G1.3} The Cost Distance algorithm is explained here.
 #'
 #' @param dem `SpatRaster` object with the digital elevation model of the region
-#' @param river An object of class `sfc_MULTILINESTRING` representing the river
+#' @param river An object of class `sf` or `sfc` representing the river
 #'
 #' @return River valley as a simple feature geometry of class `sfc_MULTIPOLYGON`
 #' @export
