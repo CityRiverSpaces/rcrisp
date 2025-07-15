@@ -25,9 +25,12 @@
 delineate_segments <- function(corridor, network, river,
                                angle_threshold = 100) {
   # Check input
+  checkmate::assert_class(corridor, "sfc_POLYGON")
+  checkmate::assert_class(network, "sfnetwork")
   checkmate::assert_true(
     inherits(river, c("sfc_LINESTRING", "sfc_MULTILINESTRING"))
   )
+  checkmate::assert_numeric(angle_threshold, lower = 90, upper = 180)
 
   # Drop all attributes of river but its geometry
   river <- sf::st_geometry(river)

@@ -19,6 +19,9 @@
 #'   OSM "key", "value" and "bbox" coordinates.
 osmdata_as_sf <- function(key, value, aoi, force_download = FALSE) {
   # Check input
+  checkmate::assert_character(key, len = 1)
+  checkmate::assert_character(value, min.len = 1)
+  checkmate::assert_true(inherits(aoi, c("sf", "sfc", "bbox")))
   checkmate::assert_logical(force_download, len = 1)
 
   bbox <- as_bbox(aoi) # it should be in lat/lon

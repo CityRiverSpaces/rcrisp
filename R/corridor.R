@@ -50,6 +50,8 @@ delineate_corridor <- function(
     inherits(corridor_init, c("numeric", "sfc_POLYGON", "sfc_MULTIPOLYGON"))
   )
   checkmate::assert_numeric(max_width, len = 1)
+  checkmate::assert_numeric(max_iterations, len = 1)
+  checkmate::assert_choice(capping_method, c("shortest-path", "direct"))
 
   # Drop all attributes of river but its geometry
   river <- sf::st_geometry(river)

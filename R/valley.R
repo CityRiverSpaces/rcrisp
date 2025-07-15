@@ -134,6 +134,11 @@ delineate_valley <- function(dem, river) {
 #'                     endpoint = "some endpoint",
 #'                     collection = "some collection")
 get_stac_asset_urls <- function(bb, endpoint = NULL, collection = NULL) {
+  # Check input
+  checkmate::assert_true(inherists(bb, c("numeric", "matrix", "bbox")))
+  checkmate::assert_character(endpoint, len = 1, null.ok = TRUE)
+  checkmate::assert_character(collection, len = 1, null.ok = TRUE)
+
   if (is.null(endpoint) && is.null(collection)) {
     endpoint <- default_stac_dem$endpoint
     collection <- default_stac_dem$collection
@@ -175,6 +180,8 @@ get_stac_asset_urls <- function(bb, endpoint = NULL, collection = NULL) {
 #'   from tile names and boundig box coordinates.
 load_dem <- function(bb, tile_urls, force_download = FALSE) {
   # Check input
+  checkmate::assert_true(inherits(bb, c("numeric", "matrix", "bbox")))
+  checkmate::assert_character(tile_urls, min.len = 1)
   checkmate::assert_logical(force_download, len = 1)
 
   bbox <- as_bbox(bb)
