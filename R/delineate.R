@@ -1,7 +1,7 @@
 #' Delineate a corridor around a river.
 #'
-#' @param city_name A place name as a string (a character vector of length one)
-#' @param river_name A river name as a string (a character vector of length one)
+#' @param city_name A character vector of length one
+#' @param river_name A character vector of length one
 #' @param crs The projected Coordinate Reference System (CRS) to use. If not
 #'   provided, the suitable Universal Transverse Mercator (UTM) CRS is selected
 #' @param network_buffer Add a buffer (an integer in meters) around
