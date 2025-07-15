@@ -7,7 +7,7 @@
 #' @param network The spatial network of class `sfnetwork` to be used for the
 #'   delineation
 #' @param river A (MULTI)LINESTRING simple feature geometry of class `sf`
-#'   representing the river centerline
+#'   or `sfc` representing the river centerline
 #' @param corridor_init How to estimate the initial guess of the river corridor.
 #'   It can take the following values:
 #'   * numeric or integer: use a buffer region of the given size (in meters)
