@@ -110,7 +110,7 @@ NULL
 #' @srrstatsNA {G3.1, G3.1a} This package does not perform covariance
 #'   calculations.
 #' @srrstatsNA {G5.3} This package does not return objects which explicitly
-#'   contain no missing (`NA`) or undefined (`NaN`, `Inf`) values.
+#'   contain missing (`NA`) or undefined (`NaN`, `Inf`) values.
 #' @srrstatsNA {G5.4b, G5.4c} This package implements a new method.
 #'
 #  Not applicable spatial software standards ----
