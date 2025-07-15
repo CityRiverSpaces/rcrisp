@@ -81,7 +81,7 @@ flatten_network <- function(network) {
 #' @noRd
 get_crossing_edges <- function(edges) {
   geometry <- sf::st_geometry(edges)
-  crossings <- sf::st_crosses(geometry) |> suppressWarnings()
+  crossings <- sf::st_crosses(geometry) |> suppressMessages()
   mask <- lengths(crossings) > 0
   sf::st_sf(id = which(mask), geometry = geometry[mask])
 }
@@ -91,7 +91,7 @@ get_crossing_edges <- function(edges) {
 #' @noRd
 get_intersection_points <- function(edges) {
   # make sure edges is an sf object, so st_intersection also returns origins
-  intersections <- sf::st_intersection(sf::st_sf(edges)) |> suppressWarnings()
+  intersections <- sf::st_intersection(sf::st_sf(edges)) |> suppressMessages()
   # only consider (multi-)point intersections
   points <- sf::st_collection_extract(intersections, type = "POINT")
   # cast multipoint intersections to points
@@ -212,7 +212,7 @@ clean_network <- function(network, simplify = TRUE) {
 
   # subdivide edges by adding missing nodes
   net <- tidygraph::convert(network, sfnetworks::to_spatial_subdivision,
-                            .clean = TRUE)
+                            .clean = TRUE) |> suppressWarnings()
   # run simplification steps
   if (simplify) net <- simplify_network(net)
   # remove pseudo-nodes
