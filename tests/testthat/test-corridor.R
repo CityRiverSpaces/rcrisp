@@ -255,25 +255,25 @@ test_that("Capping with 'shortest-path' method raises an error if no network
                                "`capping_method = 'shortest-path'`"))
           })
 
-test_that("Warning is raised if the river corridor edge did not converge in
-          given number of iterations", {
-            # These lines reproduce the steps run in delineate_corridor()
-            # before corridor_edge() can be called.
-            network <- rbind(bucharest_osm$streets, bucharest_osm$railways) |>
-              as_network() |>
-              suppressWarnings()
-            river <- sf::st_geometry(bucharest_osm$river_centerline)
-            corridor_init <- river_buffer(river, 1000)
-            river_network <- build_river_network(river,
-                                                 bbox = sf::st_bbox(network))
-            regions <- get_river_banks(river_network, 3000)
-            edges_init <- initial_edges(corridor_init, regions)
-            network_1 <- filter_network(network, regions[1])
-            end_points <- corridor_end_points(river_network, network, regions)
-            expect_warning(
-              corridor_edge(network_1, end_points, edges_init[1],
-                            corridor_init,
-                            max_iterations = 2),
-              "River corridor edge not converged within 2 iterations"
-            )
-          })
+test_that("Warning is raised if the river corridor edge did not converge", {
+  p1 <- sf::st_point(c(-1, 0))
+  p2 <- sf::st_point(c(-1, 1))
+  p3 <- sf::st_point(c(1, 1))
+  p4 <- sf::st_point(c(1, 0))
+  nodes <- sf::st_sfc(p1, p4)
+  edges <- sf::st_as_sf(sf::st_sfc(
+    sf::st_linestring(c(p1, p2, p3, p4))
+  ))
+  edges$from <- 1
+  edges$to <- 2
+  network <- sfnetworks::sfnetwork(nodes = nodes, edges = edges,
+                                   directed = FALSE, force = TRUE,
+                                   node_key = "x")
+  target_edge <- sf::st_sfc(sf::st_linestring(c(p1, p4)))
+
+  expect_warning(corridor_edge(network,
+                               end_points = nodes,
+                               target_edge = target_edge,
+                               max_iterations = 1),
+                 "River corridor edge not converged within 1 iterations")
+})
