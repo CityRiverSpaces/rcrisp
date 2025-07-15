@@ -10,8 +10,9 @@
 #' @param river The river centerline as a simple feature geometry of class
 #'   `sfc_LINESTRING` or `sfc_MULTILINESTRING`
 #' @param angle_threshold Only consider angles above this threshold (in degrees)
-#'   to form continuous strokes in the network. See [`rcoins::stroke()`] for
-#'   more details.
+#'   to form continuous strokes in the network. A meaningful angle is between
+#'   90 and 180, with the default set to 100. See [`rcoins::stroke()`] for more
+#'   details.
 #'
 #' @return Segment polygons as a simple feature geometry of class `sfc_POLYGON`
 #' @export
