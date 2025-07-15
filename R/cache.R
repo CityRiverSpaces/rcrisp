@@ -136,7 +136,7 @@ write_data_to_cache <- function(x, filepath, wrap = FALSE, quiet = FALSE) {
 #' Remove files from cache directory either before a given date or entirely.
 #'
 #' @param before_date Date before which cache files should be removed provided
-#'   as `Date`
+#'   as `Date` (or as a character string accepted by [`as.Date()`])
 #'
 #' @return List of file paths of removed files
 #' @export

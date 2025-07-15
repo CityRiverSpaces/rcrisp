@@ -18,7 +18,7 @@
 #' # Run with default values
 #' as_network(edges)
 #'
-#' # Run with custom values
+#' # Only build the spatial network
 #' as_network(edges, flatten = FALSE, clean = FALSE)
 as_network <- function(edges, flatten = TRUE, clean = TRUE) {
   # Check input
