@@ -135,7 +135,7 @@ delineate_valley <- function(dem, river) {
 #'                     collection = "some collection")
 get_stac_asset_urls <- function(bb, endpoint = NULL, collection = NULL) {
   # Check input
-  checkmate::assert_true(inherits(bb, c("numeric", "matrix", "bbox")))
+  bbox <- as_bbox(bb)
   checkmate::assert_character(endpoint, len = 1, null.ok = TRUE)
   checkmate::assert_character(collection, len = 1, null.ok = TRUE)
 
@@ -151,7 +151,6 @@ get_stac_asset_urls <- function(bb, endpoint = NULL, collection = NULL) {
     stop("Provide both or neither of STAC endpoint and collection")
   }
 
-  bbox <- as_bbox(bb)
   rstac::stac(endpoint) |>
     rstac::stac_search(collections = collection, bbox = bbox) |>
     rstac::get_request() |>
@@ -180,11 +179,9 @@ get_stac_asset_urls <- function(bb, endpoint = NULL, collection = NULL) {
 #'   from tile names and boundig box coordinates.
 load_dem <- function(bb, tile_urls, force_download = FALSE) {
   # Check input
-  checkmate::assert_true(inherits(bb, c("numeric", "matrix", "bbox")))
+  bbox <- as_bbox(bb)
   checkmate::assert_character(tile_urls, min.len = 1)
   checkmate::assert_logical(force_download, len = 1)
-
-  bbox <- as_bbox(bb)
 
   filepath <- get_dem_cache_filepath(tile_urls, bbox)
 
