@@ -135,7 +135,7 @@ delineate_valley <- function(dem, river) {
 #'                     collection = "some collection")
 get_stac_asset_urls <- function(bb, endpoint = NULL, collection = NULL) {
   # Check input
-  checkmate::assert_true(inherists(bb, c("numeric", "matrix", "bbox")))
+  checkmate::assert_true(inherits(bb, c("numeric", "matrix", "bbox")))
   checkmate::assert_character(endpoint, len = 1, null.ok = TRUE)
   checkmate::assert_character(collection, len = 1, null.ok = TRUE)
 
