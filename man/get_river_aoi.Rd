@@ -10,12 +10,12 @@ get_river_aoi(river, city_bbox, buffer_distance)
 \arguments{
 \item{river}{A list with the river centreline and surface geometries}
 
-\item{city_bbox}{Bounding box around the city}
+\item{city_bbox}{Bounding box of class \code{bbox} around the city}
 
 \item{buffer_distance}{Buffer size around the river}
 }
 \value{
-An sf object in lat/lon coordinates
+An \code{sfc_POLYGON} object in lat/lon coordinates
 }
 \description{
 Get an area of interest (AoI) around a river, cropping to the bounding box of

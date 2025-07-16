@@ -7,7 +7,7 @@
 get_utm_zone(x)
 }
 \arguments{
-\item{x}{Bounding box or geometry object}
+\item{x}{Bounding box of class \code{bbox} or geometry object}
 }
 \value{
 The EPSG code of the UTM zone

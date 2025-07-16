@@ -25,8 +25,18 @@ Get OpenStreetMap streets
 }
 \examples{
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+# Set parameters
 bb <- get_osm_bb("Bucharest")
-crs <- get_utm_zone(bb)
+crs <- 31600  # National projected CRS
+
+# Get streets with default values
 get_osm_streets(bb, crs)
+
+# Specify street categories to be retrieved
+highway_values <- "primary"
+get_osm_streets(bb, crs, highway_values = highway_values)
+
+# Ensure that data is not retrieved from cache
+get_osm_streets(bb, crs, force_download = TRUE)
 \dontshow{\}) # examplesIf}
 }

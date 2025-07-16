@@ -136,13 +136,22 @@ write_data_to_cache <- function(x, filepath, wrap = FALSE, quiet = FALSE) {
 #' Remove files from cache directory either before a given date or entirely.
 #'
 #' @param before_date Date before which cache files should be removed provided
-#'   as Date
+#'   as `Date` (or as a character string accepted by [`as.Date()`])
 #'
 #' @return List of file paths of removed files
 #' @export
 #' @examplesIf interactive()
+#' # Clear all cache
 #' clear_cache()
+#'
+#' # Clear cache before given date
+#' before_date <- as.Date("1-1-1999", "%m-%d-%Y")
+#' clear_cache(before_date)
 clear_cache <- function(before_date = NULL) {
+  # Check input
+  before_date <- if (!is.null(before_date)) as.Date(before_date)
+  checkmate::assert_date(before_date, null.ok = TRUE, len = 1)
+
   cache_dir <- cache_directory()
   files <- list.files(cache_dir, full.names = TRUE)
 
