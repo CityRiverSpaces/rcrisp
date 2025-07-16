@@ -49,9 +49,7 @@
 #' delineate(city, river)
 #'
 #' # Use custom CRS
-#' bb <- get_osm_bb(city)
-#' crs <- 31600  # National projected CRS
-#' get_osmdata(city, river, crs = crs)
+#' get_osmdata(city, river, crs = "EPSG:31600")  # National projected CRS
 #'
 #' # Use custom network buffer
 #' delineate(city, river, network_buffer = 3500)

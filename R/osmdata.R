@@ -116,9 +116,7 @@ get_osm_bb <- function(city_name) {
 #' get_osmdata(city, river, buildings_buffer = 150)
 #'
 #' # Use custom CRS
-#' bb <- get_osm_bb(city)
-#' crs <- 31600  # National projected CRS
-#' get_osmdata(city, river, crs = crs)
+#' get_osmdata(city, river, crs = "EPSG:31600")  # National projected CRS
 get_osmdata <- function(
   city_name, river_name, network_buffer = NULL, buildings_buffer = NULL,
   city_boundary = TRUE, crs = NULL, force_download = FALSE
