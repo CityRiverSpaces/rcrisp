@@ -8,14 +8,14 @@ coordinate reference system (CRS)}
 reproject(x, crs, ...)
 }
 \arguments{
-\item{x}{Raster or vector object}
+\item{x}{Raster (\code{SpatRaster}) or vector (\code{sf}) object}
 
 \item{crs}{CRS to be projected to}
 
 \item{...}{Optional arguments for raster or vector reproject functions}
 }
 \value{
-Object reprojected to specified CRS
+\code{SpatRaster} or \code{sf} object reprojected to specified CRS
 }
 \description{
 Reproject a raster or vector dataset to the specified

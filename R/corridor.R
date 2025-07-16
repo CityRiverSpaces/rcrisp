@@ -4,9 +4,10 @@
 #' network starting from an initial guess of the corridor (based e.g. on the
 #' river valley).
 #'
-#' @param network The spatial network to be used for the delineation
-#' @param river A (MULTI)LINESTRING simple feature geometry representing the
-#'   river centerline
+#' @param network The spatial network of class `sfnetwork` to be used for the
+#'   delineation
+#' @param river A (MULTI)LINESTRING simple feature geometry of class `sf`
+#'   or `sfc` representing the river centerline
 #' @param corridor_init How to estimate the initial guess of the river corridor.
 #'   It can take the following values:
 #'   * numeric or integer: use a buffer region of the given size (in meters)
@@ -20,17 +21,38 @@
 #'   points (i.e. to "cap" the corridor). See [cap_corridor()] for
 #'   the available methods
 #'
-#' @return A simple feature geometry representing the river corridor
+#' @return A simple feature geometry of class `sfc_POLYGON` representing the
+#'   river corridor
 #' @export
 #' @examplesIf interactive()
 #' bucharest_osm <- get_osm_example_data()
-#' network <- rbind(bucharest_osm$streets, bucharest_osm$railways) |>
-#'   as_network()
-#' delineate_corridor(network, bucharest_osm$river_centerline)
+#' streets <- bucharest_osm$streets
+#' railways <- bucharest_osm$railways
+#' river <- bucharest_osm$river_centerline
+#'
+#' # Delineate with default values
+#' network <- rbind(streets, railways) |> as_network()
+#' delineate_corridor(network, river)
+#'
+#' # Delineate with user-specified parameters
+#' bucharest_dem <- get_dem_example_data()
+#' corridor_init <- delineate_valley(bucharest_dem, river)
+#' delineate_corridor(network, river, corridor_init = corridor_init,
+#'                    max_width = 4000, max_iterations = 5, capping = "direct")
 delineate_corridor <- function(
   network, river, corridor_init = 1000, max_width = 3000, max_iterations = 10,
   capping_method = "shortest-path"
 ) {
+  # Check input
+  checkmate::assert_class(network, "sfnetwork")
+  checkmate::assert_true(inherits(river, c("sf", "sfc")))
+  checkmate::assert_true(
+    inherits(corridor_init, c("numeric", "sfc_POLYGON", "sfc_MULTIPOLYGON"))
+  )
+  checkmate::assert_numeric(max_width, len = 1)
+  checkmate::assert_numeric(max_iterations, len = 1)
+  checkmate::assert_choice(capping_method, c("shortest-path", "direct"))
+
   # Drop all attributes of river but its geometry
   river <- sf::st_geometry(river)
 
@@ -260,6 +282,8 @@ cap_corridor <- function(edges, method = "shortest-path", network = NULL) {
 
   start_pts <- lwgeom::st_startpoint(edges)
   end_pts <- lwgeom::st_endpoint(edges)
+
+  method <- tolower(method)
 
   if (method == "direct") {
     cap_edge_1 <- as_linestring(start_pts)

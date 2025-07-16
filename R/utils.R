@@ -18,7 +18,7 @@ set_units_like <- function(x, y) {
 
 #' Get the UTM zone of a spatial object
 #'
-#' @param x Bounding box or geometry object
+#' @param x Object in any class accepted by [`as_bbox()`]
 #' @return The EPSG code of the UTM zone
 #' @export
 #' @examples
@@ -50,6 +50,11 @@ get_utm_zone <- function(x) {
 #' class(bb)
 #' st_crs(bb)
 as_bbox <- function(x) {
+  # Check input
+  checkmate::assert_true(
+    inherits(x, c("sf", "sfc", "numeric", "matrix", "bbox"))
+  )
+
   if (inherits(x, c("numeric", "matrix"))) {
     x <- as.vector(x)
     names(x) <- c("xmin", "ymin", "xmax", "ymax")
@@ -131,11 +136,11 @@ river_buffer <- function(river, buffer_distance, bbox = NULL, side = NULL) {
 #' Reproject a raster or vector dataset to the specified
 #' coordinate reference system (CRS)
 #'
-#' @param x Raster or vector object
+#' @param x Raster (`SpatRaster`) or vector (`sf`) object
 #' @param crs CRS to be projected to
 #' @param ... Optional arguments for raster or vector reproject functions
 #'
-#' @return Object reprojected to specified CRS
+#' @return `SpatRaster` or `sf` object reprojected to specified CRS
 #' @export
 #' @examples
 #' # Reproject a raster to EPSG:4326

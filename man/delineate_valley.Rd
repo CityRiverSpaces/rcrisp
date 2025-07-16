@@ -7,12 +7,12 @@
 delineate_valley(dem, river)
 }
 \arguments{
-\item{dem}{Digital elevation model of the region}
+\item{dem}{\code{SpatRaster} object with the digital elevation model of the region}
 
-\item{river}{A simple feature geometry representing the river}
+\item{river}{An object of class \code{sf} or \code{sfc} representing the river}
 }
 \value{
-River valley as a simple feature geometry
+River valley as a simple feature geometry of class \code{sfc_MULTIPOLYGON}
 }
 \description{
 The slope of the digital elevation model (DEM) is used as friction (cost)
