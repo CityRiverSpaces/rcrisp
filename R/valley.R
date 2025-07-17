@@ -21,7 +21,7 @@ default_stac_dem <- list(
 #'
 #' @param bb A bounding box, provided either as a matrix (rows for "x", "y",
 #'   columns for "min", "max") or as a vector ("xmin", "ymin", "xmax", "ymax"),
-#'   in lat/lon coordinates (WGS84 coordinate referece system)
+#'   in lat/lon coordinates (WGS84 coordinate reference system) of class `bbox`
 #' @param dem_source Source of the DEM:
 #'   - If "STAC" (default), DEM tiles are searched on a SpatioTemporal Asset
 #'     Catalog (STAC) end point, then accessed and mosaicked to the area of
@@ -34,14 +34,31 @@ default_stac_dem <- list(
 #' @param crs Coordinate reference system (CRS) which to transform the DEM to
 #' @param force_download Download data even if cached data is available
 #'
-#' @return DEM as a terra SpatRaster object
+#' @return DEM as a terra `SpatRaster` object
 #' @export
 #' @examplesIf interactive()
+#' # Get DEM with default values
 #' bb <- get_osm_bb("Bucharest")
+#' crs <- 31600  # National projected CRS
+#'
+#' # Get DEM with default values
 #' get_dem(bb)
+#'
+#' # Get DEM from custom STAC endpoint
+#' get_dem(bb,
+#'         stac_endpoint = "some endpoint",
+#'         stac_collection = "some collection")
+#'
+#' # Specify CRS
+#' get_dem(bb, crs = crs)
 get_dem <- function(bb, dem_source = "STAC", stac_endpoint = NULL,
                     stac_collection = NULL, crs = NULL,
                     force_download = FALSE) {
+  # Check input
+  checkmate::assert_logical(force_download, len = 1)
+
+  dem_source <- toupper(dem_source)
+
   bbox <- as_bbox(bb)
   if (dem_source == "STAC") {
     asset_urls <- get_stac_asset_urls(bbox, endpoint = stac_endpoint,
@@ -66,16 +83,20 @@ get_dem <- function(bb, dem_source = "STAC", stac_endpoint = NULL,
 #'
 #' @srrstats {G1.3} The Cost Distance algorithm is explained here.
 #'
-#' @param dem Digital elevation model of the region
-#' @param river A simple feature geometry representing the river
+#' @param dem `SpatRaster` object with the digital elevation model of the region
+#' @param river An object of class `sf` or `sfc` representing the river
 #'
-#' @return River valley as a simple feature geometry
+#' @return River valley as a simple feature geometry of class `sfc_MULTIPOLYGON`
 #' @export
 #' @examplesIf interactive()
 #' bucharest_osm <- get_osm_example_data()
 #' bucharest_dem <- get_dem_example_data()
 #' delineate_valley(bucharest_dem, bucharest_osm$river_centerline)
 delineate_valley <- function(dem, river) {
+  # Check input
+  checkmate::assert_class(dem, "SpatRaster")
+  checkmate::assert_true(inherits(river, c("sf", "sfc")))
+
   if (!terra::same.crs(dem, sf::st_crs(river)$wkt)) {
     stop("DEM and river geometry should be in the same CRS")
   }
@@ -93,7 +114,7 @@ delineate_valley <- function(dem, river) {
 #'
 #' @param bb A bounding box, provided either as a matrix (rows for "x", "y",
 #'   columns for "min", "max") or as a vector ("xmin", "ymin", "xmax", "ymax"),
-#'   in lat/lon coordinates (WGS84 coordinate referece system)
+#'   in lat/lon coordinates (WGS84 coordinate referece system) of class `bbox`
 #' @param endpoint URL of the STAC API endpoint. To be provided together with
 #'   `stac_collection`, or leave blank to use defaults (see
 #'   [`default_stac_dem`])
@@ -107,7 +128,17 @@ delineate_valley <- function(dem, river) {
 #' @examplesIf interactive()
 #' bb <- get_osm_bb("Bucharest")
 #' get_stac_asset_urls(bb)
+#'
+#' # Use non-default STAC API
+#' get_stac_asset_urls(bb,
+#'                     endpoint = "some endpoint",
+#'                     collection = "some collection")
 get_stac_asset_urls <- function(bb, endpoint = NULL, collection = NULL) {
+  # Check input
+  bbox <- as_bbox(bb)
+  checkmate::assert_character(endpoint, len = 1, null.ok = TRUE)
+  checkmate::assert_character(collection, len = 1, null.ok = TRUE)
+
   if (is.null(endpoint) && is.null(collection)) {
     endpoint <- default_stac_dem$endpoint
     collection <- default_stac_dem$collection
@@ -120,7 +151,6 @@ get_stac_asset_urls <- function(bb, endpoint = NULL, collection = NULL) {
     stop("Provide both or neither of STAC endpoint and collection")
   }
 
-  bbox <- as_bbox(bb)
   rstac::stac(endpoint) |>
     rstac::stac_search(collections = collection, bbox = bbox) |>
     rstac::get_request() |>
@@ -135,6 +165,7 @@ get_stac_asset_urls <- function(bb, endpoint = NULL, collection = NULL) {
 #'
 #' @param bb A bounding box, provided either as a matrix (rows for "x", "y",
 #'   columns for "min", "max") or as a vector ("xmin", "ymin", "xmax", "ymax")
+#'   of class `bbox`.
 #' @param tile_urls A list of tiles where to read the DEM data from
 #' @param force_download Download data even if cached data is available
 #'
@@ -143,11 +174,14 @@ get_stac_asset_urls <- function(bb, endpoint = NULL, collection = NULL) {
 #' @examplesIf interactive()
 #' bb <- get_osm_bb("Bucharest")
 #' tile_urls <- get_stac_asset_urls(bb)
-#' load_dem(bb, tile_urls)
+#' load_dem(bb, tile_urls, force_download = TRUE)
 #' @srrstats {G4.0} DEM data is written to cache with a file name concatenated
 #'   from tile names and boundig box coordinates.
 load_dem <- function(bb, tile_urls, force_download = FALSE) {
+  # Check input
   bbox <- as_bbox(bb)
+  checkmate::assert_character(tile_urls, min.len = 1)
+  checkmate::assert_logical(force_download, len = 1)
 
   filepath <- get_dem_cache_filepath(tile_urls, bbox)
 
@@ -161,37 +195,6 @@ load_dem <- function(bb, tile_urls, force_download = FALSE) {
   write_data_to_cache(dem, filepath, wrap = TRUE)
 
   dem
-}
-
-#' Write DEM to cloud optimized GeoTiff file as specified location
-#'
-#' @param dem to write to file
-#' @param fpath filepath for output. If no output directory is specified
-#' (see below) fpath is parsed to determine
-#' the output directory
-#' @param output_directory where file should be written.
-#' If specified fpath is treated as filename only.
-#'
-#' @return The input DEM. This function is used for the side-effect of writing
-#'   values to a file.
-#' @export
-#' @examplesIf interactive()
-#' bucharest_dem <- get_dem_example_data()
-#' dem_to_cog(bucharest_dem, "bucharest_dem.tif")
-dem_to_cog <- function(dem, fpath, output_directory = NULL) {
-  if (is.null(output_directory)) {
-    filename <- basename(fpath)
-    directory_name <- dirname(fpath)
-  } else {
-    filename <- fpath
-    directory_name <- output_directory
-  }
-  data_dir <- directory_name
-  terra::writeRaster(
-                     x = dem,
-                     filename = sprintf("%s/%s", data_dir, filename),
-                     filetype = "COG",
-                     overwrite = TRUE)
 }
 
 #' Spatially smooth dem by (window) filtering

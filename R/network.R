@@ -1,21 +1,31 @@
 #' Create a network from a collection of line strings.
 #'
-#' @param edges A data frame with the network edges
+#' @param edges An `sfc_LINESTRING` object with the network edges
 #' @param flatten Whether all intersections between edges should be
 #'   converted to nodes
 #' @param clean Whether general cleaning tasks should be run on the generated
 #'   network (see [`clean_network()`] for the description of tasks)
 #'
-#' @return A spatial network object
+#' @return A spatial network object of class `sfnetwork`
 #' @export
 #' @examples
 #' edges <- sf::st_sfc(
 #'   sf::st_linestring(matrix(c(0, 0, 1, 1), ncol = 2, byrow = TRUE)),
-#'   sf::st_linestring(matrix(c(0, 1, 1, 0), ncol = 2, byrow = TRUE))
+#'   sf::st_linestring(matrix(c(0, 1, 1, 0), ncol = 2, byrow = TRUE)),
+#'   crs = sf::st_crs("EPSG:4326")
 #' )
-#' sf::st_crs(edges) <- sf::st_crs("EPSG:4326")
+#'
+#' # Run with default values
 #' as_network(edges)
+#'
+#' # Only build the spatial network
+#' as_network(edges, flatten = FALSE, clean = FALSE)
 as_network <- function(edges, flatten = TRUE, clean = TRUE) {
+  # Check input
+  checkmate::assert_true(inherits(edges, c("sf", "sfc")))
+  checkmate::assert_logical(flatten, len = 1)
+  checkmate::assert_logical(clean, len = 1)
+
   network <- sfnetworks::as_sfnetwork(edges, directed = FALSE)
   if (flatten) network <- flatten_network(network)
   if (clean) network <- clean_network(network)
@@ -34,9 +44,9 @@ as_network <- function(edges, flatten = TRUE, clean = TRUE) {
 #' [`sfnetworks::st_network_blend()`], but in that case an external point is
 #' only injected to the closest edge.
 #'
-#' @param network A network object
+#' @param network A network object of class `sfnetwork`
 #'
-#' @return A network object with additional points at intersections
+#' @return An `sfnetwork` object with additional points at intersections
 #' @export
 #' @examples
 #' bucharest_osm <- get_osm_example_data()
@@ -71,7 +81,7 @@ flatten_network <- function(network) {
 #' @noRd
 get_crossing_edges <- function(edges) {
   geometry <- sf::st_geometry(edges)
-  crossings <- sf::st_crosses(geometry)
+  crossings <- sf::st_crosses(geometry) |> suppressMessages()
   mask <- lengths(crossings) > 0
   sf::st_sf(id = which(mask), geometry = geometry[mask])
 }
@@ -81,7 +91,7 @@ get_crossing_edges <- function(edges) {
 #' @noRd
 get_intersection_points <- function(edges) {
   # make sure edges is an sf object, so st_intersection also returns origins
-  intersections <- sf::st_intersection(sf::st_sf(edges))
+  intersections <- sf::st_intersection(sf::st_sf(edges)) |> suppressMessages()
   # only consider (multi-)point intersections
   points <- sf::st_collection_extract(intersections, type = "POINT")
   # cast multipoint intersections to points
@@ -183,11 +193,11 @@ calc_rolling_sum <- function(x, n = 2) {
 #' and discard all but the main connected component.
 # nolint end
 #'
-#' @param network A network object
+#' @param network A network object of class `sfnetwork`
 #' @param simplify Whether the network should be simplified with
 #'   [`simplify_network()`]
 #'
-#' @return A cleaned network object
+#' @return A cleaned network object of class `sfnetwork`
 #' @export
 #' @examplesIf interactive()
 #' bucharest_osm <- get_osm_example_data()
@@ -196,9 +206,13 @@ calc_rolling_sum <- function(x, n = 2) {
 #' network <- sfnetworks::as_sfnetwork(edges, directed = FALSE)
 #' clean_network(network)
 clean_network <- function(network, simplify = TRUE) {
+  # Check input
+  checkmate::assert_class(network, "sfnetwork")
+  checkmate::assert_logical(simplify, len = 1)
+
   # subdivide edges by adding missing nodes
   net <- tidygraph::convert(network, sfnetworks::to_spatial_subdivision,
-                            .clean = TRUE)
+                            .clean = TRUE) |> suppressWarnings()
   # run simplification steps
   if (simplify) net <- simplify_network(net)
   # remove pseudo-nodes
@@ -262,6 +276,9 @@ simplify_network <- function(network) {
 #' @return A network object with weights added as a column in the edge table
 #' @importFrom rlang :=
 #' @keywords internal
+#'
+#' @srrstats {G2.4, G2.4b} Explicit conversion of logical vector to numeric with
+#' `as.numeric()` used for calculating penalty weights.
 add_weights <- function(network, target = NULL, exclude_area = NULL,
                         penalty = 1000., weight_name = "weight") {
   edges <- sf::st_geometry(sf::st_as_sf(network, "edges"))

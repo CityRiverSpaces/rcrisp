@@ -119,7 +119,7 @@ test_that("River banks for a simple river gives two regions", {
   river <- sf::st_sfc(sf::st_linestring(cbind(c(-2, 0, 0), c(0, 0, -2))))
   regions <- get_river_banks(river, width = 1)
   expect_equal(length(regions), 2)
-  expect_true(all(sf::st_geometry_type(regions) == "POLYGON"))
+  expect_true(inherits(regions, "sfc_POLYGON"))
 })
 
 test_that("River banks for a more complex river still gives two regions", {
@@ -127,8 +127,7 @@ test_that("River banks for a more complex river still gives two regions", {
                                               c(0.5, 0.5, -0.75, -0.75))))
   regions <- get_river_banks(river, width = 2)
   expect_equal(length(regions), 2)
-  expect_true(all(sf::st_geometry_type(regions) == "POLYGON"))
-
+  expect_true(inherits(regions, "sfc_POLYGON"))
 })
 
 test_that("River banks works with real data", {

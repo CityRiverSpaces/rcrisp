@@ -1,7 +1,7 @@
 #' Delineate a corridor around a river.
 #'
-#' @param city_name A place name as a string
-#' @param river_name A river name as a string
+#' @param city_name A character vector of length one
+#' @param river_name A character vector of length one
 #' @param crs The projected Coordinate Reference System (CRS) to use. If not
 #'   provided, the suitable Universal Transverse Mercator (UTM) CRS is selected
 #' @param network_buffer Add a buffer (an integer in meters) around
@@ -41,7 +41,25 @@
 #' @return A list with the corridor, segments, and riverspace geometries
 #' @export
 #' @examplesIf interactive()
-#' delineate("Bucharest", "Dâmbovița")
+#' # Set parameters
+#' city <- "Bucharest"
+#' river <- "Dâmbovița"
+#'
+#' # Delineate with defaults
+#' delineate(city, river)
+#'
+#' # Use custom CRS
+#' get_osmdata(city, river, crs = "EPSG:31600")  # National projected CRS
+#'
+#' # Use custom network buffer
+#' delineate(city, river, network_buffer = 3500)
+#'
+#' # Use custom buildings buffer
+#' delineate(city, river, buildings_buffer = 150, riverspace = TRUE)
+#'
+#' # Provide DEM as input
+#' bucharest_dem <- get_dem_example_data()
+#' delineate(city, river, dem = bucharest_dem)
 delineate <- function(
   city_name, river_name, crs = NULL, network_buffer = NULL,
   buildings_buffer = NULL, corridor_init = "valley", dem = NULL,
@@ -49,6 +67,13 @@ delineate <- function(
   angle_threshold = 100, corridor = TRUE, segments = FALSE,
   riverspace = FALSE, force_download = FALSE, ...
 ) {
+  # Check input
+  checkmate::assert_character(city_name, len = 1)
+  checkmate::assert_character(river_name, len = 1)
+  checkmate::assert_logical(corridor, len = 1)
+  checkmate::assert_logical(segments, len = 1)
+  checkmate::assert_logical(riverspace, len = 1)
+  checkmate::assert_logical(force_download, len = 1)
 
   delineations <- list()
 

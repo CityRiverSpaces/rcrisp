@@ -8,7 +8,7 @@ clear_cache(before_date = NULL)
 }
 \arguments{
 \item{before_date}{Date before which cache files should be removed provided
-as Date}
+as \code{Date}}
 }
 \value{
 List of file paths of removed files
@@ -18,6 +18,11 @@ Remove files from cache directory either before a given date or entirely.
 }
 \examples{
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+# Clear all cache
 clear_cache()
+
+# Clear cache before given date
+before_date <- as.Date("1-1-1999", "\%m-\%d-\%Y")
+clear_cache(before_date)
 \dontshow{\}) # examplesIf}
 }

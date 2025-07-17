@@ -36,7 +36,7 @@ specified, the default is the UTM zone for the city.}
 \item{force_download}{Download data even if cached data is available}
 }
 \value{
-An list with the retrieved OpenStreetMap data sets for the
+A list with the retrieved OpenStreetMap data sets for the
 given location
 }
 \description{
@@ -46,6 +46,22 @@ railways, and the buildings
 }
 \examples{
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-get_osmdata("Bucharest", "Dâmbovița")
+# Set parameters
+city <- "Bucharest"
+river <- "Dâmbovița"
+
+# Get OSM data with defaults
+get_osmdata(city, river)
+
+# Use custom network buffer
+get_osmdata(city, river, network_buffer = 3500)
+
+# Use custom buildings buffer
+get_osmdata(city, river, buildings_buffer = 150)
+
+# Use custom CRS
+bb <- get_osm_bb(city)
+crs <- 31600  # National projected CRS
+get_osmdata(city, river, crs = crs)
 \dontshow{\}) # examplesIf}
 }

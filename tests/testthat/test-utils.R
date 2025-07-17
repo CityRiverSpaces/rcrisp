@@ -74,7 +74,9 @@ test_that("a vector is correctly converted to a bbox", {
 })
 
 test_that("a sf object is correctly converted to a bbox", {
-  linestring <- sf::st_linestring(matrix(c(0, 1, 2, 3), ncol = 2, byrow = TRUE))
+  linestring <- sf::st_sfc(
+    sf::st_linestring(matrix(c(0, 1, 2, 3), ncol = 2, byrow = TRUE))
+  )
   bbox <- as_bbox(linestring)
   expect_true(inherits(bbox, "bbox"))
   expect_true(all(as.vector(bbox) == c(0, 1, 2, 3)))
@@ -119,7 +121,7 @@ test_that("Buffer also works without a CRS", {
   x <- sf::st_sfc(sf::st_linestring(cbind(c(-2, 0), c(0, -2))))
   x_buff <- buffer(x, 1)
   expect_true(is.na(sf::st_crs(x_buff)))
-  expect_equal(as.character(sf::st_geometry_type(x_buff)), "POLYGON")
+  expect_true(inherits(x_buff, c("sfc_POLYGON", "sfc_MULTIPOLYGON")))
 })
 
 test_that("River buffer implements a buffer function", {
@@ -150,6 +152,9 @@ test_that("River buffer throws error if wrong 'side' value is provided", {
   )
 })
 
+#' @srrstatsTODO {G2.4, G2.4a} Explicit conversion to integer with
+#'   `as.integer()` used to test `reproject()` with different ways of providing
+#'   CRS input.
 test_that("reproject works with raster data", {
   # raster in UTM zone 2 (lon between -174 and -168 deg), northern emisphere
   x <- terra::rast(xmin = -174, xmax = -168, ymin = 45, ymax = 51, res = 1,
