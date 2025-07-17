@@ -60,10 +60,6 @@
 #' # Provide DEM as input
 #' bucharest_dem <- get_dem_example_data()
 #' delineate(city, river, dem = bucharest_dem)
-#'
-#' @srrstats {G2.0} The function asserts that only one city and one river can
-#'   be delineated at a time. It is made explicit in the description of those
-#'   two parameters that they should be of length one.
 delineate <- function(
   city_name, river_name, crs = NULL, network_buffer = NULL,
   buildings_buffer = NULL, corridor_init = "valley", dem = NULL,
@@ -72,16 +68,14 @@ delineate <- function(
   riverspace = FALSE, force_download = FALSE, ...
 ) {
   # Check input
+  checkmate::assert_character(city_name, len = 1)
+  checkmate::assert_character(river_name, len = 1)
   checkmate::assert_logical(corridor, len = 1)
   checkmate::assert_logical(segments, len = 1)
   checkmate::assert_logical(riverspace, len = 1)
   checkmate::assert_logical(force_download, len = 1)
 
   delineations <- list()
-
-  if (length(city_name) > 1 || length(river_name) > 1) {
-    stop("Only one city and one river can be delineated at a time.")
-  }
 
   if (segments && !corridor) stop("Segmentation requires corridor delineation.")
 
