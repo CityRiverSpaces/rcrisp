@@ -30,8 +30,9 @@ buildings data will be downloaded}
 \item{city_boundary}{A logical indicating if the city boundary should be
 retrieved. Default is TRUE.}
 
-\item{crs}{An integer with the EPSG code for the projection. If no CRS is
-specified, the default is the UTM zone for the city.}
+\item{crs}{An integer or character vector of length one with the EPSG code
+for the projection. If no CRS is specified, the default is the UTM zone
+for the city.}
 
 \item{force_download}{Download data even if cached data is available}
 }
@@ -60,8 +61,6 @@ get_osmdata(city, river, network_buffer = 3500)
 get_osmdata(city, river, buildings_buffer = 150)
 
 # Use custom CRS
-bb <- get_osm_bb(city)
-crs <- 31600  # National projected CRS
-get_osmdata(city, river, crs = crs)
+get_osmdata(city, river, crs = "EPSG:31600")  # National projected CRS
 \dontshow{\}) # examplesIf}
 }

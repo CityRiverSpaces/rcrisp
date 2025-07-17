@@ -8,7 +8,7 @@ clear_cache(before_date = NULL)
 }
 \arguments{
 \item{before_date}{Date before which cache files should be removed provided
-as \code{Date}}
+as \code{Date} (or as a character string accepted by \code{\link[=as.Date]{as.Date()}})}
 }
 \value{
 List of file paths of removed files
