@@ -20,12 +20,13 @@ test_that("Delineate returns all required delineation units", {
                                                  corridor = TRUE,
                                                  segments = TRUE,
                                                  riverspace = TRUE) |>
+                         suppressMessages() |>
                          suppressWarnings())
   expect_setequal(names(delineations),
                   c("valley", "corridor", "segments", "riverspace"))
-  geometry_types <- sapply(delineations, sf::st_geometry_type)
-  # segments include multiple geometries, flatten array for comparison
-  expect_in(do.call(c, geometry_types), c("POLYGON", "MULTIPOLYGON"))
+  expect_true(all(sapply(
+    delineations, \(x) inherits(x, c("sfc_POLYGON", "sfc_MULTIPOLYGON"))
+  )))
 })
 
 test_that("Delineate does not return the valley if the buffer method is used", {
@@ -47,4 +48,11 @@ test_that("Delineate does not return the valley if the buffer method is used", {
                                                  riverspace = FALSE) |>
                          suppressWarnings())
   expect_equal(names(delineations), "corridor")
+})
+
+test_that("Only one city and one river can be delineated at a time", {
+  expect_error(delineate(c("Bucharest", "Cluj-Napoca"), "Dâmbovița"),
+               "Assertion on 'city_name' failed: Must have length 1")
+  expect_error(delineate("Bucharest", c("Dâmbovița", "SomeOtherRiver")),
+               "Assertion on 'river_name' failed: Must have length 1")
 })

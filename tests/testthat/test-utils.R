@@ -121,7 +121,7 @@ test_that("Buffer also works without a CRS", {
   x <- sf::st_sfc(sf::st_linestring(cbind(c(-2, 0), c(0, -2))))
   x_buff <- buffer(x, 1)
   expect_true(is.na(sf::st_crs(x_buff)))
-  expect_equal(as.character(sf::st_geometry_type(x_buff)), "POLYGON")
+  expect_true(inherits(x_buff, c("sfc_POLYGON", "sfc_MULTIPOLYGON")))
 })
 
 test_that("River buffer implements a buffer function", {
@@ -143,6 +143,9 @@ test_that("River buffer can trim to the region of interest", {
   expect_true(covers)
 })
 
+#' @srrstatsTODO {G2.4, G2.4a} Explicit conversion to integer with
+#'   `as.integer()` used to test `reproject()` with different ways of providing
+#'   CRS input.
 test_that("reproject works with raster data", {
   # raster in UTM zone 2 (lon between -174 and -168 deg), northern emisphere
   x <- terra::rast(xmin = -174, xmax = -168, ymin = 45, ymax = 51, res = 1,

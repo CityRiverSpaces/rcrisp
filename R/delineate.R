@@ -1,7 +1,7 @@
 #' Delineate a corridor around a river.
 #'
-#' @param city_name A place name as a string
-#' @param river_name A river name as a string
+#' @param city_name A character vector of length one
+#' @param river_name A character vector of length one
 #' @param crs The projected Coordinate Reference System (CRS) to use. If not
 #'   provided, the suitable Universal Transverse Mercator (UTM) CRS is selected
 #' @param network_buffer Add a buffer (an integer in meters) around
@@ -68,6 +68,8 @@ delineate <- function(
   riverspace = FALSE, force_download = FALSE, ...
 ) {
   # Check input
+  checkmate::assert_character(city_name, len = 1)
+  checkmate::assert_character(river_name, len = 1)
   checkmate::assert_logical(corridor, len = 1)
   checkmate::assert_logical(segments, len = 1)
   checkmate::assert_logical(riverspace, len = 1)
