@@ -168,8 +168,9 @@ select_nonintersecting_lines <- function(lines, corridor) {
   } else {
     # Identify the line with maximum number of intersections
     intersecting_lines <- intersections[["origins"]]
-    num_intersections <- sapply(seq_len(length(lines)),
-                                \(x) sum(unlist(intersecting_lines) == x))
+    num_intersections <- vapply(seq_len(length(lines)),
+                                \(x) sum(unlist(intersecting_lines) == x),
+                                numeric(1))
     max_intersections <- max(num_intersections)
     idx_line_max_intersections <- which(num_intersections == max_intersections)
     # Among these, find the longest one
