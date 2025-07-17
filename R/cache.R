@@ -161,7 +161,7 @@ clear_cache <- function(before_date = NULL) {
     file.remove(files_before_date)
     files_remaining <- list.files(cache_dir, full.names = TRUE)
     if (all(!files_before_date %in% files_remaining)) {
-      message("Cache files successfully removed.")
+      message("Cache files before date successfully removed.")
     }
   } else {
     file.remove(files)

@@ -50,6 +50,29 @@ test_that("Delineate does not return the valley if the buffer method is used", {
   expect_equal(names(delineations), "corridor")
 })
 
+test_that("If `network_buffer` is not specified, the default value is used", {
+  expect_message(with_mocked_bindings(get_osmdata = \(...) bucharest_osm,
+                                      get_dem = \(...) bucharest_dem,
+                                      delineate(city_name = "Bucharest",
+                                                river_name = "Dâmbovița",
+                                                crs = 32635) |>
+                                        suppressWarnings()),
+                 paste0("The default `network_buffer` of 3000 m ",
+                        "is used for corridor delineation."))
+})
+
+test_that("If `buildings_buffer` is not specified, the default value is used", {
+  expect_message(with_mocked_bindings(get_osmdata = \(...) bucharest_osm,
+                                      get_dem = \(...) bucharest_dem,
+                                      delineate(city_name = "Bucharest",
+                                                river_name = "Dâmbovița",
+                                                crs = 32635,
+                                                riverspace = TRUE) |>
+                                        suppressWarnings()),
+                 paste0("The default `buildings_buffer` of 100 m ",
+                        "is used for riverspace delineation."))
+})
+
 test_that("Only one city and one river can be delineated at a time", {
   expect_error(delineate(c("Bucharest", "Cluj-Napoca"), "Dâmbovița"),
                "Assertion on 'city_name' failed: Must have length 1")

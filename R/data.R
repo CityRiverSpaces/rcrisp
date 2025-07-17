@@ -10,4 +10,6 @@
 #'  \item{segments}{Corridor segments of river Dâmbovița.}
 #'  \item{riverspace}{River space of Dâmbovița.}
 #' }
+#' @srrstats {G5.1} The delineation data used in examples and vignettes is made
+#'   available to users.
 "bucharest_dambovita"

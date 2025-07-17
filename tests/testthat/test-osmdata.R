@@ -164,12 +164,13 @@ test_that("City boundary of Bucharest is correctly retrieved", {
   expect_true(inherits(city_boundary, "sfc"))
 })
 
-test_that("Wrong city name returns an empty sfc object", {
-  with_mocked_bindings(
-    osmdata_as_sf = function(...) list(osm_polygons = mock_city_boundary),
-    city_boundary <- get_osm_city_boundary(bb_bucharest, "Buhcarest")
+test_that("Wrong city name raises an error", {
+  expect_error(
+    with_mocked_bindings(
+      osmdata_as_sf = function(...) list(osm_polygons = mock_city_boundary),
+      city_boundary <- get_osm_city_boundary(bb_bucharest, "Buhcarest")
+    )
   )
-  expect_equal(length(city_boundary), 0)
 })
 
 test_that("Multiple boundaries are retreived when requested", {
@@ -180,11 +181,17 @@ test_that("Multiple boundaries are retreived when requested", {
       list(osm_polygons = mock_city_boundary_multiple)
     },
     {
-      city_boundary_multiple <- get_osm_city_boundary(
-        bb_bucharest, "Bucharest", multiple = TRUE
+      expect_message(
+        city_boundary_multiple <- get_osm_city_boundary(
+          bb_bucharest, "Bucharest", multiple = TRUE
+        ),
+        "Multiple boundaries were found. Returning all."
       )
-      city_boundary_single <- get_osm_city_boundary(
-        bb_bucharest, "București", multiple = FALSE
+      expect_message(
+        city_boundary_single <- get_osm_city_boundary(
+          bb_bucharest, "București", multiple = FALSE
+        ),
+        "Multiple boundaries were found. Using the first one."
       )
     }
   )

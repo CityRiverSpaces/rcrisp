@@ -253,3 +253,26 @@ test_that("Capping with 'shortest-path' method raises an error if no network
                          paste("A network should be provided if",
                                "`capping_method = 'shortest-path'`"))
           })
+
+test_that("Warning is raised if the river corridor edge did not converge", {
+  p1 <- sf::st_point(c(-1, 0))
+  p2 <- sf::st_point(c(-1, 1))
+  p3 <- sf::st_point(c(1, 1))
+  p4 <- sf::st_point(c(1, 0))
+  nodes <- sf::st_sfc(p1, p4)
+  edges <- sf::st_as_sf(sf::st_sfc(
+    sf::st_linestring(c(p1, p2, p3, p4))
+  ))
+  edges$from <- 1
+  edges$to <- 2
+  network <- sfnetworks::sfnetwork(nodes = nodes, edges = edges,
+                                   directed = FALSE, force = TRUE,
+                                   node_key = "x")
+  target_edge <- sf::st_sfc(sf::st_linestring(c(p1, p4)))
+
+  expect_warning(corridor_edge(network,
+                               end_points = nodes,
+                               target_edge = target_edge,
+                               max_iterations = 1),
+                 "River corridor edge not converged within 1 iterations")
+})

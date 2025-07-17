@@ -216,7 +216,7 @@ get_osm_city_boundary <- function(bb, city_name, crs = NULL, multiple = FALSE,
   city_boundary <- tryCatch(fetch_boundary("boundary", "administrative"),
                             error = function(e) NULL)
 
-  if (is.null(city_boundary)) {
+  if (is.null(city_boundary) || length(city_boundary) == 0) {
     stop("No city boundary found. The city name may be incorrect.")
   }
 

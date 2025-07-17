@@ -2,7 +2,17 @@
 #'
 #' This function retrieves example OpenStreetMap (OSM) data from a persistent
 #' URL on the 4TU.ResearchData data repository, and it can be used in examples
-#' and tests.
+#' and tests. The code used to generate the example dataset is available at
+#' https://github.com/CityRiverSpaces/CRiSpExampleData
+#'
+#' @srrstats {G5.0} The dataset used in examples, tests and vignettes is
+#'   retrieved from a persistent location on a data repository. The dataset
+#'   follows FAIR data standards and thus its properties are described in
+#'   detail.
+#' @srrstats {G5.1} The example dataset is made generally available to users
+#'   through the `get_osm_example_data()` function which retrieves the data
+#'   from a persistent URL. The code used to generate the example dataset is
+#'   publicly available, as described in the Roxygen comments.
 #'
 #' @return A list of sf objects containing the OSM data.
 #' @importFrom utils download.file
@@ -12,9 +22,7 @@
 #' @examplesIf interactive()
 #' get_osm_example_data()
 get_osm_example_data <- function() {
-  # nolint start
-  url_osm <- "https://data.4tu.nl/file/f5d5e118-b5bd-4dfb-987f-fe10d1b9b386/f519315e-b92d-4815-b924-3175bd2a7a61"
-  # nolint end
+  url_osm <- "https://data.4tu.nl/file/f5d5e118-b5bd-4dfb-987f-fe10d1b9b386/f519315e-b92d-4815-b924-3175bd2a7a61"  # nolint
   temp_file <- tempfile(fileext = ".gpkg")
   # temporarily increate timeout, reset value on exit
   op <- options(timeout = 300)
@@ -29,7 +37,8 @@ get_osm_example_data <- function() {
 #'
 #' This function retrieves example Digital Elevation Model (DEM) data from a
 #' persistent URL on the 4TU.ResearchData data repository, and it can be used
-#' in examples and tests.
+#' in examples and tests. The code used to generate the example dataset is
+#' available at https://github.com/CityRiverSpaces/CRiSpExampleData.
 #'
 #' @return A SpatRaster object containing the DEM data.
 #' @export
@@ -37,8 +46,6 @@ get_osm_example_data <- function() {
 #' @examplesIf interactive()
 #' get_dem_example_data()
 get_dem_example_data <- function() {
-  # nolint start
-  url_dem <- "https://data.4tu.nl/file/f5d5e118-b5bd-4dfb-987f-fe10d1b9b386/9eeee7aa-6005-48d6-ad63-d11c479db88b"
-  # nolint end
+  url_dem <- "https://data.4tu.nl/file/f5d5e118-b5bd-4dfb-987f-fe10d1b9b386/9eeee7aa-6005-48d6-ad63-d11c479db88b"  # nolint
   terra::rast(url_dem)
 }
