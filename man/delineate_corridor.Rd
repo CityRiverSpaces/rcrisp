@@ -14,10 +14,11 @@ delineate_corridor(
 )
 }
 \arguments{
-\item{network}{The spatial network to be used for the delineation}
+\item{network}{The spatial network of class \code{sfnetwork} to be used for the
+delineation}
 
-\item{river}{A (MULTI)LINESTRING simple feature geometry representing the
-river centerline}
+\item{river}{A (MULTI)LINESTRING simple feature geometry of class \code{sf}
+representing the river centerline}
 
 \item{corridor_init}{How to estimate the initial guess of the river corridor.
 It can take the following values:
@@ -38,7 +39,8 @@ points (i.e. to "cap" the corridor). See \code{\link[=cap_corridor]{cap_corridor
 the available methods}
 }
 \value{
-A simple feature geometry representing the river corridor
+A simple feature geometry of class \code{sfc_POLYGON} representing the
+river corridor
 }
 \description{
 The corridor edges on the two river banks are drawn on the provided spatial
@@ -48,8 +50,18 @@ river valley).
 \examples{
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 bucharest_osm <- get_osm_example_data()
-network <- rbind(bucharest_osm$streets, bucharest_osm$railways) |>
-  as_network()
-delineate_corridor(network, bucharest_osm$river_centerline)
+streets <- bucharest_osm$streets
+railways <- bucharest_osm$railways
+river <- bucharest_osm$river_centerline
+
+# Delineate with default values
+network <- rbind(streets, railways) |> as_network()
+delineate_corridor(network, river)
+
+# Delineate with user-specified parameters
+bucharest_dem <- get_dem_example_data()
+corridor_init <- delineate_valley(bucharest_dem, river)
+delineate_corridor(network, river, corridor_init = corridor_init,
+                   max_width = 4000, max_iterations = 5, capping = "direct")
 \dontshow{\}) # examplesIf}
 }

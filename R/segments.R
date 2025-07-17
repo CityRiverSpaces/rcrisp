@@ -3,14 +3,18 @@
 #' Segments are defined as corridor subregions separated by river-crossing
 #' transversal lines that form continuous strokes in the network.
 #'
-#' @param corridor The river corridor as a simple feature geometry
-#' @param network The spatial network to be used for the segmentation
-#' @param river The river centerline as a simple feature geometry
+#' @param corridor The river corridor as a simple feature geometry of class
+#'   `sfc_POLYGON`
+#' @param network The spatial network of class `sfnetwork` to be used for the
+#'   segmentation
+#' @param river The river centerline as a simple feature geometry of class
+#'   `sfc_LINESTRING` or `sfc_MULTILINESTRING`
 #' @param angle_threshold Only consider angles above this threshold (in degrees)
-#'   to form continuous strokes in the network. See [`rcoins::stroke()`] for
-#'   more details.
+#'   to form continuous strokes in the network. A meaningful angle is between
+#'   90 and 180, with the default set to 100. See [`rcoins::stroke()`] for more
+#'   details.
 #'
-#' @return Segment polygons as a simple feature geometry
+#' @return Segment polygons as a simple feature geometry of class `sfc_POLYGON`
 #' @export
 #' @examplesIf interactive()
 #' bucharest_osm <- get_osm_example_data()
@@ -21,6 +25,12 @@
 #' delineate_segments(corridor, network, river)
 delineate_segments <- function(corridor, network, river,
                                angle_threshold = 100) {
+  # Check input
+  checkmate::assert_class(corridor, "sfc_POLYGON")
+  checkmate::assert_class(network, "sfnetwork")
+  checkmate::assert_true(inherits(river, c("sf", "sfc")))
+  checkmate::assert_numeric(angle_threshold, lower = 90, upper = 180)
+
   # Drop all attributes of river but its geometry
   river <- sf::st_geometry(river)
 

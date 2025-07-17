@@ -16,7 +16,7 @@ get_dem(
 \arguments{
 \item{bb}{A bounding box, provided either as a matrix (rows for "x", "y",
 columns for "min", "max") or as a vector ("xmin", "ymin", "xmax", "ymax"),
-in lat/lon coordinates (WGS84 coordinate referece system)}
+in lat/lon coordinates (WGS84 coordinate reference system) of class \code{bbox}}
 
 \item{dem_source}{Source of the DEM:
 \itemize{
@@ -37,14 +37,26 @@ used if \code{dem_source} is \code{"STAC"}). For more info, see
 \item{force_download}{Download data even if cached data is available}
 }
 \value{
-DEM as a terra SpatRaster object
+DEM as a terra \code{SpatRaster} object
 }
 \description{
 Access digital elevation model (DEM) for a given region
 }
 \examples{
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+# Get DEM with default values
 bb <- get_osm_bb("Bucharest")
+crs <- 31600  # National projected CRS
+
+# Get DEM with default values
 get_dem(bb)
+
+# Get DEM from custom STAC endpoint
+get_dem(bb,
+        stac_endpoint = "some endpoint",
+        stac_collection = "some collection")
+
+# Specify CRS
+get_dem(bb, crs = crs)
 \dontshow{\}) # examplesIf}
 }

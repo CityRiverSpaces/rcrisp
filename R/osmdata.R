@@ -14,11 +14,20 @@
 #' @export
 #' @examplesIf interactive()
 #' bb <- get_osm_bb("Bucharest")
-#' osmdata_as_sf("highway", "motorway", bb)
+#' osmdata_as_sf("highway", "motorway", bb, force_download = TRUE)
 #' @srrstats {G4.0} OSM data is saved with a file name concatenated from the
 #'   OSM "key", "value" and "bbox" coordinates.
 osmdata_as_sf <- function(key, value, aoi, force_download = FALSE) {
+  # Check input
+  checkmate::assert_character(key, len = 1)
+  checkmate::assert_character(value, min.len = 1)
+  checkmate::assert_true(inherits(aoi, c("sf", "sfc", "bbox")))
+  checkmate::assert_logical(force_download, len = 1)
+
   bbox <- as_bbox(aoi) # it should be in lat/lon
+
+  key <- tolower(key)
+  value <- tolower(value)
 
   filepath <- get_osmdata_cache_filepath(key, value, bbox)
 
@@ -88,16 +97,34 @@ get_osm_bb <- function(city_name) {
 #'   specified, the default is the UTM zone for the city.
 #' @param force_download Download data even if cached data is available
 #'
-#' @return An list with the retrieved OpenStreetMap data sets for the
+#' @return A list with the retrieved OpenStreetMap data sets for the
 #'         given location
 #' @export
 #'
 #' @examplesIf interactive()
-#' get_osmdata("Bucharest", "Dâmbovița")
+#' # Set parameters
+#' city <- "Bucharest"
+#' river <- "Dâmbovița"
+#'
+#' # Get OSM data with defaults
+#' get_osmdata(city, river)
+#'
+#' # Use custom network buffer
+#' get_osmdata(city, river, network_buffer = 3500)
+#'
+#' # Use custom buildings buffer
+#' get_osmdata(city, river, buildings_buffer = 150)
+#'
+#' # Use custom CRS
+#' get_osmdata(city, river, crs = "EPSG:31600")  # National projected CRS
 get_osmdata <- function(
   city_name, river_name, network_buffer = NULL, buildings_buffer = NULL,
   city_boundary = TRUE, crs = NULL, force_download = FALSE
 ) {
+  # Check input
+  checkmate::assert_logical(force_download, len = 1)
+  checkmate::assert_logical(city_boundary, len = 1)
+
   bb <- get_osm_bb(city_name)
   if (is.null(crs)) crs <- get_utm_zone(bb)
 
@@ -170,6 +197,10 @@ get_osmdata <- function(
 #' get_osm_city_boundary(bb, "Bucharest", crs)
 get_osm_city_boundary <- function(bb, city_name, crs = NULL, multiple = FALSE,
                                   force_download = FALSE) {
+  # Check input
+  checkmate::assert_logical(multiple, len = 1)
+  checkmate::assert_logical(force_download, len = 1)
+
   # Drop country if specified after comma
   city_name_clean <- stringr::str_extract(city_name, "^[^,]+")
   # Define a helper function to fetch the city boundary
@@ -218,6 +249,9 @@ get_osm_city_boundary <- function(bb, city_name, crs = NULL, multiple = FALSE,
 #' crs <- get_utm_zone(bb)
 #' get_osm_river(bb, "Dâmbovița", crs)
 get_osm_river <- function(bb, river_name, crs = NULL, force_download = FALSE) {
+  # Check input
+  checkmate::assert_logical(force_download, len = 1)
+
   # Get the river centreline
   river_centerline <- osmdata_as_sf("waterway", "", bb,
                                     force_download = force_download)
@@ -286,11 +320,27 @@ get_osm_river <- function(bb, river_name, crs = NULL, force_download = FALSE) {
 #' @importFrom rlang !! sym
 #'
 #' @examplesIf interactive()
+#' # Set parameters
 #' bb <- get_osm_bb("Bucharest")
-#' crs <- get_utm_zone(bb)
+#' crs <- 31600  # National projected CRS
+#'
+#' # Get streets with default values
 #' get_osm_streets(bb, crs)
+#'
+#' # Specify street categories to be retrieved
+#' highway_values <- "primary"
+#' get_osm_streets(bb, crs, highway_values = highway_values)
+#'
+#' # Ensure that data is not retrieved from cache
+#' get_osm_streets(bb, crs, force_download = TRUE)
 get_osm_streets <- function(aoi, crs = NULL, highway_values = NULL,
                             force_download = FALSE) {
+  # Check input
+  checkmate::assert_true(inherits(aoi, c("sf", "sfc", "bbox")))
+  checkmate::assert_numeric(crs, null.ok = TRUE)
+  checkmate::assert_character(highway_values, null.ok = TRUE)
+  checkmate::assert_logical(force_download, len = 1)
+
   if (is.null(highway_values)) {
     highway_values <- c("motorway", "trunk", "primary", "secondary", "tertiary")
     link_values <- vapply(X = highway_values,
@@ -343,6 +393,11 @@ get_osm_streets <- function(aoi, crs = NULL, highway_values = NULL,
 #' get_osm_railways(bb, crs)
 get_osm_railways <- function(aoi, crs = NULL, railway_values = "rail",
                              force_download = FALSE) {
+  # Check input
+  checkmate::assert_character(railway_values)
+  checkmate::assert_logical(force_download, len = 1)
+
+  railway_values <- tolower(railway_values)
   railways <- osmdata_as_sf("railway", railway_values, aoi,
                             force_download = force_download)
   # If no railways are found, return an empty sf object
@@ -381,6 +436,9 @@ get_osm_railways <- function(aoi, crs = NULL, railway_values = "rail",
 #' crs <- get_utm_zone(bb)
 #' get_osm_buildings(bb, crs)
 get_osm_buildings <- function(aoi, crs = NULL, force_download = FALSE) {
+  # Check input
+  checkmate::assert_logical(force_download, len = 1)
+
   buildings <- osmdata_as_sf("building", "", aoi,
                              force_download = force_download)
   buildings <- buildings$osm_polygons |>
@@ -398,9 +456,9 @@ get_osm_buildings <- function(aoi, crs = NULL, force_download = FALSE) {
 #' a city
 #'
 #' @param river A list with the river centreline and surface geometries
-#' @param city_bbox Bounding box around the city
+#' @param city_bbox Bounding box of class `bbox` around the city
 #' @param buffer_distance Buffer size around the river
-#' @return An sf object in lat/lon coordinates
+#' @return An `sfc_POLYGON` object in lat/lon coordinates
 #' @export
 #'
 #' @examplesIf interactive()
@@ -408,6 +466,9 @@ get_osm_buildings <- function(aoi, crs = NULL, force_download = FALSE) {
 #' river <- get_osm_river(bb, "Dâmbovița")
 #' get_river_aoi(river, bb, buffer_distance = 100)
 get_river_aoi <- function(river, city_bbox, buffer_distance) {
+  # Check input
+  checkmate::assert_numeric(buffer_distance, len = 1)
+
   river <- c(river$centerline, river$surface)
 
   # Make sure crs are the same for cropping with bb

@@ -74,7 +74,9 @@ test_that("a vector is correctly converted to a bbox", {
 })
 
 test_that("a sf object is correctly converted to a bbox", {
-  linestring <- sf::st_linestring(matrix(c(0, 1, 2, 3), ncol = 2, byrow = TRUE))
+  linestring <- sf::st_sfc(
+    sf::st_linestring(matrix(c(0, 1, 2, 3), ncol = 2, byrow = TRUE))
+  )
   bbox <- as_bbox(linestring)
   expect_true(inherits(bbox, "bbox"))
   expect_true(all(as.vector(bbox) == c(0, 1, 2, 3)))
