@@ -22,10 +22,12 @@ test_that("Delineate returns all required delineation units", {
                                                  riverspace = TRUE) |>
                          suppressWarnings())
   expect_setequal(names(delineations),
-                  c("valley", "corridor", "segments", "riverspace"))
+                  c("streets", "railways", "river_centerline", "river_surface",
+                    "valley", "corridor", "segments", "riverspace"))
   geometry_types <- sapply(delineations, sf::st_geometry_type)
   # segments include multiple geometries, flatten array for comparison
-  expect_in(do.call(c, geometry_types), c("POLYGON", "MULTIPOLYGON"))
+  expect_in(do.call(c, geometry_types),
+            c("POLYGON", "MULTIPOLYGON", "LINESTRING", "MULTILINESTRING"))
 })
 
 test_that("Delineate does not return the valley if the buffer method is used", {
@@ -46,5 +48,7 @@ test_that("Delineate does not return the valley if the buffer method is used", {
                                                  segments = FALSE,
                                                  riverspace = FALSE) |>
                          suppressWarnings())
-  expect_equal(names(delineations), "corridor")
+  expect_setequal(names(delineations),
+                  c("streets", "railways", "river_centerline", "river_surface",
+                    "corridor"))
 })

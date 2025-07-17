@@ -45,24 +45,12 @@ library(rcrisp)
 # Set location parameters
 city_name <- "Bucharest"
 river_name <- "Dâmbovița"
-epsg_code <- 32635
-
-# Get base layer for plotting
-bb <- get_osm_bb(city_name)
-streets <- get_osm_streets(bb, epsg_code)$geometry
-railways <- get_osm_railways(bb, epsg_code)$geometry
 
 # Delineate river corridor
 bd <- delineate(city_name, river_name, segments = TRUE)
-corridor <- bd$corridor
-segments <- bd$segments
 
-# Plot results
-plot(corridor)
-plot(railways, col = "darkgrey", add = TRUE, lwd = 0.5)
-plot(streets, add = TRUE)
-plot(segments, border = "orange", add = TRUE, lwd = 3)
-plot(corridor, border = "red", add = TRUE, lwd = 3)
+# Plot delineation object
+plot(bd)
 ```
 
 <img src="man/figures/README-example-1.png" width="100%" />

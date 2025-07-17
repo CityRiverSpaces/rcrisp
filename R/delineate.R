@@ -104,6 +104,11 @@ delineate <- function(
     city_boundary = FALSE, force_download = force_download
   )
 
+  delineations$streets <- osm_data$streets
+  delineations$railways <- osm_data$railways
+  delineations$river_centerline <- osm_data$river_centerline
+  delineations$river_surface <- osm_data$river_surface
+
   # If not provided, determine the CRS
   if (is.null(crs)) crs <- get_utm_zone(osm_data$bb)
 
@@ -153,5 +158,6 @@ delineate <- function(
                                                     osm_data$buildings)
   }
 
+  class(delineations) <- c("delineation", "list")
   delineations
 }
