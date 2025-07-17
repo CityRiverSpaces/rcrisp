@@ -72,16 +72,14 @@ delineate <- function(
   riverspace = FALSE, force_download = FALSE, ...
 ) {
   # Check input
+  checkmate::assert_character(city_name, len = 1)
+  checkmate::assert_character(river_name, len = 1)
   checkmate::assert_logical(corridor, len = 1)
   checkmate::assert_logical(segments, len = 1)
   checkmate::assert_logical(riverspace, len = 1)
   checkmate::assert_logical(force_download, len = 1)
 
   delineations <- list()
-
-  if (length(city_name) > 1 || length(river_name) > 1) {
-    stop("Only one city and one river can be delineated at a time.")
-  }
 
   if (segments && !corridor) stop("Segmentation requires corridor delineation.")
 
