@@ -51,7 +51,7 @@ test_that("Delineate does not return the valley if the buffer method is used", {
 
 test_that("Only one city and one river can be delineated at a time", {
   expect_error(delineate(c("Bucharest", "Cluj-Napoca"), "Dâmbovița"),
-               "Only one city and one river can be delineated at a time.")
+               "Assertion on 'city_name' failed: Must have length 1")
   expect_error(delineate("Bucharest", c("Dâmbovița", "SomeOtherRiver")),
-               "Only one city and one river can be delineated at a time.")
+               "Assertion on 'river_name' failed: Must have length 1")
 })
