@@ -83,7 +83,6 @@ delineate <- function(
   checkmate::assert_numeric(dem_buffer, len = 1)
   checkmate::assert_numeric(max_iterations, len = 1)
   checkmate::assert_choice(capping_method, c("shortest-path", "direct"))
-  checkmate::assert_character(capping_method, len = 1)
   checkmate::assert_numeric(angle_threshold, len = 1)
   checkmate::assert_logical(corridor, len = 1)
   checkmate::assert_logical(segments, len = 1)
