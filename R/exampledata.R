@@ -11,7 +11,7 @@
 #'   detail.
 #' @srrstats {G5.1} The example dataset is made generally available to users
 #'   through the `get_osm_example_data()` function which retrieves the data
-#'   from a persistent URL. The code used to generate the example dataset is 
+#'   from a persistent URL. The code used to generate the example dataset is
 #'   publicly available, as described in the Roxygen comments.
 #'
 #' @return A list of sf objects containing the OSM data.
