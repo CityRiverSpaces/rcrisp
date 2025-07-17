@@ -220,7 +220,8 @@ test_that("reproject works with bbox", {
 })
 
 test_that("reproject does not work with objects of unknown type", {
-  expect_error(reproject(1, 4326), "Cannot reproject object type: numeric")
+  expect_error(reproject(1, 4326),
+               "Must inherit from class 'SpatRaster'/'sf'/'sfc'")
 })
 
 test_that("load_raster correctly retrieve and merge local data", {
