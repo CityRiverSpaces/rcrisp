@@ -128,7 +128,7 @@ get_osmdata <- function(
   # Check input
   checkmate::assert_character(city_name, len = 1)
   checkmate::assert_character(river_name, len = 1)
-  checkmate::assert_numeric(network_buffer, null.ok = TRUE)
+  checkmate::assert_numeric(network_buffer, len = 1, null.ok = TRUE)
   checkmate::assert_numeric(buildings_buffer, null.ok = TRUE)
   checkmate::assert_logical(city_boundary, len = 1)
   checkmate::assert_multi_class(crs, c("numeric", "character"), null.ok = TRUE)
