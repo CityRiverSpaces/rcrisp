@@ -45,7 +45,7 @@ delineate_corridor <- function(
 ) {
   # Check input
   checkmate::assert_class(network, "sfnetwork")
-  checkmate::assert_true(inherits(river, c("sf", "sfc")))
+  checkmate::assert_multi_class(river, c("sf", "sfc"))
   checkmate::assert_true(
     inherits(corridor_init, c("numeric", "sfc_POLYGON", "sfc_MULTIPOLYGON"))
   )

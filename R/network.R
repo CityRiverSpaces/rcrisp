@@ -22,7 +22,7 @@
 #' as_network(edges, flatten = FALSE, clean = FALSE)
 as_network <- function(edges, flatten = TRUE, clean = TRUE) {
   # Check input
-  checkmate::assert_true(inherits(edges, c("sf", "sfc")))
+  checkmate::assert_multi_class(edges, c("sf", "sfc"))
   checkmate::assert_logical(flatten, len = 1)
   checkmate::assert_logical(clean, len = 1)
 
@@ -55,6 +55,9 @@ as_network <- function(edges, flatten = TRUE, clean = TRUE) {
 #' network <- sfnetworks::as_sfnetwork(edges, directed = FALSE)
 #' flatten_network(network)
 flatten_network <- function(network) {
+  # Check input
+  checkmate::assert_class(network, "sfnetwork")
+
   nodes <- sf::st_as_sf(network, "nodes")
   edges <- sf::st_as_sf(network, "edges")
 

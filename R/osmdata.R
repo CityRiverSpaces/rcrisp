@@ -21,7 +21,7 @@ osmdata_as_sf <- function(key, value, aoi, force_download = FALSE) {
   # Check input
   checkmate::assert_character(key, len = 1)
   checkmate::assert_character(value, min.len = 1)
-  checkmate::assert_true(inherits(aoi, c("sf", "sfc", "bbox")))
+  checkmate::assert_multi_class(aoi, c("sf", "sfc", "bbox", "numeric"))
   checkmate::assert_logical(force_download, len = 1)
 
   bbox <- as_bbox(aoi) # it should be in lat/lon
@@ -65,7 +65,7 @@ osmdata_query <- function(key, value, bb) {
 
 #' Get the bounding box of a city
 #'
-#' @param city_name The name of the city
+#' @param city_name A character vector of length one
 #'
 #' @return A bbox object with the bounding box of the city
 #' @export
@@ -73,6 +73,9 @@ osmdata_query <- function(key, value, bb) {
 #' @examplesIf interactive()
 #' get_osm_bb("Bucharest")
 get_osm_bb <- function(city_name) {
+  # Check input
+  checkmate::assert_character(city_name, len = 1)
+
   bb <- osmdata::getbb(city_name)
   as_bbox(bb)
 }
@@ -93,8 +96,9 @@ get_osm_bb <- function(city_name) {
 #'   buildings data will be downloaded
 #' @param city_boundary A logical indicating if the city boundary should be
 #'   retrieved. Default is TRUE.
-#' @param crs An integer with the EPSG code for the projection. If no CRS is
-#'   specified, the default is the UTM zone for the city.
+#' @param crs An integer or character vector of length one with the EPSG code
+#'   for the projection. If no CRS is specified, the default is the UTM zone
+#'   for the city.
 #' @param force_download Download data even if cached data is available
 #'
 #' @return A list with the retrieved OpenStreetMap data sets for the
@@ -122,8 +126,14 @@ get_osmdata <- function(
   city_boundary = TRUE, crs = NULL, force_download = FALSE
 ) {
   # Check input
-  checkmate::assert_logical(force_download, len = 1)
+  checkmate::assert_character(city_name, len = 1)
+  checkmate::assert_character(river_name, len = 1)
+  checkmate::assert_numeric(network_buffer, null.ok = TRUE)
+  checkmate::assert_numeric(buildings_buffer, null.ok = TRUE)
   checkmate::assert_logical(city_boundary, len = 1)
+  checkmate::assert_multi_class(crs, c("numeric", "character"), null.ok = TRUE)
+  if (!is.null(crs)) checkmate::assert_vector(crs, len = 1)
+  checkmate::assert_logical(force_download, len = 1)
 
   bb <- get_osm_bb(city_name)
   if (is.null(crs)) crs <- get_utm_zone(bb)
@@ -198,6 +208,10 @@ get_osmdata <- function(
 get_osm_city_boundary <- function(bb, city_name, crs = NULL, multiple = FALSE,
                                   force_download = FALSE) {
   # Check input
+  checkmate::assert_class(bb, "bbox")
+  checkmate::assert_character(city_name, len = 1)
+  checkmate::assert_multi_class(crs, c("numeric", "character"), null.ok = TRUE)
+  if (!is.null(crs)) checkmate::assert_vector(crs, len = 1)
   checkmate::assert_logical(multiple, len = 1)
   checkmate::assert_logical(force_download, len = 1)
 
@@ -250,6 +264,10 @@ get_osm_city_boundary <- function(bb, city_name, crs = NULL, multiple = FALSE,
 #' get_osm_river(bb, "Dâmbovița", crs)
 get_osm_river <- function(bb, river_name, crs = NULL, force_download = FALSE) {
   # Check input
+  checkmate::assert_class(bb, "bbox")
+  checkmate::assert_character(river_name, len = 1)
+  checkmate::assert_multi_class(crs, c("numeric", "character"), null.ok = TRUE)
+  if (!is.null(crs)) checkmate::assert_vector(crs, len = 1)
   checkmate::assert_logical(force_download, len = 1)
 
   # Get the river centreline
@@ -336,8 +354,9 @@ get_osm_river <- function(bb, river_name, crs = NULL, force_download = FALSE) {
 get_osm_streets <- function(aoi, crs = NULL, highway_values = NULL,
                             force_download = FALSE) {
   # Check input
-  checkmate::assert_true(inherits(aoi, c("sf", "sfc", "bbox")))
-  checkmate::assert_numeric(crs, null.ok = TRUE)
+  checkmate::assert_multi_class(aoi, c("sf", "sfc", "bbox"))
+  checkmate::assert_multi_class(crs, c("numeric", "character"), null.ok = TRUE)
+  if (!is.null(crs)) checkmate::assert_vector(crs, len = 1)
   checkmate::assert_character(highway_values, null.ok = TRUE)
   checkmate::assert_logical(force_download, len = 1)
 
@@ -394,6 +413,11 @@ get_osm_streets <- function(aoi, crs = NULL, highway_values = NULL,
 get_osm_railways <- function(aoi, crs = NULL, railway_values = "rail",
                              force_download = FALSE) {
   # Check input
+  checkmate::assert_multi_class(aoi, c("sf", "sfc", "bbox"))
+  checkmate::assert_multi_class(crs,
+                                c("numeric", "character", "crs"),
+                                null.ok = TRUE)
+  if (!is.null(crs)) checkmate::assert_vector(crs, min.len = 1, max.len = 2)
   checkmate::assert_character(railway_values)
   checkmate::assert_logical(force_download, len = 1)
 
@@ -437,6 +461,9 @@ get_osm_railways <- function(aoi, crs = NULL, railway_values = "rail",
 #' get_osm_buildings(bb, crs)
 get_osm_buildings <- function(aoi, crs = NULL, force_download = FALSE) {
   # Check input
+  checkmate::assert_multi_class(aoi, c("sf", "sfc", "bbox"))
+  checkmate::assert_multi_class(crs, c("numeric", "character"), null.ok = TRUE)
+  if (!is.null(crs)) checkmate::assert_vector(crs, len = 1)
   checkmate::assert_logical(force_download, len = 1)
 
   buildings <- osmdata_as_sf("building", "", aoi,
@@ -467,6 +494,9 @@ get_osm_buildings <- function(aoi, crs = NULL, force_download = FALSE) {
 #' get_river_aoi(river, bb, buffer_distance = 100)
 get_river_aoi <- function(river, city_bbox, buffer_distance) {
   # Check input
+  checkmate::assert_multi_class(river, c("list", "sf", "sfc"))
+  checkmate::assert_vector(river, min.len = 1)
+  checkmate::assert_class(city_bbox, "bbox")
   checkmate::assert_numeric(buffer_distance, len = 1)
 
   river <- c(river$centerline, river$surface)

@@ -24,12 +24,12 @@
 #' @param max_iterations Maximum number of iterations employed to refine the
 #'   corridor edges (see [`corridor_edge()`]).
 #' @param capping_method The method employed to connect the corridor edge end
-#'   points (i.e. to "cap" the corridor). See [cap_corridor()] for
-#'   the available methods
+#'   points (i.e., to "cap" the corridor), as character vector of length one.
+#'   See [cap_corridor()] for the available methods.
 #' @param angle_threshold Only network edges forming angles above this threshold
 #'   (in degrees) are considered when forming segment edges. See
-#'  [delineate_segments()] and [rcoins::stroke()]. Only used if `segments` is
-#'  TRUE.
+#'   [delineate_segments()] and [rcoins::stroke()]. Only used if `segments` is
+#'   TRUE.
 #' @param corridor Whether to carry out the corridor delineation
 #' @param segments Whether to carry out the corridor segmentation
 #' @param riverspace Whether to carry out the riverspace delineation
@@ -70,6 +70,21 @@ delineate <- function(
   # Check input
   checkmate::assert_character(city_name, len = 1)
   checkmate::assert_character(river_name, len = 1)
+  checkmate::assert_multi_class(crs, c("numeric", "character"), null.ok = TRUE)
+  if (!is.null(crs)) checkmate::assert_vector(crs, len = 1)
+  checkmate::assert_numeric(network_buffer, null.ok = TRUE, len = 1)
+  checkmate::assert_numeric(buildings_buffer, null.ok = TRUE, len = 1)
+  checkmate::assert_multi_class(corridor_init,
+                                c("numeric", "character", "sf", "sfc"))
+  if (is.character(corridor_init)) {
+    checkmate::assert_choice(corridor_init, "valley")
+  }
+  checkmate::assert_class(dem, "SpatRaster", null.ok = TRUE)
+  checkmate::assert_numeric(dem_buffer, len = 1)
+  checkmate::assert_numeric(max_iterations, len = 1)
+  checkmate::assert_choice(capping_method, c("shortest-path", "direct"))
+  checkmate::assert_character(capping_method, len = 1)
+  checkmate::assert_numeric(angle_threshold, len = 1)
   checkmate::assert_logical(corridor, len = 1)
   checkmate::assert_logical(segments, len = 1)
   checkmate::assert_logical(riverspace, len = 1)
