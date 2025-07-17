@@ -280,8 +280,8 @@ simplify_network <- function(network) {
 #' @importFrom rlang :=
 #' @keywords internal
 #'
-#' @srrstats {G2.4, G2.4b} Explicit conversion of logical vector to numeric with
-#' `as.numeric()` used for calculating penalty weights.
+#' @srrstatsTODO {G2.4, G2.4b} Explicit conversion of logical vector to numeric
+#'   with `as.numeric()` used for calculating penalty weights.
 add_weights <- function(network, target = NULL, exclude_area = NULL,
                         penalty = 1000., weight_name = "weight") {
   edges <- sf::st_geometry(sf::st_as_sf(network, "edges"))
