@@ -31,6 +31,6 @@ edges <- sf::st_sfc(
 # Run with default values
 as_network(edges)
 
-# Run with custom values
+# Only build the spatial network
 as_network(edges, flatten = FALSE, clean = FALSE)
 }

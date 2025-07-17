@@ -18,7 +18,7 @@ delineate_corridor(
 delineation}
 
 \item{river}{A (MULTI)LINESTRING simple feature geometry of class \code{sf}
-representing the river centerline}
+or \code{sfc} representing the river centerline}
 
 \item{corridor_init}{How to estimate the initial guess of the river corridor.
 It can take the following values:
