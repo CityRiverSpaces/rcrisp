@@ -15,6 +15,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Classes of input parameters and return values were specified.
 
+## Changed
+
+- Replaced `sapply()` with `vapply()` throughout the package for improved type safety.
+
 ## Removed
 
 - The `dem_to_ceg()` function was removed from the package as it is not used.
