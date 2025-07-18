@@ -51,7 +51,7 @@ default_stac_dem <- list(
 #'
 #' # Specify CRS
 #' get_dem(bb, crs = crs)
-#' @srrstatsTODO {G2.3, G2.3b} The input character value for `dem_source` is
+#' @srrstats {G2.3, G2.3b} The input character value for `dem_source` is
 #' converted to uppercase using toupper(), making the check case-insensitive.
 #' A validation is then performed to ensure the value is allowed.
 get_dem <- function(bb, dem_source = "STAC", stac_endpoint = NULL,
