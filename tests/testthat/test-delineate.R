@@ -24,8 +24,10 @@ test_that("Delineate returns all required delineation units", {
                          suppressWarnings())
   expect_setequal(names(delineations),
                   c("valley", "corridor", "segments", "riverspace"))
-  expect_true(all(sapply(
-    delineations, \(x) inherits(x, c("sfc_POLYGON", "sfc_MULTIPOLYGON"))
+  expect_true(all(vapply(
+    delineations,
+    \(x) inherits(x, c("sfc_POLYGON", "sfc_MULTIPOLYGON")),
+    logical(1)
   )))
 })
 
