@@ -20,6 +20,7 @@
 #'
 #' # Only build the spatial network
 #' as_network(edges, flatten = FALSE, clean = FALSE)
+#' @srrstatsTODO {G2.7} *Software should accept as input as many of the above standard tabular forms as possible, including extension to domain-specific forms.*
 as_network <- function(edges, flatten = TRUE, clean = TRUE) {
   # Check input
   checkmate::assert_true(inherits(edges, c("sf", "sfc")))
@@ -54,6 +55,7 @@ as_network <- function(edges, flatten = TRUE, clean = TRUE) {
 #'                           bucharest_osm$railways)
 #' network <- sfnetworks::as_sfnetwork(edges, directed = FALSE)
 #' flatten_network(network)
+#' @srrstatsTODO {G2.7} *Software should accept as input as many of the above standard tabular forms as possible, including extension to domain-specific forms.*
 flatten_network <- function(network) {
   nodes <- sf::st_as_sf(network, "nodes")
   edges <- sf::st_as_sf(network, "edges")
@@ -205,6 +207,7 @@ calc_rolling_sum <- function(x, n = 2) {
 #'                           bucharest_osm$railways)
 #' network <- sfnetworks::as_sfnetwork(edges, directed = FALSE)
 #' clean_network(network)
+#' @srrstatsTODO {G2.7} *Software should accept as input as many of the above standard tabular forms as possible, including extension to domain-specific forms.*
 clean_network <- function(network, simplify = TRUE) {
   # Check input
   checkmate::assert_class(network, "sfnetwork")
@@ -279,6 +282,7 @@ simplify_network <- function(network) {
 #'
 #' @srrstats {G2.4, G2.4b} Explicit conversion of logical vector to numeric with
 #' `as.numeric()` used for calculating penalty weights.
+#' @srrstatsTODO {G2.7} *Software should accept as input as many of the above standard tabular forms as possible, including extension to domain-specific forms.*
 add_weights <- function(network, target = NULL, exclude_area = NULL,
                         penalty = 1000., weight_name = "weight") {
   edges <- sf::st_geometry(sf::st_as_sf(network, "edges"))

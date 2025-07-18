@@ -14,6 +14,7 @@
 #'   bucharest_osm <- get_osm_example_data()
 #'   delineate_riverspace(bucharest_osm$river_surface, bucharest_osm$buildings)
 #' }
+#' @srrstatsTODO {G2.7} *Software should accept as input as many of the above standard tabular forms as possible, including extension to domain-specific forms.*
 delineate_riverspace <- function(river, occluders = NULL, density = 1 / 50,
                                  ray_num = 40, ray_length = 100) {
   viewpoints <- visor::get_viewpoints(river, density = density)

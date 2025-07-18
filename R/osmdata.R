@@ -17,6 +17,7 @@
 #' osmdata_as_sf("highway", "motorway", bb, force_download = TRUE)
 #' @srrstats {G4.0} OSM data is saved with a file name concatenated from the
 #'   OSM "key", "value" and "bbox" coordinates.
+#' @srrstatsTODO {G2.7} *Software should accept as input as many of the above standard tabular forms as possible, including extension to domain-specific forms.*
 osmdata_as_sf <- function(key, value, aoi, force_download = FALSE) {
   # Check input
   checkmate::assert_character(key, len = 1)
@@ -465,6 +466,7 @@ get_osm_buildings <- function(aoi, crs = NULL, force_download = FALSE) {
 #' bb <- get_osm_bb("Bucharest")
 #' river <- get_osm_river(bb, "Dâmbovița")
 #' get_river_aoi(river, bb, buffer_distance = 100)
+#' @srrstatsTODO {G2.7} *Software should accept as input as many of the above standard tabular forms as possible, including extension to domain-specific forms.*
 get_river_aoi <- function(river, city_bbox, buffer_distance) {
   # Check input
   checkmate::assert_numeric(buffer_distance, len = 1)

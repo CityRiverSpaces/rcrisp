@@ -39,6 +39,7 @@
 #' corridor_init <- delineate_valley(bucharest_dem, river)
 #' delineate_corridor(network, river, corridor_init = corridor_init,
 #'                    max_width = 4000, max_iterations = 5, capping = "direct")
+#' @srrstatsTODO {G2.7} *Software should accept as input as many of the above standard tabular forms as possible, including extension to domain-specific forms.*
 delineate_corridor <- function(
   network, river, corridor_init = 1000, max_width = 3000, max_iterations = 10,
   capping_method = "shortest-path"
