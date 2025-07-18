@@ -7,7 +7,7 @@
 #'   to document all functions.
 #' @srrstats {G1.4a} All internal functions are documented with
 #'   [`roxygen2`](https://roxygen2.r-lib.org/) and use the `@noRd` tag.
-#' @srrstats {G2.0, G2.0a, G2.1, G2.1a} Assertions are implemented throughput
+#' @srrstats {G2.0, G2.0a, G2.1, G2.1a} Assertions are implemented throughout
 #'   the package for functions which require single- or multi-valued input of a
 #'   certain type using the `checkmate` package. It is made explicit in the
 #'   descriptions of such parameters that they should be of the required length.
