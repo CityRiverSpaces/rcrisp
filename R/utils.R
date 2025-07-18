@@ -51,9 +51,7 @@ get_utm_zone <- function(x) {
 #' st_crs(bb)
 as_bbox <- function(x) {
   # Check input
-  checkmate::assert_true(
-    inherits(x, c("sf", "sfc", "numeric", "matrix", "bbox"))
-  )
+  checkmate::assert_multi_class(x, c("sf", "sfc", "numeric", "matrix", "bbox"))
 
   if (inherits(x, c("numeric", "matrix"))) {
     x <- as.vector(x)
@@ -147,6 +145,13 @@ river_buffer <- function(river, buffer_distance, bbox = NULL, side = NULL) {
 #' r <- terra::rast(matrix(1:12, nrow = 3, ncol = 4), crs = "EPSG:32633")
 #' reproject(r, 4326)
 reproject <- function(x, crs, ...) {
+  # Check input
+  checkmate::assert_multi_class(x, c("SpatRaster", "sf", "sfc", "bbox"))
+  checkmate::assert_multi_class(crs,
+                                c("numeric", "character", "crs", "integer"),
+                                null.ok = TRUE)
+  if (!is.null(crs)) checkmate::assert_vector(crs, min.len = 1, max.len = 2)
+
   if (inherits(x, "SpatRaster")) {
     if (inherits(crs, c("integer", "numeric"))) {
       # terra::crs does not support a numeric value as CRS, convert to character
