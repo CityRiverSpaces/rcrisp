@@ -7,13 +7,10 @@
 #'   to document all functions.
 #' @srrstats {G1.4a} All internal functions are documented with
 #'   [`roxygen2`](https://roxygen2.r-lib.org/) and use the `@noRd` tag.
-#' @srrstats {G2.0} Assertions are implemented throughput the pacakge for
-#'   functions which require single- or multi-valued input using the `checkmate`
-#'   package. It is made explicit in the descriptions of such parameters that
-#'   they should be of the required length.
-#' @srrstatsTODO {G2.0a} Provide explicit secondary documentation of any expectations on lengths of inputs
-#' @srrstatsTODO {G2.1} *Implement assertions on types of inputs (see the initial point on nomenclature above).*
-#' @srrstatsTODO {G2.1a} *Provide explicit secondary documentation of expectations on data types of all vector inputs.*
+#' @srrstats {G2.0, G2.0a, G2.1, G2.1a} Assertions are implemented throughout
+#'   the package for functions which require single- or multi-valued input of a
+#'   certain type using the `checkmate` package. It is made explicit in the
+#'   descriptions of such parameters that they should be of the required length.
 #' @srrstatsTODO {G2.2} *Appropriately prohibit or restrict submission of multivariate input to parameters expected to be univariate.*
 #' @srrstatsTODO {G2.3} *For univariate character input:*
 #' @srrstatsTODO {G2.3a} *Use `match.arg()` or equivalent where applicable to only permit expected values.*
