@@ -60,7 +60,7 @@ get_dem <- function(bb, dem_source = "STAC", stac_endpoint = NULL,
   # Check input
   checkmate::assert_logical(force_download, len = 1)
   dem_source <- toupper(dem_source)
-  checkmate::assert_choice(dem_source, "STAC")
+  checkmate::assert_choice(dem_source, c("STAC"))
 
   bbox <- as_bbox(bb)
   if (dem_source == "STAC") {

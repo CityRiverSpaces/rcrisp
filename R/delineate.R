@@ -75,7 +75,7 @@ delineate <- function(
   checkmate::assert_character(river_name, len = 1)
   if (is.character(corridor_init)) {
     corridor_init <- tolower(corridor_init)
-    checkmate::assert_choice(corridor_init, "valley")
+    checkmate::assert_choice(corridor_init, c("valley"))
   }
   checkmate::assert_logical(corridor, len = 1)
   checkmate::assert_logical(segments, len = 1)
