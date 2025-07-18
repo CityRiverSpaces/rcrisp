@@ -23,6 +23,10 @@
 #'   as_network()
 #' river <- bucharest_osm$river_centerline |> sf::st_geometry()
 #' delineate_segments(corridor, network, river)
+#' @srrstats {G2.7} The `network` object provided as input must be of class
+#'   `sfnetwork`. `sfnetwork` objects are `sf`-compatible and are commonly
+#'   used for spatial network analysis. The `river` parameter accepts
+#'   domain-specific tabular input of type `sf`.
 delineate_segments <- function(corridor, network, river,
                                angle_threshold = 100) {
   # Check input
