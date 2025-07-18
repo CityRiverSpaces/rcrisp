@@ -68,27 +68,14 @@ delineate <- function(
   riverspace = FALSE, force_download = FALSE, ...
 ) {
   # Check input
-  checkmate::assert_character(city_name, len = 1)
-  checkmate::assert_character(river_name, len = 1)
   checkmate::assert_multi_class(crs, c("numeric", "character"), null.ok = TRUE)
   if (!is.null(crs)) checkmate::assert_vector(crs, len = 1)
   checkmate::assert_numeric(network_buffer, null.ok = TRUE, len = 1)
   checkmate::assert_numeric(buildings_buffer, null.ok = TRUE, len = 1)
-  checkmate::assert_multi_class(corridor_init,
-                                c("numeric", "character", "sf", "sfc"))
-  if (is.character(corridor_init)) {
-    checkmate::assert_choice(corridor_init, "valley")
-  }
-  checkmate::assert_class(dem, "SpatRaster", null.ok = TRUE)
   checkmate::assert_numeric(dem_buffer, len = 1)
-  checkmate::assert_numeric(max_iterations, len = 1)
-  checkmate::assert_choice(capping_method, c("shortest-path", "direct"))
-  checkmate::assert_character(capping_method, len = 1)
-  checkmate::assert_numeric(angle_threshold, len = 1)
   checkmate::assert_logical(corridor, len = 1)
   checkmate::assert_logical(segments, len = 1)
   checkmate::assert_logical(riverspace, len = 1)
-  checkmate::assert_logical(force_download, len = 1)
 
   delineations <- list()
 
