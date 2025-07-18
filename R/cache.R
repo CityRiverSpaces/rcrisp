@@ -75,7 +75,7 @@ get_dem_cache_filepath <- function(tile_urls, bbox) {
 #' @noRd
 #'
 #' @srrstats {G2.4, G2.4c} Explicit conversion of bounding box coordinates cast
-#'   with `as.charcter()` into string to be used in cache file names.
+#'   with `as.character()` into string to be used in cache file names.
 bbox_as_str <- function(bbox, digits = 3) {
   bbox_rounded <- round(bbox, digits)
   paste(as.character(bbox_rounded), collapse = "_")
