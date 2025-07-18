@@ -39,7 +39,11 @@
 #' corridor_init <- delineate_valley(bucharest_dem, river)
 #' delineate_corridor(network, river, corridor_init = corridor_init,
 #'                    max_width = 4000, max_iterations = 5, capping = "direct")
-#' @srrstatsTODO {G2.7} *Software should accept as input as many of the above standard tabular forms as possible, including extension to domain-specific forms.*
+#' @srrstats {G2.7} The `network` object provided as input must be of class
+#'   `sfnetwork`. `sfnetwork` objects are `sf`-compatible and are commonly used
+#'   for spatial network analysis. The `river` parameter accepts inputs of type
+#'   `sf` and `sfc`. In the current implementation, any other form of tabular
+#'   input is rejected.
 delineate_corridor <- function(
   network, river, corridor_init = 1000, max_width = 3000, max_iterations = 10,
   capping_method = "shortest-path"

@@ -49,7 +49,8 @@ get_utm_zone <- function(x) {
 #' bb <- as_bbox(bounding_coords)
 #' class(bb)
 #' st_crs(bb)
-#' @srrstatsTODO {G2.7} *Software should accept as input as many of the above standard tabular forms as possible, including extension to domain-specific forms.*
+#' @srrstats {G2.7} The `x` parameter accepts `matrix` or domain-specific
+#'   tabular input of type `sf`.
 as_bbox <- function(x) {
   # Check input
   checkmate::assert_true(
@@ -147,7 +148,8 @@ river_buffer <- function(river, buffer_distance, bbox = NULL, side = NULL) {
 #' # Reproject a raster to EPSG:4326
 #' r <- terra::rast(matrix(1:12, nrow = 3, ncol = 4), crs = "EPSG:32633")
 #' reproject(r, 4326)
-#' @srrstatsTODO {G2.7} *Software should accept as input as many of the above standard tabular forms as possible, including extension to domain-specific forms.*
+#' @srrstats {G2.7} The `x` parameter also accepts domain-specific tabular
+#'   input of type `sf`.
 reproject <- function(x, crs, ...) {
   if (inherits(x, "SpatRaster")) {
     if (inherits(crs, c("integer", "numeric"))) {
