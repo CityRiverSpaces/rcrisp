@@ -39,6 +39,9 @@
 #' corridor_init <- delineate_valley(bucharest_dem, river)
 #' delineate_corridor(network, river, corridor_init = corridor_init,
 #'                    max_width = 4000, max_iterations = 5, capping = "direct")
+#' @srrstats {G2.3, G2.3a, G2.3b} The `checkmate` package is used to check that
+#'   `capping_method` only uses allowed choices. The variable is also made
+#'   case-independent with `tolower()`.
 delineate_corridor <- function(
   network, river, corridor_init = 1000, max_width = 3000, max_iterations = 10,
   capping_method = "shortest-path"
@@ -51,6 +54,7 @@ delineate_corridor <- function(
   )
   checkmate::assert_numeric(max_width, len = 1)
   checkmate::assert_numeric(max_iterations, len = 1)
+  capping_method <- tolower(capping_method)
   checkmate::assert_choice(capping_method, c("shortest-path", "direct"))
 
   # Drop all attributes of river but its geometry

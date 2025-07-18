@@ -60,6 +60,9 @@
 #' # Provide DEM as input
 #' bucharest_dem <- get_dem_example_data()
 #' delineate(city, river, dem = bucharest_dem)
+#' @srrstats {G2.3, G2.3a, G2.3b} The `checkmate` package is used to check that
+#'   `corridor_init` only uses allowed values. The variable is also made
+#'   case-independent with `tolower()`.
 delineate <- function(
   city_name, river_name, crs = NULL, network_buffer = NULL,
   buildings_buffer = NULL, corridor_init = "valley", dem = NULL,
@@ -70,6 +73,10 @@ delineate <- function(
   # Check input
   checkmate::assert_character(city_name, len = 1)
   checkmate::assert_character(river_name, len = 1)
+  if (is.character(corridor_init)) {
+    corridor_init <- tolower(corridor_init)
+    checkmate::assert_choice(corridor_init, "valley")
+  }
   checkmate::assert_logical(corridor, len = 1)
   checkmate::assert_logical(segments, len = 1)
   checkmate::assert_logical(riverspace, len = 1)
