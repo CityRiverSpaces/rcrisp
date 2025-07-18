@@ -60,8 +60,6 @@ get_osmdata(city, river, network_buffer = 3500)
 get_osmdata(city, river, buildings_buffer = 150)
 
 # Use custom CRS
-bb <- get_osm_bb(city)
-crs <- 31600  # National projected CRS
-get_osmdata(city, river, crs = crs)
+get_osmdata(city, river, crs = "EPSG:31600")  # National projected CRS
 \dontshow{\}) # examplesIf}
 }

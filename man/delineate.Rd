@@ -24,9 +24,9 @@ delineate(
 )
 }
 \arguments{
-\item{city_name}{A place name as a string}
+\item{city_name}{A character vector of length one}
 
-\item{river_name}{A river name as a string}
+\item{river_name}{A character vector of length one}
 
 \item{crs}{The projected Coordinate Reference System (CRS) to use. If not
 provided, the suitable Universal Transverse Mercator (UTM) CRS is selected}
@@ -95,9 +95,7 @@ river <- "Dâmbovița"
 delineate(city, river)
 
 # Use custom CRS
-bb <- get_osm_bb(city)
-crs <- 31600  # National projected CRS
-get_osmdata(city, river, crs = crs)
+get_osmdata(city, river, crs = "EPSG:31600")  # National projected CRS
 
 # Use custom network buffer
 delineate(city, river, network_buffer = 3500)
