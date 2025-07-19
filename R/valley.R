@@ -289,6 +289,10 @@ mask_cost_distance <- function(cd, river, buffer = 2000) {
 #'
 #' @return characteristic value of cd raster
 #' @keywords internal
+#' @srrstats {G2.15} This function explicitly sets `na.rm = TRUE` when
+#'   calculating the mean of a cost distance raster, which may contain `NA`
+#'   values. This way, the mean is calculated only from valid raster cells,
+#'   ignoring any missing values.
 get_cd_char <- function(cd, method = "mean") {
   if (method == "mean") {
     mean(terra::values(cd), na.rm = TRUE)
