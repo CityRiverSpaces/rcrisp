@@ -39,6 +39,8 @@
 #' corridor_init <- delineate_valley(bucharest_dem, river)
 #' delineate_corridor(network, river, corridor_init = corridor_init,
 #'                    max_width = 4000, max_iterations = 5, capping = "direct")
+#' @srrstats {G2.13} The absence of missing values in numeric inputs is
+#'   asserted using the `checkmate` package.
 delineate_corridor <- function(
   network, river, corridor_init = 1000, max_width = 3000, max_iterations = 10,
   capping_method = "shortest-path"
@@ -49,8 +51,17 @@ delineate_corridor <- function(
   checkmate::assert_true(
     inherits(corridor_init, c("numeric", "sfc_POLYGON", "sfc_MULTIPOLYGON"))
   )
-  checkmate::assert_numeric(max_width, len = 1)
-  checkmate::assert_numeric(max_iterations, len = 1)
+  if (inherits(corridor_init, c("numeric"))) {
+    checkmate::assert_numeric(corridor_init,
+                              len = 1,
+                              any.missing = FALSE)
+  }
+  checkmate::assert_numeric(max_width,
+                            len = 1,
+                            any.missing = FALSE)
+  checkmate::assert_numeric(max_iterations,
+                            len = 1,
+                            any.missing = FALSE)
   checkmate::assert_choice(capping_method, c("shortest-path", "direct"))
 
   # Drop all attributes of river but its geometry
