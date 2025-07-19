@@ -51,7 +51,7 @@ delineate_corridor <- function(
   checkmate::assert_true(
     inherits(corridor_init, c("numeric", "sfc_POLYGON", "sfc_MULTIPOLYGON"))
   )
-  if (inherits(corridor_init, c("numeric"))) {
+  if (inherits(corridor_init, "numeric")) {
     checkmate::assert_numeric(corridor_init,
                               len = 1,
                               any.missing = FALSE)
