@@ -333,11 +333,15 @@ get_osm_river <- function(bb, river_name, crs = NULL, force_download = FALSE) {
 #'
 #' # Ensure that data is not retrieved from cache
 #' get_osm_streets(bb, crs, force_download = TRUE)
+#' @srrstats {G2.13} The absence of missing values in numeric inputs is
+#'   asserted using the `checkmate` package.
 get_osm_streets <- function(aoi, crs = NULL, highway_values = NULL,
                             force_download = FALSE) {
   # Check input
   checkmate::assert_true(inherits(aoi, c("sf", "sfc", "bbox")))
-  checkmate::assert_numeric(crs, null.ok = TRUE)
+  checkmate::assert_numeric(crs,
+                            null.ok = TRUE,
+                            any.missing = FALSE)
   checkmate::assert_character(highway_values, null.ok = TRUE)
   checkmate::assert_logical(force_download, len = 1)
 
@@ -465,9 +469,13 @@ get_osm_buildings <- function(aoi, crs = NULL, force_download = FALSE) {
 #' bb <- get_osm_bb("Bucharest")
 #' river <- get_osm_river(bb, "Dâmbovița")
 #' get_river_aoi(river, bb, buffer_distance = 100)
+#' @srrstats {G2.13} The absence of missing values in numeric inputs is
+#'   asserted using the `checkmate` package.
 get_river_aoi <- function(river, city_bbox, buffer_distance) {
   # Check input
-  checkmate::assert_numeric(buffer_distance, len = 1)
+  checkmate::assert_numeric(buffer_distance,
+                            len = 1,
+                            any.missing = FALSE)
 
   river <- c(river$centerline, river$surface)
 
