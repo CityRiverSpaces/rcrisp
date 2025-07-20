@@ -52,7 +52,8 @@ get_utm_zone <- function(x) {
 #' @srrstats {G2.8} This function ensures all supported input types are in a
 #'   consistent class accepted by `sf::st_bbox()`. Input of class `numeric` and
 #'   `matrix`, in particular, are converted to a vector with named elements
-#'   (`xmin`, `ymin`, `xmax`, `ymax`) before being passed down to `sf::st_bbox()`.
+#'   (`xmin`, `ymin`, `xmax`, `ymax`) before being passed down to
+#'   `sf::st_bbox()`.
 as_bbox <- function(x) {
   # Check input
   checkmate::assert_true(
