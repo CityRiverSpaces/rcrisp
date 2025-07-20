@@ -58,7 +58,7 @@
 #' @srrstatsTODO {G5.12} *Any conditions necessary to run extended tests such as platform requirements, memory, expected runtime, and artefacts produced that may need manual inspection, should be described in developer documentation such as a `CONTRIBUTING.md` or `tests/README.md` file.*
 #'
 #' @srrstats {SP1.0, SP1.1} The package description explicitly states that it
-#'   uses "three-dimensional spatial information [...] in a projected CRS."
+#'   uses "two-dimensional spatial information [...] in a projected CRS."
 #'   Although elevation information from DEM is used in valley delineation
 #'   if `valley` is chosen for the initial guess of the river corridor, the
 #'   overall approach cannot be considered 3D, as all calculations performed
