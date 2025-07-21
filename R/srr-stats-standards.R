@@ -85,9 +85,6 @@
 #' @srrstatsTODO {SP5.2} *Ensure that axis labels include appropriate units.*
 #' @srrstatsTODO {SP5.3} *Offer an ability to generate interactive (generally `html`-based) visualisations of results.*
 #' @srrstatsTODO {SP6.0} *Software which implements routines for transforming coordinates of input data should include tests which demonstrate ability to recover the original coordinates.*
-#' @srrstatsTODO {SP6.1} *All functions which can be applied to both Cartesian and curvilinear data should be tested through application to both.*
-#' @srrstatsTODO {SP6.1a} *Functions which may yield inaccurate results when applied to data in one or the other forms (such as the preceding examples of centroids and buffers from ellipsoidal data) should test that results from inappropriate application of those functions are indeed less accurate.*
-#' @srrstatsTODO {SP6.1b} *Functions which yield accurate results regardless of whether input data are rectilinear or curvilinear should demonstrate equivalent accuracy in both cases, and should also demonstrate how equivalent results may be obtained through first explicitly transforming input data.*
 #' @srrstatsTODO {SP6.2} *Geographical Software should include tests with extreme geographical coordinates, minimally including extension to polar extremes of +/-90 degrees.*
 #' @srrstatsTODO {SP6.3} *Spatial Software which considers spatial neighbours should explicitly test all possible ways of defining them, and should explicitly compare quantitative effects of different ways of defining neighbours.*
 #' @srrstatsTODO {SP6.4} *Spatial Software which considers spatial neighbours should explicitly test effects of different schemes to weight neighbours by spatial proximity.*
@@ -118,5 +115,14 @@ NULL
 #' @srrstatsNA {SP3.3} The package does not employ regression.
 #' @srrstatsNA {SP3.5, SP3.6} The package does not implement any kind of
 #'   machine learning.
+#' @srrstatsTODO {SP6.1a} The package relies on the [`sf`] package to
+#'   inform the user about any inaccuracies resulting from the application of
+#'   geoprocessing functions intended for applications in Cartesian space in
+#'   curvilinear space. Therefore no test is implemented here.
+#' @srrstatsTODO {SP6.1b} This package does not implement any functions
+#'   that yield equivalent accuracy for both rectilinear and curvilinear data.
+#'   All relevant functionality is limited to either Cartesian or
+#'   ellipsoidal coordinate systems, not both.
+#'
 #' @noRd
 NULL
