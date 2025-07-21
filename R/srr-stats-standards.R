@@ -71,8 +71,10 @@
 #' @srrstatsTODO {SP2.4a} *Software should not permit coordinate reference systems to be represented merely by so-called "PROJ4-strings", but should use at least WKT2.*
 #' @srrstatsTODO {SP2.5} *Class systems for input data must contain meta data on associated coordinate reference systems.*
 #' @srrstatsTODO {SP2.5a} *Software which implements new classes to input spatial data (or the spatial components of more general data) should provide an ability to convert such input objects into alternative spatial classes such as those listed above.*
-#' @srrstats {SP2.6, SP2.7} Spatial input classes are documented and checked
-#'   throughout the package using the `checkmate` package.
+#' @srrstats {SP2.6, SP2.7} Spatial input classes are documented in function
+#'   documentation and validated throughout the package using
+#'   `checkmate::assert_*` functions to ensure input data conforms to expected
+#'   types and structures.
 #' @srrstatsTODO {SP2.8} *Spatial Software should implement a single pre-processing routine to validate input data, and to appropriately transform it to a single uniform type to be passed to all subsequent data-processing functions.*
 #' @srrstatsTODO {SP2.9} *The pre-processing function described above should maintain those metadata attributes of input data which are relevant or important to core algorithms or return values.*
 #' @srrstatsTODO {SP4.0} *Return values should either:*
