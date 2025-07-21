@@ -132,7 +132,7 @@ get_corridor_edges <- function(corridor, river) {
 #'   neighborhood. Should approximate the distance between edges that we want
 #'   to consider as a single river crossing
 #'
-#' @return An object of class [`sf:sfc_LINESTRING`] including the shortest edge
+#' @return An object of class [`sf::sfc_LINESTRING`] including the shortest edge
 #'   per cluster
 #' @keywords internal
 #' @srrstats {SP4.0, SP4.0b, SP4.1, SP4.2} The return value is of class
