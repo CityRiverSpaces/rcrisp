@@ -226,8 +226,8 @@ get_river_banks <- function(river, width) {
 #'   representing the initial corridor edges
 #' @keywords internal
 #' @srrstats {SP4.0, SP4.0b, SP4.1, SP4.2} The return value is of class
-#'   [`sf::sfc_LINESTRING`] or [`sf::sfc_MULTILINESTRING`], explicitly documented as such,
-#'   and it maintains the same units as the input.
+#'   [`sf::sfc_LINESTRING`] or [`sf::sfc_MULTILINESTRING`], explicitly
+#'   documented as such, and it maintains the same units as the input.
 initial_edges <- function(corridor_initial, regions) {
   corridor_split <- sf::st_intersection(regions, corridor_initial)
   boundaries <- sf::st_union(sf::st_boundary(regions))
