@@ -115,7 +115,7 @@ NULL
 #' @srrstatsNA {SP3.3} The package does not employ regression.
 #' @srrstatsNA {SP3.5, SP3.6} The package does not implement any kind of
 #'   machine learning.
-#' @srrstatsTODO {SP6.1a} The package relies on the [`sf`] package to
+#' @srrstatsNA {SP6.1a} The package relies on the [`sf`] package to
 #'   inform the user about any inaccuracies resulting from the application of
 #'   geoprocessing functions intended for applications in Cartesian space in
 #'   curvilinear space. Therefore no test is implemented here.
