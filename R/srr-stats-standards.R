@@ -80,10 +80,6 @@
 #' @srrstatsTODO {SP4.0b} *Be in a unique, preferably class-defined, format.*
 #' @srrstatsTODO {SP4.1} *Any aspects of input data which are included in output data (either directly, or in some transformed form) and which contain units should ensure those same units are maintained in return values.*
 #' @srrstatsTODO {SP4.2} *The type and class of all return values should be explicitly documented.*
-#' @srrstatsTODO {SP5.0} *Implement default `plot` methods for any implemented class system.*
-#' @srrstatsTODO {SP5.1} *Implement appropriate placement of variables along x- and y-axes.*
-#' @srrstatsTODO {SP5.2} *Ensure that axis labels include appropriate units.*
-#' @srrstatsTODO {SP5.3} *Offer an ability to generate interactive (generally `html`-based) visualisations of results.*
 #' @srrstatsTODO {SP6.0} *Software which implements routines for transforming coordinates of input data should include tests which demonstrate ability to recover the original coordinates.*
 #' @srrstatsTODO {SP6.1} *All functions which can be applied to both Cartesian and curvilinear data should be tested through application to both.*
 #' @srrstatsTODO {SP6.1a} *Functions which may yield inaccurate results when applied to data in one or the other forms (such as the preceding examples of centroids and buffers from ellipsoidal data) should test that results from inappropriate application of those functions are indeed less accurate.*
@@ -118,5 +114,10 @@ NULL
 #' @srrstatsNA {SP3.3} The package does not employ regression.
 #' @srrstatsNA {SP3.5, SP3.6} The package does not implement any kind of
 #'   machine learning.
+#' @srrstatsNA {SP5.0, SP5.1, SP5.2, SP5.3} The package does not return any
+#'   custom classes and thus does not implement a plot method nor does it offer
+#'   an ability to generate interactive visualisations. The returned
+#'   delineations can be used in static and interactive visualisation workflows
+#'   as any other spatial data.
 #' @noRd
 NULL
