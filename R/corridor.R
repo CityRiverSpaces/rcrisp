@@ -255,7 +255,7 @@ initial_edges <- function(corridor_initial, regions) {
 #'
 #' @return An [`sf::sfc_LINESTRING`] object representing the edge
 #' @keywords internal
-#' #' @srrstats {SP4.0, SP4.0b, SP4.1, SP4.2} The return value is of class
+#' @srrstats {SP4.0, SP4.0b, SP4.1, SP4.2} The return value is of class
 #'   [`sf::sfc_LINESTRING`], explicitly documented as such, and it maintains the
 #'   same units as the input.
 corridor_edge <- function(network, end_points, target_edge, exclude_area = NULL,
