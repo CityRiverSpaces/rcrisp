@@ -119,7 +119,7 @@ NULL
 #'   inform the user about any inaccuracies resulting from the application of
 #'   geoprocessing functions intended for applications in Cartesian space in
 #'   curvilinear space. Therefore no test is implemented here.
-#' @srrstatsTODO {SP6.1b} This package does not implement any functions
+#' @srrstatsNA {SP6.1b} This package does not implement any functions
 #'   that yield equivalent accuracy for both rectilinear and curvilinear data.
 #'   All relevant functionality is limited to either Cartesian or
 #'   ellipsoidal coordinate systems, not both.
