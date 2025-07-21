@@ -257,6 +257,8 @@ mask_slope <- function(slope, river, lthresh = 1.e-3, target = 0) {
 #'
 #' @return raster of cost distance
 #' @keywords internal
+#' @srrstats {SP3.1} This function uses a slope raster as a friction surface,
+#'   weighting neighbour contributions continuously by slope.
 get_cost_distance <- function(slope, river, target = 0) {
   slope_masked <- mask_slope(slope, river, target = target)
   cd <- terra::costDist(slope_masked, target = target)
