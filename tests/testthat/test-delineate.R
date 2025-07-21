@@ -85,9 +85,10 @@ test_that("Only one city and one river can be delineated at a time", {
 #' @srrstats {SP6.2} This test checks that delineation is successfully carried
 #'   out for a river-crossed town close to the North Pole.
 test_that("delineate_corridor handles cases at extreme coordinates", {
-  delineations <- delineate("Longyearbyen", "Longyearelva",
-                               corridor_init = 1000,
-                               corridor = TRUE) |>
+  delineations <- delineate("Longyearbyen",
+                            "Longyearelva",
+                            corridor_init = 1000,
+                            corridor = TRUE) |>
     suppressWarnings()
   actual_corridor <- delineations$corridor
 
