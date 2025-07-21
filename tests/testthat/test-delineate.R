@@ -81,3 +81,24 @@ test_that("Only one city and one river can be delineated at a time", {
   expect_error(delineate("Bucharest", c("Dâmbovița", "SomeOtherRiver")),
                "Assertion on 'river_name' failed: Must have length 1")
 })
+
+#' @srrstats {SP6.2} This test checks that delineation is successfully carried
+#'   out for a river-crossed town close to the North Pole.
+test_that("delineate_corridor handles cases at extreme coordinates", {
+  city_name <- "Longyearbyen"
+  river_name <- "Longyearelva"
+
+  delineations <- delineate(city_name, river_name,
+                               corridor_init = 1000,
+                               corridor = TRUE) |>
+    suppressWarnings()
+  actual_corridor <- delineations$corridor
+
+  expected_corridor_path <-
+    testthat::test_path("testdata", "expected_corridor_longyearbyen.gpkg")
+  expected_corridor <- sf::st_read(expected_corridor_path, quiet = TRUE) |>
+    sf::st_geometry()
+
+  expect_true(sf::st_equals_exact(actual_corridor, expected_corridor,
+                                  par = 0, sparse = FALSE))
+})
