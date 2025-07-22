@@ -67,7 +67,7 @@ get_example_data_file <- function(filename, force_download = FALSE) {
     download_urls <- get_download_urls()
     download_url <- download_urls[[filename]]
     stopifnot(!is.null(download_url))
-    # temporarily increate timeout, reset value on exit
+    # temporarily increase timeout, reset value on exit
     op <- options(timeout = 120)
     on.exit(options(op))
     retry(download.file, url = download_url, destfile = filepath, mode = "wb",
