@@ -109,7 +109,7 @@ retry <- function(func, ..., max_retries = 5, delay = 2) {
       func(...)  # Call the function with arguments
     }, error = function(e) {
       warning(sprintf("Attempt %d failed: %s", attempt, e$message))
-      return(NULL)
+      NULL
     })
 
     if (!is.null(result)) {
