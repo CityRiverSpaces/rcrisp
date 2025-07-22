@@ -68,9 +68,10 @@ get_example_data_file <- function(filename, force_download = FALSE) {
     download_url <- download_urls[[filename]]
     stopifnot(!is.null(download_url))
     # temporarily increate timeout, reset value on exit
-    op <- options(timeout = 300)
+    op <- options(timeout = 120)
     on.exit(options(op))
-    download.file(download_url, destfile = filepath, mode = "wb", quiet = TRUE)
+    retry(download.file, url = download_url, destfile = filepath, mode = "wb",
+          quiet = TRUE)
   }
 
   filepath
@@ -81,7 +82,7 @@ get_example_data_file <- function(filename, force_download = FALSE) {
 #'
 #' @noRd
 get_download_urls <- function() {
-  resp <- get_body_json(example_metadata_url)
+  resp <- retry(get_body_json, example_metadata_url)
   download_urls <- list()
   for (file in resp$files) {
     download_urls[file$name] <- file$download_url
@@ -96,6 +97,31 @@ get_body_json <- function(url) {
   httr2::request(url) |>
     httr2::req_perform() |>
     httr2::resp_body_json()
+}
+
+#' Retry function call, for API calls and external services
+#'
+#' @noRd
+retry <- function(func, ..., max_retries = 5, delay = 2) {
+  attempt <- 1
+  while (attempt <= max_retries) {
+    result <- tryCatch({
+      func(...)  # Call the function with arguments
+    }, error = function(e) {
+      warning(sprintf("Attempt %d failed: %s", attempt, e$message))
+      return(NULL)
+    })
+
+    if (!is.null(result)) {
+      return(result)  # Successfully retrieved result
+    }
+
+    message(sprintf("Retrying in %d seconds...", delay))
+    Sys.sleep(delay)
+    attempt <- attempt + 1
+  }
+
+  stop("Function failed after multiple attempts.")
 }
 
 #' Example data files that can be used in examples and tests are stored in
