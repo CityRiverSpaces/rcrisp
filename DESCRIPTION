@@ -27,6 +27,7 @@ Imports:
     checkmate,
     dbscan,
     dplyr,
+    httr2,
     lwgeom,
     osmdata,
     rcoins,
