@@ -1,6 +1,6 @@
 #' Get example OSM data
 #'
-#' This function retrieves example OpenStreetMap (OSM) data from a
+#' This function retrieves example OpenStreetMap (OSM) data from the
 #' 4TU.ResearchData data repository, and it can be used in examples
 #' and tests. The code used to generate the example dataset is available at
 #' https://github.com/CityRiverSpaces/CRiSpExampleData. Note that the example
