@@ -94,20 +94,11 @@ The resulting object is a list with all the layers obtained individually above.
 names(bucharest_osm)
 ```
 
-
-```{r, eval=TRUE, fig.alt="All layers combined", fig.cap="All layers combined"}
-if (requireNamespace("ggplot2", quietly = TRUE)) {
-  library(ggplot2)
-  ggplot() +
-    geom_sf(data = bucharest_osm$boundary, fill = "grey", color = "black") +
-    geom_sf(data = bucharest_osm$railways, color = "orange") +
-    geom_sf(data = bucharest_osm$streets, color = "black") +
-    geom_sf(data = bucharest_osm$river_surface, fill = "blue", color = "blue") +
-    geom_sf(data = bucharest_osm$river_centerline, color = "blue") +
-    xlim(417000, 439000) +
-    ylim(4908800, 4932500)
-} else {
-  message("ggplot2 not available; skipping plot examples.")
-}
+```{r, echo=FALSE, fig.alt="All layers combined", fig.cap="All layers combined"}
+plot(bucharest_osm$boundary, col = "grey", border = "black")
+plot(bucharest_osm$railways, col = "orange", add = TRUE)
+plot(bucharest_osm$streets, color = "black", add = TRUE)
+plot(bucharest_osm$river_surface, col = "blue", border = "blue", add = TRUE)
+plot(bucharest_osm$river_centerline, col = "blue", add = TRUE)
 ```
 
