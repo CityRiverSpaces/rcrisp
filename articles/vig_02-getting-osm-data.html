@@ -75,14 +75,19 @@
 
     
     
-<p>In this notebook we download OSM data needed for the delineation of
-the urban river corridor of River Dâmbovița in Bucharest, Romania. We
-make sure that we include a given area around the city boundaries.</p>
+<p>In this notebook we download OpenStreetMap (OSM) data needed for the
+delineation of the urban river corridor of River Dâmbovița in Bucharest,
+Romania. After attaching the packages used in the vignette, we specify
+the city name, the river name, and the CRS, and we make sure that we
+provide a buffer around the river used to retrieve OSM data.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">city_name</span> <span class="op">&lt;-</span> <span class="st">"Bucharest"</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://cityriverspaces.github.io/rcrisp/">rcrisp</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://purrr.tidyverse.org/" class="external-link">purrr</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">city_name</span> <span class="op">&lt;-</span> <span class="st">"Bucharest"</span></span>
 <span><span class="va">river_name</span> <span class="op">&lt;-</span> <span class="st">"Dâmbovița"</span></span>
-<span><span class="va">crs</span> <span class="op">&lt;-</span> <span class="fl">32635</span>  <span class="co"># EPSG code for UTM zone 35N</span></span>
-<span><span class="va">bbox_buffer</span> <span class="op">&lt;-</span> <span class="fl">2000</span>  <span class="co"># in m, expand bbox for street network</span></span></code></pre></div>
+<span><span class="va">crs</span> <span class="op">&lt;-</span> <span class="fl">32635</span>  <span class="co"># EPSG code for UTM zone 35N, where Bucharest is located</span></span>
+<span><span class="va">buffer</span> <span class="op">&lt;-</span> <span class="fl">3000</span>  <span class="co"># in m, expand bbox for street network</span></span></code></pre></div>
 <p>We start by getting the bounding box for the study area:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">bb</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_osm_bb.html">get_osm_bb</a></span><span class="op">(</span><span class="va">city_name</span><span class="op">)</span></span></code></pre></div>
@@ -92,23 +97,41 @@ the city boundary, the waterways, the street network, and the rail
 network using built-in functions from the <code>rcrisp</code>
 package.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">city_boundary</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_osm_city_boundary.html">get_osm_city_boundary</a></span><span class="op">(</span><span class="va">city_name</span>, <span class="va">bb</span>, <span class="va">crs</span><span class="op">)</span></span>
-<span><span class="va">river</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_osm_river.html">get_osm_river</a></span><span class="op">(</span><span class="va">river_name</span>, <span class="va">bb</span>, <span class="va">crs</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">river</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_osm_river.html">get_osm_river</a></span><span class="op">(</span><span class="va">bb</span>, <span class="va">river_name</span>, <span class="va">crs</span><span class="op">)</span></span>
+<span><span class="va">aoi_network</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_river_aoi.html">get_river_aoi</a></span><span class="op">(</span><span class="va">river</span>, <span class="va">bb</span>, buffer_distance <span class="op">=</span> <span class="va">buffer</span><span class="op">)</span></span>
 <span><span class="va">streets</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_osm_streets.html">get_osm_streets</a></span><span class="op">(</span><span class="va">bb</span>, <span class="va">crs</span><span class="op">)</span></span>
-<span><span class="va">railways</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_osm_railways.html">get_osm_railways</a></span><span class="op">(</span><span class="va">bb</span>, <span class="va">crs</span><span class="op">)</span></span></code></pre></div>
-<p>Individual layers can be written to disk before being read in for
-delineation.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">bucharest_osm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span><span class="va">railways</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_osm_railways.html">get_osm_railways</a></span><span class="op">(</span><span class="va">bb</span>, <span class="va">crs</span><span class="op">)</span></span>
+<span><span class="va">city_boundary</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_osm_city_boundary.html">get_osm_city_boundary</a></span><span class="op">(</span><span class="va">bb</span>, <span class="va">city_name</span>, <span class="va">crs</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">bucharest_osm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>  bb <span class="op">=</span> <span class="va">bb</span>,</span>
-<span>  boundary <span class="op">=</span> <span class="va">city_boundary</span>,</span>
 <span>  river_centerline <span class="op">=</span> <span class="va">river</span><span class="op">$</span><span class="va">centerline</span>,</span>
 <span>  river_surface <span class="op">=</span> <span class="va">river</span><span class="op">$</span><span class="va">surface</span>,</span>
+<span>  aoi_network <span class="op">=</span> <span class="va">aoi_network</span>,</span>
 <span>  streets <span class="op">=</span> <span class="va">streets</span>,</span>
-<span>  railways <span class="op">=</span> <span class="va">railways</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">walk2</span><span class="op">(</span></span>
+<span>  railways <span class="op">=</span> <span class="va">railways</span>,</span>
+<span>  boundary <span class="op">=</span> <span class="va">city_boundary</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>The above layers can also be obtained with the all-in-one function
+<code><a href="../reference/get_osmdata.html">get_osmdata()</a></code>. Optionally, a buffer around the river can be
+specified for the retrieval of OSM data.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">bucharest_osm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_osmdata.html">get_osmdata</a></span><span class="op">(</span><span class="va">city_name</span>, <span class="va">river_name</span>, network_buffer <span class="op">=</span> <span class="va">buffer</span><span class="op">)</span></span></code></pre></div>
+<p>The resulting object is a list with all the layers obtained
+above.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">bucharest_osm</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "bb"               "river_centerline" "river_surface"    "aoi_network"     </span></span>
+<span><span class="co">#&gt; [5] "streets"          "railways"         "boundary"</span></span></code></pre></div>
+<div class="figure">
+<img src="vig_02-getting-osm-data_files/figure-html/unnamed-chunk-6-1.png" alt="All layers combined" width="700"><p class="caption">
+All layers combined
+</p>
+</div>
+<p>Individual layers can be written to disk before being read in for
+delineation.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map2.html" class="external-link">walk2</a></span><span class="op">(</span></span>
 <span>  <span class="va">bucharest_osm</span>,</span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">bucharest_osm</span><span class="op">)</span>,</span>
 <span>  <span class="op">~</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_write.html" class="external-link">st_write</a></span><span class="op">(</span></span>
@@ -118,34 +141,6 @@ delineation.</p>
 <span>    quiet <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p>The above layers can also be obtained with the all-in-one function
-<code><a href="../reference/get_osmdata.html">get_osmdata()</a></code>. Optionally, a bounding box buffer can be
-specified to expand the bounding box.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">bucharest_osm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_osmdata.html">get_osmdata</a></span><span class="op">(</span><span class="va">city_name</span>, <span class="va">river_name</span>, buffer <span class="op">=</span> <span class="va">bbox_buffer</span><span class="op">)</span></span></code></pre></div>
-<p>The resulting object is a list with all the layers obtained
-individually above.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">bucharest_osm</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"ggplot2"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">bucharest_osm</span><span class="op">$</span><span class="va">boundary</span>, fill <span class="op">=</span> <span class="st">"grey"</span>, color <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">bucharest_osm</span><span class="op">$</span><span class="va">railways</span>, color <span class="op">=</span> <span class="st">"orange"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">bucharest_osm</span><span class="op">$</span><span class="va">streets</span>, color <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">bucharest_osm</span><span class="op">$</span><span class="va">river_surface</span>, fill <span class="op">=</span> <span class="st">"blue"</span>, color <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">bucharest_osm</span><span class="op">$</span><span class="va">river_centerline</span>, color <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/lims.html" class="external-link">xlim</a></span><span class="op">(</span><span class="fl">417000</span>, <span class="fl">439000</span><span class="op">)</span> <span class="op">+</span></span>
-<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/lims.html" class="external-link">ylim</a></span><span class="op">(</span><span class="fl">4908800</span>, <span class="fl">4932500</span><span class="op">)</span></span>
-<span><span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">message</a></span><span class="op">(</span><span class="st">"ggplot2 not available; skipping plot examples."</span><span class="op">)</span></span>
-<span><span class="op">}</span></span></code></pre></div>
-<div class="figure">
-<img src="vig_02-getting-osm-data_files/figure-html/unnamed-chunk-8-1.png" alt="All layers combined" width="700"><p class="caption">
-All layers combined
-</p>
-</div>
   </main>
 </div>
 
