@@ -30,6 +30,12 @@ set_units_like <- function(x, y) {
 get_utm_zone <- function(x) {
   bb <- as_bbox(x)
 
+  # Make sure the bbox is in lat/lon
+  bb <- sf::st_transform(bb, "EPSG:4326")
+
+  if (bb[["ymin"]] < -80 || bb[["ymax"]] > 84) {
+    stop("The bbox is outside the UTM validity range (80 deg S; 84 deg N)")
+  }
   centroid_long <- (bb[["xmin"]] + bb[["xmax"]]) / 2
   centroid_lat <- (bb[["ymin"]] + bb[["ymax"]]) / 2
   base <- if (centroid_lat >= 0) 32600 else 32700
