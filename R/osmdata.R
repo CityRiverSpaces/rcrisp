@@ -263,7 +263,7 @@ get_osm_city_boundary <- function(bb, city_name, crs = NULL, multiple = FALSE,
 #' crs <- get_utm_zone(bb)
 #' get_osm_river(bb, "Dâmbovița", crs)
 #' @srrstats {SP4.0, SP4.0b, SP4.2} The return value is a list an object of
-#'   class [`sf::sfc_LINESTRING`] or [`sf::sfc_LINESTRING`] and an object of
+#'   class [`sf::sfc_LINESTRING`] or [`sf::sfc_MULTILINESTRING`] and an object of
 #'   class [`sf::sfc_POLYGON`] or [`sf::sfc_MULTIPOLYGON`], explicitly
 #'   documented as such.
 get_osm_river <- function(bb, river_name, crs = NULL, force_download = FALSE) {
