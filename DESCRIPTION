@@ -34,7 +34,7 @@ Imports:
     rcoins,
     rlang,
     rstac,
-    sf,
+    sf (>= 0.9.0),
     sfheaders,
     sfnetworks,
     stringr,
