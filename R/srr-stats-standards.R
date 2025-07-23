@@ -62,7 +62,8 @@
 #'   on vector data are carried out on `x` and `y` coordinates only.
 #' @srrstats {SP2.0} The package only uses the modern `sf` and `SpatRaster`
 #'   classes to represent geospatial *vector* and *raster* data respectively.
-#' @srrstatsTODO {SP2.1} *Spatial Software should not use the [`sp` package](https://cran.r-project.org/package=sp), rather should use [`sf`](https://cran.r-project.org/package=sf).*
+#' @srrstats {SP2.1} The package only uses `sf` for representing and handling
+#'   geospatial vector data.
 #' @srrstats {SP2.2} The output values of this package are of either class `sf`,
 #'   `SpatRaster` or `sfnetwork`, and thus are fully compatible with the
 #'   established `sf`, `terra` and `sfnetworks` packages, widely used in R
