@@ -18,6 +18,6 @@ bucharest_dambovita
 }
 \description{
 Delineation generated with rcrisp example data found at
-\url{https://data.4tu.nl/datasets/f5d5e118-b5bd-4dfb-987f-fe10d1b9b386}
+\url{https://zenodo.org/records/16325879}
 }
 \keyword{datasets}
