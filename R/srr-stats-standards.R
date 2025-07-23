@@ -57,22 +57,30 @@
 #' @srrstatsTODO {G5.11a} *When any downloads of additional data necessary for extended tests fail, the tests themselves should not fail, rather be skipped and implicitly succeed with an appropriate diagnostic message.*
 #' @srrstatsTODO {G5.12} *Any conditions necessary to run extended tests such as platform requirements, memory, expected runtime, and artefacts produced that may need manual inspection, should be described in developer documentation such as a `CONTRIBUTING.md` or `tests/README.md` file.*
 #'
-#' @srrstatsTODO {SP1.0} *Spatial software should explicitly indicate its domain of applicability, and in particular distinguish whether the software may be applied in Cartesian/rectilinear/geometric domains, curvilinear/geographic domains, or both.*
-#' @srrstatsTODO {SP1.1} *Spatial software should explicitly indicate its dimensional domain of applicability, in particular through identifying whether it is applicable to two or three dimensions only, or whether there are any other restrictions on dimensionality.*
+#' @srrstats {SP1.0, SP1.1} The package description explicitly states that it
+#'   uses "two-dimensional spatial information [...] in a projected CRS."
+#'   Although elevation information from DEM is used in valley delineation
+#'   if `valley` is chosen for the initial guess of the river corridor, the
+#'   overall approach cannot be considered 3D, as all calculations performed
+#'   on vector data are carried out on `x` and `y` coordinates only.
 #' @srrstatsTODO {SP2.0} *Spatial software should only accept input data of one or more classes explicitly developed to represent such data.*
 #' @srrstatsTODO {SP2.0a} *Where new classes are implemented, conversion to other common classes for spatial data in R should be documented.*
 #' @srrstatsTODO {SP2.0b} *Class systems should ensure that functions error appropriately, rather than merely warning, in response to data from inappropriate spatial domains.*
 #' @srrstatsTODO {SP2.1} *Spatial Software should not use the [`sp` package](https://cran.r-project.org/package=sp), rather should use [`sf`](https://cran.r-project.org/package=sf).*
-#' @srrstatsTODO {SP2.2} *Geographical Spatial Software should ensure maximal compatibility with established packages and workflows, minimally through:*
-#' @srrstatsTODO {SP2.2a} *Clear and extensive documentation demonstrating how routines from that software may be embedded within, or otherwise adapted to, workflows which rely on these established packages; and*
-#' @srrstatsTODO {SP2.2b} *Tests which clearly demonstrate that routines from that software may be successfully translated into forms and workflows which rely on these established packages.*
+#' @srrstats {SP2.2} The output values of this package are of either class `sf`,
+#'   `SpatRaster` or `sfnetwork`, and thus are fully compatible with the
+#'   established `sf`, `terra` and `sfnetworks` packages, widely used in R
+#'   spatial analytical workflows.
 #' @srrstatsTODO {SP2.3} *Software which accepts spatial input data in any standard format established in other R packages (such as any of the formats able to be read by [`GDAL`](https://gdal.org), and therefore by the [`sf` package](https://cran.r-project.org/package=sf)) should include example and test code which load those data in spatial formats, rather than R-specific binary formats such as `.Rds`.*
 #' @srrstatsTODO {SP2.4} *Geographical Spatial Software should be compliant with version 6 or larger of* [`PROJ`](https://proj.org/), *and with* `WKT2` *representations. The primary implication, described in detail in the articles linked to above, is that:*
 #' @srrstatsTODO {SP2.4a} *Software should not permit coordinate reference systems to be represented merely by so-called "PROJ4-strings", but should use at least WKT2.*
-#' @srrstatsTODO {SP2.5} *Class systems for input data must contain meta data on associated coordinate reference systems.*
-#' @srrstatsTODO {SP2.5a} *Software which implements new classes to input spatial data (or the spatial components of more general data) should provide an ability to convert such input objects into alternative spatial classes such as those listed above.*
-#' @srrstatsTODO {SP2.6} *Spatial Software should explicitly document the types and classes of input data able to be passed to each function.*
-#' @srrstatsTODO {SP2.7} *Spatial Software should implement validation routines to confirm that inputs are of acceptable classes (or represented in otherwise appropriate ways for software which does not use class systems).*
+#' @srrstats {SP2.5} The package uses `sf` and `SpatRaster` classes for vector
+#'   and raster data, respectively, both of which contain metadata on coordinate
+#'   reference systems.
+#' @srrstats {SP2.6, SP2.7} Spatial input classes are documented in function
+#'   documentation and validated throughout the package using
+#'   `checkmate::assert_*` functions to ensure input data conforms to expected
+#'   types and structures.
 #' @srrstatsTODO {SP2.8} *Spatial Software should implement a single pre-processing routine to validate input data, and to appropriately transform it to a single uniform type to be passed to all subsequent data-processing functions.*
 #' @srrstatsTODO {SP2.9} *The pre-processing function described above should maintain those metadata attributes of input data which are relevant or important to core algorithms or return values.*
 #' @srrstatsTODO {SP4.0} *Return values should either:*
@@ -86,7 +94,6 @@
 #' @srrstatsTODO {SP6.1b} *Functions which yield accurate results regardless of whether input data are rectilinear or curvilinear should demonstrate equivalent accuracy in both cases, and should also demonstrate how equivalent results may be obtained through first explicitly transforming input data.*
 #' @srrstatsTODO {SP6.2} *Geographical Software should include tests with extreme geographical coordinates, minimally including extension to polar extremes of +/-90 degrees.*
 #' @srrstatsTODO {SP6.5} *Spatial Unsupervised Learning Software which uses clustering algorithms should implement tests which explicitly compare results with equivalent results obtained with a non-spatial clustering algorithm.*
-#' @srrstatsTODO {SP6.6} *Spatial Machine Learning Software should implement tests which explicitly demonstrate the detrimental consequences of sampling test and training data from the same spatial region, rather than from spatially distinct regions.
 # nolint end
 #' @noRd
 NULL
@@ -106,12 +113,13 @@ NULL
 #' @srrstatsNA {G5.4b, G5.4c} This package implements a new method.
 #'
 #  Not applicable spatial software standards ----
+#' @srrstatsNA {SP2.5a} This package does not implement new classes.
 #' @srrstatsNA {SP3.0, SP3.0a, SP3.0b, SP3.1} The package does not consider
 #'   spatial neighbours.
 #' @srrstatsNA {SP3.2} The package does not rely on sampling from input data.
 #' @srrstatsNA {SP3.3} The package does not employ regression.
 #' @srrstatsNA {SP3.5, SP3.6} The package does not implement any kind of
-#'   machine learning.
+#'   (supervised) machine learning.
 #' @srrstatsNA {SP5.0, SP5.1, SP5.2, SP5.3} The package does not return any
 #'   custom classes and thus does not implement a plot method nor does it offer
 #'   an ability to generate interactive visualisations. The returned
@@ -121,5 +129,8 @@ NULL
 #'   `terra::costDist()` function. Therefore, the definition and weighting of
 #'   neighbours are managed by `terra`, and are not implemented or tested within
 #'   this package.
+#' @srrstatsNA {SP6.6} This package does not implement spatial ML algorithms;
+#'   therefore, tests demonstrating the effects of sampling test and training
+#'   data from the same spatial region are not applicable.
 #' @noRd
 NULL
