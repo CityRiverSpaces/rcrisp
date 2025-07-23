@@ -35,7 +35,7 @@ get_osm_example_data <- function(force_download = FALSE) {
 #' Get example DEM data
 #'
 #' This function retrieves example Digital Elevation Model (DEM) data from the
-#' Zenodo data repository, and it can be used in examples and tests. The code 
+#' Zenodo data repository, and it can be used in examples and tests. The code
 #' used to generate the example dataset is available at
 #' https://github.com/CityRiverSpaces/CRiSpExampleData. Note that the example
 #' dataset is cached locally, so that subsequent calls to the function can
@@ -110,6 +110,6 @@ retry <- function(func, ..., max_retries = 5, delay = 2) {
 #' Example data files that can be used in examples and tests are stored in
 #' a Zenodo data repository (DOI: 10.4121/f5d5e118-b5bd-4dfb-987f-fe10d1b9b386).
 #' Files can be downloaded programmatically from the following URL.
-#' 
+#'
 #' @noRd
 zenodo_record_url <- "https://zenodo.org/records/16325879"
