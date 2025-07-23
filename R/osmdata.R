@@ -331,7 +331,7 @@ get_osm_river <- function(bb, river_name, crs = NULL, force_download = FALSE) {
 #' Get OpenStreetMap streets
 #'
 #' @param aoi Area of interest as sf object or bbox
-#' @param crs Coordinate reference system as EPSG code
+#' @param crs A numeric vector of length one with the EPSG code of the CRS
 #' @param highway_values A character vector with the highway values to retrieve.
 #'             If left NULL, the function retrieves the following values:
 #'             "motorway", "trunk", "primary", "secondary", "tertiary"
