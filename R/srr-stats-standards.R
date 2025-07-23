@@ -92,7 +92,6 @@
 #' @srrstatsTODO {SP6.1b} *Functions which yield accurate results regardless of whether input data are rectilinear or curvilinear should demonstrate equivalent accuracy in both cases, and should also demonstrate how equivalent results may be obtained through first explicitly transforming input data.*
 #' @srrstatsTODO {SP6.2} *Geographical Software should include tests with extreme geographical coordinates, minimally including extension to polar extremes of +/-90 degrees.*
 #' @srrstatsTODO {SP6.5} *Spatial Unsupervised Learning Software which uses clustering algorithms should implement tests which explicitly compare results with equivalent results obtained with a non-spatial clustering algorithm.*
-#' @srrstatsTODO {SP6.6} *Spatial Machine Learning Software should implement tests which explicitly demonstrate the detrimental consequences of sampling test and training data from the same spatial region, rather than from spatially distinct regions.
 # nolint end
 #' @noRd
 NULL
@@ -123,5 +122,8 @@ NULL
 #'   `terra::costDist()` function. Therefore, the definition and weighting of
 #'   neighbours are managed by `terra`, and are not implemented or tested within
 #'   this package.
+#' @srrstatsNA {SP6.6} This package does not implement spatial ML algorithms;
+#'   therefore, tests demonstrating the effects of sampling test and training
+#'   data from the same spatial region are not applicable.
 #' @noRd
 NULL
