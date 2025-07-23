@@ -77,8 +77,10 @@
 #' @srrstats {SP2.5} The package uses `sf` and `SpatRaster` classes for vector
 #'   and raster data, respectively, both of which contain metadata on coordinate
 #'   reference systems.
-#' @srrstatsTODO {SP2.6} *Spatial Software should explicitly document the types and classes of input data able to be passed to each function.*
-#' @srrstatsTODO {SP2.7} *Spatial Software should implement validation routines to confirm that inputs are of acceptable classes (or represented in otherwise appropriate ways for software which does not use class systems).*
+#' @srrstats {SP2.6, SP2.7} Spatial input classes are documented in function
+#'   documentation and validated throughout the package using
+#'   `checkmate::assert_*` functions to ensure input data conforms to expected
+#'   types and structures.
 #' @srrstatsTODO {SP2.8} *Spatial Software should implement a single pre-processing routine to validate input data, and to appropriately transform it to a single uniform type to be passed to all subsequent data-processing functions.*
 #' @srrstatsTODO {SP2.9} *The pre-processing function described above should maintain those metadata attributes of input data which are relevant or important to core algorithms or return values.*
 #' @srrstatsTODO {SP4.0} *Return values should either:*
