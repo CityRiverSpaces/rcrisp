@@ -82,8 +82,6 @@ test_that("Only one city and one river can be delineated at a time", {
                "Assertion on 'river_name' failed: Must have length 1")
 })
 
-#' @srrstats {SP6.2} This test checks that delineation is successfully carried
-#'   out for a river-crossed town close to the North Pole.
 test_that("delineate_corridor handles cases at extreme coordinates", {
   delineations <- delineate("Longyearbyen",
                             "Longyearelva",
