@@ -66,6 +66,9 @@
 #' @srrstatsTODO {SP2.2} *Geographical Spatial Software should ensure maximal compatibility with established packages and workflows, minimally through:*
 #' @srrstatsTODO {SP2.2a} *Clear and extensive documentation demonstrating how routines from that software may be embedded within, or otherwise adapted to, workflows which rely on these established packages; and*
 #' @srrstatsTODO {SP2.2b} *Tests which clearly demonstrate that routines from that software may be successfully translated into forms and workflows which rely on these established packages.*
+#' @srrstats {SP2.3} The package caches spatial objects retrieved from external
+#'   services as RDS objects, but these are only for internal use and their
+#'   direct use is not recommended.
 #' @srrstatsTODO {SP2.4} *Geographical Spatial Software should be compliant with version 6 or larger of* [`PROJ`](https://proj.org/), *and with* `WKT2` *representations. The primary implication, described in detail in the articles linked to above, is that:*
 #' @srrstatsTODO {SP2.4a} *Software should not permit coordinate reference systems to be represented merely by so-called "PROJ4-strings", but should use at least WKT2.*
 #' @srrstatsTODO {SP2.5} *Class systems for input data must contain meta data on associated coordinate reference systems.*
