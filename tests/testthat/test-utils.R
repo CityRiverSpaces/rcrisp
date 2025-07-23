@@ -46,7 +46,7 @@ test_that("correct UTM zone is returend in the northern hemisphere", {
 
 #' @srrstats {SP6.2} The software works mostly in projected coordinates. By
 #'   default we work with UTM zones, which are defined only outside polar
-#'   regions. He we make sure that errors are raised if polar regions are
+#'   regions. We make sure that errors are raised if polar regions are
 #'   considered.
 test_that("an error is raised for latitudes outside the validity range", {
   bbox <- sf::st_bbox(
