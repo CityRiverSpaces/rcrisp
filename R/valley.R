@@ -172,7 +172,8 @@ get_stac_asset_urls <- function(bb, endpoint = NULL, collection = NULL) {
 #' @param tile_urls A list of tiles where to read the DEM data from
 #' @param force_download Download data even if cached data is available
 #'
-#' @return Raster DEM, retrieved and retiled to the given bounding box
+#' @return A DEM of class [`terra::SpatRaster`], retrieved and retiled to the
+#'   given bounding box
 #' @export
 #' @examplesIf interactive()
 #' bb <- get_osm_bb("Bucharest")
