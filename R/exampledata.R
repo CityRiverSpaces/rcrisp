@@ -17,13 +17,16 @@
 #'   publicly available, as described in the Roxygen comments.
 #'
 #' @param force_download Download data even if cached data is available
-#' @return A list of sf objects containing the OSM data.
+#' @return A list of sf objects containing the OSM data as [`sf::sfc`]
+#'   objects.
 #' @importFrom utils download.file
 #' @importFrom stats setNames
 #' @export
 #'
 #' @examplesIf interactive()
 #' get_osm_example_data()
+#' @srrstats {SP4.0, SP4.0b, SP4.2} The function returns a list of
+#'   [`sf::sfc`] objects, explicitly documented as such.
 get_osm_example_data <- function(force_download = FALSE) {
   file <- get_example_data_file("bucharest_osm.gpkg",
                                 force_download = force_download)
@@ -42,11 +45,13 @@ get_osm_example_data <- function(force_download = FALSE) {
 #' load the example data from disk without having to re-download the data.
 #'
 #' @param force_download Download data even if cached data is available
-#' @return A SpatRaster object containing the DEM data.
+#' @return A [`terra::SpatRaster`] object containing the DEM data.
 #' @export
 #'
 #' @examplesIf interactive()
 #' get_dem_example_data()
+#' @srrstats {SP4.0, SP4.0b, SP4.2} The function returns a [`terra::SpatRaster`]
+#'   object, explicitly documented as such.
 get_dem_example_data <- function(force_download = FALSE) {
   file <- get_example_data_file("bucharest_dem.tiff",
                                 force_download = force_download)
