@@ -1,7 +1,7 @@
 #' rcrisp example delineation data for Bucharest
 #'
 #' Delineation generated with rcrisp example data found at
-#' <https://data.4tu.nl/datasets/f5d5e118-b5bd-4dfb-987f-fe10d1b9b386>
+#' <https://zenodo.org/records/16325879>
 #'
 #' @format A list of sf objects representing:
 #' \describe{
