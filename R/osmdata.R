@@ -254,7 +254,7 @@ get_osm_city_boundary <- function(bb, city_name, crs = NULL, multiple = FALSE,
 #' @param force_download Download data even if cached data is available
 #'
 #' @return A list with the river centreline as object of class
-#'   [`sf::sfc_LINESTRING`] or [`sf::sfc_LINESTRING`] and river surface of class
+#'   [`sf::sfc_LINESTRING`] or [`sf::sfc_MULTILINESTRING`] and river surface of class
 #'   [`sf::sfc_POLYGON`] or [`sf::sfc_MULTIPOLYGON`].
 #' @export
 #'
