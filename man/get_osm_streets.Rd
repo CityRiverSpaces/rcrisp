@@ -33,8 +33,7 @@ crs <- 31600  # National projected CRS
 get_osm_streets(bb, crs)
 
 # Specify street categories to be retrieved
-highway_values <- "primary"
-get_osm_streets(bb, crs, highway_values = highway_values)
+get_osm_streets(bb, crs, highway_values = "primary")
 
 # Ensure that data is not retrieved from cache
 get_osm_streets(bb, crs, force_download = TRUE)

@@ -350,8 +350,7 @@ get_osm_river <- function(bb, river_name, crs = NULL, force_download = FALSE) {
 #' get_osm_streets(bb, crs)
 #'
 #' # Specify street categories to be retrieved
-#' highway_values <- "primary"
-#' get_osm_streets(bb, crs, highway_values = highway_values)
+#' get_osm_streets(bb, crs, highway_values = "primary")
 #'
 #' # Ensure that data is not retrieved from cache
 #' get_osm_streets(bb, crs, force_download = TRUE)
@@ -402,7 +401,7 @@ get_osm_streets <- function(aoi, crs = NULL, highway_values = NULL,
 #' Get OpenStreetMap railways
 #'
 #' @param aoi Area of interest as sf object or bbox
-#' @param crs Coordinate reference system as EPSG code
+#' @param crs A numeric vector of length one with the EPSG code of the CRS
 #' @param railway_values A character or character vector with the railway values
 #'   to retrieve.
 #' @param force_download Download data even if cached data is available
@@ -420,7 +419,7 @@ get_osm_streets <- function(aoi, crs = NULL, highway_values = NULL,
 get_osm_railways <- function(aoi, crs = NULL, railway_values = "rail",
                              force_download = FALSE) {
   # Check input
-  checkmate::assert_character(railway_values)
+  checkmate::assert_character(railway_values, min.len = 1)
   checkmate::assert_logical(force_download, len = 1)
 
   railway_values <- tolower(railway_values)
