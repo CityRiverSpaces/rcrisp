@@ -80,11 +80,6 @@
 #'   types and structures.
 #' @srrstatsTODO {SP2.8} *Spatial Software should implement a single pre-processing routine to validate input data, and to appropriately transform it to a single uniform type to be passed to all subsequent data-processing functions.*
 #' @srrstatsTODO {SP2.9} *The pre-processing function described above should maintain those metadata attributes of input data which are relevant or important to core algorithms or return values.*
-#' @srrstatsTODO {SP4.0} *Return values should either:*
-#' @srrstatsTODO {SP4.0a} *Be in same class as input data, or*
-#' @srrstatsTODO {SP4.0b} *Be in a unique, preferably class-defined, format.*
-#' @srrstatsTODO {SP4.1} *Any aspects of input data which are included in output data (either directly, or in some transformed form) and which contain units should ensure those same units are maintained in return values.*
-#' @srrstatsTODO {SP4.2} *The type and class of all return values should be explicitly documented.*
 #' @srrstatsTODO {SP5.0} *Implement default `plot` methods for any implemented class system.*
 #' @srrstatsTODO {SP5.1} *Implement appropriate placement of variables along x- and y-axes.*
 #' @srrstatsTODO {SP5.2} *Ensure that axis labels include appropriate units.*
