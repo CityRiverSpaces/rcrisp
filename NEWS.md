@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Package-level documentation has been added.
 - Assertions using the `checkmate` package were added to input parameters throughout the package.
 - Examples were expanded to demonstrates the use of all parameters.
+- Delineated valley has been added to the `bucharest_dambovita` example package data.
 
 ## Fixed
 
