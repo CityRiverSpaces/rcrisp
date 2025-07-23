@@ -32,7 +32,7 @@ delineate_segments <- function(corridor, network, river,
   checkmate::assert_class(network, "sfnetwork")
   checkmate::assert_true(inherits(river, c("sf", "sfc")))
   checkmate::assert_numeric(angle_threshold,
-                            lower = 90,
+                            lower = 0,
                             upper = 180,
                             any.missing = FALSE)
 
