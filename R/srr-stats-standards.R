@@ -63,17 +63,16 @@
 #'   if `valley` is chosen for the initial guess of the river corridor, the
 #'   overall approach cannot be considered 3D, as all calculations performed
 #'   on vector data are carried out on `x` and `y` coordinates only.
-#' @srrstatsTODO {SP2.0} *Spatial software should only accept input data of one or more classes explicitly developed to represent such data.*
-#' @srrstatsTODO {SP2.0a} *Where new classes are implemented, conversion to other common classes for spatial data in R should be documented.*
-#' @srrstatsTODO {SP2.0b} *Class systems should ensure that functions error appropriately, rather than merely warning, in response to data from inappropriate spatial domains.*
+#' @srrstats {SP2.0} The package only uses the modern `sf` and `SpatRaster`
+#'   classes to represent geospatial *vector* and *raster* data respectively.
 #' @srrstatsTODO {SP2.1} *Spatial Software should not use the [`sp` package](https://cran.r-project.org/package=sp), rather should use [`sf`](https://cran.r-project.org/package=sf).*
 #' @srrstats {SP2.2} The output values of this package are of either class `sf`,
 #'   `SpatRaster` or `sfnetwork`, and thus are fully compatible with the
 #'   established `sf`, `terra` and `sfnetworks` packages, widely used in R
 #'   spatial analytical workflows.
 #' @srrstatsTODO {SP2.3} *Software which accepts spatial input data in any standard format established in other R packages (such as any of the formats able to be read by [`GDAL`](https://gdal.org), and therefore by the [`sf` package](https://cran.r-project.org/package=sf)) should include example and test code which load those data in spatial formats, rather than R-specific binary formats such as `.Rds`.*
-#' @srrstatsTODO {SP2.4} *Geographical Spatial Software should be compliant with version 6 or larger of* [`PROJ`](https://proj.org/), *and with* `WKT2` *representations. The primary implication, described in detail in the articles linked to above, is that:*
-#' @srrstatsTODO {SP2.4a} *Software should not permit coordinate reference systems to be represented merely by so-called "PROJ4-strings", but should use at least WKT2.*
+#' @srrstatsTODO {SP2.4, SP2.4a} By using `sf` >= 0.9, this package employs the
+#'   WKT system for CRS and ensures compliance with PROJ version 6+.
 #' @srrstats {SP2.5} The package uses `sf` and `SpatRaster` classes for vector
 #'   and raster data, respectively, both of which contain metadata on coordinate
 #'   reference systems.
@@ -117,6 +116,8 @@ NULL
 #' @srrstatsNA {G5.4b, G5.4c} This package implements a new method.
 #'
 #  Not applicable spatial software standards ----
+#' @srrstatsNA {SP2.0a, SP2.0b} This package does not implement any new classes
+#'   for spatial data.
 #' @srrstatsNA {SP2.5a} This package does not implement new classes.
 #' @srrstatsNA {SP3.0, SP3.0a, SP3.0b, SP3.1} The package does not consider
 #'   spatial neighbours.
