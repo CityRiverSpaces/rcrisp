@@ -14,9 +14,6 @@ knitr::opts_chunk$set(
   message = FALSE,
   warning = FALSE
 )
-
-assign("has_internet_via_proxy", TRUE, environment(curl::has_internet))
-
 ```
 
 In this notebook we download OpenStreetMap (OSM) data needed for the delineation of the urban river corridor of River Dâmbovița in Bucharest, Romania. After attaching the packages used in the vignette, we specify the city name, the rivern name, and the CRS, and we make sure that we provide a buffer around the river used to retrieve OSM data.
