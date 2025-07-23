@@ -24,8 +24,6 @@
 #' @srrstatsTODO {G2.8} *Software should provide appropriate conversion or dispatch routines as part of initial pre-processing to ensure that all other sub-functions of a package receive inputs of a single defined class or type.*
 #' @srrstatsTODO {G2.9} *Software should issue diagnostic messages for type conversion in which information is lost (such as conversion of variables from factor to character; standardisation of variable names; or removal of meta-data such as those associated with [`sf`-format](https://r-spatial.github.io/sf/) data) or added (such as insertion of variable or column names where none were provided).*
 #' @srrstatsTODO {G2.10} *Software should ensure that extraction or filtering of single columns from tabular inputs should not presume any particular default behaviour, and should ensure all column-extraction operations behave consistently regardless of the class of tabular data used as input.*
-#' @srrstatsTODO {G2.11} *Software should ensure that `data.frame`-like tabular objects which have columns which do not themselves have standard class attributes (typically, `vector`) are appropriately processed, and do not error without reason. This behaviour should be tested. Again, columns created by the [`units` package](https://github.com/r-quantities/units/) provide a good test case.*
-#' @srrstatsTODO {G2.12} *Software should ensure that `data.frame`-like tabular objects which have list columns should ensure that those columns are appropriately pre-processed either through being removed, converted to equivalent vector columns where appropriate, or some other appropriate treatment such as an informative error. This behaviour should be tested.*
 #' @srrstatsTODO {G2.13} *Statistical Software should implement appropriate checks for missing data as part of initial pre-processing prior to passing data to analytic algorithms.*
 #' @srrstatsTODO {G2.14} *Where possible, all functions should provide options for users to specify how to handle missing (`NA`) data, with options minimally including:*
 #' @srrstatsTODO {G2.14a} *error on missing data*
@@ -82,11 +80,6 @@
 #'   types and structures.
 #' @srrstatsTODO {SP2.8} *Spatial Software should implement a single pre-processing routine to validate input data, and to appropriately transform it to a single uniform type to be passed to all subsequent data-processing functions.*
 #' @srrstatsTODO {SP2.9} *The pre-processing function described above should maintain those metadata attributes of input data which are relevant or important to core algorithms or return values.*
-#' @srrstatsTODO {SP4.0} *Return values should either:*
-#' @srrstatsTODO {SP4.0a} *Be in same class as input data, or*
-#' @srrstatsTODO {SP4.0b} *Be in a unique, preferably class-defined, format.*
-#' @srrstatsTODO {SP4.1} *Any aspects of input data which are included in output data (either directly, or in some transformed form) and which contain units should ensure those same units are maintained in return values.*
-#' @srrstatsTODO {SP4.2} *The type and class of all return values should be explicitly documented.*
 #' @srrstatsTODO {SP5.0} *Implement default `plot` methods for any implemented class system.*
 #' @srrstatsTODO {SP5.1} *Implement appropriate placement of variables along x- and y-axes.*
 #' @srrstatsTODO {SP5.2} *Ensure that axis labels include appropriate units.*
@@ -108,6 +101,8 @@ NULL
 #' @srrstatsNA {G1.6} As there are no alternative implementations, no
 #'   performance claims are made in this package.
 #' @srrstatsNA {G2.4d, G2.4e, G2.5} This package does not make use of factors.
+#' @srrstatsNA {G2.11, G2.12} This package does not utilize list columns or
+#'   columns with non-standard class attributes in `data.frame`-like objects.
 #' @srrstatsNA {G3.1, G3.1a} This package does not perform covariance
 #'   calculations.
 #' @srrstatsNA {G5.3} This package does not return objects which explicitly
