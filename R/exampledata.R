@@ -1,9 +1,11 @@
 #' Get example OSM data
 #'
-#' This function retrieves example OpenStreetMap (OSM) data from a persistent
-#' URL on the 4TU.ResearchData data repository, and it can be used in examples
-#' and tests. The code used to generate the example dataset is available at
-#' https://github.com/CityRiverSpaces/CRiSpExampleData
+#' This function retrieves example OpenStreetMap (OSM) data from the
+#' Zenodo data repository, and it can be used in examples and tests. The code
+#' used to generate the example dataset is available at
+#' https://github.com/CityRiverSpaces/CRiSpExampleData. Note that the example
+#' dataset is cached locally, so that subsequent calls to the function can
+#' load the example data from disk without having to re-download the data.
 #'
 #' @srrstats {G5.0} The dataset used in examples, tests and vignettes is
 #'   retrieved from a persistent location on a data repository. The dataset
@@ -14,38 +16,105 @@
 #'   from a persistent URL. The code used to generate the example dataset is
 #'   publicly available, as described in the Roxygen comments.
 #'
-#' @return A list of sf objects containing the OSM data.
+#' @param force_download Download data even if cached data is available
+#' @return A list of sf objects containing the OSM data as [`sf::sfc`]
+#'   objects.
 #' @importFrom utils download.file
 #' @importFrom stats setNames
 #' @export
 #'
 #' @examplesIf interactive()
 #' get_osm_example_data()
-get_osm_example_data <- function() {
-  url_osm <- "https://data.4tu.nl/file/f5d5e118-b5bd-4dfb-987f-fe10d1b9b386/f519315e-b92d-4815-b924-3175bd2a7a61"  # nolint
-  temp_file <- tempfile(fileext = ".gpkg")
-  # temporarily increate timeout, reset value on exit
-  op <- options(timeout = 300)
-  on.exit(options(op))
-  download.file(url_osm, destfile = temp_file, mode = "wb", quiet = TRUE)
-  names <- sf::st_layers(temp_file)$name
-  lapply(names, \(layer) sf::st_read(temp_file, layer = layer, quiet = TRUE)) |>
+#' @srrstats {SP4.0, SP4.0b, SP4.2} The function returns a list of
+#'   [`sf::sfc`] objects, explicitly documented as such.
+get_osm_example_data <- function(force_download = FALSE) {
+  file <- get_example_data_file("bucharest_osm.gpkg",
+                                force_download = force_download)
+  names <- sf::st_layers(file)$name
+  lapply(names, \(layer) sf::st_read(file, layer = layer, quiet = TRUE)) |>
     setNames(names)
 }
 
 #' Get example DEM data
 #'
-#' This function retrieves example Digital Elevation Model (DEM) data from a
-#' persistent URL on the 4TU.ResearchData data repository, and it can be used
-#' in examples and tests. The code used to generate the example dataset is
-#' available at https://github.com/CityRiverSpaces/CRiSpExampleData.
+#' This function retrieves example Digital Elevation Model (DEM) data from the
+#' Zenodo data repository, and it can be used in examples and tests. The code
+#' used to generate the example dataset is available at
+#' https://github.com/CityRiverSpaces/CRiSpExampleData. Note that the example
+#' dataset is cached locally, so that subsequent calls to the function can
+#' load the example data from disk without having to re-download the data.
 #'
-#' @return A SpatRaster object containing the DEM data.
+#' @param force_download Download data even if cached data is available
+#' @return A [`terra::SpatRaster`] object containing the DEM data.
 #' @export
 #'
 #' @examplesIf interactive()
 #' get_dem_example_data()
-get_dem_example_data <- function() {
-  url_dem <- "https://data.4tu.nl/file/f5d5e118-b5bd-4dfb-987f-fe10d1b9b386/9eeee7aa-6005-48d6-ad63-d11c479db88b"  # nolint
-  terra::rast(url_dem)
+#' @srrstats {SP4.0, SP4.0b, SP4.2} The function returns a [`terra::SpatRaster`]
+#'   object, explicitly documented as such.
+get_dem_example_data <- function(force_download = FALSE) {
+  file <- get_example_data_file("bucharest_dem.tiff",
+                                force_download = force_download)
+  terra::rast(file)
 }
+
+#' Retrieve an example data file from the data repository
+#'
+#' Store the file in the cache directory, for subsequent reuse.
+#'
+#' @param force_download Download data even if cached data is available
+#' @return A character string representing the file path
+#' @keywords internal
+get_example_data_file <- function(filename, force_download = FALSE) {
+  filepath <- get_example_cache_filepath(filename)
+
+  if (!file.exists(filepath) || force_download) {
+    download_url <- get_download_url(filename)
+    # temporarily increase timeout, reset value on exit
+    op <- options(timeout = 120)
+    on.exit(options(op))
+    retry(download.file, url = download_url, destfile = filepath, mode = "wb",
+          quiet = TRUE)
+  }
+
+  filepath
+}
+
+#' Form the URL to download a given file from the Zenodo data repository
+#'
+#' @noRd
+get_download_url <- function(filename) {
+  paste(zenodo_record_url, "files", filename, sep = "/")
+}
+
+#' Retry function call, for interaction with APIs and external services
+#'
+#' @noRd
+retry <- function(func, ..., max_retries = 5, delay = 2) {
+  attempt <- 1
+  while (attempt <= max_retries) {
+    result <- tryCatch({
+      func(...)  # Call the function with arguments
+    }, error = function(e) {
+      warning(sprintf("Attempt %d failed: %s", attempt, e$message))
+      NULL
+    })
+
+    if (!is.null(result)) {
+      return(result)  # Successfully retrieved result
+    }
+
+    message(sprintf("Retrying in %d seconds...", delay))
+    Sys.sleep(delay)
+    attempt <- attempt + 1
+  }
+
+  stop("Function failed after multiple attempts.")
+}
+
+#' Example data files that can be used in examples and tests are stored in
+#' a Zenodo data repository (DOI: 10.4121/f5d5e118-b5bd-4dfb-987f-fe10d1b9b386).
+#' Files can be downloaded programmatically from the following URL.
+#'
+#' @noRd
+zenodo_record_url <- "https://zenodo.org/records/16325879"
