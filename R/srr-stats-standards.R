@@ -22,7 +22,6 @@
 #' @srrstatsTODO {G2.6} *Software which accepts one-dimensional input should ensure values are appropriately pre-processed regardless of class structures.*
 #' @srrstatsTODO {G2.7} *Software should accept as input as many of the above standard tabular forms as possible, including extension to domain-specific forms.*
 #' @srrstatsTODO {G2.8} *Software should provide appropriate conversion or dispatch routines as part of initial pre-processing to ensure that all other sub-functions of a package receive inputs of a single defined class or type.*
-#' @srrstatsTODO {G2.9} *Software should issue diagnostic messages for type conversion in which information is lost (such as conversion of variables from factor to character; standardisation of variable names; or removal of meta-data such as those associated with [`sf`-format](https://r-spatial.github.io/sf/) data) or added (such as insertion of variable or column names where none were provided).*
 #' @srrstatsTODO {G2.10} *Software should ensure that extraction or filtering of single columns from tabular inputs should not presume any particular default behaviour, and should ensure all column-extraction operations behave consistently regardless of the class of tabular data used as input.*
 #' @srrstatsTODO {G2.13} *Statistical Software should implement appropriate checks for missing data as part of initial pre-processing prior to passing data to analytic algorithms.*
 #' @srrstatsTODO {G2.14} *Where possible, all functions should provide options for users to specify how to handle missing (`NA`) data, with options minimally including:*
@@ -63,7 +62,8 @@
 #'   on vector data are carried out on `x` and `y` coordinates only.
 #' @srrstats {SP2.0} The package only uses the modern `sf` and `SpatRaster`
 #'   classes to represent geospatial *vector* and *raster* data respectively.
-#' @srrstatsTODO {SP2.1} *Spatial Software should not use the [`sp` package](https://cran.r-project.org/package=sp), rather should use [`sf`](https://cran.r-project.org/package=sf).*
+#' @srrstats {SP2.1} The package only uses `sf` for representing and handling
+#'   geospatial vector data.
 #' @srrstats {SP2.2} The output values of this package are of either class `sf`,
 #'   `SpatRaster` or `sfnetwork`, and thus are fully compatible with the
 #'   established `sf`, `terra` and `sfnetworks` packages, widely used in R
@@ -101,6 +101,9 @@ NULL
 #' @srrstatsNA {G1.6} As there are no alternative implementations, no
 #'   performance claims are made in this package.
 #' @srrstatsNA {G2.4d, G2.4e, G2.5} This package does not make use of factors.
+#' @srrstatsNA {G2.9} This package does not perform type conversions or
+#'   meta-data changes leading to information loss that would require issuing
+#'   diagnostic messages.
 #' @srrstatsNA {G2.11, G2.12} This package does not utilize list columns or
 #'   columns with non-standard class attributes in `data.frame`-like objects.
 #' @srrstatsNA {G3.1, G3.1a} This package does not perform covariance
