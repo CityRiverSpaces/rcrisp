@@ -1,8 +1,8 @@
 #' Get example OSM data
 #'
 #' This function retrieves example OpenStreetMap (OSM) data from the
-#' 4TU.ResearchData data repository, and it can be used in examples
-#' and tests. The code used to generate the example dataset is available at
+#' Zenodo data repository, and it can be used in examples and tests. The code
+#' used to generate the example dataset is available at
 #' https://github.com/CityRiverSpaces/CRiSpExampleData. Note that the example
 #' dataset is cached locally, so that subsequent calls to the function can
 #' load the example data from disk without having to re-download the data.
@@ -34,9 +34,9 @@ get_osm_example_data <- function(force_download = FALSE) {
 
 #' Get example DEM data
 #'
-#' This function retrieves example Digital Elevation Model (DEM) data from a
-#' 4TU.ResearchData data repository, and it can be used in examples and tests.
-#' The code used to generate the example dataset is available at
+#' This function retrieves example Digital Elevation Model (DEM) data from the
+#' Zenodo data repository, and it can be used in examples and tests. The code 
+#' used to generate the example dataset is available at
 #' https://github.com/CityRiverSpaces/CRiSpExampleData. Note that the example
 #' dataset is cached locally, so that subsequent calls to the function can
 #' load the example data from disk without having to re-download the data.
@@ -64,9 +64,7 @@ get_example_data_file <- function(filename, force_download = FALSE) {
   filepath <- get_example_cache_filepath(filename)
 
   if (!file.exists(filepath) || force_download) {
-    download_urls <- get_download_urls()
-    download_url <- download_urls[[filename]]
-    stopifnot(!is.null(download_url))
+    download_url <- get_download_url(filename)
     # temporarily increase timeout, reset value on exit
     op <- options(timeout = 120)
     on.exit(options(op))
@@ -77,29 +75,14 @@ get_example_data_file <- function(filename, force_download = FALSE) {
   filepath
 }
 
-#' Parse the metadata retrieved from 4TU.ResearchData to extract
-#' download URLs for each of the files in the example data repository
+#' Form the URL to download a given file from the Zenodo data repository
 #'
 #' @noRd
-get_download_urls <- function() {
-  resp <- retry(get_body_json, example_metadata_url)
-  download_urls <- list()
-  for (file in resp$files) {
-    download_urls[file$name] <- file$download_url
-  }
-  download_urls
+get_download_url <- function(filename) {
+  paste(zenodo_record_url, "files", filename, sep = "/")
 }
 
-#' Parse the JSON response body from a request to the given URL
-#'
-#' @noRd
-get_body_json <- function(url) {
-  httr2::request(url) |>
-    httr2::req_perform() |>
-    httr2::resp_body_json()
-}
-
-#' Retry function call, for API calls and external services
+#' Retry function call, for interaction with APIs and external services
 #'
 #' @noRd
 retry <- function(func, ..., max_retries = 5, delay = 2) {
@@ -125,10 +108,8 @@ retry <- function(func, ..., max_retries = 5, delay = 2) {
 }
 
 #' Example data files that can be used in examples and tests are stored in
-#' a 4TU.ResearchData data repository, reachable at the URL:
-#' https://data.4tu.nl/datasets/f5d5e118-b5bd-4dfb-987f-fe10d1b9b .
-#' Repository metadata can be accessed programmatically via the API call encoded
-#' in the given URL.
-#'
+#' a Zenodo data repository (DOI: 10.4121/f5d5e118-b5bd-4dfb-987f-fe10d1b9b386).
+#' Files can be downloaded programmatically from the following URL.
+#' 
 #' @noRd
-example_metadata_url <- "https://data.4tu.nl/v2/articles/f5d5e118-b5bd-4dfb-987f-fe10d1b9b386"  # nolint
+zenodo_record_url <- "https://zenodo.org/records/16325879"
