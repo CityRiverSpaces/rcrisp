@@ -80,10 +80,6 @@
 #'   types and structures.
 #' @srrstatsTODO {SP2.8} *Spatial Software should implement a single pre-processing routine to validate input data, and to appropriately transform it to a single uniform type to be passed to all subsequent data-processing functions.*
 #' @srrstatsTODO {SP2.9} *The pre-processing function described above should maintain those metadata attributes of input data which are relevant or important to core algorithms or return values.*
-#' @srrstatsTODO {SP5.0} *Implement default `plot` methods for any implemented class system.*
-#' @srrstatsTODO {SP5.1} *Implement appropriate placement of variables along x- and y-axes.*
-#' @srrstatsTODO {SP5.2} *Ensure that axis labels include appropriate units.*
-#' @srrstatsTODO {SP5.3} *Offer an ability to generate interactive (generally `html`-based) visualisations of results.*
 #' @srrstatsTODO {SP6.0} *Software which implements routines for transforming coordinates of input data should include tests which demonstrate ability to recover the original coordinates.*
 #' @srrstatsTODO {SP6.1} *All functions which can be applied to both Cartesian and curvilinear data should be tested through application to both.*
 #' @srrstatsTODO {SP6.1a} *Functions which may yield inaccurate results when applied to data in one or the other forms (such as the preceding examples of centroids and buffers from ellipsoidal data) should test that results from inappropriate application of those functions are indeed less accurate.*
@@ -122,6 +118,11 @@ NULL
 #' @srrstatsNA {SP3.3} The package does not employ regression.
 #' @srrstatsNA {SP3.5, SP3.6} The package does not implement any kind of
 #'   (supervised) machine learning.
+#' @srrstatsNA {SP5.0, SP5.1, SP5.2, SP5.3} The package does not return any
+#'   custom classes and thus does not implement a plot method nor does it offer
+#'   an ability to generate interactive visualisations. The returned
+#'   delineations can be used in static and interactive visualisation workflows
+#'   as any other spatial data.
 #' @srrstatsNA {SP6.3, SP6.4} This package uses spatial neighbours only via the
 #'   `terra::costDist()` function. Therefore, the definition and weighting of
 #'   neighbours are managed by `terra`, and are not implemented or tested within
