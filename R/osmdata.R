@@ -254,8 +254,8 @@ get_osm_city_boundary <- function(bb, city_name, crs = NULL, multiple = FALSE,
 #' @param force_download Download data even if cached data is available
 #'
 #' @return A list with the river centreline as object of class
-#'   [`sf::sfc_LINESTRING`] or [`sf::sfc_MULTILINESTRING`] and river surface of class
-#'   [`sf::sfc_POLYGON`] or [`sf::sfc_MULTIPOLYGON`].
+#'   [`sf::sfc_LINESTRING`] or [`sf::sfc_MULTILINESTRING`] and river surface of
+#'   class [`sf::sfc_POLYGON`] or [`sf::sfc_MULTIPOLYGON`].
 #' @export
 #'
 #' @examplesIf interactive()
@@ -263,8 +263,8 @@ get_osm_city_boundary <- function(bb, city_name, crs = NULL, multiple = FALSE,
 #' crs <- get_utm_zone(bb)
 #' get_osm_river(bb, "Dâmbovița", crs)
 #' @srrstats {SP4.0, SP4.0b, SP4.2} The return value is a list an object of
-#'   class [`sf::sfc_LINESTRING`] or [`sf::sfc_MULTILINESTRING`] and an object of
-#'   class [`sf::sfc_POLYGON`] or [`sf::sfc_MULTIPOLYGON`], explicitly
+#'   class [`sf::sfc_LINESTRING`] or [`sf::sfc_MULTILINESTRING`] and an object
+#'   of class [`sf::sfc_POLYGON`] or [`sf::sfc_MULTIPOLYGON`], explicitly
 #'   documented as such.
 get_osm_river <- function(bb, river_name, crs = NULL, force_download = FALSE) {
   # Check input
