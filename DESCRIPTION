@@ -13,11 +13,13 @@ Authors@R: c(
     person("Netherlands eScience Center", , , "info@esciencecenter.nl", role = "fnd")
   )
 Description: Provides tools to automate the morphological delineation of
-    riverside urban areas, based on a method introduced in Forgaci (2018)
+    riverside urban areas based on a method introduced in Forgaci (2018)
     <doi:10.7480/abe.2018.31>. Delineation entails the identification of
     corridor boundaries, segmentation of the corridor, and delineation of
-    the river space. The resulting delineation can be used to characterise
-    spatial phenomena that can be related to the river as a central element.
+    the river space using two-dimensional spatial information from street
+    network data and digital elevation data in a projected CRS. The
+    resulting delineation can be used to characterise spatial phenomena
+    that can be related to the river as a central element.
 License: Apache License (>= 2)
 URL: https://cityriverspaces.github.io/rcrisp/, https://doi.org/10.5281/zenodo.15793526
 BugReports: https://github.com/CityRiverSpaces/rcrisp/issues
@@ -32,7 +34,7 @@ Imports:
     rcoins,
     rlang,
     rstac,
-    sf,
+    sf (>= 0.9.0),
     sfheaders,
     sfnetworks,
     stringr,
