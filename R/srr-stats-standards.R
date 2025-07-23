@@ -123,7 +123,7 @@ NULL
 #' @srrstatsNA {SP3.2} The package does not rely on sampling from input data.
 #' @srrstatsNA {SP3.3} The package does not employ regression.
 #' @srrstatsNA {SP3.5, SP3.6} The package does not implement any kind of
-#'   machine learning.
+#'   (supervised) machine learning.
 #' @srrstatsNA {SP6.3, SP6.4} This package uses spatial neighbours only via the
 #'   `terra::costDist()` function. Therefore, the definition and weighting of
 #'   neighbours are managed by `terra`, and are not implemented or tested within
