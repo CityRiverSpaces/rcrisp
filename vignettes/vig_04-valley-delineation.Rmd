@@ -28,6 +28,8 @@ knitr::opts_chunk$set(
 #'   is needed from that point onwards and all other attributes (i.e., columns)
 #'   can be safely discarded. The object returned by `sf::st_geometry()` is a
 #'   simple feature geometry list column of class `sfc`.
+#' @srrstats {SP2.2a} This vignette demonstrates the compatibility of `rcrisp`
+#'   routines with `terra` workflows.
 ```
 
 In a typical rcrisp workflow, valley delineation is used in the context of corridor delineation. When the parameter `method = "valley"` is set (this is the default value) in `delineate_corridor()`, first the river valley is extracted from a Digital Elevation Model (DEM) with `delineate_valley()` and then the resulting valley edge is used to "guide" the delineation of the corridor on the street network, as shown in `vignette("corridor-delineation")`.

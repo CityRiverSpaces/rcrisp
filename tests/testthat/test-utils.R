@@ -54,6 +54,23 @@ test_that("correct UTM zone is returend in the northern hemisphere", {
   expect_equal(utm_epsg, 32627)
 })
 
+#' @srrstats {SP6.2} The software works mostly in projected coordinates. By
+#'   default we work with UTM zones, which are defined only outside polar
+#'   regions. We make sure that errors are raised if polar regions are
+#'   considered.
+test_that("an error is raised for latitudes outside the validity range", {
+  bbox <- sf::st_bbox(
+    c(xmin = 0, ymin = 83, xmax = 1, ymax = 84.1),
+    crs = sf::st_crs(4326)
+  )
+  expect_error(get_utm_zone(sf::st_as_sf(sf::st_as_sfc(bbox))))
+  bbox <- sf::st_bbox(
+    c(xmin = 0, ymin = -80.5, xmax = 1, ymax = 75),
+    crs = sf::st_crs(4326)
+  )
+  expect_error(get_utm_zone(sf::st_as_sf(sf::st_as_sfc(bbox))))
+})
+
 test_that("both bbox and sf objects can be used to find UTM zone", {
   bbox <- sf::st_bbox(c(xmin = -20, ymin = 20, xmax = -21, ymax = 21),
                       crs = sf::st_crs(4326))

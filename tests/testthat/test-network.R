@@ -88,6 +88,8 @@ test_that("Network objects can be set up with no modifications", {
   expect_setequal(nodes_actual, nodes_expected)
 })
 
+#' @srrstats {SP2.2b} This test demonstrates the interoperability with the
+#'   `sfnetworks` package.
 test_that("Network flattening inject intersection within edges", {
   nodes <- sf::st_sfc(p2, p3, p4, p5)
   edges <- sf::st_as_sf(sf::st_sfc(e2, e3))
@@ -106,6 +108,8 @@ test_that("Network flattening inject intersection within edges", {
   expect_setequal(edges_actual, edges_expected)
 })
 
+#' @srrstats {SP2.2b} This test demonstrates the interoperability with the
+#'   `sfnetworks` package.
 test_that("Network cleaning transforms shared internal points to nodes", {
   nodes <- sf::st_sfc(p2, p3, p4, p5)
   intersection <- sf::st_intersection(e2, e3)
@@ -128,6 +132,8 @@ test_that("Network cleaning transforms shared internal points to nodes", {
   expect_setequal(edges_actual, edges_expected)
 })
 
+#' @srrstats {SP2.2b} This test demonstrates the interoperability with the
+#'   `sfnetworks` package.
 test_that("Network cleaning drops pseudo nodes", {
   nodes <- sf::st_sfc(p1, p2, p3)
   edges <- sf::st_as_sf(sf::st_sfc(e1, e2))
@@ -145,6 +151,8 @@ test_that("Network cleaning drops pseudo nodes", {
   expect_setequal(edges_actual, edges_expected)
 })
 
+#' @srrstats {SP2.2b} This test demonstrates the interoperability with the
+#'   `sfnetworks` package.
 test_that("Network cleaning drops disconnected components", {
   nodes <- sf::st_sfc(p2, p3, p4, p5)
   edges <- sf::st_as_sf(sf::st_sfc(e2, e3))
@@ -162,6 +170,8 @@ test_that("Network cleaning drops disconnected components", {
   expect_setequal(edges_actual, edges_expected)
 })
 
+#' @srrstats {SP2.2b} This test demonstrates the interoperability with the
+#'   `sfnetworks` package.
 test_that("Network simplification drops loops and multiple edges", {
   nodes <- sf::st_sfc(p2, p3)
   p6 <- sf::st_point(c(3, -1))
