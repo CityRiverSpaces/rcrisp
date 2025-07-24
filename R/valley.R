@@ -235,6 +235,12 @@ get_slope <- function(dem) {
 #'
 #' @return updated slope raster
 #' @keywords internal
+#' @srrstats {G2.10} This function uses `sf::st_geometry()` to extract the
+#'   geometry column from the `sf` object `river`. This is used when
+#'   only geometry information is needed from that point onwards and all other
+#'   attributes (i.e., columns) can be safely discarded. The object returned
+#'   by `sf::st_geometry()` is a simple feature geometry list column of class
+#'   `sfc`.
 mask_slope <- function(slope, river, lthresh = 1.e-3, target = 0) {
   slope_masked <- terra::mask(slope,
                               terra::ifel(slope <= lthresh, NA, 1),
@@ -301,9 +307,15 @@ get_cd_char <- function(cd, method = "mean") {
 #'
 #' @param valley_mask raster mask of valley pixels
 #'
-#' @return polygon representation of valley area as st_geometry
+#' @return polygon representation of valley area as object of class [sf::sfc]
 #' @importFrom rlang .data
 #' @keywords internal
+#' @srrstats {G2.10} This function uses `sf::st_geometry()` to extract the
+#'   geometry column from an `sf` object in a `dplyr` pipline. This is used when
+#'   only geometry information is needed from that point onwards and all other
+#'   attributes (i.e., columns) can be safely discarded. The object returned
+#'   by `sf::st_geometry()` is a simple feature geometry list column of class
+#'   `sfc`.
 get_valley_polygon_raw <- function(valley_mask) {
   terra::as.polygons(valley_mask, dissolve = TRUE) |>
     sf::st_as_sf() |>
@@ -313,7 +325,7 @@ get_valley_polygon_raw <- function(valley_mask) {
 
 #' Remove possible holes from valley geometry
 #'
-#' @param valley_polygon st_geometry of valley region
+#' @param valley_polygon Geometry of valley as object of class [sf:sfc]
 #'
 #' @return (multi)polygon geometry of valley
 #' @keywords internal

@@ -1,3 +1,13 @@
+#' @srrstats {G2.10} Several tests in this test module use `sf::st_geometry()`
+#'   to extract the geometry column from the either
+#'   `bucharest_osm$river_centerline` or `bucharest_osm$river_surface`. This is
+#'   used when only geometry information is needed from that point onwards and
+#'   all other attributes (i.e., columns) can be safely discarded. The object
+#'   returned by `sf::st_geometry()` is a simple feature geometry list column of
+#'   class `sfc`.
+#' @noRd
+NULL
+
 test_that("setting units works if x is unitless", {
   x <- 1
   y <- 2

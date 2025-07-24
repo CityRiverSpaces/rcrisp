@@ -39,6 +39,12 @@
 #' corridor_init <- delineate_valley(bucharest_dem, river)
 #' delineate_corridor(network, river, corridor_init = corridor_init,
 #'                    max_width = 4000, max_iterations = 5, capping = "direct")
+#' @srrstats {G2.10} This function uses `sf::st_geometry()` to extract the
+#'   geometry column from the `sf` object `river`. This is used when only
+#'   geometry information is needed from that point onwards and all other
+#'   attributes (i.e., columns) can be safely discarded. The object returned
+#'   by `sf::st_geometry()` is a simple feature geometry list column of class
+#'   `sfc`.
 delineate_corridor <- function(
   network, river, corridor_init = 1000, max_width = 3000, max_iterations = 10,
   capping_method = "shortest-path"
@@ -178,6 +184,12 @@ corridor_end_points <- function(river_network, spatial_network, regions) {
 #' @param width Width of the regions
 #' @return A [`sf::sfc`] object with two polygon features
 #' @keywords internal
+#' @srrstats {G2.10} This function uses `sf::st_geometry()` to extract the
+#'   geometry column from the `sf` object `river`. This is used when only
+#'   geometry information is needed from that point onwards and all other
+#'   attributes (i.e., columns) can be safely discarded. The object returned
+#'   by `sf::st_geometry()` is a simple feature geometry list column of class
+#'   `sfc`.
 get_river_banks <- function(river, width) {
   if (inherits(river, "sfnetwork")) {
     river <- sf::st_as_sf(river, "edges")

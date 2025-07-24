@@ -193,6 +193,12 @@ load_raster <- function(urlpaths, bbox = NULL) {
 #'
 #' @return Combined river as sfc_MULTILINESTRING
 #' @keywords internal
+#' @srrstats {G2.10} This function uses `sf::st_geometry()` to extract the
+#'   geometry columns from the `sf` objects `river_centerline` and
+#'   `river_surface`. This is used when only geometry information is needed
+#'   from that point onwards and all other attributes (i.e., columns) can be
+#'   safely discarded. The object returned by `sf::st_geometry()` is a simple
+#'   feature geometry list column of class `sfc`.
 combine_river_features <- function(river_centerline, river_surface) {
   if (is.null(river_surface)) {
     warning("Calculating viewpoints along river centerline.")

@@ -79,6 +79,12 @@ flatten_network <- function(network) {
 #' Get edges that cross each other.
 #'
 #' @noRd
+#' @srrstats {G2.10} This function uses `sf::st_geometry()` to extract the
+#'   geometry column from the `sf` object `edges`. This is used when only
+#'   geometry information is needed from that point onwards and all other
+#'   attributes (i.e., columns) can be safely discarded. The object returned
+#'   by `sf::st_geometry()` is a simple feature geometry list column of class
+#'   `sfc`.
 get_crossing_edges <- function(edges) {
   geometry <- sf::st_geometry(edges)
   crossings <- sf::st_crosses(geometry) |> suppressMessages()
@@ -103,6 +109,12 @@ get_intersection_points <- function(edges) {
 #' @importFrom utils head tail
 #'
 #' @noRd
+#' @srrstats {G2.10} This function uses `sf::st_geometry()` to extract the
+#'   geometry column from the `sf` object `edges`. This is used when only
+#'   geometry information is needed from that point onwards and all other
+#'   attributes (i.e., columns) can be safely discarded. The object returned
+#'   by `sf::st_geometry()` is a simple feature geometry list column of class
+#'   `sfc`.
 insert_intersections <- function(edges, points, tol = 1.e-3) {
 
   edge_geometry <- sf::st_geometry(edges)
@@ -279,6 +291,12 @@ simplify_network <- function(network) {
 #'
 #' @srrstats {G2.4, G2.4b} Explicit conversion of logical vector to numeric with
 #' `as.numeric()` used for calculating penalty weights.
+#' @srrstats {G2.10} This function uses `sf::st_geometry()` to extract the
+#'   geometry column from the `sf` object `sf::st_as_sf(network, "edges")`.
+#'   This is used when only geometry information is needed from that point
+#'   onwards and all other attributes (i.e., columns) can be safely discarded.
+#'   The object returned by `sf::st_geometry()` is a simple feature geometry
+#'   list column of class `sfc`.
 add_weights <- function(network, target = NULL, exclude_area = NULL,
                         penalty = 1000., weight_name = "weight") {
   edges <- sf::st_geometry(sf::st_as_sf(network, "edges"))
@@ -319,6 +337,12 @@ add_weights <- function(network, target = NULL, exclude_area = NULL,
 #' @return A simple feature geometry
 #' @importFrom rlang .data
 #' @keywords internal
+#' @srrstats {G2.10} This function uses `sf::st_geometry()` to extract the
+#'   geometry column from the `sf` object `sf::st_as_sf(network, "edges")`.
+#'   This is used when only geometry information is needed from that point
+#'   onwards and all other attributes (i.e., columns) can be safely discarded.
+#'   The object returned by `sf::st_geometry()` is a simple feature geometry
+#'   list column of class `sfc`.
 shortest_path <- function(network, from, to, weights = "weight") {
   paths <- sfnetworks::st_network_paths(
     network, from = from, to = to, weights = weights, type = "shortest",
@@ -345,6 +369,12 @@ shortest_path <- function(network, from, to, weights = "weight") {
 #'
 #' @return A node in the network as a simple feature geometry
 #' @keywords internal
+#' @srrstats {G2.10} This function uses `sf::st_geometry()` to extract the
+#'   geometry column from the `sf` object `sf::st_as_sf(network, "nodes")`.
+#'   This is used when only geometry information is needed from that point
+#'   onwards and all other attributes (i.e., columns) can be safely discarded.
+#'   The object returned by `sf::st_geometry()` is a simple feature geometry
+#'   list column of class `sfc`.
 nearest_node <- function(network, target) {
   nodes <- sf::st_as_sf(network, "nodes") |>
     sf::st_geometry()
@@ -405,6 +435,13 @@ get_intersecting_edges <- function(network, geometry, index = FALSE) {
 #' @param network_1,network_2 The two spatial network objects
 #' @return A simple feature object
 #' @keywords internal
+#' @srrstats {G2.10} This function uses `sf::st_geometry()` to extract the
+#'   geometry column from the `sf` objects `sf::st_as_sf(network_1, "edges")`
+#'   and `sf::st_as_sf(network_2, "edges")`. This is used when only geometry
+#'   information is needed from that point onwards and all other attributes
+#'   (i.e., columns) can be safely discarded. The object returned by
+#'   `sf::st_geometry()` is a simple feature geometry list column of class
+#'   `sfc`.
 find_intersections <- function(network_1, network_2) {
   sf::st_intersection(sf::st_geometry(sf::st_as_sf(network_1, "edges")),
                       sf::st_geometry(sf::st_as_sf(network_2, "edges")))

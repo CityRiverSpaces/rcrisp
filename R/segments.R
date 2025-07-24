@@ -21,8 +21,14 @@
 #' corridor <- bucharest_dambovita$corridor
 #' network <- rbind(bucharest_osm$streets, bucharest_osm$railways) |>
 #'   as_network()
-#' river <- bucharest_osm$river_centerline |> sf::st_geometry()
+#' river <- bucharest_osm$river_centerline
 #' delineate_segments(corridor, network, river)
+#' @srrstats {G2.10} This function uses `sf::st_geometry()` to extract the
+#'   geometry column from the `sf` object `river`. This is used when
+#'   only geometry information is needed from that point onwards and all other
+#'   attributes (i.e., columns) can be safely discarded. The object returned
+#'   by `sf::st_geometry()` is a simple feature geometry list column of class
+#'   `sfc`.
 delineate_segments <- function(corridor, network, river,
                                angle_threshold = 100) {
   # Check input
@@ -63,6 +69,12 @@ delineate_segments <- function(corridor, network, river,
 #' @return Candidate segment edges as a simple feature geometry
 #' @importFrom rlang .data
 #' @keywords internal
+#' @srrstats {G2.10} This function uses `sf::st_geometry()` to extract the
+#'   geometry column from an `sf` object in a `dplyr` pipline. This is used when
+#'   only geometry information is needed from that point onwards and all other
+#'   attributes (i.e., columns) can be safely discarded. The object returned
+#'   by `sf::st_geometry()` is a simple feature geometry list column of class
+#'   `sfc`.
 clip_and_filter <- function(lines, corridor, river) {
 
   # Split corridor along the river centerline to find edges on the two sides
@@ -124,6 +136,12 @@ get_corridor_edges <- function(corridor, river) {
 #'
 #' @return A simple feature geometry including the shortest edge per cluster
 #' @keywords internal
+#' @srrstats {G2.10} This function uses `sf::st_geometry()` to extract the
+#'   geometry column from an `sf` object in a `dplyr` pipline. This is used when
+#'   only geometry information is needed from that point onwards and all other
+#'   attributes (i.e., columns) can be safely discarded. The object returned
+#'   by `sf::st_geometry()` is a simple feature geometry list column of class
+#'   `sfc`.
 filter_clusters <- function(crossings, river, eps = 100) {
   intersections <- sf::st_intersection(crossings, river)
   # By computing centroids we make sure we only have POINT geometries here

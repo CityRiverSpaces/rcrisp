@@ -195,6 +195,12 @@ get_osmdata <- function(
 #' bb <- get_osm_bb("Bucharest")
 #' crs <- get_utm_zone(bb)
 #' get_osm_city_boundary(bb, "Bucharest", crs)
+#' @srrstats {G2.10} This function uses `sf::st_geometry()` to extract the
+#'   geometry column from an `sf` object in a `dplyr` pipline. This is used when
+#'   only geometry information is needed from that point onwards and all other
+#'   attributes (i.e., columns) can be safely discarded. The object returned
+#'   by `sf::st_geometry()` is a simple feature geometry list column of class
+#'   `sfc`.
 get_osm_city_boundary <- function(bb, city_name, crs = NULL, multiple = FALSE,
                                   force_download = FALSE) {
   # Check input
@@ -248,6 +254,12 @@ get_osm_city_boundary <- function(bb, city_name, crs = NULL, multiple = FALSE,
 #' bb <- get_osm_bb("Bucharest")
 #' crs <- get_utm_zone(bb)
 #' get_osm_river(bb, "Dâmbovița", crs)
+#' @srrstats {G2.10} This function uses `sf::st_geometry()` to extract
+#'   geometry columns from `sf` objects in `dplyr` piplines. This is used when
+#'   only geometry information is needed from that point onwards and all other
+#'   attributes (i.e., columns) can be safely discarded. The object returned
+#'   by `sf::st_geometry()` is a simple feature geometry list column of class
+#'   `sfc`.
 get_osm_river <- function(bb, river_name, crs = NULL, force_download = FALSE) {
   # Check input
   checkmate::assert_logical(force_download, len = 1)
@@ -435,6 +447,12 @@ get_osm_railways <- function(aoi, crs = NULL, railway_values = "rail",
 #' bb <- get_osm_bb("Bucharest")
 #' crs <- get_utm_zone(bb)
 #' get_osm_buildings(bb, crs)
+#' @srrstats {G2.10} This function uses `sf::st_geometry()` to extract the
+#'   geometry column from an `sf` object in a `dplyr` pipline. This is used when
+#'   only geometry information is needed from that point onwards and all other
+#'   attributes (i.e., columns) can be safely discarded. The object returned
+#'   by `sf::st_geometry()` is a simple feature geometry list column of class
+#'   `sfc`.
 get_osm_buildings <- function(aoi, crs = NULL, force_download = FALSE) {
   # Check input
   checkmate::assert_logical(force_download, len = 1)

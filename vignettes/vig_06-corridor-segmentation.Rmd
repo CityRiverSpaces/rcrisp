@@ -23,6 +23,15 @@ bucharest_osm <- get_osm_example_data()
 bucharest_dem <- get_dem_example_data()
 ```
 
+```{r srr-tags, eval=FALSE, echo=FALSE}
+#' @srrstats {G2.10} This vignette uses `sf::st_geometry()` to extract the
+#'   geometry column from the `sf` objects `bucharest_osm$river_centerline` and
+#'   `streets`. This is used when only geometry information is needed from that
+#'   point onwards and all other attributes (i.e., columns) can be safely
+#'   discarded. The object returned by `sf::st_geometry()` is a simple feature
+#'   geometry list column of class `sfc`.
+```
+
 For a more detailed analysis of an urban river corridor, corridor-level delineation may not be sufficient. The corridor needs to be subdivided into smaller morphological units. Segmentation is a process of subdividing the corridor by using major transversal road or rail infrastructure lines.
 
 By default, the all-in-one function `delineate()` only returns the corridor boundary. The corridor can be segmented either by setting the argument `segments = TRUE` in `delineate()` or by using the `delineate_segments()` function in a separate step.

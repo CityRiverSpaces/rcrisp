@@ -63,6 +63,16 @@ network_no_crossings <- sfnetworks::sfnetwork(nodes = nodes_no_crossings,
                                               directed = FALSE, force = TRUE,
                                               node_key = "x")
 
+#' @srrstats {G2.10} Several tests in this test module use `sf::st_geometry()`
+#'   to extract the geometry column from the either the "edges" or "nodes"
+#'   component of an `sfnetwork` network as object of class `sf`. This is used
+#'   when only geometry information is needed from that point onwards and all
+#'   other attributes (i.e., columns) can be safely discarded. The object
+#'   returned by `sf::st_geometry()` is a simple feature geometry list column of
+#'   class `sfc`.
+#' @noRd
+NULL
+
 test_that("Network objects can be set up with no modifications", {
   edges <- sf::st_sfc(e1, e2, e3)
   network <- as_network(edges, flatten = FALSE, clean = FALSE)

@@ -1,3 +1,13 @@
+#' @srrstats {G2.10} The following four tests use `sf::st_geometry()` to extract
+#'   the geometry column from the `sf` object
+#'   `sf::st_as_sf(river_network, "edges")`. This is used when only geometry
+#'   information is needed from that point onwards and all other attributes
+#'   (i.e., columns) can be safely discarded. The object returned by
+#'   `sf::st_geometry()` is a simple feature geometry list column of class
+#'   `sfc`.
+#' @noRd
+NULL
+
 test_that("Build river network works with multiple linestring features", {
   river <- sf::st_sfc(sf::st_linestring(cbind(c(-2, 0, 0), c(0, 0, -2))))
   river_network <- build_river_network(river)
