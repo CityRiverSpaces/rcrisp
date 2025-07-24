@@ -10,3 +10,7 @@ library(testthat)
 library(rcrisp)
 
 test_check("rcrisp")
+
+#' @srrstats {SP2.2b} The interoperability with the `sf` package is
+#'   demonstrated throughout the tests in this package.
+NULL

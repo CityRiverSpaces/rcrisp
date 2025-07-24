@@ -38,7 +38,8 @@
 #'   dataset (see [get_dem()]). Only relevant if `corridor_init` is `"valley"`
 #'   and `dem` is NULL
 #'
-#' @return A list with the corridor, segments, and riverspace geometries
+#' @return A list with the corridor, segments, and riverspace geometries as
+#'   [`sf::sfc_POLYGON`] objects.
 #' @export
 #' @examplesIf interactive()
 #' # Set parameters
@@ -60,6 +61,9 @@
 #' # Provide DEM as input
 #' bucharest_dem <- get_dem_example_data()
 #' delineate(city, river, dem = bucharest_dem)
+#' @srrstats {SP4.0, SP4.0b, SP4.1, SP4.2} The return value is a list of
+#'   [`sf::sfc_POLYGON`] objects, explicitly documented as such, and it
+#'   maintains the same units as the input.
 delineate <- function(
   city_name, river_name, crs = NULL, network_buffer = NULL,
   buildings_buffer = NULL, corridor_init = "valley", dem = NULL,
