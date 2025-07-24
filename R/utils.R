@@ -57,6 +57,8 @@ get_utm_zone <- function(x) {
 #' bb <- as_bbox(bounding_coords)
 #' class(bb)
 #' st_crs(bb)
+#' @srrstats {G2.7} The `x` parameter accepts `matrix` or domain-specific
+#'   tabular input of type `sf`.
 #' @srrstats {G2.8} This function ensures all supported input types are in a
 #'   consistent class accepted by `sf::st_bbox()`. Input of class `numeric` and
 #'   `matrix`, in particular, are converted to a vector with named elements
@@ -170,6 +172,8 @@ river_buffer <- function(river, buffer_distance, bbox = NULL, side = NULL) {
 #' # Reproject a raster to EPSG:4326
 #' r <- terra::rast(matrix(1:12, nrow = 3, ncol = 4), crs = "EPSG:32633")
 #' reproject(r, 4326)
+#' @srrstats {G2.7} The `x` parameter also accepts domain-specific tabular
+#'   input of type `sf`.
 #' @srrstats {SP4.0, SP4.0b, SP4.1} The return value is of class [`sf::sf`],
 #'   [`sf::sfc`] or [`terra::SpatRaster`], explicitly documented as such, with
 #'   transformed CRS as specified by the `crs` parameter.

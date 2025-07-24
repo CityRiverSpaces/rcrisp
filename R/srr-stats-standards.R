@@ -12,22 +12,17 @@
 #'   certain type using the `checkmate` package. It is made explicit in the
 #'   descriptions of such parameters that they should be of the required length.
 #' @srrstatsTODO {G2.2} *Appropriately prohibit or restrict submission of multivariate input to parameters expected to be univariate.*
-#' @srrstatsTODO {G2.3} *For univariate character input:*
-#' @srrstatsTODO {G2.3a} *Use `match.arg()` or equivalent where applicable to only permit expected values.*
-#' @srrstatsTODO {G2.3b} *Either: use `tolower()` or equivalent to ensure input of character parameters is not case dependent; or explicitly document that parameters are strictly case-sensitive.*
 #' @srrstatsTODO {G2.4} *Provide appropriate mechanisms to convert between different data types, potentially including:*
 #' @srrstatsTODO {G2.4a} *explicit conversion to `integer` via `as.integer()`*
 #' @srrstatsTODO {G2.4b} *explicit conversion to continuous via `as.numeric()`*
 #' @srrstatsTODO {G2.4c} *explicit conversion to character via `as.character()` (and not `paste` or `paste0`)*
 #' @srrstatsTODO {G2.6} *Software which accepts one-dimensional input should ensure values are appropriately pre-processed regardless of class structures.*
-#' @srrstatsTODO {G2.7} *Software should accept as input as many of the above standard tabular forms as possible, including extension to domain-specific forms.*
 #' @srrstatsTODO {G2.10} *Software should ensure that extraction or filtering of single columns from tabular inputs should not presume any particular default behaviour, and should ensure all column-extraction operations behave consistently regardless of the class of tabular data used as input.*
 #' @srrstatsTODO {G2.13} *Statistical Software should implement appropriate checks for missing data as part of initial pre-processing prior to passing data to analytic algorithms.*
 #' @srrstatsTODO {G2.14} *Where possible, all functions should provide options for users to specify how to handle missing (`NA`) data, with options minimally including:*
 #' @srrstatsTODO {G2.14a} *error on missing data*
 #' @srrstatsTODO {G2.14b} *ignore missing data with default warnings or messages issued*
 #' @srrstatsTODO {G2.14c} *replace missing data with appropriately imputed values*
-#' @srrstatsTODO {G2.15} *Functions should never assume non-missingness, and should never pass data with potential missing values to any base routines with default `na.rm = FALSE`-type parameters (such as [`mean()`](https://stat.ethz.ch/R-manual/R-devel/library/base/html/mean.html), [`sd()`](https://stat.ethz.ch/R-manual/R-devel/library/stats/html/sd.html) or [`cor()`](https://stat.ethz.ch/R-manual/R-devel/library/stats/html/cor.html)).*
 #' @srrstatsTODO {G2.16} *All functions should also provide options to handle undefined values (e.g., `NaN`, `Inf` and `-Inf`), including potentially ignoring or removing such values.*
 #' @srrstats {G3.0} The package does not compare floating point numbers for
 #'   equality. All numeric equality comparisons are made between integers.
