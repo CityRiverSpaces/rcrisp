@@ -4,6 +4,8 @@
 #' @param y y (can be unitless)
 #' @return Object x with units of y
 #' @keywords internal
+#' @srrstats {SP4.0, SP4.0b, SP4.1} The return value is of the same class and
+#'   units as input geometry.
 set_units_like <- function(x, y) {
   has_units_x <- inherits(x, "units")
   has_units_y <- inherits(y, "units")
@@ -28,6 +30,12 @@ set_units_like <- function(x, y) {
 get_utm_zone <- function(x) {
   bb <- as_bbox(x)
 
+  # Make sure the bbox is in lat/lon
+  bb <- sf::st_transform(bb, "EPSG:4326")
+
+  if (bb[["ymin"]] < -80 || bb[["ymax"]] > 84) {
+    stop("The bbox is outside the UTM validity range (80 deg S; 84 deg N)")
+  }
   centroid_long <- (bb[["xmin"]] + bb[["xmax"]]) / 2
   centroid_lat <- (bb[["ymin"]] + bb[["ymax"]]) / 2
   base <- if (centroid_lat >= 0) 32600 else 32700
@@ -41,7 +49,7 @@ get_utm_zone <- function(x) {
 #' @param x Simple feature object (or compatible) or a bounding box, provided
 #'   either as a matrix (with x, y as rows and min, max as columns) or as a
 #'   vector (xmin, ymin, xmax, ymax)
-#' @return A bounding box as returned by [`sf::st_bbox()`]
+#' @return A `bbox` object as returned by [`sf::st_bbox()`]
 #' @export
 #' @examples
 #' library(sf)
@@ -51,6 +59,10 @@ get_utm_zone <- function(x) {
 #' st_crs(bb)
 #' @srrstats {G2.7} The `x` parameter accepts `matrix` or domain-specific
 #'   tabular input of type `sf`.
+#' @srrstats {SP4.0, SP4.0b, SP4.1} The return value is a `bbox` object as
+#'   returned by [`sf::st_bbox()`], explicitly documented as such, and it
+#'   maintains the same units as the input if CRS information is available
+#'   in the input object.
 as_bbox <- function(x) {
   # Check input
   checkmate::assert_true(
@@ -77,8 +89,11 @@ as_bbox <- function(x) {
 #' @param obj A sf object
 #' @param buffer_distance Buffer distance in meters
 #' @param ... Optional parameters passed on to [`sf::st_buffer()`]
-#' @return Expanded sf object
+#' @return An object of class [`sf::sfc_POLYGON`]
 #' @keywords internal
+#' @srrstats {SP4.0, SP4.0b, SP4.1} The return value is of the class
+#'   [`sf::sfc_POLYGON`], explicitly documented as such, and it maintains the
+#'   same units as the input.
 buffer <- function(obj, buffer_distance, ...) {
   is_obj_longlat <- sf::st_is_longlat(obj)
   dst_crs <- sf::st_crs(obj)
@@ -110,8 +125,11 @@ buffer <- function(obj, buffer_distance, ...) {
 #'   This is only applicable if `river` is a (multi)linestring geometry.
 #'   Choose between `NULL` (double-sided), `"right"` and `"left"`
 #'
-#' @return A simple feature geometry
+#' @return An object of class [`sf::sfc_POLYGON`]
 #' @keywords internal
+#' @srrstats {SP4.0, SP4.0b, SP4.1} The return value is of the class
+#'   [`sf::sfc_POLYGON`], explicitly documented as such, and it maintains the
+#'   same units as the input.
 river_buffer <- function(river, buffer_distance, bbox = NULL, side = NULL) {
   if (!is.null(bbox)) river <- sf::st_crop(river, bbox)
   if (is.null(side)) {
@@ -142,7 +160,8 @@ river_buffer <- function(river, buffer_distance, bbox = NULL, side = NULL) {
 #' @param crs CRS to be projected to
 #' @param ... Optional arguments for raster or vector reproject functions
 #'
-#' @return `SpatRaster` or `sf` object reprojected to specified CRS
+#' @return [`sf::sf`], [`sf::sfc`], or [`terra::SpatRaster`] object reprojected
+#'   to specified CRS
 #' @export
 #' @examples
 #' # Reproject a raster to EPSG:4326
@@ -150,6 +169,9 @@ river_buffer <- function(river, buffer_distance, bbox = NULL, side = NULL) {
 #' reproject(r, 4326)
 #' @srrstats {G2.7} The `x` parameter also accepts domain-specific tabular
 #'   input of type `sf`.
+#' @srrstats {SP4.0, SP4.0b, SP4.1} The return value is of class [`sf::sf`],
+#'   [`sf::sfc`] or [`terra::SpatRaster`], explicitly documented as such, with
+#'   transformed CRS as specified by the `crs` parameter.
 reproject <- function(x, crs, ...) {
   if (inherits(x, "SpatRaster")) {
     if (inherits(crs, c("integer", "numeric"))) {
@@ -177,6 +199,8 @@ reproject <- function(x, crs, ...) {
 #'
 #' @return Raster data as a [`terra::SpatRaster`] object
 #' @keywords internal
+#' @srrstats {SP4.0, SP4.0b} The return value is of class [`terra::SpatRaster`],
+#'   explicitly documented as such.
 load_raster <- function(urlpaths, bbox = NULL) {
   rasters <- lapply(urlpaths, terra::rast)
   if (!is.null(bbox)) {
@@ -192,11 +216,16 @@ load_raster <- function(urlpaths, bbox = NULL) {
 
 #' Combine river centerline and surface
 #'
-#' @param river_centerline River line as sfc_LINESTRING or sfc_MULTILINESTRING
-#' @param river_surface River surface as sfc_POLYGON or sfc_MULTIPOLYGON
+#' @param river_centerline River line as [`sf::sfc_LINESTRING`] or
+#'   [`sf::sfc_MULTILINESTRING`]
+#' @param river_surface River surface as [`sf::sfc_POLYGON`] or
+#'   [`sf::sfc_MULTIPOLYGON`]
 #'
-#' @return Combined river as sfc_MULTILINESTRING
+#' @return Combined river as [`sf::sfc_MULTILINESTRING`]
 #' @keywords internal
+#' @srrstats {SP4.0, SP4.0b, SP4.1, SP4.2} The return value is of class
+#'   [`sf::sfc_MULTILINESTRING`], explicitly documented as such, and it
+#'   maintains the same units as the input.
 combine_river_features <- function(river_centerline, river_surface) {
   if (is.null(river_surface)) {
     warning("Calculating viewpoints along river centerline.")
@@ -212,10 +241,13 @@ combine_river_features <- function(river_centerline, river_surface) {
 
 #' Check and fix invalid geometries
 #'
-#' @param sf_obj sf object
+#' @param sf_obj An object of class [`sf::sf`] or [`sf::sfc`]
 #'
-#' @return sf object with valid geometries
+#' @return [`sf::sf`] or [`sf::sfc`] object with valid geometries
 #' @keywords internal
+#' @srrstats {SP4.0, SP4.0a, SP4.1, SP4.2} The return value is of class
+#'   [`sf::sf`] or [`sf::sfc`], with the same units and class as the input,
+#'   explicitly documented as such.
 check_invalid_geometry <- function(sf_obj) {
   if (!all(sf::st_is_valid(sf_obj))) {
     message("Invalid geometries detected! Fixing them...")

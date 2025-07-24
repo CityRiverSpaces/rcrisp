@@ -1,12 +1,13 @@
 #' Create a network from a collection of line strings.
 #'
-#' @param edges An `sf` or `sfc_LINESTRING` object with the network edges
+#' @param edges An [`sf::sf`] or [`sf::sfc_LINESTRING`] object with the
+#'   network edges
 #' @param flatten Whether all intersections between edges should be
 #'   converted to nodes
 #' @param clean Whether general cleaning tasks should be run on the generated
 #'   network (see [`clean_network()`] for the description of tasks)
 #'
-#' @return A spatial network object of class `sfnetwork`
+#' @return An [`sfnetworks::sfnetwork`] object
 #' @export
 #' @examples
 #' edges <- sf::st_sfc(
@@ -23,6 +24,9 @@
 #' @srrstats {G2.7} The `edges` parameter only accepts tabular input of class
 #'   `sf`. `sfnetwork` objects are `sf`-compatible and are commonly used
 #'   for spatial network analysis.
+#' @srrstats {SP4.0, SP4.0b, SP4.1, SP4.2} The return value is of class
+#'   [`sfnetworks::sfnetwork`], explicitly documented as such, and it maintains
+#'   the same units as the input.
 as_network <- function(edges, flatten = TRUE, clean = TRUE) {
   # Check input
   checkmate::assert_true(inherits(edges, c("sf", "sfc")))
@@ -47,9 +51,10 @@ as_network <- function(edges, flatten = TRUE, clean = TRUE) {
 #' [`sfnetworks::st_network_blend()`], but in that case an external point is
 #' only injected to the closest edge.
 #'
-#' @param network A network object of class `sfnetwork`
+#' @param network A network object of class [`sfnetworks::sfnetwork`]
 #'
-#' @return An `sfnetwork` object with additional points at intersections
+#' @return An [`sfnetworks::sfnetwork`] object with additional points at
+#'   intersections
 #' @export
 #' @examples
 #' bucharest_osm <- get_osm_example_data()
@@ -60,6 +65,9 @@ as_network <- function(edges, flatten = TRUE, clean = TRUE) {
 #' @srrstats {G2.7} The `network` object provided as input must be of class
 #'   `sfnetwork`. `sfnetwork` objects are `sf`-compatible and are commonly used
 #'   for spatial network analysis.
+#' @srrstats {SP4.0, SP4.0a, SP4.1, SP4.2} The return value is of class
+#'   [`sfnetworks::sfnetwork`], same as the input class, explicitly documented
+#'   as such, and it maintains the same units as the input.
 flatten_network <- function(network) {
   nodes <- sf::st_as_sf(network, "nodes")
   edges <- sf::st_as_sf(network, "edges")
@@ -85,6 +93,8 @@ flatten_network <- function(network) {
 #' Get edges that cross each other.
 #'
 #' @noRd
+#' @srrstats {SP4.0, SP4.0b, SP4.1} The return value is of class [`sf::sf`] and
+#'   it maintains the same units as the input.
 get_crossing_edges <- function(edges) {
   geometry <- sf::st_geometry(edges)
   crossings <- sf::st_crosses(geometry) |> suppressMessages()
@@ -95,6 +105,8 @@ get_crossing_edges <- function(edges) {
 #' Get intersection points between edges.
 #'
 #' @noRd
+#' @srrstats {SP4.0, SP4.0b, SP4.1} The return value is of class
+#'   [`sf::sfc_POINT`] and it maintains the same units as the input.
 get_intersection_points <- function(edges) {
   # make sure edges is an sf object, so st_intersection also returns origins
   intersections <- sf::st_intersection(sf::st_sf(edges)) |> suppressMessages()
@@ -109,6 +121,8 @@ get_intersection_points <- function(edges) {
 #' @importFrom utils head tail
 #'
 #' @noRd
+#' @srrstats {SP4.0, SP4.0a, SP4.1} The return value is of class
+#'   [`sf::sfc_LINESTRING`] and it maintains the same units as the input.
 insert_intersections <- function(edges, points, tol = 1.e-3) {
 
   edge_geometry <- sf::st_geometry(edges)
@@ -199,11 +213,11 @@ calc_rolling_sum <- function(x, n = 2) {
 #' and discard all but the main connected component.
 # nolint end
 #'
-#' @param network A network object of class `sfnetwork`
+#' @param network A network object of class [`sfnetworks::sfnetwork`]
 #' @param simplify Whether the network should be simplified with
 #'   [`simplify_network()`]
 #'
-#' @return A cleaned network object of class `sfnetwork`
+#' @return A cleaned network object of class [`sfnetworks::sfnetwork`]
 #' @export
 #' @examplesIf interactive()
 #' bucharest_osm <- get_osm_example_data()
@@ -214,6 +228,9 @@ calc_rolling_sum <- function(x, n = 2) {
 #' @srrstats {G2.7} The `network` object provided as input must be of class
 #'   `sfnetwork`. `sfnetwork` objects are `sf`-compatible and are commonly used
 #'   for spatial network analysis.
+#' @srrstats {SP4.0, SP4.0a, SP4.1, SP4.2} The return value is of class
+#'   [`sfnetworks::sfnetwork`], same as the input class, explicitly documented
+#'   as such, and it maintains the same units as the input.
 clean_network <- function(network, simplify = TRUE) {
   # Check input
   checkmate::assert_class(network, "sfnetwork")
@@ -244,6 +261,9 @@ clean_network <- function(network, simplify = TRUE) {
 #'
 #' @return A simplifed network object
 #' @keywords internal
+#' @srrstats {SP4.0, SP4.0a, SP4.1, SP4.2} The return value is of class
+#'   [`sfnetworks::sfnetwork`], same as the input class, explicitly documented
+#'   as such, and it maintains the same units as the input.
 simplify_network <- function(network) {
   network |>
     sfnetworks::activate("edges") |>
@@ -282,7 +302,8 @@ simplify_network <- function(network) {
 #' @param weight_name Name of the column in the edge table where to add the
 #'   weights
 #'
-#' @return A network object with weights added as a column in the edge table
+#' @return A network object of class [`sfnetworks::sfnetwork`] with weights
+#'   added as a column in the edge table
 #' @importFrom rlang :=
 #' @keywords internal
 #'
@@ -291,6 +312,9 @@ simplify_network <- function(network) {
 #' @srrstats {G2.7} The `network` object provided as input must be of class
 #'   `sfnetwork`. `sfnetwork` objects are `sf`-compatible and are commonly used
 #'   for spatial network analysis.
+#' @srrstats {SP4.0, SP4.0a, SP4.1, SP4.2} The return value is of class
+#'   [`sfnetworks::sfnetwork`], same as the input class, explicitly documented
+#'   as such, and it maintains the same units as the input.
 add_weights <- function(network, target = NULL, exclude_area = NULL,
                         penalty = 1000., weight_name = "weight") {
   edges <- sf::st_geometry(sf::st_as_sf(network, "edges"))
@@ -322,15 +346,18 @@ add_weights <- function(network, target = NULL, exclude_area = NULL,
 
 #' Find shortest path between a pair of nodes in the network.
 #'
-#' @param network A spatial network object
+#' @param network A spatial network object of class [`sfnetworks::sfnetwork`]
 #' @param from Start node
 #' @param to End node
 #' @param weights Name of the column in the network edge table from where to
 #'   take the weigths
 #'
-#' @return A simple feature geometry
+#' @return An [`sf::sfc_LINESTRING`] object
 #' @importFrom rlang .data
 #' @keywords internal
+#' @srrstats {SP4.0, SP4.0b, SP4.1, SP4.2} The return value is of class
+#'   [`sf::sfc_LINESTRING`], explicitly documented as such, and it maintains
+#'   the same units as the input.
 shortest_path <- function(network, from, to, weights = "weight") {
   paths <- sfnetworks::st_network_paths(
     network, from = from, to = to, weights = weights, type = "shortest",
@@ -352,11 +379,14 @@ shortest_path <- function(network, from, to, weights = "weight") {
 
 #' Find the node in a network that is closest to a target geometry.
 #'
-#' @param network A network object
-#' @param target The target geometry
+#' @param network A network object of class [`sfnetworks::sfnetwork`]
+#' @param target An object of class [`sf::sf`] or [`sf::sfc`]
 #'
-#' @return A node in the network as a simple feature geometry
+#' @return A node in the network as an object of class [`sf::sfc_POINT`]
 #' @keywords internal
+#' @srrstats {SP4.0, SP4.0b, SP4.1, SP4.2} The return value is of class
+#'   [`sf::sfc_POINT`], explicitly documented as such, and it maintains
+#'   the same units as the input.
 nearest_node <- function(network, target) {
   nodes <- sf::st_as_sf(network, "nodes") |>
     sf::st_geometry()
@@ -369,14 +399,17 @@ nearest_node <- function(network, target) {
 #' If subsetting results in multiple disconnected components, we keep the main
 #' one.
 #'
-#' @param network A network object
+#' @param network A spatial network object of class [`sfnetworks::sfnetwork`]
 #' @param target The target geometry
 #' @param elements The elements of the network to filter. It can be "nodes"
 #'   or "edges"
 #'
-#' @return A spatial network object
+#' @return A spatial network object of class [`sfnetworks::sfnetwork`]
 #' @importFrom rlang !!
 #' @keywords internal
+#' @srrstats {SP4.0, SP4.0a, SP4.1, SP4.2} The return value is of class
+#'   [`sfnetworks::sfnetwork`], same as the input class, explicitly documented
+#'   as such, and it maintains the same units as the input.
 filter_network <- function(network, target, elements = "nodes") {
   if (elements == "nodes") {
     intersect_func <- sfnetworks::node_intersects
@@ -395,13 +428,17 @@ filter_network <- function(network, target, elements = "nodes") {
 
 #' Identify network edges that are intersecting a geometry
 #'
-#' @param network A spatial network object
-#' @param geometry A simple feature geometry
+#' @param network A spatial network object of class [`sfnetworks::sfnetwork`]
+#' @param geometry An object of class [`sf::sfc`]
 #' @param index Whether to return the indices of the matchin edges or the
 #'   geometries
 #'
 #' @return Indices or geometries of the edges intersecting the given geometry
+#'   of class [`sf::sfc_LINESTRING`]
 #' @keywords internal
+#' @srrstats {SP4.0, SP4.0b, SP4.1, SP4.2} If `index = FALSE`, the return value
+#'   is of class [`sf::sfc_LINESTRING`], explicitly documented as such, and it
+#'   maintains the same units as the input.
 get_intersecting_edges <- function(network, geometry, index = FALSE) {
   edges <- sf::st_as_sf(network, "edges")
   intersects <- sf::st_intersects(edges, geometry, sparse = FALSE)
@@ -415,8 +452,11 @@ get_intersecting_edges <- function(network, geometry, index = FALSE) {
 #' Find intersections between the edges of two networks
 #'
 #' @param network_1,network_2 The two spatial network objects
-#' @return A simple feature object
+#' @return An object of class [`sf::sfc`]
 #' @keywords internal
+#' @srrstats {SP4.0, SP4.0b, SP4.1, SP4.2} The return value is of class
+#'   [`sf::sfc`], explicitly documented as such, and it maintains the same units
+#'   as the input.
 find_intersections <- function(network_1, network_2) {
   sf::st_intersection(sf::st_geometry(sf::st_as_sf(network_1, "edges")),
                       sf::st_geometry(sf::st_as_sf(network_2, "edges")))

@@ -24,6 +24,11 @@ bucharest_osm <- get_osm_example_data()
 bucharest_dem <- get_dem_example_data()
 ```
 
+```{r srr-tags, eval=FALSE, echo=FALSE}
+#' @srrstats {SP2.2a} This vignette demonstrates the compatibility of `rcrisp`
+#'   routines with `sfnetworks` workflows.
+```
+
 ## 1. Input data
 
 In this article we show how to set up the spatial network for a city before using it for urban river corridor delineation. We work with the OSM data for the city of Bucharest provided in rcrisp example data. See how to get your own OSM data in `vignette("getting-osm-data")`.
