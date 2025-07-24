@@ -77,6 +77,49 @@ as_bbox <- function(x) {
   bbox
 }
 
+#' Standardise the coordinate reference system (CRS) of an object
+#'
+#' @param x An object of class `sf`, `sfc`, `bbox`, or a numeric  or character
+#'   vector representing a CRS (e.g., EPSG code).
+#'
+#' @returns An object of class [sf::crs] with a valid CRS.
+#' @export
+#'
+#' @examples
+#' library(sf)
+#'
+#' # Standardise a numeric EPSG code
+#' as_crs(4326, allow_geographic = TRUE)
+#'
+#' # Standardise a character EPSG code
+#' as_crs("EPSG:4326", allow_geographic = TRUE)
+#'
+#' # Standardise a bbox object
+#' bb <- st_bbox(c(xmin = 25.9, ymin = 44.3, xmax = 26.2, ymax = 44.5),
+#'                 crs = 4326)
+#' as_crs(bb, allow_geographic = TRUE)
+#'
+#' # Standardise a simple feature object
+#' bb_sfc <- st_as_sfc(bb)
+#' bb_sf <- st_as_sf(bb_sf)
+#' as_crs(bb_sf, allow_geographic = TRUE)
+#' as_crs(bb_sfc, allow_geographic = TRUE)
+as_crs <- function(x, allow_geographic = FALSE) {
+  checkmate::assert_multi_class(x, c("numeric",
+                                     "character",
+                                     "bbox",
+                                     "sf",
+                                     "sfc"))
+  checkmate::assert_logical(allow_geographic, len = 1)
+
+  crs <- sf::st_crs(x)
+  if (!allow_geographic && crs$IsGeographic) {
+    stop(paste("The input CRS is geographic (lat/lon),",
+               "please provide a projected CRS."))
+  }
+  crs
+}
+
 #' Apply a buffer region to a sf object
 #'
 #' If the input object is in lat/lon coordinates, the buffer is approximately
