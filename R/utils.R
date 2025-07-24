@@ -27,6 +27,10 @@ set_units_like <- function(x, y) {
 #' # Get EPSG code for UTM zone of Bucharest
 #' bb <- get_osm_bb("Bucharest")
 #' get_utm_zone(bb)
+#' @srrstats {SP2.8, SP2.9} Before determining the UTM zone, the bounding box
+#'   given as input is transformed into an object of class `bbox`. If input
+#'   data does not have a CRS, EPSG:4326 (WGS84) is assumed and assigned by
+#'   [`as_bbox()`].
 get_utm_zone <- function(x) {
   bb <- as_bbox(x)
 
