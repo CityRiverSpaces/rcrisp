@@ -61,6 +61,9 @@
 #' # Provide DEM as input
 #' bucharest_dem <- get_dem_example_data()
 #' delineate(city, river, dem = bucharest_dem)
+#' @srrstats {G2.3, G2.3a, G2.3b} The `checkmate` package is used to check that
+#'   `corridor_init` only uses allowed values. The variable is also made
+#'   case-independent with `tolower()`.
 #' @srrstats {SP4.0, SP4.0b, SP4.1, SP4.2} The return value is a list of
 #'   [`sf::sfc_POLYGON`] objects, explicitly documented as such, and it
 #'   maintains the same units as the input.
@@ -74,6 +77,10 @@ delineate <- function(
   # Check input
   checkmate::assert_character(city_name, len = 1)
   checkmate::assert_character(river_name, len = 1)
+  if (is.character(corridor_init)) {
+    corridor_init <- tolower(corridor_init)
+    checkmate::assert_choice(corridor_init, c("valley"))
+  }
   checkmate::assert_logical(corridor, len = 1)
   checkmate::assert_logical(segments, len = 1)
   checkmate::assert_logical(riverspace, len = 1)
