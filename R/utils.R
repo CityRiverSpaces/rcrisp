@@ -116,19 +116,25 @@ as_bbox <- function(x) {
 #' as_crs(bb_sf, allow_geographic = TRUE)
 #' as_crs(bb_sfc, allow_geographic = TRUE)
 as_crs <- function(x, allow_geographic = FALSE) {
-  checkmate::assert_multi_class(x, c("numeric",
-                                     "character",
-                                     "bbox",
-                                     "sf",
-                                     "sfc"))
+  checkmate::assert_multi_class(x,
+                                c("numeric",
+                                  "character",
+                                  "bbox",
+                                  "sf",
+                                  "sfc"),
+                                null.ok = TRUE)
   checkmate::assert_logical(allow_geographic, len = 1)
 
-  crs <- sf::st_crs(x)
-  if (!allow_geographic && crs$IsGeographic) {
-    stop(paste("The input CRS is geographic (lat/lon),",
-               "please provide a projected CRS."))
+  if (!is.null(x)) {
+    crs <- sf::st_crs(x)
+    if (!allow_geographic && crs$IsGeographic) {
+      stop(paste("The input CRS is geographic (lat/lon),",
+                 "please provide a projected CRS."))
+    }
+    crs
+  } else {
+    NULL
   }
-  crs
 }
 
 #' Apply a buffer region to a sf object
