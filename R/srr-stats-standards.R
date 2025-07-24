@@ -99,9 +99,6 @@ NULL
 #' @srrstatsNA {G2.9} This package does not perform type conversions or
 #'   meta-data changes leading to information loss that would require issuing
 #'   diagnostic messages.
-#' @srrstatsNA {G2.10} This package does not perform any extraction of single
-#'   columns from tabular inputs (such as `data.frame`, `tibble`, or
-#'   `data.table`). Therefore, the requirements of this standard do not apply.
 #' @srrstatsNA {G2.11, G2.12} This package does not utilize list columns or
 #'   columns with non-standard class attributes in `data.frame`-like objects.
 #' @srrstatsNA {G3.1, G3.1a} This package does not perform covariance
