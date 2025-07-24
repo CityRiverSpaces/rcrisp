@@ -59,6 +59,11 @@ get_utm_zone <- function(x) {
 #' st_crs(bb)
 #' @srrstats {G2.7} The `x` parameter accepts `matrix` or domain-specific
 #'   tabular input of type `sf`.
+#' @srrstats {G2.8} This function ensures all supported input types are in a
+#'   consistent class accepted by `sf::st_bbox()`. Input of class `numeric` and
+#'   `matrix`, in particular, are converted to a vector with named elements
+#'   (`xmin`, `ymin`, `xmax`, `ymax`) before being passed down to
+#'   `sf::st_bbox()`.
 #' @srrstats {SP4.0, SP4.0b, SP4.1} The return value is a `bbox` object as
 #'   returned by [`sf::st_bbox()`], explicitly documented as such, and it
 #'   maintains the same units as the input if CRS information is available
