@@ -39,6 +39,14 @@
 #' corridor_init <- delineate_valley(bucharest_dem, river)
 #' delineate_corridor(network, river, corridor_init = corridor_init,
 #'                    max_width = 4000, max_iterations = 5, capping = "direct")
+#' @srrstats {G2.3, G2.3a, G2.3b} The `checkmate` package is used to check that
+#'   `capping_method` only uses allowed choices. The variable is also made
+#'   case-independent with `tolower()`.
+#' @srrstats {G2.7} The `network` object provided as input must be of class
+#'   `sfnetwork`. `sfnetwork` objects are `sf`-compatible and are commonly used
+#'   for spatial network analysis. The `river` parameter accepts inputs of type
+#'   `sf` and `sfc`. In the current implementation, any other form of tabular
+#'   input is rejected (the spatial information is strictly needed).
 #' @srrstats {G2.13} The absence of missing values in numeric inputs is
 #'   asserted using the `checkmate` package.
 #' @srrstats {SP4.0, SP4.0b, SP4.1, SP4.2} The return value is of class
@@ -65,6 +73,7 @@ delineate_corridor <- function(
   checkmate::assert_numeric(max_iterations,
                             len = 1,
                             any.missing = FALSE)
+  capping_method <- tolower(capping_method)
   checkmate::assert_choice(capping_method, c("shortest-path", "direct"))
 
   # Drop all attributes of river but its geometry

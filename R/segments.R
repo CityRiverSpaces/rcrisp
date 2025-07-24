@@ -24,6 +24,10 @@
 #'   as_network()
 #' river <- bucharest_osm$river_centerline |> sf::st_geometry()
 #' delineate_segments(corridor, network, river)
+#' @srrstats {G2.7} The `network` object provided as input must be of class
+#'   `sfnetwork`. `sfnetwork` objects are `sf`-compatible and are commonly
+#'   used for spatial network analysis. The `river` parameter accepts
+#'   domain-specific tabular input of type `sf`.
 #' @srrstats {G2.13} The absence of missing values in numeric inputs is
 #'   asserted using the `checkmate` package.
 #' @srrstats {SP4.0, SP4.0b, SP4.1, SP4.2} The return value is of class
