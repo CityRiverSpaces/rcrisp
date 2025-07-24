@@ -11,23 +11,17 @@
 #'   the package for functions which require single- or multi-valued input of a
 #'   certain type using the `checkmate` package. It is made explicit in the
 #'   descriptions of such parameters that they should be of the required length.
-#' @srrstatsTODO {G2.2} *Appropriately prohibit or restrict submission of multivariate input to parameters expected to be univariate.*
-#' @srrstatsTODO {G2.3} *For univariate character input:*
-#' @srrstatsTODO {G2.3a} *Use `match.arg()` or equivalent where applicable to only permit expected values.*
-#' @srrstatsTODO {G2.3b} *Either: use `tolower()` or equivalent to ensure input of character parameters is not case dependent; or explicitly document that parameters are strictly case-sensitive.*
+#' @srrstats {G2.2} Throughout the package, input validation is performed
+#'   using vector-specific assertions from the `checkmate` package, such as
+#'   `assert_character()`, `assert_numeric()`, or the more general
+#'   `assert_vector()`. This ensures that parameters expected to be univariate
+#'   vectors are appropriately restricted, and multivariate input (such as
+#'   matrices, data frames, or lists) is prohibited.
 #' @srrstatsTODO {G2.4} *Provide appropriate mechanisms to convert between different data types, potentially including:*
 #' @srrstatsTODO {G2.4a} *explicit conversion to `integer` via `as.integer()`*
 #' @srrstatsTODO {G2.4b} *explicit conversion to continuous via `as.numeric()`*
 #' @srrstatsTODO {G2.4c} *explicit conversion to character via `as.character()` (and not `paste` or `paste0`)*
 #' @srrstatsTODO {G2.6} *Software which accepts one-dimensional input should ensure values are appropriately pre-processed regardless of class structures.*
-#' @srrstatsTODO {G2.7} *Software should accept as input as many of the above standard tabular forms as possible, including extension to domain-specific forms.*
-#' @srrstatsTODO {G2.8} *Software should provide appropriate conversion or dispatch routines as part of initial pre-processing to ensure that all other sub-functions of a package receive inputs of a single defined class or type.*
-#' @srrstatsTODO {G2.13} *Statistical Software should implement appropriate checks for missing data as part of initial pre-processing prior to passing data to analytic algorithms.*
-#' @srrstatsTODO {G2.14} *Where possible, all functions should provide options for users to specify how to handle missing (`NA`) data, with options minimally including:*
-#' @srrstatsTODO {G2.14a} *error on missing data*
-#' @srrstatsTODO {G2.14b} *ignore missing data with default warnings or messages issued*
-#' @srrstatsTODO {G2.14c} *replace missing data with appropriately imputed values*
-#' @srrstatsTODO {G2.15} *Functions should never assume non-missingness, and should never pass data with potential missing values to any base routines with default `na.rm = FALSE`-type parameters (such as [`mean()`](https://stat.ethz.ch/R-manual/R-devel/library/base/html/mean.html), [`sd()`](https://stat.ethz.ch/R-manual/R-devel/library/stats/html/sd.html) or [`cor()`](https://stat.ethz.ch/R-manual/R-devel/library/stats/html/cor.html)).*
 #' @srrstatsTODO {G2.16} *All functions should also provide options to handle undefined values (e.g., `NaN`, `Inf` and `-Inf`), including potentially ignoring or removing such values.*
 #' @srrstats {G3.0} The package does not compare floating point numbers for
 #'   equality. All numeric equality comparisons are made between integers.
@@ -67,7 +61,9 @@
 #'   `SpatRaster` or `sfnetwork`, and thus are fully compatible with the
 #'   established `sf`, `terra` and `sfnetworks` packages, widely used in R
 #'   spatial analytical workflows.
-#' @srrstatsTODO {SP2.3} *Software which accepts spatial input data in any standard format established in other R packages (such as any of the formats able to be read by [`GDAL`](https://gdal.org), and therefore by the [`sf` package](https://cran.r-project.org/package=sf)) should include example and test code which load those data in spatial formats, rather than R-specific binary formats such as `.Rds`.*
+#' @srrstats {SP2.3} The package caches spatial objects retrieved from external
+#'   services as RDS objects, but these are only for internal use and their
+#'   direct use is not recommended.
 #' @srrstatsTODO {SP2.4, SP2.4a} By using `sf` >= 0.9, this package employs the
 #'   WKT system for CRS and ensures compliance with PROJ version 6+.
 #' @srrstats {SP2.5} The package uses `sf` and `SpatRaster` classes for vector
@@ -77,8 +73,6 @@
 #'   documentation and validated throughout the package using
 #'   `checkmate::assert_*` functions to ensure input data conforms to expected
 #'   types and structures.
-#' @srrstatsTODO {SP2.8} *Spatial Software should implement a single pre-processing routine to validate input data, and to appropriately transform it to a single uniform type to be passed to all subsequent data-processing functions.*
-#' @srrstatsTODO {SP2.9} *The pre-processing function described above should maintain those metadata attributes of input data which are relevant or important to core algorithms or return values.*
 #' @srrstatsTODO {SP6.0} *Software which implements routines for transforming coordinates of input data should include tests which demonstrate ability to recover the original coordinates.*
 #' @srrstatsTODO {SP6.1} *All functions which can be applied to both Cartesian and curvilinear data should be tested through application to both.*
 #' @srrstatsTODO {SP6.1a} *Functions which may yield inaccurate results when applied to data in one or the other forms (such as the preceding examples of centroids and buffers from ellipsoidal data) should test that results from inappropriate application of those functions are indeed less accurate.*
@@ -101,6 +95,10 @@ NULL
 #'   diagnostic messages.
 #' @srrstatsNA {G2.11, G2.12} This package does not utilize list columns or
 #'   columns with non-standard class attributes in `data.frame`-like objects.
+#' @srrstatsNA {G2.14, G2.14a, G2.14b, G2.14c} These standards are not
+#'   applicable because `mean()` is used only within the internal function
+#'   `get_cd_char()` which does not provide a user interface for handling
+#'   missing data.
 #' @srrstatsNA {G3.1, G3.1a} This package does not perform covariance
 #'   calculations.
 #' @srrstatsNA {G5.3} This package does not return objects which explicitly

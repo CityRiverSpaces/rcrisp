@@ -51,13 +51,17 @@ default_stac_dem <- list(
 #'
 #' # Specify CRS
 #' get_dem(bb, crs = crs)
+#' @srrstats {G2.3, G2.3b} The input character value for `dem_source` is
+#'   converted to uppercase using toupper(), making the check case-insensitive.
+#'   A validation is then performed to ensure the value is allowed.
+#' @srrstats {G2.7} The `bb` parameter accepts tabular input of class `matrix`.
 get_dem <- function(bb, dem_source = "STAC", stac_endpoint = NULL,
                     stac_collection = NULL, crs = NULL,
                     force_download = FALSE) {
   # Check input
   checkmate::assert_logical(force_download, len = 1)
-
   dem_source <- toupper(dem_source)
+  checkmate::assert_choice(dem_source, c("STAC"))
 
   bbox <- as_bbox(bb)
   if (dem_source == "STAC") {
@@ -92,6 +96,8 @@ get_dem <- function(bb, dem_source = "STAC", stac_endpoint = NULL,
 #' bucharest_osm <- get_osm_example_data()
 #' bucharest_dem <- get_dem_example_data()
 #' delineate_valley(bucharest_dem, bucharest_osm$river_centerline)
+#' @srrstats {G2.7} The `river` parameter accepts domain-specific tabular input
+#'   of type `sf`.
 delineate_valley <- function(dem, river) {
   # Check input
   checkmate::assert_class(dem, "SpatRaster")
@@ -133,6 +139,7 @@ delineate_valley <- function(dem, river) {
 #' get_stac_asset_urls(bb,
 #'                     endpoint = "some endpoint",
 #'                     collection = "some collection")
+#' @srrstats {G2.7} The `bb` parameter accepts tabular input of class `matrix`.
 get_stac_asset_urls <- function(bb, endpoint = NULL, collection = NULL) {
   # Check input
   bbox <- as_bbox(bb)
@@ -177,6 +184,7 @@ get_stac_asset_urls <- function(bb, endpoint = NULL, collection = NULL) {
 #' load_dem(bb, tile_urls, force_download = TRUE)
 #' @srrstats {G4.0} DEM data is written to cache with a file name concatenated
 #'   from tile names and boundig box coordinates.
+#' @srrstats {G2.7} The `bb` parameter accepts tabular input of class `matrix`.
 load_dem <- function(bb, tile_urls, force_download = FALSE) {
   # Check input
   bbox <- as_bbox(bb)
@@ -295,6 +303,10 @@ mask_cost_distance <- function(cd, river, buffer = 2000) {
 #'
 #' @return characteristic value of cd raster
 #' @keywords internal
+#' @srrstats {G2.15} This function explicitly sets `na.rm = TRUE` when
+#'   calculating the mean of a cost distance raster, which may contain `NA`
+#'   values. This way, the mean is calculated only from valid raster cells,
+#'   ignoring any missing values.
 get_cd_char <- function(cd, method = "mean") {
   if (method == "mean") {
     mean(terra::values(cd), na.rm = TRUE)
