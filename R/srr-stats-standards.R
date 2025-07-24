@@ -11,7 +11,12 @@
 #'   the package for functions which require single- or multi-valued input of a
 #'   certain type using the `checkmate` package. It is made explicit in the
 #'   descriptions of such parameters that they should be of the required length.
-#' @srrstatsTODO {G2.2} *Appropriately prohibit or restrict submission of multivariate input to parameters expected to be univariate.*
+#' @srrstats {G2.2} Throughout the package, input validation is performed
+#'   using vector-specific assertions from the `checkmate` package, such as
+#'   `assert_character()`, `assert_numeric()`, or the more general
+#'   `assert_vector()`. This ensures that parameters expected to be univariate
+#'   vectors are appropriately restricted, and multivariate input (such as
+#'   matrices, data frames, or lists) is prohibited.
 #' @srrstatsTODO {G2.4} *Provide appropriate mechanisms to convert between different data types, potentially including:*
 #' @srrstatsTODO {G2.4a} *explicit conversion to `integer` via `as.integer()`*
 #' @srrstatsTODO {G2.4b} *explicit conversion to continuous via `as.numeric()`*
