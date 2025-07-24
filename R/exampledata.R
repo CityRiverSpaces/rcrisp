@@ -25,6 +25,8 @@
 #'
 #' @examplesIf interactive()
 #' get_osm_example_data()
+#' @srrstats {SP2.3} This function is used throughout the package to retrieve
+#'   example data in `GPKG` format.
 #' @srrstats {SP4.0, SP4.0b, SP4.2} The function returns a list of
 #'   [`sf::sfc`] objects, explicitly documented as such.
 get_osm_example_data <- function(force_download = FALSE) {
@@ -50,6 +52,8 @@ get_osm_example_data <- function(force_download = FALSE) {
 #'
 #' @examplesIf interactive()
 #' get_dem_example_data()
+#' @srrstats {SP2.3} This function is used throughout the package to retrieve
+#'   example data in `GeoTIFF` format.
 #' @srrstats {SP4.0, SP4.0b, SP4.2} The function returns a [`terra::SpatRaster`]
 #'   object, explicitly documented as such.
 get_dem_example_data <- function(force_download = FALSE) {
