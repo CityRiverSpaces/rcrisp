@@ -47,6 +47,8 @@
 #'   for spatial network analysis. The `river` parameter accepts inputs of type
 #'   `sf` and `sfc`. In the current implementation, any other form of tabular
 #'   input is rejected (the spatial information is strictly needed).
+#' @srrstats {G2.13} The absence of missing values in numeric inputs is
+#'   asserted using the `checkmate` package.
 #' @srrstats {G2.16} This function checks numeric arguments for undefined values
 #'   (NaN, Inf, -Inf) and errors when encountering such values.
 #' @srrstats {SP4.0, SP4.0b, SP4.1, SP4.2} The return value is of class
@@ -62,7 +64,7 @@ delineate_corridor <- function(
   checkmate::assert_true(
     inherits(corridor_init, c("numeric", "sfc_POLYGON", "sfc_MULTIPOLYGON"))
   )
-  if (inherits(corridor_init, c("numeric", "integer"))) {
+  if (inherits(corridor_init, c("numeric"))) {
     checkmate::assert_numeric(corridor_init,
                               len = 1,
                               any.missing = FALSE,
