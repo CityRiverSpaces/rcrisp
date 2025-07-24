@@ -14,6 +14,8 @@
 #'   bucharest_osm <- get_osm_example_data()
 #'   delineate_riverspace(bucharest_osm$river_surface, bucharest_osm$buildings)
 #' }
+#' @srrstats {G2.7} The `river` and `occluders` parameters accept
+#'   domain-specific tabular input of type `sf`.
 #' @srrstats {SP4.0, SP4.0b, SP4.1, SP4.2} The return value is of class
 #'   [`sf::sfc_POLYGON`], explicitly documented as such, and it maintains the
 #'   same units as the input.

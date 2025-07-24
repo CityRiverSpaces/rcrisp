@@ -16,7 +16,8 @@ of class \code{bbox}.}
 \item{force_download}{Download data even if cached data is available}
 }
 \value{
-Raster DEM, retrieved and retiled to the given bounding box
+A DEM of class \code{\link[terra:SpatRaster-class]{terra::SpatRaster}}, retrieved and retiled to the
+given bounding box
 }
 \description{
 Load DEM data from a list of tiles, crop and merge using a given bounding

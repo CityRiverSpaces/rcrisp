@@ -15,8 +15,14 @@
 #' @examplesIf interactive()
 #' bb <- get_osm_bb("Bucharest")
 #' osmdata_as_sf("highway", "motorway", bb, force_download = TRUE)
+#' @srrstats {G2.7} The `aoi` parameter accepts domain-specific tabular input
+#'   of type `sf`.
 #' @srrstats {G4.0} OSM data is saved with a file name concatenated from the
 #'   OSM "key", "value" and "bbox" coordinates.
+#' @srrstats {G2.3, G2.3b} Both `key` and `value` are made case-insensitive to
+#'   comply with OpenStreetMap (OSM) naming convention. Values are not checked
+#'   as they depend on the key. Keys and values should be retrieved from OSM
+#'   documentation.
 #' @srrstats {SP4.0, SP4.0b, SP4.2} The return value is of class
 #'   [`osmdata::osmdata`], explicitly documented as such.
 osmdata_as_sf <- function(key, value, aoi, force_download = FALSE) {
@@ -327,7 +333,7 @@ get_osm_river <- function(bb, river_name, crs = NULL, force_download = FALSE) {
 #' Get OpenStreetMap streets
 #'
 #' @param aoi Area of interest as sf object or bbox
-#' @param crs Coordinate reference system as EPSG code
+#' @param crs A numeric vector of length one with the EPSG code of the CRS
 #' @param highway_values A character vector with the highway values to retrieve.
 #'             If left NULL, the function retrieves the following values:
 #'             "motorway", "trunk", "primary", "secondary", "tertiary"
@@ -346,18 +352,21 @@ get_osm_river <- function(bb, river_name, crs = NULL, force_download = FALSE) {
 #' get_osm_streets(bb, crs)
 #'
 #' # Specify street categories to be retrieved
-#' highway_values <- "primary"
-#' get_osm_streets(bb, crs, highway_values = highway_values)
+#' get_osm_streets(bb, crs, highway_values = "primary")
 #'
 #' # Ensure that data is not retrieved from cache
 #' get_osm_streets(bb, crs, force_download = TRUE)
+#' @srrstats {G2.13} The absence of missing values in numeric inputs is
+#'   asserted using the `checkmate` package.
 #' @srrstats {SP4.0, SP4.0b, SP4.2} The return value is a an object of
 #'   class [`sf::sfc_LINESTRING`], explicitly documented as such.
 get_osm_streets <- function(aoi, crs = NULL, highway_values = NULL,
                             force_download = FALSE) {
   # Check input
   checkmate::assert_true(inherits(aoi, c("sf", "sfc", "bbox")))
-  checkmate::assert_numeric(crs, null.ok = TRUE)
+  checkmate::assert_numeric(crs,
+                            null.ok = TRUE,
+                            any.missing = FALSE)
   checkmate::assert_character(highway_values, null.ok = TRUE)
   checkmate::assert_logical(force_download, len = 1)
 
@@ -398,7 +407,7 @@ get_osm_streets <- function(aoi, crs = NULL, highway_values = NULL,
 #' Get OpenStreetMap railways
 #'
 #' @param aoi Area of interest as sf object or bbox
-#' @param crs Coordinate reference system as EPSG code
+#' @param crs A numeric vector of length one with the EPSG code of the CRS
 #' @param railway_values A character or character vector with the railway values
 #'   to retrieve.
 #' @param force_download Download data even if cached data is available
@@ -416,7 +425,7 @@ get_osm_streets <- function(aoi, crs = NULL, highway_values = NULL,
 get_osm_railways <- function(aoi, crs = NULL, railway_values = "rail",
                              force_download = FALSE) {
   # Check input
-  checkmate::assert_character(railway_values)
+  checkmate::assert_character(railway_values, min.len = 1)
   checkmate::assert_logical(force_download, len = 1)
 
   railway_values <- tolower(railway_values)
@@ -489,13 +498,19 @@ get_osm_buildings <- function(aoi, crs = NULL, force_download = FALSE) {
 #' bb <- get_osm_bb("Bucharest")
 #' river <- get_osm_river(bb, "Dâmbovița")
 #' get_river_aoi(river, bb, buffer_distance = 100)
+#' @srrstats {G2.7} The `river` parameter accepts domain-specific tabular input
+#'   of type `sf`.
+#' @srrstats {G2.13} The absence of missing values in numeric inputs is
+#'   asserted using the `checkmate` package.
 #' @srrstats {SP4.0, SP4.0b, SP4.2} The return value is a an object of
 #'   class [`sf::sfc_POLYGON`], explicitly documented as such. The returned area
 #'   of interest is in geographic CRS as it is meant to be used for clipping
 #'   OpenStreetMap data.
 get_river_aoi <- function(river, city_bbox, buffer_distance) {
   # Check input
-  checkmate::assert_numeric(buffer_distance, len = 1)
+  checkmate::assert_numeric(buffer_distance,
+                            len = 1,
+                            any.missing = FALSE)
 
   river <- c(river$centerline, river$surface)
 
@@ -504,7 +519,6 @@ get_river_aoi <- function(river, city_bbox, buffer_distance) {
 
   river_buffer(river, buffer_distance, bbox = city_bbox)
 }
-
 
 #' Match OpenStreetMap data by name
 #'
