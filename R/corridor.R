@@ -43,7 +43,7 @@
 #'   `sfnetwork`. `sfnetwork` objects are `sf`-compatible and are commonly used
 #'   for spatial network analysis. The `river` parameter accepts inputs of type
 #'   `sf` and `sfc`. In the current implementation, any other form of tabular
-#'   input is rejected.
+#'   input is rejected (the spatial information is strictly needed).
 delineate_corridor <- function(
   network, river, corridor_init = 1000, max_width = 3000, max_iterations = 10,
   capping_method = "shortest-path"
