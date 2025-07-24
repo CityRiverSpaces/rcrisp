@@ -68,7 +68,9 @@
 #'   `SpatRaster` or `sfnetwork`, and thus are fully compatible with the
 #'   established `sf`, `terra` and `sfnetworks` packages, widely used in R
 #'   spatial analytical workflows.
-#' @srrstatsTODO {SP2.3} *Software which accepts spatial input data in any standard format established in other R packages (such as any of the formats able to be read by [`GDAL`](https://gdal.org), and therefore by the [`sf` package](https://cran.r-project.org/package=sf)) should include example and test code which load those data in spatial formats, rather than R-specific binary formats such as `.Rds`.*
+#' @srrstats {SP2.3} The package caches spatial objects retrieved from external
+#'   services as RDS objects, but these are only for internal use and their
+#'   direct use is not recommended.
 #' @srrstatsTODO {SP2.4, SP2.4a} By using `sf` >= 0.9, this package employs the
 #'   WKT system for CRS and ensures compliance with PROJ version 6+.
 #' @srrstats {SP2.5} The package uses `sf` and `SpatRaster` classes for vector
