@@ -206,11 +206,13 @@ load_dem <- function(bb, tile_urls, force_download = FALSE) {
 #'
 #' @return filtered dem
 #' @keywords internal
-#' @srrstats {SP3.0} Although it does not accept "rook" as a neighbourhood form,
-#'   this function does allow `window` (i.e., the size of the neighourhood) to
-#'   be set and passed down to the `w` parameter of `terra::focal()`. With a
-#'   single value (default), the function employs the square ("queen")
-#'   neighbourhood form.
+#' @srrstats {SP3.0, SP3.0a} This function allows `window` (i.e., the size of
+#'   the neighourhood) to be set and passed down to the `w` parameter of
+#'   `terra::focal()`. With a single value (default), the function employs the
+#'   square ("queen") neighbourhood form. With a weight matrix, also accepted
+#'   by `terra::focal()`, in which cells on ortogonal direction are assigned
+#'   `1` and cells on diagonal direction are assigned `0`, a "rook"
+#'   neighbourhood form can also be obtained.
 smooth_dem <- function(dem, method = "median", window = 5) {
   dem_smoothed <- terra::focal(dem, w = window, fun = method)
   names(dem_smoothed) <- "dem_smoothed"
