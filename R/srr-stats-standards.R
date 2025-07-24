@@ -111,19 +111,9 @@ NULL
 #' @srrstatsNA {G5.4b, G5.4c} This package implements a new method.
 #'
 #  Not applicable spatial software standards ----
-<<<<<<< HEAD
-=======
 #' @srrstatsNA {SP2.0a, SP2.0b} This package does not implement any new classes
 #'   for spatial data.
 #' @srrstatsNA {SP2.5a} This package does not implement new classes.
-#' @srrstatsNA {SP3.0a} The `get_cost_dist()` internal function uses
-#'   `terra::costDist()` to calculate cost distance on a slope raster. As
-#'   `terra::costDist()` computes distances "by summing local distances
-#'   between cells [...] in 8 directions" and does not allow the user to
-#'   choose between "rook" and "queen" neighbourhood forms, this package cannot
-#'   offer user control on that aspect either. Similarly, `smooth_dem()` only
-#'   allows for the `queen` neighbourhood form.
->>>>>>> 6ca80226454ff1e577eba62545fd434082e58152
 #' @srrstatsNA {SP3.0b} The package does not consider spatial neighbours in
 #'   irregular spaces.
 #' @srrstatsNA {SP3.2} The package does not rely on sampling from input data.
