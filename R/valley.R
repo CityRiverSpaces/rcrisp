@@ -51,13 +51,16 @@ default_stac_dem <- list(
 #'
 #' # Specify CRS
 #' get_dem(bb, crs = crs)
+#' @srrstats {G2.3, G2.3b} The input character value for `dem_source` is
+#' converted to uppercase using toupper(), making the check case-insensitive.
+#' A validation is then performed to ensure the value is allowed.
 get_dem <- function(bb, dem_source = "STAC", stac_endpoint = NULL,
                     stac_collection = NULL, crs = NULL,
                     force_download = FALSE) {
   # Check input
   checkmate::assert_logical(force_download, len = 1)
-
   dem_source <- toupper(dem_source)
+  checkmate::assert_choice(dem_source, c("STAC"))
 
   bbox <- as_bbox(bb)
   if (dem_source == "STAC") {
@@ -169,7 +172,8 @@ get_stac_asset_urls <- function(bb, endpoint = NULL, collection = NULL) {
 #' @param tile_urls A list of tiles where to read the DEM data from
 #' @param force_download Download data even if cached data is available
 #'
-#' @return Raster DEM, retrieved and retiled to the given bounding box
+#' @return A DEM of class [`terra::SpatRaster`], retrieved and retiled to the
+#'   given bounding box
 #' @export
 #' @examplesIf interactive()
 #' bb <- get_osm_bb("Bucharest")
@@ -289,6 +293,10 @@ mask_cost_distance <- function(cd, river, buffer = 2000) {
 #'
 #' @return characteristic value of cd raster
 #' @keywords internal
+#' @srrstats {G2.15} This function explicitly sets `na.rm = TRUE` when
+#'   calculating the mean of a cost distance raster, which may contain `NA`
+#'   values. This way, the mean is calculated only from valid raster cells,
+#'   ignoring any missing values.
 get_cd_char <- function(cd, method = "mean") {
   if (method == "mean") {
     mean(terra::values(cd), na.rm = TRUE)
