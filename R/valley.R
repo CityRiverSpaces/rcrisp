@@ -51,13 +51,16 @@ default_stac_dem <- list(
 #'
 #' # Specify CRS
 #' get_dem(bb, crs = crs)
+#' @srrstats {G2.3, G2.3b} The input character value for `dem_source` is
+#' converted to uppercase using toupper(), making the check case-insensitive.
+#' A validation is then performed to ensure the value is allowed.
 get_dem <- function(bb, dem_source = "STAC", stac_endpoint = NULL,
                     stac_collection = NULL, crs = NULL,
                     force_download = FALSE) {
   # Check input
   checkmate::assert_logical(force_download, len = 1)
-
   dem_source <- toupper(dem_source)
+  checkmate::assert_choice(dem_source, c("STAC"))
 
   bbox <- as_bbox(bb)
   if (dem_source == "STAC") {
