@@ -14,7 +14,7 @@ get_osm_railways(
 \arguments{
 \item{aoi}{Area of interest as sf object or bbox}
 
-\item{crs}{Coordinate reference system as EPSG code}
+\item{crs}{A numeric vector of length one with the EPSG code of the CRS}
 
 \item{railway_values}{A character or character vector with the railway values
 to retrieve.}
