@@ -39,6 +39,9 @@
 #' corridor_init <- delineate_valley(bucharest_dem, river)
 #' delineate_corridor(network, river, corridor_init = corridor_init,
 #'                    max_width = 4000, max_iterations = 5, capping = "direct")
+#' @srrstats {G2.3, G2.3a, G2.3b} The `checkmate` package is used to check that
+#'   `capping_method` only uses allowed choices. The variable is also made
+#'   case-independent with `tolower()`.
 #' @srrstats {G2.16} This function checks numeric arguments for undefined values
 #'   (NaN, Inf, -Inf) and errors when encountering such values.
 #' @srrstats {SP4.0, SP4.0b, SP4.1, SP4.2} The return value is of class
@@ -68,6 +71,7 @@ delineate_corridor <- function(
                             len = 1,
                             any.missing = FALSE,
                             finite = TRUE)
+  capping_method <- tolower(capping_method)
   checkmate::assert_choice(capping_method, c("shortest-path", "direct"))
 
   # Drop all attributes of river but its geometry
