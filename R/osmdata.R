@@ -15,6 +15,8 @@
 #' @examplesIf interactive()
 #' bb <- get_osm_bb("Bucharest")
 #' osmdata_as_sf("highway", "motorway", bb, force_download = TRUE)
+#' @srrstats {G2.7} The `aoi` parameter accepts domain-specific tabular input
+#'   of type `sf`.
 #' @srrstats {G4.0} OSM data is saved with a file name concatenated from the
 #'   OSM "key", "value" and "bbox" coordinates.
 #' @srrstats {G2.3, G2.3b} Both `key` and `value` are made case-insensitive to
@@ -493,6 +495,8 @@ get_osm_buildings <- function(aoi, crs = NULL, force_download = FALSE) {
 #' bb <- get_osm_bb("Bucharest")
 #' river <- get_osm_river(bb, "Dâmbovița")
 #' get_river_aoi(river, bb, buffer_distance = 100)
+#' @srrstats {G2.7} The `river` parameter accepts domain-specific tabular input
+#'   of type `sf`.
 #' @srrstats {SP4.0, SP4.0b, SP4.2} The return value is a an object of
 #'   class [`sf::sfc_POLYGON`], explicitly documented as such. The returned area
 #'   of interest is in geographic CRS as it is meant to be used for clipping
@@ -508,7 +512,6 @@ get_river_aoi <- function(river, city_bbox, buffer_distance) {
 
   river_buffer(river, buffer_distance, bbox = city_bbox)
 }
-
 
 #' Match OpenStreetMap data by name
 #'

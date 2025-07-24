@@ -42,6 +42,11 @@
 #' @srrstats {G2.3, G2.3a, G2.3b} The `checkmate` package is used to check that
 #'   `capping_method` only uses allowed choices. The variable is also made
 #'   case-independent with `tolower()`.
+#' @srrstats {G2.7} The `network` object provided as input must be of class
+#'   `sfnetwork`. `sfnetwork` objects are `sf`-compatible and are commonly used
+#'   for spatial network analysis. The `river` parameter accepts inputs of type
+#'   `sf` and `sfc`. In the current implementation, any other form of tabular
+#'   input is rejected (the spatial information is strictly needed).
 #' @srrstats {SP4.0, SP4.0b, SP4.1, SP4.2} The return value is of class
 #'   [`sf::sfc_POLYGON`], explicitly documented as such, and it maintains the
 #'   same units as the input.
