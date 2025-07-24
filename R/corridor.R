@@ -47,6 +47,8 @@
 #'   for spatial network analysis. The `river` parameter accepts inputs of type
 #'   `sf` and `sfc`. In the current implementation, any other form of tabular
 #'   input is rejected (the spatial information is strictly needed).
+#' @srrstats {G2.13} The absence of missing values in numeric inputs is
+#'   asserted using the `checkmate` package.
 #' @srrstats {SP4.0, SP4.0b, SP4.1, SP4.2} The return value is of class
 #'   [`sf::sfc_POLYGON`], explicitly documented as such, and it maintains the
 #'   same units as the input.
@@ -60,8 +62,17 @@ delineate_corridor <- function(
   checkmate::assert_true(
     inherits(corridor_init, c("numeric", "sfc_POLYGON", "sfc_MULTIPOLYGON"))
   )
-  checkmate::assert_numeric(max_width, len = 1)
-  checkmate::assert_numeric(max_iterations, len = 1)
+  if (inherits(corridor_init, "numeric")) {
+    checkmate::assert_numeric(corridor_init,
+                              len = 1,
+                              any.missing = FALSE)
+  }
+  checkmate::assert_numeric(max_width,
+                            len = 1,
+                            any.missing = FALSE)
+  checkmate::assert_numeric(max_iterations,
+                            len = 1,
+                            any.missing = FALSE)
   capping_method <- tolower(capping_method)
   checkmate::assert_choice(capping_method, c("shortest-path", "direct"))
 

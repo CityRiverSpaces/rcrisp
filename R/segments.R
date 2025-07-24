@@ -28,6 +28,8 @@
 #'   `sfnetwork`. `sfnetwork` objects are `sf`-compatible and are commonly
 #'   used for spatial network analysis. The `river` parameter accepts
 #'   domain-specific tabular input of type `sf`.
+#' @srrstats {G2.13} The absence of missing values in numeric inputs is
+#'   asserted using the `checkmate` package.
 #' @srrstats {SP4.0, SP4.0b, SP4.1, SP4.2} The return value is of class
 #'   [`sf::sfc_POLYGON`], explicitly documented as such, and it maintains the
 #'   same units as the input.
@@ -37,7 +39,10 @@ delineate_segments <- function(corridor, network, river,
   checkmate::assert_class(corridor, "sfc_POLYGON")
   checkmate::assert_class(network, "sfnetwork")
   checkmate::assert_true(inherits(river, c("sf", "sfc")))
-  checkmate::assert_numeric(angle_threshold, lower = 90, upper = 180)
+  checkmate::assert_numeric(angle_threshold,
+                            lower = 90,
+                            upper = 180,
+                            any.missing = FALSE)
 
   # Drop all attributes of river but its geometry
   river <- sf::st_geometry(river)
