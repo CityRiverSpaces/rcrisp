@@ -10,7 +10,7 @@
 #' as a vector ("xmin", "ymin", "xmax", "ymax")
 #' @param force_download Download data even if cached data is available
 #'
-#' @return An sf object with the retrieved OpenStreetMap data
+#' @return An [`osmdata::osmdata`] object with the retrieved OpenStreetMap data
 #' @export
 #' @examplesIf interactive()
 #' bb <- get_osm_bb("Bucharest")
@@ -21,6 +21,8 @@
 #'   comply with OpenStreetMap (OSM) naming convention. Values are not checked
 #'   as they depend on the key. Keys and values should be retrieved from OSM
 #'   documentation.
+#' @srrstats {SP4.0, SP4.0b, SP4.2} The return value is of class
+#'   [`osmdata::osmdata`], explicitly documented as such.
 osmdata_as_sf <- function(key, value, aoi, force_download = FALSE) {
   # Check input
   checkmate::assert_character(key, len = 1)
@@ -55,8 +57,10 @@ osmdata_as_sf <- function(key, value, aoi, force_download = FALSE) {
 #'  specified bounding box
 #' @param bb A bounding box, in lat/lon coordinates
 #'
-#' @return An sf object with the retrieved OpenStreetMap data
+#' @return An [`osmdata::osmdata`] object with the retrieved OpenStreetMap data
 #' @keywords internal
+#' @srrstats {SP4.0, SP4.0b, SP4.2} The return value is of class
+#'   [`osmdata::osmdata`], explicitly documented as such.
 osmdata_query <- function(key, value, bb) {
   # this is needed because the add_osm_feature does not support
   # value as an empty string
@@ -71,11 +75,13 @@ osmdata_query <- function(key, value, bb) {
 #'
 #' @param city_name The name of the city
 #'
-#' @return A bbox object with the bounding box of the city
+#' @return A `bbox` object with the bounding box of the city
 #' @export
 #'
 #' @examplesIf interactive()
 #' get_osm_bb("Bucharest")
+#' @srrstats {SP4.0, SP4.0b, SP4.2} The return value is a `bbox` object as
+#'   returned by [`sf::st_bbox()`], explicitly documented as such.
 get_osm_bb <- function(city_name) {
   bb <- osmdata::getbb(city_name)
   as_bbox(bb)
@@ -102,7 +108,7 @@ get_osm_bb <- function(city_name) {
 #' @param force_download Download data even if cached data is available
 #'
 #' @return A list with the retrieved OpenStreetMap data sets for the
-#'         given location
+#'         given location, as objects of class [`sf::sfc`]
 #' @export
 #'
 #' @examplesIf interactive()
@@ -121,6 +127,8 @@ get_osm_bb <- function(city_name) {
 #'
 #' # Use custom CRS
 #' get_osmdata(city, river, crs = "EPSG:31600")  # National projected CRS
+#' @srrstats {SP4.0, SP4.0b, SP4.2} The return value is a list of objects of
+#'   class [`sf::sfc`], explicitly documented as such.
 get_osmdata <- function(
   city_name, river_name, network_buffer = NULL, buildings_buffer = NULL,
   city_boundary = TRUE, crs = NULL, force_download = FALSE
@@ -191,7 +199,8 @@ get_osmdata <- function(
 #'                 returned. By default, only the first one is returned.
 #' @param force_download Download data even if cached data is available
 #'
-#' @return An sf object with the city boundary
+#' @return An object of class [`sf::sfc_POLYGON`] or [`sf::sfc_MULTIPOLYGON`]
+#'   with the city boundary
 #' @importFrom rlang .data
 #' @export
 #'
@@ -199,6 +208,9 @@ get_osmdata <- function(
 #' bb <- get_osm_bb("Bucharest")
 #' crs <- get_utm_zone(bb)
 #' get_osm_city_boundary(bb, "Bucharest", crs)
+#' @srrstats {SP4.0, SP4.0b, SP4.2} The return value is a an object of
+#'   class [`sf::sfc_POLYGON`] or [`sf::sfc_MULTIPOLYGON`], explicitly
+#'   documented as such.
 get_osm_city_boundary <- function(bb, city_name, crs = NULL, multiple = FALSE,
                                   force_download = FALSE) {
   # Check input
@@ -245,13 +257,19 @@ get_osm_city_boundary <- function(bb, city_name, crs = NULL, multiple = FALSE,
 #' @param crs Coordinate reference system as EPSG code
 #' @param force_download Download data even if cached data is available
 #'
-#' @return A list with the river centreline and surface
+#' @return A list with the river centreline as object of class
+#'   [`sf::sfc_LINESTRING`] or [`sf::sfc_MULTILINESTRING`] and river surface of
+#'   class [`sf::sfc_POLYGON`] or [`sf::sfc_MULTIPOLYGON`].
 #' @export
 #'
 #' @examplesIf interactive()
 #' bb <- get_osm_bb("Bucharest")
 #' crs <- get_utm_zone(bb)
 #' get_osm_river(bb, "Dâmbovița", crs)
+#' @srrstats {SP4.0, SP4.0b, SP4.2} The return value is a list an object of
+#'   class [`sf::sfc_LINESTRING`] or [`sf::sfc_MULTILINESTRING`] and an object
+#'   of class [`sf::sfc_POLYGON`] or [`sf::sfc_MULTIPOLYGON`], explicitly
+#'   documented as such.
 get_osm_river <- function(bb, river_name, crs = NULL, force_download = FALSE) {
   # Check input
   checkmate::assert_logical(force_download, len = 1)
@@ -319,7 +337,7 @@ get_osm_river <- function(bb, river_name, crs = NULL, force_download = FALSE) {
 #'             "motorway", "trunk", "primary", "secondary", "tertiary"
 #' @param force_download Download data even if cached data is available
 #'
-#' @return An sf object with the streets
+#' @return An object of class [`sf::sfc_LINESTRING`]
 #' @export
 #' @importFrom rlang !! sym
 #'
@@ -337,6 +355,8 @@ get_osm_river <- function(bb, river_name, crs = NULL, force_download = FALSE) {
 #'
 #' # Ensure that data is not retrieved from cache
 #' get_osm_streets(bb, crs, force_download = TRUE)
+#' @srrstats {SP4.0, SP4.0b, SP4.2} The return value is a an object of
+#'   class [`sf::sfc_LINESTRING`], explicitly documented as such.
 get_osm_streets <- function(aoi, crs = NULL, highway_values = NULL,
                             force_download = FALSE) {
   # Check input
@@ -387,7 +407,7 @@ get_osm_streets <- function(aoi, crs = NULL, highway_values = NULL,
 #'   to retrieve.
 #' @param force_download Download data even if cached data is available
 #'
-#' @return An sf object with the railways
+#' @return An object of class [`sf::sfc_LINESTRING`]
 #' @export
 #' @importFrom rlang !! sym
 #'
@@ -395,6 +415,8 @@ get_osm_streets <- function(aoi, crs = NULL, highway_values = NULL,
 #' bb <- get_osm_bb("Bucharest")
 #' crs <- get_utm_zone(bb)
 #' get_osm_railways(bb, crs)
+#' @srrstats {SP4.0, SP4.0b, SP4.2} The return value is a an object of
+#'   class [`sf::sfc_LINESTRING`], explicitly documented as such.
 get_osm_railways <- function(aoi, crs = NULL, railway_values = "rail",
                              force_download = FALSE) {
   # Check input
@@ -433,12 +455,14 @@ get_osm_railways <- function(aoi, crs = NULL, railway_values = "rail",
 #' @param crs Coordinate reference system as EPSG code
 #' @param force_download Download data even if cached data is available
 #'
-#' @return An sf object with the buildings
+#' @return An object of class [`sf::sfc_POLYGON`]
 #' @export
 #' @examplesIf interactive()
 #' bb <- get_osm_bb("Bucharest")
 #' crs <- get_utm_zone(bb)
 #' get_osm_buildings(bb, crs)
+#' @srrstats {SP4.0, SP4.0b, SP4.2} The return value is a an object of
+#'   class [`sf::sfc_POLYGON`], explicitly documented as such.
 get_osm_buildings <- function(aoi, crs = NULL, force_download = FALSE) {
   # Check input
   checkmate::assert_logical(force_download, len = 1)
@@ -462,13 +486,17 @@ get_osm_buildings <- function(aoi, crs = NULL, force_download = FALSE) {
 #' @param river A list with the river centreline and surface geometries
 #' @param city_bbox Bounding box of class `bbox` around the city
 #' @param buffer_distance Buffer size around the river
-#' @return An `sfc_POLYGON` object in lat/lon coordinates
+#' @return An [`sf::sfc_POLYGON`] object in lat/lon coordinates
 #' @export
 #'
 #' @examplesIf interactive()
 #' bb <- get_osm_bb("Bucharest")
 #' river <- get_osm_river(bb, "Dâmbovița")
 #' get_river_aoi(river, bb, buffer_distance = 100)
+#' @srrstats {SP4.0, SP4.0b, SP4.2} The return value is a an object of
+#'   class [`sf::sfc_POLYGON`], explicitly documented as such. The returned area
+#'   of interest is in geographic CRS as it is meant to be used for clipping
+#'   OpenStreetMap data.
 get_river_aoi <- function(river, city_bbox, buffer_distance) {
   # Check input
   checkmate::assert_numeric(buffer_distance, len = 1)

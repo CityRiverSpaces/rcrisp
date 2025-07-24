@@ -38,7 +38,8 @@
 #'   dataset (see [get_dem()]). Only relevant if `corridor_init` is `"valley"`
 #'   and `dem` is NULL
 #'
-#' @return A list with the corridor, segments, and riverspace geometries
+#' @return A list with the corridor, segments, and riverspace geometries as
+#'   [`sf::sfc_POLYGON`] objects.
 #' @export
 #' @examplesIf interactive()
 #' # Set parameters
@@ -63,6 +64,9 @@
 #' @srrstats {G2.3, G2.3a, G2.3b} The `checkmate` package is used to check that
 #'   `corridor_init` only uses allowed values. The variable is also made
 #'   case-independent with `tolower()`.
+#' @srrstats {SP4.0, SP4.0b, SP4.1, SP4.2} The return value is a list of
+#'   [`sf::sfc_POLYGON`] objects, explicitly documented as such, and it
+#'   maintains the same units as the input.
 delineate <- function(
   city_name, river_name, crs = NULL, network_buffer = NULL,
   buildings_buffer = NULL, corridor_init = "valley", dem = NULL,
