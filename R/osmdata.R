@@ -17,6 +17,10 @@
 #' osmdata_as_sf("highway", "motorway", bb, force_download = TRUE)
 #' @srrstats {G4.0} OSM data is saved with a file name concatenated from the
 #'   OSM "key", "value" and "bbox" coordinates.
+#' @srrstats {G2.3, G2.3b} Both `key` and `value` are made case-insensitive to
+#'   comply with OpenStreetMap (OSM) naming convention. Values are not checked
+#'   as they depend on the key. Keys and values should be retrieved from OSM
+#'   documentation.
 #' @srrstats {SP4.0, SP4.0b, SP4.2} The return value is of class
 #'   [`osmdata::osmdata`], explicitly documented as such.
 osmdata_as_sf <- function(key, value, aoi, force_download = FALSE) {
