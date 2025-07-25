@@ -9,7 +9,7 @@ get_osm_streets(aoi, crs = NULL, highway_values = NULL, force_download = FALSE)
 \arguments{
 \item{aoi}{Area of interest as sf object or bbox}
 
-\item{crs}{Coordinate reference system as EPSG code}
+\item{crs}{A numeric vector of length one with the EPSG code of the CRS}
 
 \item{highway_values}{A character vector with the highway values to retrieve.
 If left NULL, the function retrieves the following values:
@@ -33,8 +33,7 @@ crs <- 31600  # National projected CRS
 get_osm_streets(bb, crs)
 
 # Specify street categories to be retrieved
-highway_values <- "primary"
-get_osm_streets(bb, crs, highway_values = highway_values)
+get_osm_streets(bb, crs, highway_values = "primary")
 
 # Ensure that data is not retrieved from cache
 get_osm_streets(bb, crs, force_download = TRUE)

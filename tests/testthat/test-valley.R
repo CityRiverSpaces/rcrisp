@@ -49,6 +49,12 @@ test_that("Download DEM data can be retrieved from the cache on new calls", {
   )
 })
 
+#' @srrstats {G2.10} This test uses `sf::st_geometry()` to extract
+#'   the geometry column from an `sf` object read in with `sf::st_read()`. This
+#'   is used when only geometry information is needed from that point onwards
+#'   and all other attributes (i.e., columns) can be safely discarded. The
+#'   object returned by `sf::st_geometry()` is a simple feature geometry list
+#'   column of class `sfc`.
 test_that("valley polygon is correctly constructed", {
   dem <- bucharest_dem
   river <- bucharest_osm$river_surface
