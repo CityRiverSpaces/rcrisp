@@ -308,7 +308,7 @@ simplify_network <- function(network) {
 #' @keywords internal
 #'
 #' @srrstats {G2.4, G2.4b} Explicit conversion of logical vector to numeric with
-#' `as.numeric()` used for calculating penalty weights.
+#'   `as.numeric()` used for calculating penalty weights.
 #' @srrstats {G2.7} The `network` object provided as input must be of class
 #'   `sfnetwork`. `sfnetwork` objects are `sf`-compatible and are commonly used
 #'   for spatial network analysis.

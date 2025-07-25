@@ -30,6 +30,8 @@
 #'   domain-specific tabular input of type `sf`.
 #' @srrstats {G2.13} The absence of missing values in numeric inputs is
 #'   asserted using the `checkmate` package.
+#' @srrstats {G2.16} This function checks numeric arguments for undefined values
+#'   (NaN, Inf, -Inf) and errors when encountering such values.
 #' @srrstats {SP4.0, SP4.0b, SP4.1, SP4.2} The return value is of class
 #'   [`sf::sfc_POLYGON`], explicitly documented as such, and it maintains the
 #'   same units as the input.
@@ -40,7 +42,7 @@ delineate_segments <- function(corridor, network, river,
   checkmate::assert_class(network, "sfnetwork")
   checkmate::assert_true(inherits(river, c("sf", "sfc")))
   checkmate::assert_numeric(angle_threshold,
-                            lower = 90,
+                            lower = 0,
                             upper = 180,
                             any.missing = FALSE)
 
