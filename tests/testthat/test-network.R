@@ -313,8 +313,8 @@ test_that("Filter network drops smallest disconnected components", {
   expect_length(nodes_area, 3)
 })
 
-#' @srrstats {G5.8} Edge test: if a value outside the available range is
-#'   selected, an error is raised.
+#' @srrstats {G5.8} Edge test: if a value different from a set of
+#'   allowed values is selected, an error is raised.
 test_that("Filter network raises error if elements argument is unknown", {
   expect_error(filter_network(network, elements = "unknown"),
                "Unknown elements")
