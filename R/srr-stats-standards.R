@@ -26,10 +26,6 @@
 #'   `warning()`, and `message()` is unique.
 #' @srrstats {G5.2b} For all messages, conditions triggering them are
 #'   demonstrated and the result are compared with expected values.
-#' @srrstatsTODO {G5.10} *Extended tests should included and run under a common framework with other tests but be switched on by flags such as as a `<MYPKG>_EXTENDED_TESTS="true"` environment variable.* - The extended tests can be then run automatically by GitHub Actions for example by adding the following to the `env` section of the workflow:
-#' @srrstatsTODO {G5.11} *Where extended tests require large data sets or other assets, these should be provided for downloading and fetched as part of the testing workflow.*
-#' @srrstatsTODO {G5.11a} *When any downloads of additional data necessary for extended tests fail, the tests themselves should not fail, rather be skipped and implicitly succeed with an appropriate diagnostic message.*
-#' @srrstatsTODO {G5.12} *Any conditions necessary to run extended tests such as platform requirements, memory, expected runtime, and artefacts produced that may need manual inspection, should be described in developer documentation such as a `CONTRIBUTING.md` or `tests/README.md` file.*
 #'
 #' @srrstats {SP1.0, SP1.1} The package description explicitly states that it
 #'   uses "two-dimensional spatial information [...] in a projected CRS."
@@ -97,7 +93,8 @@ NULL
 #'   can be used as input in any of the function of this package.
 #' @srrstatsNA {G5.9, G5.9a, G5.9b} The core algorithm and input data of this
 #'   package are deterministic, so noise susceptibility tests do not apply.
-
+#' @srrstatsNA {G5.12} No special requirements are needed to run extended tests.
+#'
 #  Not applicable spatial software standards ----
 #' @srrstatsNA {SP2.0a, SP2.0b} This package does not implement any new classes
 #'   for spatial data.
