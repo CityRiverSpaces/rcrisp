@@ -117,10 +117,9 @@ delineate <- function(
     city_boundary = FALSE, force_download = force_download
   )
 
-  # If not provided, determine the CRS
+  # If not provided, determine the CRS. Otherwise, standardise CRS
   if (is.null(crs)) {
     crs <- get_utm_zone(osm_data$bb)
-  # If provided, standardise CRS
   } else {
     crs <- as_crs(crs)
   }
