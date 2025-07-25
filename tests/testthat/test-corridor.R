@@ -277,8 +277,8 @@ test_that("Warning is raised if the river corridor edge did not converge", {
                  "River corridor edge not converged within 1 iterations")
 })
 
-#' @srrstats {G5.6, } This test verifies that the delineation is correctly
-#'   identified within the provided input geometries, which has been designed
+#' @srrstats {G5.6} This test verifies that the delineation is correctly
+#'   identified for the provided input geometries, which have been designed
 #'   with the target delineation in mind.
 #' @srrstats {G5.6a} The test is considered to succeed even if a geometry that
 #'   is topological equivalent to the expected geometry is recovered (so

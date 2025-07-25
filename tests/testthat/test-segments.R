@@ -125,3 +125,32 @@ test_that("The correct crossing segments are selected", {
   expect_equal(length(selected_crossings), 3)
   expect_equal(sf::st_length(selected_crossings), c(0.8, 0.9, 1.5))
 })
+
+#' @srrstats {G5.6} This test verifies that the segmentation is correctly
+#'   carried out for the provided input geometries, which have been designed
+#'   with the target segments in mind.
+test_that("", {
+  e1 <- sf::st_linestring(cbind(c(-500, -500), c(1000, -1000)))
+  e2 <- sf::st_linestring(cbind(c(0, 500), c(1000, -1000)))
+  e3 <- sf::st_linestring(cbind(c(1000, 1000), c(1000, -1000)))
+  e4 <- sf::st_linestring(cbind(c(-5000, 5000), c(1000, 1000)))
+  e5 <- sf::st_linestring(cbind(c(-5000, 5000), c(-1000, -1000)))
+  network_edges <- sf::st_sfc(e1, e2, e3, e4, e5, crs = 32635)
+  network <- sfnetworks::as_sfnetwork(network_edges, directed = FALSE)
+  corridor <- sf::st_sfc(
+    sf::st_polygon(list(cbind(
+      c(-1000, -1000, 3000, 3000, -1000),
+      c(-1000, 1000, 1000, -1000, -1000)
+    ))),
+    crs = 32635
+  )
+  river <- sf::st_sfc(sf::st_linestring(cbind(c(5000, -5000), c(0, 0))),
+                      crs = 32635)
+  segs_actual <- delineate_segments(corridor, network, river)
+  segs_expected <- lwgeom::st_split(corridor, sf::st_union(network_edges)) |>
+    st_collection_extract()
+  # Check that each element in segs_actual is equal to one element in
+  # segs_expected (i.e. in each row of the equality matrix there is one TRUE)
+  equal_matrix <- sf::st_equals(segs_actual, segs_expected, sparse = FALSE)
+  expect_setequal(rowSums(equal_matrix), 1)
+})
