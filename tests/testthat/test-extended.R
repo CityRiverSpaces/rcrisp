@@ -2,7 +2,7 @@
 #'   the package is included here. The test only run as part of the CI if a
 #'   commit message includes the phrase 'run-extended'.
 #' @srrstats {G5.11, G5.11a} The test downloads the required data. If any error
-#'   arises due to access to web resources (HTTP the the error message), the
+#'   arises due to access to web resources (HTTP error message), the
 #'   test is skipped with an appropriate diagnostic message.
 test_that("a full delineation run succeed, including data retrieval", {
 
