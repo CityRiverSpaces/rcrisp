@@ -65,8 +65,8 @@ test_that("valley polygon is correctly constructed", {
                                   par = 0, sparse = FALSE))
 })
 
-#' @srrstats {G5.8} Edge test: if a value outside the available
-#'   range is selected, an error is raised.
+#' @srrstats {G5.8} Edge test: if a value different from a set of
+#'   allowed values is selected, an error is raised.
 test_that("Unknown DEM source throws error", {
   expect_error(get_dem(bb, dem_source = "CATS")) # :)
 })
