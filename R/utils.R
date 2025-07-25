@@ -72,6 +72,7 @@ get_utm_zone <- function(x) {
 #'   returned by [`sf::st_bbox()`], explicitly documented as such, and it
 #'   maintains the same units as the input if CRS information is available
 #'   in the input object.
+# TODO standardise CRS?
 as_bbox <- function(x) {
   # Check input
   checkmate::assert_true(
@@ -230,6 +231,7 @@ river_buffer <- function(river, buffer_distance, bbox = NULL, side = NULL) {
 #' @srrstats {SP4.0, SP4.0b, SP4.1} The return value is of class [`sf::sf`],
 #'   [`sf::sfc`] or [`terra::SpatRaster`], explicitly documented as such, with
 #'   transformed CRS as specified by the `crs` parameter.
+# TODO standardise CRS input
 reproject <- function(x, crs, ...) {
   if (inherits(x, "SpatRaster")) {
     if (inherits(crs, c("integer", "numeric"))) {
