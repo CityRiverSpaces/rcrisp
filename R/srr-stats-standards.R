@@ -112,8 +112,10 @@ NULL
 #'   an ability to generate interactive visualisations. The returned
 #'   delineations can be used in static and interactive visualisation workflows
 #'   as any other spatial data.
-#' @srrstatsNA {G5.6b} The core algorithm of this package do not involve random
+#' @srrstatsNA {G5.6b} The core algorithms of this package do not involve random
 #'   components.
+#' @srrstatsNA {G5.9, G5.9a, G5.9b} The core algorithm and input data of this
+#'   package are deterministic, so noise susceptibility tests do not apply.
 #' @srrstatsNA {G5.7} The results of the core algorithm of this package are not
 #'   expected to return predictable trends for given changes in input data
 #'   properties.
