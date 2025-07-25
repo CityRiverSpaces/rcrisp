@@ -319,7 +319,7 @@ get_cd_char <- function(cd, method = "mean") {
 #'
 #' @param valley_mask raster mask of valley pixels
 #'
-#' @return polygon representation of valley area as object of class [sf::sfc]
+#' @return polygon representation of valley area as object of class [`sf::sfc`]
 #' @importFrom rlang .data
 #' @keywords internal
 #' @srrstats {G2.10} This function uses `sf::st_geometry()` to extract the
@@ -337,7 +337,7 @@ get_valley_polygon_raw <- function(valley_mask) {
 
 #' Remove possible holes from valley geometry
 #'
-#' @param valley_polygon Geometry of valley as object of class [sf:sfc]
+#' @param valley_polygon Geometry of valley as object of class [`sf::sfc`]
 #'
 #' @return (multi)polygon geometry of valley
 #' @keywords internal
