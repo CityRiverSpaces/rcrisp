@@ -48,6 +48,8 @@ test_that("correct UTM zone is returend in the northern hemisphere", {
 #'   default we work with UTM zones, which are defined only outside polar
 #'   regions. We make sure that errors are raised if polar regions are
 #'   considered.
+#' @srrstats {G5.8, G5.8d} Edge test: input outside the expected validity ranges
+#'   raise an error.
 test_that("an error is raised for latitudes outside the validity range", {
   bbox <- sf::st_bbox(
     c(xmin = 0, ymin = 83, xmax = 1, ymax = 84.1),
@@ -160,6 +162,8 @@ test_that("River buffer can trim to the region of interest", {
   expect_true(covers)
 })
 
+#' @srrstats {G5.8} Edge test: if a value outside the available
+#'   range is selected, an error is raised.
 test_that("River buffer throws error if wrong 'side' value is provided", {
   river <- bucharest_osm$river_centerline
   bbox <- sf::st_bbox(bucharest_osm$boundary)
@@ -235,6 +239,8 @@ test_that("reproject works with bbox", {
   expect_equal(crs_actual_str, crs_expected)
 })
 
+#' @srrstats {G5.8, G5.8b} Edge test: giving as input a value of wrong type
+#'   raises an error is raised.
 test_that("reproject does not work with objects of unknown type", {
   expect_error(reproject(1, 4326), "Cannot reproject object type: numeric")
 })

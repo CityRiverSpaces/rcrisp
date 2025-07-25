@@ -12,6 +12,9 @@ test_that("Splitting the corridor works with a complex river geometry", {
   expect_length(edges, 2)
 })
 
+#' @srrstats {G5.8, G5.8d} Edge test: if a corridor with properties that make
+#'   the corridor segmentation impossible is passed as input, an error is
+#'   raised.
 test_that("If the corridor cannot be split in two edges, an error is raised", {
   corridor <- sf::st_sfc(sf::st_polygon(list(cbind(c(-5, 5, 5, -5, -5),
                                                    c(2, 2, 1, 1, 2)))))
@@ -153,4 +156,34 @@ test_that("Segments are correctly identified", {
   # segs_expected (i.e. in each row of the equality matrix there is one TRUE)
   equal_matrix <- sf::st_equals(segs_actual, segs_expected, sparse = FALSE)
   expect_setequal(rowSums(equal_matrix), 1)
+})
+
+#' @srrstats {G5.8, G5.8b} Edge test: if wrong data type are given in input, an
+#'   error is raised
+test_that("Errors are raised for wrong input types to segmentation", {
+  e1 <- sf::st_linestring(cbind(c(-500, -500), c(1000, -1000)))
+  e2 <- sf::st_linestring(cbind(c(0, 500), c(1000, -1000)))
+  e3 <- sf::st_linestring(cbind(c(1000, 1000), c(1000, -1000)))
+  e4 <- sf::st_linestring(cbind(c(-5000, 5000), c(1000, 1000)))
+  e5 <- sf::st_linestring(cbind(c(-5000, 5000), c(-1000, -1000)))
+  network_edges <- sf::st_sfc(e1, e2, e3, e4, e5, crs = 32635)
+  network <- sfnetworks::as_sfnetwork(network_edges, directed = FALSE)
+  corridor <- sf::st_sfc(
+    sf::st_polygon(list(cbind(
+      c(-1000, -1000, 3000, 3000, -1000),
+      c(-1000, 1000, 1000, -1000, -1000)
+    ))),
+    crs = 32635
+  )
+  river <- sf::st_sfc(sf::st_linestring(cbind(c(5000, -5000), c(0, 0))),
+                      crs = 32635)
+  # corridor must be of class `sfc_POLYGON`
+  expect_error(delineate_segments(corridor = river, network, river),
+               "Assertion on 'corridor' failed")
+  # network must be of class `sfnetwork`
+  expect_error(delineate_segments(corridor, network = network_edges, river),
+               "Assertion on 'network' failed")
+  # river must be of class `sf`/`sfc`
+  expect_error(delineate_segments(corridor, network, river = river[[1]]),
+               "Assertion on 'river' failed")
 })

@@ -164,6 +164,8 @@ test_that("City boundary of Bucharest is correctly retrieved", {
   expect_true(inherits(city_boundary, "sfc"))
 })
 
+#' @srrstats {G5.8, G5.8a} Edge test: if a value that leads to no data being
+#'   retrieved, an error is raised.
 test_that("Wrong city name raises an error", {
   expect_error(
     with_mocked_bindings(
@@ -211,6 +213,8 @@ test_that("City boundary is retrieved for alternative names", {
   expect_equal(city_boundary_eng, city_boundary_ro)
 })
 
+#' @srrstats {G5.8, G5.8a} Edge test: if a value that leads to no data being
+#'   retrieved, an error is raised.
 test_that("River retrieval raise error if no river is found in the bb", {
   with_mocked_bindings(
     osmdata_as_sf = function(...) list(osm_lines = NULL),
@@ -221,6 +225,8 @@ test_that("River retrieval raise error if no river is found in the bb", {
   )
 })
 
+#' @srrstats {G5.8, G5.8a} Edge test: if a value that leads to no data being
+#'   retrieved, an error is raised.
 test_that("River retrieval raise error if river is not found in the bb", {
   with_mocked_bindings(
     osmdata_as_sf = function(...) list(osm_lines = mock_river_lines),

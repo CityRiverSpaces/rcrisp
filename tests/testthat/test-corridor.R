@@ -101,6 +101,8 @@ test_that("Isolated crossings are dropped when selecting end points", {
   expect_setequal(actual, expected)
 })
 
+#' @srrstats {G5.8, G5.8d} Edge test: if a network with properties that make the
+#'   corridor delineation impossible is passed as input, an error is raised.
 test_that("An error is raised for a single intersection with network edge", {
   river <- sf::st_sfc(sf::st_linestring(cbind(c(-2, 0, 0), c(0, 0, -2))))
   regions <- c(sf::st_buffer(river, 2, singleSide = TRUE),
@@ -112,7 +114,7 @@ test_that("An error is raised for a single intersection with network edge", {
   river_network <- sfnetworks::as_sfnetwork(river, directed = FALSE)
   spatial_network <- sfnetworks::as_sfnetwork(network_edges, directed = FALSE)
   expect_error(corridor_end_points(river_network, spatial_network, regions),
-               "coincide")
+               "Corridor start- and end-points coincide!")
 })
 
 test_that("River banks for a simple river gives two regions", {
@@ -236,6 +238,8 @@ test_that("Capping a corridor with 'shortest_path' uses network paths", {
   expect_setequal(pts_corridor, nodes)
 })
 
+#' @srrstats {G5.8} Edge test: if a value outside the available range is
+#'   selected, an error is raised.
 test_that("Capping a corridor with unknown method raises an error", {
   corridor_edge_1 <- sf::st_linestring(cbind(c(-1, 1), c(1, 1)))
   corridor_edge_2 <- sf::st_linestring(cbind(c(-1, 1), c(-1, -1)))
@@ -244,6 +248,8 @@ test_that("Capping a corridor with unknown method raises an error", {
                "Unknown method to cap the river corridor: crisp")
 })
 
+#' @srrstats {G5.8} Edge test: if some of the required input parameters are
+#'   missing, an error is raised.
 test_that("Capping with 'shortest-path' method raises an error if no network
           is provided", {
             corridor_edge_1 <- sf::st_linestring(cbind(c(-1, 1), c(1, 1)))
@@ -302,4 +308,26 @@ test_that("The corridor is correcly identified", {
     sf::st_collection_extract()
   # Use st_equals since point order might differ
   expect_true(sf::st_equals(corridor_actual, corridor_expected, sparse = FALSE))
+})
+
+#' @srrstats {G5.8, G5.8b} Edge test: if wrong data type are given in input, an
+#'   error is raised
+test_that("Errors are raised for wrong input types to corridor delineation", {
+  network_edges <- sf::st_sfc(
+    sf::st_linestring(cbind(c(1, -1), c(-1, -1))),
+    sf::st_linestring(cbind(c(1, -1), c(1, 1))),
+    sf::st_linestring(cbind(c(1, 1), c(1, -1))),
+    sf::st_linestring(cbind(c(-1, -1), c(1, -1))),
+    crs = 32635
+  )
+  spatial_network <- sfnetworks::as_sfnetwork(network_edges, directed = FALSE)
+  river <- sf::st_sfc(sf::st_linestring(cbind(c(-2, 0, 2), c(0, 0, 0))),
+                      crs = 32635)
+
+  # river must be of class `sf`/`sfc`
+  expect_error(delineate_corridor(network, river[[1]]),
+               "Assertion on 'river' failed")
+  # network must be of class `sfnetwork`
+  expect_error(delineate_corridor(network_edges, river),
+               "Assertion on 'network' failed")
 })
