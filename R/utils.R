@@ -119,10 +119,12 @@ as_bbox <- function(x) {
 as_crs <- function(x, allow_geographic = FALSE) {
   checkmate::assert_multi_class(x,
                                 c("numeric",
+                                  "integer",
                                   "character",
                                   "bbox",
                                   "sf",
-                                  "sfc"),
+                                  "sfc",
+                                  "crs"),
                                 null.ok = TRUE)
   checkmate::assert_logical(allow_geographic, len = 1)
 
