@@ -9,6 +9,8 @@ as_crs(x, allow_geographic = FALSE)
 \arguments{
 \item{x}{An object of class \code{sf}, \code{sfc}, \code{bbox}, or a numeric  or character
 vector representing a CRS (e.g., EPSG code).}
+
+\item{allow_geographic}{Logical, whether to allow geographic CRS (lat/lon).}
 }
 \value{
 An object of class \link[sf:coerce-methods]{sf::crs} with a valid CRS.
@@ -32,7 +34,7 @@ as_crs(bb, allow_geographic = TRUE)
 
 # Standardise a simple feature object
 bb_sfc <- st_as_sfc(bb)
-bb_sf <- st_as_sf(bb_sf)
+bb_sf <- st_as_sf(bb_sfc)
 as_crs(bb_sf, allow_geographic = TRUE)
 as_crs(bb_sfc, allow_geographic = TRUE)
 }

@@ -93,6 +93,7 @@ as_bbox <- function(x) {
 #'
 #' @param x An object of class `sf`, `sfc`, `bbox`, or a numeric  or character
 #'   vector representing a CRS (e.g., EPSG code).
+#' @param allow_geographic Logical, whether to allow geographic CRS (lat/lon).
 #'
 #' @returns An object of class [sf::crs] with a valid CRS.
 #' @export
@@ -113,7 +114,7 @@ as_bbox <- function(x) {
 #'
 #' # Standardise a simple feature object
 #' bb_sfc <- st_as_sfc(bb)
-#' bb_sf <- st_as_sf(bb_sf)
+#' bb_sf <- st_as_sf(bb_sfc)
 #' as_crs(bb_sf, allow_geographic = TRUE)
 #' as_crs(bb_sfc, allow_geographic = TRUE)
 as_crs <- function(x, allow_geographic = FALSE) {
