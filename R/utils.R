@@ -116,6 +116,9 @@ as_bbox <- function(x) {
 #' bb_sf <- st_as_sf(bb_sfc)
 #' as_crs(bb_sf, allow_geographic = TRUE)
 #' as_crs(bb_sfc, allow_geographic = TRUE)
+#' @srrstats {G2.8} This function ensures all supported input types are in a
+#'   consistent class accepted by `sf::st_crs()` and it is used throughout the
+#'   package to standardise CRS input.
 as_crs <- function(x, allow_geographic = FALSE) {
   checkmate::assert_multi_class(x,
                                 c("numeric",
