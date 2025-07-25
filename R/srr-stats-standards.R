@@ -26,10 +26,6 @@
 #'   `warning()`, and `message()` is unique.
 #' @srrstats {G5.2b} For all messages, conditions triggering them are
 #'   demonstrated and the result are compared with expected values.
-#' @srrstatsTODO {G5.6} **Parameter recovery tests** *to test that the implementation produce expected results given data with known properties. For instance, a linear regression algorithm should return expected coefficient values for a simulated data set generated from a linear model.*
-#' @srrstatsTODO {G5.6a} *Parameter recovery tests should generally be expected to succeed within a defined tolerance rather than recovering exact values.*
-#' @srrstatsTODO {G5.6b} *Parameter recovery tests should be run with multiple random seeds when either data simulation or the algorithm contains a random component. (When long-running, such tests may be part of an extended, rather than regular, test suite; see G5.10-4.12, below).*
-#' @srrstatsTODO {G5.7} **Algorithm performance tests** *to test that implementation performs as expected as properties of data change. For instance, a test may show that parameters approach correct estimates within tolerance as data size increases, or that convergence times decrease for higher convergence thresholds.*
 #' @srrstatsTODO {G5.8} **Edge condition tests** *to test that these conditions produce expected behaviour such as clear warnings or errors when confronted with data with extreme properties including but not limited to:*
 #' @srrstatsTODO {G5.8a} *Zero-length data*
 #' @srrstatsTODO {G5.8b} *Data of unsupported types (e.g., character or complex numbers in for functions designed only for numeric data)*
@@ -116,6 +112,11 @@ NULL
 #'   an ability to generate interactive visualisations. The returned
 #'   delineations can be used in static and interactive visualisation workflows
 #'   as any other spatial data.
+#' @srrstatsNA {G5.6b} The core algorithm of this package do not involve random
+#'   components.
+#' @srrstatsNA {G5.7} The results of the core algorithm of this package are not
+#'   expected to return predictable trends for given changes in input data
+#'   properties.
 #' @srrstatsNA {SP6.3, SP6.4} This package uses spatial neighbours only via the
 #'   `terra::costDist()` function. Therefore, the definition and weighting of
 #'   neighbours are managed by `terra`, and are not implemented or tested within

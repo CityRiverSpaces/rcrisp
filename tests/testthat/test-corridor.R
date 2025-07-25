@@ -276,3 +276,30 @@ test_that("Warning is raised if the river corridor edge did not converge", {
                                max_iterations = 1),
                  "River corridor edge not converged within 1 iterations")
 })
+
+#' @srrstats {G5.6, } This test verifies that the delineation is correctly
+#'   identified within the provided input geometries, which has been designed
+#'   with the target delineation in mind.
+#' @srrstats {G5.6a} The test is considered to succeed even if a geometry that
+#'   is topological equivalent to the expected geometry is recovered (so
+#'   recovering the same exact target geometry is not required).
+test_that("The corridor is correcly identified", {
+  # The following edges form a corridor around the given river.
+  # `delineate_corridor` is expected to properly identify it.
+  network_edges <- sf::st_sfc(
+    sf::st_linestring(cbind(c(1, -1), c(-1, -1))),
+    sf::st_linestring(cbind(c(1, -1), c(1, 1))),
+    sf::st_linestring(cbind(c(1, 1), c(1, -1))),
+    sf::st_linestring(cbind(c(-1, -1), c(1, -1))),
+    crs = 32635
+  )
+  spatial_network <- sfnetworks::as_sfnetwork(network_edges, directed = FALSE)
+  river <- sf::st_sfc(sf::st_linestring(cbind(c(-2, 0, 2), c(0, 0, 0))),
+                      crs = 32635)
+  corridor_actual <- delineate_corridor(spatial_network, river,
+                                        corridor_init = 1, max_width = 2)
+  corridor_expected <- sf::st_polygonize(sf::st_union(network_edges)) |>
+    sf::st_collection_extract()
+  # Use st_equals since point order might differ
+  expect_true(sf::st_equals(corridor_actual, corridor_expected, sparse = FALSE))
+})
