@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
-      RCRISP_EXTENDED_TESTS: ${{ contains(github.event.commits[0].message, "run-extended") }}
+      RCRISP_EXTENDED_TESTS: ${{ contains(github.event.commits[0].message, 'run-extended') }}
 
     steps:
       - uses: actions/checkout@v4
