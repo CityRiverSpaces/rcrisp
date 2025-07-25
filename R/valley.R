@@ -74,7 +74,6 @@ get_dem <- function(bb, dem_source = "STAC", stac_endpoint = NULL,
     stop(sprintf("DEM source %s unknown", dem_source))
   }
   if (!is.null(crs)) {
-    crs <- as_crs(crs)
     dem <- reproject(dem, crs)
   }
   dem
