@@ -70,9 +70,26 @@ get_dem_cache_filepath <- function(tile_urls, bbox) {
   file.path(cache_directory(), filename)
 }
 
+#' Get file path where to cache example data files
+#'
+#' The function returns the file path where to store example data files that
+#' are retrieved from a data repository (see [`get_osm_example_data()`] and
+#' [`get_dem_example_data()`]). The directory used is the one returned by
+#' [`cache_directory()`].
+#'
+#' @param filename The name of the file to be retrieved from the data repository
+#' @return A character string representing the file path
+#' @keywords internal
+get_example_cache_filepath <- function(filename) {
+  file.path(cache_directory(), filename)
+}
+
 #' Convert a bounding box to a string
 #'
 #' @noRd
+#'
+#' @srrstats {G2.4, G2.4c} Explicit conversion of bounding box coordinates cast
+#'   with `as.character()` into string to be used in cache file names.
 bbox_as_str <- function(bbox, digits = 3) {
   bbox_rounded <- round(bbox, digits)
   paste(as.character(bbox_rounded), collapse = "_")
