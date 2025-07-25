@@ -1,3 +1,5 @@
+#' @srrstats {G5.8} Edge test: an error is raised if conflicting input
+#'   parameters are given.
 test_that("Segmentation without corridor raises error", {
   expect_error(delineate("Bucharest", "Dâmbovița",
                          corridor = FALSE, segment = TRUE),
@@ -75,6 +77,8 @@ test_that("If `buildings_buffer` is not specified, the default value is used", {
                         "is used for riverspace delineation."))
 })
 
+#' @srrstats {G5.8} Edge test: an error is raised if the dimension of the input
+#'   parameters does not fit the requirements.
 test_that("Only one city and one river can be delineated at a time", {
   expect_error(delineate(c("Bucharest", "Cluj-Napoca"), "Dâmbovița"),
                "Assertion on 'city_name' failed: Must have length 1")
