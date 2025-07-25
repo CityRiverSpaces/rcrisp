@@ -87,8 +87,8 @@ test_that("Incorrect STAC endpoint and collection throws error", {
   expect_error(get_stac_asset_urls(bb, collection = "only collection"))
 })
 
-#' @srrstats {G5.8} Edge test: if a value outside the available
-#'   range is selected, an error is raised.
+#' @srrstats {G5.8} Edge test: if a value different from a set of
+#'   allowed values is selected, an error is raised.
 test_that("Unimplemented function used to derive characteristic value throws
           error", {
             expect_error(get_cd_char(cd, "max"))
