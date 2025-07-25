@@ -325,7 +325,7 @@ test_that("Errors are raised for wrong input types to corridor delineation", {
                       crs = 32635)
 
   # river must be of class `sf`/`sfc`
-  expect_error(delineate_corridor(network, river[[1]]),
+  expect_error(delineate_corridor(spatial_network, river[[1]]),
                "Assertion on 'river' failed")
   # network must be of class `sfnetwork`
   expect_error(delineate_corridor(network_edges, river),
