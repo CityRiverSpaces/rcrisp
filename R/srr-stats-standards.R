@@ -105,8 +105,8 @@ NULL
 #' @srrstatsNA {SP2.0a, SP2.0b} This package does not implement any new classes
 #'   for spatial data.
 #' @srrstatsNA {SP2.5a} This package does not implement new classes.
-#' @srrstatsNA {SP3.0, SP3.0a, SP3.0b, SP3.1} The package does not consider
-#'   spatial neighbours.
+#' @srrstatsNA {SP3.0b} The package does not consider spatial neighbours in
+#'   irregular spaces.
 #' @srrstatsNA {SP3.2} The package does not rely on sampling from input data.
 #' @srrstatsNA {SP3.3} The package does not employ regression.
 #' @srrstatsNA {SP3.5, SP3.6} The package does not implement any kind of
