@@ -72,7 +72,6 @@ get_utm_zone <- function(x) {
 #'   returned by [`sf::st_bbox()`], explicitly documented as such, and it
 #'   maintains the same units as the input if CRS information is available
 #'   in the input object.
-# TODO standardise CRS?
 as_bbox <- function(x) {
   # Check input
   checkmate::assert_true(
@@ -161,7 +160,7 @@ buffer <- function(obj, buffer_distance, ...) {
   is_obj_bbox <- inherits(obj, "bbox")
   if (is_obj_bbox) obj <- sf::st_as_sfc(obj)
   if (!is.na(is_obj_longlat) && is_obj_longlat) {
-    crs_meters <- get_utm_zone(obj)
+    crs_meters <- get_utm_zone(obj) |> as_crs()
     obj <- sf::st_transform(obj, crs_meters)
   }
   expanded_obj <- sf::st_buffer(obj, buffer_distance, ...)
@@ -232,16 +231,10 @@ river_buffer <- function(river, buffer_distance, bbox = NULL, side = NULL) {
 #' @srrstats {SP4.0, SP4.0b, SP4.1} The return value is of class [`sf::sf`],
 #'   [`sf::sfc`] or [`terra::SpatRaster`], explicitly documented as such, with
 #'   transformed CRS as specified by the `crs` parameter.
-# TODO standardise CRS input
 reproject <- function(x, crs, ...) {
+  crs <- as_crs(crs, allow_geographic = TRUE)
   if (inherits(x, "SpatRaster")) {
-    if (inherits(crs, c("integer", "numeric"))) {
-      # terra::crs does not support a numeric value as CRS, convert to character
-      crs <- sprintf("EPSG:%s", crs)
-    } else if (inherits(crs, "crs")) {
-      # terra::crs also does not understand sf::crs objects
-      crs <- sprintf("EPSG:%s", crs$epsg)
-    }
+    crs <- sprintf("EPSG:%s", crs$epsg)
     terra::project(x, crs, ...)
   } else if (inherits(x, c("bbox", "sfc", "sf"))) {
     sf::st_transform(x, crs, ...)
