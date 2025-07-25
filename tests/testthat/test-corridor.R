@@ -238,8 +238,8 @@ test_that("Capping a corridor with 'shortest_path' uses network paths", {
   expect_setequal(pts_corridor, nodes)
 })
 
-#' @srrstats {G5.8} Edge test: if a value outside the available range is
-#'   selected, an error is raised.
+#' @srrstats {G5.8} Edge test: if a value different from a set of
+#'   allowed values is selected, an error is raised.
 test_that("Capping a corridor with unknown method raises an error", {
   corridor_edge_1 <- sf::st_linestring(cbind(c(-1, 1), c(1, 1)))
   corridor_edge_2 <- sf::st_linestring(cbind(c(-1, 1), c(-1, -1)))
