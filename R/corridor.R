@@ -55,6 +55,8 @@
 #'   `sfc`.
 #' @srrstats {G2.13} The absence of missing values in numeric inputs is
 #'   asserted using the `checkmate` package.
+#' @srrstats {G2.16} This function checks numeric arguments for undefined values
+#'   (NaN, Inf, -Inf) and errors when encountering such values.
 #' @srrstats {SP4.0, SP4.0b, SP4.1, SP4.2} The return value is of class
 #'   [`sf::sfc_POLYGON`], explicitly documented as such, and it maintains the
 #'   same units as the input.
@@ -68,17 +70,20 @@ delineate_corridor <- function(
   checkmate::assert_true(
     inherits(corridor_init, c("numeric", "sfc_POLYGON", "sfc_MULTIPOLYGON"))
   )
-  if (inherits(corridor_init, "numeric")) {
+  if (inherits(corridor_init, c("numeric"))) {
     checkmate::assert_numeric(corridor_init,
                               len = 1,
-                              any.missing = FALSE)
+                              any.missing = FALSE,
+                              finite = TRUE)
   }
   checkmate::assert_numeric(max_width,
                             len = 1,
-                            any.missing = FALSE)
+                            any.missing = FALSE,
+                            finite = TRUE)
   checkmate::assert_numeric(max_iterations,
                             len = 1,
-                            any.missing = FALSE)
+                            any.missing = FALSE,
+                            finite = TRUE)
   capping_method <- tolower(capping_method)
   checkmate::assert_choice(capping_method, c("shortest-path", "direct"))
 

@@ -87,6 +87,9 @@ get_example_cache_filepath <- function(filename) {
 #' Convert a bounding box to a string
 #'
 #' @noRd
+#'
+#' @srrstats {G2.4, G2.4c} Explicit conversion of bounding box coordinates cast
+#'   with `as.character()` into string to be used in cache file names.
 bbox_as_str <- function(bbox, digits = 3) {
   bbox_rounded <- round(bbox, digits)
   paste(as.character(bbox_rounded), collapse = "_")
