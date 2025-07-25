@@ -140,7 +140,13 @@ get_osmdata <- function(
   checkmate::assert_logical(city_boundary, len = 1)
 
   bb <- get_osm_bb(city_name)
-  if (is.null(crs)) crs <- get_utm_zone(bb)
+  # If not provided, determine the CRS
+  if (is.null(crs)) {
+    crs <- get_utm_zone(bb)
+    # If provided, standardise CRS
+  } else {
+    crs <- as_crs(crs)
+  }
 
   # Retrieve the river center line and surface
   river <- get_osm_river(
@@ -238,6 +244,7 @@ get_osm_city_boundary <- function(bb, city_name, crs = NULL, multiple = FALSE,
     stop("No city boundary found. The city name may be incorrect.")
   }
 
+  crs <- as_crs(crs)
   if (!is.null(crs)) city_boundary <- sf::st_transform(city_boundary, crs)
 
   if (length(city_boundary) > 1) {
