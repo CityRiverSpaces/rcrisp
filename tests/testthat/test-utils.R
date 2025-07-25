@@ -162,8 +162,8 @@ test_that("River buffer can trim to the region of interest", {
   expect_true(covers)
 })
 
-#' @srrstats {G5.8} Edge test: if a value outside the available
-#'   range is selected, an error is raised.
+#' @srrstats {G5.8} Edge test: if a value different from a set of
+#'   allowed values is selected, an error is raised.
 test_that("River buffer throws error if wrong 'side' value is provided", {
   river <- bucharest_osm$river_centerline
   bbox <- sf::st_bbox(bucharest_osm$boundary)
