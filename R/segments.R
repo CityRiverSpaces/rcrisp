@@ -22,12 +22,18 @@
 #' corridor <- bucharest_dambovita$corridor
 #' network <- rbind(bucharest_osm$streets, bucharest_osm$railways) |>
 #'   as_network()
-#' river <- bucharest_osm$river_centerline |> sf::st_geometry()
+#' river <- bucharest_osm$river_centerline
 #' delineate_segments(corridor, network, river)
 #' @srrstats {G2.7} The `network` object provided as input must be of class
 #'   `sfnetwork`. `sfnetwork` objects are `sf`-compatible and are commonly
 #'   used for spatial network analysis. The `river` parameter accepts
 #'   domain-specific tabular input of type `sf`.
+#' @srrstats {G2.10} This function uses `sf::st_geometry()` to extract the
+#'   geometry column from the `sf` object `river`. This is used when
+#'   only geometry information is needed from that point onwards and all other
+#'   attributes (i.e., columns) can be safely discarded. The object returned
+#'   by `sf::st_geometry()` is a simple feature geometry list column of class
+#'   `sfc`.
 #' @srrstats {G2.13} The absence of missing values in numeric inputs is
 #'   asserted using the `checkmate` package.
 #' @srrstats {G2.16} This function checks numeric arguments for undefined values
@@ -78,6 +84,12 @@ delineate_segments <- function(corridor, network, river,
 #' @return Candidate segment edges as object of class [`sf::sfc_LINESTRING`]
 #' @importFrom rlang .data
 #' @keywords internal
+#' @srrstats {G2.10} This function uses `sf::st_geometry()` to extract the
+#'   geometry column from an `sf` object in a `dplyr` pipline. This is used when
+#'   only geometry information is needed from that point onwards and all other
+#'   attributes (i.e., columns) can be safely discarded. The object returned
+#'   by `sf::st_geometry()` is a simple feature geometry list column of class
+#'   `sfc`.
 #' @srrstats {SP4.0, SP4.0b, SP4.1, SP4.2} The return value is of class
 #'   [`sf::sfc_LINESTRING`], explicitly documented as such, and it maintains the
 #'   same units as the input.
@@ -146,6 +158,12 @@ get_corridor_edges <- function(corridor, river) {
 #' @return An object of class [`sf::sfc_LINESTRING`] including the shortest edge
 #'   per cluster
 #' @keywords internal
+#' @srrstats {G2.10} This function uses `sf::st_geometry()` to extract the
+#'   geometry column from an `sf` object in a `dplyr` pipline. This is used when
+#'   only geometry information is needed from that point onwards and all other
+#'   attributes (i.e., columns) can be safely discarded. The object returned
+#'   by `sf::st_geometry()` is a simple feature geometry list column of class
+#'   `sfc`.
 #' @srrstats {SP4.0, SP4.0b, SP4.1, SP4.2} The return value is of class
 #'   [`sf::sfc_LINESTRING`], explicitly documented as such, and it maintains the
 #'   same units as the input.

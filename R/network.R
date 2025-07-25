@@ -93,6 +93,12 @@ flatten_network <- function(network) {
 #' Get edges that cross each other.
 #'
 #' @noRd
+#' @srrstats {G2.10} This function uses `sf::st_geometry()` to extract the
+#'   geometry column from the `sf` object `edges`. This is used when only
+#'   geometry information is needed from that point onwards and all other
+#'   attributes (i.e., columns) can be safely discarded. The object returned
+#'   by `sf::st_geometry()` is a simple feature geometry list column of class
+#'   `sfc`.
 #' @srrstats {SP4.0, SP4.0b, SP4.1} The return value is of class [`sf::sf`] and
 #'   it maintains the same units as the input.
 get_crossing_edges <- function(edges) {
@@ -121,6 +127,12 @@ get_intersection_points <- function(edges) {
 #' @importFrom utils head tail
 #'
 #' @noRd
+#' @srrstats {G2.10} This function uses `sf::st_geometry()` to extract the
+#'   geometry column from the `sf` object `edges`. This is used when only
+#'   geometry information is needed from that point onwards and all other
+#'   attributes (i.e., columns) can be safely discarded. The object returned
+#'   by `sf::st_geometry()` is a simple feature geometry list column of class
+#'   `sfc`.
 #' @srrstats {SP4.0, SP4.0a, SP4.1} The return value is of class
 #'   [`sf::sfc_LINESTRING`] and it maintains the same units as the input.
 insert_intersections <- function(edges, points, tol = 1.e-3) {
@@ -312,6 +324,12 @@ simplify_network <- function(network) {
 #' @srrstats {G2.7} The `network` object provided as input must be of class
 #'   `sfnetwork`. `sfnetwork` objects are `sf`-compatible and are commonly used
 #'   for spatial network analysis.
+#' @srrstats {G2.10} This function uses `sf::st_geometry()` to extract the
+#'   geometry column from the `sf` object `sf::st_as_sf(network, "edges")`.
+#'   This is used when only geometry information is needed from that point
+#'   onwards and all other attributes (i.e., columns) can be safely discarded.
+#'   The object returned by `sf::st_geometry()` is a simple feature geometry
+#'   list column of class `sfc`.
 #' @srrstats {SP4.0, SP4.0a, SP4.1, SP4.2} The return value is of class
 #'   [`sfnetworks::sfnetwork`], same as the input class, explicitly documented
 #'   as such, and it maintains the same units as the input.
@@ -355,6 +373,12 @@ add_weights <- function(network, target = NULL, exclude_area = NULL,
 #' @return An [`sf::sfc_LINESTRING`] object
 #' @importFrom rlang .data
 #' @keywords internal
+#' @srrstats {G2.10} This function uses `sf::st_geometry()` to extract the
+#'   geometry column from the `sf` object `sf::st_as_sf(network, "edges")`.
+#'   This is used when only geometry information is needed from that point
+#'   onwards and all other attributes (i.e., columns) can be safely discarded.
+#'   The object returned by `sf::st_geometry()` is a simple feature geometry
+#'   list column of class `sfc`.
 #' @srrstats {SP4.0, SP4.0b, SP4.1, SP4.2} The return value is of class
 #'   [`sf::sfc_LINESTRING`], explicitly documented as such, and it maintains
 #'   the same units as the input.
@@ -384,6 +408,12 @@ shortest_path <- function(network, from, to, weights = "weight") {
 #'
 #' @return A node in the network as an object of class [`sf::sfc_POINT`]
 #' @keywords internal
+#' @srrstats {G2.10} This function uses `sf::st_geometry()` to extract the
+#'   geometry column from the `sf` object `sf::st_as_sf(network, "nodes")`.
+#'   This is used when only geometry information is needed from that point
+#'   onwards and all other attributes (i.e., columns) can be safely discarded.
+#'   The object returned by `sf::st_geometry()` is a simple feature geometry
+#'   list column of class `sfc`.
 #' @srrstats {SP4.0, SP4.0b, SP4.1, SP4.2} The return value is of class
 #'   [`sf::sfc_POINT`], explicitly documented as such, and it maintains
 #'   the same units as the input.
@@ -454,6 +484,13 @@ get_intersecting_edges <- function(network, geometry, index = FALSE) {
 #' @param network_1,network_2 The two spatial network objects
 #' @return An object of class [`sf::sfc`]
 #' @keywords internal
+#' @srrstats {G2.10} This function uses `sf::st_geometry()` to extract the
+#'   geometry column from the `sf` objects `sf::st_as_sf(network_1, "edges")`
+#'   and `sf::st_as_sf(network_2, "edges")`. This is used when only geometry
+#'   information is needed from that point onwards and all other attributes
+#'   (i.e., columns) can be safely discarded. The object returned by
+#'   `sf::st_geometry()` is a simple feature geometry list column of class
+#'   `sfc`.
 #' @srrstats {SP4.0, SP4.0b, SP4.1, SP4.2} The return value is of class
 #'   [`sf::sfc`], explicitly documented as such, and it maintains the same units
 #'   as the input.

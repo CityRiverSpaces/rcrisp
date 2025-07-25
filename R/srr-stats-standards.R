@@ -18,7 +18,6 @@
 #'   vectors are appropriately restricted, and multivariate input (such as
 #'   matrices, data frames, or lists) is prohibited.
 #' @srrstatsTODO {G2.6} *Software which accepts one-dimensional input should ensure values are appropriately pre-processed regardless of class structures.*
-#' @srrstatsTODO {G2.10} *Software should ensure that extraction or filtering of single columns from tabular inputs should not presume any particular default behaviour, and should ensure all column-extraction operations behave consistently regardless of the class of tabular data used as input.*
 #' @srrstats {G3.0} The package does not compare floating point numbers for
 #'   equality. All numeric equality comparisons are made between integers.
 #' @srrstats {G5.2} Error and warning behaviour is fully tested.
