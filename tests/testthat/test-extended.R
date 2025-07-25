@@ -1,5 +1,5 @@
 #' @srrstats {G5.10} An extended test that includes all the core algorithm of
-#'   the package is included here. The test only run as part of the CI if a
+#'   the package is included here. The test only runs as part of the CI if a
 #'   commit message includes the phrase 'run-extended'.
 #' @srrstats {G5.11, G5.11a} The test downloads the required data. If any error
 #'   arises due to access to web resources (HTTP error message), the
