@@ -129,7 +129,7 @@ test_that("The correct crossing segments are selected", {
 #' @srrstats {G5.6} This test verifies that the segmentation is correctly
 #'   carried out for the provided input geometries, which have been designed
 #'   with the target segments in mind.
-test_that("", {
+test_that("Segments are correctly identified", {
   e1 <- sf::st_linestring(cbind(c(-500, -500), c(1000, -1000)))
   e2 <- sf::st_linestring(cbind(c(0, 500), c(1000, -1000)))
   e3 <- sf::st_linestring(cbind(c(1000, 1000), c(1000, -1000)))
