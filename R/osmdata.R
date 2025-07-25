@@ -140,6 +140,7 @@ get_osmdata <- function(
   checkmate::assert_logical(city_boundary, len = 1)
 
   bb <- get_osm_bb(city_name)
+  # If not provided, determine the CRS
   if (is.null(crs)) crs <- get_utm_zone(bb)
 
   # Retrieve the river center line and surface
@@ -244,6 +245,7 @@ get_osm_city_boundary <- function(bb, city_name, crs = NULL, multiple = FALSE,
     stop("No city boundary found. The city name may be incorrect.")
   }
 
+  crs <- as_crs(crs)
   if (!is.null(crs)) city_boundary <- sf::st_transform(city_boundary, crs)
 
   if (length(city_boundary) > 1) {
@@ -335,6 +337,7 @@ get_osm_river <- function(bb, river_name, crs = NULL, force_download = FALSE) {
     sf::st_union()
 
   if (!is.null(crs)) {
+    crs <- as_crs(crs)
     river_centerline <- sf::st_transform(river_centerline, crs)
     river_surface <- sf::st_transform(river_surface, crs)
   }
@@ -413,7 +416,10 @@ get_osm_streets <- function(aoi, crs = NULL, highway_values = NULL,
   mask <- sf::st_intersects(streets_lines, aoi, sparse = FALSE)
   streets_lines <- streets_lines[mask, ]
 
-  if (!is.null(crs)) streets_lines <- sf::st_transform(streets_lines, crs)
+  if (!is.null(crs)) {
+    crs <- as_crs(crs)
+    streets_lines <- sf::st_transform(streets_lines, crs)
+  }
 
   streets_lines
 }
@@ -447,7 +453,7 @@ get_osm_railways <- function(aoi, crs = NULL, railway_values = "rail",
                             force_download = force_download)
   # If no railways are found, return an empty sf object
   if (is.null(railways$osm_lines)) {
-    if (is.null(crs)) crs <- sf::st_crs("EPSG:4326")
+    if (is.null(crs)) crs <- as_crs("EPSG:4326", allow_geographic = TRUE)
     empty_sf <- sf::st_sf(geometry = sf::st_sfc(crs = crs))
     return(empty_sf)
   }
@@ -461,7 +467,10 @@ get_osm_railways <- function(aoi, crs = NULL, railway_values = "rail",
   mask <- sf::st_intersects(railways_lines, aoi, sparse = FALSE)
   railways_lines <- railways_lines[mask, ]
 
-  if (!is.null(crs)) railways_lines <- sf::st_transform(railways_lines, crs)
+  if (!is.null(crs)) {
+    crs <- as_crs(crs)
+    railways_lines <- sf::st_transform(railways_lines, crs)
+  }
 
   railways_lines
 }
@@ -500,7 +509,10 @@ get_osm_buildings <- function(aoi, crs = NULL, force_download = FALSE) {
     dplyr::filter(.data$building != "NULL") |>
     sf::st_geometry()
 
-  if (!is.null(crs)) buildings <- sf::st_transform(buildings, crs)
+  if (!is.null(crs)) {
+    crs <- as_crs(crs)
+    buildings <- sf::st_transform(buildings, crs)
+  }
 
   buildings
 }
