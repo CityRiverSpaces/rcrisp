@@ -4,17 +4,29 @@
 \alias{clean_network}
 \title{Clean a spatial network.}
 \usage{
-clean_network(network)
+clean_network(network, simplify = TRUE)
 }
 \arguments{
-\item{network}{A network object}
+\item{network}{A network object of class \code{sfnetwork}}
+
+\item{simplify}{Whether the network should be simplified with
+\code{\link[=simplify_network]{simplify_network()}}}
 }
 \value{
-A cleaned network object
+A cleaned network object of class \code{sfnetwork}
 }
 \description{
 Subdivide edges by \href{https://luukvdmeer.github.io/sfnetworks/articles/sfn02_preprocess_clean.html#subdivide-edges}{adding missing nodes},
-simplify the network (see \code{\link[=simplify_network]{simplify_network()}}), remove
+(optionally) simplify the network (see \code{\link[=simplify_network]{simplify_network()}}), remove
 \href{https://luukvdmeer.github.io/sfnetworks/articles/sfn02_preprocess_clean.html#smooth-pseudo-nodes}{pseudo-nodes},
 and discard all but the main connected component.
+}
+\examples{
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+bucharest_osm <- get_osm_example_data()
+edges <- dplyr::bind_rows(bucharest_osm$streets,
+                          bucharest_osm$railways)
+network <- sfnetworks::as_sfnetwork(edges, directed = FALSE)
+clean_network(network)
+\dontshow{\}) # examplesIf}
 }

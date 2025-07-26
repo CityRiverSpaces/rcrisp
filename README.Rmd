@@ -13,28 +13,72 @@ knitr::opts_chunk$set(
 )
 ```
 
-# CRiSp
+```{r srr-tags, eval=FALSE, echo=FALSE}
+#' @srrstats {G1.2} Life cycle badge added in the README and statement on state
+#'   of development added in the "Contributing" section.
+```
+
+# rcrisp
 
 <!-- badges: start -->
-[![R-CMD-check](https://github.com/CityRiverSpaces/CRiSp/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/CityRiverSpaces/CRiSp/actions/workflows/R-CMD-check.yaml)
+[![R-CMD-check](https://github.com/CityRiverSpaces/rcrisp/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/CityRiverSpaces/rcrisp/actions/workflows/R-CMD-check.yaml)
+[![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.15793526.svg)](https://doi.org/10.5281/zenodo.15793526)
+[![CRAN status](https://www.r-pkg.org/badges/version/rcrisp)](https://CRAN.R-project.org/package=rcrisp)
+[![](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 <!-- badges: end -->
 
-CRiSp (City River Spaces) provides tools to automate the morphological delineation of riverside urban areas.
+rcrisp provides tools to automate the morphological delineation of riverside urban areas following the CRiSp (City River Spaces) method.
 
 ## Installation
 
-You can install the development version of CRiSp from [GitHub](https://github.com/) with:
+You can install the released version of rcrisp from [CRAN](https://cran.r-project.org) with:
 
 ``` r
-# install.packages("devtools")
-devtools::install_github("CityRiverSpaces/CRiSp")
+install.packages("rcrisp")
+```
+
+You can install the development version of rcrisp from [GitHub](https://github.com/) with:
+
+``` r
+# install.packages("pak")
+pak::pak("CityRiverSpaces/rcrisp")
 ```
 
 ## Example
 
 This is a basic example which shows you how to solve a common problem:
 
-```{r example}
-library(CRiSp)
-## basic example code
+```{r example, warning=FALSE, message=FALSE}
+library(rcrisp)
+
+# Set location parameters
+city_name <- "Bucharest"
+river_name <- "Dâmbovița"
+epsg_code <- 32635
+
+# Get base layer for plotting
+bb <- get_osm_bb(city_name)
+streets <- get_osm_streets(bb, epsg_code)$geometry
+railways <- get_osm_railways(bb, epsg_code)$geometry
+
+# Delineate river corridor
+bd <- delineate(city_name, river_name, segments = TRUE)
+corridor <- bd$corridor
+segments <- bd$segments
+
+# Plot results
+plot(corridor)
+plot(railways, col = "darkgrey", add = TRUE, lwd = 0.5)
+plot(streets, add = TRUE)
+plot(segments, border = "orange", add = TRUE, lwd = 3)
+plot(corridor, border = "red", add = TRUE, lwd = 3)
 ```
+
+## Contributing
+
+rcrisp is in a stable state of development, with some degree of active subsequent development as envisioned by the primary authors.
+
+We also look very much forward to contributions. See the [Contributing Guide](https://github.com/CityRiverSpaces/rcrisp/blob/main/.github/CONTRIBUTING.md) for further details.
+
+This package is released with a [Contributor Code of Conduct](https://github.com/CityRiverSpaces/rcrisp/blob/main/.github/CODE_OF_CONDUCT.md). By contributing to this project you agree to abide by its terms.

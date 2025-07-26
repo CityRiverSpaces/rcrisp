@@ -50,3 +50,4 @@ that is added if the centroid of the edge falls within a specified region
 Shortest paths calculated on the resulting network will thus tend to prefer
 edges close to \code{target} and to avoid edges within \code{exclude_area}.
 }
+\keyword{internal}

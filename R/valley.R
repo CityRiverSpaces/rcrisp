@@ -1,178 +1,244 @@
-#'Load dem from a STAC endpoint
+#' Default STAC collection
 #'
-#' @param bb bounding box of aoi for which to retrieve dem.
-#' @param resource from which to source dem. Can be "STAC".
-#' if "STAC" the parameters the following parameters
-#' must be supplied as named parameters. If omitted defaults
-#' will be used.
-#' @param ... Additional parameters to be passed depending on the resource.
-#'            In case `resource = "STAC"`, the arguments `endpoint` and
-#'            `collection` need to be passed to `get_stac_asset_urls()`.
+#' Endpoint and collection ID of the default STAC collection where to access
+#' digital elevation model (DEM) data. This is the global Copernicus DEM 30
+#' dataset hosted on AWS, as listed in the EarthSearch STAC API endpoint.
+#' Note that AWS credentials need to be set up in order to access the data (not
+#' the catalog).
+# nolint start
+#' References:
+#'  - [EarthSearch STAC API](https://element84.com/earth-search/)
+#'  - [Copernicus DEM](https://dataspace.copernicus.eu/explore-data/data-collections/copernicus-contributing-missions/collections-description/COP-DEM)
+#'  - [AWS Copernicus DEM datasets](https://copernicus-dem-30m.s3.amazonaws.com/readme.html)
+#'  - [Data license](https://docs.sentinel-hub.com/api/latest/static/files/data/dem/resources/license/License-COPDEM-30.pdf)
+# nolint end
+default_stac_dem <- list(
+  endpoint = "https://earth-search.aws.element84.com/v1",
+  collection = "cop-dem-glo-30"
+)
+
+#' Access digital elevation model (DEM) for a given region
 #'
-#' @return dem
+#' @param bb A bounding box, provided either as a matrix (rows for "x", "y",
+#'   columns for "min", "max") or as a vector ("xmin", "ymin", "xmax", "ymax"),
+#'   in lat/lon coordinates (WGS84 coordinate reference system) of class `bbox`
+#' @param dem_source Source of the DEM:
+#'   - If "STAC" (default), DEM tiles are searched on a SpatioTemporal Asset
+#'     Catalog (STAC) end point, then accessed and mosaicked to the area of
+#'     interest
+#' @param stac_endpoint URL of the STAC API endpoint (only used if `dem_source`
+#'   is `"STAC"`). For more info, see [`get_stac_asset_urls()`]
+#' @param stac_collection Identifier of the STAC collection to be queried (only
+#'   used if `dem_source` is `"STAC"`). For more info, see
+#'   [`get_stac_asset_urls()`]
+#' @param crs Coordinate reference system (CRS) which to transform the DEM to
+#' @param force_download Download data even if cached data is available
+#'
+#' @return DEM as a terra `SpatRaster` object
 #' @export
-get_dem <- function(bb, resource = "STAC", ...) {
-  args <- list(...)
-  if (resource == "STAC") {
-    if (length(args) && !is.null(...)) {
-      endpoint <- args$endpoint
-      collection <- args$collection
-      asset_urls <- get_stac_asset_urls(
-                                        bb,
-                                        endpoint = endpoint,
-                                        collection = collection)
-    } else {
-      asset_urls <- get_stac_asset_urls(bb)
-    }
-    dem <- load_raster(bb, asset_urls)
-    return(dem)
+#' @examplesIf interactive()
+#' # Get DEM with default values
+#' bb <- get_osm_bb("Bucharest")
+#' crs <- 31600  # National projected CRS
+#'
+#' # Get DEM with default values
+#' get_dem(bb)
+#'
+#' # Get DEM from custom STAC endpoint
+#' get_dem(bb,
+#'         stac_endpoint = "some endpoint",
+#'         stac_collection = "some collection")
+#'
+#' # Specify CRS
+#' get_dem(bb, crs = crs)
+#' @srrstats {G2.3, G2.3b} The input character value for `dem_source` is
+#'   converted to uppercase using toupper(), making the check case-insensitive.
+#'   A validation is then performed to ensure the value is allowed.
+#' @srrstats {G2.7} The `bb` parameter accepts tabular input of class `matrix`.
+get_dem <- function(bb, dem_source = "STAC", stac_endpoint = NULL,
+                    stac_collection = NULL, crs = NULL,
+                    force_download = FALSE) {
+  # Check input
+  checkmate::assert_logical(force_download, len = 1)
+  dem_source <- toupper(dem_source)
+  checkmate::assert_choice(dem_source, c("STAC"))
+
+  bbox <- as_bbox(bb)
+  if (dem_source == "STAC") {
+    asset_urls <- get_stac_asset_urls(bbox, endpoint = stac_endpoint,
+                                      collection = stac_collection)
+    dem <- load_dem(bbox, asset_urls, force_download = force_download)
   } else {
-    stop(sprintf("Resource %s unknown", resource))
+    stop(sprintf("DEM source %s unknown", dem_source))
   }
+  if (!is.null(crs)) dem <- reproject(dem, crs)
+  dem
 }
 
-#' Create vector/polygon representation of valley from dem and river polygon
-#' for a crs
+#' Extract the river valley from the DEM
 #'
-#' @param dem of region
-#' @param river vector/polygon representation of river area
-#' @param crs coordiante reference system to use
+#' The slope of the digital elevation model (DEM) is used as friction (cost)
+#' surface to compute the cost distance from any grid cell of the raster to
+#' the river. A characteristic value (default: the mean) of the cost distance
+#' distribution in a region surrounding the river (default: a buffer region of
+#' 2 km) is then calculated, and used to threshold the cost-distance surface.
+#' The resulting area is then "polygonized" to obtain the valley boundary as a
+#' simple feature geometry.
 #'
-#' @return (multi)polygon representation of valley
-#' area as st_geometry without holes
+#' @srrstats {G1.3} The Cost Distance algorithm is explained here.
+#'
+#' @param dem `SpatRaster` object with the digital elevation model of the region
+#' @param river An object of class `sf` or `sfc` representing the river
+#'
+#' @return River valley as a simple feature geometry of class `sfc_MULTIPOLYGON`
 #' @export
-get_valley <- function(dem, river, crs) {
-  dem_repr <- reproject(dem, crs)
-  river_repr <- reproject(river, crs)
-  cd_masked <- smooth_dem(dem_repr) |>
+#' @examplesIf interactive()
+#' bucharest_osm <- get_osm_example_data()
+#' bucharest_dem <- get_dem_example_data()
+#' delineate_valley(bucharest_dem, bucharest_osm$river_centerline)
+#' @srrstats {G2.7} The `river` parameter accepts domain-specific tabular input
+#'   of type `sf`.
+delineate_valley <- function(dem, river) {
+  # Check input
+  checkmate::assert_class(dem, "SpatRaster")
+  checkmate::assert_true(inherits(river, c("sf", "sfc")))
+
+  if (!terra::same.crs(dem, sf::st_crs(river)$wkt)) {
+    stop("DEM and river geometry should be in the same CRS")
+  }
+  cd_masked <- smooth_dem(dem) |>
     get_slope() |>
-    get_cost_distance(river_repr) |>
-    mask_cost_distance(river_repr)
+    get_cost_distance(river) |>
+    mask_cost_distance(river)
 
   cd_thresh <- get_cd_char(cd_masked)
 
-  valley <- get_valley_mask(cd_masked, cd_thresh) |>
-    get_valley_polygon()
-  return(valley)
+  get_valley_polygon(cd_masked < cd_thresh)
 }
 
-
-
-#'Retrieve asset urls for the intersection of a bounding box with a
-#'remote STAC endpoint
+#' Retrieve the URLs of all the assets intersecting a bbox from a STAC API
 #'
-#' @param bb A bounding box (compliant with CRiSp,
-#' i.e. as a matrix with 4 elements: xmin, ymin, xmax, ymax)
-#' @param endpoint url of (remote) STAC endpoint
-#' @param collection STAC collection to be queried
+#' @param bb A bounding box, provided either as a matrix (rows for "x", "y",
+#'   columns for "min", "max") or as a vector ("xmin", "ymin", "xmax", "ymax"),
+#'   in lat/lon coordinates (WGS84 coordinate referece system) of class `bbox`
+#' @param endpoint URL of the STAC API endpoint. To be provided together with
+#'   `stac_collection`, or leave blank to use defaults (see
+#'   [`default_stac_dem`])
+#' @param collection Identifier of the STAC collection to be queried. To be
+#'   provided together with `stac_endpoint`, or leave blank to use defaults
+#'   (see [`default_stac_dem`])
 #'
-#' @return A list of urls for the assets in the collection
-#' overlapping with the specified bounding box
+#' @return A list of URLs for the assets in the collection overlapping with
+#'   the specified bounding box
 #' @export
-get_stac_asset_urls <- function(
-    bb,
-    endpoint = "https://earth-search.aws.element84.com/v1",
-    collection = "cop-dem-glo-30") {
-  it_obj <- rstac::stac(endpoint) |>
-    rstac::stac_search(collections = collection, bbox = as.vector(bb)) |>
-    rstac::get_request()
-  asset_urls <- rstac::assets_url(it_obj)
-  return(asset_urls)
-}
+#' @examplesIf interactive()
+#' bb <- get_osm_bb("Bucharest")
+#' get_stac_asset_urls(bb)
+#'
+#' # Use non-default STAC API
+#' get_stac_asset_urls(bb,
+#'                     endpoint = "some endpoint",
+#'                     collection = "some collection")
+#' @srrstats {G2.7} The `bb` parameter accepts tabular input of class `matrix`.
+get_stac_asset_urls <- function(bb, endpoint = NULL, collection = NULL) {
+  # Check input
+  bbox <- as_bbox(bb)
+  checkmate::assert_character(endpoint, len = 1, null.ok = TRUE)
+  checkmate::assert_character(collection, len = 1, null.ok = TRUE)
 
-#' retrieve STAC records (of a DEM) corresponding to a list of asset urls,
-#' crop and merge with a specified bounding box to create a dem of the
-#' specified region
-#'
-#' @param bb A bounding box (compliant with CRiSp,
-#' i.e. as a matrix with 4 elements: xmin, ymin, xmax, ymax)
-#' @param raster_urlpaths a list of STAC records to be retrieved
-#'
-#' @return A a merged dem from retrieved assets cropped to the bounding box
-#' @export
-load_raster <- function(bb, raster_urlpaths) {
-  raster_urlpaths |>
-    lapply(terra::rast) |>
-    lapply(terra::crop, as.vector(t(bb))) |>
-    do.call(terra::merge, args = _)
-}
-
-#'Write dem to cloud optimized GeoTiff file as specified location
-#'
-#' @param dem to write to file
-#' @param fpath filepath for output. If no output directory is specified
-#' (see below) fpath is parsed to determine
-#' the output directory
-#' @param output_directory where file should be written.
-#' If specified fpath is treated as filename only.
-#'
-#' @export
-dem_to_cog <- function(dem, fpath, output_directory = NULL) {
-  if (is.null(output_directory)) {
-    filename <- basename(fpath)
-    directory_name <- dirname(fpath)
-  } else {
-    filename <- fpath
-    directory_name <- output_directory
+  if (is.null(endpoint) && is.null(collection)) {
+    endpoint <- default_stac_dem$endpoint
+    collection <- default_stac_dem$collection
+    # check if there is AWS credentials file, otherwise use unsigned requests
+    aws_credentials_path <- file.path(Sys.getenv("HOME"), ".aws", "credentials")
+    if (!file.exists(aws_credentials_path)) {
+      Sys.setenv("AWS_NO_SIGN_REQUEST" = "YES")
+    }
+  } else if (is.null(endpoint) || is.null(collection)) {
+    stop("Provide both or neither of STAC endpoint and collection")
   }
-  data_dir <- directory_name
-  terra::writeRaster(
-                     x = dem,
-                     filename = sprintf("%s/%s", data_dir, filename),
-                     filetype = "COG",
-                     overwrite = TRUE)
+
+  rstac::stac(endpoint) |>
+    rstac::stac_search(collections = collection, bbox = bbox) |>
+    rstac::get_request() |>
+    rstac::assets_url()
 }
 
-
-
-
-
-
-#' Reproject a raster or vector dataset to the specified
-#' coordinate reference system (CRS)
+#' Retrieve DEM data from a list of STAC assets
 #'
-#' @param x Raster or vector object
-#' @param crs CRS to be projected to
-#' @param ... Optional arguments for raster or vector reproject functions
+#' Load DEM data from a list of tiles, crop and merge using a given bounding
+#' box to create a raster DEM for the specified region. Results are cached, so
+#' that new queries with the same input parameters will be loaded from disk.
 #'
-#' @return Object reprojected to specified CRS
+#' @param bb A bounding box, provided either as a matrix (rows for "x", "y",
+#'   columns for "min", "max") or as a vector ("xmin", "ymin", "xmax", "ymax")
+#'   of class `bbox`.
+#' @param tile_urls A list of tiles where to read the DEM data from
+#' @param force_download Download data even if cached data is available
+#'
+#' @return A DEM of class [`terra::SpatRaster`], retrieved and retiled to the
+#'   given bounding box
 #' @export
-reproject <- function(x, crs, ...) {
-  if (inherits(x, "SpatRaster")) {
-    return(terra::project(x, crs, ...))
-  } else if (inherits(x, c("bbox", "sfc", "sf"))) {
-    return(sf::st_transform(x, crs, ...))
-  } else {
-    stop(sprintf("Cannot reproject object type: %s", class(x)))
+#' @examplesIf interactive()
+#' bb <- get_osm_bb("Bucharest")
+#' tile_urls <- get_stac_asset_urls(bb)
+#' load_dem(bb, tile_urls, force_download = TRUE)
+#' @srrstats {G4.0} DEM data is written to cache with a file name concatenated
+#'   from tile names and boundig box coordinates.
+#' @srrstats {G2.7} The `bb` parameter accepts tabular input of class `matrix`.
+load_dem <- function(bb, tile_urls, force_download = FALSE) {
+  # Check input
+  bbox <- as_bbox(bb)
+  checkmate::assert_character(tile_urls, min.len = 1)
+  checkmate::assert_logical(force_download, len = 1)
+
+  filepath <- get_dem_cache_filepath(tile_urls, bbox)
+
+  if (file.exists(filepath) && !force_download) {
+    dem <- read_data_from_cache(filepath, unwrap = TRUE)
+    return(dem)
   }
+
+  dem <- load_raster(tile_urls, bbox = bbox)
+
+  write_data_to_cache(dem, filepath, wrap = TRUE)
+
+  dem
 }
 
-#' spatially smooth dem by (window) filtering
+#' Spatially smooth dem by (window) filtering
 #'
 #' @param dem raster data of dem
-#' @param method smoothing function to be used, e.g. "median".
-#' As accepted by focal
+#' @param method smoothing function to be used, e.g. "median",
+#'   as accepted by [terra::focal()]
 #' @param window size of smoothing kernel
 #'
 #' @return filtered dem
-#' @export
+#' @keywords internal
+#' @srrstats {SP3.0, SP3.0a} This function allows `window` (i.e., the size of
+#'   the neighourhood) to be set and passed down to the `w` parameter of
+#'   `terra::focal()`. With a single value (default), the function employs the
+#'   square ("queen") neighbourhood form. With a weight matrix, also accepted
+#'   by `terra::focal()`, in which cells on ortogonal direction are assigned
+#'   `1` and cells on diagonal direction are assigned `0`, a "rook"
+#'   neighbourhood form can also be obtained.
 smooth_dem <- function(dem, method = "median", window = 5) {
   dem_smoothed <- terra::focal(dem, w = window, fun = method)
   names(dem_smoothed) <- "dem_smoothed"
-  return(dem_smoothed)
+  dem_smoothed
 }
 
-#' Derive slope as percentage from dem
+#' Derive slope as percentage from DEM
+#'
 #' This makes use of the terrain function of the terra package
 #'
 #' @param dem raster data of dem
 #'
 #' @return raster of derived slope over dem extent
-#' @export
+#' @keywords internal
 get_slope <- function(dem) {
   slope_radians <- terra::terrain(dem, v = "slope", unit = "radians")
-  slope <- tan(slope_radians)
-  return(slope)
+  tan(slope_radians)
 }
 
 #' Mask slope raster, setting the slope to zero for the pixels overlapping
@@ -184,20 +250,25 @@ get_slope <- function(dem) {
 #' @param target value to set for pixels overlapping river area
 #'
 #' @return updated slope raster
-#'
-#' @export
+#' @keywords internal
+#' @srrstats {G2.10} This function uses `sf::st_geometry()` to extract the
+#'   geometry column from the `sf` object `river`. This is used when
+#'   only geometry information is needed from that point onwards and all other
+#'   attributes (i.e., columns) can be safely discarded. The object returned
+#'   by `sf::st_geometry()` is a simple feature geometry list column of class
+#'   `sfc`.
 mask_slope <- function(slope, river, lthresh = 1.e-3, target = 0) {
-  slope_masked <- terra::mask(
-                              slope,
+  slope_masked <- terra::mask(slope,
                               terra::ifel(slope <= lthresh, NA, 1),
                               updatevalue = lthresh)
-
-  slope_masked <- terra::mask(
-                              slope_masked,
-                              terra::vect(river),
-                              inverse = TRUE,
-                              updatevalue = target,
-                              touches = TRUE)
+  for (ngeom in seq_len(length(sf::st_geometry(river)))) {
+    slope_masked <- terra::mask(slope_masked,
+                                terra::vect(river[ngeom]),
+                                inverse = TRUE,
+                                updatevalue = target,
+                                touches = TRUE)
+  }
+  slope_masked
 }
 
 #' Derive cost distance function from masked slope
@@ -207,12 +278,14 @@ mask_slope <- function(slope, river, lthresh = 1.e-3, target = 0) {
 #' @param target value for cost distance calculation
 #'
 #' @return raster of cost distance
-#' @export
+#' @keywords internal
+#' @srrstats {SP3.1} This function uses a slope raster as a friction surface,
+#'   weighting neighbour contributions continuously by slope.
 get_cost_distance <- function(slope, river, target = 0) {
-  slope_masked <- CRiSp::mask_slope(slope, river, target = target)
+  slope_masked <- mask_slope(slope, river, target = target)
   cd <- terra::costDist(slope_masked, target = target)
   names(cd) <- "cost_distance"
-  return(cd)
+  cd
 }
 
 #' Mask out river regions incl. a buffer in cost distance raster data
@@ -222,16 +295,15 @@ get_cost_distance <- function(slope, river, target = 0) {
 #' @param buffer size of buffer around river polygon to additionally mask
 #'
 #' @return cd raster with river+BUFFER pixels masked
-#' @export
+#' @keywords internal
 mask_cost_distance <- function(cd, river, buffer = 2000) {
   river_buffer <- sf::st_buffer(river, buffer) |> terra::vect()
-  cd_masked <- terra::mask(
+  terra::mask(
     cd,
     river_buffer,
     updatevalue = NA,
     touches = TRUE
   )
-  return(cd_masked)
 }
 
 #' Get characteristic value of distribution of cost distance
@@ -240,66 +312,61 @@ mask_cost_distance <- function(cd, river, buffer = 2000) {
 #' @param method function used to derive caracteristic value (mean)
 #'
 #' @return characteristic value of cd raster
-#' @export
+#' @keywords internal
+#' @srrstats {G2.15} This function explicitly sets `na.rm = TRUE` when
+#'   calculating the mean of a cost distance raster, which may contain `NA`
+#'   values. This way, the mean is calculated only from valid raster cells,
+#'   ignoring any missing values.
 get_cd_char <- function(cd, method = "mean") {
   if (method == "mean") {
-    cd_char <- mean(terra::values(cd), na.rm = TRUE)
-    return(cd_char)
+    mean(terra::values(cd), na.rm = TRUE)
   } else {
-    #TODO
+    stop("Not implemented!")
   }
-}
-
-#' Select valley pixels from cost distance based on threshold
-#'
-#' @param cd cost distance raster
-#' @param thresh threshold cost distance value below which pixels are assuemd
-#' to belong to the valley
-#' @export
-get_valley_mask <- function(cd, thresh) {
-  valley_mask <- (cd < thresh)
-  return(valley_mask)
 }
 
 #' Create vector/polygon representation of valley raster mask
 #'
 #' @param valley_mask raster mask of valley pixels
 #'
-#' @return polygon representation of valley area as st_geometry
+#' @return polygon representation of valley area as object of class [`sf::sfc`]
 #' @importFrom rlang .data
-#' @export
+#' @keywords internal
+#' @srrstats {G2.10} This function uses `sf::st_geometry()` to extract the
+#'   geometry column from an `sf` object in a `dplyr` pipline. This is used when
+#'   only geometry information is needed from that point onwards and all other
+#'   attributes (i.e., columns) can be safely discarded. The object returned
+#'   by `sf::st_geometry()` is a simple feature geometry list column of class
+#'   `sfc`.
 get_valley_polygon_raw <- function(valley_mask) {
-  valley_polygon <- terra::as.polygons(valley_mask, dissolve = TRUE) |>
+  terra::as.polygons(valley_mask, dissolve = TRUE) |>
     sf::st_as_sf() |>
     dplyr::filter(.data$cost_distance == 1) |>
     sf::st_geometry()
-  return(valley_polygon)
 }
 
 #' Remove possible holes from valley geometry
 #'
-#' @param valley_polygon st_geometry of valley region
+#' @param valley_polygon Geometry of valley as object of class [`sf::sfc`]
 #'
 #' @return (multi)polygon geometry of valley
-#' @export
+#' @keywords internal
 get_valley_polygon_no_hole <- function(valley_polygon) {
-  valley_polygon_noholes <- valley_polygon |>
+  valley_polygon |>
     sf::st_cast("POLYGON") |>
     lapply(function(x) x[1]) |>
     sf::st_multipolygon() |>
     sf::st_sfc(crs = sf::st_crs(valley_polygon))
-  return(valley_polygon_noholes)
 }
 
 #' Create vector/polygon representation of valley without holes from raster mask
 #'
 #' @param valley_mask raster mask of valley pixels
 #'
-#' @return (multi)polygon representation of valley area
-#' as st_geometry without holes
-#' @export
+#' @return (multi)polygon representation of valley area as a simple feature
+#'   geometry without holes
+#' @keywords internal
 get_valley_polygon <- function(valley_mask) {
-  val_poly <- CRiSp::get_valley_polygon_raw(valley_mask) |>
-    CRiSp::get_valley_polygon_no_hole()
-  return(val_poly)
+  get_valley_polygon_raw(valley_mask) |>
+    get_valley_polygon_no_hole()
 }

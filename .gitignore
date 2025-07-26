@@ -8,3 +8,5 @@ inst/doc
 /Meta/
 /inst/joss/*
 !/inst/joss/paper.qmd
+R/tmp.R
+tmp/

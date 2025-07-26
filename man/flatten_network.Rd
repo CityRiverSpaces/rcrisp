@@ -7,10 +7,10 @@
 flatten_network(network)
 }
 \arguments{
-\item{network}{A network object}
+\item{network}{A network object of class \code{sfnetwork}}
 }
 \value{
-A network object with additional points at intersections
+An \code{sfnetwork} object with additional points at intersections
 }
 \description{
 All crossing edges are identified, and the points of intersections are
@@ -23,4 +23,11 @@ that are included in \code{\link[=clean_network]{clean_network()}}.
 The functionality is similar to sfnetworks'
 \code{\link[sfnetworks:st_network_blend]{sfnetworks::st_network_blend()}}, but in that case an external point is
 only injected to the closest edge.
+}
+\examples{
+bucharest_osm <- get_osm_example_data()
+edges <- dplyr::bind_rows(bucharest_osm$streets,
+                          bucharest_osm$railways)
+network <- sfnetworks::as_sfnetwork(edges, directed = FALSE)
+flatten_network(network)
 }

@@ -1,11 +1,15 @@
-#' CRiSp example data for Bucharest
+#' rcrisp example delineation data for Bucharest
 #'
-#' Data extracted from OpenStreetMap for examples used in the CRiSp package.
+#' Delineation generated with rcrisp example data found at
+#' <https://zenodo.org/records/16325879>
 #'
-#' @format A list with the following components:
+#' @format A list of sf objects representing:
 #' \describe{
-#'  \item{boundary}{A sf object representing the administrative boundary of
-#'                  Bucharest.}
+#'  \item{valley}{The valley boundaries of river Dâmbovița.}
+#'  \item{corridor}{The corridor boundaries of river Dâmbovița.}
+#'  \item{segments}{Corridor segments of river Dâmbovița.}
+#'  \item{riverspace}{River space of Dâmbovița.}
 #' }
-#' @source OpenStreetMap
-"bucharest"
+#' @srrstats {G5.1} The delineation data used in examples and vignettes is made
+#'   available to users.
+"bucharest_dambovita"

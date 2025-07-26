@@ -7,6 +7,10 @@
 # * https://testthat.r-lib.org/articles/special-files.html
 
 library(testthat)
-library(CRiSp)
+library(rcrisp)
 
-test_check("CRiSp")
+test_check("rcrisp")
+
+#' @srrstats {SP2.2b} The interoperability with the `sf` package is
+#'   demonstrated throughout the tests in this package.
+NULL

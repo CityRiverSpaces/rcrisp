@@ -4,16 +4,18 @@
 \alias{get_osm_streets}
 \title{Get OpenStreetMap streets}
 \usage{
-get_osm_streets(bb, crs, highway_values = NULL)
+get_osm_streets(aoi, crs = NULL, highway_values = NULL, force_download = FALSE)
 }
 \arguments{
-\item{bb}{Boundary box}
+\item{aoi}{Area of interest as sf object or bbox}
 
-\item{crs}{Coordinate reference system as EPSG code}
+\item{crs}{A numeric vector of length one with the EPSG code of the CRS}
 
 \item{highway_values}{A character vector with the highway values to retrieve.
 If left NULL, the function retrieves the following values:
 "motorway", "trunk", "primary", "secondary", "tertiary"}
+
+\item{force_download}{Download data even if cached data is available}
 }
 \value{
 An sf object with the streets
@@ -22,7 +24,18 @@ An sf object with the streets
 Get OpenStreetMap streets
 }
 \examples{
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+# Set parameters
 bb <- get_osm_bb("Bucharest")
-crs <- get_utm_zone(bb)
+crs <- 31600  # National projected CRS
+
+# Get streets with default values
 get_osm_streets(bb, crs)
+
+# Specify street categories to be retrieved
+get_osm_streets(bb, crs, highway_values = "primary")
+
+# Ensure that data is not retrieved from cache
+get_osm_streets(bb, crs, force_download = TRUE)
+\dontshow{\}) # examplesIf}
 }

@@ -2,28 +2,38 @@
 % Please edit documentation in R/valley.R
 \name{get_stac_asset_urls}
 \alias{get_stac_asset_urls}
-\title{Retrieve asset urls for the intersection of a bounding box with a
-remote STAC endpoint}
+\title{Retrieve the URLs of all the assets intersecting a bbox from a STAC API}
 \usage{
-get_stac_asset_urls(
-  bb,
-  endpoint = "https://earth-search.aws.element84.com/v1",
-  collection = "cop-dem-glo-30"
-)
+get_stac_asset_urls(bb, endpoint = NULL, collection = NULL)
 }
 \arguments{
-\item{bb}{A bounding box (compliant with CRiSp,
-i.e. as a matrix with 4 elements: xmin, ymin, xmax, ymax)}
+\item{bb}{A bounding box, provided either as a matrix (rows for "x", "y",
+columns for "min", "max") or as a vector ("xmin", "ymin", "xmax", "ymax"),
+in lat/lon coordinates (WGS84 coordinate referece system) of class \code{bbox}}
 
-\item{endpoint}{url of (remote) STAC endpoint}
+\item{endpoint}{URL of the STAC API endpoint. To be provided together with
+\code{stac_collection}, or leave blank to use defaults (see
+\code{\link{default_stac_dem}})}
 
-\item{collection}{STAC collection to be queried}
+\item{collection}{Identifier of the STAC collection to be queried. To be
+provided together with \code{stac_endpoint}, or leave blank to use defaults
+(see \code{\link{default_stac_dem}})}
 }
 \value{
-A list of urls for the assets in the collection
-overlapping with the specified bounding box
+A list of URLs for the assets in the collection overlapping with
+the specified bounding box
 }
 \description{
-Retrieve asset urls for the intersection of a bounding box with a
-remote STAC endpoint
+Retrieve the URLs of all the assets intersecting a bbox from a STAC API
+}
+\examples{
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+bb <- get_osm_bb("Bucharest")
+get_stac_asset_urls(bb)
+
+# Use non-default STAC API
+get_stac_asset_urls(bb,
+                    endpoint = "some endpoint",
+                    collection = "some collection")
+\dontshow{\}) # examplesIf}
 }

@@ -1,6 +1,6 @@
 ^renv$
 ^renv\.lock$
-^CRiSp\.Rproj$
+^rcrisp\.Rproj$
 ^\.Rproj\.user$
 ^LICENSE\.md$
 ^data-raw$
@@ -13,3 +13,4 @@
 ^CITATION.cff$
 ^doc$
 ^Meta$
+^cran-comments\.md$

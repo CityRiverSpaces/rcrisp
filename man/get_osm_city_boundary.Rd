@@ -4,17 +4,25 @@
 \alias{get_osm_city_boundary}
 \title{Get the city boundary from OpenStreetMap}
 \usage{
-get_osm_city_boundary(city_name, bb, crs, multiple = FALSE)
+get_osm_city_boundary(
+  bb,
+  city_name,
+  crs = NULL,
+  multiple = FALSE,
+  force_download = FALSE
+)
 }
 \arguments{
-\item{city_name}{A character string with the name of the city}
-
 \item{bb}{Bounding box of class \code{bbox}}
+
+\item{city_name}{A character string with the name of the city}
 
 \item{crs}{Coordinate reference system as EPSG code}
 
 \item{multiple}{A logical indicating if multiple city boundaries should be
 returned. By default, only the first one is returned.}
+
+\item{force_download}{Download data even if cached data is available}
 }
 \value{
 An sf object with the city boundary
@@ -25,7 +33,9 @@ bounding box with the OSM tags "place:city" and "boundary:administrative".
 The result is filtered by the city name.
 }
 \examples{
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 bb <- get_osm_bb("Bucharest")
 crs <- get_utm_zone(bb)
-get_osm_city_boundary("Bucharest", bb, crs)
+get_osm_city_boundary(bb, "Bucharest", crs)
+\dontshow{\}) # examplesIf}
 }

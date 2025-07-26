@@ -4,28 +4,62 @@
 \alias{get_osmdata}
 \title{Retrieve OpenStreetMap data for a given location}
 \usage{
-get_osmdata(city_name, river_name, crs = NULL, buffer = NULL)
+get_osmdata(
+  city_name,
+  river_name,
+  network_buffer = NULL,
+  buildings_buffer = NULL,
+  city_boundary = TRUE,
+  crs = NULL,
+  force_download = FALSE
+)
 }
 \arguments{
 \item{city_name}{A character string with the name of the city.}
 
 \item{river_name}{A character string with the name of the river.}
 
+\item{network_buffer}{Buffer distance in meters around the river
+to get the streets and railways, default is 0 means no
+network data will be downloaded}
+
+\item{buildings_buffer}{Buffer distance in meters around the river
+to get the buildings, default is 0 means no
+buildings data will be downloaded}
+
+\item{city_boundary}{A logical indicating if the city boundary should be
+retrieved. Default is TRUE.}
+
 \item{crs}{An integer with the EPSG code for the projection. If no CRS is
 specified, the default is the UTM zone for the city.}
 
-\item{buffer}{A numeric with the buffer distance in meters. By default,
-no buffer is applied}
+\item{force_download}{Download data even if cached data is available}
 }
 \value{
-An list with the retrieved OpenStreetMap data sets for the
+A list with the retrieved OpenStreetMap data sets for the
 given location
 }
 \description{
 Retrieve OpenStreetMap data for a given location, including
-the city boundary, the river centreline and surface, the streets, and the
-railways.
+the city boundary, the river centreline and surface, the streets, the
+railways, and the buildings
 }
 \examples{
-get_osmdata("Bucharest", "Dambovita", buffer = 2000)
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+# Set parameters
+city <- "Bucharest"
+river <- "Dâmbovița"
+
+# Get OSM data with defaults
+get_osmdata(city, river)
+
+# Use custom network buffer
+get_osmdata(city, river, network_buffer = 3500)
+
+# Use custom buildings buffer
+get_osmdata(city, river, buildings_buffer = 150)
+
+# Use custom CRS
+get_osmdata(city, river, crs = "EPSG:31600")  # National projected CRS
+\dontshow{\}) # examplesIf}
 }

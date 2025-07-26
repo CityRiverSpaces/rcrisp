@@ -1,45 +1,57 @@
-Package: CRiSp
+Package: rcrisp
 Title: Automate the Delineation of Urban River Spaces
-Version: 0.0.0.9000
+Version: 0.1.4
 Authors@R: c(
-    person("Claudiu", "Forgaci", , "c.forgaci@tudelft.nl", role = c("aut", "cre"),
+    person("Claudiu", "Forgaci", , "c.forgaci@tudelft.nl", role = c("aut", "cre", "cph"),
            comment = c(ORCID = "0000-0003-3218-5102")),
     person("Francesco", "Nattino", , "f.nattino@esciencecenter.nl", role = "aut",
            comment = c(ORCID = "0000-0003-3286-0139")),
+    person("Fakhereh", "Alidoost", , "f.alidoost@esciencecenter.nl", role = "ctb",
+           comment = c(ORCID = "0000-0001-8407-6472")),
+    person("Meiert Willem", "Grootes", , "m.grootes@esciencecenter.nl", role = "ctb",
+           comment = c(ORCID = "0000-0002-5733-4795")),
     person("Netherlands eScience Center", , , "info@esciencecenter.nl", role = "fnd")
   )
-Description: CRiSp (City River Spaces) provides tools to automate the
-    morphological delineation of riverside urban areas.
+Description: Provides tools to automate the morphological delineation of
+    riverside urban areas based on a method introduced in Forgaci (2018)
+    <doi:10.7480/abe.2018.31>. Delineation entails the identification of
+    corridor boundaries, segmentation of the corridor, and delineation of
+    the river space using two-dimensional spatial information from street
+    network data and digital elevation data in a projected CRS. The
+    resulting delineation can be used to characterise spatial phenomena
+    that can be related to the river as a central element.
 License: Apache License (>= 2)
-URL: https://cityriverspaces.github.io/CRiSp/
-BugReports: https://github.com/CityRiverSpaces/crisp/issues
-Depends: 
-    R (>= 2.10)
-Imports: 
+URL: https://cityriverspaces.github.io/rcrisp/, https://doi.org/10.5281/zenodo.15793526
+BugReports: https://github.com/CityRiverSpaces/rcrisp/issues
+Depends:
+    R (>= 4.1.0)
+Imports:
+    checkmate,
+    dbscan,
     dplyr,
     lwgeom,
     osmdata,
+    rcoins,
     rlang,
     rstac,
-    sf,
+    sf (>= 0.9.0),
     sfheaders,
     sfnetworks,
     stringr,
     terra,
-    tibble,
     tidygraph,
-    units
-Suggests: 
-    ggplot2,
-    gridExtra,
+    units,
+    visor
+Suggests:
     knitr,
     purrr,
     rmarkdown,
-    testthat (>= 3.0.0)
-VignetteBuilder: 
+    testthat (>= 3.0.0),
+    withr
+VignetteBuilder:
     knitr
 Config/testthat/edition: 3
 Encoding: UTF-8
 LazyData: true
-Roxygen: list(markdown = TRUE)
+Roxygen: list(markdown = TRUE, roclets = c("namespace", "rd", "srr::srr_stats_roclet"))
 RoxygenNote: 7.3.2

@@ -2,19 +2,25 @@
 city_name <- "Bucharest"
 river_name <- "Dâmbovița"
 epsg_code <- 32635
-bbox_buffer <- 2000
+network_buffer <- 2500
+buildings_buffer <- 100
+dem_buffer <- 2500
 
-# Fetch the data
-bucharest <- CRiSp::get_osmdata(city_name, river_name,
-                                crs = epsg_code, buffer = bbox_buffer)
+# Add delineation to package data
+bucharest_dambovita <- delineate(city_name, river_name, crs = epsg_code,
+                                 network_buffer = network_buffer,
+                                 buildings_buffer = buildings_buffer,
+                                 dem_buffer = dem_buffer,
+                                 corridor = TRUE, segments = TRUE,
+                                 riverspace = TRUE)
 
-# Fix encoding issue in the WKT string of city boundary
+# Fix encoding issue in the WKT strings
 fix_wkt_encoding <- function(x) {
   wkt <- sf::st_crs(x)$wkt
-  sf::st_crs(x)$wkt <- gsub("°|º", "\\\u00b0", wkt)
+  sf::st_crs(x)$wkt <- gsub("°|º", "\\\u00b0", wkt)  # replace with ASCII code
   x
 }
-bucharest <- lapply(bucharest, fix_wkt_encoding)
+bucharest_dambovita <- lapply(bucharest_dambovita, fix_wkt_encoding)
 
 # Save as package data
-usethis::use_data(bucharest, overwrite = TRUE)
+usethis::use_data(bucharest_dambovita, overwrite = TRUE, compress = "xz")
