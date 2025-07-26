@@ -51,10 +51,15 @@ delineate_corridor <- function(
 ) {
   # Check input
   checkmate::assert_class(network, "sfnetwork")
-  checkmate::assert_true(inherits(river, c("sf", "sfc")))
-  checkmate::assert_true(
-    inherits(corridor_init, c("numeric", "sfc_POLYGON", "sfc_MULTIPOLYGON"))
-  )
+  checkmate::assert_multi_class(river, c("sf", "sfc"))
+  checkmate::assert_multi_class(corridor_init, c("numeric",
+                                                 "character",
+                                                 "sfc_POLYGON",
+                                                 "sfc_MULTIPOLYGON"))
+  if (is.character(corridor_init)) {
+    corridor_init <- tolower(corridor_init)
+    checkmate::assert_choice(corridor_init, "valley")
+  }
   checkmate::assert_numeric(max_width, len = 1)
   checkmate::assert_numeric(max_iterations, len = 1)
   capping_method <- tolower(capping_method)
