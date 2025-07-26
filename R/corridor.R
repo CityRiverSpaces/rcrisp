@@ -13,8 +13,9 @@
 #'   * numeric or integer: use a buffer region of the given size (in meters)
 #'     around the river centerline
 #'   * An [`sf::sf`] or [`sf::sfc`] object: use the given input geometry
-#' @param max_width (Approximate) maximum width of the corridor. The spatial
-#'   network is trimmed by a buffer region of this size around the river
+#' @param max_width Positive non-zero number with the (approximate) maximum
+#'   width of the corridor. The spatial network is trimmed by a buffer region of
+#'   this size around the river
 #' @param max_iterations Maximum number of iterations employed to refine the
 #'   corridor edges (see [`corridor_edge()`]).
 #' @param capping_method The method employed to connect the corridor edge end
@@ -38,7 +39,8 @@
 #' bucharest_dem <- get_dem_example_data()
 #' corridor_init <- delineate_valley(bucharest_dem, river)
 #' delineate_corridor(network, river, corridor_init = corridor_init,
-#'                    max_width = 4000, max_iterations = 5, capping = "direct")
+#'                    max_width = 4000, max_iterations = 5,
+#'                    capping_method = "direct")
 #' @srrstats {G2.3, G2.3a, G2.3b} The `checkmate` package is used to check that
 #'   `capping_method` only uses allowed choices. The variable is also made
 #'   case-independent with `tolower()`.
@@ -68,13 +70,9 @@ delineate_corridor <- function(
   checkmate::assert_class(network, "sfnetwork")
   checkmate::assert_multi_class(river, c("sf", "sfc"))
   checkmate::assert_multi_class(corridor_init, c("numeric",
-                                                 "character",
+                                                 "integer",
                                                  "sfc_POLYGON",
                                                  "sfc_MULTIPOLYGON"))
-  if (is.character(corridor_init)) {
-    corridor_init <- tolower(corridor_init)
-    checkmate::assert_choice(corridor_init, "valley")
-  }
   if (is.numeric(corridor_init)) {
     checkmate::assert_numeric(corridor_init,
                               len = 1,
