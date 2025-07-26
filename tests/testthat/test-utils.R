@@ -1,3 +1,13 @@
+#' @srrstats {G2.10} Several tests in this test module use `sf::st_geometry()`
+#'   to extract the geometry column from the either
+#'   `bucharest_osm$river_centerline` or `bucharest_osm$river_surface`. This is
+#'   used when only geometry information is needed from that point onwards and
+#'   all other attributes (i.e., columns) can be safely discarded. The object
+#'   returned by `sf::st_geometry()` is a simple feature geometry list column of
+#'   class `sfc`.
+#' @noRd
+NULL
+
 test_that("setting units works if x is unitless", {
   x <- 1
   y <- 2
@@ -169,9 +179,8 @@ test_that("River buffer throws error if wrong 'side' value is provided", {
   )
 })
 
-#' @srrstatsTODO {G2.4, G2.4a} Explicit conversion to integer with
-#'   `as.integer()` used to test `reproject()` with different ways of providing
-#'   CRS input.
+#' @srrstats {G2.4, G2.4a} Explicit conversion to integer with `as.integer()`
+#'   used to test `reproject()` with different ways of providing CRS input.
 test_that("reproject works with raster data", {
   # raster in UTM zone 2 (lon between -174 and -168 deg), northern emisphere
   x <- terra::rast(xmin = -174, xmax = -168, ymin = 45, ymax = 51, res = 1,

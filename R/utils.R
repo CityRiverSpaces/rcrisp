@@ -27,6 +27,10 @@ set_units_like <- function(x, y) {
 #' # Get EPSG code for UTM zone of Bucharest
 #' bb <- get_osm_bb("Bucharest")
 #' get_utm_zone(bb)
+#' @srrstats {SP2.8, SP2.9} Before determining the UTM zone, the bounding box
+#'   given as input is transformed into an object of class `bbox`. If input
+#'   data does not have a CRS, EPSG:4326 (WGS84) is assumed and assigned by
+#'   [`as_bbox()`].
 get_utm_zone <- function(x) {
   bb <- as_bbox(x)
 
@@ -57,6 +61,13 @@ get_utm_zone <- function(x) {
 #' bb <- as_bbox(bounding_coords)
 #' class(bb)
 #' st_crs(bb)
+#' @srrstats {G2.7} The `x` parameter accepts `matrix` or domain-specific
+#'   tabular input of type `sf`.
+#' @srrstats {G2.8} This function ensures all supported input types are in a
+#'   consistent class accepted by `sf::st_bbox()`. Input of class `numeric` and
+#'   `matrix`, in particular, are converted to a vector with named elements
+#'   (`xmin`, `ymin`, `xmax`, `ymax`) before being passed down to
+#'   `sf::st_bbox()`.
 #' @srrstats {SP4.0, SP4.0b, SP4.1} The return value is a `bbox` object as
 #'   returned by [`sf::st_bbox()`], explicitly documented as such, and it
 #'   maintains the same units as the input if CRS information is available
@@ -165,6 +176,8 @@ river_buffer <- function(river, buffer_distance, bbox = NULL, side = NULL) {
 #' # Reproject a raster to EPSG:4326
 #' r <- terra::rast(matrix(1:12, nrow = 3, ncol = 4), crs = "EPSG:32633")
 #' reproject(r, 4326)
+#' @srrstats {G2.7} The `x` parameter also accepts domain-specific tabular
+#'   input of type `sf`.
 #' @srrstats {SP4.0, SP4.0b, SP4.1} The return value is of class [`sf::sf`],
 #'   [`sf::sfc`] or [`terra::SpatRaster`], explicitly documented as such, with
 #'   transformed CRS as specified by the `crs` parameter.
@@ -219,6 +232,12 @@ load_raster <- function(urlpaths, bbox = NULL) {
 #'
 #' @return Combined river as [`sf::sfc_MULTILINESTRING`]
 #' @keywords internal
+#' @srrstats {G2.10} This function uses `sf::st_geometry()` to extract the
+#'   geometry columns from the `sf` objects `river_centerline` and
+#'   `river_surface`. This is used when only geometry information is needed
+#'   from that point onwards and all other attributes (i.e., columns) can be
+#'   safely discarded. The object returned by `sf::st_geometry()` is a simple
+#'   feature geometry list column of class `sfc`.
 #' @srrstats {SP4.0, SP4.0b, SP4.1, SP4.2} The return value is of class
 #'   [`sf::sfc_MULTILINESTRING`], explicitly documented as such, and it
 #'   maintains the same units as the input.

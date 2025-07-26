@@ -80,6 +80,12 @@ test_that("OSM queries are always performed if force_download is set to TRUE", {
   )
 })
 
+#' @srrstats {G2.10} This test uses `sf::st_geometry()` to extract
+#'   the geometry column from the `sf` object `mock_river_lines`. This is
+#'   used when only geometry information is needed from that point onwards
+#'   and all other attributes (i.e., columns) can be safely discarded. The
+#'   object returned by `sf::st_geometry()` is a simple feature geometry list
+#'   column of class `sfc`.
 test_that("The correct OSM data elements are retrieved", {
   # setup cache directory, even though it shold not be used
   temp_cache_dir()
