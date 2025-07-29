@@ -80,6 +80,12 @@ test_that("OSM queries are always performed if force_download is set to TRUE", {
   )
 })
 
+#' @srrstats {G2.10} This test uses `sf::st_geometry()` to extract
+#'   the geometry column from the `sf` object `mock_river_lines`. This is
+#'   used when only geometry information is needed from that point onwards
+#'   and all other attributes (i.e., columns) can be safely discarded. The
+#'   object returned by `sf::st_geometry()` is a simple feature geometry list
+#'   column of class `sfc`.
 test_that("The correct OSM data elements are retrieved", {
   # setup cache directory, even though it shold not be used
   temp_cache_dir()
@@ -164,6 +170,8 @@ test_that("City boundary of Bucharest is correctly retrieved", {
   expect_true(inherits(city_boundary, "sfc"))
 })
 
+#' @srrstats {G5.8, G5.8a} Edge test: if a value that leads to no data being
+#'   retrieved, an error is raised.
 test_that("Wrong city name raises an error", {
   expect_error(
     with_mocked_bindings(
@@ -211,6 +219,8 @@ test_that("City boundary is retrieved for alternative names", {
   expect_equal(city_boundary_eng, city_boundary_ro)
 })
 
+#' @srrstats {G5.8, G5.8a} Edge test: if a value that leads to no data being
+#'   retrieved, an error is raised.
 test_that("River retrieval raise error if no river is found in the bb", {
   with_mocked_bindings(
     osmdata_as_sf = function(...) list(osm_lines = NULL),
@@ -221,6 +231,8 @@ test_that("River retrieval raise error if no river is found in the bb", {
   )
 })
 
+#' @srrstats {G5.8, G5.8a} Edge test: if a value that leads to no data being
+#'   retrieved, an error is raised.
 test_that("River retrieval raise error if river is not found in the bb", {
   with_mocked_bindings(
     osmdata_as_sf = function(...) list(osm_lines = mock_river_lines),

@@ -38,7 +38,8 @@
 #'   dataset (see [get_dem()]). Only relevant if `corridor_init` is `"valley"`
 #'   and `dem` is NULL
 #'
-#' @return A list with the corridor, segments, and riverspace geometries
+#' @return A list with the corridor, segments, and riverspace geometries as
+#'   [`sf::sfc_POLYGON`] objects.
 #' @export
 #' @examplesIf interactive()
 #' # Set parameters
@@ -60,6 +61,12 @@
 #' # Provide DEM as input
 #' bucharest_dem <- get_dem_example_data()
 #' delineate(city, river, dem = bucharest_dem)
+#' @srrstats {G2.3, G2.3a, G2.3b} The `checkmate` package is used to check that
+#'   `corridor_init` only uses allowed values. The variable is also made
+#'   case-independent with `tolower()`.
+#' @srrstats {SP4.0, SP4.0b, SP4.1, SP4.2} The return value is a list of
+#'   [`sf::sfc_POLYGON`] objects, explicitly documented as such, and it
+#'   maintains the same units as the input.
 delineate <- function(
   city_name, river_name, crs = NULL, network_buffer = NULL,
   buildings_buffer = NULL, corridor_init = "valley", dem = NULL,
@@ -68,10 +75,14 @@ delineate <- function(
   riverspace = FALSE, force_download = FALSE, ...
 ) {
   # Check input
-  checkmate::assert_multi_class(crs, c("numeric", "character"), null.ok = TRUE)
-  if (!is.null(crs)) checkmate::assert_vector(crs, len = 1)
+  checkmate::assert_character(city_name, len = 1)
+  checkmate::assert_character(river_name, len = 1)
   checkmate::assert_numeric(network_buffer, null.ok = TRUE, len = 1)
   checkmate::assert_numeric(buildings_buffer, null.ok = TRUE, len = 1)
+  if (is.character(corridor_init)) {
+    corridor_init <- tolower(corridor_init)
+    checkmate::assert_choice(corridor_init, c("valley"))
+  }
   checkmate::assert_numeric(dem_buffer, len = 1)
   checkmate::assert_logical(corridor, len = 1)
   checkmate::assert_logical(segments, len = 1)
@@ -108,8 +119,12 @@ delineate <- function(
     city_boundary = FALSE, force_download = force_download
   )
 
-  # If not provided, determine the CRS
-  if (is.null(crs)) crs <- get_utm_zone(osm_data$bb)
+  # If not provided, determine the CRS. Otherwise, standardise CRS
+  if (is.null(crs)) {
+    crs <- get_utm_zone(osm_data$bb)
+  } else {
+    crs <- as_crs(crs)
+  }
 
   if (corridor) {
     # If using the valley method, and the DEM is not provided, retrieve dataset

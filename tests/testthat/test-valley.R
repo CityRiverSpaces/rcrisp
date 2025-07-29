@@ -49,6 +49,12 @@ test_that("Download DEM data can be retrieved from the cache on new calls", {
   )
 })
 
+#' @srrstats {G2.10} This test uses `sf::st_geometry()` to extract
+#'   the geometry column from an `sf` object read in with `sf::st_read()`. This
+#'   is used when only geometry information is needed from that point onwards
+#'   and all other attributes (i.e., columns) can be safely discarded. The
+#'   object returned by `sf::st_geometry()` is a simple feature geometry list
+#'   column of class `sfc`.
 test_that("valley polygon is correctly constructed", {
   dem <- bucharest_dem
   river <- bucharest_osm$river_surface
@@ -65,10 +71,14 @@ test_that("valley polygon is correctly constructed", {
                                   par = 0, sparse = FALSE))
 })
 
+#' @srrstats {G5.8} Edge test: if a value different from a set of
+#'   allowed values is selected, an error is raised.
 test_that("Unknown DEM source throws error", {
   expect_error(get_dem(bb, dem_source = "CATS")) # :)
 })
 
+#' @srrstats {G5.8} Edge test: if input arguments are not consistent with each
+#'    other, an error is raised.
 test_that("Mismatch between DEM CRS and river CRS throws error", {
   expect_error(delineate_valley(bucharest_dem,
                                 st_transform(bucharest_osm$river_centerline,
@@ -76,11 +86,15 @@ test_that("Mismatch between DEM CRS and river CRS throws error", {
                "DEM and river geometry should be in the same CRS")
 })
 
+#' @srrstats {G5.8} Edge test: if input arguments are not consistent with each
+#'    other, an error is raised.
 test_that("Incorrect STAC endpoint and collection throws error", {
   expect_error(get_stac_asset_urls(bb, endpoint = "only endpoint"))
   expect_error(get_stac_asset_urls(bb, collection = "only collection"))
 })
 
+#' @srrstats {G5.8} Edge test: if a value different from a set of
+#'   allowed values is selected, an error is raised.
 test_that("Unimplemented function used to derive characteristic value throws
           error", {
             expect_error(get_cd_char(cd, "max"))
