@@ -58,6 +58,8 @@ test_that("correct UTM zone is returend in the northern hemisphere", {
 #'   default we work with UTM zones, which are defined only outside polar
 #'   regions. We make sure that errors are raised if polar regions are
 #'   considered.
+#' @srrstats {G5.8, G5.8d} Edge test: input outside the expected validity ranges
+#'   raise an error.
 test_that("an error is raised for latitudes outside the validity range", {
   bbox <- sf::st_bbox(
     c(xmin = 0, ymin = 83, xmax = 1, ymax = 84.1),
@@ -170,6 +172,8 @@ test_that("River buffer can trim to the region of interest", {
   expect_true(covers)
 })
 
+#' @srrstats {G5.8} Edge test: if a value different from a set of
+#'   allowed values is selected, an error is raised.
 test_that("River buffer throws error if wrong 'side' value is provided", {
   river <- bucharest_osm$river_centerline
   bbox <- sf::st_bbox(bucharest_osm$boundary)
@@ -245,9 +249,52 @@ test_that("reproject works with bbox", {
   expect_equal(crs_actual_str, crs_expected)
 })
 
+#' @srrstats {G5.8, G5.8b} Edge test: giving as input a value of wrong type
+#'   raises an error is raised.
 test_that("reproject does not work with objects of unknown type", {
   expect_error(reproject(1, 4326), "Cannot reproject object type: numeric")
 })
+
+#' @srrstats {SP6.0} This test checks that the original coordinates of a raster
+#'   can be recovered after reprojection within a reasonable numeric tolerance.
+test_that("the original coorindates of a raster can be recovered after
+          reprojection within reasonable numeric tolerance", {
+            # raster in WGS84
+            x <- terra::rast(xmin = -174, xmax = -168, ymin = 45, ymax = 51,
+                             res = 1, vals = 1, crs = "EPSG:4326")
+
+            # reproject to UTM zone 2
+            x_repr <- reproject(x, "EPSG:32602")
+
+            # recover original CRS
+            x_recovered <- reproject(x_repr, "EPSG:4326")
+
+            # check that the original coordinates are recovered
+            # within a tolerance of 1 (the size of a grid cell)
+            expect_true(all(abs(terra::xmin(x) - terra::xmin(x_recovered)) < 1))
+          })
+
+#' @srrstats {SP6.0} This test checks that the original coordinates of a vector
+#'   can be recovered after reprojection within a reasonable numeric tolerance.
+test_that("the original coorindates of vector data can be recovered after
+          reprojection within reasonable numeric tolerance", {
+            # polygon in WGS84
+            x <- sf::st_polygon(list(cbind(c(-174, -174, -168, -168, -174),
+                                           c(45, 51, 51, 45, 45))))
+            x <- sf::st_sfc(x, crs = "EPSG:4326")
+
+            # reproject to UTM zone 2
+            x_repr <- reproject(x, "EPSG:32602")
+
+            # recover original CRS
+            x_recovered <- reproject(x_repr, "EPSG:4326")
+
+            # check that the original coordinates are recovered
+            expect_true(
+              all(abs(sf::st_coordinates(x) -
+                        sf::st_coordinates(x_recovered)) < 1e-06)
+            )
+          })
 
 test_that("load_raster correctly retrieve and merge local data", {
 
