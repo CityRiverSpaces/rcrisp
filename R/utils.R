@@ -166,7 +166,10 @@ river_buffer <- function(river, buffer_distance, bbox = NULL, side = NULL) {
 #' coordinate reference system (CRS)
 #'
 #' @param x Raster (`SpatRaster`) or vector (`sf`) object
-#' @param crs CRS to be projected to
+#' @param crs CRS to be projected to, provided as `numeric`, `integer` or
+#'   `logical` vector of length one or [`sf::crs`]. If `numeric`, the value
+#'   should be a positive number with unrestricted upper bound representing
+#'   a valid EPSG code.
 #' @param ... Optional arguments for raster or vector reproject functions
 #'
 #' @return [`sf::sf`], [`sf::sfc`], or [`terra::SpatRaster`] object reprojected

@@ -76,7 +76,6 @@ delineate <- function(
 ) {
   # Check input
   checkmate::assert_character(city_name, len = 1)
-  checkmate::assert_character(river_name, len = 1)
   if (is.character(corridor_init)) {
     corridor_init <- tolower(corridor_init)
     checkmate::assert_choice(corridor_init, c("valley"))

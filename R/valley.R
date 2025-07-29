@@ -88,7 +88,8 @@ get_dem <- function(bb, dem_source = "STAC", stac_endpoint = NULL,
 #' @srrstats {G1.3} The Cost Distance algorithm is explained here.
 #'
 #' @param dem `SpatRaster` object with the digital elevation model of the region
-#' @param river An object of class `sf` or `sfc` representing the river
+#' @param river An object of class [`sf::sf`] or [`sf::sfc`]
+#'   representing the river
 #'
 #' @return River valley as a simple feature geometry of class `sfc_MULTIPOLYGON`
 #' @export
@@ -182,7 +183,7 @@ get_stac_asset_urls <- function(bb, endpoint = NULL, collection = NULL) {
 #' @examplesIf interactive()
 #' bb <- get_osm_bb("Bucharest")
 #' tile_urls <- get_stac_asset_urls(bb)
-#' load_dem(bb, tile_urls, force_download = TRUE)
+#' load_dem(bb = bb, tile_urls = tile_urls, force_download = TRUE)
 #' @srrstats {G4.0} DEM data is written to cache with a file name concatenated
 #'   from tile names and boundig box coordinates.
 #' @srrstats {G2.7} The `bb` parameter accepts tabular input of class `matrix`.

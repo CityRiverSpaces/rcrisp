@@ -4,23 +4,25 @@
 #' network starting from an initial guess of the corridor (based e.g. on the
 #' river valley).
 #'
-#' @param network The spatial network of class `sfnetwork` to be used for the
-#'   delineation
-#' @param river A (MULTI)LINESTRING simple feature geometry of class `sf`
-#'   or `sfc` representing the river centerline
+#' @param network The spatial network of class [`sfnetworks::sfnetwork`] to be
+#'   used for the delineation. Required, no default.
+#' @param river A (MULTI)LINESTRING simple feature geometry of class [`sf::sf`]
+#'   or [`sf::sfc`] representing the river centerline. Required, no default.
 #' @param corridor_init How to estimate the initial guess of the river corridor.
 #'   It can take the following values:
-#'   * numeric or integer: use a buffer region of the given size (in meters)
-#'     around the river centerline
+#'   * numeric or integer: use a buffer region of the given size (in meters,
+#'     positive, unrestricted) around the river centerline
 #'   * An [`sf::sf`] or [`sf::sfc`] object: use the given input geometry
-#' @param max_width Positive non-zero number with the (approximate) maximum
-#'   width of the corridor. The spatial network is trimmed by a buffer region of
-#'   this size around the river
-#' @param max_iterations Maximum number of iterations employed to refine the
-#'   corridor edges (see [`corridor_edge()`]).
-#' @param capping_method The method employed to connect the corridor edge end
-#'   points (i.e. to "cap" the corridor). See [cap_corridor()] for
-#'   the available methods
+#' @param max_width A positive number representing the (approximate)
+#'   maximum width of the corridor in meters. The upper limit is unrestricted.
+#'   The spatial network is trimmed by a buffer region of this size around the
+#'   river.
+#' @param max_iterations An integer greater than 0, with upper limit
+#'   unrestricted, representing the maximum number of iterations employed to
+#'   refine the corridor edges (see [`corridor_edge()`]).
+#' @param capping_method Case-insensitive character vector of length 1 with the
+#'   method employed to connect the corridor edge end points (i.e. to "cap" the
+#'   corridor). See [cap_corridor()] for the available methods.
 #'
 #' @return A simple feature geometry of class [`sf::sfc_POLYGON`] representing
 #'   the river corridor
@@ -33,12 +35,13 @@
 #'
 #' # Delineate with default values
 #' network <- rbind(streets, railways) |> as_network()
-#' delineate_corridor(network, river)
+#' delineate_corridor(network = network, river = river)
 #'
 #' # Delineate with user-specified parameters
 #' bucharest_dem <- get_dem_example_data()
-#' corridor_init <- delineate_valley(bucharest_dem, river)
-#' delineate_corridor(network, river, corridor_init = corridor_init,
+#' corridor_init <- delineate_valley(dem = bucharest_dem, river = river)
+#' delineate_corridor(network = network, river = river,
+#'                    corridor_init = corridor_init,
 #'                    max_width = 4000, max_iterations = 5,
 #'                    capping_method = "direct")
 #' @srrstats {G2.3, G2.3a, G2.3b} The `checkmate` package is used to check that
