@@ -24,22 +24,6 @@
 #'   `warning()`, and `message()` is unique.
 #' @srrstats {G5.2b} For all messages, conditions triggering them are
 #'   demonstrated and the result are compared with expected values.
-#' @srrstatsTODO {G5.6} **Parameter recovery tests** *to test that the implementation produce expected results given data with known properties. For instance, a linear regression algorithm should return expected coefficient values for a simulated data set generated from a linear model.*
-#' @srrstatsTODO {G5.6a} *Parameter recovery tests should generally be expected to succeed within a defined tolerance rather than recovering exact values.*
-#' @srrstatsTODO {G5.6b} *Parameter recovery tests should be run with multiple random seeds when either data simulation or the algorithm contains a random component. (When long-running, such tests may be part of an extended, rather than regular, test suite; see G5.10-4.12, below).*
-#' @srrstatsTODO {G5.7} **Algorithm performance tests** *to test that implementation performs as expected as properties of data change. For instance, a test may show that parameters approach correct estimates within tolerance as data size increases, or that convergence times decrease for higher convergence thresholds.*
-#' @srrstatsTODO {G5.8} **Edge condition tests** *to test that these conditions produce expected behaviour such as clear warnings or errors when confronted with data with extreme properties including but not limited to:*
-#' @srrstatsTODO {G5.8a} *Zero-length data*
-#' @srrstatsTODO {G5.8b} *Data of unsupported types (e.g., character or complex numbers in for functions designed only for numeric data)*
-#' @srrstatsTODO {G5.8c} *Data with all-`NA` fields or columns or all identical fields or columns*
-#' @srrstatsTODO {G5.8d} *Data outside the scope of the algorithm (for example, data with more fields (columns) than observations (rows) for some regression algorithms)*
-#' @srrstatsTODO {G5.9} **Noise susceptibility tests** *Packages should test for expected stochastic behaviour, such as through the following conditions:*
-#' @srrstatsTODO {G5.9a} *Adding trivial noise (for example, at the scale of `.Machine$double.eps`) to data does not meaningfully change results*
-#' @srrstatsTODO {G5.9b} *Running under different random seeds or initial conditions does not meaningfully change results*
-#' @srrstatsTODO {G5.10} *Extended tests should included and run under a common framework with other tests but be switched on by flags such as as a `<MYPKG>_EXTENDED_TESTS="true"` environment variable.* - The extended tests can be then run automatically by GitHub Actions for example by adding the following to the `env` section of the workflow:
-#' @srrstatsTODO {G5.11} *Where extended tests require large data sets or other assets, these should be provided for downloading and fetched as part of the testing workflow.*
-#' @srrstatsTODO {G5.11a} *When any downloads of additional data necessary for extended tests fail, the tests themselves should not fail, rather be skipped and implicitly succeed with an appropriate diagnostic message.*
-#' @srrstatsTODO {G5.12} *Any conditions necessary to run extended tests such as platform requirements, memory, expected runtime, and artefacts produced that may need manual inspection, should be described in developer documentation such as a `CONTRIBUTING.md` or `tests/README.md` file.*
 #'
 #' @srrstats {SP1.0, SP1.1} The package description explicitly states that it
 #'   uses "two-dimensional spatial information [...] in a projected CRS."
@@ -100,6 +84,16 @@ NULL
 #' @srrstatsNA {G5.3} This package does not return objects which explicitly
 #'   contain missing (`NA`) or undefined (`NaN`, `Inf`) values.
 #' @srrstatsNA {G5.4b, G5.4c} This package implements a new method.
+#' @srrstatsNA {G5.6b} The core algorithms of this package do not involve random
+#'   components.
+#' @srrstatsNA {G5.7} The results of the core algorithm of this package are not
+#'   expected to return predictable trends for given changes in input data
+#'   properties.
+#' @srrstatsNA {G5.8c} No tabular data where all fields or all columns can be NA
+#'   can be used as input in any of the function of this package.
+#' @srrstatsNA {G5.9, G5.9a, G5.9b} The core algorithm and input data of this
+#'   package are deterministic, so noise susceptibility tests do not apply.
+#' @srrstatsNA {G5.12} No special requirements are needed to run extended tests.
 #'
 #  Not applicable spatial software standards ----
 #' @srrstatsNA {SP2.0a, SP2.0b} This package does not implement any new classes
