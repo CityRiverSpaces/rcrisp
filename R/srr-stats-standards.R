@@ -51,9 +51,6 @@
 #'   documentation and validated throughout the package using
 #'   `checkmate::assert_*` functions to ensure input data conforms to expected
 #'   types and structures.
-#' @srrstatsTODO {SP6.1} *All functions which can be applied to both Cartesian and curvilinear data should be tested through application to both.*
-#' @srrstatsTODO {SP6.1a} *Functions which may yield inaccurate results when applied to data in one or the other forms (such as the preceding examples of centroids and buffers from ellipsoidal data) should test that results from inappropriate application of those functions are indeed less accurate.*
-#' @srrstatsTODO {SP6.1b} *Functions which yield accurate results regardless of whether input data are rectilinear or curvilinear should demonstrate equivalent accuracy in both cases, and should also demonstrate how equivalent results may be obtained through first explicitly transforming input data.*
 # nolint end
 #' @noRd
 NULL
@@ -105,6 +102,14 @@ NULL
 #' @srrstatsNA {SP3.3} The package does not employ regression.
 #' @srrstatsNA {SP3.5, SP3.6} The package does not implement any kind of
 #'   (supervised) machine learning.
+#' @srrstatsNA {SP6.1a} The package relies on the [`sf`] package to
+#'   inform the user about any inaccuracies resulting from the application of
+#'   geoprocessing functions intended for applications in Cartesian space in
+#'   curvilinear space. Therefore no test is implemented here.
+#' @srrstatsNA {SP6.1b} This package does not implement any functions
+#'   that yield equivalent accuracy for both rectilinear and curvilinear data.
+#'   All relevant functionality is limited to either Cartesian or
+#'   ellipsoidal coordinate systems, not both.
 #' @srrstatsNA {SP5.0, SP5.1, SP5.2, SP5.3} The package does not return any
 #'   custom classes and thus does not implement a plot method nor does it offer
 #'   an ability to generate interactive visualisations. The returned
