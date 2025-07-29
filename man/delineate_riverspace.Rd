@@ -24,7 +24,7 @@ delineate_riverspace(
 \item{ray_length}{Length of rays in meters as numeric vector of length one}
 }
 \value{
-Polygon geometry with the riverspace
+Riverspace as object of class \code{\link[sf:sfc]{sf::sfc_POLYGON}}
 }
 \description{
 Delineate the space surrounding a river

@@ -25,7 +25,7 @@ corridor_edge(
 corridor edges}
 }
 \value{
-A simple feature geometry representing the edge (i.e. a linestring)
+An \code{\link[sf:sfc]{sf::sfc_LINESTRING}} object representing the edge
 }
 \description{
 The corridor edge is drawn on the network as a shortest-path link between a

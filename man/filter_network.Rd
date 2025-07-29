@@ -7,7 +7,7 @@
 filter_network(network, target, elements = "nodes")
 }
 \arguments{
-\item{network}{A network object}
+\item{network}{A spatial network object of class \code{\link[sfnetworks:sfnetwork]{sfnetworks::sfnetwork}}}
 
 \item{target}{The target geometry}
 
@@ -15,7 +15,7 @@ filter_network(network, target, elements = "nodes")
 or "edges"}
 }
 \value{
-A spatial network object
+A spatial network object of class \code{\link[sfnetworks:sfnetwork]{sfnetworks::sfnetwork}}
 }
 \description{
 If subsetting results in multiple disconnected components, we keep the main

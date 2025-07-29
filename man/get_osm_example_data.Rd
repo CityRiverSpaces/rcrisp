@@ -10,7 +10,8 @@ get_osm_example_data(force_download = FALSE)
 \item{force_download}{Download data even if cached data is available}
 }
 \value{
-A list of sf objects containing the OSM data.
+A list of sf objects containing the OSM data as \code{\link[sf:sfc]{sf::sfc}}
+objects.
 }
 \description{
 This function retrieves example OpenStreetMap (OSM) data from the

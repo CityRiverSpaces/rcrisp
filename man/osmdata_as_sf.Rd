@@ -17,7 +17,7 @@ as a vector ("xmin", "ymin", "xmax", "ymax")}
 \item{force_download}{Download data even if cached data is available}
 }
 \value{
-An sf object with the retrieved OpenStreetMap data
+An \code{\link[osmdata:osmdata]{osmdata::osmdata}} object with the retrieved OpenStreetMap data
 }
 \description{
 Query the Overpass API for a key:value pair within a given bounding box

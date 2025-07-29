@@ -15,7 +15,8 @@ reproject(x, crs, ...)
 \item{...}{Optional arguments for raster or vector reproject functions}
 }
 \value{
-\code{SpatRaster} or \code{sf} object reprojected to specified CRS
+\code{\link[sf:sf]{sf::sf}}, \code{\link[sf:sfc]{sf::sfc}}, or \code{\link[terra:SpatRaster-class]{terra::SpatRaster}} object reprojected
+to specified CRS
 }
 \description{
 Reproject a raster or vector dataset to the specified

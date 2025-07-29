@@ -16,7 +16,8 @@ neighborhood. Should approximate the distance between edges that we want
 to consider as a single river crossing}
 }
 \value{
-A simple feature geometry including the shortest edge per cluster
+An object of class \code{\link[sf:sfc]{sf::sfc_LINESTRING}} including the shortest edge
+per cluster
 }
 \description{
 Create groups of edges that are crossing the river in nearby locations,

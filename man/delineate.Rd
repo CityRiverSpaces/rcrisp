@@ -80,7 +80,8 @@ dataset (see \code{\link[=get_dem]{get_dem()}}). Only relevant if \code{corridor
 and \code{dem} is NULL}
 }
 \value{
-A list with the corridor, segments, and riverspace geometries
+A list with the corridor, segments, and riverspace geometries as
+\code{\link[sf:sfc]{sf::sfc_POLYGON}} objects.
 }
 \description{
 Delineate a corridor around a river.

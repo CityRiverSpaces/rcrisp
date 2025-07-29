@@ -38,7 +38,7 @@ for the city.}
 }
 \value{
 A list with the retrieved OpenStreetMap data sets for the
-given location
+given location, as objects of class \code{\link[sf:sfc]{sf::sfc}}
 }
 \description{
 Retrieve OpenStreetMap data for a given location, including

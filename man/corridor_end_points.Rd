@@ -16,7 +16,7 @@ spatial network used for the delineation}
 \item{regions}{A simple feature geometry representing the two river sides}
 }
 \value{
-A simple feature geometry including a pair of points
+An \code{\link[sf:sfc]{sf::sfc_POINT}} geometry including a pair of points
 }
 \description{
 Determine the extremes (end points) of the river corridor using the network
