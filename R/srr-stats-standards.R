@@ -59,7 +59,7 @@
 #' @srrstats {SP2.3} The package caches spatial objects retrieved from external
 #'   services as RDS objects, but these are only for internal use and their
 #'   direct use is not recommended.
-#' @srrstatsTODO {SP2.4, SP2.4a} By using `sf` >= 0.9, this package employs the
+#' @srrstats {SP2.4, SP2.4a} By using `sf` >= 0.9, this package employs the
 #'   WKT system for CRS and ensures compliance with PROJ version 6+.
 #' @srrstats {SP2.5} The package uses `sf` and `SpatRaster` classes for vector
 #'   and raster data, respectively, both of which contain metadata on coordinate
