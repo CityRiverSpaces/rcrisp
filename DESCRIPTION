@@ -43,6 +43,7 @@ Imports:
     units,
     visor
 Suggests:
+    autotest,
     knitr,
     purrr,
     rmarkdown,
