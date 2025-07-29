@@ -17,7 +17,6 @@
 #'   `assert_vector()`. This ensures that parameters expected to be univariate
 #'   vectors are appropriately restricted, and multivariate input (such as
 #'   matrices, data frames, or lists) is prohibited.
-#' @srrstatsTODO {G2.6} *Software which accepts one-dimensional input should ensure values are appropriately pre-processed regardless of class structures.*
 #' @srrstats {G3.0} The package does not compare floating point numbers for
 #'   equality. All numeric equality comparisons are made between integers.
 #' @srrstats {G5.2} Error and warning behaviour is fully tested.
@@ -84,6 +83,10 @@ NULL
 #' @srrstatsNA {G1.6} As there are no alternative implementations, no
 #'   performance claims are made in this package.
 #' @srrstatsNA {G2.4d, G2.4e, G2.5} This package does not make use of factors.
+#' @srrstatsNA {G2.6} This package only accepts one-dimensional inputs
+#'   inheriting from base vector classes. Input types are strictly validated
+#'   with `checkmate`, and custom vector-like classes are not in the list of
+#'   accepted input classes. Therefore, this standard does not apply.
 #' @srrstatsNA {G2.9} This package does not perform type conversions or
 #'   meta-data changes leading to information loss that would require issuing
 #'   diagnostic messages.
