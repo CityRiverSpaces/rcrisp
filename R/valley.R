@@ -104,6 +104,7 @@ get_dem <- function(bb, dem_source = "STAC", stac_endpoint = NULL,
 #'   of type `sf`.
 delineate_valley <- function(dem, river) {
   # Check input
+  checkmate::assert_true(as_crs(dem) == as_crs(river))
   checkmate::assert_class(dem, "SpatRaster")
   checkmate::assert_true(inherits(river, c("sf", "sfc")))
 

@@ -65,6 +65,7 @@ delineate_corridor <- function(
   capping_method = "shortest-path"
 ) {
   # Check input
+  checkmate::assert_true(as_crs(network) == as_crs(river))
   checkmate::assert_class(network, "sfnetwork")
   checkmate::assert_multi_class(river, c("sf", "sfc"))
   checkmate::assert_true(
