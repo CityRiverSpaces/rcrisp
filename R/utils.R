@@ -94,7 +94,7 @@ as_bbox <- function(x) {
 #'   vector representing a CRS (e.g., EPSG code).
 #' @param allow_geographic Logical, whether to allow geographic CRS (lat/lon).
 #'
-#' @returns An object of class [sf::crs] with a valid CRS.
+#' @returns An object of class [`sf::crs`] with a valid CRS.
 #' @export
 #'
 #' @examples
