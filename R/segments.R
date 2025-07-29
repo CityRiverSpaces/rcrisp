@@ -44,8 +44,6 @@
 delineate_segments <- function(corridor, network, river,
                                angle_threshold = 100) {
   # Check input
-  checkmate::assert_true(as_crs(corridor) == as_crs(network) &&
-                           as_crs(network) == as_crs(river))
   checkmate::assert_class(corridor, "sfc_POLYGON")
   checkmate::assert_class(network, "sfnetwork")
   checkmate::assert_multi_class(river, c("sf", "sfc"))
@@ -53,6 +51,8 @@ delineate_segments <- function(corridor, network, river,
                             lower = 0,
                             upper = 180,
                             any.missing = FALSE)
+  checkmate::assert_true(as_crs(corridor) == as_crs(network) &&
+                           as_crs(network) == as_crs(river))
 
   # Drop all attributes of river but its geometry
   river <- sf::st_geometry(river)
