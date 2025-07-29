@@ -117,8 +117,12 @@ delineate <- function(
     city_boundary = FALSE, force_download = force_download
   )
 
-  # If not provided, determine the CRS
-  if (is.null(crs)) crs <- get_utm_zone(osm_data$bb)
+  # If not provided, determine the CRS. Otherwise, standardise CRS
+  if (is.null(crs)) {
+    crs <- get_utm_zone(osm_data$bb)
+  } else {
+    crs <- as_crs(crs)
+  }
 
   if (corridor) {
     # If using the valley method, and the DEM is not provided, retrieve dataset
