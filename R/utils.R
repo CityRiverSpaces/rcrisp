@@ -127,7 +127,7 @@ as_crs <- function(x, allow_geographic = FALSE) {
                                   "sfc",
                                   "crs"),
                                 null.ok = TRUE)
-  if (!is.null(x)) checkmate::assert_vector(x, min.len = 1, max.len = 2)
+  if (!is.null(x)) checkmate::assert_vector(x, min.len = 1, max.len = 4)
   checkmate::assert_logical(allow_geographic, len = 1)
 
   if (!is.null(x)) {
