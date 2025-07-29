@@ -13,16 +13,14 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
-      RCRISP_EXTENDED_TESTS: ${{ contains(github.event.commits[0].message, 'run-extended') }}
+      PULL_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
 
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 2
 
       - name: Check if last commit message contains 'run-extended'
         run: |
-          COMMIT_MSG="$(git show -s --format=%s HEAD^)"
+          COMMIT_MSG="$(git show -s --format=%s ${PULL_HEAD_SHA})"
           echo "Last commit message: $COMMIT_MSG"
           if echo "$COMMIT_MSG" | grep -qi 'run-extended'; then
             echo "RCRISP_EXTENDED_TESTS=true" >> ${GITHUB_ENV}
