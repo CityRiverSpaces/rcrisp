@@ -80,8 +80,8 @@ test_that("Mismatch between DEM CRS and river CRS throws error", {
                "DEM and river geometry should be in the same CRS")
 })
 
-#' @srrstats {G5.8} Edge test: if a value outside the available
-#'   range is selected, an error is raised.
+#' @srrstats {G5.8} Edge test: if input arguments are not consistent with each
+#'    other, an error is raised.
 test_that("Incorrect STAC endpoint and collection throws error", {
   expect_error(get_stac_asset_urls(bb, endpoint = "only endpoint"))
   expect_error(get_stac_asset_urls(bb, collection = "only collection"))
