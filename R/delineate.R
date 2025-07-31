@@ -24,12 +24,12 @@
 #' @param max_iterations Maximum number of iterations employed to refine the
 #'   corridor edges (see [`corridor_edge()`]).
 #' @param capping_method The method employed to connect the corridor edge end
-#'   points (i.e. to "cap" the corridor). See [cap_corridor()] for
-#'   the available methods
+#'   points (i.e., to "cap" the corridor), as character vector of length one.
+#'   See [cap_corridor()] for the available methods.
 #' @param angle_threshold Only network edges forming angles above this threshold
 #'   (in degrees) are considered when forming segment edges. See
-#'  [delineate_segments()] and [rcoins::stroke()]. Only used if `segments` is
-#'  TRUE.
+#'   [delineate_segments()] and [rcoins::stroke()]. Only used if `segments` is
+#'   TRUE.
 #' @param corridor Whether to carry out the corridor delineation
 #' @param segments Whether to carry out the corridor segmentation
 #' @param riverspace Whether to carry out the riverspace delineation
@@ -75,15 +75,16 @@ delineate <- function(
   riverspace = FALSE, force_download = FALSE, ...
 ) {
   # Check input
-  checkmate::assert_character(city_name, len = 1)
+  checkmate::assert_numeric(network_buffer, null.ok = TRUE, len = 1)
+  checkmate::assert_numeric(buildings_buffer, null.ok = TRUE, len = 1)
   if (is.character(corridor_init)) {
     corridor_init <- tolower(corridor_init)
     checkmate::assert_choice(corridor_init, c("valley"))
   }
+  checkmate::assert_numeric(dem_buffer, len = 1)
   checkmate::assert_logical(corridor, len = 1)
   checkmate::assert_logical(segments, len = 1)
   checkmate::assert_logical(riverspace, len = 1)
-  checkmate::assert_logical(force_download, len = 1)
 
   delineations <- list()
 
@@ -116,8 +117,12 @@ delineate <- function(
     city_boundary = FALSE, force_download = force_download
   )
 
-  # If not provided, determine the CRS
-  if (is.null(crs)) crs <- get_utm_zone(osm_data$bb)
+  # If not provided, determine the CRS. Otherwise, standardise CRS
+  if (is.null(crs)) {
+    crs <- get_utm_zone(osm_data$bb)
+  } else {
+    crs <- as_crs(crs)
+  }
 
   if (corridor) {
     # If using the valley method, and the DEM is not provided, retrieve dataset

@@ -74,9 +74,7 @@ get_utm_zone <- function(x) {
 #'   in the input object.
 as_bbox <- function(x) {
   # Check input
-  checkmate::assert_true(
-    inherits(x, c("sf", "sfc", "numeric", "matrix", "bbox"))
-  )
+  checkmate::assert_multi_class(x, c("sf", "sfc", "numeric", "matrix", "bbox"))
 
   if (inherits(x, c("numeric", "matrix"))) {
     x <- as.vector(x)
@@ -86,6 +84,64 @@ as_bbox <- function(x) {
   crs <- sf::st_crs(bbox)
   if (is.na(crs)) sf::st_crs(bbox) <- sf::st_crs("EPSG:4326")
   bbox
+}
+
+#' Standardise the coordinate reference system (CRS) of an object
+#'
+#' @param x An object of class `sf`, `sfc`, `bbox`, or a numeric  or character
+#'   vector representing a CRS (e.g., EPSG code).
+#' @param allow_geographic Logical, whether to allow geographic CRS (lat/lon).
+#'
+#' @returns An object of class [`sf::crs`] with a valid CRS.
+#' @export
+#'
+#' @examples
+#' library(sf)
+#'
+#' # Standardise a numeric EPSG code
+#' as_crs(4326, allow_geographic = TRUE)
+#'
+#' # Standardise a character EPSG code
+#' as_crs("EPSG:4326", allow_geographic = TRUE)
+#'
+#' # Standardise a bbox object
+#' bb <- st_bbox(c(xmin = 25.9, ymin = 44.3, xmax = 26.2, ymax = 44.5),
+#'                 crs = 4326)
+#' as_crs(bb, allow_geographic = TRUE)
+#'
+#' # Standardise a simple feature object
+#' bb_sfc <- st_as_sfc(bb)
+#' bb_sf <- st_as_sf(bb_sfc)
+#' as_crs(bb_sf, allow_geographic = TRUE)
+#' as_crs(bb_sfc, allow_geographic = TRUE)
+#' @srrstats {G2.8} This function ensures all supported input types are in a
+#'   consistent class accepted by `sf::st_crs()` and it is used throughout the
+#'   package to standardise CRS input.
+as_crs <- function(x, allow_geographic = FALSE) {
+  checkmate::assert_multi_class(x,
+                                c("numeric",
+                                  "integer",
+                                  "character",
+                                  "bbox",
+                                  "sf",
+                                  "sfc",
+                                  "sfnetwork",
+                                  "SpatRaster",
+                                  "crs"),
+                                null.ok = TRUE)
+  if (!is.null(x)) checkmate::assert_vector(x, min.len = 1)
+  checkmate::assert_logical(allow_geographic, len = 1)
+
+  if (!is.null(x)) {
+    crs <- sf::st_crs(x)
+    if (!allow_geographic && crs$IsGeographic) {
+      stop(paste("The input CRS is geographic (lat/lon),",
+                 "please provide a projected CRS."))
+    }
+    crs
+  } else {
+    NULL
+  }
 }
 
 #' Apply a buffer region to a sf object
@@ -110,7 +166,7 @@ buffer <- function(obj, buffer_distance, ...) {
   is_obj_bbox <- inherits(obj, "bbox")
   if (is_obj_bbox) obj <- sf::st_as_sfc(obj)
   if (!is.na(is_obj_longlat) && is_obj_longlat) {
-    crs_meters <- get_utm_zone(obj)
+    crs_meters <- get_utm_zone(obj) |> as_crs()
     obj <- sf::st_transform(obj, crs_meters)
   }
   expanded_obj <- sf::st_buffer(obj, buffer_distance, ...)
@@ -185,14 +241,11 @@ river_buffer <- function(river, buffer_distance, bbox = NULL, side = NULL) {
 #'   [`sf::sfc`] or [`terra::SpatRaster`], explicitly documented as such, with
 #'   transformed CRS as specified by the `crs` parameter.
 reproject <- function(x, crs, ...) {
+  # Check input
+  checkmate::assert_multi_class(x, c("SpatRaster", "sf", "sfc", "bbox"))
+  crs <- as_crs(crs, allow_geographic = TRUE)
   if (inherits(x, "SpatRaster")) {
-    if (inherits(crs, c("integer", "numeric"))) {
-      # terra::crs does not support a numeric value as CRS, convert to character
-      crs <- sprintf("EPSG:%s", crs)
-    } else if (inherits(crs, "crs")) {
-      # terra::crs also does not understand sf::crs objects
-      crs <- sprintf("EPSG:%s", crs$epsg)
-    }
+    crs <- sprintf("EPSG:%s", crs$epsg)
     terra::project(x, crs, ...)
   } else if (inherits(x, c("bbox", "sfc", "sf"))) {
     sf::st_transform(x, crs, ...)

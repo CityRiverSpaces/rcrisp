@@ -7,7 +7,8 @@
 as_network(edges, flatten = TRUE, clean = TRUE)
 }
 \arguments{
-\item{edges}{An \code{sfc_LINESTRING} object with the network edges}
+\item{edges}{An \code{\link[sf:sf]{sf::sf}} or \code{\link[sf:sfc]{sf::sfc_LINESTRING}} object with the
+network edges}
 
 \item{flatten}{Whether all intersections between edges should be
 converted to nodes}
@@ -16,7 +17,7 @@ converted to nodes}
 network (see \code{\link[=clean_network]{clean_network()}} for the description of tasks)}
 }
 \value{
-A spatial network object of class \code{sfnetwork}
+An \code{\link[sfnetworks:sfnetwork]{sfnetworks::sfnetwork}} object
 }
 \description{
 Create a network from a collection of line strings.

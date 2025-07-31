@@ -30,14 +30,15 @@ buildings data will be downloaded}
 \item{city_boundary}{A logical indicating if the city boundary should be
 retrieved. Default is TRUE.}
 
-\item{crs}{An integer with the EPSG code for the projection. If no CRS is
-specified, the default is the UTM zone for the city.}
+\item{crs}{An integer or character vector of length one with the EPSG code
+for the projection. If no CRS is specified, the default is the UTM zone
+for the city.}
 
 \item{force_download}{Download data even if cached data is available}
 }
 \value{
 A list with the retrieved OpenStreetMap data sets for the
-given location
+given location, as objects of class \code{\link[sf:sfc]{sf::sfc}}
 }
 \description{
 Retrieve OpenStreetMap data for a given location, including

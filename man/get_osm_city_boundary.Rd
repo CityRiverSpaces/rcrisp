@@ -25,7 +25,8 @@ returned. By default, only the first one is returned.}
 \item{force_download}{Download data even if cached data is available}
 }
 \value{
-An sf object with the city boundary
+An object of class \code{\link[sf:sfc]{sf::sfc_POLYGON}} or \code{\link[sf:sfc]{sf::sfc_MULTIPOLYGON}}
+with the city boundary
 }
 \description{
 This function retrieves the city boundary from OpenStreetMap based on a

@@ -10,7 +10,7 @@ get_valley_polygon_raw(valley_mask)
 \item{valley_mask}{raster mask of valley pixels}
 }
 \value{
-polygon representation of valley area as st_geometry
+polygon representation of valley area as object of class \code{\link[sf:sfc]{sf::sfc}}
 }
 \description{
 Create vector/polygon representation of valley raster mask
