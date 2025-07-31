@@ -87,7 +87,8 @@ details.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>Segment polygons as a simple feature geometry of class <code>sfc_POLYGON</code></p>
+    <p>Segment polygons as a simple feature geometry of class
+<code><a href="https://r-spatial.github.io/sf/reference/sfc.html" class="external-link">sf::sfc_POLYGON</a></code></p>
     </div>
 
     <div class="section level2">
@@ -97,7 +98,7 @@ details.</p></dd>
 <span class="r-in"><span><span class="va">corridor</span> <span class="op">&lt;-</span> <span class="va">bucharest_dambovita</span><span class="op">$</span><span class="va">corridor</span></span></span>
 <span class="r-in"><span><span class="va">network</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">bucharest_osm</span><span class="op">$</span><span class="va">streets</span>, <span class="va">bucharest_osm</span><span class="op">$</span><span class="va">railways</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="as_network.html">as_network</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">river</span> <span class="op">&lt;-</span> <span class="va">bucharest_osm</span><span class="op">$</span><span class="va">river_centerline</span> <span class="op">|&gt;</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_geometry</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">river</span> <span class="op">&lt;-</span> <span class="va">bucharest_osm</span><span class="op">$</span><span class="va">river_centerline</span></span></span>
 <span class="r-in"><span><span class="fu">delineate_segments</span><span class="op">(</span><span class="va">corridor</span>, <span class="va">network</span>, <span class="va">river</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>

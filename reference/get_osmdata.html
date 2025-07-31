@@ -100,8 +100,9 @@ retrieved. Default is TRUE.</p></dd>
 
 
 <dt id="arg-crs">crs<a class="anchor" aria-label="anchor" href="#arg-crs"></a></dt>
-<dd><p>An integer with the EPSG code for the projection. If no CRS is
-specified, the default is the UTM zone for the city.</p></dd>
+<dd><p>An integer or character vector of length one with the EPSG code
+for the projection. If no CRS is specified, the default is the UTM zone
+for the city.</p></dd>
 
 
 <dt id="arg-force-download">force_download<a class="anchor" aria-label="anchor" href="#arg-force-download"></a></dt>
@@ -111,7 +112,7 @@ specified, the default is the UTM zone for the city.</p></dd>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>A list with the retrieved OpenStreetMap data sets for the
-given location</p>
+given location, as objects of class <code><a href="https://r-spatial.github.io/sf/reference/sfc.html" class="external-link">sf::sfc</a></code></p>
     </div>
 
     <div class="section level2">
