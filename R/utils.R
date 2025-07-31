@@ -127,6 +127,8 @@ as_crs <- function(x, allow_geographic = FALSE) {
                                   "bbox",
                                   "sf",
                                   "sfc",
+                                  "sfnetwork",
+                                  "SpatRaster",
                                   "crs"),
                                 null.ok = TRUE)
   checkmate::assert_logical(allow_geographic, len = 1)
