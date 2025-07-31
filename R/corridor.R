@@ -85,6 +85,7 @@ delineate_corridor <- function(
                             finite = TRUE)
   capping_method <- tolower(capping_method)
   checkmate::assert_choice(capping_method, c("shortest-path", "direct"))
+  checkmate::assert_true(as_crs(network) == as_crs(river))
 
   # Drop all attributes of river but its geometry
   river <- sf::st_geometry(river)

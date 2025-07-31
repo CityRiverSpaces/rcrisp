@@ -125,6 +125,8 @@ as_crs <- function(x, allow_geographic = FALSE) {
                                   "bbox",
                                   "sf",
                                   "sfc",
+                                  "sfnetwork",
+                                  "SpatRaster",
                                   "crs"),
                                 null.ok = TRUE)
   if (!is.null(x)) checkmate::assert_vector(x, min.len = 1, max.len = 4)

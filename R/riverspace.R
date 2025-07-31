@@ -28,6 +28,7 @@ delineate_riverspace <- function(river, occluders = NULL, density = 1 / 50,
   checkmate::assert_numeric(density, len = 1)
   checkmate::assert_numeric(ray_num, len = 1)
   checkmate::assert_numeric(ray_length, len = 1)
+  checkmate::assert_true(as_crs(river) == as_crs(occluders))
 
   viewpoints <- visor::get_viewpoints(river, density = density)
   visor::get_isovist(viewpoints, occluders = occluders, ray_num = ray_num,
