@@ -50,6 +50,7 @@ delineate_segments <- function(corridor, network, river,
   checkmate::assert_numeric(angle_threshold,
                             lower = 0,
                             upper = 180,
+                            len = 1,
                             any.missing = FALSE)
   checkmate::assert_true(as_crs(corridor) == as_crs(network) &&
                            as_crs(network) == as_crs(river))

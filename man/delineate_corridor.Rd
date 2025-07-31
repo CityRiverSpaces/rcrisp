@@ -39,8 +39,8 @@ points (i.e. to "cap" the corridor). See \code{\link[=cap_corridor]{cap_corridor
 the available methods}
 }
 \value{
-A simple feature geometry of class \code{sfc_POLYGON} representing the
-river corridor
+A simple feature geometry of class \code{\link[sf:sfc]{sf::sfc_POLYGON}} representing
+the river corridor
 }
 \description{
 The corridor edges on the two river banks are drawn on the provided spatial

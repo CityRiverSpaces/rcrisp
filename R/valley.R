@@ -61,11 +61,15 @@ get_dem <- function(bb, dem_source = "STAC", stac_endpoint = NULL,
                     stac_collection = NULL, crs = NULL,
                     force_download = FALSE) {
   # Check input
+  bbox <- as_bbox(bb)
+  checkmate::assert_choice(dem_source, "STAC")
+  checkmate::assert_character(stac_endpoint, null.ok = TRUE, len = 1)
+  checkmate::assert_character(stac_collection, null.ok = TRUE, len = 1)
+  crs <- as_crs(crs)
   checkmate::assert_logical(force_download, len = 1)
   dem_source <- toupper(dem_source)
   checkmate::assert_choice(dem_source, c("STAC"))
 
-  bbox <- as_bbox(bb)
   if (dem_source == "STAC") {
     asset_urls <- get_stac_asset_urls(bbox, endpoint = stac_endpoint,
                                       collection = stac_collection)
@@ -105,7 +109,7 @@ get_dem <- function(bb, dem_source = "STAC", stac_endpoint = NULL,
 delineate_valley <- function(dem, river) {
   # Check input
   checkmate::assert_class(dem, "SpatRaster")
-  checkmate::assert_true(inherits(river, c("sf", "sfc")))
+  checkmate::assert_multi_class(river, c("sf", "sfc"))
 
   if (!terra::same.crs(dem, sf::st_crs(river)$wkt)) {
     stop("DEM and river geometry should be in the same CRS")

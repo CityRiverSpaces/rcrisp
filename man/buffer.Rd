@@ -14,7 +14,7 @@ buffer(obj, buffer_distance, ...)
 \item{...}{Optional parameters passed on to \code{\link[sf:geos_unary]{sf::st_buffer()}}}
 }
 \value{
-Expanded sf object
+An object of class \code{\link[sf:sfc]{sf::sfc_POLYGON}}
 }
 \description{
 If the input object is in lat/lon coordinates, the buffer is approximately

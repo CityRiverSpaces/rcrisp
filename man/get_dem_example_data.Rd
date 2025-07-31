@@ -10,7 +10,7 @@ get_dem_example_data(force_download = FALSE)
 \item{force_download}{Download data even if cached data is available}
 }
 \value{
-A SpatRaster object containing the DEM data.
+A \code{\link[terra:SpatRaster-class]{terra::SpatRaster}} object containing the DEM data.
 }
 \description{
 This function retrieves example Digital Elevation Model (DEM) data from the

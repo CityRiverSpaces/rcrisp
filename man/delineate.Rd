@@ -59,8 +59,8 @@ river to retrieve the DEM  (only used if \code{corridor_init} is \code{"valley"}
 corridor edges (see \code{\link[=corridor_edge]{corridor_edge()}}).}
 
 \item{capping_method}{The method employed to connect the corridor edge end
-points (i.e. to "cap" the corridor). See \code{\link[=cap_corridor]{cap_corridor()}} for
-the available methods}
+points (i.e., to "cap" the corridor), as character vector of length one.
+See \code{\link[=cap_corridor]{cap_corridor()}} for the available methods.}
 
 \item{angle_threshold}{Only network edges forming angles above this threshold
 (in degrees) are considered when forming segment edges. See
@@ -80,7 +80,8 @@ dataset (see \code{\link[=get_dem]{get_dem()}}). Only relevant if \code{corridor
 and \code{dem} is NULL}
 }
 \value{
-A list with the corridor, segments, and riverspace geometries
+A list with the corridor, segments, and riverspace geometries as
+\code{\link[sf:sfc]{sf::sfc_POLYGON}} objects.
 }
 \description{
 Delineate a corridor around a river.

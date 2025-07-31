@@ -22,7 +22,8 @@ to form continuous strokes in the network. A meaningful angle is between
 details.}
 }
 \value{
-Segment polygons as a simple feature geometry of class \code{sfc_POLYGON}
+Segment polygons as a simple feature geometry of class
+\code{\link[sf:sfc]{sf::sfc_POLYGON}}
 }
 \description{
 Segments are defined as corridor subregions separated by river-crossing
@@ -34,7 +35,7 @@ bucharest_osm <- get_osm_example_data()
 corridor <- bucharest_dambovita$corridor
 network <- rbind(bucharest_osm$streets, bucharest_osm$railways) |>
   as_network()
-river <- bucharest_osm$river_centerline |> sf::st_geometry()
+river <- bucharest_osm$river_centerline
 delineate_segments(corridor, network, river)
 \dontshow{\}) # examplesIf}
 }

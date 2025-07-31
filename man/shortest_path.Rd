@@ -7,7 +7,7 @@
 shortest_path(network, from, to, weights = "weight")
 }
 \arguments{
-\item{network}{A spatial network object}
+\item{network}{A spatial network object of class \code{\link[sfnetworks:sfnetwork]{sfnetworks::sfnetwork}}}
 
 \item{from}{Start node}
 
@@ -17,7 +17,7 @@ shortest_path(network, from, to, weights = "weight")
 take the weigths}
 }
 \value{
-A simple feature geometry
+An \code{\link[sf:sfc]{sf::sfc_LINESTRING}} object
 }
 \description{
 Find shortest path between a pair of nodes in the network.

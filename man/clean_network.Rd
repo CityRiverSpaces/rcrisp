@@ -7,13 +7,13 @@
 clean_network(network, simplify = TRUE)
 }
 \arguments{
-\item{network}{A network object of class \code{sfnetwork}}
+\item{network}{A network object of class \code{\link[sfnetworks:sfnetwork]{sfnetworks::sfnetwork}}}
 
 \item{simplify}{Whether the network should be simplified with
 \code{\link[=simplify_network]{simplify_network()}}}
 }
 \value{
-A cleaned network object of class \code{sfnetwork}
+A cleaned network object of class \code{\link[sfnetworks:sfnetwork]{sfnetworks::sfnetwork}}
 }
 \description{
 Subdivide edges by \href{https://luukvdmeer.github.io/sfnetworks/articles/sfn02_preprocess_clean.html#subdivide-edges}{adding missing nodes},

@@ -256,7 +256,8 @@ test_that("reproject works with bbox", {
 #' @srrstats {G5.8, G5.8b} Edge test: giving as input a value of wrong type
 #'   raises an error is raised.
 test_that("reproject does not work with objects of unknown type", {
-  expect_error(reproject(1, 4326), "Cannot reproject object type: numeric")
+  expect_error(reproject(1, 4326),
+               "Must inherit from class 'SpatRaster'/'sf'/'sfc'")
 })
 
 #' @srrstats {SP6.0} This test checks that the original coordinates of a raster

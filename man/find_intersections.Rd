@@ -10,7 +10,7 @@ find_intersections(network_1, network_2)
 \item{network_1, network_2}{The two spatial network objects}
 }
 \value{
-A simple feature object
+An object of class \code{\link[sf:sfc]{sf::sfc}}
 }
 \description{
 Find intersections between the edges of two networks
