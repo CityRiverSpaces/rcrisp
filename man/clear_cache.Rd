@@ -8,7 +8,8 @@ clear_cache(before_date = NULL)
 }
 \arguments{
 \item{before_date}{Date before which cache files should be removed provided
-as \code{Date} (or as a character string accepted by \code{\link[=as.Date]{as.Date()}})}
+as object of class \code{\link{Date}} or as a case dependent character vector
+accepted by \code{\link[=as.Date]{as.Date()}}}
 }
 \value{
 List of file paths of removed files
@@ -23,6 +24,6 @@ clear_cache()
 
 # Clear cache before given date
 before_date <- as.Date("1-1-1999", "\%m-\%d-\%Y")
-clear_cache(before_date)
+clear_cache(before_date = before_date)
 \dontshow{\}) # examplesIf}
 }

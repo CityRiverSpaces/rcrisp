@@ -7,7 +7,7 @@
 get_osm_streets(aoi, crs = NULL, highway_values = NULL, force_download = FALSE)
 }
 \arguments{
-\item{aoi}{Area of interest as sf object or bbox}
+\item{aoi}{Area of interest as sf object or bbox. Required, no default.}
 
 \item{crs}{A numeric vector of length one with the EPSG code of the CRS}
 
@@ -30,12 +30,12 @@ bb <- get_osm_bb("Bucharest")
 crs <- 31600  # National projected CRS
 
 # Get streets with default values
-get_osm_streets(bb, crs)
+get_osm_streets(aoi = bb, crs = crs)
 
 # Specify street categories to be retrieved
-get_osm_streets(bb, crs, highway_values = "primary")
+get_osm_streets(aoi = bb, crs = crs, highway_values = "primary")
 
 # Ensure that data is not retrieved from cache
-get_osm_streets(bb, crs, force_download = TRUE)
+get_osm_streets(aoi = bb, crs = crs, force_download = FALSE)
 \dontshow{\}) # examplesIf}
 }

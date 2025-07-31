@@ -10,7 +10,7 @@ get_dem_example_data(force_download = FALSE)
 \item{force_download}{Download data even if cached data is available}
 }
 \value{
-A \code{\link[terra:SpatRaster-class]{terra::SpatRaster}} object containing the DEM data.
+An object of class \code{\link[terra:SpatRaster-class]{terra::SpatRaster}} containing the DEM data.
 }
 \description{
 This function retrieves example Digital Elevation Model (DEM) data from the
@@ -22,6 +22,6 @@ load the example data from disk without having to re-download the data.
 }
 \examples{
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-get_dem_example_data()
+get_dem_example_data(force_download = TRUE)
 \dontshow{\}) # examplesIf}
 }
