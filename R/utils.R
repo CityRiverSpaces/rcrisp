@@ -129,7 +129,7 @@ as_crs <- function(x, allow_geographic = FALSE) {
                                   "SpatRaster",
                                   "crs"),
                                 null.ok = TRUE)
-  if (!is.null(x)) checkmate::assert_vector(x, min.len = 1, max.len = 4)
+  if (!is.null(x)) checkmate::assert_vector(x, min.len = 1)
   checkmate::assert_logical(allow_geographic, len = 1)
 
   if (!is.null(x)) {
