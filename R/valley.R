@@ -55,7 +55,7 @@ default_stac_dem <- list(
 #'   converted to uppercase using toupper(), making the check case-insensitive.
 #'   A validation is then performed to ensure the value is allowed.
 #' @srrstats {G2.7} The `bb` parameter accepts tabular input of class `matrix`.
-#' @srrstatsTODO {SP6.1} If specified by the user, the CRS is standardised with
+#' @srrstats {SP6.1} If specified by the user, the CRS is standardised with
 #'   `as_crs()` before being used to reproject the DEM.
 get_dem <- function(bb, dem_source = "STAC", stac_endpoint = NULL,
                     stac_collection = NULL, crs = NULL,
