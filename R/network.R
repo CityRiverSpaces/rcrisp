@@ -70,6 +70,7 @@ as_network <- function(edges, flatten = TRUE, clean = TRUE) {
 #'   as such, and it maintains the same units as the input.
 flatten_network <- function(network) {
   # Check input
+  as_crs(network)
   checkmate::assert_class(network, "sfnetwork")
 
   nodes <- sf::st_as_sf(network, "nodes")
