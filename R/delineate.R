@@ -75,8 +75,6 @@ delineate <- function(
   riverspace = FALSE, force_download = FALSE, ...
 ) {
   # Check input
-  checkmate::assert_numeric(network_buffer, null.ok = TRUE, len = 1)
-  checkmate::assert_numeric(buildings_buffer, null.ok = TRUE, len = 1)
   if (is.character(corridor_init)) {
     corridor_init <- tolower(corridor_init)
     checkmate::assert_choice(corridor_init, c("valley"))

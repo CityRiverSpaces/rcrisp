@@ -265,7 +265,6 @@ get_osm_city_boundary <- function(bb, city_name, crs = NULL, multiple = FALSE,
     stop("No city boundary found. The city name may be incorrect.")
   }
 
-  crs <- as_crs(crs)
   if (!is.null(crs)) city_boundary <- sf::st_transform(city_boundary, crs)
 
   if (length(city_boundary) > 1) {
@@ -361,7 +360,6 @@ get_osm_river <- function(bb, river_name, crs = NULL, force_download = FALSE) {
     sf::st_union()
 
   if (!is.null(crs)) {
-    crs <- as_crs(crs)
     river_centerline <- sf::st_transform(river_centerline, crs)
     river_surface <- sf::st_transform(river_surface, crs)
   }
