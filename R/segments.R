@@ -8,7 +8,7 @@
 #' @param network The spatial network of class `sfnetwork` to be used for the
 #'   segmentation
 #' @param river The river centerline as a simple feature geometry of class
-#'   [`sf::sfc_LINESTRING`] or [`sf::sfc_MULTILINESTRING`]
+#'   [`sf::sf`] or [`sf::sfc`]
 #' @param angle_threshold Only consider angles above this threshold (in degrees)
 #'   to form continuous strokes in the network. The value can range between
 #'   0 and 180, with the default set to 100. See [`rcoins::stroke()`] for more
@@ -46,8 +46,7 @@ delineate_segments <- function(corridor, network, river,
   # Check input
   checkmate::assert_class(corridor, "sfc_POLYGON")
   checkmate::assert_class(network, "sfnetwork")
-  checkmate::assert_multi_class(river, c("sf::sfc_LINESTRING",
-                                         "sf::sfc_MULTILINESTRING"))
+  checkmate::assert_multi_class(river, c("sf", "sfc"))
   checkmate::assert_numeric(angle_threshold,
                             lower = 0,
                             upper = 180,
