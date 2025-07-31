@@ -74,9 +74,7 @@ get_utm_zone <- function(x) {
 #'   in the input object.
 as_bbox <- function(x) {
   # Check input
-  checkmate::assert_true(
-    inherits(x, c("sf", "sfc", "numeric", "matrix", "bbox"))
-  )
+  checkmate::assert_multi_class(x, c("sf", "sfc", "numeric", "matrix", "bbox"))
 
   if (inherits(x, c("numeric", "matrix"))) {
     x <- as.vector(x)
@@ -127,8 +125,11 @@ as_crs <- function(x, allow_geographic = FALSE) {
                                   "bbox",
                                   "sf",
                                   "sfc",
+                                  "sfnetwork",
+                                  "SpatRaster",
                                   "crs"),
                                 null.ok = TRUE)
+  if (!is.null(x)) checkmate::assert_vector(x, min.len = 1)
   checkmate::assert_logical(allow_geographic, len = 1)
 
   if (!is.null(x)) {
@@ -240,6 +241,8 @@ river_buffer <- function(river, buffer_distance, bbox = NULL, side = NULL) {
 #'   [`sf::sfc`] or [`terra::SpatRaster`], explicitly documented as such, with
 #'   transformed CRS as specified by the `crs` parameter.
 reproject <- function(x, crs, ...) {
+  # Check input
+  checkmate::assert_multi_class(x, c("SpatRaster", "sf", "sfc", "bbox"))
   crs <- as_crs(crs, allow_geographic = TRUE)
   if (inherits(x, "SpatRaster")) {
     crs <- sprintf("EPSG:%s", crs$epsg)

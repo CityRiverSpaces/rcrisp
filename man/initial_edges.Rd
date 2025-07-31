@@ -14,7 +14,8 @@ the initial corridor}
 by cutting the area of interest along the river}
 }
 \value{
-A simple feature geometry representing the initial corridor edges
+An \code{\link[sf:sfc]{sf::sfc_LINESTRING}} or \code{\link[sf:sfc]{sf::sfc_MULTILINESTRING}} object
+representing the initial corridor edges
 }
 \description{
 These are defined by splitting the initial corridor boundary into the

@@ -16,7 +16,9 @@ get_osm_river(bb, river_name, crs = NULL, force_download = FALSE)
 \item{force_download}{Download data even if cached data is available}
 }
 \value{
-A list with the river centreline and surface
+A list with the river centreline as object of class
+\code{\link[sf:sfc]{sf::sfc_LINESTRING}} or \code{\link[sf:sfc]{sf::sfc_MULTILINESTRING}} and river surface of
+class \code{\link[sf:sfc]{sf::sfc_POLYGON}} or \code{\link[sf:sfc]{sf::sfc_MULTIPOLYGON}}.
 }
 \description{
 Get the river centreline and surface from OpenStreetMap

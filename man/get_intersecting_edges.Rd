@@ -7,15 +7,16 @@
 get_intersecting_edges(network, geometry, index = FALSE)
 }
 \arguments{
-\item{network}{A spatial network object}
+\item{network}{A spatial network object of class \code{\link[sfnetworks:sfnetwork]{sfnetworks::sfnetwork}}}
 
-\item{geometry}{A simple feature geometry}
+\item{geometry}{An object of class \code{\link[sf:sfc]{sf::sfc}}}
 
 \item{index}{Whether to return the indices of the matchin edges or the
 geometries}
 }
 \value{
 Indices or geometries of the edges intersecting the given geometry
+of class \code{\link[sf:sfc]{sf::sfc_LINESTRING}}
 }
 \description{
 Identify network edges that are intersecting a geometry

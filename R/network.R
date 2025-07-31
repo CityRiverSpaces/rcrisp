@@ -29,7 +29,7 @@
 #'   the same units as the input.
 as_network <- function(edges, flatten = TRUE, clean = TRUE) {
   # Check input
-  checkmate::assert_true(inherits(edges, c("sf", "sfc")))
+  checkmate::assert_multi_class(edges, c("sf", "sfc"))
   checkmate::assert_logical(flatten, len = 1)
   checkmate::assert_logical(clean, len = 1)
 
@@ -69,6 +69,9 @@ as_network <- function(edges, flatten = TRUE, clean = TRUE) {
 #'   [`sfnetworks::sfnetwork`], same as the input class, explicitly documented
 #'   as such, and it maintains the same units as the input.
 flatten_network <- function(network) {
+  # Check input
+  checkmate::assert_class(network, "sfnetwork")
+
   nodes <- sf::st_as_sf(network, "nodes")
   edges <- sf::st_as_sf(network, "edges")
 
@@ -103,7 +106,7 @@ flatten_network <- function(network) {
 #'   it maintains the same units as the input.
 get_crossing_edges <- function(edges) {
   geometry <- sf::st_geometry(edges)
-  crossings <- sf::st_crosses(geometry) |> suppressMessages()
+  crossings <- sf::st_crosses(geometry)
   mask <- lengths(crossings) > 0
   sf::st_sf(id = which(mask), geometry = geometry[mask])
 }
@@ -115,7 +118,7 @@ get_crossing_edges <- function(edges) {
 #'   [`sf::sfc_POINT`] and it maintains the same units as the input.
 get_intersection_points <- function(edges) {
   # make sure edges is an sf object, so st_intersection also returns origins
-  intersections <- sf::st_intersection(sf::st_sf(edges)) |> suppressMessages()
+  intersections <- sf::st_intersection(sf::st_sf(edges))
   # only consider (multi-)point intersections
   points <- sf::st_collection_extract(intersections, type = "POINT")
   # cast multipoint intersections to points

@@ -15,7 +15,7 @@ get_river_aoi(river, city_bbox, buffer_distance)
 \item{buffer_distance}{Buffer size around the river}
 }
 \value{
-An \code{sfc_POLYGON} object in lat/lon coordinates
+An \code{\link[sf:sfc]{sf::sfc_POLYGON}} object in lat/lon coordinates
 }
 \description{
 Get an area of interest (AoI) around a river, cropping to the bounding box of

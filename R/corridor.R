@@ -74,8 +74,8 @@ delineate_corridor <- function(
   checkmate::assert_multi_class(river, c("sf", "sfc"))
   checkmate::assert_multi_class(corridor_init, c("numeric",
                                                  "integer",
-                                                 "sfc_POLYGON",
-                                                 "sfc_MULTIPOLYGON"))
+                                                 "sf",
+                                                 "sfc"))
   if (is.numeric(corridor_init)) {
     checkmate::assert_numeric(corridor_init,
                               len = 1,
@@ -92,6 +92,7 @@ delineate_corridor <- function(
                             finite = TRUE)
   capping_method <- tolower(capping_method)
   checkmate::assert_choice(capping_method, c("shortest-path", "direct"))
+  checkmate::assert_true(as_crs(network) == as_crs(river))
 
   # Drop all attributes of river but its geometry
   river <- sf::st_geometry(river)

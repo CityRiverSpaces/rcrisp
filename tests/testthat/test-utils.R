@@ -183,6 +183,10 @@ test_that("River buffer throws error if wrong 'side' value is provided", {
   )
 })
 
+#' @srrstats {SP6.1} The following two tests show that `reproject()` works with
+#'   both vector and raster data.
+NULL
+
 #' @srrstats {G2.4, G2.4a} Explicit conversion to integer with `as.integer()`
 #'   used to test `reproject()` with different ways of providing CRS input.
 test_that("reproject works with raster data", {
@@ -252,7 +256,8 @@ test_that("reproject works with bbox", {
 #' @srrstats {G5.8, G5.8b} Edge test: giving as input a value of wrong type
 #'   raises an error is raised.
 test_that("reproject does not work with objects of unknown type", {
-  expect_error(reproject(1, 4326), "Cannot reproject object type: numeric")
+  expect_error(reproject(1, 4326),
+               "Must inherit from class 'SpatRaster'/'sf'/'sfc'")
 })
 
 #' @srrstats {SP6.0} This test checks that the original coordinates of a raster

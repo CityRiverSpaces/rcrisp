@@ -13,7 +13,7 @@ vector representing a CRS (e.g., EPSG code).}
 \item{allow_geographic}{Logical, whether to allow geographic CRS (lat/lon).}
 }
 \value{
-An object of class \link[sf:coerce-methods]{sf::crs} with a valid CRS.
+An object of class \code{\link[sf:coerce-methods]{sf::crs}} with a valid CRS.
 }
 \description{
 Standardise the coordinate reference system (CRS) of an object

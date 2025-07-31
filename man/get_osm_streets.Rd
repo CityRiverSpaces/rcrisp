@@ -18,7 +18,7 @@ If left NULL, the function retrieves the following values:
 \item{force_download}{Download data even if cached data is available}
 }
 \value{
-An sf object with the streets
+An object of class \code{\link[sf:sfc]{sf::sfc_LINESTRING}}
 }
 \description{
 Get OpenStreetMap streets
