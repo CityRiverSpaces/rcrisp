@@ -88,8 +88,9 @@ as_bbox <- function(x) {
 
 #' Standardise the coordinate reference system (CRS) of an object
 #'
-#' @param x An object of class `sf`, `sfc`, `bbox`, or a numeric  or character
-#'   vector representing a CRS (e.g., EPSG code).
+#' @param x An object of class `sf`, `sfc`, `bbox`, or a numeric or character
+#'   vector representing a CRS (e.g., EPSG code). If `numeric`, the value
+#'   should be an unrestricted positive number representing a valid EPSG code.
 #' @param allow_geographic Logical, whether to allow geographic CRS (lat/lon).
 #'
 #' @returns An object of class [`sf::crs`] with a valid CRS.

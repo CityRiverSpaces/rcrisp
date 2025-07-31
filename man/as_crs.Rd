@@ -7,8 +7,9 @@
 as_crs(x, allow_geographic = FALSE)
 }
 \arguments{
-\item{x}{An object of class \code{sf}, \code{sfc}, \code{bbox}, or a numeric  or character
-vector representing a CRS (e.g., EPSG code).}
+\item{x}{An object of class \code{sf}, \code{sfc}, \code{bbox}, or a numeric or character
+vector representing a CRS (e.g., EPSG code). If \code{numeric}, the value
+should be an unrestricted positive number representing a valid EPSG code.}
 
 \item{allow_geographic}{Logical, whether to allow geographic CRS (lat/lon).}
 }

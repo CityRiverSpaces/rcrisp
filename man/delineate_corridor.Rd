@@ -33,7 +33,7 @@ maximum width of the corridor in meters. The upper limit is unrestricted.
 The spatial network is trimmed by a buffer region of this size around the
 river.}
 
-\item{max_iterations}{An integer greater than 0, with upper limit
+\item{max_iterations}{A positive integer greater than 0, with upper limit
 unrestricted, representing the maximum number of iterations employed to
 refine the corridor edges (see \code{\link[=corridor_edge]{corridor_edge()}}).}
 
