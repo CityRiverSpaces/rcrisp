@@ -141,8 +141,7 @@ get_osmdata <- function(
   checkmate::assert_numeric(network_buffer, null.ok = TRUE, len = 1)
   checkmate::assert_numeric(buildings_buffer, null.ok = TRUE, len = 1)
   checkmate::assert_logical(city_boundary, len = 1)
-  checkmate::assert_multi_class(crs, c("numeric", "character"), null.ok = TRUE)
-  if (!is.null(crs)) checkmate::assert_vector(crs, len = 1)
+  crs <- as_crs(crs)
 
   bb <- get_osm_bb(city_name)
   # If not provided, determine the CRS
@@ -229,8 +228,7 @@ get_osm_city_boundary <- function(bb, city_name, crs = NULL, multiple = FALSE,
                                   force_download = FALSE) {
   # Check input
   checkmate::assert_character(city_name, len = 1)
-  checkmate::assert_multi_class(crs, c("numeric", "character"), null.ok = TRUE)
-  if (!is.null(crs)) checkmate::assert_vector(crs, len = 1)
+  crs <- as_crs(crs)
   checkmate::assert_logical(multiple, len = 1)
 
   # Drop country if specified after comma
@@ -296,8 +294,7 @@ get_osm_city_boundary <- function(bb, city_name, crs = NULL, multiple = FALSE,
 get_osm_river <- function(bb, river_name, crs = NULL, force_download = FALSE) {
   # Check input
   checkmate::assert_character(river_name, len = 1)
-  checkmate::assert_multi_class(crs, c("numeric", "character"), null.ok = TRUE)
-  if (!is.null(crs)) checkmate::assert_vector(crs, len = 1)
+  crs <- as_crs(crs)
 
   # Get the river centreline
   river_centerline <- osmdata_as_sf("waterway", "", bb,
@@ -506,10 +503,7 @@ get_osm_railways <- function(aoi, crs = NULL, railway_values = "rail",
 #'   class [`sf::sfc_POLYGON`], explicitly documented as such.
 get_osm_buildings <- function(aoi, crs = NULL, force_download = FALSE) {
   # Check input
-  checkmate::assert_multi_class(crs,
-                                c("numeric", "character", "crs"),
-                                null.ok = TRUE)
-  if (!is.null(crs)) checkmate::assert_vector(crs, len = 1)
+  crs <- as_crs(crs)
 
   buildings <- osmdata_as_sf("building", "", aoi,
                              force_download = force_download)
