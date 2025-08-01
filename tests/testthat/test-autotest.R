@@ -1,6 +1,7 @@
 test_that("`autotest` checks pass", {
   skip_on_ci()
   skip_on_cran()
+  skip_if_not_installed("rcrisp")
   skip(paste0("This test only seems to work in interactive mode. When run as ",
               "`devtools::test()` it errors that ",
               "`installed help of package 'rcrisp' is corrupt`"))
