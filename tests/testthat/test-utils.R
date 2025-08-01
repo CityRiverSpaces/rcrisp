@@ -372,3 +372,9 @@ test_that("Invalid geometry input produces message", {
     "Invalid geometries detected! Fixing them..."
   )
 })
+
+test_that("as_crs raises error if input object does not have CRS", {
+  # Create dummy sf object with no crs
+  x <- sf::st_sfc(sf::st_point(c(1, 2)))
+  expect_error(as_crs(x), "Input should have a CRS.")
+})

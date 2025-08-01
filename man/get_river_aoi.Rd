@@ -12,7 +12,8 @@ get_river_aoi(river, city_bbox, buffer_distance)
 
 \item{city_bbox}{Bounding box of class \code{bbox} around the city}
 
-\item{buffer_distance}{Buffer size around the river}
+\item{buffer_distance}{A positive number representing the buffer size around
+the river in meters. The upper limit is unrestricted.}
 }
 \value{
 An \code{\link[sf:sfc]{sf::sfc_POLYGON}} object in lat/lon coordinates
@@ -25,6 +26,6 @@ a city
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 bb <- get_osm_bb("Bucharest")
 river <- get_osm_river(bb, "Dâmbovița")
-get_river_aoi(river, bb, buffer_distance = 100)
+get_river_aoi(river = river, city_bbox = bb, buffer_distance = 100)
 \dontshow{\}) # examplesIf}
 }

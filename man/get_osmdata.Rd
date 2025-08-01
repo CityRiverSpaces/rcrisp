@@ -15,9 +15,11 @@ get_osmdata(
 )
 }
 \arguments{
-\item{city_name}{A character string with the name of the city.}
+\item{city_name}{The name of the city as character vector of length 1,
+case-sensitive. Required, no default.}
 
-\item{river_name}{A character string with the name of the river.}
+\item{river_name}{The name of the river as character vector of length 1,
+case-sensitive. Required, no default.}
 
 \item{network_buffer}{Buffer distance in meters around the river
 to get the streets and railways, default is 0 means no
@@ -50,17 +52,24 @@ railways, and the buildings
 # Set parameters
 city <- "Bucharest"
 river <- "Dâmbovița"
+crs <- "EPSG:31600"  # National projected CRS
 
 # Get OSM data with defaults
-get_osmdata(city, river)
+get_osmdata(city_name = city, river_name = river)
 
-# Use custom network buffer
-get_osmdata(city, river, network_buffer = 3500)
+# Get OSM data without city boundary
+get_osmdata(city_name = city, river_name = river, city_boundary = FALSE)
 
-# Use custom buildings buffer
-get_osmdata(city, river, buildings_buffer = 150)
+# Use custom network buffer to get streets and railways
+get_osmdata(city_name = city, river_name = river, network_buffer = 3500)
+
+# Use custom buffer to get buildings
+get_osmdata(city_name = city, river_name = river, buildings_buffer = 150)
 
 # Use custom CRS
-get_osmdata(city, river, crs = "EPSG:31600")  # National projected CRS
+get_osmdata(city_name = city, river_name = river, crs = crs)
+
+# Avoid getting OSM data from cache
+get_osmdata(city_name = city, river_name = river, force_download = TRUE)
 \dontshow{\}) # examplesIf}
 }

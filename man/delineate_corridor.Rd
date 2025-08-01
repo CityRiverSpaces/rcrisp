@@ -14,29 +14,32 @@ delineate_corridor(
 )
 }
 \arguments{
-\item{network}{The spatial network of class \code{sfnetwork} to be used for the
-delineation}
+\item{network}{The spatial network of class \code{\link[sfnetworks:sfnetwork]{sfnetworks::sfnetwork}} to be
+used for the delineation. Required, no default.}
 
-\item{river}{A (MULTI)LINESTRING simple feature geometry of class \code{sf}
-or \code{sfc} representing the river centerline}
+\item{river}{A (MULTI)LINESTRING simple feature geometry of class \code{\link[sf:sf]{sf::sf}}
+or \code{\link[sf:sfc]{sf::sfc}} representing the river centerline. Required, no default.}
 
 \item{corridor_init}{How to estimate the initial guess of the river corridor.
 It can take the following values:
 \itemize{
-\item numeric or integer: use a buffer region of the given size (in meters)
-around the river centerline
+\item numeric or integer: use a buffer region of the given size (in meters,
+positive, unrestricted) around the river centerline
 \item An \code{\link[sf:sf]{sf::sf}} or \code{\link[sf:sfc]{sf::sfc}} object: use the given input geometry
 }}
 
-\item{max_width}{(Approximate) maximum width of the corridor. The spatial
-network is trimmed by a buffer region of this size around the river}
+\item{max_width}{A positive number representing the (approximate)
+maximum width of the corridor in meters. The upper limit is unrestricted.
+The spatial network is trimmed by a buffer region of this size around the
+river.}
 
-\item{max_iterations}{Maximum number of iterations employed to refine the
-corridor edges (see \code{\link[=corridor_edge]{corridor_edge()}}).}
+\item{max_iterations}{A positive integer greater than 0, with upper limit
+unrestricted, representing the maximum number of iterations employed to
+refine the corridor edges (see \code{\link[=corridor_edge]{corridor_edge()}}).}
 
-\item{capping_method}{The method employed to connect the corridor edge end
-points (i.e. to "cap" the corridor). See \code{\link[=cap_corridor]{cap_corridor()}} for
-the available methods}
+\item{capping_method}{Case-insensitive character vector of length 1 with the
+method employed to connect the corridor edge end points (i.e. to "cap" the
+corridor). See \code{\link[=cap_corridor]{cap_corridor()}} for the available methods.}
 }
 \value{
 A simple feature geometry of class \code{\link[sf:sfc]{sf::sfc_POLYGON}} representing
@@ -56,12 +59,14 @@ river <- bucharest_osm$river_centerline
 
 # Delineate with default values
 network <- rbind(streets, railways) |> as_network()
-delineate_corridor(network, river)
+delineate_corridor(network = network, river = river)
 
 # Delineate with user-specified parameters
 bucharest_dem <- get_dem_example_data()
-corridor_init <- delineate_valley(bucharest_dem, river)
-delineate_corridor(network, river, corridor_init = corridor_init,
-                   max_width = 4000, max_iterations = 5, capping = "direct")
+corridor_init <- delineate_valley(dem = bucharest_dem, river = river)
+delineate_corridor(network = network, river = river,
+                   corridor_init = corridor_init,
+                   max_width = 4000, max_iterations = 5,
+                   capping_method = "direct")
 \dontshow{\}) # examplesIf}
 }

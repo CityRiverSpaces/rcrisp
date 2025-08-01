@@ -14,11 +14,11 @@ delineate_segments(corridor, network, river, angle_threshold = 100)
 segmentation}
 
 \item{river}{The river centerline as a simple feature geometry of class
-\code{sfc_LINESTRING} or \code{sfc_MULTILINESTRING}}
+\code{\link[sf:sf]{sf::sf}} or \code{\link[sf:sfc]{sf::sfc}}}
 
 \item{angle_threshold}{Only consider angles above this threshold (in degrees)
-to form continuous strokes in the network. A meaningful angle is between
-90 and 180, with the default set to 100. See \code{\link[rcoins:stroke]{rcoins::stroke()}} for more
+to form continuous strokes in the network. The value can range between
+0 and 180, with the default set to 100. See \code{\link[rcoins:stroke]{rcoins::stroke()}} for more
 details.}
 }
 \value{

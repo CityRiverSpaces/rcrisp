@@ -24,12 +24,15 @@
 #' @export
 #'
 #' @examplesIf interactive()
-#' get_osm_example_data()
+#' get_osm_example_data(force_download = TRUE)
 #' @srrstats {SP2.3} This function is used throughout the package to retrieve
 #'   example data in `GPKG` format.
 #' @srrstats {SP4.0, SP4.0b, SP4.2} The function returns a list of
 #'   [`sf::sfc`] objects, explicitly documented as such.
 get_osm_example_data <- function(force_download = FALSE) {
+  # Check input
+  checkmate::assert_logical(force_download, len = 1)
+
   file <- get_example_data_file("bucharest_osm.gpkg",
                                 force_download = force_download)
   names <- sf::st_layers(file)$name
@@ -47,16 +50,19 @@ get_osm_example_data <- function(force_download = FALSE) {
 #' load the example data from disk without having to re-download the data.
 #'
 #' @param force_download Download data even if cached data is available
-#' @return A [`terra::SpatRaster`] object containing the DEM data.
+#' @return An object of class [`terra::SpatRaster`] containing the DEM data.
 #' @export
 #'
 #' @examplesIf interactive()
-#' get_dem_example_data()
+#' get_dem_example_data(force_download = TRUE)
 #' @srrstats {SP2.3} This function is used throughout the package to retrieve
 #'   example data in `GeoTIFF` format.
 #' @srrstats {SP4.0, SP4.0b, SP4.2} The function returns a [`terra::SpatRaster`]
 #'   object, explicitly documented as such.
 get_dem_example_data <- function(force_download = FALSE) {
+  # Check input
+  checkmate::assert_logical(force_download, len = 1)
+
   file <- get_example_data_file("bucharest_dem.tiff",
                                 force_download = force_download)
   terra::rast(file)

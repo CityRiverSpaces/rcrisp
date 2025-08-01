@@ -96,7 +96,7 @@ river <- "Dâmbovița"
 delineate(city, river)
 
 # Use custom CRS
-get_osmdata(city, river, crs = "EPSG:31600")  # National projected CRS
+delineate(city, river, crs = "EPSG:31600")  # National projected CRS
 
 # Use custom network buffer
 delineate(city, river, network_buffer = 3500)

@@ -17,6 +17,6 @@ Get the bounding box of a city
 }
 \examples{
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-get_osm_bb("Bucharest")
+get_osm_bb(city_name = "Bucharest")
 \dontshow{\}) # examplesIf}
 }

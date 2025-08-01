@@ -13,7 +13,7 @@
 #' edges <- sf::st_sfc(
 #'   sf::st_linestring(matrix(c(0, 0, 1, 1), ncol = 2, byrow = TRUE)),
 #'   sf::st_linestring(matrix(c(0, 1, 1, 0), ncol = 2, byrow = TRUE)),
-#'   crs = sf::st_crs("EPSG:4326")
+#'   crs = sf::st_crs("EPSG:32635")
 #' )
 #'
 #' # Run with default values
@@ -70,6 +70,7 @@ as_network <- function(edges, flatten = TRUE, clean = TRUE) {
 #'   as such, and it maintains the same units as the input.
 flatten_network <- function(network) {
   # Check input
+  as_crs(network)
   checkmate::assert_class(network, "sfnetwork")
 
   nodes <- sf::st_as_sf(network, "nodes")

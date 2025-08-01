@@ -8,10 +8,10 @@
 #' @param network The spatial network of class `sfnetwork` to be used for the
 #'   segmentation
 #' @param river The river centerline as a simple feature geometry of class
-#'   `sfc_LINESTRING` or `sfc_MULTILINESTRING`
+#'   [`sf::sf`] or [`sf::sfc`]
 #' @param angle_threshold Only consider angles above this threshold (in degrees)
-#'   to form continuous strokes in the network. A meaningful angle is between
-#'   90 and 180, with the default set to 100. See [`rcoins::stroke()`] for more
+#'   to form continuous strokes in the network. The value can range between
+#'   0 and 180, with the default set to 100. See [`rcoins::stroke()`] for more
 #'   details.
 #'
 #' @return Segment polygons as a simple feature geometry of class

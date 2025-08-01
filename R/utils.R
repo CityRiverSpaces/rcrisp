@@ -88,8 +88,9 @@ as_bbox <- function(x) {
 
 #' Standardise the coordinate reference system (CRS) of an object
 #'
-#' @param x An object of class `sf`, `sfc`, `bbox`, or a numeric  or character
-#'   vector representing a CRS (e.g., EPSG code).
+#' @param x An object of class `sf`, `sfc`, `bbox`, or a numeric or character
+#'   vector representing a CRS (e.g., EPSG code). If `numeric`, the value
+#'   should be an unrestricted positive number representing a valid EPSG code.
 #' @param allow_geographic Logical, whether to allow geographic CRS (lat/lon).
 #'
 #' @returns An object of class [`sf::crs`] with a valid CRS.
@@ -134,6 +135,9 @@ as_crs <- function(x, allow_geographic = FALSE) {
 
   if (!is.null(x)) {
     crs <- sf::st_crs(x)
+    if (is.na(crs$IsGeographic)) {
+      stop("Input should have a CRS.")
+    }
     if (!allow_geographic && crs$IsGeographic) {
       stop(paste("The input CRS is geographic (lat/lon),",
                  "please provide a projected CRS."))
@@ -222,7 +226,10 @@ river_buffer <- function(river, buffer_distance, bbox = NULL, side = NULL) {
 #' coordinate reference system (CRS)
 #'
 #' @param x Raster (`SpatRaster`) or vector (`sf`) object
-#' @param crs CRS to be projected to
+#' @param crs CRS to be projected to, provided as `numeric`, `integer` or
+#'   `logical` vector of length one or [`sf::crs`]. If `numeric`, the value
+#'   should be a positive number with unrestricted upper bound representing
+#'   a valid EPSG code.
 #' @param ... Optional arguments for raster or vector reproject functions
 #'
 #' @return [`sf::sf`], [`sf::sfc`], or [`terra::SpatRaster`] object reprojected
