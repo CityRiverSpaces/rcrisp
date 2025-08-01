@@ -62,6 +62,7 @@ network_no_crossings <- sfnetworks::sfnetwork(nodes = nodes_no_crossings,
                                               edges = edges_no_crossings,
                                               directed = FALSE, force = TRUE,
                                               node_key = "x")
+sf::st_crs(network_no_crossings, 32635)
 
 #' @srrstats {G2.10} Several tests in this test module use `sf::st_geometry()`
 #'   to extract the geometry column from the either the "edges" or "nodes"
