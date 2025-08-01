@@ -135,6 +135,9 @@ as_crs <- function(x, allow_geographic = FALSE) {
 
   if (!is.null(x)) {
     crs <- sf::st_crs(x)
+    if (is.na(crs$IsGeographic)) {
+      stop("Input should have a CRS.")
+    }
     if (!allow_geographic && crs$IsGeographic) {
       stop(paste("The input CRS is geographic (lat/lon),",
                  "please provide a projected CRS."))

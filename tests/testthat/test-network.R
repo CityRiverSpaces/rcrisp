@@ -98,6 +98,7 @@ test_that("Network flattening inject intersection within edges", {
   network <- sfnetworks::sfnetwork(nodes = nodes, edges = edges,
                                    directed = FALSE, force = TRUE,
                                    node_key = "x")
+  sf::st_crs(network) <- 32635
   network_flat <- flatten_network(network)
   nodes_actual <- sf::st_geometry(sf::st_as_sf(network_flat, "nodes"))
   edges_actual <- sf::st_geometry(sf::st_as_sf(network_flat, "edges"))

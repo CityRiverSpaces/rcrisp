@@ -75,7 +75,7 @@ test_that("`autotest` checks pass", {
                   !grepl("par_is_demonstrated", test_name))
   if (nrow(xt) == 0) xt <- NULL
 
-  # autotest::expect_autotest_testdata(tf) cannot be used because of the
-  # false positives from normal function calls
+  # `autotest::expect_autotest_testdata(tf)` cannot be used because of the
+  # false positives from normal function calls.
   expect_null(xt)
 })
