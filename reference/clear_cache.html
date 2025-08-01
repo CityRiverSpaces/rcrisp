@@ -62,7 +62,8 @@
 
 <dl><dt id="arg-before-date">before_date<a class="anchor" aria-label="anchor" href="#arg-before-date"></a></dt>
 <dd><p>Date before which cache files should be removed provided
-as <code>Date</code> (or as a character string accepted by <code><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date()</a></code>)</p></dd>
+as object of class <code><a href="https://rdrr.io/r/base/Dates.html" class="external-link">Date</a></code> or as a case dependent character vector
+accepted by <code><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date()</a></code></p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -78,7 +79,7 @@ as <code>Date</code> (or as a character string accepted by <code><a href="https:
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Clear cache before given date</span></span></span>
 <span class="r-in"><span><span class="va">before_date</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"1-1-1999"</span>, <span class="st">"%m-%d-%Y"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">clear_cache</span><span class="op">(</span><span class="va">before_date</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">clear_cache</span><span class="op">(</span>before_date <span class="op">=</span> <span class="va">before_date</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>

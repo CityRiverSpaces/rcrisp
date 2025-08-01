@@ -68,7 +68,10 @@ coordinate reference system (CRS)</p>
 
 
 <dt id="arg-crs">crs<a class="anchor" aria-label="anchor" href="#arg-crs"></a></dt>
-<dd><p>CRS to be projected to</p></dd>
+<dd><p>CRS to be projected to, provided as <code>numeric</code>, <code>integer</code> or
+<code>logical</code> vector of length one or <code><a href="https://r-spatial.github.io/sf/reference/coerce-methods.html" class="external-link">sf::crs</a></code>. If <code>numeric</code>, the value
+should be a positive number with unrestricted upper bound representing
+a valid EPSG code.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
