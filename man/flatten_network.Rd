@@ -26,9 +26,11 @@ The functionality is similar to sfnetworks'
 only injected to the closest edge.
 }
 \examples{
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 bucharest_osm <- get_osm_example_data()
 edges <- dplyr::bind_rows(bucharest_osm$streets,
                           bucharest_osm$railways)
 network <- sfnetworks::as_sfnetwork(edges, directed = FALSE)
 flatten_network(network)
+\dontshow{\}) # examplesIf}
 }

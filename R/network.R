@@ -56,7 +56,7 @@ as_network <- function(edges, flatten = TRUE, clean = TRUE) {
 #' @return An [`sfnetworks::sfnetwork`] object with additional points at
 #'   intersections
 #' @export
-#' @examples
+#' @examplesIf interactive()
 #' bucharest_osm <- get_osm_example_data()
 #' edges <- dplyr::bind_rows(bucharest_osm$streets,
 #'                           bucharest_osm$railways)
