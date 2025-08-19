@@ -8,7 +8,7 @@
   "codeRepository": "https://github.com/CityRiverSpaces/rcrisp",
   "issueTracker": "https://github.com/CityRiverSpaces/rcrisp/issues",
   "license": "Apache License 2",
-  "version": "0.1.4",
+  "version": "0.2.0",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",

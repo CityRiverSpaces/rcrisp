@@ -3,7 +3,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-# [Unreleased]
+# rcrisp 0.2.0 - 2025-19-08
 
 ## Added
 
@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Fixed
 
 - Classes of input parameters and return values were specified.
+- `get_osm_example_data()` and `get_dem_example_data()` fail gracefully in examples, vignettes and tests, that is, return a message and NULL, if internet resource is not available.
 
 ## Changed
 
