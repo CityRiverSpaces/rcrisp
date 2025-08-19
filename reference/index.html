@@ -46,9 +46,214 @@
     </div>
 
     <div class="section level2">
-      <h2 id="all-functions">All functions<a class="anchor" aria-label="anchor" href="#all-functions"></a></h2>
+      <h2 id="delineation">Delineation<a class="anchor" aria-label="anchor" href="#delineation"></a></h2>
+
+      <div class="section-desc"><p>Functions for full or specific delineation</p></div>
 
 
+    </div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="delineate.html">delineate()</a></code>
+
+        </dt>
+        <dd>Delineate a corridor around a river.</dd>
+      </dl><dl><dt>
+
+          <code><a href="delineate_valley.html">delineate_valley()</a></code>
+
+        </dt>
+        <dd>Extract the river valley from the DEM</dd>
+      </dl><dl><dt>
+
+          <code><a href="delineate_corridor.html">delineate_corridor()</a></code>
+
+        </dt>
+        <dd>Delineate a river corridor on a spatial network.</dd>
+      </dl><dl><dt>
+
+          <code><a href="delineate_segments.html">delineate_segments()</a></code>
+
+        </dt>
+        <dd>Split a river corridor into segments</dd>
+      </dl><dl><dt>
+
+          <code><a href="delineate_riverspace.html">delineate_riverspace()</a></code>
+
+        </dt>
+        <dd>Delineate the space surrounding a river</dd>
+      </dl></div><div class="section level2">
+      <h2 id="data">Data<a class="anchor" aria-label="anchor" href="#data"></a></h2>
+
+
+
+
+    </div><div class="section level2">
+
+      <h3 id="get-osm-data">Get OSM data<a class="anchor" aria-label="anchor" href="#get-osm-data"></a></h3>
+      <div class="section-desc"><p>Get OSM data for delineation</p></div>
+
+
+    </div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="get_osmdata.html">get_osmdata()</a></code>
+
+        </dt>
+        <dd>Retrieve OpenStreetMap data for a given location</dd>
+      </dl><dl><dt>
+
+          <code><a href="get_osm_bb.html">get_osm_bb()</a></code>
+
+        </dt>
+        <dd>Get the bounding box of a city</dd>
+      </dl><dl><dt>
+
+          <code><a href="get_osm_city_boundary.html">get_osm_city_boundary()</a></code>
+
+        </dt>
+        <dd>Get the city boundary from OpenStreetMap</dd>
+      </dl><dl><dt>
+
+          <code><a href="get_osm_river.html">get_osm_river()</a></code>
+
+        </dt>
+        <dd>Get the river centreline and surface from OpenStreetMap</dd>
+      </dl><dl><dt>
+
+          <code><a href="get_osm_streets.html">get_osm_streets()</a></code>
+
+        </dt>
+        <dd>Get OpenStreetMap streets</dd>
+      </dl><dl><dt>
+
+          <code><a href="get_osm_railways.html">get_osm_railways()</a></code>
+
+        </dt>
+        <dd>Get OpenStreetMap railways</dd>
+      </dl><dl><dt>
+
+          <code><a href="get_osm_buildings.html">get_osm_buildings()</a></code>
+
+        </dt>
+        <dd>Get OpenStreetMap buildings</dd>
+      </dl><dl><dt>
+
+          <code><a href="get_river_aoi.html">get_river_aoi()</a></code>
+
+        </dt>
+        <dd>Get an area of interest (AoI) around a river, cropping to the bounding box of a city</dd>
+      </dl><dl><dt>
+
+          <code><a href="osmdata_as_sf.html">osmdata_as_sf()</a></code>
+
+        </dt>
+        <dd>Retrieve OpenStreetMap data as sf object</dd>
+      </dl></div><div class="section level2">
+
+      <h3 id="get-dem-data">Get DEM data<a class="anchor" aria-label="anchor" href="#get-dem-data"></a></h3>
+      <div class="section-desc"><p>Get DEM data for delineation</p></div>
+
+
+    </div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="get_dem.html">get_dem()</a></code>
+
+        </dt>
+        <dd>Access digital elevation model (DEM) for a given region</dd>
+      </dl><dl><dt>
+
+          <code><a href="load_dem.html">load_dem()</a></code>
+
+        </dt>
+        <dd>Retrieve DEM data from a list of STAC assets</dd>
+      </dl><dl><dt>
+
+          <code><a href="default_stac_dem.html">default_stac_dem</a></code>
+
+        </dt>
+        <dd>Default STAC collection</dd>
+      </dl><dl><dt>
+
+          <code><a href="get_stac_asset_urls.html">get_stac_asset_urls()</a></code>
+
+        </dt>
+        <dd>Retrieve the URLs of all the assets intersecting a bbox from a STAC API</dd>
+      </dl></div><div class="section level2">
+
+      <h3 id="example-data">Example data<a class="anchor" aria-label="anchor" href="#example-data"></a></h3>
+      <div class="section-desc"><p>Example OSM, DEM and delineation data</p></div>
+
+
+    </div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="get_osm_example_data.html">get_osm_example_data()</a></code>
+
+        </dt>
+        <dd>Get example OSM data</dd>
+      </dl><dl><dt>
+
+          <code><a href="get_dem_example_data.html">get_dem_example_data()</a></code>
+
+        </dt>
+        <dd>Get example DEM data</dd>
+      </dl><dl><dt>
+
+          <code><a href="bucharest_dambovita.html">bucharest_dambovita</a></code>
+
+        </dt>
+        <dd>rcrisp example delineation data for Bucharest</dd>
+      </dl></div><div class="section level2">
+      <h2 id="network-preparation">Network preparation<a class="anchor" aria-label="anchor" href="#network-preparation"></a></h2>
+
+      <div class="section-desc"><p>Functions to prepare network for delineation</p></div>
+
+
+    </div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="as_network.html">as_network()</a></code>
+
+        </dt>
+        <dd>Create a network from a collection of line strings.</dd>
+      </dl><dl><dt>
+
+          <code><a href="flatten_network.html">flatten_network()</a></code>
+
+        </dt>
+        <dd>Flatten a network by adding points at apparent intersections.</dd>
+      </dl><dl><dt>
+
+          <code><a href="clean_network.html">clean_network()</a></code>
+
+        </dt>
+        <dd>Clean a spatial network.</dd>
+      </dl></div><div class="section level2">
+      <h2 id="helpers">Helpers<a class="anchor" aria-label="anchor" href="#helpers"></a></h2>
+
+      <div class="section-desc"><p>Helpers used throughout delineation and data retrieval functions</p></div>
 
 
     </div><div class="section level2">
@@ -70,34 +275,33 @@
         <dd>Standardise the coordinate reference system (CRS) of an object</dd>
       </dl><dl><dt>
 
-          <code><a href="as_network.html">as_network()</a></code>
+          <code><a href="get_utm_zone.html">get_utm_zone()</a></code>
 
         </dt>
-        <dd>Create a network from a collection of line strings.</dd>
+        <dd>Get the UTM zone of a spatial object</dd>
       </dl><dl><dt>
 
-          <code><a href="bucharest_dambovita.html">bucharest_dambovita</a></code>
+          <code><a href="reproject.html">reproject()</a></code>
 
         </dt>
-        <dd>rcrisp example delineation data for Bucharest</dd>
-      </dl><dl><dt>
+        <dd>Reproject a raster or vector dataset to the specified coordinate reference system (CRS)</dd>
+      </dl></div><div class="section level2">
+      <h2 id="cache">Cache<a class="anchor" aria-label="anchor" href="#cache"></a></h2>
 
-          <code><a href="cache_directory.html">cache_directory()</a></code>
+      <div class="section-desc"><p>Functions to handle cached data</p></div>
 
-        </dt>
-        <dd>Return the cache directory used by the package</dd>
-      </dl><dl><dt>
+
+    </div><div class="section level2">
+
+
+
+
+      <dl><dt>
 
           <code><a href="check_cache.html">check_cache()</a></code>
 
         </dt>
         <dd>Check cache</dd>
-      </dl><dl><dt>
-
-          <code><a href="clean_network.html">clean_network()</a></code>
-
-        </dt>
-        <dd>Clean a spatial network.</dd>
       </dl><dl><dt>
 
           <code><a href="clear_cache.html">clear_cache()</a></code>
@@ -106,144 +310,13 @@
         <dd>Remove cache files</dd>
       </dl><dl><dt>
 
-          <code><a href="default_stac_dem.html">default_stac_dem</a></code>
+          <code><a href="cache_directory.html">cache_directory()</a></code>
 
         </dt>
-        <dd>Default STAC collection</dd>
-      </dl><dl><dt>
-
-          <code><a href="delineate.html">delineate()</a></code>
-
-        </dt>
-        <dd>Delineate a corridor around a river.</dd>
-      </dl><dl><dt>
-
-          <code><a href="delineate_corridor.html">delineate_corridor()</a></code>
-
-        </dt>
-        <dd>Delineate a river corridor on a spatial network.</dd>
-      </dl><dl><dt>
-
-          <code><a href="delineate_riverspace.html">delineate_riverspace()</a></code>
-
-        </dt>
-        <dd>Delineate the space surrounding a river</dd>
-      </dl><dl><dt>
-
-          <code><a href="delineate_segments.html">delineate_segments()</a></code>
-
-        </dt>
-        <dd>Split a river corridor into segments</dd>
-      </dl><dl><dt>
-
-          <code><a href="delineate_valley.html">delineate_valley()</a></code>
-
-        </dt>
-        <dd>Extract the river valley from the DEM</dd>
-      </dl><dl><dt>
-
-          <code><a href="flatten_network.html">flatten_network()</a></code>
-
-        </dt>
-        <dd>Flatten a network by adding points at apparent intersections.</dd>
-      </dl><dl><dt>
-
-          <code><a href="get_dem.html">get_dem()</a></code>
-
-        </dt>
-        <dd>Access digital elevation model (DEM) for a given region</dd>
-      </dl><dl><dt>
-
-          <code><a href="get_dem_example_data.html">get_dem_example_data()</a></code>
-
-        </dt>
-        <dd>Get example DEM data</dd>
-      </dl><dl><dt>
-
-          <code><a href="get_osm_bb.html">get_osm_bb()</a></code>
-
-        </dt>
-        <dd>Get the bounding box of a city</dd>
-      </dl><dl><dt>
-
-          <code><a href="get_osm_buildings.html">get_osm_buildings()</a></code>
-
-        </dt>
-        <dd>Get OpenStreetMap buildings</dd>
-      </dl><dl><dt>
-
-          <code><a href="get_osm_city_boundary.html">get_osm_city_boundary()</a></code>
-
-        </dt>
-        <dd>Get the city boundary from OpenStreetMap</dd>
-      </dl><dl><dt>
-
-          <code><a href="get_osm_example_data.html">get_osm_example_data()</a></code>
-
-        </dt>
-        <dd>Get example OSM data</dd>
-      </dl><dl><dt>
-
-          <code><a href="get_osm_railways.html">get_osm_railways()</a></code>
-
-        </dt>
-        <dd>Get OpenStreetMap railways</dd>
-      </dl><dl><dt>
-
-          <code><a href="get_osm_river.html">get_osm_river()</a></code>
-
-        </dt>
-        <dd>Get the river centreline and surface from OpenStreetMap</dd>
-      </dl><dl><dt>
-
-          <code><a href="get_osm_streets.html">get_osm_streets()</a></code>
-
-        </dt>
-        <dd>Get OpenStreetMap streets</dd>
-      </dl><dl><dt>
-
-          <code><a href="get_osmdata.html">get_osmdata()</a></code>
-
-        </dt>
-        <dd>Retrieve OpenStreetMap data for a given location</dd>
-      </dl><dl><dt>
-
-          <code><a href="get_river_aoi.html">get_river_aoi()</a></code>
-
-        </dt>
-        <dd>Get an area of interest (AoI) around a river, cropping to the bounding box of a city</dd>
-      </dl><dl><dt>
-
-          <code><a href="get_stac_asset_urls.html">get_stac_asset_urls()</a></code>
-
-        </dt>
-        <dd>Retrieve the URLs of all the assets intersecting a bbox from a STAC API</dd>
-      </dl><dl><dt>
-
-          <code><a href="get_utm_zone.html">get_utm_zone()</a></code>
-
-        </dt>
-        <dd>Get the UTM zone of a spatial object</dd>
-      </dl><dl><dt>
-
-          <code><a href="load_dem.html">load_dem()</a></code>
-
-        </dt>
-        <dd>Retrieve DEM data from a list of STAC assets</dd>
-      </dl><dl><dt>
-
-          <code><a href="osmdata_as_sf.html">osmdata_as_sf()</a></code>
-
-        </dt>
-        <dd>Retrieve OpenStreetMap data as sf object</dd>
-      </dl><dl><dt>
-
-          <code><a href="reproject.html">reproject()</a></code>
-
-        </dt>
-        <dd>Reproject a raster or vector dataset to the specified coordinate reference system (CRS)</dd>
+        <dd>Return the cache directory used by the package</dd>
       </dl></div>
-  </main></div>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">
