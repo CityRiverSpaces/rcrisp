@@ -1,4 +1,4 @@
-#' Create a network from a collection of line strings.
+#' Create a network from a collection of line strings
 #'
 #' @param edges An [`sf::sf`] or [`sf::sfc_LINESTRING`] object with the
 #'   network edges
@@ -39,7 +39,7 @@ as_network <- function(edges, flatten = TRUE, clean = TRUE) {
   network
 }
 
-#' Flatten a network by adding points at apparent intersections.
+#' Flatten a network by adding points at apparent intersections
 #'
 #' All crossing edges are identified, and the points of intersections are
 #' injected within the edge geometries. Note that the injected points are
@@ -220,7 +220,7 @@ calc_rolling_sum <- function(x, n = 2) {
   tail(cs - cs_roll, length(x) - 1)
 }
 
-#' Clean a spatial network.
+#' Clean a spatial network
 #'
 # nolint start
 #' Subdivide edges by [adding missing nodes](https://luukvdmeer.github.io/sfnetworks/articles/sfn02_preprocess_clean.html#subdivide-edges),
