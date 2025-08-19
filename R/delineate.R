@@ -1,4 +1,4 @@
-#' Delineate a corridor around a river.
+#' Delineate a corridor around a river
 #'
 #' @param city_name A character vector of length one
 #' @param river_name A character vector of length one

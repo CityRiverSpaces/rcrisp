@@ -1,4 +1,4 @@
-#' Delineate a river corridor on a spatial network.
+#' Delineate a river corridor on a spatial network
 #'
 #' The corridor edges on the two river banks are drawn on the provided spatial
 #' network starting from an initial guess of the corridor (based e.g. on the
