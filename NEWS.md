@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Replaced `sapply()` with `vapply()` throughout the package for improved type safety.
 - Updated package metadata in `DESCRIPTION` and `codemeta.json`
+- Organized function reference page into meaningful sections.
 
 ## Removed
 

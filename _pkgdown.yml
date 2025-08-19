@@ -40,3 +40,64 @@ navbar:
           href: articles/vig_06-corridor-segmentation.html
         - text: Riverspace delineation
           href: articles/vig_07-riverspace-delineation.html
+reference:
+- title: Delineation
+  desc: >
+    Functions for full or specific delineation
+  contents:
+    - delineate
+    - delineate_valley
+    - delineate_corridor
+    - delineate_segments
+    - delineate_riverspace
+- title: Data
+- subtitle: Get OSM data
+  desc: >
+    Get OSM data for delineation
+  contents:
+    - get_osmdata
+    - get_osm_bb
+    - get_osm_city_boundary
+    - get_osm_river
+    - get_osm_streets
+    - get_osm_railways
+    - get_osm_buildings
+    - get_river_aoi
+    - osmdata_as_sf
+- subtitle: Get DEM data
+  desc: >
+    Get DEM data for delineation
+  contents:
+    - get_dem
+    - load_dem
+    - default_stac_dem
+    - get_stac_asset_urls
+- subtitle: Example data
+  desc: >
+    Example OSM, DEM and delineation data
+  contents:
+    - get_osm_example_data
+    - get_dem_example_data
+    - bucharest_dambovita
+- title: Network preparation
+  desc: >
+    Functions to prepare network for delineation
+  contents:
+    - as_network
+    - flatten_network
+    - clean_network
+- title: Helpers
+  desc: >
+    Helpers used throughout delineation and data retrieval functions
+  contents:
+    - as_bbox
+    - as_crs
+    - get_utm_zone
+    - reproject
+- title: Cache
+  desc: >
+    Functions to handle cached data
+  contents:
+    - check_cache
+    - clear_cache
+    - cache_directory
