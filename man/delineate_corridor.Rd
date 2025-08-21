@@ -2,7 +2,7 @@
 % Please edit documentation in R/corridor.R
 \name{delineate_corridor}
 \alias{delineate_corridor}
-\title{Delineate a river corridor on a spatial network.}
+\title{Delineate a river corridor on a spatial network}
 \usage{
 delineate_corridor(
   network,

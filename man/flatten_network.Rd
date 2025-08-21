@@ -2,7 +2,7 @@
 % Please edit documentation in R/network.R
 \name{flatten_network}
 \alias{flatten_network}
-\title{Flatten a network by adding points at apparent intersections.}
+\title{Flatten a network by adding points at apparent intersections}
 \usage{
 flatten_network(network)
 }

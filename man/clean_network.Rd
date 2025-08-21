@@ -2,7 +2,7 @@
 % Please edit documentation in R/network.R
 \name{clean_network}
 \alias{clean_network}
-\title{Clean a spatial network.}
+\title{Clean a spatial network}
 \usage{
 clean_network(network, simplify = TRUE)
 }
