@@ -7,13 +7,26 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r setup, include = FALSE}
+```{r setup, include=FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
   message = FALSE,
-  warning = FALSE
+  warning = FALSE,
+  eval = FALSE
 )
+```
+
+```{r data, eval=TRUE, echo=FALSE}
+library(rcrisp)
+
+bucharest_osm <- get_osm_example_data()
+
+data_available <- !is.null(bucharest_osm)
+
+if (!data_available) {
+  cat("NOTE: OSM data could not be downloaded; result will be not be plotted.")
+}
 ```
 
 In this notebook we download OpenStreetMap (OSM) data needed for the delineation of the urban river corridor of River Dâmbovița in Bucharest, Romania. After attaching the packages used in the vignette, we specify the city name, the river name, and the CRS, and we make sure that we provide a buffer around the river used to retrieve OSM data.
@@ -25,7 +38,8 @@ library(purrr)
 city_name <- "Bucharest"
 river_name <- "Dâmbovița"
 crs <- 32635  # EPSG code for UTM zone 35N, where Bucharest is located
-buffer <- 3000  # in m, expand bbox for street network
+network_buffer <- 3000  # in m, buffer around the river to get the streets and railways
+buildings_buffer <- 100  # in m, buffer around the river to get the buildings
 ```
 
 We start by getting the bounding box for the study area:
@@ -37,46 +51,62 @@ bb <- get_osm_bb(city_name)
 Using the obtained bounding box, we get the different layers of OSM data needed for the delineation of the urban river corridor. We will get the city boundary, the waterways, the street network, and the rail network using built-in functions from the `rcrisp` package.
 
 ```{r}
+city_boundary <- get_osm_city_boundary(bb, city_name, crs)
 river <- get_osm_river(bb, river_name, crs)
-aoi_network <- get_river_aoi(river, bb, buffer_distance = buffer)
+aoi_network <- get_river_aoi(river, bb, buffer_distance = network_buffer)
 streets <- get_osm_streets(bb, crs)
 railways <- get_osm_railways(bb, crs)
-city_boundary <- get_osm_city_boundary(bb, city_name, crs)
+aoi_buildings <- get_river_aoi(river, bb, buffer_distance = buildings_buffer)
+buildings <- get_osm_buildings(bb, crs)
 
 bucharest_osm <- list(
-  bb = bb,
+  boundary = city_boundary,
   river_centerline = river$centerline,
   river_surface = river$surface,
   aoi_network = aoi_network,
   streets = streets,
   railways = railways,
-  boundary = city_boundary
+  aoi_buildings = aoi_buildings,
+  buildings = buildings
 )
 ```
 
 The above layers can also be obtained with the all-in-one function `get_osmdata()`. Optionally, a buffer around the river can be specified for the retrieval of OSM data.
 
 ```{r}
-bucharest_osm <- get_osmdata(city_name, river_name, network_buffer = buffer)
+bucharest_osm <- get_osmdata(city_name, river_name,
+                             network_buffer = network_buffer)
 ```
 
 The resulting object is a list with all the layers obtained above.
 
-```{r}
+```{r eval=data_available}
 names(bucharest_osm)
 ```
 
-```{r, echo=FALSE, fig.alt="All layers combined", fig.cap="All layers combined"}
-plot(bucharest_osm$boundary, col = "grey", border = "black")
-plot(bucharest_osm$railways, col = "orange", add = TRUE)
-plot(bucharest_osm$streets, color = "black", add = TRUE)
+```{r plot, eval=data_available, echo=FALSE, fig.alt="All layers combined", fig.cap="All layers combined (buildings not shown)"}
+bbox <- sf::st_bbox(bucharest_osm$boundary)
+plot(
+  NA,
+  xlim = c(bbox["xmin"], bbox["xmax"]),
+  ylim = c(bbox["ymin"], bbox["ymax"]),
+  asp = 1,
+  xaxt = "n",
+  yaxt = "n",
+  xlab = "",
+  ylab = "",
+  bty = "n"
+)
+plot(bucharest_osm$railways$geom, col = "orange", add = TRUE)
+plot(bucharest_osm$streets$geom, color = "black", add = TRUE)
 plot(bucharest_osm$river_surface, col = "blue", border = "blue", add = TRUE)
 plot(bucharest_osm$river_centerline, col = "blue", add = TRUE)
+plot(bucharest_osm$boundary, border = "red", add = TRUE)
 ```
 
 Individual layers can be written to disk before being read in for delineation.
 
-```{r eval=FALSE}
+```{r}
 walk2(
   bucharest_osm,
   names(bucharest_osm),
