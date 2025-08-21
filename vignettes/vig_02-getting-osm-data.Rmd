@@ -17,18 +17,6 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r data, eval=TRUE, echo=FALSE}
-library(rcrisp)
-
-bucharest_osm <- get_osm_example_data()
-
-data_available <- !is.null(bucharest_osm)
-
-if (!data_available) {
-  cat("NOTE: OSM data could not be downloaded; result will be not be plotted.")
-}
-```
-
 In this notebook we download OpenStreetMap (OSM) data needed for the delineation of the urban river corridor of River Dâmbovița in Bucharest, Romania. After attaching the packages used in the vignette, we specify the city name, the river name, and the CRS, and we make sure that we provide a buffer around the river used to retrieve OSM data.
 
 ```{r}
@@ -80,11 +68,11 @@ bucharest_osm <- get_osmdata(city_name, river_name,
 
 The resulting object is a list with all the layers obtained above.
 
-```{r eval=data_available}
+```{r}
 names(bucharest_osm)
 ```
 
-```{r plot, eval=data_available, echo=FALSE, fig.alt="All layers combined", fig.cap="All layers combined (buildings not shown)"}
+```{r plot, echo=FALSE, fig.alt="All layers combined", fig.cap="All layers combined (buildings not shown)"}
 bbox <- sf::st_bbox(bucharest_osm$boundary)
 plot(
   NA,
