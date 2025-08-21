@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">rcrisp</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -46,6 +46,33 @@
       <small>Source: <a href="https://github.com/CityRiverSpaces/rcrisp/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.2.0" id="rcrisp-020---2025-08-21">rcrisp 0.2.0 - 2025-08-21<a class="anchor" aria-label="anchor" href="#rcrisp-020---2025-08-21"></a></h2>
+<div class="section level3">
+<h3 id="added-0-2-0">Added<a class="anchor" aria-label="anchor" href="#added-0-2-0"></a></h3>
+<ul><li>Package-level documentation has been added.</li>
+<li>Assertions using the <code>checkmate</code> package were added to input parameters throughout the package.</li>
+<li>Examples were expanded to demonstrates the use of all parameters.</li>
+<li>Delineated valley has been added to the <code>bucharest_dambovita</code> example package data.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="fixed-0-2-0">Fixed<a class="anchor" aria-label="anchor" href="#fixed-0-2-0"></a></h3>
+<ul><li>Classes of input parameters and return values were specified.</li>
+<li>
+<code><a href="../reference/get_osm_example_data.html">get_osm_example_data()</a></code> and <code><a href="../reference/get_dem_example_data.html">get_dem_example_data()</a></code> fail gracefully in examples, vignettes and tests, that is, return a message and NULL, if internet resource is not available.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="changed-0-2-0">Changed<a class="anchor" aria-label="anchor" href="#changed-0-2-0"></a></h3>
+<ul><li>Replaced <code><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply()</a></code> with <code><a href="https://rdrr.io/r/base/lapply.html" class="external-link">vapply()</a></code> throughout the package for improved type safety.</li>
+<li>Updated package metadata in <code>DESCRIPTION</code> and <code>codemeta.json</code>
+</li>
+<li>Organized function reference page into meaningful sections.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="removed-0-2-0">Removed<a class="anchor" aria-label="anchor" href="#removed-0-2-0"></a></h3>
+<ul><li>The <code>dem_to_ceg()</code> function was removed from the package as it is not used.</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.4" id="version-014---2025-07-04">Version 0.1.4 - 2025-07-04<a class="anchor" aria-label="anchor" href="#version-014---2025-07-04"></a></h2><p class="text-muted">CRAN release: 2025-07-04</p>
 <div class="section level3">

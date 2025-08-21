@@ -15,7 +15,7 @@ that are included in clean_network()."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">rcrisp</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -90,35 +90,13 @@ only injected to the closest edge.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">bucharest_osm</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_osm_example_data.html">get_osm_example_data</a></span><span class="op">(</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># interactive()</span></span></span>
+<span class="r-in"><span><span class="va">bucharest_osm</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_osm_example_data.html">get_osm_example_data</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">edges</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html" class="external-link">bind_rows</a></span><span class="op">(</span><span class="va">bucharest_osm</span><span class="op">$</span><span class="va">streets</span>,</span></span>
 <span class="r-in"><span>                          <span class="va">bucharest_osm</span><span class="op">$</span><span class="va">railways</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">network</span> <span class="op">&lt;-</span> <span class="fu">sfnetworks</span><span class="fu">::</span><span class="fu"><a href="https://luukvdmeer.github.io/sfnetworks/reference/as_sfnetwork.html" class="external-link">as_sfnetwork</a></span><span class="op">(</span><span class="va">edges</span>, directed <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">flatten_network</span><span class="op">(</span><span class="va">network</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"># A sfnetwork with</span> <span style="color: #555555;">9350</span> <span style="color: #555555;">nodes and</span> <span style="color: #555555;">9684</span> <span style="color: #555555;">edges</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">#</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"># CRS: </span> <span style="color: #555555;">WGS 84 / UTM zone 35N</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">#</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"># An undirected multigraph with 937 components with spatially explicit edges</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">#</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Node data: 9,350 × 1 (active)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                 geom</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;POINT [m]&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> (427899.3 4924401)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> (428081.7 4924019)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> (427853.8 4924451)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> (427667.9 4924312)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> (427348.7 4924016)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> (427390.9 4923984)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 9,344 more rows</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">#</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Edge data: 9,684 × 4</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    from    to type                                                          geom</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                             <span style="color: #949494; font-style: italic;">&lt;LINESTRING [m]&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>     1     2 tertiary (427899.3 4924401, 427901.6 4924397, 427911.8 4924379, 4…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span>     3     4 tertiary (427853.8 4924451, 427842.3 4924442, 427797.7 4924408, 4…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span>     5     6 primary  (427348.7 4924016, 427360 4924008, 427382.4 4923991, 427…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 9,681 more rows</span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">rcrisp</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -107,6 +107,12 @@ calculated.</p>
 <span></span>
 <span><span class="va">bucharest_osm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_osm_example_data.html">get_osm_example_data</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">bucharest_dem</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_dem_example_data.html">get_dem_example_data</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/any.html" class="external-link">any</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">bucharest_osm</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">bucharest_dem</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"NOTE: Example data was not found; "</span>,</span>
+<span>      <span class="st">"subsequent code chunks will be skipped.\n"</span>, sep <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
+<span>  <span class="fu">knitr</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/knitr/man/opts_chunk.html" class="external-link">opts_chunk</a></span><span class="op">$</span><span class="fu">set</span><span class="op">(</span>eval <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
 <span></span>
 <span><span class="co"># Load data for valley delineation</span></span>
 <span><span class="va">dem</span> <span class="op">&lt;-</span> <span class="va">bucharest_dem</span></span>
