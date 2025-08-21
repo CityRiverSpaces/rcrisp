@@ -2,7 +2,7 @@
 % Please edit documentation in R/network.R
 \name{as_network}
 \alias{as_network}
-\title{Create a network from a collection of line strings.}
+\title{Create a network from a collection of line strings}
 \usage{
 as_network(edges, flatten = TRUE, clean = TRUE)
 }
@@ -20,7 +20,7 @@ network (see \code{\link[=clean_network]{clean_network()}} for the description o
 An \code{\link[sfnetworks:sfnetwork]{sfnetworks::sfnetwork}} object
 }
 \description{
-Create a network from a collection of line strings.
+Create a network from a collection of line strings
 }
 \examples{
 edges <- sf::st_sfc(

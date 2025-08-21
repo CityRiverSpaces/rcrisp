@@ -2,7 +2,7 @@
 % Please edit documentation in R/delineate.R
 \name{delineate}
 \alias{delineate}
-\title{Delineate a corridor around a river.}
+\title{Delineate a corridor around a river}
 \usage{
 delineate(
   city_name,
@@ -84,7 +84,7 @@ A list with the corridor, segments, and riverspace geometries as
 \code{\link[sf:sfc]{sf::sfc_POLYGON}} objects.
 }
 \description{
-Delineate a corridor around a river.
+Delineate a corridor around a river
 }
 \examples{
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
