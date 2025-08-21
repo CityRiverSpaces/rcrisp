@@ -21,6 +21,12 @@ library(sf)
 
 bucharest_osm <- get_osm_example_data()
 bucharest_dem <- get_dem_example_data()
+
+if (any(is.null(bucharest_osm), is.null(bucharest_dem))) {
+  cat("NOTE: Example data was not found; ",
+      "subsequent code chunks will be skipped.\n", sep = "")
+  knitr::opts_chunk$set(eval = FALSE)
+}
 ```
 
 In this notebook we explore how to delineate an urban river corridor using river Dâmbovița in Bucharest, Romania. We will use OpenStreetMap (OSM) data, first from the Overpass API and then from a local file.
@@ -42,14 +48,16 @@ We start by demonstrating the use of the all-in-one `delineate()` function which
 
 The `delineate()` function carries out the above steps in one and returns a list that by default contains the following output elements: `corridor`, `segments`, and `riverspace`.
 
-```{r delineate, fig.alt="Delineation of the corridor of River Dâmbovița in Bucharest"}
+```{r delineate, eval=FALSE}
 bucharest_dambovita <- delineate(
   city_name,
   river_name,
   segments = TRUE,
   riverspace = TRUE
 )
+```
 
+```{r plot, fig.alt="Delineation of the corridor of River Dâmbovița in Bucharest"}
 # Plot all layers within the extent of the delineated corridor
 bbox <- st_bbox(bucharest_dambovita$corridor)
 plot(bucharest_dambovita$valley, col = "grey", border = NA,

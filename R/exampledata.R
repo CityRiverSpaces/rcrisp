@@ -106,7 +106,7 @@ retry <- function(func, ..., max_retries = 5, delay = 2) {
     result <- tryCatch({
       func(...)  # Call the function with arguments
     }, error = function(e) {
-      warning(sprintf("Attempt %d failed: %s", attempt, e$message))
+      message(sprintf("Attempt %d failed: %s", attempt, e$message))
       NULL
     })
 
@@ -119,7 +119,8 @@ retry <- function(func, ..., max_retries = 5, delay = 2) {
     attempt <- attempt + 1
   }
 
-  stop("Function failed after multiple attempts.")
+  message("Function failed after multiple attempts.")
+  NULL
 }
 
 #' Example data files that can be used in examples and tests are stored in

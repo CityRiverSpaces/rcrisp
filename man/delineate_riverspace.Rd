@@ -30,8 +30,8 @@ Riverspace as object of class \code{\link[sf:sfc]{sf::sfc_POLYGON}}
 Delineate the space surrounding a river
 }
 \examples{
-\dontrun{
-  bucharest_osm <- get_osm_example_data()
-  delineate_riverspace(bucharest_osm$river_surface, bucharest_osm$buildings)
-}
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+bucharest_osm <- get_osm_example_data()
+delineate_riverspace(bucharest_osm$river_surface, bucharest_osm$buildings)
+\dontshow{\}) # examplesIf}
 }

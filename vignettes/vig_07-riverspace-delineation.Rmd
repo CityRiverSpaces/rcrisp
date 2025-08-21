@@ -21,6 +21,12 @@ library(sf)
 
 bucharest_osm <- get_osm_example_data()
 bucharest_dem <- get_dem_example_data()
+
+if (any(is.null(bucharest_osm), is.null(bucharest_dem))) {
+  cat("NOTE: Example data was not found; ",
+      "subsequent code chunks will be skipped.\n", sep = "")
+  knitr::opts_chunk$set(eval = FALSE)
+}
 ```
 
 River space delineation is a delineation step that uses the river and buildings as input to generate a polygon representing the space between the river and the first line of buildings. We will use River Dâmbovița of Bucharest as the river and the buildings surrounding it as input.
