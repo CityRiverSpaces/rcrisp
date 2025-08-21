@@ -106,7 +106,7 @@ plot(bucharest_osm$boundary, border = "red", add = TRUE)
 
 Individual layers can be written to disk before being read in for delineation.
 
-```{r}
+```{r, eval=FALSE}
 walk2(
   bucharest_osm,
   names(bucharest_osm),
