@@ -38,7 +38,7 @@ library(purrr)
 city_name <- "Bucharest"
 river_name <- "Dâmbovița"
 crs <- 32635  # EPSG code for UTM zone 35N, where Bucharest is located
-network_buffer <- 3000  # in m, buffer around the river to get the streets and railways
+network_buffer <- 3000  # in m, buffer around the river to get the network
 buildings_buffer <- 100  # in m, buffer around the river to get the buildings
 ```
 
