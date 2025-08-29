@@ -592,5 +592,9 @@ match_osm_name <- function(osm_data, match) {
   includes_match <- \(x) grepl(match, x, ignore.case = TRUE)
   # Apply function above to all columns whose name starts with "name", thus
   # checking for matches in all listed languages
-  dplyr::filter(osm_data, dplyr::if_any(dplyr::matches("name"), includes_match))
+  osm_data |>
+    dplyr::filter(dplyr::if_any(dplyr::matches("name"), includes_match)) |>
+    # Make sure that exact match is in the first row(s)
+    dplyr::arrange(dplyr::desc(dplyr::if_any(dplyr::matches("name"),
+                                             ~ tolower(.) == tolower(match))))
 }
