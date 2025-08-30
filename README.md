@@ -18,6 +18,21 @@ status](https://www.r-pkg.org/badges/version/rcrisp)](https://CRAN.R-project.org
 rcrisp provides tools to automate the morphological delineation of
 riverside urban areas following the CRiSp (City River Spaces) method.
 
+- Website: <https://cityriverspaces.github.io/rcrisp/>
+- Get started (purpose & workflow):
+  `vignette("getting-started", package = "rcrisp")`
+
+## Workflow at a glance
+
+1.  (Optionally) get OSM base layers
+2.  Run `delineate()` to compute corridor and segments
+3.  Visualize/export results
+
+See the [Getting started
+vignette](https://cityriverspaces.github.io/rcrisp/articles/getting-started.html)
+for an end-to-end example, data requirements, and indication of use
+cases.
+
 ## Installation
 
 You can install the released version of rcrisp from
