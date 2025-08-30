@@ -24,14 +24,16 @@ riverside urban areas following the CRiSp (City River Spaces) method.
 
 ## Workflow at a glance
 
-1.  (Optionally) get OSM base layers
-2.  Run `delineate()` to compute corridor and segments
-3.  Visualize/export results
+1.  (Optionally) get OSM and DEM base layers
+2.  Run the all-in-one `delineate()` or delineation-specific
+    `delineate_*()` functions to compute valley, corridor, segments,
+    and/or river space
+3.  Visualize/export results for downstream analysis
 
 See the [Getting started
 vignette](https://cityriverspaces.github.io/rcrisp/articles/getting-started.html)
-for an end-to-end example, data requirements, and indication of use
-cases.
+for further details about the purpose of the package, an end-to-end
+example, data requirements, and indication of use cases.
 
 ## Installation
 
@@ -62,22 +64,20 @@ city_name <- "Bucharest"
 river_name <- "Dâmbovița"
 epsg_code <- 32635
 
+# Delineate river corridor
+bd <- delineate(city_name, river_name, segments = TRUE)
+
 # Get base layer for plotting
 bb <- get_osm_bb(city_name)
 streets <- get_osm_streets(bb, epsg_code)$geometry
 railways <- get_osm_railways(bb, epsg_code)$geometry
 
-# Delineate river corridor
-bd <- delineate(city_name, river_name, segments = TRUE)
-corridor <- bd$corridor
-segments <- bd$segments
-
 # Plot results
-plot(corridor)
+plot(bd$corridor)
 plot(railways, col = "darkgrey", add = TRUE, lwd = 0.5)
 plot(streets, add = TRUE)
-plot(segments, border = "orange", add = TRUE, lwd = 3)
-plot(corridor, border = "red", add = TRUE, lwd = 3)
+plot(bd$segments, border = "orange", add = TRUE, lwd = 3)
+plot(bd$corridor, border = "red", add = TRUE, lwd = 3)
 ```
 
 <img src="man/figures/README-example-1.png" width="100%" />
