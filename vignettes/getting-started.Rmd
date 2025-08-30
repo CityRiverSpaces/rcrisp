@@ -16,10 +16,6 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
-library(rcrisp)
-```
-
 # What is `rcrisp`?
 
 `rcrisp` automates the morphological delineation of riverside urban areas following a method developed by @forgaci2018. It overcomes the challenge of arbitrary urban river corridor delineation by providing a reliable workflow to produce morphologically grounded spatial analytical units.
