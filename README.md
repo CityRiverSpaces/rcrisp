@@ -20,11 +20,28 @@ Directory](https://img.shields.io/badge/rsd-rcrisp-00a3e3.svg)](https://research
 <!-- badges: end -->
 
 rcrisp provides tools to automate the morphological delineation of
-riverside urban areas following the CRiSp (City River Spaces) method.
+riverside urban areas following a method developed in Forgaci ([2018,
+pp. 88–89](#ref-forgaci2018)). The method is based on the premise that
+analyses of riverside urban phenomena are often done without a clear and
+consistent spatial definition of the area of interest and that a
+morphological delineation can provide a more objective and comparable
+approach.
 
-- Website: <https://cityriverspaces.github.io/rcrisp/>
-- Get started (purpose & workflow):
-  `vignette("getting-started", package = "rcrisp")`
+Accordingly, the method proposes a hierarchical delineation of four
+spatial units: the river valley, the river corridor, the corridor
+segments and the river space. These units are defined based on the
+combined morphologies of the river valley and urban form. The resulting
+delineations can be used in any downstream analysis of riverside urban
+areas that can benefit from consistent and comparable spatial units,
+including land use, accessibility, and ecosystem services assessments.
+
+The package includes functions to delineate the river valley, the river
+corridor, the corridor segments, and the river space (i.e., the area
+between the riverbanks and the first line of buildings) as well as an
+all-in-one function that runs all desired delineations. The package also
+includes functions to download and preprocess OpenStreetMap (OSM) and
+global Digital Elevation Model (DEM) data, which are required as input
+data for the delineation process.
 
 ## Workflow at a glance
 
