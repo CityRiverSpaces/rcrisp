@@ -88,7 +88,7 @@ epsg_code <- 32635
 # Delineate river corridor
 bd <- delineate(city_name, river_name, segments = TRUE)
 
-# Get base layer for plotting
+# Get base layers for plotting
 bb <- get_osm_bb(city_name)
 streets <- get_osm_streets(bb, epsg_code)$geometry
 railways <- get_osm_railways(bb, epsg_code)$geometry
