@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Added
 
+- Overall workflow was documented in a new vignette and the package README  
 - Badges to Research Software Directory and R-universe were added
 
 # rcrisp 0.2.0 - 2025-08-21

@@ -10,6 +10,7 @@ articles:
 - title: Articles
   navbar: ~
   contents:
+  - getting-started
   - vig_01-method
   - vig_02-getting-osm-data
   - vig_03-network-preparation
@@ -18,7 +19,12 @@ articles:
   - vig_06-corridor-segmentation
   - vig_07-riverspace-delineation
 navbar:
+  structure:
+    left: [reference, getting-started, articles, news]
   components:
+    getting-started:
+      text: Getting started
+      href: articles/getting-started.html
     articles:
       text: Articles
       menu:
