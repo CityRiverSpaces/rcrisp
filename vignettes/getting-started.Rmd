@@ -37,9 +37,7 @@ In short, given a city name and a river name, it:
 1. Acquire base data:
    - OpenStreetMap layers using `get_osm_*()` functions
    - (Optional) global Digital Elevation Model data
-2. Delineate the river valley, corridor, segments and/or riverspace with the
-   all-in-one `delineate()` function or with the dedicated `delineate_*()`
-   functions
+2. Delineate the river valley, corridor, segments and/or riverspace with the all-in-one `delineate()` function or with the dedicated `delineate_*()` functions
 3. Visualize, validate, and export results
 
 # Data considerations
