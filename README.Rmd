@@ -1,5 +1,8 @@
 ---
 output: github_document
+bibliography: vignettes/references.bib
+csl: inst/csl/apa.csl
+link-citations: true
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -89,3 +92,5 @@ rcrisp is in a stable state of development, with some degree of active subsequen
 We also look very much forward to contributions. See the [Contributing Guide](https://github.com/CityRiverSpaces/rcrisp/blob/main/.github/CONTRIBUTING.md) for further details.
 
 This package is released with a [Contributor Code of Conduct](https://github.com/CityRiverSpaces/rcrisp/blob/main/.github/CODE_OF_CONDUCT.md). By contributing to this project you agree to abide by its terms.
+
+## References

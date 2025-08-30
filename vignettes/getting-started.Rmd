@@ -6,6 +6,8 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 bibliography: references.bib
+csl: ../inst/csl/apa.csl
+link-citations: true
 ---
 
 ```{r, include = FALSE}
@@ -18,7 +20,7 @@ knitr::opts_chunk$set(
 
 # What is `rcrisp`?
 
-`rcrisp` automates the morphological delineation of riverside urban areas following a method developed by @forgaci2018. It overcomes the challenge of arbitrary urban river corridor delineation by providing a reliable workflow to produce morphologically grounded spatial analytical units.
+`rcrisp` automates the morphological delineation of riverside urban areas following a method developed by @forgaci2018 [pp. 88-89]. It overcomes the challenge of arbitrary urban river corridor delineation by providing a reliable workflow to produce morphologically grounded spatial analytical units.
 
 Such spatial units enable integrated local analyses (many different layers within one case) and large-scale cross-case analyses (many cases using comparable spatial units) in a wide range of domains of application, such as urban planning, environmental management, public space design, and disaster risk reduction.
 

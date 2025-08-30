@@ -115,3 +115,18 @@ for further details.
 This package is released with a [Contributor Code of
 Conduct](https://github.com/CityRiverSpaces/rcrisp/blob/main/.github/CODE_OF_CONDUCT.md).
 By contributing to this project you agree to abide by its terms.
+
+## References
+
+<div id="refs" class="references csl-bib-body hanging-indent"
+entry-spacing="0" line-spacing="2">
+
+<div id="ref-forgaci2018" class="csl-entry">
+
+Forgaci, C. (2018). *Integrated urban river corridors: Spatial design
+for social-ecological integration in bucharest and beyond* \[PhD
+thesis\]. <https://doi.org/10.7480/abe.2018.31>
+
+</div>
+
+</div>
