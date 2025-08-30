@@ -28,22 +28,23 @@ In short, given a city name and a river name, it:
 - (optionally) segments the corridor; and
 - (optionally) delineates the river space.
 
-# Workflow at a glance
+# Workflow
 
 1. Acquire base data:
    - OpenStreetMap layers using `get_osm_*()` functions
    - (Optional) global Digital Elevation Model data
 2. Delineate the river valley, corridor, segments and/or riverspace with the all-in-one `delineate()` function or with the dedicated `delineate_*()` functions
-3. Visualize, validate, and export results
+3. Visualize, validate, and export results for use in downstream analyses
 
 # Data considerations
 
 - Use an appropriate projected CRS (e.g., a relevant UTM EPSG code).
 - Verify OSM coverage and elevation availability for your area.
 - Spatial (street and railway) network completeness and elevation data quality may affect corridor and segment accuracy.
+- The `delineate()` function retrieves OSM data and global DEM data by default, so no additional data retrieval is needed.
 - The `delineate_*()` functions allow for any data input, not only OSM and global DEM data.
 
-# End-to-end example
+# Example
 
 ```{r}
 library(rcrisp)
