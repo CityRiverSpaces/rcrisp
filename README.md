@@ -13,6 +13,10 @@ developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.re
 [![CRAN
 status](https://www.r-pkg.org/badges/version/rcrisp)](https://CRAN.R-project.org/package=rcrisp)
 [![](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
+[![name status
+badge](https://cityriverspaces.r-universe.dev/badges/:name)](https://cityriverspaces.r-universe.dev/)
+[![Research Software
+Directory](https://img.shields.io/badge/rsd-rcrisp-00a3e3.svg)](https://research-software-directory.org/software/crisp)
 <!-- badges: end -->
 
 rcrisp provides tools to automate the morphological delineation of
