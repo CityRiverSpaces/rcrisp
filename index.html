@@ -32,6 +32,7 @@
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
 <li class="nav-item"><a class="nav-link" href="reference/index.html">Reference</a></li>
+<li class="nav-item"><a class="nav-link" href="articles/getting-started.html">Getting started</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
@@ -67,7 +68,19 @@
 </h1></div>
 <!-- badges: start -->
 
-<p>rcrisp provides tools to automate the morphological delineation of riverside urban areas following the CRiSp (City River Spaces) method.</p>
+<p>rcrisp provides tools to automate the morphological delineation of riverside urban areas following a method developed in Forgaci (<a href="#ref-forgaci2018">2018, pp. 88–89</a>). The method is based on the premise that analyses of riverside urban phenomena are often done without a clear and consistent spatial definition of the area of interest and that a morphological delineation can provide a more objective and comparable approach.</p>
+<p>Accordingly, the method proposes a hierarchical delineation of four spatial units: the river valley, the river corridor, the corridor segments and the river space. These units are defined based on the combined morphologies of the river valley and urban form. The resulting delineations can be used in any downstream analysis of riverside urban areas that can benefit from consistent and comparable spatial units, including land use, accessibility, and ecosystem services assessments.</p>
+<p>The package includes functions to delineate the river valley, the river corridor, the corridor segments, and the river space (i.e., the area between the riverbanks and the first line of buildings) as well as an all-in-one function that runs all desired delineations. The package also includes functions to download and preprocess OpenStreetMap (OSM) and global Digital Elevation Model (DEM) data, which are required as input data for the delineation process.</p>
+<div class="section level2">
+<h2 id="workflow-at-a-glance">Workflow at a glance<a class="anchor" aria-label="anchor" href="#workflow-at-a-glance"></a>
+</h2>
+<ol style="list-style-type: decimal">
+<li>(Optionally) get OSM and DEM base layers</li>
+<li>Run the all-in-one <code><a href="reference/delineate.html">delineate()</a></code> or delineation-specific <code>delineate_*()</code> functions to compute valley, corridor, segments, and/or river space</li>
+<li>Visualize/export results for downstream analysis</li>
+</ol>
+<p>See the <a href="https://cityriverspaces.github.io/rcrisp/articles/getting-started.html">Getting started vignette</a> for further details about the purpose of the package, an end-to-end example, data requirements, and indication of use cases.</p>
+</div>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
@@ -91,22 +104,20 @@
 <span><span class="va">river_name</span> <span class="op">&lt;-</span> <span class="st">"Dâmbovița"</span></span>
 <span><span class="va">epsg_code</span> <span class="op">&lt;-</span> <span class="fl">32635</span></span>
 <span></span>
-<span><span class="co"># Get base layer for plotting</span></span>
+<span><span class="co"># Delineate river corridor</span></span>
+<span><span class="va">bd</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/delineate.html">delineate</a></span><span class="op">(</span><span class="va">city_name</span>, <span class="va">river_name</span>, segments <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Get base layers for plotting</span></span>
 <span><span class="va">bb</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_osm_bb.html">get_osm_bb</a></span><span class="op">(</span><span class="va">city_name</span><span class="op">)</span></span>
 <span><span class="va">streets</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_osm_streets.html">get_osm_streets</a></span><span class="op">(</span><span class="va">bb</span>, <span class="va">epsg_code</span><span class="op">)</span><span class="op">$</span><span class="va">geometry</span></span>
 <span><span class="va">railways</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_osm_railways.html">get_osm_railways</a></span><span class="op">(</span><span class="va">bb</span>, <span class="va">epsg_code</span><span class="op">)</span><span class="op">$</span><span class="va">geometry</span></span>
 <span></span>
-<span><span class="co"># Delineate river corridor</span></span>
-<span><span class="va">bd</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/delineate.html">delineate</a></span><span class="op">(</span><span class="va">city_name</span>, <span class="va">river_name</span>, segments <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="va">corridor</span> <span class="op">&lt;-</span> <span class="va">bd</span><span class="op">$</span><span class="va">corridor</span></span>
-<span><span class="va">segments</span> <span class="op">&lt;-</span> <span class="va">bd</span><span class="op">$</span><span class="va">segments</span></span>
-<span></span>
 <span><span class="co"># Plot results</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">corridor</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">bd</span><span class="op">$</span><span class="va">corridor</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">railways</span>, col <span class="op">=</span> <span class="st">"darkgrey"</span>, add <span class="op">=</span> <span class="cn">TRUE</span>, lwd <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">streets</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">segments</span>, border <span class="op">=</span> <span class="st">"orange"</span>, add <span class="op">=</span> <span class="cn">TRUE</span>, lwd <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">corridor</span>, border <span class="op">=</span> <span class="st">"red"</span>, add <span class="op">=</span> <span class="cn">TRUE</span>, lwd <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">bd</span><span class="op">$</span><span class="va">segments</span>, border <span class="op">=</span> <span class="st">"orange"</span>, add <span class="op">=</span> <span class="cn">TRUE</span>, lwd <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">bd</span><span class="op">$</span><span class="va">corridor</span>, border <span class="op">=</span> <span class="st">"red"</span>, add <span class="op">=</span> <span class="cn">TRUE</span>, lwd <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-example-1.png" width="100%"></p>
 </div>
 <div class="section level2">
@@ -115,6 +126,15 @@
 <p>rcrisp is in a stable state of development, with some degree of active subsequent development as envisioned by the primary authors.</p>
 <p>We also look very much forward to contributions. See the <a href="https://github.com/CityRiverSpaces/rcrisp/blob/main/.github/CONTRIBUTING.md" class="external-link">Contributing Guide</a> for further details.</p>
 <p>This package is released with a <a href="https://github.com/CityRiverSpaces/rcrisp/blob/main/.github/CODE_OF_CONDUCT.md" class="external-link">Contributor Code of Conduct</a>. By contributing to this project you agree to abide by its terms.</p>
+</div>
+<div class="section level2">
+<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h2>
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0" line-spacing="2">
+<div id="ref-forgaci2018" class="csl-entry">
+Forgaci, C. (2018). <em>Integrated urban river corridors: Spatial design for social-ecological integration in bucharest and beyond</em> [PhD thesis]. <a href="https://doi.org/10.7480/abe.2018.31" class="external-link uri">https://doi.org/10.7480/abe.2018.31</a>
+</div>
+</div>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">
