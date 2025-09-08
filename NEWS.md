@@ -10,6 +10,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Overall workflow was documented in a new vignette and the package README  
 - Badges to Research Software Directory and R-universe were added
 
+## Fixed
+
+- Exact matches in `match_osm_name()` are returned before partial matches.
+
 # rcrisp 0.2.0 - 2025-08-21
 
 ## Added
