@@ -27,6 +27,7 @@ mock_city_boundary_geom <- sf::st_as_sfc(bb_bucharest)
 mock_city_boundary <- sf::st_sf(
   name = "Bucharest",
   `name:ro` = "București",
+  admin_level = "4",
   geometry = mock_city_boundary_geom
 )
 
