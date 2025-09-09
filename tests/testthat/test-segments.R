@@ -177,7 +177,7 @@ test_that("Errors are raised for wrong input types to segmentation", {
   )
   river <- sf::st_sfc(sf::st_linestring(cbind(c(5000, -5000), c(0, 0))),
                       crs = 32635)
-  # corridor must be of class `sfc_POLYGON`
+  # corridor must be of class `sfc_POLYGON` or `sfc_MULTIPOLYGON`
   expect_error(delineate_segments(corridor = river, network, river),
                "Assertion on 'corridor' failed")
   # network must be of class `sfnetwork`
