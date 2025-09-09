@@ -44,7 +44,7 @@
 delineate_segments <- function(corridor, network, river,
                                angle_threshold = 100) {
   # Check input
-  checkmate::assert_class(corridor, "sfc_POLYGON")
+  checkmate::assert_multi_class(corridor, c("sfc_POLYGON", "sfc_MULTIPOLYGON"))
   checkmate::assert_class(network, "sfnetwork")
   checkmate::assert_multi_class(river, c("sf", "sfc"))
   checkmate::assert_numeric(angle_threshold,
