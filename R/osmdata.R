@@ -162,14 +162,17 @@ get_osmdata <- function(
   if (is.null(crs)) crs <- get_utm_zone(bb)
 
   # Retrieve the river center line and surface
-  river <- get_osm_river(
+  river_centerline <- get_osm_river_centerline(
+    bb, river_name, crs = crs, force_download = force_download
+  )
+  river_surface <- get_osm_river_surface(
     bb, river_name, crs = crs, force_download = force_download
   )
 
   osm_data <- list(
     bb = bb,
-    river_centerline = river$centerline,
-    river_surface = river$surface
+    river_centerline = river_centerline,
+    river_surface = river_surface
   )
 
   # Retrieve streets and railways based on the aoi
@@ -283,7 +286,7 @@ get_osm_city_boundary <- function(bb, city_name, crs = NULL, multiple = FALSE,
   city_boundary
 }
 
-#' Get the river centreline and surface from OpenStreetMap
+#' Get the river centreline from OpenStreetMap
 #'
 #' @param bb Bounding box of class `bbox`
 #' @param river_name The name of the river as character vector of length 1,
@@ -292,14 +295,13 @@ get_osm_city_boundary <- function(bb, city_name, crs = NULL, multiple = FALSE,
 #' @param force_download Download data even if cached data is available
 #'
 #' @return A list with the river centreline as object of class
-#'   [`sf::sfc_LINESTRING`] or [`sf::sfc_MULTILINESTRING`] and river surface of
-#'   class [`sf::sfc_POLYGON`] or [`sf::sfc_MULTIPOLYGON`].
+#'   [`sf::sfc_LINESTRING`] or [`sf::sfc_MULTILINESTRING`].
 #' @export
 #'
 #' @examplesIf interactive()
 #' bb <- get_osm_bb("Bucharest")
 #' crs <- get_utm_zone(bb)
-#' get_osm_river(bb = bb, river_name = "Dâmbovița", crs = crs,
+#' get_osm_river_centerline(bb = bb, river_name = "Dâmbovița", crs = crs,
 #'               force_download = FALSE)
 #' @srrstats {G2.10} This function uses `sf::st_geometry()` to extract
 #'   geometry columns from `sf` objects in `dplyr` piplines. This is used when
@@ -308,10 +310,10 @@ get_osm_city_boundary <- function(bb, city_name, crs = NULL, multiple = FALSE,
 #'   by `sf::st_geometry()` is a simple feature geometry list column of class
 #'   `sfc`.
 #' @srrstats {SP4.0, SP4.0b, SP4.2} The return value is a list an object of
-#'   class [`sf::sfc_LINESTRING`] or [`sf::sfc_MULTILINESTRING`] and an object
-#'   of class [`sf::sfc_POLYGON`] or [`sf::sfc_MULTIPOLYGON`], explicitly
+#'   class [`sf::sfc_LINESTRING`] or [`sf::sfc_MULTILINESTRING`], explicitly
 #'   documented as such.
-get_osm_river <- function(bb, river_name, crs = NULL, force_download = FALSE) {
+get_osm_river_centerline <- function(bb, river_name, crs = NULL,
+                                     force_download = FALSE) {
   # Check input
   checkmate::assert_character(river_name, len = 1)
   crs <- as_crs(crs)
@@ -347,9 +349,48 @@ get_osm_river <- function(bb, river_name, crs = NULL, force_download = FALSE) {
     sprintf("No river geometry found for %s", river_name)
   )
 
+  if (!is.null(crs)) river_centerline <- sf::st_transform(river_centerline, crs)
+
+  river_centerline
+}
+
+#' Get the river surface from OpenStreetMap
+#'
+#' @param bb Bounding box of class `bbox`
+#' @param river_name The name of the river as character vector of length 1,
+#'   case-sensitive.
+#' @param crs Coordinate reference system as EPSG code
+#' @param force_download Download data even if cached data is available
+#'
+#' @return A list with the river surface of class [`sf::sfc_POLYGON`] or
+#'   [`sf::sfc_MULTIPOLYGON`].
+#' @export
+#'
+#' @examplesIf interactive()
+#' bb <- get_osm_bb("Bucharest")
+#' crs <- get_utm_zone(bb)
+#' get_osm_river_surface(bb = bb, river_name = "Dâmbovița", crs = crs,
+#'               force_download = FALSE)
+#' @srrstats {G2.10} This function uses `sf::st_geometry()` to extract
+#'   geometry columns from `sf` objects in `dplyr` pipelines. This is used when
+#'   only geometry information is needed from that point onwards and all other
+#'   attributes (i.e., columns) can be safely discarded. The object returned
+#'   by `sf::st_geometry()` is a simple feature geometry list column of class
+#'   `sfc`.
+#' @srrstats {SP4.0, SP4.0b, SP4.2} The return value is an object
+#'   of class [`sf::sfc_POLYGON`] or [`sf::sfc_MULTIPOLYGON`], explicitly
+#'   documented as such.
+get_osm_river_surface <- function(bb, river_name, crs = NULL,
+                                  force_download = FALSE) {
+  # Check input
+  checkmate::assert_character(river_name, len = 1)
+  crs <- as_crs(crs)
+  checkmate::assert_logical(force_download, len = 1)
+
   # Get the river surface
   river_surface <- osmdata_as_sf("natural", "water", bb,
                                  force_download = force_download)
+
   river_surface_polygons <- river_surface$osm_polygons
   if (!is.null(river_surface$osm_multipolygons)) {
     river_surface_polygons <- dplyr::bind_rows(river_surface_polygons,
@@ -363,12 +404,13 @@ get_osm_river <- function(bb, river_name, crs = NULL, force_download = FALSE) {
     sf::st_filter(river_centerline, .predicate = sf::st_intersects) |>
     sf::st_union()
 
-  if (!is.null(crs)) {
-    river_centerline <- sf::st_transform(river_centerline, crs)
-    river_surface <- sf::st_transform(river_surface, crs)
-  }
+  if (sf::st_is_empty(river_surface)) stop(
+    sprintf("No river surface geometry found for %s", river_name)
+  )
 
-  list(centerline = river_centerline, surface = river_surface)
+  if (!is.null(crs)) river_surface <- sf::st_transform(river_surface, crs)
+
+  river_surface
 }
 
 #' Get OpenStreetMap streets
@@ -554,7 +596,9 @@ get_osm_buildings <- function(aoi, crs = NULL, force_download = FALSE) {
 #'
 #' @examplesIf interactive()
 #' bb <- get_osm_bb("Bucharest")
-#' river <- get_osm_river(bb, "Dâmbovița")
+#' river_centerline <- get_osm_river_centerline(bb, "Dâmbovița")
+#' river_surface <- get_osm_river_surface(bb, "Dâmbovița")
+#' river <- list(centerline = river_centerline, surface = river_surface)
 #' get_river_aoi(river = river, city_bbox = bb, buffer_distance = 100)
 #' @srrstats {G2.7} The `river` parameter accepts domain-specific tabular input
 #'   of type `sf`.
