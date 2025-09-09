@@ -193,6 +193,9 @@ corridor_end_points <- function(river_network, spatial_network, regions) {
   inters_reg_2 <- find_intersections(network_2, river_network)
   # Identify common intersections between the two sub-networks
   intersections <- inters_reg_1[inters_reg_1 %in% inters_reg_2]
+  if (length(intersections) == 0) {
+    stop("No river crossings found. Corridor cannot be delineated.")
+  }
   # Make sure they are "POINTS" (no "MULTIPOINTS")
   intersections <- sfheaders::sfc_cast(intersections, "POINT")
 
