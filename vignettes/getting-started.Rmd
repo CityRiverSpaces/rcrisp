@@ -14,7 +14,8 @@ link-citations: true
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  warning = FALSE
+  warning = FALSE,
+  eval = FALSE
 )
 ```
 
