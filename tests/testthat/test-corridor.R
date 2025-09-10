@@ -344,16 +344,23 @@ test_that("Errors are raised for wrong input types to corridor delineation", {
 
 test_that("When river has no crossing, delineation fails with informative
           error.", {
-            river <- sf::st_sfc(sf::st_linestring(cbind(c(-3, 0.5), c(0, 0))),
+            river <- sf::st_sfc(sf::st_linestring(cbind(c(-3, 0.1, 0.6),
+                                                        c(0, 0, 0))),
                                 crs = 32635)
             network_edges <- sf::st_sfc(
-              sf::st_linestring(cbind(c(1, -1), c(-1, -1))),
-              sf::st_linestring(cbind(c(1, -1), c(1, 1))),
-              sf::st_linestring(cbind(c(1, 1), c(1, -1))),
+              sf::st_linestring(matrix(c(3, -1,
+                                         -3, -1),
+                                       ncol = 2, byrow = TRUE)),
+              sf::st_linestring(matrix(c(3, 1,
+                                         -3, 1),
+                                       ncol = 2, byrow = TRUE)),
+              sf::st_linestring(matrix(c(1, 3,
+                                         1, -3),
+                                       ncol = 2, byrow = TRUE)),
               crs = 32635
             )
-            spatial_network <- as_network(network_edges)
+            network <- as_network(network_edges)
 
-            expect_error(delineate_corridor(spatial_network, river),
+            expect_error(delineate_corridor(network, river),
                          "No river crossings found.")
           })
