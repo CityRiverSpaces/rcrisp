@@ -281,3 +281,25 @@ test_that("Partial matches of names are accounted for", {
   # All columns are returned
   expect_equal(ncol(res), 4)
 })
+
+test_that("OSM buildings are retrieved with bounding box as input", {
+  crs <- sf::st_crs("EPSG:32632")
+  aoi <- sf::st_bbox(c(xmin = 1, xmax = 2, ymin = 1, ymax = 2),
+                     crs = crs)
+  mocked_osmdata_response <- list(osm_polygons = sf::st_sf(
+    # id = 1:2,
+    building = c("building", "building"),
+    geometry = sf::st_sfc(
+      sf::st_polygon(list(matrix(c(1, 1, 1.5, 1, 1.5, 1.5, 1, 1.5, 1, 1),
+                                 ncol = 2, byrow = TRUE))),
+      sf::st_polygon(list(matrix(c(1.5, 1.5, 2, 1.5, 2, 2, 1.5, 2, 1.5, 1.5),
+                                 ncol = 2, byrow = TRUE)))
+    ),
+    crs = crs
+  ))
+  with_mocked_bindings(osmdata_as_sf = \(...) mocked_osmdata_response, {
+    buildings <- get_osm_buildings(aoi, crs = crs, force_download = FALSE)
+  })
+  expect_equal(nrow(buildings), 2)
+  expect_equal(sf::st_crs(buildings), crs)
+})
