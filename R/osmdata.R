@@ -172,36 +172,28 @@ get_osmdata <- function(
   if (!is.null(network_buffer)) {
     aoi_network <- get_river_aoi(river_centerline, bb,
                                  buffer_distance = network_buffer)
-    osm_data <- append(osm_data, list(aoi_network = aoi_network))
-    osm_data <- append(osm_data, list(
-      streets = get_osm_streets(aoi_network, crs = crs,
-                                force_download = force_download)
-    ))
-    osm_data <- append(osm_data, list(
-      railways = get_osm_railways(aoi_network, crs = crs,
-                                  force_download = force_download)
-    ))
+    osm_data$aoi_network <- aoi_network
+    osm_data$streets <- get_osm_streets(aoi_network, crs = crs,
+                                        force_download = force_download)
+    osm_data$railways <- get_osm_railways(aoi_network, crs = crs,
+                                          force_download = force_download)
   }
 
   # Retrieve buildings and water surface based on a different aoi
   if (!is.null(buildings_buffer)) {
     river_surface <- get_osm_river_surface(bb, river_centerline, crs = crs,
                                            force_download = force_download)
-    osm_data <- append(osm_data, list(river_surface = river_surface))
+    osm_data$river_surface <- river_surface
     aoi_buildings <- get_river_aoi(c(river_centerline, river_surface), bb,
                                    buffer_distance = buildings_buffer)
-    osm_data <- append(osm_data, list(aoi_buildings = aoi_buildings))
-    osm_data <- c(osm_data, list(
-      buildings = get_osm_buildings(aoi_buildings, crs = crs,
-                                    force_download = force_download)
-    ))
+    osm_data$aoi_buildings <- aoi_buildings
+    osm_data$buildings <- get_osm_buildings(aoi_buildings, crs = crs,
+                                            force_download = force_download)
   }
 
   if (city_boundary) {
-    osm_data <- c(osm_data, list(
-      boundary = get_osm_city_boundary(bb, city_name, crs = crs,
-                                       force_download = force_download)
-    ))
+    osm_data$boundary <- get_osm_city_boundary(bb, city_name, crs = crs,
+                                               force_download = force_download)
   }
 
   osm_data
