@@ -188,7 +188,7 @@ get_osmdata <- function(
     river_surface <- get_osm_river_surface(bb, river_centerline, crs = crs,
                                            force_download = force_download)
     osm_data <- append(osm_data, list(river_surface = river_surface))
-    aoi_buildings <- get_river_aoi(river_centerline, river_surface, bb,
+    aoi_buildings <- get_river_aoi(c(river_centerline, river_surface), bb,
                                    buffer_distance = buildings_buffer)
     osm_data <- append(osm_data, list(aoi_buildings = aoi_buildings))
     osm_data <- c(osm_data, list(
@@ -585,7 +585,8 @@ get_osm_buildings <- function(aoi, crs = NULL, force_download = FALSE) {
 #' Get an area of interest (AoI) around a river, cropping to the bounding box of
 #' a city
 #'
-#' @param river A list with the river centreline and surface geometries
+#' @param river A `sf::sf` or `sf::sfc` object with the river centreline and
+#'   (optionally) the river surface geometry
 #' @param city_bbox Bounding box of class `bbox` around the city
 #' @param buffer_distance A positive number representing the buffer size around
 #'   the river in meters. The upper limit is unrestricted.
@@ -610,15 +611,13 @@ get_osm_buildings <- function(aoi, crs = NULL, force_download = FALSE) {
 #'   OpenStreetMap data.
 get_river_aoi <- function(river, city_bbox, buffer_distance) {
   # Check input
-  checkmate::assert_multi_class(river, c("list", "sf", "sfc"))
+  checkmate::assert_multi_class(river, c("sf", "sfc"))
   checkmate::assert_vector(river, min.len = 1)
   checkmate::assert_class(city_bbox, "bbox")
   checkmate::assert_numeric(buffer_distance,
                             len = 1,
                             any.missing = FALSE,
                             finite = TRUE)
-
-  river <- c(river$centerline, river$surface)
 
   # Make sure crs are the same for cropping with bb
   river <- sf::st_transform(river, sf::st_crs(city_bbox))

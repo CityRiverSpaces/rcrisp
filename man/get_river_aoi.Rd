@@ -8,7 +8,8 @@ a city}
 get_river_aoi(river, city_bbox, buffer_distance)
 }
 \arguments{
-\item{river}{A list with the river centreline and surface geometries}
+\item{river}{A \code{sf::sf} or \code{sf::sfc} object with the river centreline and
+(optionally) the river surface geometry}
 
 \item{city_bbox}{Bounding box of class \code{bbox} around the city}
 
