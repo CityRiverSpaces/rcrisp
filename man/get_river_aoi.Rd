@@ -25,7 +25,9 @@ a city
 \examples{
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 bb <- get_osm_bb("Bucharest")
-river <- get_osm_river(bb, "Dâmbovița")
+river_centerline <- get_osm_river_centerline(bb, "Dâmbovița")
+river_surface <- get_osm_river_surface(bb, "Dâmbovița")
+river <- list(centerline = river_centerline, surface = river_surface)
 get_river_aoi(river = river, city_bbox = bb, buffer_distance = 100)
 \dontshow{\}) # examplesIf}
 }
