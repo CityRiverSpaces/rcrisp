@@ -165,19 +165,13 @@ get_osmdata <- function(
   river_centerline <- get_osm_river_centerline(
     bb, river_name, crs = crs, force_download = force_download
   )
-  river_surface <- get_osm_river_surface(
-    bb, river_name, crs = crs, force_download = force_download
-  )
 
-  osm_data <- list(
-    bb = bb,
-    river_centerline = river_centerline,
-    river_surface = river_surface
-  )
+  osm_data <- list(bb = bb, river_centerline = river_centerline)
 
   # Retrieve streets and railways based on the aoi
   if (!is.null(network_buffer)) {
-    aoi_network <- get_river_aoi(river, bb, buffer_distance = network_buffer)
+    aoi_network <- get_river_aoi(river_centerline, bb,
+                                 buffer_distance = network_buffer)
     osm_data <- append(osm_data, list(aoi_network = aoi_network))
     osm_data <- append(osm_data, list(
       streets = get_osm_streets(aoi_network, crs = crs,
@@ -189,14 +183,19 @@ get_osmdata <- function(
     ))
   }
 
-  # Retrieve buildings based on a different aoi
+  # Retrieve buildings and water surface based on a different aoi
   if (!is.null(buildings_buffer)) {
-    aoi_buildings <- get_river_aoi(river, bb,
+    aoi_buildings <- get_river_aoi(river_centerline, bb,
                                    buffer_distance = buildings_buffer)
     osm_data <- append(osm_data, list(aoi_buildings = aoi_buildings))
     osm_data <- c(osm_data, list(
       buildings = get_osm_buildings(aoi_buildings, crs = crs,
                                     force_download = force_download)
+    ))
+    osm_data <- append(osm_data, list(
+      river_surface = get_osm_river_surface(aoi_buildings, river_centerline,
+                                            crs = crs,
+                                            force_download = force_download)
     ))
   }
 
@@ -294,8 +293,8 @@ get_osm_city_boundary <- function(bb, city_name, crs = NULL, multiple = FALSE,
 #' @param crs Coordinate reference system as EPSG code
 #' @param force_download Download data even if cached data is available
 #'
-#' @return A list with the river centreline as object of class
-#'   [`sf::sfc_LINESTRING`] or [`sf::sfc_MULTILINESTRING`].
+#' @return The river centreline as object of class [`sf::sfc_LINESTRING`] or
+#'   [`sf::sfc_MULTILINESTRING`].
 #' @export
 #'
 #' @examplesIf interactive()
@@ -356,20 +355,21 @@ get_osm_river_centerline <- function(bb, river_name, crs = NULL,
 
 #' Get the river surface from OpenStreetMap
 #'
-#' @param bb Bounding box of class `bbox`
-#' @param river_name The name of the river as character vector of length 1,
-#'   case-sensitive.
+#' @param aoi Area of interest as sf object or bbox
+#' @param river_centerline The river centerline as an object of class
+#'   [`sf::sfc_LINESTRING`] or [`sf::sfc_MULTILINESTRING`]
 #' @param crs Coordinate reference system as EPSG code
 #' @param force_download Download data even if cached data is available
 #'
-#' @return A list with the river surface of class [`sf::sfc_POLYGON`] or
+#' @return The river surface as object of class [`sf::sfc_POLYGON`] or
 #'   [`sf::sfc_MULTIPOLYGON`].
 #' @export
 #'
 #' @examplesIf interactive()
 #' bb <- get_osm_bb("Bucharest")
 #' crs <- get_utm_zone(bb)
-#' get_osm_river_surface(bb = bb, river_name = "Dâmbovița", crs = crs,
+#' river <- get_osm_river_centerline(bb, "Dâmbovița")
+#' get_osm_river_surface(bb = bb, river_centerline = river, crs = crs,
 #'               force_download = FALSE)
 #' @srrstats {G2.10} This function uses `sf::st_geometry()` to extract
 #'   geometry columns from `sf` objects in `dplyr` pipelines. This is used when
@@ -380,15 +380,16 @@ get_osm_river_centerline <- function(bb, river_name, crs = NULL,
 #' @srrstats {SP4.0, SP4.0b, SP4.2} The return value is an object
 #'   of class [`sf::sfc_POLYGON`] or [`sf::sfc_MULTIPOLYGON`], explicitly
 #'   documented as such.
-get_osm_river_surface <- function(bb, river_name, crs = NULL,
+get_osm_river_surface <- function(aoi, river_centerline, crs = NULL,
                                   force_download = FALSE) {
   # Check input
-  checkmate::assert_character(river_name, len = 1)
+  checkmate::assert_multi_class(river_centerline,
+                                c("sfc_LINESTRING", "sfc_MULTILINESTRING"))
   crs <- as_crs(crs)
   checkmate::assert_logical(force_download, len = 1)
 
   # Get the river surface
-  river_surface <- osmdata_as_sf("natural", "water", bb,
+  river_surface <- osmdata_as_sf("natural", "water", aoi,
                                  force_download = force_download)
 
   river_surface_polygons <- river_surface$osm_polygons
@@ -396,17 +397,16 @@ get_osm_river_surface <- function(bb, river_name, crs = NULL,
     river_surface_polygons <- dplyr::bind_rows(river_surface_polygons,
                                                river_surface$osm_multipolygons)
   }
-
+  river <- sf::st_transform(river_centerline,
+                            sf::st_crs(river_surface_polygons))
   river_surface <- river_surface_polygons |>
     sf::st_geometry() |>
     check_invalid_geometry() |> # fix invalid geometries, if any
     sf::st_as_sf() |>
-    sf::st_filter(river_centerline, .predicate = sf::st_intersects) |>
+    sf::st_filter(river, .predicate = sf::st_intersects) |>
     sf::st_union()
 
-  if (sf::st_is_empty(river_surface)) stop(
-    sprintf("No river surface geometry found for %s", river_name)
-  )
+  if (sf::st_is_empty(river_surface)) stop("No river surface geometry found.")
 
   if (!is.null(crs)) river_surface <- sf::st_transform(river_surface, crs)
 
