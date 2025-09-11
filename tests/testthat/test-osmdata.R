@@ -132,16 +132,16 @@ test_that("The correct OSM data elements are retrieved", {
   # verify that the correct elements are returned
   expect_setequal(
     names(osmdata_default),
-    c("bb", "river_centerline", "river_surface", "boundary")
+    c("bb", "river_centerline", "boundary")
   )
   expect_setequal(
     names(osmdata_nobound),
-    c("bb", "river_centerline", "river_surface")
+    c("bb", "river_centerline")
   )
   expect_setequal(
     names(osmdata_network),
     c(
-      "bb", "river_centerline", "river_surface", "boundary", "aoi_network",
+      "bb", "river_centerline", "boundary", "aoi_network",
       "streets", "railways"
     )
   )
