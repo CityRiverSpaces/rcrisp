@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Exact matches in `match_osm_name()` are returned before partial matches.
 - Bug returning county boundary instead of city boundary was fixed.
 - Code chunk with OSM data retrieval was disabled in getting started vignette.
+- `get_osm_buildings()` does not error when given bounding box as input.
 
 # rcrisp 0.2.0 - 2025-08-21
 
