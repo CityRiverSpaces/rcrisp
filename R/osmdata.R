@@ -185,17 +185,15 @@ get_osmdata <- function(
 
   # Retrieve buildings and water surface based on a different aoi
   if (!is.null(buildings_buffer)) {
-    aoi_buildings <- get_river_aoi(river_centerline, bb,
+    river_surface <- get_osm_river_surface(bb, river_centerline, crs = crs,
+                                           force_download = force_download)
+    osm_data <- append(osm_data, list(river_surface = river_surface))
+    aoi_buildings <- get_river_aoi(river_centerline, river_surface, bb,
                                    buffer_distance = buildings_buffer)
     osm_data <- append(osm_data, list(aoi_buildings = aoi_buildings))
     osm_data <- c(osm_data, list(
       buildings = get_osm_buildings(aoi_buildings, crs = crs,
                                     force_download = force_download)
-    ))
-    osm_data <- append(osm_data, list(
-      river_surface = get_osm_river_surface(aoi_buildings, river_centerline,
-                                            crs = crs,
-                                            force_download = force_download)
     ))
   }
 
@@ -355,7 +353,7 @@ get_osm_river_centerline <- function(bb, river_name, crs = NULL,
 
 #' Get the river surface from OpenStreetMap
 #'
-#' @param aoi Area of interest as sf object or bbox
+#' @param bb Bounding box of class `bbox`
 #' @param river_centerline The river centerline as an object of class
 #'   [`sf::sfc_LINESTRING`] or [`sf::sfc_MULTILINESTRING`]
 #' @param crs Coordinate reference system as EPSG code
@@ -380,7 +378,7 @@ get_osm_river_centerline <- function(bb, river_name, crs = NULL,
 #' @srrstats {SP4.0, SP4.0b, SP4.2} The return value is an object
 #'   of class [`sf::sfc_POLYGON`] or [`sf::sfc_MULTIPOLYGON`], explicitly
 #'   documented as such.
-get_osm_river_surface <- function(aoi, river_centerline, crs = NULL,
+get_osm_river_surface <- function(bb, river_centerline, crs = NULL,
                                   force_download = FALSE) {
   # Check input
   checkmate::assert_multi_class(river_centerline,
@@ -389,7 +387,7 @@ get_osm_river_surface <- function(aoi, river_centerline, crs = NULL,
   checkmate::assert_logical(force_download, len = 1)
 
   # Get the river surface
-  river_surface <- osmdata_as_sf("natural", "water", aoi,
+  river_surface <- osmdata_as_sf("natural", "water", bb,
                                  force_download = force_download)
 
   river_surface_polygons <- river_surface$osm_polygons

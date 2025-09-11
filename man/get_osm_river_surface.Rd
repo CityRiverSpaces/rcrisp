@@ -4,15 +4,10 @@
 \alias{get_osm_river_surface}
 \title{Get the river surface from OpenStreetMap}
 \usage{
-get_osm_river_surface(
-  aoi,
-  river_centerline,
-  crs = NULL,
-  force_download = FALSE
-)
+get_osm_river_surface(bb, river_centerline, crs = NULL, force_download = FALSE)
 }
 \arguments{
-\item{aoi}{Area of interest as sf object or bbox}
+\item{bb}{Bounding box of class \code{bbox}}
 
 \item{river_centerline}{The river centerline as an object of class
 \code{\link[sf:sfc]{sf::sfc_LINESTRING}} or \code{\link[sf:sfc]{sf::sfc_MULTILINESTRING}}}
