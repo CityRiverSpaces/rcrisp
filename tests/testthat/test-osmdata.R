@@ -287,7 +287,6 @@ test_that("OSM buildings are retrieved with bounding box as input", {
   aoi <- sf::st_bbox(c(xmin = 1, xmax = 2, ymin = 1, ymax = 2),
                      crs = crs)
   mocked_osmdata_response <- list(osm_polygons = sf::st_sf(
-    # id = 1:2,
     building = c("building", "building"),
     geometry = sf::st_sfc(
       sf::st_polygon(list(matrix(c(1, 1, 1.5, 1, 1.5, 1.5, 1, 1.5, 1, 1),
