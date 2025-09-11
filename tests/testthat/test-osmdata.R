@@ -300,6 +300,6 @@ test_that("OSM buildings are retrieved with bounding box as input", {
   with_mocked_bindings(osmdata_as_sf = \(...) mocked_osmdata_response, {
     buildings <- get_osm_buildings(aoi, crs = crs, force_download = FALSE)
   })
-  expect_equal(nrow(buildings), 2)
+  expect_equal(length(buildings), 2)
   expect_equal(sf::st_crs(buildings), crs)
 })
