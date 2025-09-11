@@ -98,11 +98,11 @@ test_that("The correct OSM data elements are retrieved", {
   with_mocked_bindings(
     get_osm_bb = function(...) bb_bucharest,
     get_osm_river_centerline = function(...) river_centerline,
-    get_osm_river_surface = function(...) NULL,
-    get_osm_streets = function(...) NULL,
-    get_osm_railways = function(...) NULL,
-    get_osm_buildings = function(...) NULL,
-    get_osm_city_boundary = function(...) NULL,
+    get_osm_river_surface = function(...) sf::st_buffer(river_centerline, 10),
+    get_osm_streets = function(...) "streets",
+    get_osm_railways = function(...) "railways",
+    get_osm_buildings = function(...) "buildings",
+    get_osm_city_boundary = function(...) "city_boundary",
     {
       # By default, the bb, river, river suf
       osmdata_default <- get_osmdata("Bucharest",
