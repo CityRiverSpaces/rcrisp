@@ -260,7 +260,7 @@ test_that("River lines and surface are properly set up", {
   expect_true(sf::st_is(river_surface, "MULTIPOLYGON"))
 })
 
-test_that("If no river surface us found, an empty sfc object is returned", {
+test_that("If no river surface is found, an empty sfc object is returned", {
   crs <- sf::st_crs("EPSG:32632")
   bb <- sf::st_bbox(c(xlim = -1, xmax = 1, ylim = -1, ymax = 1))
   river_centerline <- sf::st_sfc(
