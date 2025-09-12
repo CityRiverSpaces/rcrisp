@@ -260,6 +260,23 @@ test_that("River lines and surface are properly set up", {
   expect_true(sf::st_is(river_surface, "MULTIPOLYGON"))
 })
 
+test_that("If no river surface us found, an empty sfc object is returned", {
+  crs <- sf::st_crs("EPSG:32632")
+  bb <- sf::st_bbox(c(xlim = -1, xmax = 1, ylim = -1, ymax = 1))
+  river_centerline <- sf::st_sfc(
+    sf::st_linestring(matrix(c(-2, 2, 0, 0), ncol = 2)), crs = crs
+  )
+  mocked_osmdata_response <- list(
+    osm_polygons = sf::st_as_sf(sf::st_sfc(sf::st_polygon(), crs = crs))
+  )
+  with_mocked_bindings(osmdata_as_sf = function(...) mocked_osmdata_response, {
+    water_surface <- get_osm_river_surface(aoi, river_centerline, crs = crs,
+                                           force_download = FALSE)
+  })
+  expect_equal(length(water_surface), 0)
+  expect_equal(sf::st_crs(railways), crs)
+})
+
 test_that("If no railways are found, an empty sf object is returned", {
   crs <- sf::st_crs("EPSG:32632")
   aoi <- sf::st_bbox(c(xlim = 1, xmax = 2, ylim = 1, ymax = 2))
