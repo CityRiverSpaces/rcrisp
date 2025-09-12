@@ -525,6 +525,7 @@ get_osm_railways <- function(aoi, crs = NULL, railway_values = "rail",
 get_osm_buildings <- function(aoi, crs = NULL, force_download = FALSE) {
   # Check input
   crs <- as_crs(crs)
+  aoi <- sf::st_as_sfc(aoi)
 
   buildings <- osmdata_as_sf("building", "", aoi,
                              force_download = force_download)

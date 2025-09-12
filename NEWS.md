@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Bug returning county boundary instead of city boundary was fixed.
 - Bug for river with no crossings was fixed. Delineation fails with informative error.
 - Code chunk with OSM data retrieval was disabled in getting started vignette.
+- `get_osm_buildings()` does not error when given bounding box as input.
 
 # rcrisp 0.2.0 - 2025-08-21
 
