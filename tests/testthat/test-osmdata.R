@@ -274,7 +274,7 @@ test_that("If no river surface us found, an empty sfc object is returned", {
                                            force_download = FALSE)
   })
   expect_equal(length(water_surface), 0)
-  expect_equal(sf::st_crs(railways), crs)
+  expect_equal(sf::st_crs(water_surface), crs)
 })
 
 test_that("If no railways are found, an empty sf object is returned", {
