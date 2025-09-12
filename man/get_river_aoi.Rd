@@ -8,7 +8,8 @@ a city}
 get_river_aoi(river, city_bbox, buffer_distance)
 }
 \arguments{
-\item{river}{A list with the river centreline and surface geometries}
+\item{river}{A \code{sf::sf} or \code{sf::sfc} object with the river centreline and
+(optionally) the river surface geometry}
 
 \item{city_bbox}{Bounding box of class \code{bbox} around the city}
 
@@ -25,7 +26,9 @@ a city
 \examples{
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 bb <- get_osm_bb("Bucharest")
-river <- get_osm_river(bb, "Dâmbovița")
+river_centerline <- get_osm_river_centerline(bb, "Dâmbovița")
+river_surface <- get_osm_river_surface(bb, "Dâmbovița")
+river <- list(centerline = river_centerline, surface = river_surface)
 get_river_aoi(river = river, city_bbox = bb, buffer_distance = 100)
 \dontshow{\}) # examplesIf}
 }

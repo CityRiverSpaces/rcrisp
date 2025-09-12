@@ -19,6 +19,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Code chunk with OSM data retrieval was disabled in getting started vignette.
 - `get_osm_buildings()` does not error when given bounding box as input.
 
+## Changed
+
+- OSM river surface retrieval was moved to a separate function.
+
 # rcrisp 0.2.0 - 2025-08-21
 
 ## Added
