@@ -100,7 +100,9 @@ network using built-in functions from the <code>rcrisp</code>
 package.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">city_boundary</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_osm_city_boundary.html">get_osm_city_boundary</a></span><span class="op">(</span><span class="va">bb</span>, <span class="va">city_name</span>, <span class="va">crs</span><span class="op">)</span></span>
-<span><span class="va">river</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_osm_river.html">get_osm_river</a></span><span class="op">(</span><span class="va">bb</span>, <span class="va">river_name</span>, <span class="va">crs</span><span class="op">)</span></span>
+<span><span class="va">river_centerline</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_osm_river_centerline.html">get_osm_river_centerline</a></span><span class="op">(</span><span class="va">bb</span>, <span class="va">river_name</span>, <span class="va">crs</span><span class="op">)</span></span>
+<span><span class="va">river_surface</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_osm_river_surface.html">get_osm_river_surface</a></span><span class="op">(</span><span class="va">bb</span>, <span class="va">river_centerline</span>, <span class="va">crs</span><span class="op">)</span></span>
+<span><span class="va">river</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">river_centerline</span>, <span class="va">river_surface</span><span class="op">)</span></span>
 <span><span class="va">aoi_network</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_river_aoi.html">get_river_aoi</a></span><span class="op">(</span><span class="va">river</span>, <span class="va">bb</span>, buffer_distance <span class="op">=</span> <span class="va">network_buffer</span><span class="op">)</span></span>
 <span><span class="va">streets</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_osm_streets.html">get_osm_streets</a></span><span class="op">(</span><span class="va">bb</span>, <span class="va">crs</span><span class="op">)</span></span>
 <span><span class="va">railways</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_osm_railways.html">get_osm_railways</a></span><span class="op">(</span><span class="va">bb</span>, <span class="va">crs</span><span class="op">)</span></span>
@@ -109,8 +111,8 @@ package.</p>
 <span></span>
 <span><span class="va">bucharest_osm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>  boundary <span class="op">=</span> <span class="va">city_boundary</span>,</span>
-<span>  river_centerline <span class="op">=</span> <span class="va">river</span><span class="op">$</span><span class="va">centerline</span>,</span>
-<span>  river_surface <span class="op">=</span> <span class="va">river</span><span class="op">$</span><span class="va">surface</span>,</span>
+<span>  river_centerline <span class="op">=</span> <span class="va">river_centerline</span>,</span>
+<span>  river_surface <span class="op">=</span> <span class="va">river_surface</span>,</span>
 <span>  aoi_network <span class="op">=</span> <span class="va">aoi_network</span>,</span>
 <span>  streets <span class="op">=</span> <span class="va">streets</span>,</span>
 <span>  railways <span class="op">=</span> <span class="va">railways</span>,</span>

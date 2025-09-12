@@ -57,7 +57,8 @@
 <url><loc>https://cityriverspaces.github.io/rcrisp/reference/get_osm_city_boundary.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/rcrisp/reference/get_osm_example_data.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/rcrisp/reference/get_osm_railways.html</loc></url>
-<url><loc>https://cityriverspaces.github.io/rcrisp/reference/get_osm_river.html</loc></url>
+<url><loc>https://cityriverspaces.github.io/rcrisp/reference/get_osm_river_centerline.html</loc></url>
+<url><loc>https://cityriverspaces.github.io/rcrisp/reference/get_osm_river_surface.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/rcrisp/reference/get_osm_streets.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/rcrisp/reference/get_osmdata.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/rcrisp/reference/get_osmdata_cache_filepath.html</loc></url>
