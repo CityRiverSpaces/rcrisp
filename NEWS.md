@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Changed
 
 - OSM river surface retrieval was moved to a separate function.
+- Small rivers for which OSM river surface is not available can still be delineated.
 
 # rcrisp 0.2.0 - 2025-08-21
 
