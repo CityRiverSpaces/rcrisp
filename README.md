@@ -17,6 +17,8 @@ status](https://www.r-pkg.org/badges/version/rcrisp)](https://CRAN.R-project.org
 badge](https://cityriverspaces.r-universe.dev/badges/:name)](https://cityriverspaces.r-universe.dev/)
 [![Research Software
 Directory](https://img.shields.io/badge/rsd-rcrisp-00a3e3.svg)](https://research-software-directory.org/software/crisp)
+[![Status at rOpenSci Software Peer
+Review](https://badges.ropensci.org/718_status.svg)](https://github.com/ropensci/software-review/issues/718)
 <!-- badges: end -->
 
 rcrisp provides tools to automate the morphological delineation of
