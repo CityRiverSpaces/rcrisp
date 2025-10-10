@@ -248,7 +248,7 @@ get_osm_city_boundary <- function(bb, city_name, crs = NULL, multiple = FALSE,
       match_osm_name(city_name_clean) |>
       dplyr::filter(
         suppressWarnings(as.numeric(.data$admin_level) ==
-          max(as.numeric(.data$admin_level), na.rm = TRUE))
+                           max(as.numeric(.data$admin_level), na.rm = TRUE))
       ) |>
       sf::st_geometry()
   }
