@@ -1,5 +1,5 @@
 ---
-title: 'CRiSp: An R package for urban river space delineation'
+title: 'rcrisp: An R package for urban river space delineation'
 tags:
   - urban rivers
   - urban morphology
@@ -30,7 +30,7 @@ output:
 
 # Summary
 
-CRiSp is a software for automated and scalable delineation of urban
+`rcrisp` is a software for automated and scalable delineation of urban
 river spaces with spatial-temporal big data. 
 
 # Introduction
@@ -67,31 +67,31 @@ planning and design.
 
 # Statement of need
 
-CRiSp is designed to address a diverse, growing and cross-disciplinary 
+`rcrisp` is designed to address a diverse, growing and cross-disciplinary 
 research community concerned with understanding URSs in an integrated and
 scalable way. 
 
-CRiSp provides specialized
+`rcrisp` provides specialized
 functionality in addition to more general morphometric tools like the
 Python packages momepy [@fleischmann2019; @fleischmann2022 and OSMnx
 [@boeing2024] and the R package sfnetworks [@vandermeer2024].
 
-CRiSp is intended to open new research avenues, such as integrated local
+`rcrisp` is intended to open new research avenues, such as integrated local
 spatial analyses and global cross-case analyses, which have been so far
 hindered by data- or workflow-related difficulties. However, the
-usability and effectiveness of CRiSp in addressing the needs, challenges
+usability and effectiveness of `rcrisp` in addressing the needs, challenges
 and various use cases of researchers and practitioners is yet to be
 tested and the software needs to be adapted according to such input.
 
 # Algorithms
 
-CRiSp builds on a previously developed delineation method [@Forgaci2018], 
 which considers the morphology of the urban fabric and the morphology of 
 the river valley jointly. CRiSp automates that method of delineation, 
 while leveraging local and global spatial-temporal big data (e.g., 
 OpenStreetMap and Global DEM data) increasingly available for riverspace 
 analysis at large [@forgaci2020]. The automation of the delineation is
 implemented using the following algorithms:
+`rcrisp` builds on a previously developed delineation method [@Forgaci2018], 
 
 - A cost distance algorithm is used to determine the river valley boundaries 
 from a DEM.
