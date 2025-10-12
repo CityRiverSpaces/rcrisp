@@ -40,15 +40,16 @@ to as urban river spaces (URS), have come to the forefront of
 sustainable urban transformations worldwide. This trend is not only due
 to pounding water-related disturbances such as floods or water scarcity,
 but also because the vital role of rivers in supporting social and
-ecological processes is increasingly acknowledged. As researchers of the
-urban environment engage into understanding current URS transformations,
+ecological processes is increasingly acknowledged. As researchers and
+practitioners of the
+urban environment engage into understanding or tackling current URS transformations,
 they face the challenge of capturing the complexities of environmental,
 social, and ecological phenomena in an integrated way [@prominski2023].
 Moreover, considering the global extent of the phenomenon, they lack
 established frames of comparison that may reveal local specificities and
 cross-case similarities. An essential part of the challenge is how urban
-areas surrounding rivers are delineated—that is, how their boundaries
-are drawn for analytical or intervention purposes—, as the resulting
+areas surrounding rivers are delineated---that is, how their boundaries
+are drawn for analytical or intervention purposes---, as the resulting
 spatial units can considerably impact decisions made for urban
 riverspace transformations. More often than not, URS boundaries are
 determined without a systematic and reproducible delineation method,
@@ -73,8 +74,8 @@ scalable way.
 
 `rcrisp` provides specialized
 functionality in addition to more general morphometric tools like the
-Python packages momepy [@fleischmann2019; @fleischmann2022 and OSMnx
-[@boeing2024] and the R package sfnetworks [@vandermeer2024].
+Python packages `momepy` [@fleischmann2019; @fleischmann2022 and `OSMnx`
+[@boeing2024] and the R package `sfnetworks` [@vandermeer2024].
 
 `rcrisp` is intended to open new research avenues, such as integrated local
 spatial analyses and global cross-case analyses, which have been so far
@@ -85,13 +86,11 @@ tested and the software needs to be adapted according to such input.
 
 # Algorithms
 
-which considers the morphology of the urban fabric and the morphology of 
-the river valley jointly. CRiSp automates that method of delineation, 
-while leveraging local and global spatial-temporal big data (e.g., 
-OpenStreetMap and Global DEM data) increasingly available for riverspace 
-analysis at large [@forgaci2020]. The automation of the delineation is
-implemented using the following algorithms:
 `rcrisp` builds on a previously developed delineation method [@Forgaci2018], 
+which considers the morphology of the river valley and that of the urban fabric
+jointly. `rcrisp` automates that method of delineation, while leveraging local
+and global spatial-temporal big data (e.g., OpenStreetMap and Global DEM data) increasingly available for riverspace analysis at large [@forgaci2020]. The
+automation of the delineation is implemented using the following algorithms:
 
 - A cost distance algorithm is used to determine the river valley boundaries 
 from a DEM.
