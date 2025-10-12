@@ -92,39 +92,39 @@ jointly. `rcrisp` automates that method of delineation, while leveraging local
 and global spatial-temporal big data (e.g., OpenStreetMap and Global DEM data) increasingly available for riverspace analysis at large [@forgaci2020]. The
 automation of the delineation is implemented using the following algorithms:
 
-- A cost distance algorithm is used to determine the river valley boundaries 
-from a DEM.
+- The `valley` module implements a cost distance algorithm to determine the
+river valley boundaries from a DEM.
 
-- A shortest path algorithm is used to determine the corridor edges on the
-street network obtained from OpenStreetMap. The valley boundaries are used to 
-adjust the corridor edges to the 
+- The `corridor` modules uses a shortest path algorithm to determine the
+corridor edges on the street network obtained from OpenStreetMap. For both sides
+of the river, the shortest paths which are closest to the valley boundaries are
+chosen for the corridor edge.
 
-- The COINS algorithm is used to determine continuous lines along the street
-network starting from bridges crossing the river. The resulting continuous lines
-are used to divide the corridor into corridor segments.
+- The `segments` module uses the COINS algorithm to determine continuous lines
+along the street network starting from bridges crossing the river. The resulting continuous lines are used to divide the corridor into corridor segments.
 
-- An isovist algorithm is used to determine the space enclosed by the first line
-of buildings around the river within a given visibility distance.
+- The `riverspace` modules applies an isovist algorithm to determine the space
+enclosed by the first line of buildings around the river within a given
+visibility distance.
 
 # Related software
 
 # Software package overview
 
-Modules...
-
--   corridor
-
--   delineate
-
--   network
-
--   osmdata
-
--   utils
-
--   valley
+`rcrisp` is structured into five core delineation modules, namely `valley`,
+`corridor`, `segments`, and `riverspace` for the four delineation steps, as well
+as an all-encompassing `delineate` module which runs the entire delineation
+workflow. The dedicated `network` and `sf` modules contain functionality needed
+for processing `sfnetwork` and `sf` objects, respectively. The retrieval of OSM
+data is available from the `osmdata` module, while example delineation data and
+example OSM data used in the documentation are available from the `data` and
+`exampeldata modules`. Utility functions are collected in a `utils` module and
+the `cache` module is used to retain and manage OSM and DEM data retrieved by
+the user.
 
 # Acknowledgements
+
+- Netherlands eScience Center
 
 # Author contributions
 
