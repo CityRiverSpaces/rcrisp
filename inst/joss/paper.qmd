@@ -124,7 +124,8 @@ the user.
 
 # Acknowledgements
 
-- Netherlands eScience Center
+`rcrisp` was funded by the Netherlands eScience Center (grant no.
+NLESC.OEC.2023.050).
 
 # Author contributions
 
