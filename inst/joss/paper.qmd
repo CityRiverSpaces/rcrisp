@@ -89,8 +89,11 @@ tested and the software needs to be adapted according to such input.
 `rcrisp` builds on a previously developed delineation method [@Forgaci2018], 
 which considers the morphology of the river valley and that of the urban fabric
 jointly. `rcrisp` automates that method of delineation, while leveraging local
-and global spatial-temporal big data (e.g., OpenStreetMap and Global DEM data) increasingly available for riverspace analysis at large [@forgaci2020]. The
-automation of the delineation is implemented using the following algorithms:
+and global spatial-temporal big data (e.g., OpenStreetMap and Global DEM data) increasingly available for riverspace analysis at large [@forgaci2020].
+
+![Diagram of the four delineation steps carried out by rcrisp.](method.png)
+
+The automation of the delineation is implemented using the following algorithms:
 
 - The `valley` module implements a cost distance algorithm to determine the
 river valley boundaries from a DEM.
@@ -125,7 +128,7 @@ the user.
 # Acknowledgements
 
 `rcrisp` was funded by the Netherlands eScience Center (grant no.
-NLESC.OEC.2023.050).
+NLESC.OEC.2023.050). We acknowledge contributions from ...
 
 # Author contributions
 
