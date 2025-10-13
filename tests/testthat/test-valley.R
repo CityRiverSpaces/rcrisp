@@ -13,6 +13,7 @@ asset_urls <- c(paste0("s3://copernicus-dem-30m/",
 
 test_that("STAC asset urls are correctly retrieved", {
   skip_on_ci()
+  skip_on_cran()
 
   ep <- "https://earth-search.aws.element84.com/v1"
   col <- "cop-dem-glo-30"
