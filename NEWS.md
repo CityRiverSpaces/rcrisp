@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Code chunk with OSM data retrieval was disabled in getting started vignette.
 - `get_osm_buildings()` does not error when given bounding box as input.
 - STAC asset URL retrieval test fails gracefully on unsuccessful HTTP request.
+- Suppress warning in wrong city name test.
 
 ## Changed
 
