@@ -13,12 +13,24 @@ asset_urls <- c(paste0("s3://copernicus-dem-30m/",
 
 test_that("STAC asset urls are correctly retrieved", {
   skip_on_ci()
+  skip_on_cran()
 
   ep <- "https://earth-search.aws.element84.com/v1"
   col <- "cop-dem-glo-30"
 
-  asset_urls_retrieved <- get_stac_asset_urls(bb, endpoint = ep,
-                                              collection = col)
+  asset_urls_retrieved <- tryCatch(
+    {
+      get_stac_asset_urls(bb, endpoint = ep, collection = col)
+    },
+    error = function(e) {
+      if (grepl("HTTP", conditionMessage(e), ignore.case = TRUE)) {
+        skip(paste("Skipped due to HTTP error:", conditionMessage(e)))
+      } else {
+        stop(e)
+      }
+    }
+  )
+
   expected_asset_urls <- asset_urls
 
   expect_equal(expected_asset_urls, asset_urls_retrieved)
