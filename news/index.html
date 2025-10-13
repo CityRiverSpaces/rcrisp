@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">rcrisp</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -47,6 +47,32 @@
       <small>Source: <a href="https://github.com/CityRiverSpaces/rcrisp/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.3.0" id="rcrisp-030---2025-10-13">rcrisp 0.3.0 - 2025-10-13<a class="anchor" aria-label="anchor" href="#rcrisp-030---2025-10-13"></a></h2>
+<div class="section level3">
+<h3 id="added-0-3-0">Added<a class="anchor" aria-label="anchor" href="#added-0-3-0"></a></h3>
+<ul><li>Overall workflow was documented in a new vignette and the package README</li>
+<li>Badges to Research Software Directory and R-universe were added</li>
+<li>Corridors are also allowed to be multipolygons when delineating segments</li>
+<li>Badge with Status at rOpenSci Software Peer Review was added</li>
+</ul></div>
+<div class="section level3">
+<h3 id="fixed-0-3-0">Fixed<a class="anchor" aria-label="anchor" href="#fixed-0-3-0"></a></h3>
+<ul><li>Exact matches in <code><a href="../reference/match_osm_name.html">match_osm_name()</a></code> are returned before partial matches.</li>
+<li>Bug returning county boundary instead of city boundary was fixed.</li>
+<li>Bug for river with no crossings was fixed. Delineation fails with informative error.</li>
+<li>Code chunk with OSM data retrieval was disabled in getting started vignette.</li>
+<li>
+<code><a href="../reference/get_osm_buildings.html">get_osm_buildings()</a></code> does not error when given bounding box as input.</li>
+<li>STAC asset URL retrieval test fails gracefully on unsuccessful HTTP request.</li>
+<li>Suppress warning in wrong city name test.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="changed-0-3-0">Changed<a class="anchor" aria-label="anchor" href="#changed-0-3-0"></a></h3>
+<ul><li>OSM river surface retrieval was moved to a separate function.</li>
+<li>Small rivers for which OSM river surface is not available can still be delineated.</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.2.0" id="rcrisp-020---2025-08-21">rcrisp 0.2.0 - 2025-08-21<a class="anchor" aria-label="anchor" href="#rcrisp-020---2025-08-21"></a></h2><p class="text-muted">CRAN release: 2025-08-21</p>
 <div class="section level3">
