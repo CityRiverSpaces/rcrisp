@@ -5,8 +5,5 @@
 ## Resubmission
 
 * This is a resubmission to solve problems identified by package checks on CRAN.
-Specifically, the STAC asset URL retrieval test fails gracefully on unsuccessful
-HTTP request.
-
-* In addition, this version includes extensive documentation updates and bug
-fixes.
+Specifically, code chunk evaluation was disabled in the network preparation
+vignette to prevent failed http requests on CRAN.
