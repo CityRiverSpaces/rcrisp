@@ -10,7 +10,8 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  eval = FALSE
 )
 ```
 
@@ -22,12 +23,6 @@ library(sfnetworks)
 
 bucharest_osm <- get_osm_example_data()
 bucharest_dem <- get_dem_example_data()
-
-if (any(is.null(bucharest_osm), is.null(bucharest_dem))) {
-  cat("NOTE: Example data was not found; ",
-      "subsequent code chunks will be skipped.\n", sep = "")
-  knitr::opts_chunk$set(eval = FALSE)
-}
 ```
 
 ```{r srr-tags, eval=FALSE, echo=FALSE}
@@ -98,15 +93,16 @@ network_removed_nodes <- network |>
 par(mfrow = c(1, 2))
 plot(network, col = "grey50",
      xlim = c(425100, 425400), ylim = c(4922400, 4923000),
-     main = "Network before preprocessing")
+     main = "Before preprocessing")
 plot(network_cleaned |> activate("nodes"), col = "grey50",
      xlim = c(425100, 425400), ylim = c(4922400, 4923000),
-     main = "Network after preprocessing")
+     main = "After preprocessing")
 plot(network_new_nodes, col = "darkgreen",
      xlim = c(425100, 425400), ylim = c(4922400, 4923000),
-     main = "Network after preprocessing", add = TRUE)
+     main = "After preprocessing", add = TRUE)
 plot(network_removed_nodes, col = "red", pch = 4,
      xlim = c(425100, 425400), ylim = c(4922400, 4923000),
-     main = "Network after preprocessing", add = TRUE)
+     main = "After preprocessing", add = TRUE)
 ```
 
+![](img/net_before_after.png)
