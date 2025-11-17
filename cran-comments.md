@@ -15,6 +15,4 @@ the checks on CRAN.
 
 * One of the CRAN checks also shows a dependency error, stating that `osmdata`
 is not available. However, `osmdata` is on CRAN and we believe this to be a
-temporary issue on CRAN's side. (Note that the `osmdata` check results form the
-failing flavor "r-devel-linux-x86_64-fedora-gcc" seem to be unavailable:
-https://www.r-project.org/nosvn/R.check/r-devel-linux-x86_64-fedora-gcc/osmdata-00check.html)
+temporary issue on CRAN's side (see check for `r-oldrel-macos-x86_64`: https://www.r-project.org/nosvn/R.check/r-oldrel-macos-x86_64/rcrisp-00check.html).
