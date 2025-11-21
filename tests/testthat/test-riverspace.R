@@ -16,14 +16,19 @@ test_that("The riverspace of Dâmbovița within 100m is correctly returned", {
 })
 
 test_that(
-  "The area of the riverspace of Dâmbovița is smaller than
-  an unoccluded buffer and larger than the water surface",
+  "The area of a riverspace is smaller than an unoccluded buffer and larger
+  than the water surface",
   {
-    actual_surface <- sf::st_area(riverspace_actual)
-    river_surface_buffer <-
-      sf::st_buffer(bucharest_osm$river_surface, 100)
+    test_osmdata <- get_test_osmdata()
+    river_surface <- test_osmdata$river_surface
+    buildings <- test_osmdata$buildings
+    riverspace <- delineate_riverspace(
+      river = river_surface, occluders = buildings, ray_length = 100
+    )
+    actual_surface <- sf::st_area(riverspace)
+    river_surface_buffer <- sf::st_buffer(river_surface, 100)
     river_surface_buffer_area <- sf::st_area(river_surface_buffer)
-    river_surface_area <- sf::st_area(bucharest_osm$river_surface)
+    river_surface_area <- sf::st_area(river_surface)
     expect_lt(actual_surface, river_surface_buffer_area)
     expect_gt(actual_surface, river_surface_area)
   }
