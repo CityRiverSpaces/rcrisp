@@ -70,7 +70,7 @@ segmented_corridor <-
                      st_geometry(bucharest_osm$river_centerline))
 ```
 
-```{r plot-segmentation, fig.cap="", dpi=150, out.width="100%"}
+```{r plot-segmentation, fig.cap="", out.width="100%"}
 plot(st_geometry(streets))
 plot(segmented_corridor, border = "orange", lwd = 3, add = TRUE)
 ```

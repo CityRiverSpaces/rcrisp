@@ -80,7 +80,7 @@ network_cleaned <- clean_network(network_new)
 
 Visualize cleaned network:
 
-```{r plot-network, fig.cap="The network before and after preprocessing.", fig.alt="Comparison of the spatial network before and after preprocessing.", dpi=150, out.width="100%"}
+```{r plot-network, fig.cap="The network before and after preprocessing.", fig.alt="Comparison of the spatial network before and after preprocessing.", out.width="100%"}
 network_new_nodes <- network_cleaned |>
   activate("nodes") |>
   filter(is.na(node_id)) |>

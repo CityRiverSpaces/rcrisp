@@ -77,7 +77,7 @@ The resulting object is a list with all the layers obtained above.
 names(bucharest_osm)
 ```
 
-```{r plot-osm-data, echo=FALSE, fig.alt="All layers combined", fig.cap="All layers combined (buildings not shown)", dpi=150, out.width="100%"}
+```{r plot-osm-data, echo=FALSE, fig.alt="All layers combined", fig.cap="All layers combined (buildings not shown)", out.width="100%"}
 bbox <- sf::st_bbox(bucharest_osm$boundary)
 plot(
   NA,

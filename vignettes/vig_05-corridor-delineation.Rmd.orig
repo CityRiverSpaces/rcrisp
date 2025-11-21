@@ -55,7 +55,7 @@ bucharest_dambovita <- delineate(
 )
 ```
 
-```{r plot, fig.alt="Delineation of the corridor of River Dâmbovița in Bucharest", fig.cap="", dpi=150, out.width="100%"}
+```{r plot, fig.alt="Delineation of the corridor of River Dâmbovița in Bucharest", fig.cap="", out.width="100%"}
 # Plot all layers within the extent of the delineated corridor
 bbox <- st_bbox(bucharest_dambovita$corridor)
 plot(bucharest_dambovita$valley, col = "grey", border = NA,

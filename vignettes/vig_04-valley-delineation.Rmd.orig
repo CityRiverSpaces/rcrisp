@@ -59,7 +59,7 @@ river_surface <- st_geometry(bucharest_osm$river_surface)
 river <- c(river_centerline, river_surface)
 ```
 
-```{r plot-dem, dpi=150, out.width="100%"}
+```{r plot-dem, out.width="100%"}
 #| echo: false
 #| fig.alt: "DEM of the area enclosing River Dâmbovița in Bucharest"
 #| fig.cap: "DEM of the area enclosing River Dâmbovița in Bucharest"
@@ -71,7 +71,7 @@ plot(river, col = "white", border = NA, add = TRUE)
 valley <- delineate_valley(dem, river)
 ```
 
-```{r plot-valley, dpi=150, out.width="100%"}
+```{r plot-valley, out.width="100%"}
 #| echo: false
 #| fig.alt: "Valley polygon derived from the DEM"
 #| fig.cap: "Valley polygon derived from the DEM"

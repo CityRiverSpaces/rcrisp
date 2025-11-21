@@ -50,7 +50,7 @@ In short, given a city name and a river name, it:
 
 # Example
 
-```{r plot, fig.cap="", dpi=150, out.width="100%"}
+```{r plot, fig.cap="", out.width="100%"}
 library(rcrisp)
 
 # Parameters
