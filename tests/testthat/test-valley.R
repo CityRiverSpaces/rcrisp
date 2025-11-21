@@ -3,7 +3,8 @@
 # cache folder only used for testing purposes. This is achieved via the
 # [`temp_cache_dir()`] helper function, which should be called in each test.
 
-bb <- get_osm_bb("Bucharest")
+# Approximate bbox for Bucharest
+bb <- c(xmin = 25.97, ymin = 44.33, xmax = 26.23, ymax = 44.54)
 asset_urls <- c(paste0("s3://copernicus-dem-30m/",
                        "Copernicus_DSM_COG_10_N44_00_E026_00_DEM/",
                        "Copernicus_DSM_COG_10_N44_00_E026_00_DEM.tif"),
@@ -39,11 +40,13 @@ test_that("STAC asset urls are correctly retrieved", {
 test_that("Download DEM data can be retrieved from the cache on new calls", {
   # setup cache directory
   cache_dir <- temp_cache_dir()
-
+  river <- sf::st_sfc(
+    sf::st_linestring(cbind(c(-150, 150), c(150, -150))), crs = "EPSG:32601"
+  )
+  dem <- get_test_dem_valley(river)
   with_mocked_bindings(
     load_raster = function(...) {
-      bucharest_dem |>
-        terra::project("EPSG:4326")
+      dem |> terra::project("EPSG:4326")
     },
     {
       # calling load_dem should create a file in the cache folder
@@ -61,12 +64,6 @@ test_that("Download DEM data can be retrieved from the cache on new calls", {
   )
 })
 
-#' @srrstats {G2.10} This test uses `sf::st_geometry()` to extract
-#'   the geometry column from an `sf` object read in with `sf::st_read()`. This
-#'   is used when only geometry information is needed from that point onwards
-#'   and all other attributes (i.e., columns) can be safely discarded. The
-#'   object returned by `sf::st_geometry()` is a simple feature geometry list
-#'   column of class `sfc`.
 test_that("valley polygon is correctly constructed", {
   dem <- bucharest_dem
   river <- bucharest_osm$river_surface
