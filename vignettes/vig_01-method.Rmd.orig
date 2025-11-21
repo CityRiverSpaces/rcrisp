@@ -9,16 +9,26 @@ vignette: >
 
 <!-- the *.Rmd vignettes are generated from the *.Rmd.orig files. Please edit those files. -->
 
+```{r, include=FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "img/vig_01-method-"
+)
+```
 
-
-
+```{r srr-tags, eval=FALSE, echo=FALSE}
+#' @srrstats {G1.0} This vignette provides a publication describing an early
+#'   version of the method implemented in the package.
+#' @srrstats {G1.1} It is specified here that `rcrisp` is the first
+#'   implementation of a novel algorithm.
+```
 
 rcrisp is the first implementation of a spatial morphological method of delineation ([Forgaci, 2018](https://doi.org/10.7480/abe.2018.31)) that considers both the terrain of the river valley and the configuration of the urban fabric, as shown in the diagram below.
 
-<div class="figure" style="text-align: center">
-<img src="img/method-diagram.png" alt="Diagram of the method of delineation" width="100%" />
-<p class="caption">Method of delineation</p>
-</div>
+```{r diagram, fig.align='center', fig.alt='Diagram of the method of delineation', fig.cap='Method of delineation', echo=FALSE, out.width="100%"}
+knitr::include_graphics("img/method-diagram.png")
+```
 
 The method consists of the following steps, each explained on this website in a separate article:
 

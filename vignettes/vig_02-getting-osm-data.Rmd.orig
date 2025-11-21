@@ -9,12 +9,19 @@ vignette: >
 
 <!-- the *.Rmd vignettes are generated from the *.Rmd.orig files. Please edit those files. -->
 
-
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  message = FALSE,
+  warning = FALSE,
+  fig.path = "img/vig_02-getting-osm-data-"
+)
+```
 
 In this notebook we download OpenStreetMap (OSM) data needed for the delineation of the urban river corridor of River Dâmbovița in Bucharest, Romania. After attaching the packages used in the vignette, we specify the city name, the river name, and the CRS, and we make sure that we provide a buffer around the river used to retrieve OSM data.
 
-
-``` r
+```{r}
 library(rcrisp)
 library(purrr)
 
@@ -27,15 +34,13 @@ buildings_buffer <- 100  # in m, buffer around the river to get the buildings
 
 We start by getting the bounding box for the study area:
 
-
-``` r
+```{r}
 bb <- get_osm_bb(city_name)
 ```
 
 Using the obtained bounding box, we get the different layers of OSM data needed for the delineation of the urban river corridor. We will get the city boundary, the waterways, the street network, and the rail network using built-in functions from the `rcrisp` package.
 
-
-``` r
+```{r}
 city_boundary <- get_osm_city_boundary(bb, city_name, crs)
 river_centerline <- get_osm_river_centerline(bb, river_name, crs)
 river_surface <- get_osm_river_surface(bb, river_centerline, crs)
@@ -60,8 +65,7 @@ bucharest_osm <- list(
 
 The above layers can also be obtained with the all-in-one function `get_osmdata()`. Optionally, a buffer around the river can be specified for the retrieval of OSM data.
 
-
-``` r
+```{r}
 bucharest_osm <- get_osmdata(city_name, river_name,
                              network_buffer = network_buffer,
                              buildings_buffer = buildings_buffer)
@@ -69,23 +73,33 @@ bucharest_osm <- get_osmdata(city_name, river_name,
 
 The resulting object is a list with all the layers obtained above.
 
-
-``` r
+```{r}
 names(bucharest_osm)
-#> [1] "bb"               "river_centerline" "aoi_network"      "streets"         
-#> [5] "railways"         "river_surface"    "aoi_buildings"    "buildings"       
-#> [9] "boundary"
 ```
 
-<div class="figure">
-<img src="img/vig_02-getting-osm-data-plot-osm-data-1.png" alt="All layers combined" width="100%" />
-<p class="caption">All layers combined (buildings not shown)</p>
-</div>
+```{r plot-osm-data, echo=FALSE, fig.alt="All layers combined", fig.cap="All layers combined (buildings not shown)", dpi=150, out.width="100%"}
+bbox <- sf::st_bbox(bucharest_osm$boundary)
+plot(
+  NA,
+  xlim = c(bbox["xmin"], bbox["xmax"]),
+  ylim = c(bbox["ymin"], bbox["ymax"]),
+  asp = 1,
+  xaxt = "n",
+  yaxt = "n",
+  xlab = "",
+  ylab = "",
+  bty = "n"
+)
+plot(bucharest_osm$railways$geom, col = "orange", add = TRUE)
+plot(bucharest_osm$streets$geom, color = "black", add = TRUE)
+plot(bucharest_osm$river_surface, col = "blue", border = "blue", add = TRUE)
+plot(bucharest_osm$river_centerline, col = "blue", add = TRUE)
+plot(bucharest_osm$boundary, border = "red", add = TRUE)
+```
 
 Individual layers can be written to disk before being read in for delineation.
 
-
-``` r
+```{r, eval=FALSE}
 walk2(
   bucharest_osm,
   names(bucharest_osm),
