@@ -1,0 +1,73 @@
+# 5. Corridor delineation
+
+``` r
+library(rcrisp)
+library(sf)
+
+bucharest_osm <- get_osm_example_data()
+bucharest_dem <- get_dem_example_data()
+```
+
+In this notebook we explore how to delineate an urban river corridor
+using river Dâmbovița in Bucharest, Romania. We will use OpenStreetMap
+(OSM) data, first from the Overpass API and then from a local file.
+
+``` r
+city_name <- "Bucharest"
+river_name <- "Dâmbovița"
+```
+
+We start by demonstrating the use of the all-in-one
+[`delineate()`](https://cityriverspaces.github.io/rcrisp/reference/delineate.md)
+function which does the following three steps:
+
+1.  Fetches city boundary, street and rail network, as well as river
+    centreline and surface data from the [Overpass
+    API](https://wiki.openstreetmap.org/wiki/Overpass_API) as shown in
+    `vignette("getting-osm-data")`;
+
+2.  Pre-processes the street and rail network for delineation as shown
+    in `vignette("network-preparation")`
+
+3.  Constructs the initial corridor based on the chosen method. With the
+    default `method = "valley"`, the Cost Distance Accumulation
+    algorithm is used to delineate the corridor based on the digital
+    elevation model (DEM) of the area retrieved from the [Earth Search
+    API](https://element84.com/earth-search/). If the
+    `method = "buffer"` is chosen instead, the corridor is constructed
+    by buffering the river centreline and surface data with a given
+    buffer distance.
+
+4.  Delineates the corridor based on the pre-processed network and
+    initial corridor. Optionally, the corridor is split into segments
+    based on the network and the river space is delineated.
+
+The
+[`delineate()`](https://cityriverspaces.github.io/rcrisp/reference/delineate.md)
+function carries out the above steps in one and returns a list that by
+default contains the following output elements: `corridor`, `segments`,
+and `riverspace`.
+
+``` r
+bucharest_dambovita <- delineate(
+  city_name,
+  river_name,
+  segments = TRUE,
+  riverspace = TRUE
+)
+```
+
+``` r
+# Plot all layers within the extent of the delineated corridor
+bbox <- st_bbox(bucharest_dambovita$corridor)
+plot(bucharest_dambovita$valley, col = "grey", border = NA,
+     xlim = c(bbox["xmin"], bbox["xmax"]), ylim = c(bbox["ymin"], bbox["ymax"]))
+plot(bucharest_dambovita$riverspace, col = "lightgreen", border = NA,
+     add = TRUE)
+plot(bucharest_osm$river_centerline, col = "blue", add = TRUE)
+plot(bucharest_dambovita$segments, border = "lightblue", add = TRUE)
+plot(bucharest_dambovita$corridor, border = "red", wt = 2, add = TRUE)
+```
+
+![Delineation of the corridor of River Dâmbovița in
+Bucharest](img/vig_05-corridor-delineation-plot-1.png)

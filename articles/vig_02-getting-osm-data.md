@@ -1,0 +1,92 @@
+# 2. Getting OSM data for delineation
+
+In this notebook we download OpenStreetMap (OSM) data needed for the
+delineation of the urban river corridor of River Dâmbovița in Bucharest,
+Romania. After attaching the packages used in the vignette, we specify
+the city name, the river name, and the CRS, and we make sure that we
+provide a buffer around the river used to retrieve OSM data.
+
+``` r
+library(rcrisp)
+library(purrr)
+
+city_name <- "Bucharest"
+river_name <- "Dâmbovița"
+crs <- 32635  # EPSG code for UTM zone 35N, where Bucharest is located
+network_buffer <- 3000  # in m, buffer around the river to get the network
+buildings_buffer <- 100  # in m, buffer around the river to get the buildings
+```
+
+We start by getting the bounding box for the study area:
+
+``` r
+bb <- get_osm_bb(city_name)
+```
+
+Using the obtained bounding box, we get the different layers of OSM data
+needed for the delineation of the urban river corridor. We will get the
+city boundary, the waterways, the street network, and the rail network
+using built-in functions from the `rcrisp` package.
+
+``` r
+city_boundary <- get_osm_city_boundary(bb, city_name, crs)
+river_centerline <- get_osm_river_centerline(bb, river_name, crs)
+river_surface <- get_osm_river_surface(bb, river_centerline, crs)
+river <- c(river_centerline, river_surface)
+aoi_network <- get_river_aoi(river, bb, buffer_distance = network_buffer)
+streets <- get_osm_streets(bb, crs)
+railways <- get_osm_railways(bb, crs)
+aoi_buildings <- get_river_aoi(river, bb, buffer_distance = buildings_buffer)
+buildings <- get_osm_buildings(bb, crs)
+
+bucharest_osm <- list(
+  boundary = city_boundary,
+  river_centerline = river_centerline,
+  river_surface = river_surface,
+  aoi_network = aoi_network,
+  streets = streets,
+  railways = railways,
+  aoi_buildings = aoi_buildings,
+  buildings = buildings
+)
+```
+
+The above layers can also be obtained with the all-in-one function
+[`get_osmdata()`](https://cityriverspaces.github.io/rcrisp/reference/get_osmdata.md).
+Optionally, a buffer around the river can be specified for the retrieval
+of OSM data.
+
+``` r
+bucharest_osm <- get_osmdata(city_name, river_name,
+                             network_buffer = network_buffer,
+                             buildings_buffer = buildings_buffer)
+```
+
+The resulting object is a list with all the layers obtained above.
+
+``` r
+names(bucharest_osm)
+#> [1] "bb"               "river_centerline" "aoi_network"      "streets"         
+#> [5] "railways"         "river_surface"    "aoi_buildings"    "buildings"       
+#> [9] "boundary"
+```
+
+![All layers combined](img/vig_02-getting-osm-data-plot-osm-data-1.png)
+
+All layers combined (buildings not shown)
+
+Individual layers can be written to disk before being read in for
+delineation.
+
+``` r
+walk2(
+  bucharest_osm,
+  names(bucharest_osm),
+  ~ st_write(
+    .x,
+    dsn = sprintf("%s_%s.gpkg", .y, city_name),
+    append = FALSE,
+    quiet = TRUE
+  )
+)
+```

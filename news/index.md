@@ -1,0 +1,133 @@
+# Changelog
+
+## rcrisp 0.3.1 - 2025-11-24
+
+### Changed
+
+- To make the package check more robust with respect to missing/failing
+  data access, the vignettes are frozen, all tests and examples using
+  example data are skipped on CRAN
+
+## rcrisp 0.3.0 - 2025-10-13
+
+CRAN release: 2025-10-14
+
+### Added
+
+- Overall workflow was documented in a new vignette and the package
+  README
+- Badges to Research Software Directory and R-universe were added
+- Corridors are also allowed to be multipolygons when delineating
+  segments
+- Badge with Status at rOpenSci Software Peer Review was added
+
+### Fixed
+
+- Exact matches in
+  [`match_osm_name()`](https://cityriverspaces.github.io/rcrisp/reference/match_osm_name.md)
+  are returned before partial matches.
+- Bug returning county boundary instead of city boundary was fixed.
+- Bug for river with no crossings was fixed. Delineation fails with
+  informative error.
+- Code chunk with OSM data retrieval was disabled in getting started
+  vignette.
+- [`get_osm_buildings()`](https://cityriverspaces.github.io/rcrisp/reference/get_osm_buildings.md)
+  does not error when given bounding box as input.
+- STAC asset URL retrieval test fails gracefully on unsuccessful HTTP
+  request.
+- Suppress warning in wrong city name test.
+
+### Changed
+
+- OSM river surface retrieval was moved to a separate function.
+- Small rivers for which OSM river surface is not available can still be
+  delineated.
+
+## rcrisp 0.2.0 - 2025-08-21
+
+CRAN release: 2025-08-21
+
+### Added
+
+- Package-level documentation has been added.
+- Assertions using the `checkmate` package were added to input
+  parameters throughout the package.
+- Examples were expanded to demonstrates the use of all parameters.
+- Delineated valley has been added to the `bucharest_dambovita` example
+  package data.
+
+### Fixed
+
+- Classes of input parameters and return values were specified.
+- [`get_osm_example_data()`](https://cityriverspaces.github.io/rcrisp/reference/get_osm_example_data.md)
+  and
+  [`get_dem_example_data()`](https://cityriverspaces.github.io/rcrisp/reference/get_dem_example_data.md)
+  fail gracefully in examples, vignettes and tests, that is, return a
+  message and NULL, if internet resource is not available.
+
+### Changed
+
+- Replaced [`sapply()`](https://rdrr.io/r/base/lapply.html) with
+  [`vapply()`](https://rdrr.io/r/base/lapply.html) throughout the
+  package for improved type safety.
+- Updated package metadata in `DESCRIPTION` and `codemeta.json`
+- Organized function reference page into meaningful sections.
+
+### Removed
+
+- The `dem_to_ceg()` function was removed from the package as it is not
+  used.
+
+## Version 0.1.4 - 2025-07-04
+
+CRAN release: 2025-07-04
+
+### Added
+
+- The CRAN badge has been added to the README.
+- DOI is added to CITATION.cff, DESCRIPTION and README (badge)
+
+### Fixed
+
+- [`check_cache()`](https://cityriverspaces.github.io/rcrisp/reference/check_cache.md)
+  is only run when the package is attached, not when it is loaded to
+  avoid namespace issues.
+
+### Changed
+
+- Vignette file names are updated to ensure they are listed in order on
+  CRAN.
+
+## Version 0.1.3 - 2025-06-27
+
+CRAN release: 2025-07-02
+
+### Fixed
+
+- Tests retrieving DEM data from AWS have been either removed or mocked
+  to avoid issues with the AWS API.
+- Warnings in delineation tests are safely suppressed.
+
+## Version 0.1.2 - 2025-06-26
+
+### Changed
+
+- The default cache directory has been moved to the path given by
+  [`tools::R_user_dir()`](https://rdrr.io/r/tools/userdir.html). Checks
+  for the cache directory size and outdated files are now included on
+  package load.
+- Tests in `test-delineate.R` and `test-osmdata.R` have been partly
+  rewritten, so that they use less resources and they complete in a
+  reasonable amount of time.
+
+## Version 0.1.1 - 2025-06-24
+
+### Fixed
+
+- Examples that take too long to run are only run in interactive mode
+
+## Version 0.1.0 - 2025-06-23
+
+### Added
+
+- The first version of the package is created
