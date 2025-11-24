@@ -9,10 +9,17 @@ vignette: >
 
 <!-- the *.Rmd vignettes are generated from the *.Rmd.orig files. Please edit those files. -->
 
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  message = FALSE,
+  warning = FALSE,
+  fig.path = "img/vig_07-riverspace-delineation-"
+)
+```
 
-
-
-``` r
+```{r setup}
 library(rcrisp)
 library(sf)
 
@@ -22,23 +29,20 @@ bucharest_dem <- get_dem_example_data()
 
 River space delineation is a delineation step that uses the river and buildings as input to generate a polygon representing the space between the river and the first line of buildings. We will use River Dâmbovița of Bucharest as the river and the buildings surrounding it as input.
 
-
-``` r
+```{r data}
 buildings <- bucharest_osm$buildings
 river <- bucharest_osm$river_surface
 ```
 
 The `delineate_riverspace()` function takes the building polygons and the river surface polygons as input. If no river is provided, it will return an error message. If no buildings are provided, it will return an unobstructed buffer of a given radius with a warning message. The function returns an sf polygon.
 
-
-``` r
+```{r riverspace}
 riverspace <- delineate_riverspace(river, buildings)
 ```
 
 We visualise the riverspace in a subset of segments.
 
-
-``` r
+```{r plot-riverspace, fig.alt="Riverspace delineation", fig.cap="", out.width="100%"}
 riverspace_segment_2_4 <- riverspace |>
   st_intersection(bucharest_dambovita$segments[2:4])
 
@@ -50,5 +54,3 @@ buildings_segment_2_4 <- buildings |>
 plot(riverspace_segment_2_4, col = "orange", border = NA)
 plot(buildings_segment_2_4, add = TRUE)
 ```
-
-<img src="img/vig_07-riverspace-delineation-plot-riverspace-1.png" alt="Riverspace delineation" width="100%" />

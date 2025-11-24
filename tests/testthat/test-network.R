@@ -333,6 +333,9 @@ test_that("Filter network raises error if elements argument is unknown", {
 })
 
 test_that("Network setup with real data", {
+  skip_on_ci()
+  skip_on_cran()
+  bucharest_osm <- get_osm_example_data()
   edges <- bucharest_osm$streets
   network <- as_network(edges, clean = FALSE, flatten = FALSE)
   edges_actual <- sf::st_geometry(sf::st_as_sf(network, "edges"))

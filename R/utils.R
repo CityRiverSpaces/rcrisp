@@ -25,7 +25,7 @@ set_units_like <- function(x, y) {
 #' @export
 #' @examples
 #' # Get EPSG code for UTM zone of Bucharest
-#' bb <- get_osm_bb("Bucharest")
+#' bb <- c(xmin = 25.97, ymin = 44.33, xmax = 26.23, ymax = 44.54)
 #' get_utm_zone(bb)
 #' @srrstats {SP2.8, SP2.9} Before determining the UTM zone, the bounding box
 #'   given as input is transformed into an object of class `bbox`. If input

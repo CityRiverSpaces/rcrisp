@@ -9,10 +9,17 @@ vignette: >
 
 <!-- the *.Rmd vignettes are generated from the *.Rmd.orig files. Please edit those files. -->
 
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  message = FALSE,
+  warning = FALSE,
+  fig.path = "img/vig_03-network-preparation-"
+)
+```
 
-
-
-``` r
+```{r setup}
 library(rcrisp)
 library(dplyr)
 library(sf)
@@ -22,7 +29,10 @@ bucharest_osm <- get_osm_example_data()
 bucharest_dem <- get_dem_example_data()
 ```
 
-
+```{r srr-tags, eval=FALSE, echo=FALSE}
+#' @srrstats {SP2.2a} This vignette demonstrates the compatibility of `rcrisp`
+#'   routines with `sfnetworks` workflows.
+```
 
 ## 1. Input data
 
@@ -30,8 +40,7 @@ In this article we show how to set up the spatial network for a city before usin
 
 We start by loading the OSM data. According to the delineation method, all persistent physical structures need to be considered. Therefore, the network will contain both streets and railways from OSM.
 
-
-``` r
+```{r}
 streets <- bucharest_osm$streets
 railways <- bucharest_osm$railways
 ```
@@ -42,8 +51,7 @@ railways <- bucharest_osm$railways
 
 After combining the streets and railway lines, we create a network object.
 
-
-``` r
+```{r}
 network <- bind_rows(streets, railways) |>
   as_sfnetwork(directed = FALSE) |>
   activate("nodes") |>
@@ -52,8 +60,7 @@ network <- bind_rows(streets, railways) |>
 
 To be able to use the network for delineation, we need to flatten it (that is, project bridges to the ground surface) and add nodes at all intersections between edges.
 
-
-``` r
+```{r}
 network_new <- flatten_network(network)
 ```
 
@@ -65,8 +72,7 @@ The function above first identifies unique apparent intersections between edges.
 
 We now perform standard cleaning tasks on the network: subdividing edges by adding missing nodes, removing pseudo-nodes and keeping only the main component of the network.
 
-
-``` r
+```{r}
 network_cleaned <- clean_network(network_new)
 ```
 
@@ -74,8 +80,7 @@ network_cleaned <- clean_network(network_new)
 
 Visualize cleaned network:
 
-
-``` r
+```{r plot-network, fig.cap="The network before and after preprocessing.", fig.alt="Comparison of the spatial network before and after preprocessing.", out.width="100%"}
 network_new_nodes <- network_cleaned |>
   activate("nodes") |>
   filter(is.na(node_id)) |>
@@ -103,8 +108,3 @@ plot(network_removed_nodes, col = "red", pch = 4,
      xlim = c(425100, 425400), ylim = c(4922400, 4923000),
      main = "After preprocessing", add = TRUE)
 ```
-
-<div class="figure">
-<img src="img/vig_03-network-preparation-plot-network-1.png" alt="Comparison of the spatial network before and after preprocessing." width="100%" />
-<p class="caption">The network before and after preprocessing.</p>
-</div>

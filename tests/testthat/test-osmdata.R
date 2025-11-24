@@ -323,3 +323,11 @@ test_that("OSM buildings are retrieved with bounding box as input", {
   expect_equal(length(buildings), 2)
   expect_equal(sf::st_crs(buildings), crs)
 })
+
+#' @srrstats {G5.8} Edge test: an error is raised if the dimension of the input
+#'   parameters does not fit the requirements.
+test_that("Only one river can be queried at a time", {
+  bb <- sf::st_bbox(c(xmin = 0, ymin = 0, xmax = 1, ymax = 1))
+  expect_error(get_osm_river_centerline(bb, c("Dâmbovița", "SomeOtherRiver")),
+               "Assertion on 'river_name' failed: Must have length 1")
+})

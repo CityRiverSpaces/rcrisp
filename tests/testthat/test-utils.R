@@ -154,20 +154,17 @@ test_that("Buffer also works without a CRS", {
 })
 
 test_that("River buffer implements a buffer function", {
-  river <- bucharest_osm$river_centerline |> sf::st_geometry()
+  river <- sf::st_sfc(sf::st_linestring(cbind(c(-2, 0), c(0, -2))))
   actual <- river_buffer(river, buffer_distance = 0.5)
   expected <- sf::st_buffer(river, 0.5)
   expect_setequal(actual, expected)
 })
 
 test_that("River buffer can trim to the region of interest", {
-  river <- bucharest_osm$river_centerline
-  bbox <- sf::st_bbox(bucharest_osm$boundary)
-  actual <- river_buffer(river, buffer_distance = 10, bbox = bbox)
-  river_buffer <- sf::st_buffer(river, 10)
-  # set precision to bypass numerical issues
-  actual <- sf::st_set_precision(actual, 1.e-3)
-  river_buffer <- sf::st_set_precision(river_buffer, 1.e-3)
+  river <- sf::st_sfc(sf::st_linestring(cbind(c(2, -2), c(0, 0))))
+  bbox <- c(xmin = -1, ymin = -1, xmax = 1, ymax = 1)
+  actual <- river_buffer(river, buffer_distance = 0.1, bbox = bbox)
+  river_buffer <- sf::st_buffer(river, 0.1)
   covers <- sf::st_covers(river_buffer, actual, sparse = FALSE)
   expect_true(covers)
 })
@@ -175,8 +172,8 @@ test_that("River buffer can trim to the region of interest", {
 #' @srrstats {G5.8} Edge test: if a value different from a set of
 #'   allowed values is selected, an error is raised.
 test_that("River buffer throws error if wrong 'side' value is provided", {
-  river <- bucharest_osm$river_centerline
-  bbox <- sf::st_bbox(bucharest_osm$boundary)
+  river <- sf::st_sfc(sf::st_linestring(cbind(c(-2, 2), c(0, 0))))
+  bbox <- sf::st_bbox(c(xmin = -1, xmax = 1, ymin = -1, ymax = 1))
   expect_error(
     river_buffer(river, buffer_distance = 10, bbox = bbox, side = "wrong"),
     "If specified, 'side' should be either 'right' or 'left'"
@@ -326,39 +323,42 @@ test_that("load_raster correctly retrieve and merge local data", {
 })
 
 test_that("River centerline and surface are combined without overlap", {
-  l_centerline <- sf::st_length(bucharest_osm$river_centerline)
-  l_surface <- bucharest_osm$river_surface |>
+  centerline <- sf::st_sfc(sf::st_linestring(cbind(c(-2, 2), c(0, 0))))
+  surface <- sf::st_sfc(sf::st_multipolygon(list(
+    sf::st_polygon(list(cbind(c(-1, -1, -0.5, -0.5, -1), c(-1, 1, 1, -1, -1)))),
+    sf::st_polygon(list(cbind(c(0.5, 0.5, 1, 1, 0.5), c(-1, 1, 1, -1, -1))))
+  )))
+  l_centerline <- sf::st_length(centerline)
+  l_surface <- surface |>
     sf::st_cast("MULTILINESTRING") |>
     sf::st_length()
-  l_overlap <- bucharest_osm$river_centerline |>
-    sf::st_intersection(bucharest_osm$river_surface) |>
+  l_overlap <- sf::st_intersection(centerline, surface) |>
     sf::st_length()
   l_combined_expected <- l_centerline + l_surface - l_overlap
-  l_combined_actual <-
-    combine_river_features(sf::st_geometry(bucharest_osm$river_centerline),
-                           sf::st_geometry(bucharest_osm$river_surface)) |>
+  l_combined_actual <- combine_river_features(centerline, surface) |>
     sf::st_length()
   expect_equal(l_combined_actual, l_combined_expected)
 })
 
-test_that("When river surface is not available,
-  river centerline is used with warning",
-          {
-            expect_warning(
-              combine_river_features(bucharest_osm$river_centerline, NULL),
-              regexp = "*Calculating viewpoints along river centerline.*"
-            )
-          })
+test_that(
+  "When river surface is not available, river centerline is used with warning",
+  {
+    river_centerline <- sf::st_sfc(sf::st_linestring(cbind(c(-2, 0), c(0, -2))))
+    expect_warning(
+      combine_river_features(river_centerline, NULL),
+      "*Calculating viewpoints along river centerline.*"
+    )
+  }
+)
 
 test_that(
-  "When both river centerlin and river surface are used for setting viewpoints,
+  "When both river centerline and river surface are used for setting viewpoints,
   message is returned",
   {
+    river_centerline <- sf::st_sfc(sf::st_linestring(cbind(c(-2, 0), c(0, -2))))
+    river_surface <- sf::st_buffer(river_centerline, 0.1)
     expect_message(
-      combine_river_features(
-        bucharest_osm$river_centerline |> sf::st_geometry(),
-        bucharest_osm$river_surface |> sf::st_geometry()
-      ),
+      combine_river_features(river_centerline, river_surface),
       "*Calculating viewpoints from both river edge and river centerline.*"
     )
   }

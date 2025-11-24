@@ -9,10 +9,17 @@ vignette: >
 
 <!-- the *.Rmd vignettes are generated from the *.Rmd.orig files. Please edit those files. -->
 
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  message = FALSE,
+  warning = FALSE,
+  fig.path = "img/vig_06-corridor-segmentation-"
+)
+```
 
-
-
-``` r
+```{r setup}
 library(rcrisp)
 library(sf)
 
@@ -20,7 +27,16 @@ bucharest_osm <- get_osm_example_data()
 bucharest_dem <- get_dem_example_data()
 ```
 
-
+```{r srr-tags, eval=FALSE, echo=FALSE}
+#' @srrstats {G2.10} This vignette uses `sf::st_geometry()` to extract the
+#'   geometry column from the `sf` objects `bucharest_osm$river_centerline` and
+#'   `streets`. This is used when only geometry information is needed from that
+#'   point onwards and all other attributes (i.e., columns) can be safely
+#'   discarded. The object returned by `sf::st_geometry()` is a simple feature
+#'   geometry list column of class `sfc`.
+#' @srrstats {SP2.2a} This vignette demonstrates the compatibility of `rcrisp`
+#'   routines with `sf` workflows.
+```
 
 For a more detailed analysis of an urban river corridor, corridor-level delineation may not be sufficient. The corridor needs to be subdivided into smaller morphological units. Segmentation is a process of subdividing the corridor by using major transversal road or rail infrastructure lines.
 
@@ -30,8 +46,7 @@ To demonstrate this as a separate step, we will use the `bucharest_dambovita$cor
 
 We first prepare the network and select all the streets and railways that cover the river corridor plus a small buffer region (see also `vignette("network-preparation")`):
 
-
-``` r
+```{r network}
 # Add a buffer region around the corridor
 corridor_buffer <- sf::st_buffer(bucharest_dambovita$corridor, 500)
 
@@ -48,18 +63,14 @@ network_filtered <- rbind(streets, railways) |>
 
 We then delineate segments in the corridor. The algorithm spits the corridor using river-crossing transversal edges that form continuous lines in the network:
 
-
-``` r
+```{r}
 segmented_corridor <-
   delineate_segments(bucharest_dambovita$corridor,
                      network_filtered,
                      st_geometry(bucharest_osm$river_centerline))
 ```
 
-
-``` r
+```{r plot-segmentation, fig.cap="", out.width="100%"}
 plot(st_geometry(streets))
 plot(segmented_corridor, border = "orange", lwd = 3, add = TRUE)
 ```
-
-<img src="img/vig_06-corridor-segmentation-plot-segmentation-1.png" width="100%" />

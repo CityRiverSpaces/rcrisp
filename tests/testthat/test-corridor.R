@@ -143,6 +143,9 @@ test_that("River banks for a more complex river still gives two regions", {
 })
 
 test_that("River banks works with real data", {
+  skip_on_ci()
+  skip_on_cran()
+  bucharest_osm <- get_osm_example_data()
   river <- bucharest_osm$river_centerline
   regions <- get_river_banks(river, width = 2500)
   expect_equal(length(regions), 2)
