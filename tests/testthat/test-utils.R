@@ -161,13 +161,10 @@ test_that("River buffer implements a buffer function", {
 })
 
 test_that("River buffer can trim to the region of interest", {
-  river <- sf::st_sfc(sf::st_linestring(cbind(c(-2, 2), c(2, -2))))
+  river <- sf::st_sfc(sf::st_linestring(cbind(c(2, -2), c(0, 0))))
   bbox <- c(xmin = -1, ymin = -1, xmax = 1, ymax = 1)
   actual <- river_buffer(river, buffer_distance = 0.1, bbox = bbox)
   river_buffer <- sf::st_buffer(river, 0.1)
-  # set precision to bypass numerical issues
-  actual <- sf::st_set_precision(actual, 1.e-3)
-  river_buffer <- sf::st_set_precision(river_buffer, 1.e-3)
   covers <- sf::st_covers(river_buffer, actual, sparse = FALSE)
   expect_true(covers)
 })
