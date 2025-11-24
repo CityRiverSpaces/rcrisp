@@ -19,7 +19,7 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/CityRiverSpaces/rcrisp/blob/main/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/CityRiverSpaces/rcrisp/blob/v0.3.1/DESCRIPTION)
 
 Forgaci C, Nattino F (2025). *rcrisp: Automate the Delineation of Urban
 River Spaces*. R package version 0.3.1,
