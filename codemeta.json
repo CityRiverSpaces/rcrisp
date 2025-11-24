@@ -343,8 +343,8 @@
     },
     "SystemRequirements": null
   },
-  "fileSize": "2985.918KB",
-  "releaseNotes": "https://github.com/CityRiverSpaces/rcrisp/blob/master/NEWS.md",
+  "fileSize": "3377.344KB",
+  "releaseNotes": "https://github.com/CityRiverSpaces/rcrisp/blob/main/NEWS.md",
   "readme": "https://github.com/CityRiverSpaces/rcrisp/blob/main/README.md",
   "contIntegration": "https://github.com/CityRiverSpaces/rcrisp/actions/workflows/R-CMD-check.yaml",
   "developmentStatus": ["https://www.repostatus.org/#active", "https://lifecycle.r-lib.org/articles/stages.html#stable"],

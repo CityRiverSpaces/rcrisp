@@ -3,7 +3,8 @@
 # cache folder only used for testing purposes. This is achieved via the
 # [`temp_cache_dir()`] helper function, which should be called in each test.
 
-bb <- get_osm_bb("Bucharest")
+# Approximate bbox for Bucharest
+bb <- c(xmin = 25.97, ymin = 44.33, xmax = 26.23, ymax = 44.54)
 asset_urls <- c(paste0("s3://copernicus-dem-30m/",
                        "Copernicus_DSM_COG_10_N44_00_E026_00_DEM/",
                        "Copernicus_DSM_COG_10_N44_00_E026_00_DEM.tif"),
@@ -39,11 +40,13 @@ test_that("STAC asset urls are correctly retrieved", {
 test_that("Download DEM data can be retrieved from the cache on new calls", {
   # setup cache directory
   cache_dir <- temp_cache_dir()
-
+  river <- sf::st_sfc(
+    sf::st_linestring(cbind(c(-150, 150), c(150, -150))), crs = "EPSG:32601"
+  )
+  dem <- get_test_dem_valley(river)
   with_mocked_bindings(
     load_raster = function(...) {
-      bucharest_dem |>
-        terra::project("EPSG:4326")
+      dem |> terra::project("EPSG:4326")
     },
     {
       # calling load_dem should create a file in the cache folder
@@ -61,26 +64,35 @@ test_that("Download DEM data can be retrieved from the cache on new calls", {
   )
 })
 
-#' @srrstats {G2.10} This test uses `sf::st_geometry()` to extract
-#'   the geometry column from an `sf` object read in with `sf::st_read()`. This
-#'   is used when only geometry information is needed from that point onwards
-#'   and all other attributes (i.e., columns) can be safely discarded. The
-#'   object returned by `sf::st_geometry()` is a simple feature geometry list
-#'   column of class `sfc`.
 test_that("valley polygon is correctly constructed", {
-  dem <- bucharest_dem
-  river <- bucharest_osm$river_surface
-
+  res <- 50
+  crs <- "EPSG:32601"
+  river <- sf::st_sfc(
+    sf::st_linestring(cbind(c(-10000, 10000), c(0, 0))),
+    crs = crs
+  )
+  # Generate the DEM representing the valley around the river, using a fixed
+  # slope.
+  dem <- get_test_dem_valley(
+    river, xmin = -10000, xmax = 10000, ymin = -4000, ymax = 4000, slope = 0.5,
+    res = res
+  )
   valley <- delineate_valley(dem, river)
-  expected_valley_path <- testthat::test_path("testdata",
-                                              "expected_valley.gpkg")
-  expected_valley <- sf::st_read(expected_valley_path, quiet = TRUE) |>
-    sf::st_geometry()
 
-  valley <- sf::st_set_precision(valley, 1e-06)
-  expected_valley <- sf::st_set_precision(expected_valley, 1e-06)
-  expect_true(sf::st_equals_exact(valley, expected_valley,
-                                  par = 0, sparse = FALSE))
+  # We focus on the central part of the DEM, to be sure we neglect edge effects
+  bbox <- sf::st_bbox(c(xmin = -5000, xmax = 5000, ymin = -5000, ymax = 5000))
+  valley_crop <- sf::st_crop(valley, bbox)
+
+  # We use a fixed slope for the valley, and calculate the characteristic cost
+  # distance to extract the valley using a "mean" operator. Thus, the valley
+  # edge is expected to lay at half the distance used to calculate the
+  # characteristic cost distance, which is by default 2 km.
+  river_buffer <- sf::st_buffer(river, 1000)  # 1 km
+  valley_expected <- sf::st_crop(river_buffer, bbox)
+
+  expect_true(
+    sf::st_equals_exact(valley_crop, valley_expected, par = res, sparse = FALSE)
+  )
 })
 
 #' @srrstats {G5.8} Edge test: if a value different from a set of
@@ -92,10 +104,14 @@ test_that("Unknown DEM source throws error", {
 #' @srrstats {G5.8} Edge test: if input arguments are not consistent with each
 #'    other, an error is raised.
 test_that("Mismatch between DEM CRS and river CRS throws error", {
-  expect_error(delineate_valley(bucharest_dem,
-                                st_transform(bucharest_osm$river_centerline,
-                                             4326)),
-               "DEM and river geometry should be in the same CRS")
+  river <- sf::st_sfc(
+    sf::st_linestring(cbind(c(-150, 150), c(150, -150))), crs = "EPSG:32601"
+  )
+  dem <- get_test_dem_valley(river)
+  expect_error(
+    delineate_valley(dem, st_transform(river, "EPSG:4326")),
+    "DEM and river geometry should be in the same CRS"
+  )
 })
 
 #' @srrstats {G5.8} Edge test: if input arguments are not consistent with each

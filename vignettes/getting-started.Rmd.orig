@@ -10,7 +10,15 @@ csl: ../inst/csl/apa.csl
 link-citations: true
 ---
 
-
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  message = FALSE,
+  warning = FALSE,
+  fig.path = "img/getting-started-"
+)
+```
 
 # What is `rcrisp`?
 
@@ -42,8 +50,7 @@ In short, given a city name and a river name, it:
 
 # Example
 
-
-``` r
+```{r plot, fig.cap="", out.width="100%"}
 library(rcrisp)
 
 # Parameters
@@ -66,8 +73,6 @@ plot(streets, add = TRUE)
 plot(bd$segments, border = "orange", add = TRUE, lwd = 3)
 plot(bd$corridor, border = "red", add = TRUE, lwd = 3)
 ```
-
-<img src="img/getting-started-plot-1.png" width="100%" />
 
 # Interpretation and next steps
 

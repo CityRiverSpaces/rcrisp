@@ -5,9 +5,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 # rcrisp 0.3.1
 
-## Fixed
+## Changed
 
-- Code chunk evaluation was disabled in the network preparation vignette to prevent failed http requests on CRAN.
+- To make the package check more robust with respect to missing/failing data access, the vignettes are frozen, all tests and examples using example data are skipped on CRAN
 
 # rcrisp 0.3.0 - 2025-10-13
 

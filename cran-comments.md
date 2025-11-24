@@ -5,8 +5,8 @@
 ## Resubmission
 
 * This is a resubmission to solve problems identified by package checks on CRAN.
-Specifically, code chunk evaluation was disabled in the network preparation
-vignette to prevent failed http requests on CRAN.
+Specifically, vignettes, tests and examples are now modified so that no remote
+resources are required during CRAN checks.
 
 * We also noticed in the rendering of all vignettes a warning originating from
 `rmarkdown`. A recent release of `rmarkdown` (v2.30) addresses this issue and
