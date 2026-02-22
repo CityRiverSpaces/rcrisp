@@ -80,8 +80,12 @@ dataset (see \code{\link[=get_dem]{get_dem()}}). Only relevant if \code{corridor
 and \code{dem} is NULL}
 }
 \value{
-A list with the corridor, segments, and riverspace geometries as
-\code{\link[sf:sfc]{sf::sfc_POLYGON}} objects.
+A list containing zero or more of the following elements: "valley",
+"corridor", "segments", and "riverspace", each as an \code{\link[sf:sfc]{sf::sfc_POLYGON}} or
+\code{\link[sf:sfc]{sf::sfc_MULTIPOLYGON}} object (depending on the geometry of the input
+data). The list contains only the geometries corresponding to the
+delineation steps that were carried out (e.g., if \code{segments} is FALSE, the
+list will not contain a "segments" element).
 }
 \description{
 Delineate a corridor around a river
