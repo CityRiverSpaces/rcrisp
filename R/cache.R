@@ -156,7 +156,7 @@ write_data_to_cache <- function(x, filepath, wrap = FALSE, quiet = FALSE) {
 #'   as object of class [`Date`] or as a case dependent character vector
 #'   accepted by [`as.Date()`]
 #'
-#' @return List of file paths of removed files
+#' @return NULL
 #' @export
 #' @examplesIf interactive()
 #' # Clear all cache
