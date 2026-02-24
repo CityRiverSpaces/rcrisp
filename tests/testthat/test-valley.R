@@ -115,7 +115,8 @@ test_that("DEM source is case insensitive", {
       expect_error(get_dem(bb, dem_source = "stac"), NA)
       expect_error(get_dem(bb, dem_source = "STAC"), NA)
       expect_error(get_dem(bb, dem_source = "StAc"), NA)
-    })
+    }
+  )
 })
 
 #' @srrstats {G5.8} Edge test: if input arguments are not consistent with each
