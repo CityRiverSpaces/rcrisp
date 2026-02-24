@@ -101,6 +101,23 @@ test_that("Unknown DEM source throws error", {
   expect_error(get_dem(bb, dem_source = "CATS")) # :)
 })
 
+#' @srrstats {G2.3b} Test that the value of dem_source passed to get_dem() is
+#'   case insensitive.
+test_that("DEM source is case insensitive", {
+  with_mocked_bindings(
+    load_dem = function(...) {
+      terra::rast(matrix(1:4, nrow = 2), crs = "EPSG:4326")
+    },
+    get_stac_asset_urls = function(...) {
+      asset_urls
+    },
+    {
+      expect_error(get_dem(bb, dem_source = "stac"), NA)
+      expect_error(get_dem(bb, dem_source = "STAC"), NA)
+      expect_error(get_dem(bb, dem_source = "StAc"), NA)
+    })
+})
+
 #' @srrstats {G5.8} Edge test: if input arguments are not consistent with each
 #'    other, an error is raised.
 test_that("Mismatch between DEM CRS and river CRS throws error", {
