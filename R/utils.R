@@ -203,7 +203,7 @@ river_buffer <- function(river, buffer_distance, bbox = NULL, side = NULL) {
   if (!is.null(bbox)) river <- sf::st_crop(river, bbox)
   if (is.null(side)) {
     river_buf <- buffer(river, buffer_distance)
-    return(sf::st_union(river_buf))
+    sf::st_union(river_buf)
   } else {
     if (side == "left") {
       river_buf <- buffer(river, buffer_distance, singleSide = TRUE)
@@ -218,7 +218,7 @@ river_buffer <- function(river, buffer_distance, bbox = NULL, side = NULL) {
     splits <- split_by(sf::st_union(river_buf), river)
     river_buf <- splits[find_largest(splits)]
     # Finally drop any eventual hole
-    return(sfheaders::sf_remove_holes(river_buf))
+    sfheaders::sf_remove_holes(river_buf)
   }
 }
 
