@@ -1,4 +1,14 @@
 #' @noRd
+.onLoad <- function(libname, pkgname) {
+  if (is.null(getOption("rcrisp.run_checks", NULL))) {
+    options(rcrisp.run_checks = FALSE)
+  }
+  invisible()
+}
+
+#' @noRd
 .onAttach <- function(libname, pkgname) {
-  check_cache()
+  if (interactive() || getOption("rcrisp.run_checks", FALSE)) {
+    check_cache()
+  }
 }
