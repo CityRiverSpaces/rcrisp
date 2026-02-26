@@ -165,10 +165,13 @@ test_that("City boundary of Bucharest is correctly retrieved", {
   with_mocked_bindings(
     osmdata_as_sf = function(...) list(osm_polygons = mock_city_boundary),
     expect_no_message(
-      city_boundary <- get_osm_city_boundary(bb_bucharest, "Bucharest")
+      city_boundary <- get_osm_city_boundary(bb_bucharest,
+                                             "Bucharest",
+                                             crs = 32635)
     )
   )
   expect_true(inherits(city_boundary, "sfc"))
+  expect_equal(sf::st_crs(city_boundary)$epsg, 32635)
 })
 
 #' @srrstats {G5.8, G5.8a} Edge test: if a value that leads to no data being
