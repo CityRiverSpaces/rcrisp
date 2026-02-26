@@ -22,7 +22,17 @@ mock_river_lines <- sf::st_sf(
   name = c("Dâmbovița", "Dâmbovița", "Colentina", "Colentina"),
   geometry = mock_river_lines_geom
 )
+mock_river_multilines_geom <- sf::st_sfc(
+  sf::st_multilinestring(list(matrix(c(26.0, 26.1, 44.5, 44.6), ncol = 2))),
+  sf::st_multilinestring(list(matrix(c(26.2, 26.3, 44.5, 44.6), ncol = 2))),
+  crs = "EPSG:4326"
+)
+mock_river_multilines <- sf::st_sf(
+  name = c("Dâmbovița", "Colentina"),
+  geometry = mock_river_multilines_geom
+)
 mock_river_polygons <- sf::st_buffer(mock_river_lines, 10)
+mock_river_multipolygons <- sf::st_buffer(mock_river_multilines, 10)
 mock_city_boundary_geom <- sf::st_as_sfc(bb_bucharest)
 mock_city_boundary <- sf::st_sf(
   name = "Bucharest",
@@ -221,6 +231,64 @@ test_that("City boundary is retrieved for alternative names", {
     }
   )
   expect_equal(city_boundary_eng, city_boundary_ro)
+})
+
+test_that("Both lines and multilines are included in river retrieval", {
+  with_mocked_bindings(
+    osmdata_as_sf = function(...) list(osm_lines = mock_river_lines,
+                                       osm_multilines = NULL),
+    {
+      river_centerline_1 <- get_osm_river_centerline(bb_bucharest, "Dâmbovița",
+                                                     force_download = TRUE)
+    }
+  )
+  with_mocked_bindings(
+    osmdata_as_sf = function(...) list(osm_lines = mock_river_lines,
+                                       osm_multilines = mock_river_multilines),
+    {
+      river_centerline_2 <- get_osm_river_centerline(bb_bucharest, "Dâmbovița",
+                                                     force_download = TRUE)
+    }
+  )
+  expect_lt(
+    sf::st_length(river_centerline_1),
+    sf::st_length(river_centerline_2)
+  )
+  length_with_multilines <- sum(sf::st_length(mock_river_lines)[1:2],
+                                sf::st_length(mock_river_multilines)[1])
+  expect_equal(
+    sf::st_length(river_centerline_2),
+    length_with_multilines
+  )
+})
+
+test_that("Both polygons and multipolygons are included in river retrieval", {
+  with_mocked_bindings(
+    osmdata_as_sf = function(...) list(osm_lines = mock_river_lines,
+                                       osm_multilines = mock_river_multilines),
+    {
+      river_centerline <- get_osm_river_centerline(bb_bucharest, "Dâmbovița",
+                                                   force_download = TRUE)
+    }
+  )
+  with_mocked_bindings(
+    osmdata_as_sf = function(...) {
+      list(osm_polygons = mock_river_polygons,
+           osm_multipolygons = mock_river_multipolygons)
+    },
+    {
+      river_polygons <- get_osm_river_surface(bb_bucharest,
+                                              river_centerline,
+                                              force_download = TRUE)
+    }
+  )
+  area_with_multipolygons <- sum(sf::st_area(mock_river_polygons)[1:2],
+                                 sf::st_area(mock_river_multipolygons)[1])
+  expect_equal(
+    sum(sf::st_area(river_polygons)),
+    area_with_multipolygons,
+    tolerance = 1e-5
+  )
 })
 
 #' @srrstats {G5.8, G5.8a} Edge test: if a value that leads to no data being
