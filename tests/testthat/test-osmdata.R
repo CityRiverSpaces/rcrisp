@@ -359,6 +359,107 @@ test_that("Only one river can be queried at a time", {
   expect_error(get_osm_river_centerline(bb, c("Dâmbovița", "SomeOtherRiver")),
                "Assertion on 'river_name' failed: Must have length 1")
 })
+
+test_that("get_osm_streets returns an sf of street lines with correct CRS", {
+  crs <- 32632
+  aoi <- sf::st_bbox(c(xmin = 1, ymin = 1, xmax = 2, ymax = 2), crs = crs)
+
+  mocked_osmdata_response <- list(
+    osm_lines = sf::st_sf(
+      highway = c("residential", "primary"),
+      geometry = sf::st_sfc(
+        sf::st_linestring(matrix(c(1, 1, 1.5, 1.5), ncol = 2, byrow = TRUE)),
+        sf::st_linestring(matrix(c(1.5, 1.5, 2, 2), ncol = 2, byrow = TRUE))
+      ),
+      crs = crs
+    ),
+    osm_polygons = sf::st_sf(
+      highway = c("primary"),
+      geometry = sf::st_sfc(
+        sf::st_polygon(
+          list(matrix(c(1, 1, 2, 1, 2, 2, 1, 2, 1, 1), ncol = 2, byrow = TRUE))
+        ),
+        crs = crs)
+      )
+  )
+
+  with_mocked_bindings(
+    osmdata_as_sf = function(...) mocked_osmdata_response,
+    {
+      streets <- get_osm_streets(
+        aoi,
+        crs = crs,
+        highway_values = c("residential", "primary"),
+        force_download = FALSE
+      )
+    }
+  )
+
+  mocked_osmdata_response_no_poly <- mocked_osmdata_response
+  mocked_osmdata_response_no_poly$osm_polygons <- sf::st_sf(
+    highway = c("primary"),
+    geometry = sf::st_sfc(
+      sf::st_polygon(),
+      crs = crs)
+  )
+
+  with_mocked_bindings(
+    osmdata_as_sf = function(...) mocked_osmdata_response_no_poly,
+    {
+      streets_no_poly <- get_osm_streets(
+        aoi,
+        crs = crs,
+        highway_values = c("residential", "primary"),
+        force_download = FALSE
+      )
+    }
+  )
+
+  expect_equal(nrow(streets), 3)
+  expect_equal(nrow(streets_no_poly), 2)
+  expect_equal(sf::st_crs(streets), sf::st_crs(crs))
+  expect_true(
+    all(sf::st_is(streets, "LINESTRING") |
+      sf::st_is(streets, "MULTILINESTRING"))
+  )
+})
+
+test_that("Street polygons cast to lines are included", {
+  crs <- 32632
+  aoi <- sf::st_bbox(c(xmin = 1, ymin = 1, xmax = 2, ymax = 2), crs = crs)
+
+  poly <- sf::st_polygon(list(matrix(
+    c(1, 1, 3, 1, 3, 2, 1, 2, 1, 1),
+    ncol = 2, byrow = TRUE
+  )))
+  mocked_osmdata_response <- list(
+    osm_lines = NULL,
+    osm_polygons = sf::st_sf(
+      highway = "residential",
+      geometry = sf::st_sfc(poly),
+      crs = crs
+    )
+  )
+
+  with_mocked_bindings(
+    osmdata_as_sf = function(...) mocked_osmdata_response,
+    {
+      streets_from_polygons <- get_osm_streets(aoi,
+                                               crs = crs,
+                                               force_download = FALSE)
+    }
+  )
+
+  expect_gt(nrow(streets_from_polygons), 0)
+  expect_equal(sf::st_crs(streets_from_polygons), sf::st_crs(crs))
+  expect_true(
+    all(
+      sf::st_is(streets_from_polygons, "LINESTRING") |
+        sf::st_is(streets_from_polygons, "MULTILINESTRING")
+      )
+    )
+})
+
 test_that("If no railways are found, an empty sf object is returned", {
   crs <- sf::st_crs("EPSG:32632")
   aoi <- sf::st_bbox(c(xlim = 1, xmax = 2, ylim = 1, ymax = 2))
