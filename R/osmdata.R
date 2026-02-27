@@ -455,9 +455,13 @@ get_osm_streets <- function(aoi, crs = NULL, highway_values = NULL,
                            force_download = force_download)
 
   # Cast polygons (closed streets) into lines
-  poly_to_lines <- suppressWarnings(
-    streets$osm_polygons |> sf::st_cast("LINESTRING")
-  )
+  if (!is.null(streets$osm_polygons)) {
+    poly_to_lines <- suppressWarnings(
+      streets$osm_polygons |> sf::st_cast("LINESTRING")
+    )
+  } else {
+    poly_to_lines <- sf::st_as_sf(sf::st_sfc(sf::st_polygon(), crs = crs))
+  }
 
   # Combine all features in one data frame
   streets_lines <- streets$osm_lines |>
