@@ -322,13 +322,17 @@ test_that("River lines and surface are properly set up", {
     },
     {
       river_centerline <- get_osm_river_centerline(bb_bucharest, "Dâmbovița",
-                                                   force_download = TRUE)
+                                                   force_download = TRUE,
+                                                   crs = 32635)
       river_surface <- get_osm_river_surface(bb_bucharest, river_centerline,
-                                             force_download = TRUE)
+                                             force_download = TRUE,
+                                             crs = 32635)
     }
   )
   expect_true(sf::st_is(river_centerline, "MULTILINESTRING"))
   expect_true(sf::st_is(river_surface, "MULTIPOLYGON"))
+  expect_equal(sf::st_crs(river_centerline)$epsg, 32635)
+  expect_equal(sf::st_crs(river_surface)$epsg, 32635)
 })
 
 test_that("If no river surface is found, an empty sfc object is returned", {
