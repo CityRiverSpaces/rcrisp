@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - A definition of "riverside urban areas" was added in the README.
 - The practical usefulness of the morphological approach was explained in the README.
+- Test coverage of the `osmdata` module was increased.
 
 # rcrisp 0.3.1 - 2025-11-24
 
