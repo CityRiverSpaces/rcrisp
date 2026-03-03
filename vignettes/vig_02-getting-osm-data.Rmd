@@ -44,7 +44,7 @@ aoi_network <- get_river_aoi(river, bb, buffer_distance = network_buffer)
 streets <- get_osm_streets(bb, crs)
 railways <- get_osm_railways(bb, crs)
 aoi_buildings <- get_river_aoi(river, bb, buffer_distance = buildings_buffer)
-buildings <- get_osm_buildings(bb, crs)
+buildings <- get_osm_buildings(aoi_buildings, crs)
 
 bucharest_osm <- list(
   boundary = city_boundary,
