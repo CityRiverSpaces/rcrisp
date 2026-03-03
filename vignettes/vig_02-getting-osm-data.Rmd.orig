@@ -31,7 +31,7 @@ network_buffer <- 3000  # in m, buffer around the river to get the network
 buildings_buffer <- 100  # in m, buffer around the river to get the buildings
 ```
 
-We start by getting the bounding box and projected CRS for the study area.
+We start by getting the bounding box and by defining a suitable projected CRS for the study area (we use a helper function to find the suitable UTM zone).
 
 ```{r}
 bb <- get_osm_bb(city_name)  # Get bounding box from OSM
