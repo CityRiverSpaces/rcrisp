@@ -5,7 +5,9 @@
 #
 # NOTE: pre-existing vignettes will not be compiled, remove the .Rmd files to
 # re-generate them!
-vigs_orig <- list.files(".", pattern = "\\.Rmd.orig")
+vigs_orig <- list.files("vignettes",
+                        pattern = "\\.Rmd.orig",
+                        full.names = TRUE)
 
 for (vig_orig in vigs_orig) {
   vig <- gsub(".orig", "", vig_orig)
