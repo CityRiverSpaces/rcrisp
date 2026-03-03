@@ -10,9 +10,11 @@ vignette: >
 <!-- the *.Rmd vignettes are generated from the *.Rmd.orig files. Please edit those files. -->
 
 ```{r setup, include=FALSE}
+knitr::opts_knit$set(base.dir = "vignettes")
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
+  dev = "png",
   message = FALSE,
   warning = FALSE,
   fig.path = "img/vig_02-getting-osm-data-"
