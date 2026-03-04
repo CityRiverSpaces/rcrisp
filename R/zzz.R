@@ -1,7 +1,7 @@
 #' @noRd
 .onLoad <- function(libname, pkgname) {
   if (is.null(getOption("rcrisp.check_cache"))) {
-    options(rcrisp.run_checks = FALSE)
+    options(rcrisp.check_cache = FALSE)
   }
   invisible()
 }
