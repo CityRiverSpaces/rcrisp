@@ -407,12 +407,7 @@ test_that("get_osm_streets returns an sf of street lines with correct CRS", {
   )
 
   mock_streets_no_poly <- mock_streets
-  mock_streets_no_poly$osm_polygons <- sf::st_sf(
-    highway = c("primary"),
-    geometry = sf::st_sfc(
-      sf::st_polygon(),
-      crs = crs)
-  )
+  mock_streets_no_poly$osm_polygons <- NULL
 
   with_mocked_bindings(
     osmdata_as_sf = function(...) mock_streets_no_poly,
