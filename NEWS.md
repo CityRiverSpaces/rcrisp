@@ -11,6 +11,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The practical usefulness of the morphological approach was explained in the README.
 - Test coverage of the `osmdata` module was increased.
 
+## Fixed
+
+- Assertion on CRS input was removed from `get_osm_streets()`. CRS input is now checked in `as_crs()` as in the other `get_osm_*()` functions.
+- Incorrect CRS was fixed in osmdata tests.
+
 # rcrisp 0.3.1 - 2025-11-24
 
 ## Changed
