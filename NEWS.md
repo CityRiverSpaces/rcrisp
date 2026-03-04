@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Fixed
 
 - Figure output path was fixed in frozen OSM vignette
-- Buildings retrieval was limited to AOI in OSM vignette
+- Buildings, streets and railways retrieval was limited to AOI in OSM vignette
 
 # rcrisp 0.3.1 - 2025-11-24
 
