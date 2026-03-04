@@ -44,22 +44,18 @@ mock_streets <- list(
   ),
   osm_polygons = sf::st_sf(
     highway = c("primary"),
-    geometry = sf::st_sfc(
-      sf::st_polygon(
-        list(matrix(c(1, 1, 2, 1, 2, 2, 1, 2, 1, 1), ncol = 2, byrow = TRUE))
-      ),
-      crs = sf::st_crs("EPSG:4326"))
+    geometry = sf::st_sfc(sf::st_polygon(list(
+      matrix(c(1, 1, 2, 1, 2, 2, 1, 2, 1, 1), ncol = 2, byrow = TRUE)
+    )), crs = sf::st_crs("EPSG:4326"))
   )
 )
 mock_streets_polygon <- list(
   osm_lines = NULL,
   osm_polygons = sf::st_sf(
     highway = "residential",
-    geometry = sf::st_sfc(
-      sf::st_polygon(list(matrix(
-        c(1, 1, 3, 1, 3, 2, 1, 2, 1, 1),
-        ncol = 2, byrow = TRUE)))
-    ),
+    geometry = sf::st_sfc(sf::st_polygon(list(
+      matrix(c(1, 1, 3, 1, 3, 2, 1, 2, 1, 1), ncol = 2, byrow = TRUE)
+    ))),
     crs = sf::st_crs("EPSG:4326")
   )
 )
@@ -265,16 +261,20 @@ test_that("City boundary is retrieved for alternative names", {
 
 test_that("Both lines and multilines are included in river retrieval", {
   with_mocked_bindings(
-    osmdata_as_sf = function(...) list(osm_lines = mock_river_lines,
-                                       osm_multilines = NULL),
+    osmdata_as_sf = function(...) {
+      list(osm_lines = mock_river_lines,
+           osm_multilines = NULL)
+    },
     {
       river_centerline_1 <- get_osm_river_centerline(bb_bucharest, "Dâmbovița",
                                                      force_download = TRUE)
     }
   )
   with_mocked_bindings(
-    osmdata_as_sf = function(...) list(osm_lines = mock_river_lines,
-                                       osm_multilines = mock_river_multilines),
+    osmdata_as_sf = function(...) {
+      list(osm_lines = mock_river_lines,
+           osm_multilines = mock_river_multilines)
+    },
     {
       river_centerline_2 <- get_osm_river_centerline(bb_bucharest, "Dâmbovița",
                                                      force_download = TRUE)
@@ -294,8 +294,10 @@ test_that("Both lines and multilines are included in river retrieval", {
 
 test_that("Both polygons and multipolygons are included in river retrieval", {
   with_mocked_bindings(
-    osmdata_as_sf = function(...) list(osm_lines = mock_river_lines,
-                                       osm_multilines = mock_river_multilines),
+    osmdata_as_sf = function(...) {
+      list(osm_lines = mock_river_lines,
+           osm_multilines = mock_river_multilines)
+    },
     {
       river_centerline <- get_osm_river_centerline(bb_bucharest, "Dâmbovița",
                                                    force_download = TRUE)
@@ -427,7 +429,7 @@ test_that("get_osm_streets returns an sf of street lines with correct CRS", {
   expect_equal(sf::st_crs(streets), crs)
   expect_true(
     all(sf::st_is(streets, "LINESTRING") |
-      sf::st_is(streets, "MULTILINESTRING"))
+          sf::st_is(streets, "MULTILINESTRING"))
   )
 })
 
@@ -447,12 +449,10 @@ test_that("Street polygons cast to lines are included", {
 
   expect_gt(nrow(streets_from_polygons), 0)
   expect_equal(sf::st_crs(streets_from_polygons), crs)
-  expect_true(
-    all(
-      sf::st_is(streets_from_polygons, "LINESTRING") |
-        sf::st_is(streets_from_polygons, "MULTILINESTRING")
-      )
-    )
+  expect_true(all(
+    sf::st_is(streets_from_polygons, "LINESTRING") |
+      sf::st_is(streets_from_polygons, "MULTILINESTRING")
+  ))
 })
 
 test_that("If no railways are found, an empty sf object is returned", {
