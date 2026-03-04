@@ -460,7 +460,7 @@ get_osm_streets <- function(aoi, crs = NULL, highway_values = NULL,
       streets$osm_polygons |> sf::st_cast("LINESTRING")
     )
   } else {
-    poly_to_lines <- sf::st_as_sf(sf::st_sfc(sf::st_polygon(), crs = crs))
+    poly_to_lines <- sf::st_as_sf(sf::st_sfc(sf::st_linestring(), crs = sf::st_crs("EPSG:4326")))
   }
 
   # Combine all features in one data frame
