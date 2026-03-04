@@ -437,9 +437,6 @@ get_osm_streets <- function(aoi, crs = NULL, highway_values = NULL,
                             force_download = FALSE) {
   # Check input
   checkmate::assert_true(inherits(aoi, c("sf", "sfc", "bbox")))
-  checkmate::assert_numeric(crs,
-                            null.ok = TRUE,
-                            any.missing = FALSE)
   checkmate::assert_character(highway_values, null.ok = TRUE)
 
   if (is.null(highway_values)) {

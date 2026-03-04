@@ -40,7 +40,7 @@ mock_streets <- list(
       sf::st_linestring(matrix(c(1, 1, 1.5, 1.5), ncol = 2, byrow = TRUE)),
       sf::st_linestring(matrix(c(1.5, 1.5, 2, 2), ncol = 2, byrow = TRUE))
     ),
-    crs = 32632
+    crs = sf::st_crs("EPSG:4326")
   ),
   osm_polygons = sf::st_sf(
     highway = c("primary"),
@@ -48,7 +48,7 @@ mock_streets <- list(
       sf::st_polygon(
         list(matrix(c(1, 1, 2, 1, 2, 2, 1, 2, 1, 1), ncol = 2, byrow = TRUE))
       ),
-      crs = 32632)
+      crs = sf::st_crs("EPSG:4326"))
   )
 )
 mock_streets_polygon <- list(
@@ -60,7 +60,7 @@ mock_streets_polygon <- list(
         c(1, 1, 3, 1, 3, 2, 1, 2, 1, 1),
         ncol = 2, byrow = TRUE)))
     ),
-    crs = 32632
+    crs = sf::st_crs("EPSG:4326")
   )
 )
 mock_city_boundary_geom <- sf::st_as_sfc(bb_bucharest)
@@ -391,8 +391,9 @@ test_that("Only one river can be queried at a time", {
 })
 
 test_that("get_osm_streets returns an sf of street lines with correct CRS", {
-  crs <- 32632
-  aoi <- sf::st_bbox(c(xmin = 1, ymin = 1, xmax = 2, ymax = 2), crs = crs)
+  crs <- sf::st_crs("EPSG:32632")
+  aoi <- sf::st_bbox(c(xmin = 1, ymin = 1, xmax = 2, ymax = 2),
+                     crs = sf::st_crs("EPSG:4326"))
 
   with_mocked_bindings(
     osmdata_as_sf = function(...) mock_streets,
@@ -423,7 +424,7 @@ test_that("get_osm_streets returns an sf of street lines with correct CRS", {
 
   expect_equal(nrow(streets), 3)
   expect_equal(nrow(streets_no_poly), 2)
-  expect_equal(sf::st_crs(streets), sf::st_crs(crs))
+  expect_equal(sf::st_crs(streets), crs)
   expect_true(
     all(sf::st_is(streets, "LINESTRING") |
       sf::st_is(streets, "MULTILINESTRING"))
@@ -431,8 +432,9 @@ test_that("get_osm_streets returns an sf of street lines with correct CRS", {
 })
 
 test_that("Street polygons cast to lines are included", {
-  crs <- 32632
-  aoi <- sf::st_bbox(c(xmin = 1, ymin = 1, xmax = 2, ymax = 2), crs = crs)
+  crs <- sf::st_crs("EPSG:32632")
+  aoi <- sf::st_bbox(c(xmin = 1, ymin = 1, xmax = 2, ymax = 2),
+                     crs = sf::st_crs("EPSG:4326"))
 
   with_mocked_bindings(
     osmdata_as_sf = function(...) mock_streets_polygon,
@@ -444,7 +446,7 @@ test_that("Street polygons cast to lines are included", {
   )
 
   expect_gt(nrow(streets_from_polygons), 0)
-  expect_equal(sf::st_crs(streets_from_polygons), sf::st_crs(crs))
+  expect_equal(sf::st_crs(streets_from_polygons), crs)
   expect_true(
     all(
       sf::st_is(streets_from_polygons, "LINESTRING") |
