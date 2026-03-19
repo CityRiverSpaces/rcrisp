@@ -352,7 +352,7 @@ get_osm_river_centerline <- function(bb, river_name, crs = NULL,
 #' `water=reservoir`, `water=lake`, or other complex water bodies. For analyses
 #' targeting only the main river surface, results should be inspected and
 #' non-river water bodies removed where needed.
-
+#'
 #' @param bb Bounding box of class `bbox`
 #' @param river_centerline The river centerline as an object of class
 #'   [`sf::sfc_LINESTRING`] or [`sf::sfc_MULTILINESTRING`]
