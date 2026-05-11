@@ -30,105 +30,47 @@ output:
 
 # Summary
 
-`rcrisp` is a software for automated and scalable delineation of urban
-river spaces with spatial-temporal big data. 
+`rcrisp` is a software for automated and scalable delineation of urban river spaces with spatial-temporal big data.
 
 # Introduction
 
-Urban rivers and the urban areas surrounding them, hereinafter referred
-to as urban river spaces (URS), have come to the forefront of
-sustainable urban transformations worldwide. This trend is not only due
-to pounding water-related disturbances such as floods or water scarcity,
-but also because the vital role of rivers in supporting social and
-ecological processes is increasingly acknowledged. As researchers and
-practitioners of the
-urban environment engage into understanding or tackling current URS transformations,
-they face the challenge of capturing the complexities of environmental,
-social, and ecological phenomena in an integrated way [@prominski2023].
-Moreover, considering the global extent of the phenomenon, they lack
-established frames of comparison that may reveal local specificities and
-cross-case similarities. An essential part of the challenge is how urban
-areas surrounding rivers are delineated---that is, how their boundaries
-are drawn for analytical or intervention purposes---, as the resulting
-spatial units can considerably impact decisions made for urban
-riverspace transformations. More often than not, URS boundaries are
-determined without a systematic and reproducible delineation method,
-wherever suitable spatial data is available, based on census tracts,
-using rivers as boundaries, using neutral (square or circular) cut-outs,
-at different levels of aggregation (city, district, neighbourhood), or
-areas of study specific to a local urban development project. None of
-these approaches to delineation are suitable for a reliable integrated
-understanding of URSs, as they are to a large extent arbitrary. An
-integrated understanding of URS requires spatial morphological units of
-analysis that reflect the combined “footprints” of environmental, social
-and ecological processes [@marcus2016]. This is a case of the modifiable
-areal unit problem (MAUP) [@openshaw1984] with a considerable impact on
-decisions taken in environmental, mobility, ecological, and public space
-planning and design.
+Urban rivers and the urban areas surrounding them, hereinafter referred to as urban river spaces (URS), have come to the forefront of sustainable urban transformations worldwide. This trend is not only due to pounding water-related disturbances such as floods or water scarcity, but also because the vital role of rivers in supporting social and ecological processes is increasingly acknowledged. As researchers and practitioners of the urban environment engage into understanding or tackling current URS transformations, they face the challenge of capturing the complexities of environmental, social, and ecological phenomena in an integrated way [@prominski2023]. Moreover, considering the global extent of the phenomenon, they lack established frames of comparison that may reveal local specificities and cross-case similarities. An essential part of the challenge is how urban areas surrounding rivers are delineated---that is, how their boundaries are drawn for analytical or intervention purposes---, as the resulting spatial units can considerably impact decisions made for urban riverspace transformations. More often than not, URS boundaries are determined without a systematic and reproducible delineation method, wherever suitable spatial data is available, based on census tracts, using rivers as boundaries, using neutral (square or circular) cut-outs, at different levels of aggregation (city, district, neighbourhood), or areas of study specific to a local urban development project. None of these approaches to delineation are suitable for a reliable integrated understanding of URSs, as they are to a large extent arbitrary. An integrated understanding of URS requires spatial morphological units of analysis that reflect the combined “footprints” of environmental, social and ecological processes [@marcus2016]. This is a case of the modifiable areal unit problem (MAUP) [@openshaw1984] with a considerable impact on decisions taken in environmental, mobility, ecological, and public space planning and design.
 
 # Statement of need
 
-`rcrisp` is designed to address a diverse, growing and cross-disciplinary 
-research community concerned with understanding URSs in an integrated and
-scalable way. 
+`rcrisp` is designed to address a diverse, growing and cross-disciplinary research community concerned with understanding URSs in an integrated and scalable way.
 
-`rcrisp` provides specialized
-functionality in addition to more general morphometric tools like the
-Python packages `momepy` [@fleischmann2019; @fleischmann2022 and `OSMnx`
-[@boeing2024] and the R package `sfnetworks` [@vandermeer2024].
+`rcrisp` provides specialized functionality in addition to more general morphometric tools like the Python packages `momepy` \[@fleischmann2019; @fleischmann2022 and `OSMnx` [@boeing2024] and the R package `sfnetworks` [@vandermeer2024].
 
-`rcrisp` is intended to open new research avenues, such as integrated local
-spatial analyses and global cross-case analyses, which have been so far
-hindered by data- or workflow-related difficulties. However, the
-usability and effectiveness of `rcrisp` in addressing the needs, challenges
-and various use cases of researchers and practitioners is yet to be
-tested and the software needs to be adapted according to such input.
+[@bhowmik2015] script, using deprecated packages, non-urban, focus on
+
+`rcrisp` is intended to open new research avenues, such as integrated local spatial analyses and global cross-case analyses, which have been so far hindered by data- or workflow-related difficulties. However, the usability and effectiveness of `rcrisp` in addressing the needs, challenges and various use cases of researchers and practitioners is yet to be tested and the software needs to be adapted according to such input.
 
 # Algorithms
 
-`rcrisp` builds on a previously developed delineation method [@Forgaci2018], 
-which considers the morphology of the river valley and that of the urban fabric
-jointly. `rcrisp` automates that method of delineation, while leveraging local
-and global spatial-temporal big data (e.g., OpenStreetMap and Global DEM data) increasingly available for riverspace analysis at large [@forgaci2020].
+`rcrisp` builds on a previously developed delineation method [@Forgaci2018], which considers the morphology of the river valley and that of the urban fabric jointly. `rcrisp` automates that method of delineation, while leveraging local and global spatial-temporal big data (e.g., OpenStreetMap and Global DEM data) increasingly available for riverspace analysis at large [@forgaci2020].
 
 ![Diagram of the four delineation steps carried out by rcrisp.](method.png)
 
 The automation of the delineation is implemented using the following algorithms:
 
-- The `valley` module implements a cost distance algorithm to determine the
-river valley boundaries from a DEM.
+-   The `valley` module implements a cost distance algorithm to determine the river valley boundaries from a DEM.
 
-- The `corridor` modules uses a shortest path algorithm to determine the
-corridor edges on the street network obtained from OpenStreetMap. For both sides
-of the river, the shortest paths which are closest to the valley boundaries are
-chosen for the corridor edge.
+-   The `corridor` modules uses a shortest path algorithm to determine the corridor edges on the street network obtained from OpenStreetMap. For both sides of the river, the shortest paths which are closest to the valley boundaries are chosen for the corridor edge.
 
-- The `segments` module uses the COINS algorithm to determine continuous lines
-along the street network starting from bridges crossing the river. The resulting continuous lines are used to divide the corridor into corridor segments.
+-   The `segments` module uses the COINS algorithm to determine continuous lines along the street network starting from bridges crossing the river. The resulting continuous lines are used to divide the corridor into corridor segments.
 
-- The `riverspace` modules applies an isovist algorithm to determine the space
-enclosed by the first line of buildings around the river within a given
-visibility distance.
+-   The `riverspace` modules applies an isovist algorithm to determine the space enclosed by the first line of buildings around the river within a given visibility distance.
 
 # Related software
 
 # Software package overview
 
-`rcrisp` is structured into five core delineation modules, namely `valley`,
-`corridor`, `segments`, and `riverspace` for the four delineation steps, as well
-as an all-encompassing `delineate` module which runs the entire delineation
-workflow. The dedicated `network` and `sf` modules contain functionality needed
-for processing `sfnetwork` and `sf` objects, respectively. The retrieval of OSM
-data is available from the `osmdata` module, while example delineation data and
-example OSM data used in the documentation are available from the `data` and
-`exampeldata modules`. Utility functions are collected in a `utils` module and
-the `cache` module is used to retain and manage OSM and DEM data retrieved by
-the user.
+`rcrisp` is structured into five core delineation modules, namely `valley`, `corridor`, `segments`, and `riverspace` for the four delineation steps, as well as an all-encompassing `delineate` module which runs the entire delineation workflow. The dedicated `network` and `sf` modules contain functionality needed for processing `sfnetwork` and `sf` objects, respectively. The retrieval of OSM data is available from the `osmdata` module, while example delineation data and example OSM data used in the documentation are available from the `data` and `exampeldata modules`. Utility functions are collected in a `utils` module and the `cache` module is used to retain and manage OSM and DEM data retrieved by the user.
 
 # Acknowledgements
 
-`rcrisp` was funded by the Netherlands eScience Center (grant no.
-NLESC.OEC.2023.050). We acknowledge contributions from ...
+`rcrisp` was funded by the Netherlands eScience Center (grant no. NLESC.OEC.2023.050). We acknowledge contributions from ...
 
 # Author contributions
 
