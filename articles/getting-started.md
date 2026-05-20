@@ -49,6 +49,7 @@ In short, given a city name and a river name, it:
 ## Example
 
 ``` r
+
 library(rcrisp)
 
 # Parameters

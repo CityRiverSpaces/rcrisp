@@ -40,13 +40,13 @@ object reprojected to specified CRS
 # Reproject a raster to EPSG:4326
 r <- terra::rast(matrix(1:12, nrow = 3, ncol = 4), crs = "EPSG:32633")
 reproject(r, 4326)
-#> class       : SpatRaster 
+#> class       : SpatRaster
 #> size        : 3, 4, 1  (nrow, ncol, nlyr)
 #> resolution  : 8.98078e-06, 8.98078e-06  (x, y)
 #> extent      : 10.51126, 10.51129, 1.157883e-07, 2.705813e-05  (xmin, xmax, ymin, ymax)
-#> coord. ref. : lon/lat WGS 84 (EPSG:4326) 
+#> coord. ref. : lon/lat WGS 84 (EPSG:4326)
 #> source(s)   : memory
-#> name        :     lyr.1 
-#> min value   :  1.003647 
-#> max value   : 11.989302 
+#> name        :     lyr.1
+#> min value   :  1.003647
+#> max value   : 11.989302
 ```

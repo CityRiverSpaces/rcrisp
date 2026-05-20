@@ -1,6 +1,7 @@
 # 3. Preparing the network for delineation
 
 ``` r
+
 library(rcrisp)
 library(dplyr)
 library(sf)
@@ -22,6 +23,7 @@ all persistent physical structures need to be considered. Therefore, the
 network will contain both streets and railways from OSM.
 
 ``` r
+
 streets <- bucharest_osm$streets
 railways <- bucharest_osm$railways
 ```
@@ -38,6 +40,7 @@ After combining the streets and railway lines, we create a network
 object.
 
 ``` r
+
 network <- bind_rows(streets, railways) |>
   as_sfnetwork(directed = FALSE) |>
   activate("nodes") |>
@@ -49,6 +52,7 @@ To be able to use the network for delineation, we need to flatten it
 intersections between edges.
 
 ``` r
+
 network_new <- flatten_network(network)
 ```
 
@@ -69,6 +73,7 @@ by adding missing nodes, removing pseudo-nodes and keeping only the main
 component of the network.
 
 ``` r
+
 network_cleaned <- clean_network(network_new)
 ```
 
@@ -77,6 +82,7 @@ network_cleaned <- clean_network(network_new)
 Visualize cleaned network:
 
 ``` r
+
 network_new_nodes <- network_cleaned |>
   activate("nodes") |>
   filter(is.na(node_id)) |>

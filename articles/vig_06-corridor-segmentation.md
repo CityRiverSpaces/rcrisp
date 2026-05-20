@@ -1,6 +1,7 @@
 # 6. Corridor segmentation
 
 ``` r
+
 library(rcrisp)
 library(sf)
 
@@ -33,6 +34,7 @@ that cover the river corridor plus a small buffer region (see also
 `vignette("network-preparation")`):
 
 ``` r
+
 # Add a buffer region around the corridor
 corridor_buffer <- sf::st_buffer(bucharest_dambovita$corridor, 500)
 
@@ -52,6 +54,7 @@ corridor using river-crossing transversal edges that form continuous
 lines in the network:
 
 ``` r
+
 segmented_corridor <-
   delineate_segments(bucharest_dambovita$corridor,
                      network_filtered,
@@ -59,6 +62,7 @@ segmented_corridor <-
 ```
 
 ``` r
+
 plot(st_geometry(streets))
 plot(segmented_corridor, border = "orange", lwd = 3, add = TRUE)
 ```

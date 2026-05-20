@@ -1,6 +1,7 @@
 # 7. Riverspace delineation
 
 ``` r
+
 library(rcrisp)
 library(sf)
 
@@ -14,6 +15,7 @@ the river and the first line of buildings. We will use River Dâmbovița
 of Bucharest as the river and the buildings surrounding it as input.
 
 ``` r
+
 buildings <- bucharest_osm$buildings
 river <- bucharest_osm$river_surface
 ```
@@ -26,12 +28,14 @@ buildings are provided, it will return an unobstructed buffer of a given
 radius with a warning message. The function returns an sf polygon.
 
 ``` r
+
 riverspace <- delineate_riverspace(river, buildings)
 ```
 
 We visualise the riverspace in a subset of segments.
 
 ``` r
+
 riverspace_segment_2_4 <- riverspace |>
   st_intersection(bucharest_dambovita$segments[2:4])
 

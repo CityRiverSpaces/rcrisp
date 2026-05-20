@@ -33,6 +33,7 @@ namely the DEM of Bucharest as the input raster and the river centerline
 and surface as the source for which the Cost Distance is calculated.
 
 ``` r
+
 # Attach required packages
 library(rcrisp)
 library(sf)
@@ -53,6 +54,7 @@ Bucharest](img/vig_04-valley-delineation-plot-dem-1.png)
 DEM of the area enclosing River Dâmbovița in Bucharest
 
 ``` r
+
 valley <- delineate_valley(dem, river)
 ```
 

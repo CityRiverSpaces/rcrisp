@@ -1,6 +1,7 @@
 # 5. Corridor delineation
 
 ``` r
+
 library(rcrisp)
 library(sf)
 
@@ -13,6 +14,7 @@ using river Dâmbovița in Bucharest, Romania. We will use OpenStreetMap
 (OSM) data, first from the Overpass API and then from a local file.
 
 ``` r
+
 city_name <- "Bucharest"
 river_name <- "Dâmbovița"
 ```
@@ -49,6 +51,7 @@ default contains the following output elements: `corridor`, `segments`,
 and `riverspace`.
 
 ``` r
+
 bucharest_dambovita <- delineate(
   city_name,
   river_name,
@@ -58,6 +61,7 @@ bucharest_dambovita <- delineate(
 ```
 
 ``` r
+
 # Plot all layers within the extent of the delineated corridor
 bbox <- st_bbox(bucharest_dambovita$corridor)
 plot(bucharest_dambovita$valley, col = "grey", border = NA,

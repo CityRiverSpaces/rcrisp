@@ -44,6 +44,7 @@ You can install the released version of rcrisp from
 [CRAN](https://cran.r-project.org) with:
 
 ``` r
+
 install.packages("rcrisp")
 ```
 
@@ -51,6 +52,7 @@ You can install the development version of rcrisp from
 [GitHub](https://github.com/) with:
 
 ``` r
+
 # install.packages("pak")
 pak::pak("CityRiverSpaces/rcrisp")
 ```
@@ -60,6 +62,7 @@ pak::pak("CityRiverSpaces/rcrisp")
 This is a basic example which shows you how to solve a common problem:
 
 ``` r
+
 library(rcrisp)
 
 # Set location parameters

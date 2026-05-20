@@ -7,8 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>4. Valley delineation • rcrisp</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="4. Valley delineation">
 </head>
@@ -70,7 +70,7 @@
       <h1>4. Valley delineation</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/CityRiverSpaces/rcrisp/blob/v0.3.1/vignettes/vig_04-valley-delineation.Rmd" class="external-link"><code>vignettes/vig_04-valley-delineation.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/CityRiverSpaces/rcrisp/blob/main/vignettes/vig_04-valley-delineation.Rmd" class="external-link"><code>vignettes/vig_04-valley-delineation.Rmd</code></a></small>
       <div class="d-none name"><code>vig_04-valley-delineation.Rmd</code></div>
     </div>
 
@@ -89,8 +89,7 @@ as shown in <code>vignette("corridor-delineation")</code>.</p>
 works and how it can be used independently.
 <code><a href="../reference/delineate_valley.html">delineate_valley()</a></code> uses a Cost Distance algorithm, variants
 of which are mostly used for the delineation of wet area mapping and
-valley bottom delineation in non-urban contexts <span class="citation">(Ågren et al., 2014; Murphy et al., 2009; White et al.,
-2012)</span>.</p>
+valley bottom delineation in non-urban contexts <span class="citation">(Ågren et al., 2014; Murphy et al., 2009; <span class="nocase">White et al.</span>, 2012)</span>.</p>
 <p>As the resulting valley boundary is only used as an intermediate step
 in <code><a href="../reference/delineate_corridor.html">delineate_corridor()</a></code>, valley delineation does not
 require high-resolution DEM data, as required for non-urban applications
@@ -156,11 +155,13 @@ S. (2019). <span>GFPLAIN250m</span>, a global high-resolution dataset of
 <em>6</em>(1), 180309. <a href="https://doi.org/10.1038/sdata.2018.309" class="external-link">https://doi.org/10.1038/sdata.2018.309</a>
 </div>
 <div id="ref-white2012" class="csl-entry">
-White, B., Ogilvie, Campbell, Hiltz, Gauthier, Chisholm, Wen, Murphy,
-&amp; and Arp, P. A. A. (2012). Using the <span class="nocase">Cartographic Depth-to-Water Index</span> to <span>Locate
-Small Streams</span> and <span>Associated Wet Areas</span> across
-<span>Landscapes</span>. <em>Canadian Water Resources Journal / Revue
-Canadienne Des Ressources Hydriques</em>, <em>37</em>(4), 333–347. <a href="https://doi.org/10.4296/cwrj2011-909" class="external-link">https://doi.org/10.4296/cwrj2011-909</a>
+<span class="nocase">White, B., Ogilvie, Campbell, Hiltz, Gauthier,
+Chisholm, Wen, Murphy, &amp; and Arp, P. A. A.</span> (2012). Using the
+<span class="nocase">Cartographic Depth-to-Water Index</span> to
+<span>Locate Small Streams</span> and <span>Associated Wet Areas</span>
+across <span>Landscapes</span>. <em>Canadian Water Resources Journal /
+Revue Canadienne Des Ressources Hydriques</em>, <em>37</em>(4), 333–347.
+<a href="https://doi.org/10.4296/cwrj2011-909" class="external-link">https://doi.org/10.4296/cwrj2011-909</a>
 </div>
 </div>
 </div>

@@ -2,6 +2,8 @@
 
 ## rcrisp 0.3.1 - 2025-11-24
 
+CRAN release: 2025-11-24
+
 ### Changed
 
 - To make the package check more robust with respect to missing/failing
