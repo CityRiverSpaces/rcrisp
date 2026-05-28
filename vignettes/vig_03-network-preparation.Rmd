@@ -9,6 +9,12 @@ vignette: >
 
 <!-- the *.Rmd vignettes are generated from the *.Rmd.orig files. Please edit those files. -->
 
+```{r srr-tags, eval=FALSE, echo=FALSE}
+#' @srrstats {SP2.2a} This vignette demonstrates the compatibility of `rcrisp`
+#'   routines with `sfnetworks` workflows.
+```
+
+
 
 
 
