@@ -64,6 +64,11 @@ test_that("Download DEM data can be retrieved from the cache on new calls", {
   )
 })
 
+#' @srrstats {G5.6} This test verifies that valley delineation correctly
+#'   recovers the expected valley boundary for a DEM generated with a known,
+#'   fixed slope, for which the expected output can be analytically derived.
+#' @srrstats {G5.6a} The test succeeds if the recovered valley boundary lies
+#'   within one raster cell resolution (`res`) from the expected geometry.
 test_that("valley polygon is correctly constructed", {
   res <- 50
   crs <- "EPSG:32601"

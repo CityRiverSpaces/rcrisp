@@ -54,6 +54,12 @@ test_that("Build river network only select longest segment within AoI", {
   expect_setequal(expected_edges, actual_edges)
 })
 
+#' @srrstats {G5.6} The following three tests of `corridor_end_points()` verify
+#'   that corridor endpoints are correctly recovered for a given synthetic river
+#'   and spatial network for which the expected output can be easily derived.
+#' @noRd
+NULL
+
 test_that("Endpoints are found for two intersections with network edges", {
   river <- sf::st_sfc(sf::st_linestring(cbind(c(-2, 0, 0), c(0, 0, -2))))
   regions <- c(sf::st_buffer(river, 2, singleSide = TRUE),
@@ -151,6 +157,12 @@ test_that("River banks works with real data", {
   expect_equal(length(regions), 2)
 })
 
+#' @srrstats {G5.6} The following two tests verify that initial edges are
+#'   correctly recovered for a given corridor and regions on the two sides of
+#'   the river for which the expected output can be easily derived.
+#' @noRd
+NULL
+
 test_that("Initial edges are identified if corridor exceeds AoI", {
   #        ____________
   #       |            |
@@ -202,6 +214,12 @@ test_that("Initial edges are identified if AoI includes corridor", {
   )
   expect_setequal(edges_actual, edges_expected)
 })
+
+#' @srrstats {G5.6} The following two tests verify that the correct corridor
+#'   polygon is recovered for given corridor edges for which the expected
+#'   output can be easily derived.
+#' @noRd
+NULL
 
 test_that("Capping a corridor with method 'direct' properly closes a polygon", {
   edge_1 <- sf::st_linestring(cbind(c(-1, 1), c(1, 1)))

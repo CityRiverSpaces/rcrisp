@@ -199,6 +199,12 @@ test_that("Network simplification drops loops and multiple edges", {
   expect_setequal(edges_clean, edges_simplified)
 })
 
+#' @srrstats {G5.6} The following four tests verify that network weights are
+#'   correctly recovered for the provided input network for which the weights
+#'   can be easily derived.
+#' @noRd
+NULL
+
 test_that("Weights only include edge lengths if no opt args are given", {
   network_weights <- add_weights(network)
   edges <- sf::st_as_sf(network_weights, "edges")
@@ -258,6 +264,12 @@ test_that("Weight name can be changed", {
   expect_equal(colnames(edges), colnames_expected)
 })
 
+#' @srrstats {G5.6} The following two tests verify that shortest paths are
+#'   correctly recovered for provided input network and end points for which the
+#'   shortest path can be easily derived.
+#' @noRd
+NULL
+
 test_that("Shortest path works for single-edge path", {
   endpoints <- sf::st_sfc(p6, p7)
   path <- shortest_path(network_shortpath, from = endpoints[1],
@@ -276,6 +288,13 @@ test_that("Shortest path can reorient edges to return a LINESTRING", {
   path_expected <- sf::st_sfc(sf::st_linestring(c(p6, p10, p8)))
   expect_equal(path, path_expected)
 })
+
+
+#' @srrstats {G5.6} The following two tests verify that the nearest node is
+#'   correctly recovered for provided input network and target point for which
+#'   the nearest point can be easily derived.
+#' @noRd
+NULL
 
 test_that("Nearest node always return one point", {
   # Even if the feature is equidistant from two nodes
