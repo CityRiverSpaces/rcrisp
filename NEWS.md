@@ -5,13 +5,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 # [Unreleased]
 
-## Changed
-
-- Attach-time `check_cache()` was moved behind `interactive()`.
-
 ## Fixed
 
 - Missing parenthesis was added in warning text in `check_cache()`.
+- Vignette pre-compilation was updated so that srr tags dropped by `knitr::knit()` are reinserted into the vignettes. Affected vignettes were also recompiled.
+
+## Changed
+
+- Attach-time `check_cache()` was moved behind `interactive()`.
 
 # rcrisp 0.3.1 - 2025-11-24
 
