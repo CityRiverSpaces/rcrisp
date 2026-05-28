@@ -3,11 +3,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-# [unreleased]
+# [Unreleased]
 
 ## Fixed
 
 - Corrected documentation for `reproject()`: the `crs` parameter no longer (incorrectly) lists `logical` as an accepted type. `crs` accepts numeric/integer, character (e.g. "EPSG:4326") or an `sf::crs` object; passing `TRUE`/`FALSE` will fail.
+- Vignette pre-compilation was updated so that srr tags dropped by `knitr::knit()` are reinserted into the vignettes. Affected vignettes were also recompiled.
 
 # rcrisp 0.3.1 - 2025-11-24
 
