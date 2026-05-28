@@ -188,7 +188,7 @@ insert_intersections <- function(edges, points, tol = 1.e-3) {
     x = "x", y = "y", linestring_id = "linestring_id"
   )
   sf::st_crs(edges_new) <- sf::st_crs(edges)
-  return(edges_new)
+  edges_new
 }
 
 #' Check if a point is within a given edge.
