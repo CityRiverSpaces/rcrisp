@@ -498,6 +498,7 @@ get_osm_streets <- function(aoi, crs = NULL, highway_values = NULL,
 get_osm_railways <- function(aoi, crs = NULL, railway_values = "rail",
                              force_download = FALSE) {
   # Check input
+  crs <- as_crs(crs)
   checkmate::assert_character(railway_values, min.len = 1)
   checkmate::assert_choice(railway_values, "rail")
   checkmate::assert_logical(force_download, len = 1)
