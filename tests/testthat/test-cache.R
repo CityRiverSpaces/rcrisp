@@ -1,4 +1,4 @@
-test_that("Cache directory is set via environmnent variable and created", {
+test_that("Cache directory is set via environment variable and created", {
   # create temporary folder
   root_dir <- withr::local_tempdir(pattern = "rcrisp-test-cache")
   cache_dir <- file.path(root_dir, ".cache", "rcrisp")
@@ -133,7 +133,7 @@ test_that("Only cache before given date is removed", {
   expect_true(grepl("tmp2", list.files(cache_dir)[1]))
 })
 
-test_that("Cache checks raise no wornings for small, recent files", {
+test_that("Cache checks raise no warnings for small, recent files", {
   cache_dir <- temp_cache_dir()
 
   expect_no_warning(check_cache())
