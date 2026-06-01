@@ -148,7 +148,7 @@ delineate <- function(
 
   if (segments) {
     # Select the relevant part of the network
-    buffer_corridor <- 100  # TODO should this be an additional input parameter?
+    buffer_corridor <- 100
     corridor_buffer <- sf::st_buffer(delineations$corridor, buffer_corridor)
     network_filtered <- filter_network(network, corridor_buffer)
 
