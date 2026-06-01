@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Figure output path was fixed in frozen OSM vignette
 - Buildings, streets and railways retrieval was limited to AOI in OSM vignette
+- Vignette pre-compilation was updated so that srr tags dropped by `knitr::knit()` are reinserted into the vignettes. Affected vignettes were also recompiled.
 
 # rcrisp 0.3.1 - 2025-11-24
 
