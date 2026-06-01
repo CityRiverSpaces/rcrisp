@@ -14,7 +14,7 @@ get_osm_buildings(aoi, crs = NULL, force_download = FALSE)
 \item{force_download}{Download data even if cached data is available}
 }
 \value{
-An sf object with the buildings
+An object of class \code{\link[sf:sfc]{sf::sfc_POLYGON}}
 }
 \description{
 Get buildings from OpenStreetMap within a given buffer around a river.
@@ -23,6 +23,6 @@ Get buildings from OpenStreetMap within a given buffer around a river.
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 bb <- get_osm_bb("Bucharest")
 crs <- get_utm_zone(bb)
-get_osm_buildings(bb, crs)
+get_osm_buildings(aoi = bb, crs = crs)
 \dontshow{\}) # examplesIf}
 }

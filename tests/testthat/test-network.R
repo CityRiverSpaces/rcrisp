@@ -62,6 +62,17 @@ network_no_crossings <- sfnetworks::sfnetwork(nodes = nodes_no_crossings,
                                               edges = edges_no_crossings,
                                               directed = FALSE, force = TRUE,
                                               node_key = "x")
+sf::st_crs(network_no_crossings) <- 32635
+
+#' @srrstats {G2.10} Several tests in this test module use `sf::st_geometry()`
+#'   to extract the geometry column from the either the "edges" or "nodes"
+#'   component of an `sfnetwork` network as object of class `sf`. This is used
+#'   when only geometry information is needed from that point onwards and all
+#'   other attributes (i.e., columns) can be safely discarded. The object
+#'   returned by `sf::st_geometry()` is a simple feature geometry list column of
+#'   class `sfc`.
+#' @noRd
+NULL
 
 test_that("Network objects can be set up with no modifications", {
   edges <- sf::st_sfc(e1, e2, e3)
@@ -78,6 +89,8 @@ test_that("Network objects can be set up with no modifications", {
   expect_setequal(nodes_actual, nodes_expected)
 })
 
+#' @srrstats {SP2.2b} This test demonstrates the interoperability with the
+#'   `sfnetworks` package.
 test_that("Network flattening inject intersection within edges", {
   nodes <- sf::st_sfc(p2, p3, p4, p5)
   edges <- sf::st_as_sf(sf::st_sfc(e2, e3))
@@ -86,6 +99,7 @@ test_that("Network flattening inject intersection within edges", {
   network <- sfnetworks::sfnetwork(nodes = nodes, edges = edges,
                                    directed = FALSE, force = TRUE,
                                    node_key = "x")
+  sf::st_crs(network) <- 32635
   network_flat <- flatten_network(network)
   nodes_actual <- sf::st_geometry(sf::st_as_sf(network_flat, "nodes"))
   edges_actual <- sf::st_geometry(sf::st_as_sf(network_flat, "edges"))
@@ -96,6 +110,8 @@ test_that("Network flattening inject intersection within edges", {
   expect_setequal(edges_actual, edges_expected)
 })
 
+#' @srrstats {SP2.2b} This test demonstrates the interoperability with the
+#'   `sfnetworks` package.
 test_that("Network cleaning transforms shared internal points to nodes", {
   nodes <- sf::st_sfc(p2, p3, p4, p5)
   intersection <- sf::st_intersection(e2, e3)
@@ -118,6 +134,8 @@ test_that("Network cleaning transforms shared internal points to nodes", {
   expect_setequal(edges_actual, edges_expected)
 })
 
+#' @srrstats {SP2.2b} This test demonstrates the interoperability with the
+#'   `sfnetworks` package.
 test_that("Network cleaning drops pseudo nodes", {
   nodes <- sf::st_sfc(p1, p2, p3)
   edges <- sf::st_as_sf(sf::st_sfc(e1, e2))
@@ -135,6 +153,8 @@ test_that("Network cleaning drops pseudo nodes", {
   expect_setequal(edges_actual, edges_expected)
 })
 
+#' @srrstats {SP2.2b} This test demonstrates the interoperability with the
+#'   `sfnetworks` package.
 test_that("Network cleaning drops disconnected components", {
   nodes <- sf::st_sfc(p2, p3, p4, p5)
   edges <- sf::st_as_sf(sf::st_sfc(e2, e3))
@@ -152,6 +172,8 @@ test_that("Network cleaning drops disconnected components", {
   expect_setequal(edges_actual, edges_expected)
 })
 
+#' @srrstats {SP2.2b} This test demonstrates the interoperability with the
+#'   `sfnetworks` package.
 test_that("Network simplification drops loops and multiple edges", {
   nodes <- sf::st_sfc(p2, p3)
   p6 <- sf::st_point(c(3, -1))
@@ -303,7 +325,17 @@ test_that("Filter network drops smallest disconnected components", {
   expect_length(nodes_area, 3)
 })
 
+#' @srrstats {G5.8} Edge test: if a value different from a set of
+#'   allowed values is selected, an error is raised.
+test_that("Filter network raises error if elements argument is unknown", {
+  expect_error(filter_network(network, elements = "unknown"),
+               "Unknown elements")
+})
+
 test_that("Network setup with real data", {
+  skip_on_ci()
+  skip_on_cran()
+  bucharest_osm <- get_osm_example_data()
   edges <- bucharest_osm$streets
   network <- as_network(edges, clean = FALSE, flatten = FALSE)
   edges_actual <- sf::st_geometry(sf::st_as_sf(network, "edges"))
@@ -312,6 +344,5 @@ test_that("Network setup with real data", {
 })
 
 test_that("Flattening network with no crossings does not fail", {
-  network_no_crossings_flat <- flatten_network(network_no_crossings)
-  expect_true(inherits(network_no_crossings_flat, "sfnetwork"))
+  expect_no_error(flatten_network(network_no_crossings))
 })

@@ -1,4 +1,4 @@
-test_that("Cache directory is set via environmnent variable and created", {
+test_that("Cache directory is set via environment variable and created", {
   # create temporary folder
   root_dir <- withr::local_tempdir(pattern = "rcrisp-test-cache")
   cache_dir <- file.path(root_dir, ".cache", "rcrisp")
@@ -107,7 +107,8 @@ test_that("All cache is removed when no date is provided", {
   file.create(filepath1, filepath2)
 
   expect_length(list.files(cache_dir), 2)
-  clear_cache()
+  expect_message(clear_cache(),
+                 "Cache files successfully removed.")
   expect_length(list.files(cache_dir), 0)
 })
 
@@ -126,12 +127,13 @@ test_that("Only cache before given date is removed", {
   expect_length(list.files(cache_dir), 2)
 
   before_date <- as.Date("1-1-2000", "%m-%d-%Y")
-  clear_cache(before_date = before_date)
+  expect_message(clear_cache(before_date = before_date),
+                 "Cache files before date successfully removed.")
   expect_length(list.files(cache_dir), 1)
   expect_true(grepl("tmp2", list.files(cache_dir)[1]))
 })
 
-test_that("Cache checks raise no wornings for small, recent files", {
+test_that("Cache checks raise no warnings for small, recent files", {
   cache_dir <- temp_cache_dir()
 
   expect_no_warning(check_cache())
@@ -151,6 +153,8 @@ test_that("Cache checks raise warnings when old cached files are found", {
 })
 
 test_that("Cache checks raise warnings when large cached files are found", {
+  cache_dir <- temp_cache_dir()
+
   mocked_file_info_response <- data.frame(
     mtime = Sys.time(),
     size = 10000000000

@@ -4,27 +4,38 @@
 #' (provided as lat/lon coordiates). Results are cached, so that new queries
 #' with the same input parameters will be loaded from disk.
 #'
-#' @param key A character string with the key to filter the data
-#' @param value A character string with the value to filter the data
+#' @param key A case-insensitive character vector of length 1 with the key to
+#'   filter the data
+#' @param value A case-insensitive character vector with the value(s) to filter
+#'   the data
 #' @param aoi An area of interest, provided either as as sf object or "bbox" or
 #' as a vector ("xmin", "ymin", "xmax", "ymax")
 #' @param force_download Download data even if cached data is available
 #'
-#' @return An sf object with the retrieved OpenStreetMap data
+#' @return An [`osmdata::osmdata`] object with the retrieved OpenStreetMap data
 #' @export
 #' @examplesIf interactive()
 #' bb <- get_osm_bb("Bucharest")
-#' osmdata_as_sf("highway", "motorway", bb, force_download = TRUE)
+#' osmdata_as_sf(key = "highway",
+#'               value = "motorway",
+#'               aoi = bb,
+#'               force_download = FALSE)
+#' @srrstats {G2.7} The `aoi` parameter accepts domain-specific tabular input
+#'   of type `sf`.
 #' @srrstats {G4.0} OSM data is saved with a file name concatenated from the
 #'   OSM "key", "value" and "bbox" coordinates.
+#' @srrstats {G2.3, G2.3b} Both `key` and `value` are made case-insensitive to
+#'   comply with OpenStreetMap (OSM) naming convention. Values are not checked
+#'   as they depend on the key. Keys and values should be retrieved from OSM
+#'   documentation.
+#' @srrstats {SP4.0, SP4.0b, SP4.2} The return value is of class
+#'   [`osmdata::osmdata`], explicitly documented as such.
 osmdata_as_sf <- function(key, value, aoi, force_download = FALSE) {
   # Check input
+  bbox <- as_bbox(aoi) # it should be in lat/lon
   checkmate::assert_character(key, len = 1)
   checkmate::assert_character(value, min.len = 1)
-  checkmate::assert_true(inherits(aoi, c("sf", "sfc", "bbox")))
   checkmate::assert_logical(force_download, len = 1)
-
-  bbox <- as_bbox(aoi) # it should be in lat/lon
 
   key <- tolower(key)
   value <- tolower(value)
@@ -51,8 +62,10 @@ osmdata_as_sf <- function(key, value, aoi, force_download = FALSE) {
 #'  specified bounding box
 #' @param bb A bounding box, in lat/lon coordinates
 #'
-#' @return An sf object with the retrieved OpenStreetMap data
+#' @return An [`osmdata::osmdata`] object with the retrieved OpenStreetMap data
 #' @keywords internal
+#' @srrstats {SP4.0, SP4.0b, SP4.2} The return value is of class
+#'   [`osmdata::osmdata`], explicitly documented as such.
 osmdata_query <- function(key, value, bb) {
   # this is needed because the add_osm_feature does not support
   # value as an empty string
@@ -65,14 +78,19 @@ osmdata_query <- function(key, value, bb) {
 
 #' Get the bounding box of a city
 #'
-#' @param city_name The name of the city
+#' @param city_name A character vector of length one
 #'
-#' @return A bbox object with the bounding box of the city
+#' @return A `bbox` object with the bounding box of the city
 #' @export
 #'
 #' @examplesIf interactive()
-#' get_osm_bb("Bucharest")
+#' get_osm_bb(city_name = "Bucharest")
+#' @srrstats {SP4.0, SP4.0b, SP4.2} The return value is a `bbox` object as
+#'   returned by [`sf::st_bbox()`], explicitly documented as such.
 get_osm_bb <- function(city_name) {
+  # Check input
+  checkmate::assert_character(city_name, len = 1)
+
   bb <- osmdata::getbb(city_name)
   as_bbox(bb)
 }
@@ -83,8 +101,10 @@ get_osm_bb <- function(city_name) {
 #' the city boundary, the river centreline and surface, the streets, the
 #' railways, and the buildings
 #'
-#' @param city_name A character string with the name of the city.
-#' @param river_name A character string with the name of the river.
+#' @param city_name The name of the city as character vector of length 1,
+#'   case-sensitive. Required, no default.
+#' @param river_name The name of the river as character vector of length 1,
+#'   case-sensitive. Required, no default.
 #' @param network_buffer Buffer distance in meters around the river
 #'   to get the streets and railways, default is 0 means no
 #'   network data will be downloaded
@@ -93,82 +113,87 @@ get_osm_bb <- function(city_name) {
 #'   buildings data will be downloaded
 #' @param city_boundary A logical indicating if the city boundary should be
 #'   retrieved. Default is TRUE.
-#' @param crs An integer with the EPSG code for the projection. If no CRS is
-#'   specified, the default is the UTM zone for the city.
+#' @param crs An integer or character vector of length one with the EPSG code
+#'   for the projection. If no CRS is specified, the default is the UTM zone
+#'   for the city.
 #' @param force_download Download data even if cached data is available
 #'
 #' @return A list with the retrieved OpenStreetMap data sets for the
-#'         given location
+#'         given location, as objects of class [`sf::sfc`]
 #' @export
 #'
 #' @examplesIf interactive()
 #' # Set parameters
 #' city <- "Bucharest"
 #' river <- "Dâmbovița"
+#' crs <- "EPSG:31600"  # National projected CRS
 #'
 #' # Get OSM data with defaults
-#' get_osmdata(city, river)
+#' get_osmdata(city_name = city, river_name = river)
 #'
-#' # Use custom network buffer
-#' get_osmdata(city, river, network_buffer = 3500)
+#' # Get OSM data without city boundary
+#' get_osmdata(city_name = city, river_name = river, city_boundary = FALSE)
 #'
-#' # Use custom buildings buffer
-#' get_osmdata(city, river, buildings_buffer = 150)
+#' # Use custom network buffer to get streets and railways
+#' get_osmdata(city_name = city, river_name = river, network_buffer = 3500)
+#'
+#' # Use custom buffer to get buildings
+#' get_osmdata(city_name = city, river_name = river, buildings_buffer = 150)
 #'
 #' # Use custom CRS
-#' get_osmdata(city, river, crs = "EPSG:31600")  # National projected CRS
+#' get_osmdata(city_name = city, river_name = river, crs = crs)
+#'
+#' # Avoid getting OSM data from cache
+#' get_osmdata(city_name = city, river_name = river, force_download = TRUE)
+#' @srrstats {SP4.0, SP4.0b, SP4.2} The return value is a list of objects of
+#'   class [`sf::sfc`], explicitly documented as such.
 get_osmdata <- function(
   city_name, river_name, network_buffer = NULL, buildings_buffer = NULL,
   city_boundary = TRUE, crs = NULL, force_download = FALSE
 ) {
   # Check input
-  checkmate::assert_logical(force_download, len = 1)
+  checkmate::assert_numeric(network_buffer, null.ok = TRUE, len = 1)
+  checkmate::assert_numeric(buildings_buffer, null.ok = TRUE, len = 1)
   checkmate::assert_logical(city_boundary, len = 1)
+  crs <- as_crs(crs)
 
   bb <- get_osm_bb(city_name)
+  # If not provided, determine the CRS
   if (is.null(crs)) crs <- get_utm_zone(bb)
 
   # Retrieve the river center line and surface
-  river <- get_osm_river(
+  river_centerline <- get_osm_river_centerline(
     bb, river_name, crs = crs, force_download = force_download
   )
 
-  osm_data <- list(
-    bb = bb,
-    river_centerline = river$centerline,
-    river_surface = river$surface
-  )
+  osm_data <- list(bb = bb, river_centerline = river_centerline)
 
   # Retrieve streets and railways based on the aoi
   if (!is.null(network_buffer)) {
-    aoi_network <- get_river_aoi(river, bb, buffer_distance = network_buffer)
-    osm_data <- append(osm_data, list(aoi_network = aoi_network))
-    osm_data <- append(osm_data, list(
-      streets = get_osm_streets(aoi_network, crs = crs,
-                                force_download = force_download)
-    ))
-    osm_data <- append(osm_data, list(
-      railways = get_osm_railways(aoi_network, crs = crs,
-                                  force_download = force_download)
-    ))
+    aoi_network <- get_river_aoi(river_centerline, bb,
+                                 buffer_distance = network_buffer)
+    osm_data$aoi_network <- aoi_network
+    osm_data$streets <- get_osm_streets(aoi_network, crs = crs,
+                                        force_download = force_download)
+    osm_data$railways <- get_osm_railways(aoi_network, crs = crs,
+                                          force_download = force_download)
   }
 
-  # Retrieve buildings based on a different aoi
+  # Retrieve buildings and water surface based on a different aoi
   if (!is.null(buildings_buffer)) {
-    aoi_buildings <- get_river_aoi(river, bb,
+    river_surface <- get_osm_river_surface(bb, river_centerline, crs = crs,
+                                           force_download = force_download)
+    osm_data$river_surface <- river_surface
+    aoi_buildings <- get_river_aoi(c(river_centerline, river_surface), bb,
                                    buffer_distance = buildings_buffer)
-    osm_data <- append(osm_data, list(aoi_buildings = aoi_buildings))
-    osm_data <- c(osm_data, list(
-      buildings = get_osm_buildings(aoi_buildings, crs = crs,
-                                    force_download = force_download)
-    ))
+    osm_data$aoi_buildings <- aoi_buildings
+    osm_data$buildings <- get_osm_buildings(aoi_buildings, crs = crs,
+                                            force_download = force_download)
   }
 
   if (city_boundary) {
-    osm_data <- c(osm_data, list(
-      boundary = get_osm_city_boundary(bb, city_name, crs = crs,
-                                       force_download = force_download)
-    ))
+    osm_data$boundary <- get_osm_city_boundary(bb, city_name, crs = crs,
+                                               force_download = force_download)
   }
 
   osm_data
@@ -181,25 +206,37 @@ get_osmdata <- function(
 #' The result is filtered by the city name.
 #'
 #' @param bb Bounding box of class `bbox`
-#' @param city_name A character string with the name of the city
+#' @param city_name A case-sensitive character vector of length 1 with the name
+#'   of the city
 #' @param crs Coordinate reference system as EPSG code
 #' @param multiple A logical indicating if multiple city boundaries should be
 #'                 returned. By default, only the first one is returned.
 #' @param force_download Download data even if cached data is available
 #'
-#' @return An sf object with the city boundary
+#' @return An object of class [`sf::sfc_POLYGON`] or [`sf::sfc_MULTIPOLYGON`]
+#'   with the city boundary
 #' @importFrom rlang .data
 #' @export
 #'
 #' @examplesIf interactive()
 #' bb <- get_osm_bb("Bucharest")
 #' crs <- get_utm_zone(bb)
-#' get_osm_city_boundary(bb, "Bucharest", crs)
+#' get_osm_city_boundary(bb = bb, city_name = "Bucharest", crs = crs)
+#' @srrstats {G2.10} This function uses `sf::st_geometry()` to extract the
+#'   geometry column from an `sf` object in a `dplyr` pipline. This is used when
+#'   only geometry information is needed from that point onwards and all other
+#'   attributes (i.e., columns) can be safely discarded. The object returned
+#'   by `sf::st_geometry()` is a simple feature geometry list column of class
+#'   `sfc`.
+#' @srrstats {SP4.0, SP4.0b, SP4.2} The return value is a an object of
+#'   class [`sf::sfc_POLYGON`] or [`sf::sfc_MULTIPOLYGON`], explicitly
+#'   documented as such.
 get_osm_city_boundary <- function(bb, city_name, crs = NULL, multiple = FALSE,
                                   force_download = FALSE) {
   # Check input
+  checkmate::assert_character(city_name, len = 1)
+  crs <- as_crs(crs)
   checkmate::assert_logical(multiple, len = 1)
-  checkmate::assert_logical(force_download, len = 1)
 
   # Drop country if specified after comma
   city_name_clean <- stringr::str_extract(city_name, "^[^,]+")
@@ -209,6 +246,10 @@ get_osm_city_boundary <- function(bb, city_name, crs = NULL, multiple = FALSE,
     dplyr::bind_rows(osmdata_sf$osm_polygons, osmdata_sf$osm_multipolygons) |>
       # filter using any of the "name" columns (matching different languages)
       match_osm_name(city_name_clean) |>
+      dplyr::filter(
+        suppressWarnings(as.numeric(.data$admin_level) ==
+                           max(as.numeric(.data$admin_level), na.rm = TRUE))
+      ) |>
       sf::st_geometry()
   }
 
@@ -216,7 +257,7 @@ get_osm_city_boundary <- function(bb, city_name, crs = NULL, multiple = FALSE,
   city_boundary <- tryCatch(fetch_boundary("boundary", "administrative"),
                             error = function(e) NULL)
 
-  if (is.null(city_boundary)) {
+  if (is.null(city_boundary) || length(city_boundary) == 0) {
     stop("No city boundary found. The city name may be incorrect.")
   }
 
@@ -234,22 +275,37 @@ get_osm_city_boundary <- function(bb, city_name, crs = NULL, multiple = FALSE,
   city_boundary
 }
 
-#' Get the river centreline and surface from OpenStreetMap
+#' Get the river centreline from OpenStreetMap
 #'
 #' @param bb Bounding box of class `bbox`
-#' @param river_name The name of the river
+#' @param river_name The name of the river as character vector of length 1,
+#'   case-sensitive.
 #' @param crs Coordinate reference system as EPSG code
 #' @param force_download Download data even if cached data is available
 #'
-#' @return A list with the river centreline and surface
+#' @return The river centreline as object of class [`sf::sfc_LINESTRING`] or
+#'   [`sf::sfc_MULTILINESTRING`].
 #' @export
 #'
 #' @examplesIf interactive()
 #' bb <- get_osm_bb("Bucharest")
 #' crs <- get_utm_zone(bb)
-#' get_osm_river(bb, "Dâmbovița", crs)
-get_osm_river <- function(bb, river_name, crs = NULL, force_download = FALSE) {
+#' get_osm_river_centerline(bb = bb, river_name = "Dâmbovița", crs = crs,
+#'               force_download = FALSE)
+#' @srrstats {G2.10} This function uses `sf::st_geometry()` to extract
+#'   geometry columns from `sf` objects in `dplyr` piplines. This is used when
+#'   only geometry information is needed from that point onwards and all other
+#'   attributes (i.e., columns) can be safely discarded. The object returned
+#'   by `sf::st_geometry()` is a simple feature geometry list column of class
+#'   `sfc`.
+#' @srrstats {SP4.0, SP4.0b, SP4.2} The return value is a list an object of
+#'   class [`sf::sfc_LINESTRING`] or [`sf::sfc_MULTILINESTRING`], explicitly
+#'   documented as such.
+get_osm_river_centerline <- function(bb, river_name, crs = NULL,
+                                     force_download = FALSE) {
   # Check input
+  checkmate::assert_character(river_name, len = 1)
+  crs <- as_crs(crs)
   checkmate::assert_logical(force_download, len = 1)
 
   # Get the river centreline
@@ -282,40 +338,79 @@ get_osm_river <- function(bb, river_name, crs = NULL, force_download = FALSE) {
     sprintf("No river geometry found for %s", river_name)
   )
 
+  if (!is.null(crs)) river_centerline <- sf::st_transform(river_centerline, crs)
+
+  river_centerline
+}
+
+#' Get the river surface from OpenStreetMap
+#'
+#' @param bb Bounding box of class `bbox`
+#' @param river_centerline The river centerline as an object of class
+#'   [`sf::sfc_LINESTRING`] or [`sf::sfc_MULTILINESTRING`]
+#' @param crs Coordinate reference system as EPSG code
+#' @param force_download Download data even if cached data is available
+#'
+#' @return The river surface as object of class [`sf::sfc_POLYGON`] or
+#'   [`sf::sfc_MULTIPOLYGON`].
+#' @export
+#'
+#' @examplesIf interactive()
+#' bb <- get_osm_bb("Bucharest")
+#' crs <- get_utm_zone(bb)
+#' river <- get_osm_river_centerline(bb, "Dâmbovița")
+#' get_osm_river_surface(bb = bb, river_centerline = river, crs = crs,
+#'               force_download = FALSE)
+#' @srrstats {G2.10} This function uses `sf::st_geometry()` to extract
+#'   geometry columns from `sf` objects in `dplyr` pipelines. This is used when
+#'   only geometry information is needed from that point onwards and all other
+#'   attributes (i.e., columns) can be safely discarded. The object returned
+#'   by `sf::st_geometry()` is a simple feature geometry list column of class
+#'   `sfc`.
+#' @srrstats {SP4.0, SP4.0b, SP4.2} The return value is an object
+#'   of class [`sf::sfc_POLYGON`] or [`sf::sfc_MULTIPOLYGON`], explicitly
+#'   documented as such.
+get_osm_river_surface <- function(bb, river_centerline, crs = NULL,
+                                  force_download = FALSE) {
+  # Check input
+  checkmate::assert_multi_class(river_centerline,
+                                c("sfc_LINESTRING", "sfc_MULTILINESTRING"))
+  crs <- as_crs(crs)
+  checkmate::assert_logical(force_download, len = 1)
+
   # Get the river surface
   river_surface <- osmdata_as_sf("natural", "water", bb,
                                  force_download = force_download)
+
   river_surface_polygons <- river_surface$osm_polygons
   if (!is.null(river_surface$osm_multipolygons)) {
     river_surface_polygons <- dplyr::bind_rows(river_surface_polygons,
                                                river_surface$osm_multipolygons)
   }
-
+  river <- sf::st_transform(river_centerline,
+                            sf::st_crs(river_surface_polygons))
   river_surface <- river_surface_polygons |>
     sf::st_geometry() |>
     check_invalid_geometry() |> # fix invalid geometries, if any
     sf::st_as_sf() |>
-    sf::st_filter(river_centerline, .predicate = sf::st_intersects) |>
+    sf::st_filter(river, .predicate = sf::st_intersects) |>
     sf::st_union()
 
-  if (!is.null(crs)) {
-    river_centerline <- sf::st_transform(river_centerline, crs)
-    river_surface <- sf::st_transform(river_surface, crs)
-  }
+  if (!is.null(crs)) river_surface <- sf::st_transform(river_surface, crs)
 
-  list(centerline = river_centerline, surface = river_surface)
+  river_surface
 }
 
 #' Get OpenStreetMap streets
 #'
-#' @param aoi Area of interest as sf object or bbox
-#' @param crs Coordinate reference system as EPSG code
+#' @param aoi Area of interest as sf object or bbox. Required, no default.
+#' @param crs A numeric vector of length one with the EPSG code of the CRS
 #' @param highway_values A character vector with the highway values to retrieve.
 #'             If left NULL, the function retrieves the following values:
 #'             "motorway", "trunk", "primary", "secondary", "tertiary"
 #' @param force_download Download data even if cached data is available
 #'
-#' @return An sf object with the streets
+#' @return An object of class [`sf::sfc_LINESTRING`]
 #' @export
 #' @importFrom rlang !! sym
 #'
@@ -325,21 +420,27 @@ get_osm_river <- function(bb, river_name, crs = NULL, force_download = FALSE) {
 #' crs <- 31600  # National projected CRS
 #'
 #' # Get streets with default values
-#' get_osm_streets(bb, crs)
+#' get_osm_streets(aoi = bb, crs = crs)
 #'
 #' # Specify street categories to be retrieved
-#' highway_values <- "primary"
-#' get_osm_streets(bb, crs, highway_values = highway_values)
+#' get_osm_streets(aoi = bb, crs = crs, highway_values = "primary")
 #'
 #' # Ensure that data is not retrieved from cache
-#' get_osm_streets(bb, crs, force_download = TRUE)
+#' get_osm_streets(aoi = bb, crs = crs, force_download = FALSE)
+#' @srrstats {G2.13} The absence of missing values in numeric inputs is
+#'   asserted using the `checkmate` package.
+#' @srrstats {G2.16} This function checks numeric arguments for undefined values
+#'   (NaN, Inf, -Inf) and errors when encountering such values.
+#' @srrstats {SP4.0, SP4.0b, SP4.2} The return value is a an object of
+#'   class [`sf::sfc_LINESTRING`], explicitly documented as such.
 get_osm_streets <- function(aoi, crs = NULL, highway_values = NULL,
                             force_download = FALSE) {
   # Check input
   checkmate::assert_true(inherits(aoi, c("sf", "sfc", "bbox")))
-  checkmate::assert_numeric(crs, null.ok = TRUE)
+  checkmate::assert_numeric(crs,
+                            null.ok = TRUE,
+                            any.missing = FALSE)
   checkmate::assert_character(highway_values, null.ok = TRUE)
-  checkmate::assert_logical(force_download, len = 1)
 
   if (is.null(highway_values)) {
     highway_values <- c("motorway", "trunk", "primary", "secondary", "tertiary")
@@ -370,7 +471,10 @@ get_osm_streets <- function(aoi, crs = NULL, highway_values = NULL,
   mask <- sf::st_intersects(streets_lines, aoi, sparse = FALSE)
   streets_lines <- streets_lines[mask, ]
 
-  if (!is.null(crs)) streets_lines <- sf::st_transform(streets_lines, crs)
+  if (!is.null(crs)) {
+    crs <- as_crs(crs)
+    streets_lines <- sf::st_transform(streets_lines, crs)
+  }
 
   streets_lines
 }
@@ -378,31 +482,33 @@ get_osm_streets <- function(aoi, crs = NULL, highway_values = NULL,
 #' Get OpenStreetMap railways
 #'
 #' @param aoi Area of interest as sf object or bbox
-#' @param crs Coordinate reference system as EPSG code
-#' @param railway_values A character or character vector with the railway values
-#'   to retrieve.
+#' @param crs A numeric vector of length one with the EPSG code of the CRS
+#' @param railway_values A case-insensitive character vector with the railway
+#'   values to retrieve.
 #' @param force_download Download data even if cached data is available
 #'
-#' @return An sf object with the railways
+#' @return An object of class [`sf::sfc_LINESTRING`]
 #' @export
 #' @importFrom rlang !! sym
 #'
 #' @examplesIf interactive()
 #' bb <- get_osm_bb("Bucharest")
 #' crs <- get_utm_zone(bb)
-#' get_osm_railways(bb, crs)
+#' get_osm_railways(aoi = bb, crs = crs)
+#' @srrstats {SP4.0, SP4.0b, SP4.2} The return value is a an object of
+#'   class [`sf::sfc_LINESTRING`], explicitly documented as such.
 get_osm_railways <- function(aoi, crs = NULL, railway_values = "rail",
                              force_download = FALSE) {
   # Check input
-  checkmate::assert_character(railway_values)
+  checkmate::assert_character(railway_values, min.len = 1)
+  checkmate::assert_choice(railway_values, "rail")
   checkmate::assert_logical(force_download, len = 1)
 
-  railway_values <- tolower(railway_values)
   railways <- osmdata_as_sf("railway", railway_values, aoi,
                             force_download = force_download)
   # If no railways are found, return an empty sf object
   if (is.null(railways$osm_lines)) {
-    if (is.null(crs)) crs <- sf::st_crs("EPSG:4326")
+    if (is.null(crs)) crs <- as_crs("EPSG:4326", allow_geographic = TRUE)
     empty_sf <- sf::st_sf(geometry = sf::st_sfc(crs = crs))
     return(empty_sf)
   }
@@ -416,7 +522,10 @@ get_osm_railways <- function(aoi, crs = NULL, railway_values = "rail",
   mask <- sf::st_intersects(railways_lines, aoi, sparse = FALSE)
   railways_lines <- railways_lines[mask, ]
 
-  if (!is.null(crs)) railways_lines <- sf::st_transform(railways_lines, crs)
+  if (!is.null(crs)) {
+    crs <- as_crs(crs)
+    railways_lines <- sf::st_transform(railways_lines, crs)
+  }
 
   railways_lines
 }
@@ -429,15 +538,24 @@ get_osm_railways <- function(aoi, crs = NULL, railway_values = "rail",
 #' @param crs Coordinate reference system as EPSG code
 #' @param force_download Download data even if cached data is available
 #'
-#' @return An sf object with the buildings
+#' @return An object of class [`sf::sfc_POLYGON`]
 #' @export
 #' @examplesIf interactive()
 #' bb <- get_osm_bb("Bucharest")
 #' crs <- get_utm_zone(bb)
-#' get_osm_buildings(bb, crs)
+#' get_osm_buildings(aoi = bb, crs = crs)
+#' @srrstats {G2.10} This function uses `sf::st_geometry()` to extract the
+#'   geometry column from an `sf` object in a `dplyr` pipline. This is used when
+#'   only geometry information is needed from that point onwards and all other
+#'   attributes (i.e., columns) can be safely discarded. The object returned
+#'   by `sf::st_geometry()` is a simple feature geometry list column of class
+#'   `sfc`.
+#' @srrstats {SP4.0, SP4.0b, SP4.2} The return value is a an object of
+#'   class [`sf::sfc_POLYGON`], explicitly documented as such.
 get_osm_buildings <- function(aoi, crs = NULL, force_download = FALSE) {
   # Check input
-  checkmate::assert_logical(force_download, len = 1)
+  crs <- as_crs(crs)
+  aoi <- as_sfc(aoi)
 
   buildings <- osmdata_as_sf("building", "", aoi,
                              force_download = force_download)
@@ -447,7 +565,10 @@ get_osm_buildings <- function(aoi, crs = NULL, force_download = FALSE) {
     dplyr::filter(.data$building != "NULL") |>
     sf::st_geometry()
 
-  if (!is.null(crs)) buildings <- sf::st_transform(buildings, crs)
+  if (!is.null(crs)) {
+    crs <- as_crs(crs)
+    buildings <- sf::st_transform(buildings, crs)
+  }
 
   buildings
 }
@@ -455,28 +576,45 @@ get_osm_buildings <- function(aoi, crs = NULL, force_download = FALSE) {
 #' Get an area of interest (AoI) around a river, cropping to the bounding box of
 #' a city
 #'
-#' @param river A list with the river centreline and surface geometries
+#' @param river A `sf::sf` or `sf::sfc` object with the river centreline and
+#'   (optionally) the river surface geometry
 #' @param city_bbox Bounding box of class `bbox` around the city
-#' @param buffer_distance Buffer size around the river
-#' @return An `sfc_POLYGON` object in lat/lon coordinates
+#' @param buffer_distance A positive number representing the buffer size around
+#'   the river in meters. The upper limit is unrestricted.
+#' @return An [`sf::sfc_POLYGON`] object in lat/lon coordinates
 #' @export
 #'
 #' @examplesIf interactive()
 #' bb <- get_osm_bb("Bucharest")
-#' river <- get_osm_river(bb, "Dâmbovița")
-#' get_river_aoi(river, bb, buffer_distance = 100)
+#' river_centerline <- get_osm_river_centerline(bb, "Dâmbovița")
+#' river_surface <- get_osm_river_surface(bb, "Dâmbovița")
+#' river <- list(centerline = river_centerline, surface = river_surface)
+#' get_river_aoi(river = river, city_bbox = bb, buffer_distance = 100)
+#' @srrstats {G2.7} The `river` parameter accepts domain-specific tabular input
+#'   of type `sf`.
+#' @srrstats {G2.13} The absence of missing values in numeric inputs is
+#'   asserted using the `checkmate` package.
+#' @srrstats {G2.16} This function checks numeric arguments for undefined values
+#'   (NaN, Inf, -Inf) and errors when encountering such values.
+#' @srrstats {SP4.0, SP4.0b, SP4.2} The return value is a an object of
+#'   class [`sf::sfc_POLYGON`], explicitly documented as such. The returned area
+#'   of interest is in geographic CRS as it is meant to be used for clipping
+#'   OpenStreetMap data.
 get_river_aoi <- function(river, city_bbox, buffer_distance) {
   # Check input
-  checkmate::assert_numeric(buffer_distance, len = 1)
-
-  river <- c(river$centerline, river$surface)
+  checkmate::assert_multi_class(river, c("sf", "sfc"))
+  checkmate::assert_vector(river, min.len = 1)
+  checkmate::assert_class(city_bbox, "bbox")
+  checkmate::assert_numeric(buffer_distance,
+                            len = 1,
+                            any.missing = FALSE,
+                            finite = TRUE)
 
   # Make sure crs are the same for cropping with bb
   river <- sf::st_transform(river, sf::st_crs(city_bbox))
 
   river_buffer(river, buffer_distance, bbox = city_bbox)
 }
-
 
 #' Match OpenStreetMap data by name
 #'
@@ -490,5 +628,9 @@ match_osm_name <- function(osm_data, match) {
   includes_match <- \(x) grepl(match, x, ignore.case = TRUE)
   # Apply function above to all columns whose name starts with "name", thus
   # checking for matches in all listed languages
-  dplyr::filter(osm_data, dplyr::if_any(dplyr::matches("name"), includes_match))
+  osm_data |>
+    dplyr::filter(dplyr::if_any(dplyr::matches("name"), includes_match)) |>
+    # Make sure that exact match is in the first row(s)
+    dplyr::arrange(dplyr::desc(dplyr::if_any(dplyr::matches("name"),
+                                             ~ tolower(.) == tolower(match))))
 }

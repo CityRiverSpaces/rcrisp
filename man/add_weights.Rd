@@ -28,7 +28,8 @@ edges that falls within the excluded area}
 weights}
 }
 \value{
-A network object with weights added as a column in the edge table
+A network object of class \code{\link[sfnetworks:sfnetwork]{sfnetworks::sfnetwork}} with weights
+added as a column in the edge table
 }
 \description{
 This is to prepare the network for the search of shortest paths between node

@@ -7,16 +7,16 @@
 get_osm_bb(city_name)
 }
 \arguments{
-\item{city_name}{The name of the city}
+\item{city_name}{A character vector of length one}
 }
 \value{
-A bbox object with the bounding box of the city
+A \code{bbox} object with the bounding box of the city
 }
 \description{
 Get the bounding box of a city
 }
 \examples{
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-get_osm_bb("Bucharest")
+get_osm_bb(city_name = "Bucharest")
 \dontshow{\}) # examplesIf}
 }

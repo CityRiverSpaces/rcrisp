@@ -7,7 +7,7 @@
 get_utm_zone(x)
 }
 \arguments{
-\item{x}{Bounding box of class \code{bbox} or geometry object}
+\item{x}{Object in any class accepted by \code{\link[=as_bbox]{as_bbox()}}}
 }
 \value{
 The EPSG code of the UTM zone
@@ -17,6 +17,6 @@ Get the UTM zone of a spatial object
 }
 \examples{
 # Get EPSG code for UTM zone of Bucharest
-bb <- get_osm_bb("Bucharest")
+bb <- c(xmin = 25.97, ymin = 44.33, xmax = 26.23, ymax = 44.54)
 get_utm_zone(bb)
 }

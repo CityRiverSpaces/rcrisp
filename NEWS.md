@@ -5,20 +5,73 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 # [Unreleased]
 
+## Added
+
+- A `plot()` method was created for objects of class `delineation`.
+
+## Fixed
+
+- Fixed typos in test statements.
+- Corrected documentation for `reproject()`: the `crs` parameter no longer (incorrectly) lists `logical` as an accepted type. `crs` accepts numeric/integer, character (e.g. "EPSG:4326") or an `sf::crs` object; passing `TRUE`/`FALSE` will fail.
+- Vignette pre-compilation was updated so that srr tags dropped by `knitr::knit()` are reinserted into the vignettes. Affected vignettes were also recompiled.
+
 ## Changed
 
 - `delineate()` returns now an S3 object of class `delineation`.
+
+## Removed
+
+- TODOs were moved from released code to GitHub issues.
+
+# rcrisp 0.3.1 - 2025-11-24
+
+## Changed
+
+- To make the package check more robust with respect to missing/failing data access, the vignettes are frozen, all tests and examples using example data are skipped on CRAN
+
+# rcrisp 0.3.0 - 2025-10-13
+
+## Added
+
+- Overall workflow was documented in a new vignette and the package README
+- Badges to Research Software Directory and R-universe were added
+- Corridors are also allowed to be multipolygons when delineating segments
+- Badge with Status at rOpenSci Software Peer Review was added
+
+## Fixed
+
+- Exact matches in `match_osm_name()` are returned before partial matches.
+- Bug returning county boundary instead of city boundary was fixed.
+- Bug for river with no crossings was fixed. Delineation fails with informative error.
+- Code chunk with OSM data retrieval was disabled in getting started vignette.
+- `get_osm_buildings()` does not error when given bounding box as input.
+- STAC asset URL retrieval test fails gracefully on unsuccessful HTTP request.
+- Suppress warning in wrong city name test.
+
+## Changed
+
+- OSM river surface retrieval was moved to a separate function.
+- Small rivers for which OSM river surface is not available can still be delineated.
+
+# rcrisp 0.2.0 - 2025-08-21
 
 ## Added
 
 - Package-level documentation has been added.
 - Assertions using the `checkmate` package were added to input parameters throughout the package.
 - Examples were expanded to demonstrates the use of all parameters.
-- A `plot()` method was created for objects of class `delineation`.
+- Delineated valley has been added to the `bucharest_dambovita` example package data.
 
 ## Fixed
 
 - Classes of input parameters and return values were specified.
+- `get_osm_example_data()` and `get_dem_example_data()` fail gracefully in examples, vignettes and tests, that is, return a message and NULL, if internet resource is not available.
+
+## Changed
+
+- Replaced `sapply()` with `vapply()` throughout the package for improved type safety.
+- Updated package metadata in `DESCRIPTION` and `codemeta.json`
+- Organized function reference page into meaningful sections.
 
 ## Removed
 

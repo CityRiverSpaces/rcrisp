@@ -12,8 +12,8 @@ select_nonintersecting_lines(lines, corridor)
 \item{corridor}{The river corridor as a simple feature geometry}
 }
 \value{
-A set of lines that do not intersect within the corridor geometry,
-as a simple feature geometry
+A set of lines of class \code{\link[sf:sfc]{sf::sfc_LINESTRING}} that do not intersect
+within the corridor geometry, as a simple feature geometry
 }
 \description{
 Recursively drop intersecting lines, starting from the line that form most

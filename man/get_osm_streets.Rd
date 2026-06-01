@@ -7,9 +7,9 @@
 get_osm_streets(aoi, crs = NULL, highway_values = NULL, force_download = FALSE)
 }
 \arguments{
-\item{aoi}{Area of interest as sf object or bbox}
+\item{aoi}{Area of interest as sf object or bbox. Required, no default.}
 
-\item{crs}{Coordinate reference system as EPSG code}
+\item{crs}{A numeric vector of length one with the EPSG code of the CRS}
 
 \item{highway_values}{A character vector with the highway values to retrieve.
 If left NULL, the function retrieves the following values:
@@ -18,7 +18,7 @@ If left NULL, the function retrieves the following values:
 \item{force_download}{Download data even if cached data is available}
 }
 \value{
-An sf object with the streets
+An object of class \code{\link[sf:sfc]{sf::sfc_LINESTRING}}
 }
 \description{
 Get OpenStreetMap streets
@@ -30,13 +30,12 @@ bb <- get_osm_bb("Bucharest")
 crs <- 31600  # National projected CRS
 
 # Get streets with default values
-get_osm_streets(bb, crs)
+get_osm_streets(aoi = bb, crs = crs)
 
 # Specify street categories to be retrieved
-highway_values <- "primary"
-get_osm_streets(bb, crs, highway_values = highway_values)
+get_osm_streets(aoi = bb, crs = crs, highway_values = "primary")
 
 # Ensure that data is not retrieved from cache
-get_osm_streets(bb, crs, force_download = TRUE)
+get_osm_streets(aoi = bb, crs = crs, force_download = FALSE)
 \dontshow{\}) # examplesIf}
 }

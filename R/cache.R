@@ -70,9 +70,26 @@ get_dem_cache_filepath <- function(tile_urls, bbox) {
   file.path(cache_directory(), filename)
 }
 
+#' Get file path where to cache example data files
+#'
+#' The function returns the file path where to store example data files that
+#' are retrieved from a data repository (see [`get_osm_example_data()`] and
+#' [`get_dem_example_data()`]). The directory used is the one returned by
+#' [`cache_directory()`].
+#'
+#' @param filename The name of the file to be retrieved from the data repository
+#' @return A character string representing the file path
+#' @keywords internal
+get_example_cache_filepath <- function(filename) {
+  file.path(cache_directory(), filename)
+}
+
 #' Convert a bounding box to a string
 #'
 #' @noRd
+#'
+#' @srrstats {G2.4, G2.4c} Explicit conversion of bounding box coordinates cast
+#'   with `as.character()` into string to be used in cache file names.
 bbox_as_str <- function(bbox, digits = 3) {
   bbox_rounded <- round(bbox, digits)
   paste(as.character(bbox_rounded), collapse = "_")
@@ -136,7 +153,8 @@ write_data_to_cache <- function(x, filepath, wrap = FALSE, quiet = FALSE) {
 #' Remove files from cache directory either before a given date or entirely.
 #'
 #' @param before_date Date before which cache files should be removed provided
-#'   as `Date` (or as a character string accepted by [`as.Date()`])
+#'   as object of class [`Date`] or as a case dependent character vector
+#'   accepted by [`as.Date()`]
 #'
 #' @return List of file paths of removed files
 #' @export
@@ -146,7 +164,7 @@ write_data_to_cache <- function(x, filepath, wrap = FALSE, quiet = FALSE) {
 #'
 #' # Clear cache before given date
 #' before_date <- as.Date("1-1-1999", "%m-%d-%Y")
-#' clear_cache(before_date)
+#' clear_cache(before_date = before_date)
 clear_cache <- function(before_date = NULL) {
   # Check input
   before_date <- if (!is.null(before_date)) as.Date(before_date)
@@ -161,7 +179,7 @@ clear_cache <- function(before_date = NULL) {
     file.remove(files_before_date)
     files_remaining <- list.files(cache_dir, full.names = TRUE)
     if (all(!files_before_date %in% files_remaining)) {
-      message("Cache files successfully removed.")
+      message("Cache files before date successfully removed.")
     }
   } else {
     file.remove(files)

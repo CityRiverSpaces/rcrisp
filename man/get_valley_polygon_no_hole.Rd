@@ -7,7 +7,7 @@
 get_valley_polygon_no_hole(valley_polygon)
 }
 \arguments{
-\item{valley_polygon}{st_geometry of valley region}
+\item{valley_polygon}{Geometry of valley as object of class \code{\link[sf:sfc]{sf::sfc}}}
 }
 \value{
 (multi)polygon geometry of valley

@@ -6,7 +6,7 @@
 \alias{rcrisp-package}
 \title{rcrisp: Automate the Delineation of Urban River Spaces}
 \description{
-Provides tools to automate the morphological delineation of riverside urban areas, based on a method introduced in Forgaci (2018) \doi{10.7480/abe.2018.31}. Delineation entails the identification of corridor boundaries, segmentation of the corridor, and delineation of the river space. The resulting delineation can be used to characterise spatial phenomena that can be related to the river as a central element.
+Provides tools to automate the morphological delineation of riverside urban areas based on a method introduced in Forgaci (2018) \doi{10.7480/abe.2018.31}. Delineation entails the identification of corridor boundaries, segmentation of the corridor, and delineation of the river space using two-dimensional spatial information from street network data and digital elevation data in a projected CRS. The resulting delineation can be used to characterise spatial phenomena that can be related to the river as a central element.
 }
 \seealso{
 Useful links:

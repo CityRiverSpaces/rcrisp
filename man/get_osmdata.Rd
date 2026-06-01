@@ -15,9 +15,11 @@ get_osmdata(
 )
 }
 \arguments{
-\item{city_name}{A character string with the name of the city.}
+\item{city_name}{The name of the city as character vector of length 1,
+case-sensitive. Required, no default.}
 
-\item{river_name}{A character string with the name of the river.}
+\item{river_name}{The name of the river as character vector of length 1,
+case-sensitive. Required, no default.}
 
 \item{network_buffer}{Buffer distance in meters around the river
 to get the streets and railways, default is 0 means no
@@ -30,14 +32,15 @@ buildings data will be downloaded}
 \item{city_boundary}{A logical indicating if the city boundary should be
 retrieved. Default is TRUE.}
 
-\item{crs}{An integer with the EPSG code for the projection. If no CRS is
-specified, the default is the UTM zone for the city.}
+\item{crs}{An integer or character vector of length one with the EPSG code
+for the projection. If no CRS is specified, the default is the UTM zone
+for the city.}
 
 \item{force_download}{Download data even if cached data is available}
 }
 \value{
 A list with the retrieved OpenStreetMap data sets for the
-given location
+given location, as objects of class \code{\link[sf:sfc]{sf::sfc}}
 }
 \description{
 Retrieve OpenStreetMap data for a given location, including
@@ -49,19 +52,24 @@ railways, and the buildings
 # Set parameters
 city <- "Bucharest"
 river <- "Dâmbovița"
+crs <- "EPSG:31600"  # National projected CRS
 
 # Get OSM data with defaults
-get_osmdata(city, river)
+get_osmdata(city_name = city, river_name = river)
 
-# Use custom network buffer
-get_osmdata(city, river, network_buffer = 3500)
+# Get OSM data without city boundary
+get_osmdata(city_name = city, river_name = river, city_boundary = FALSE)
 
-# Use custom buildings buffer
-get_osmdata(city, river, buildings_buffer = 150)
+# Use custom network buffer to get streets and railways
+get_osmdata(city_name = city, river_name = river, network_buffer = 3500)
+
+# Use custom buffer to get buildings
+get_osmdata(city_name = city, river_name = river, buildings_buffer = 150)
 
 # Use custom CRS
-bb <- get_osm_bb(city)
-crs <- 31600  # National projected CRS
-get_osmdata(city, river, crs = crs)
+get_osmdata(city_name = city, river_name = river, crs = crs)
+
+# Avoid getting OSM data from cache
+get_osmdata(city_name = city, river_name = river, force_download = TRUE)
 \dontshow{\}) # examplesIf}
 }

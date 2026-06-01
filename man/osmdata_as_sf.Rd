@@ -7,9 +7,11 @@
 osmdata_as_sf(key, value, aoi, force_download = FALSE)
 }
 \arguments{
-\item{key}{A character string with the key to filter the data}
+\item{key}{A case-insensitive character vector of length 1 with the key to
+filter the data}
 
-\item{value}{A character string with the value to filter the data}
+\item{value}{A case-insensitive character vector with the value(s) to filter
+the data}
 
 \item{aoi}{An area of interest, provided either as as sf object or "bbox" or
 as a vector ("xmin", "ymin", "xmax", "ymax")}
@@ -17,7 +19,7 @@ as a vector ("xmin", "ymin", "xmax", "ymax")}
 \item{force_download}{Download data even if cached data is available}
 }
 \value{
-An sf object with the retrieved OpenStreetMap data
+An \code{\link[osmdata:osmdata]{osmdata::osmdata}} object with the retrieved OpenStreetMap data
 }
 \description{
 Query the Overpass API for a key:value pair within a given bounding box
@@ -27,6 +29,9 @@ with the same input parameters will be loaded from disk.
 \examples{
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 bb <- get_osm_bb("Bucharest")
-osmdata_as_sf("highway", "motorway", bb, force_download = TRUE)
+osmdata_as_sf(key = "highway",
+              value = "motorway",
+              aoi = bb,
+              force_download = FALSE)
 \dontshow{\}) # examplesIf}
 }

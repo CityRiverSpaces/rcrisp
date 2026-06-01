@@ -16,7 +16,7 @@ specified bounding box}
 \item{bb}{A bounding box, in lat/lon coordinates}
 }
 \value{
-An sf object with the retrieved OpenStreetMap data
+An \code{\link[osmdata:osmdata]{osmdata::osmdata}} object with the retrieved OpenStreetMap data
 }
 \description{
 Query the Overpass API for a key:value pair within a bounding box

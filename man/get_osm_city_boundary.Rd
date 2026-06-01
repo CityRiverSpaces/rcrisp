@@ -15,7 +15,8 @@ get_osm_city_boundary(
 \arguments{
 \item{bb}{Bounding box of class \code{bbox}}
 
-\item{city_name}{A character string with the name of the city}
+\item{city_name}{A case-sensitive character vector of length 1 with the name
+of the city}
 
 \item{crs}{Coordinate reference system as EPSG code}
 
@@ -25,7 +26,8 @@ returned. By default, only the first one is returned.}
 \item{force_download}{Download data even if cached data is available}
 }
 \value{
-An sf object with the city boundary
+An object of class \code{\link[sf:sfc]{sf::sfc_POLYGON}} or \code{\link[sf:sfc]{sf::sfc_MULTIPOLYGON}}
+with the city boundary
 }
 \description{
 This function retrieves the city boundary from OpenStreetMap based on a
@@ -36,6 +38,6 @@ The result is filtered by the city name.
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 bb <- get_osm_bb("Bucharest")
 crs <- get_utm_zone(bb)
-get_osm_city_boundary(bb, "Bucharest", crs)
+get_osm_city_boundary(bb = bb, city_name = "Bucharest", crs = crs)
 \dontshow{\}) # examplesIf}
 }

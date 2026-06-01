@@ -14,15 +14,15 @@ get_osm_railways(
 \arguments{
 \item{aoi}{Area of interest as sf object or bbox}
 
-\item{crs}{Coordinate reference system as EPSG code}
+\item{crs}{A numeric vector of length one with the EPSG code of the CRS}
 
-\item{railway_values}{A character or character vector with the railway values
-to retrieve.}
+\item{railway_values}{A case-insensitive character vector with the railway
+values to retrieve.}
 
 \item{force_download}{Download data even if cached data is available}
 }
 \value{
-An sf object with the railways
+An object of class \code{\link[sf:sfc]{sf::sfc_LINESTRING}}
 }
 \description{
 Get OpenStreetMap railways
@@ -31,6 +31,6 @@ Get OpenStreetMap railways
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 bb <- get_osm_bb("Bucharest")
 crs <- get_utm_zone(bb)
-get_osm_railways(bb, crs)
+get_osm_railways(aoi = bb, crs = crs)
 \dontshow{\}) # examplesIf}
 }

@@ -16,7 +16,8 @@ of class \code{bbox}.}
 \item{force_download}{Download data even if cached data is available}
 }
 \value{
-Raster DEM, retrieved and retiled to the given bounding box
+A DEM of class \code{\link[terra:SpatRaster-class]{terra::SpatRaster}}, retrieved and retiled to the
+given bounding box
 }
 \description{
 Load DEM data from a list of tiles, crop and merge using a given bounding
@@ -27,6 +28,6 @@ that new queries with the same input parameters will be loaded from disk.
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 bb <- get_osm_bb("Bucharest")
 tile_urls <- get_stac_asset_urls(bb)
-load_dem(bb, tile_urls, force_download = TRUE)
+load_dem(bb = bb, tile_urls = tile_urls, force_download = TRUE)
 \dontshow{\}) # examplesIf}
 }

@@ -1,7 +1,7 @@
-#' Delineate a corridor around a river.
+#' Delineate a corridor around a river
 #'
-#' @param city_name A place name as a string
-#' @param river_name A river name as a string
+#' @param city_name A character vector of length one
+#' @param river_name A character vector of length one
 #' @param crs The projected Coordinate Reference System (CRS) to use. If not
 #'   provided, the suitable Universal Transverse Mercator (UTM) CRS is selected
 #' @param network_buffer Add a buffer (an integer in meters) around
@@ -24,12 +24,12 @@
 #' @param max_iterations Maximum number of iterations employed to refine the
 #'   corridor edges (see [`corridor_edge()`]).
 #' @param capping_method The method employed to connect the corridor edge end
-#'   points (i.e. to "cap" the corridor). See [cap_corridor()] for
-#'   the available methods
+#'   points (i.e., to "cap" the corridor), as character vector of length one.
+#'   See [cap_corridor()] for the available methods.
 #' @param angle_threshold Only network edges forming angles above this threshold
 #'   (in degrees) are considered when forming segment edges. See
-#'  [delineate_segments()] and [rcoins::stroke()]. Only used if `segments` is
-#'  TRUE.
+#'   [delineate_segments()] and [rcoins::stroke()]. Only used if `segments` is
+#'   TRUE.
 #' @param corridor Whether to carry out the corridor delineation
 #' @param segments Whether to carry out the corridor segmentation
 #' @param riverspace Whether to carry out the riverspace delineation
@@ -38,7 +38,8 @@
 #'   dataset (see [get_dem()]). Only relevant if `corridor_init` is `"valley"`
 #'   and `dem` is NULL
 #'
-#' @return A list with the corridor, segments, and riverspace geometries
+#' @return A list with the corridor, segments, and riverspace geometries as
+#'   [`sf::sfc_POLYGON`] objects.
 #' @export
 #' @examplesIf interactive()
 #' # Set parameters
@@ -49,7 +50,7 @@
 #' delineate(city, river)
 #'
 #' # Use custom CRS
-#' get_osmdata(city, river, crs = "EPSG:31600")  # National projected CRS
+#' delineate(city, river, crs = "EPSG:31600")  # National projected CRS
 #'
 #' # Use custom network buffer
 #' delineate(city, river, network_buffer = 3500)
@@ -60,6 +61,12 @@
 #' # Provide DEM as input
 #' bucharest_dem <- get_dem_example_data()
 #' delineate(city, river, dem = bucharest_dem)
+#' @srrstats {G2.3, G2.3a, G2.3b} The `checkmate` package is used to check that
+#'   `corridor_init` only uses allowed values. The variable is also made
+#'   case-independent with `tolower()`.
+#' @srrstats {SP4.0, SP4.0b, SP4.1, SP4.2} The return value is a list of
+#'   [`sf::sfc_POLYGON`] objects, explicitly documented as such, and it
+#'   maintains the same units as the input.
 delineate <- function(
   city_name, river_name, crs = NULL, network_buffer = NULL,
   buildings_buffer = NULL, corridor_init = "valley", dem = NULL,
@@ -68,10 +75,14 @@ delineate <- function(
   riverspace = FALSE, force_download = FALSE, ...
 ) {
   # Check input
+  if (is.character(corridor_init)) {
+    corridor_init <- tolower(corridor_init)
+    checkmate::assert_choice(corridor_init, c("valley"))
+  }
+  checkmate::assert_numeric(dem_buffer, len = 1)
   checkmate::assert_logical(corridor, len = 1)
   checkmate::assert_logical(segments, len = 1)
   checkmate::assert_logical(riverspace, len = 1)
-  checkmate::assert_logical(force_download, len = 1)
 
   delineations <- list()
 
@@ -109,8 +120,12 @@ delineate <- function(
   delineations$river_centerline <- osm_data$river_centerline
   delineations$river_surface <- osm_data$river_surface
 
-  # If not provided, determine the CRS
-  if (is.null(crs)) crs <- get_utm_zone(osm_data$bb)
+  # If not provided, determine the CRS. Otherwise, standardise CRS
+  if (is.null(crs)) {
+    crs <- get_utm_zone(osm_data$bb)
+  } else {
+    crs <- as_crs(crs)
+  }
 
   if (corridor) {
     # If using the valley method, and the DEM is not provided, retrieve dataset
@@ -138,7 +153,7 @@ delineate <- function(
 
   if (segments) {
     # Select the relevant part of the network
-    buffer_corridor <- 100  # TODO should this be an additional input parameter?
+    buffer_corridor <- 100
     corridor_buffer <- sf::st_buffer(delineations$corridor, buffer_corridor)
     network_filtered <- filter_network(network, corridor_buffer)
 
