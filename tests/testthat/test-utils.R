@@ -259,7 +259,7 @@ test_that("reproject does not work with objects of unknown type", {
 
 #' @srrstats {SP6.0} This test checks that the original coordinates of a raster
 #'   can be recovered after reprojection within a reasonable numeric tolerance.
-test_that("the original coorindates of a raster can be recovered after
+test_that("the original coordinates of a raster can be recovered after
           reprojection within reasonable numeric tolerance", {
             # raster in WGS84
             x <- terra::rast(xmin = -174, xmax = -168, ymin = 45, ymax = 51,
@@ -278,7 +278,7 @@ test_that("the original coorindates of a raster can be recovered after
 
 #' @srrstats {SP6.0} This test checks that the original coordinates of a vector
 #'   can be recovered after reprojection within a reasonable numeric tolerance.
-test_that("the original coorindates of vector data can be recovered after
+test_that("the original coordinates of vector data can be recovered after
           reprojection within reasonable numeric tolerance", {
             # polygon in WGS84
             x <- sf::st_polygon(list(cbind(c(-174, -174, -168, -168, -174),
