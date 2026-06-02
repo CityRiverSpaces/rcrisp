@@ -5,6 +5,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 # [Unreleased]
 
+## Added
+
+- Added a test demonstrating that `reproject()` yields equivalent results regardless of whether input data are curvilinear (WGS84) or rectilinear (projected).
+
 ## Fixed
 
 - Fixed typos in test statements.
