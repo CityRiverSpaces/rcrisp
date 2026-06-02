@@ -106,10 +106,6 @@ NULL
 #'   inform the user about any inaccuracies resulting from the application of
 #'   geoprocessing functions intended for applications in Cartesian space in
 #'   curvilinear space. Therefore no test is implemented here.
-#' @srrstatsNA {SP6.1b} This package does not implement any functions
-#'   that yield equivalent accuracy for both rectilinear and curvilinear data.
-#'   All relevant functionality is limited to either Cartesian or
-#'   ellipsoidal coordinate systems, not both.
 #' @srrstatsNA {SP5.0, SP5.1, SP5.2, SP5.3} The package does not return any
 #'   custom classes and thus does not implement a plot method nor does it offer
 #'   an ability to generate interactive visualisations. The returned
