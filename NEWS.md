@@ -5,6 +5,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 # [Unreleased]
 
+## Added
+
+- A definition of "riverside urban areas" was added in the README.
+- The practical usefulness of the morphological approach was explained in the README.
+
 ## Fixed
 
 - Fixed typos in test statements.

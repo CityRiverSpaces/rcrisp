@@ -22,20 +22,29 @@ Review](https://badges.ropensci.org/718_status.svg)](https://github.com/ropensci
 <!-- badges: end -->
 
 rcrisp provides tools to automate the morphological delineation of
-riverside urban areas following a method developed in Forgaci ([2018,
-pp. 88–89](#ref-forgaci2018)). The method is based on the premise that
-analyses of riverside urban phenomena are often done without a clear and
-consistent spatial definition of the area of interest and that a
-morphological delineation can provide a more objective and comparable
-approach.
+riverside urban areas—i.e., the spaces surrounding a river where social,
+environmental and economic phenomena are assumed to be influenced by the
+presence of the river—following a method developed in Forgaci ([2018,
+pp. 88–89](#ref-forgaci2018)).
 
-Accordingly, the method proposes a hierarchical delineation of four
-spatial units: the river valley, the river corridor, the corridor
-segments and the river space. These units are defined based on the
-combined morphologies of the river valley and urban form. The resulting
-delineations can be used in any downstream analysis of riverside urban
-areas that can benefit from consistent and comparable spatial units,
-including land use, accessibility, and ecosystem services assessments.
+The method is based on the premise that analyses of riverside urban
+phenomena are often done without a clear and consistent spatial
+definition of the area of interest and that a morphological
+delineation—combining the natural terrain of the river valley and the
+configuration of the overlapping built urban fabric—can provide a more
+objective and comparable approach. Delineations following this
+morphological delineation method enable integrated local analyses, where
+data from different sources must be combined within a neutral spatial
+unit, as well as global cross-case analyses, which require a spatial
+unit that is comparable across different geographic contexts.
+
+The method proposes a hierarchical delineation of four spatial units:
+the river valley, the river corridor, the corridor segments and the
+river space. These units are defined based on the combined morphologies
+of the river valley and urban form. The resulting delineations can be
+used in any downstream analysis of riverside urban areas that can
+benefit from consistent and comparable spatial units, including land
+use, accessibility, and ecosystem services assessments.
 
 The package includes functions to delineate the river valley, the river
 corridor, the corridor segments, and the river space (i.e., the area
