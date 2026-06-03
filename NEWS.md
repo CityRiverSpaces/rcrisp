@@ -9,10 +9,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Missing parenthesis was added in warning text in `check_cache()`.
 - Vignette pre-compilation was updated so that srr tags dropped by `knitr::knit()` are reinserted into the vignettes. Affected vignettes were also recompiled.
+- Fixed typos in test statements.
+- Corrected documentation for `reproject()`: the `crs` parameter no longer (incorrectly) lists `logical` as an accepted type. `crs` accepts numeric/integer, character (e.g. "EPSG:4326") or an `sf::crs` object; passing `TRUE`/`FALSE` will fail.
+- Vignette pre-compilation was updated so that srr tags dropped by `knitr::knit()` are reinserted into the vignettes. Affected vignettes were also recompiled.
 
 ## Changed
 
 - Attach-time `check_cache()` was moved behind `interactive()`.
+
+## Removed
+
+- TODOs were moved from released code to GitHub issues.
 
 # rcrisp 0.3.1 - 2025-11-24
 
