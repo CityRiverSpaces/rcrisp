@@ -57,15 +57,17 @@ default_stac_dem <- list(
 #' @srrstats {G2.7} The `bb` parameter accepts tabular input of class `matrix`.
 #' @srrstats {SP6.1} If specified by the user, the CRS is standardised with
 #'   `as_crs()` before being used to reproject the DEM.
-get_dem <- function(bb, dem_source = "STAC", stac_endpoint = NULL,
-                    stac_collection = NULL, crs = NULL,
-                    force_download = FALSE) {
+get_dem <- function(aoi, osm_data, dem_source = "STAC", stac_endpoint = NULL,
+                    stac_collection = NULL, force_download = FALSE) {
+  # Retrieve dataset on a larger AOI to limit edge effects in downstream
+  # valley delineation
+  aoi_dem <- buffer(osm_data$aoi_network, aoi$dem_buffer)
+  bbox <- as_bbox(aoi_dem)
+
   # Check input
-  bbox <- as_bbox(bb)
   checkmate::assert_choice(dem_source, "STAC")
   checkmate::assert_character(stac_endpoint, null.ok = TRUE, len = 1)
   checkmate::assert_character(stac_collection, null.ok = TRUE, len = 1)
-  crs <- as_crs(crs)
   checkmate::assert_logical(force_download, len = 1)
   dem_source <- toupper(dem_source)
   checkmate::assert_choice(dem_source, c("STAC"))
@@ -77,8 +79,8 @@ get_dem <- function(bb, dem_source = "STAC", stac_endpoint = NULL,
   } else {
     stop(sprintf("DEM source %s unknown", dem_source))
   }
-  if (!is.null(crs)) {
-    dem <- reproject(dem, crs)
+  if (!is.null(aoi$crs)) {
+    dem <- reproject(dem, aoi$crs)
   }
   dem
 }

@@ -147,31 +147,24 @@ get_osm_bb <- function(city_name) {
 #' get_osmdata(city_name = city, river_name = river, force_download = TRUE)
 #' @srrstats {SP4.0, SP4.0b, SP4.2} The return value is a list of objects of
 #'   class [`sf::sfc`], explicitly documented as such.
-get_osmdata <- function(
-  city_name, river_name, network_buffer = NULL, buildings_buffer = NULL,
-  city_boundary = TRUE, crs = NULL, force_download = FALSE
-) {
+get_osmdata <- function(aoi, city_boundary = TRUE, force_download = FALSE) {
   # Check input
-  checkmate::assert_numeric(network_buffer, null.ok = TRUE, len = 1)
-  checkmate::assert_numeric(buildings_buffer, null.ok = TRUE, len = 1)
   checkmate::assert_logical(city_boundary, len = 1)
-  crs <- as_crs(crs)
 
-  bb <- get_osm_bb(city_name)
-  # If not provided, determine the CRS
-  if (is.null(crs)) crs <- get_utm_zone(bb)
+  crs <- aoi$crs
+  bb <- aoi$bb
 
   # Retrieve the river center line and surface
   river_centerline <- get_osm_river_centerline(
-    bb, river_name, crs = crs, force_download = force_download
+    bb, aoi$river_name, crs = crs, force_download = force_download
   )
 
   osm_data <- list(bb = bb, river_centerline = river_centerline)
 
   # Retrieve streets and railways based on the aoi
-  if (!is.null(network_buffer)) {
+  if (!is.null(aoi$network_buffer)) {
     aoi_network <- get_river_aoi(river_centerline, bb,
-                                 buffer_distance = network_buffer)
+                                 buffer_distance = aoi$network_buffer)
     osm_data$aoi_network <- aoi_network
     osm_data$streets <- get_osm_streets(aoi_network, crs = crs,
                                         force_download = force_download)
@@ -180,19 +173,19 @@ get_osmdata <- function(
   }
 
   # Retrieve buildings and water surface based on a different aoi
-  if (!is.null(buildings_buffer)) {
+  if (!is.null(aoi$buildings_buffer)) {
     river_surface <- get_osm_river_surface(bb, river_centerline, crs = crs,
                                            force_download = force_download)
     osm_data$river_surface <- river_surface
     aoi_buildings <- get_river_aoi(c(river_centerline, river_surface), bb,
-                                   buffer_distance = buildings_buffer)
+                                   buffer_distance = aoi$buildings_buffer)
     osm_data$aoi_buildings <- aoi_buildings
     osm_data$buildings <- get_osm_buildings(aoi_buildings, crs = crs,
                                             force_download = force_download)
   }
 
   if (city_boundary) {
-    osm_data$boundary <- get_osm_city_boundary(bb, city_name, crs = crs,
+    osm_data$boundary <- get_osm_city_boundary(bb, aoi$city_name, crs = crs,
                                                force_download = force_download)
   }
 
