@@ -23,7 +23,7 @@ get_test_osmdata <- function() {
   aoi_network <- sf::st_buffer(river_centerline, 3000) |>
     sf::st_transform(sf::st_crs("EPSG:4326"))
   aoi_buildings <- sf::st_buffer(river_centerline, 100) |>
-    sf::st_transform(sf::st_crs("EPSG:4326"))
+    sf::st_transform(sf::st_crs("EPSG:32601"))
   # Draw some water surfaces (they should all intersect the river centerline)
   river_surface <- sf::st_sfc(
     sf::st_multipolygon(list(

@@ -179,7 +179,7 @@ get_osmdata <- function(aoi, city_boundary = TRUE, force_download = FALSE) {
     osm_data$river_surface <- river_surface
     aoi_buildings <- get_river_aoi(c(river_centerline, river_surface), bb,
                                    buffer_distance = aoi$buildings_buffer)
-    osm_data$aoi_buildings <- aoi_buildings
+    osm_data$aoi_buildings <- sf::st_transform(aoi_buildings, crs)
     osm_data$buildings <- get_osm_buildings(aoi_buildings, crs = crs,
                                             force_download = force_download)
   }
