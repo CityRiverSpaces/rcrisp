@@ -30,6 +30,20 @@ mock_city_boundary <- sf::st_sf(
   admin_level = "4",
   geometry = mock_city_boundary_geom
 )
+aoi <- list(
+  city_name = "Bucharest",
+  river_name = "Dâmbovița",
+  bb = sf::st_bbox(c(xmin = 25.967,
+                     ymin = 44.334,
+                     xmax = 26.226,
+                     ymax = 44.541),
+                   crs = "EPSG:4326"),
+  crs = sf::st_crs("EPSG:4326"),
+  corridor_init = "valley",
+  network_buffer = NULL,
+  dem_buffer = 2500,
+  buildings_buffer = NULL
+)
 
 test_that("OSM queries are stored to and retrieved from the cache", {
 
@@ -105,27 +119,21 @@ test_that("The correct OSM data elements are retrieved", {
     get_osm_city_boundary = function(...) "city_boundary",
     {
       # By default, the bb, river, river suf
-      osmdata_default <- get_osmdata("Bucharest",
-                                     "Dâmbovița",
+      osmdata_default <- get_osmdata(aoi,
                                      force_download = TRUE)
-      osmdata_nobound <- get_osmdata("Bucharest",
-                                     "Dâmbovița",
+      osmdata_nobound <- get_osmdata(aoi,
                                      city_boundary = FALSE,
                                      force_download = TRUE)
-      osmdata_network <- get_osmdata("Bucharest",
-                                     "Dâmbovița",
-                                     network_buffer = 3000,
-                                     force_download = TRUE)
-      osmdata_buildings <- get_osmdata("Bucharest",
-                                       "Dâmbovița",
-                                       buildings_buffer = 100,
-                                       force_download = TRUE)
-      osmdata_all <- get_osmdata("Bucharest",
-                                 "Dâmbovița",
-                                 network_buffer = 3000,
-                                 buildings_buffer = 100,
-                                 force_download = TRUE)
 
+      aoi$network_buffer <- 3000
+      osmdata_network <- get_osmdata(aoi, force_download = TRUE)
+
+      aoi$network_buffer <- NULL
+      aoi$buildings_buffer <- 100
+      osmdata_buildings <- get_osmdata(aoi, force_download = TRUE)
+
+      aoi$network_buffer <- 3000
+      osmdata_all <- get_osmdata(aoi, force_download = TRUE)
     }
   )
 
