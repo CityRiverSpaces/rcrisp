@@ -5,19 +5,15 @@
 \title{Access digital elevation model (DEM) for a given region}
 \usage{
 get_dem(
-  bb,
+  aoi,
+  osm_data,
   dem_source = "STAC",
   stac_endpoint = NULL,
   stac_collection = NULL,
-  crs = NULL,
   force_download = FALSE
 )
 }
 \arguments{
-\item{bb}{A bounding box, provided either as a matrix (rows for "x", "y",
-columns for "min", "max") or as a vector ("xmin", "ymin", "xmax", "ymax"),
-in lat/lon coordinates (WGS84 coordinate reference system) of class \code{bbox}}
-
 \item{dem_source}{Source of the DEM:
 \itemize{
 \item If "STAC" (default), DEM tiles are searched on a SpatioTemporal Asset
@@ -32,9 +28,13 @@ is \code{"STAC"}). For more info, see \code{\link[=get_stac_asset_urls]{get_stac
 used if \code{dem_source} is \code{"STAC"}). For more info, see
 \code{\link[=get_stac_asset_urls]{get_stac_asset_urls()}}}
 
-\item{crs}{Coordinate reference system (CRS) which to transform the DEM to}
-
 \item{force_download}{Download data even if cached data is available}
+
+\item{bb}{A bounding box, provided either as a matrix (rows for "x", "y",
+columns for "min", "max") or as a vector ("xmin", "ymin", "xmax", "ymax"),
+in lat/lon coordinates (WGS84 coordinate reference system) of class \code{bbox}}
+
+\item{crs}{Coordinate reference system (CRS) which to transform the DEM to}
 }
 \value{
 DEM as a terra \code{SpatRaster} object

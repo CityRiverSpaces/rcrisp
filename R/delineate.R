@@ -1,6 +1,8 @@
 #' Delineate a corridor around a river
 #'
 #' @param aoi A list of delineation parameters
+#' @param osm_data A list with OpenStreetMap data sets for the a location, as
+#'   objects of class [`sf::sfc`]
 #' @param dem Digital elevation model (DEM) of the region (only used if
 #'   `corridor_init` is `"valley"`)
 #' @param max_iterations Maximum number of iterations employed to refine the

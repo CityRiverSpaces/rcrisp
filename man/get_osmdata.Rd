@@ -4,37 +4,13 @@
 \alias{get_osmdata}
 \title{Retrieve OpenStreetMap data for a given location}
 \usage{
-get_osmdata(
-  city_name,
-  river_name,
-  network_buffer = NULL,
-  buildings_buffer = NULL,
-  city_boundary = TRUE,
-  crs = NULL,
-  force_download = FALSE
-)
+get_osmdata(aoi, city_boundary = TRUE, force_download = FALSE)
 }
 \arguments{
-\item{city_name}{The name of the city as character vector of length 1,
-case-sensitive. Required, no default.}
-
-\item{river_name}{The name of the river as character vector of length 1,
-case-sensitive. Required, no default.}
-
-\item{network_buffer}{Buffer distance in meters around the river
-to get the streets and railways, default is 0 means no
-network data will be downloaded}
-
-\item{buildings_buffer}{Buffer distance in meters around the river
-to get the buildings, default is 0 means no
-buildings data will be downloaded}
+\item{aoi}{A list of delineation parameters}
 
 \item{city_boundary}{A logical indicating if the city boundary should be
 retrieved. Default is TRUE.}
-
-\item{crs}{An integer or character vector of length one with the EPSG code
-for the projection. If no CRS is specified, the default is the UTM zone
-for the city.}
 
 \item{force_download}{Download data even if cached data is available}
 }

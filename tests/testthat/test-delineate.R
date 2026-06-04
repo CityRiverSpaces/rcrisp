@@ -56,7 +56,7 @@ test_that("Delineate does not return the valley if the buffer method is used", {
                             corridor = TRUE,
                             segments = FALSE,
                             riverspace = FALSE) |>
-                         suppressWarnings()
+    suppressWarnings()
   expect_equal(names(delineations), "corridor")
 })
 
