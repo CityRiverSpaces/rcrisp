@@ -107,3 +107,37 @@ delineate <- function(
 
   delineations
 }
+
+#' Delineate a corridor around a river
+#'
+#' This is a convenience function used for quick delineation. With only the city
+#' name and river name as input, it uses default delineation parameters, it
+#' retrieves OSM and DEM data and returns a list with all three delineations.
+#'
+#' @param city_name A character vector of length one.
+#' @param river_name A character vector of length one.
+#' @param corridor Whether to carry out the corridor delineation. Default is
+#'   TRUE.
+#' @param segments Whether to carry out the corridor segmentation.
+#'   Default is TRUE.
+#' @param riverspace Whether to carry out the riverspace delineation.
+#'   Default is TRUE.
+#'
+#' @returns A list with the valley, corridor, segments, and riverspace
+#'   geometries as [`sf::sfc_POLYGON`] objects.
+#' @export
+#'
+#' @examplesIf interactive()
+#' delineate_city_river("Bucharest", "Dâmbovița"))
+delineate_city_river <- function(city_name, river_name,
+                                 corridor = TRUE,
+                                 segments = TRUE,
+                                 riverspace = TRUE) {
+  aoi <- define_aoi(city_name, river_name)
+  osm_data <- get_osmdata(aoi)
+  dem <- get_dem(aoi, osm_data)
+  delineate(aoi, osm_data, dem,
+            corridor = corridor,
+            segments = segments,
+            riverspace = riverspace)
+}
