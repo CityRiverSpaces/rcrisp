@@ -308,7 +308,8 @@ test_that("reproject() yields equivalent results from curvilinear and
           {
             target_crs <- "EPSG:32633"  # UTM zone 33N
 
-            # Curvilinear input (WGS84): transform first to rectilinear, then to target
+            # Curvilinear input (WGS84): transform first to rectilinear,
+            # then to target
             x_geo <- sf::st_sfc(sf::st_polygon(list(cbind(
               c(12, 12, 15, 15, 12), c(47, 50, 50, 47, 47)
             ))), crs = "EPSG:4326")
@@ -318,7 +319,8 @@ test_that("reproject() yields equivalent results from curvilinear and
             x_proj <- reproject(x_geo, "EPSG:3035")
             x_from_proj <- reproject(x_proj, target_crs)
 
-            # Both routes should produce the same coordinates within numeric tolerance
+            # Both routes should produce the same coordinates within numeric
+            # tolerance
             expect_true(all(abs(
               sf::st_coordinates(x_from_geo) -
                 sf::st_coordinates(x_from_proj)
