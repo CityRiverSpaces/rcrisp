@@ -46,9 +46,10 @@ river to retrieve additional data (buildings). Default is 100 m.}
 \value{
 A list with delineation parameter values, namely \code{city_name} and
 \code{river_name} as character vectors of length one, \code{bb} as object of class
-\code{\link[sf:bbox]{sf::bbox}}, \code{crs} as object of class \code{\link[sf:coerce-methods]{sf::crs}}, \code{corridor_init} as
-character or numerical vector of length one, and \code{network_buffer},
-\code{dem_buffer} and \code{buildings_buffer} as numerical vector of length one.
+\code{\link[sf:st_bbox]{sf::bbox}}, \code{crs} as object of class \code{\link[sf:coerce-methods]{sf::crs}},
+\code{corridor_init} as character or numerical vector of length one, and
+\code{network_buffer}, \code{dem_buffer} and \code{buildings_buffer} as numerical vector
+of length one.
 }
 \description{
 Define delineation parameters within an area of interest

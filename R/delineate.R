@@ -130,7 +130,7 @@ delineate <- function(
 #' @export
 #'
 #' @examplesIf interactive()
-#' delineate_city_river("Bucharest", "Dâmbovița"))
+#' delineate_city_river("Bucharest", "Dâmbovița")
 delineate_city_river <- function(city_name, river_name,
                                  corridor = TRUE,
                                  segments = TRUE,

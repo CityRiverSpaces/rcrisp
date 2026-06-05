@@ -14,6 +14,13 @@ get_dem(
 )
 }
 \arguments{
+\item{aoi}{A list of delineation parameters, including \verb{$dem_buffer} used
+to expand the area of interest covered by the network and \verb{$crs} for the
+CRS which to transform the DEM to}
+
+\item{osm_data}{A list with OpenStreetMap data sets for the a location, as
+objects of class \code{\link[sf:sfc]{sf::sfc}}}
+
 \item{dem_source}{Source of the DEM:
 \itemize{
 \item If "STAC" (default), DEM tiles are searched on a SpatioTemporal Asset
@@ -29,12 +36,6 @@ used if \code{dem_source} is \code{"STAC"}). For more info, see
 \code{\link[=get_stac_asset_urls]{get_stac_asset_urls()}}}
 
 \item{force_download}{Download data even if cached data is available}
-
-\item{bb}{A bounding box, provided either as a matrix (rows for "x", "y",
-columns for "min", "max") or as a vector ("xmin", "ymin", "xmax", "ymax"),
-in lat/lon coordinates (WGS84 coordinate reference system) of class \code{bbox}}
-
-\item{crs}{Coordinate reference system (CRS) which to transform the DEM to}
 }
 \value{
 DEM as a terra \code{SpatRaster} object
@@ -44,15 +45,15 @@ Access digital elevation model (DEM) for a given region
 }
 \examples{
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-# Get DEM with default values
-bb <- get_osm_bb("Bucharest")
-crs <- 31600  # National projected CRS
+# Define delineation parameters and get OSM data within area of interest
+aoi <- define_aoi("Bucharest", "Dâmbovița")
+osm <- get_osmdata(aoi)
 
 # Get DEM with default values
-get_dem(bb)
+dem <- get_dem(aoi, osm_data)
 
 # Get DEM from custom STAC endpoint
-get_dem(bb,
+get_dem(aoi, osm_data,
         stac_endpoint = "some endpoint",
         stac_collection = "some collection")
 

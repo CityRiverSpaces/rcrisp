@@ -37,6 +37,6 @@ retrieves OSM and DEM data and returns a list with all three delineations.
 }
 \examples{
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-delineate_city_river("Bucharest", "Dâmbovița"))
+delineate_city_river("Bucharest", "Dâmbovița")
 \dontshow{\}) # examplesIf}
 }

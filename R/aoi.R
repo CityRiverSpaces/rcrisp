@@ -22,9 +22,10 @@
 #'
 #' @return A list with delineation parameter values, namely `city_name` and
 #'   `river_name` as character vectors of length one, `bb` as object of class
-#'   [`sf::bbox`], `crs` as object of class [`sf::crs`], `corridor_init` as
-#'   character or numerical vector of length one, and `network_buffer`,
-#'   `dem_buffer` and `buildings_buffer` as numerical vector of length one.
+#'   [`sf::bbox`][sf::st_bbox], `crs` as object of class [`sf::crs`],
+#'   `corridor_init` as character or numerical vector of length one, and
+#'   `network_buffer`, `dem_buffer` and `buildings_buffer` as numerical vector
+#'   of length one.
 #' @export
 #' @examplesIf interactive()
 #' # Get default parameters in AOI
