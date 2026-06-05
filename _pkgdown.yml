@@ -52,6 +52,7 @@ reference:
     Functions for full or specific delineation
   contents:
     - delineate
+    - delineate_city_river
     - delineate_valley
     - delineate_corridor
     - delineate_segments
@@ -97,6 +98,7 @@ reference:
   desc: >
     Helpers used throughout delineation and data retrieval functions
   contents:
+    - define_aoi
     - as_bbox
     - as_crs
     - get_utm_zone
