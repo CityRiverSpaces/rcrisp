@@ -364,7 +364,6 @@ cap_corridor <- function(edges, method = "shortest-path", network = NULL) {
     network <- add_weights(network)
     cap_edge_1 <- shortest_path(network, from = start_pts[1], to = start_pts[2])
     cap_edge_2 <- shortest_path(network, from = end_pts[1], to = end_pts[2])
-    # TODO: raise warning if lenght is 2 times longer than direct segment
   } else {
     stop(
       sprintf("Unknown method to cap the river corridor: %s", method)
