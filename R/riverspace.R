@@ -19,6 +19,8 @@
 #'   same units as the input.
 delineate_riverspace <- function(river, occluders = NULL, density = 1 / 50,
                                  ray_num = 40, ray_length = 100) {
+  # Pre-process distance input
+  ray_length <- preprocess_distance(ray_length)
   # Check input
   checkmate::assert_multi_class(river, c("list", "sf", "sfc"))
   checkmate::assert_vector(river, min.len = 1)

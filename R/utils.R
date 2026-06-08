@@ -164,6 +164,7 @@ as_crs <- function(x, allow_geographic = FALSE) {
 #'   [`sf::sfc_POLYGON`], explicitly documented as such, and it maintains the
 #'   same units as the input.
 buffer <- function(obj, buffer_distance, ...) {
+  buffer_distance <- preprocess_distance(buffer_distance)
   is_obj_longlat <- sf::st_is_longlat(obj)
   dst_crs <- sf::st_crs(obj)
   # check if obj is a bbox
@@ -200,6 +201,7 @@ buffer <- function(obj, buffer_distance, ...) {
 #'   [`sf::sfc_POLYGON`], explicitly documented as such, and it maintains the
 #'   same units as the input.
 river_buffer <- function(river, buffer_distance, bbox = NULL, side = NULL) {
+  buffer_distance <- preprocess_distance(buffer_distance)
   if (!is.null(bbox)) river <- sf::st_crop(river, bbox)
   if (is.null(side)) {
     river_buf <- buffer(river, buffer_distance)

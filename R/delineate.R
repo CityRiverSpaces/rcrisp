@@ -74,6 +74,14 @@ delineate <- function(
   angle_threshold = 100, corridor = TRUE, segments = FALSE,
   riverspace = FALSE, force_download = FALSE, ...
 ) {
+  # Pre-process distances
+  if (!is.null(network_buffer)) {
+    network_buffer   <- preprocess_distance(network_buffer)
+  }
+  if (!is.null(buildings_buffer)) {
+    buildings_buffer <- preprocess_distance(buildings_buffer)
+  }
+  dem_buffer <- preprocess_distance(dem_buffer)
   # Check input
   if (is.character(corridor_init)) {
     corridor_init <- tolower(corridor_init)

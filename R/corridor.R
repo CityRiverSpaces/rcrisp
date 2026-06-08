@@ -69,6 +69,11 @@ delineate_corridor <- function(
   network, river, corridor_init = 1000, max_width = 3000, max_iterations = 10,
   capping_method = "shortest-path"
 ) {
+  # Preprocess distances
+  if (is.numeric(corridor_init) || inherits(corridor_init, "units")) {
+    corridor_init <- preprocess_distance(corridor_init)
+  }
+  max_width <- preprocess_distance(max_width)
   # Check input
   checkmate::assert_class(network, "sfnetwork")
   checkmate::assert_multi_class(river, c("sf", "sfc"))
