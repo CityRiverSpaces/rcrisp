@@ -378,3 +378,27 @@ test_that("as_crs raises error if input object does not have CRS", {
   x <- sf::st_sfc(sf::st_point(c(1, 2)))
   expect_error(as_crs(x), "Input should have a CRS.")
 })
+
+test_that("Distance pre-processing handles units objects", {
+  x_m  <- units::set_units(500, "m")
+  x_km <- units::set_units(0.5, "km")
+  expect_equal(preprocess_distance(x_m),  500)
+  expect_equal(preprocess_distance(x_km), 500)
+  expect_type(preprocess_distance(x_m), "double")
+})
+
+test_that("Distance pre-processing does not change plain numeric values", {
+  expect_equal(preprocess_distance(500), 500)
+})
+
+test_that("Distance pre-processing coerces non-atomic, vector-like objects", {
+  m <- matrix(500, nrow = 1, ncol = 1)
+  expect_equal(preprocess_distance(m), 500)
+})
+
+test_that("Distance pre-processing only accepts input of length 1", {
+  expect_error(preprocess_distance(c(500, 1000)), "single value")
+  expect_error(preprocess_distance(units::set_units(c(500, 1000), "m")),
+               "single value")
+
+})
