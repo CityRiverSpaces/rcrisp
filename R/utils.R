@@ -353,9 +353,9 @@ preprocess_distance <- function(x, arg_name = deparse(substitute(x))) {
   if (inherits(x, "units")) {
     x <- units::set_units(x, "m")
     x <- as.numeric(x)
-  # Handle other non-atomic vector-like classes (e.g., one-column matrices or
+  # Handle other vector-like classes (e.g., one-column matrices or
   # one-row data frames) with `storage.mode` numeric
-  } else if (!is.atomic(x) && storage.mode(x) %in% c("double", "integer")) {
+  } else if (!is.null(dim(x)) && storage.mode(x) %in% c("double", "integer")) {
     x <- as.vector(x)
   }
 
