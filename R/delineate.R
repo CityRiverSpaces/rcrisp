@@ -64,6 +64,8 @@
 #' @srrstats {G2.3, G2.3a, G2.3b} The `checkmate` package is used to check that
 #'   `corridor_init` only uses allowed values. The variable is also made
 #'   case-independent with `tolower()`.
+#' @srrstats {G2.9) A message is issued when CRS is not provided by the user and
+#'   a suitable UTM zone is auto-selected instead.
 #' @srrstats {SP4.0, SP4.0b, SP4.1, SP4.2} The return value is a list of
 #'   [`sf::sfc_POLYGON`] objects, explicitly documented as such, and it
 #'   maintains the same units as the input.
@@ -118,6 +120,8 @@ delineate <- function(
   # If not provided, determine the CRS. Otherwise, standardise CRS
   if (is.null(crs)) {
     crs <- get_utm_zone(osm_data$bb)
+    message(sprintf("No CRS provided. Using auto-selected UTM zone: EPSG:%s.",
+                    crs))
   } else {
     crs <- as_crs(crs)
   }
