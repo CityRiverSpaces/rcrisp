@@ -329,3 +329,37 @@ check_invalid_geometry <- function(sf_obj) {
   }
   sf::st_make_valid(sf_obj) # if input valid, it remains unchanged
 }
+
+#' Pre-process one-dimensional distance input
+#'
+#' Ensure that distance input is plain numeric in meters, regardless of
+#' whether it is provided as a `units` object (e.g., a distance in kilometers),
+#' a plain numeric or another vector-like class with numeric `storage.mode`.
+#'
+#' @param x A distance value which may be `numeric`, or a [`units::units`]
+#'   object, or any other class fir which the underlying `storage.mode` is
+#'   numeric.
+#' @param arg_name Name of the argument, used in messages/errors.
+#'
+#' @returns A vector of class `numeric` in meters.
+#' @keywords internal
+#' @srrstats {G2.6} One-dimensional distance input is pre=processed by
+#'   `preprocess_distance()` to handle `units` objects or other vector-like
+#'   classes with storage mode `numeric`.
+preprocess_distance <- function(x, arg_name = deparse(substitute(x))) {
+  # To handle `units` objects, convert them first to meters and then drop class
+  if (inherits(x, "units")) {
+    x <- units::set_units(x, "m")
+    x <- as.numeric(x)
+  # Handle other non-atomic vector-like classes (e.g., one-column matrices or
+  # one-row data frames) with `storage.mode` numeric
+  } else if (!is.atomic(x) && storage.mode(x) %in% c("double", "integer")) {
+    x <- as.vector(x)
+  }
+
+  # Ensure that the input is a single value
+  if (length(x) != 1) {
+    stop("`", arg_name, "` must be a single value, not length ", length(x))
+  }
+  x
+}
