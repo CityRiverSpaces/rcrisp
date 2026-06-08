@@ -336,16 +336,16 @@ check_invalid_geometry <- function(sf_obj) {
 #'
 #' Ensure that distance input is plain numeric in meters, regardless of
 #' whether it is provided as a `units` object (e.g., a distance in kilometers),
-#' a plain numeric or another vector-like class with numeric `storage.mode`.
+#' a plain numeric or another vector-like object with numeric `storage.mode`.
 #'
 #' @param x A distance value which may be `numeric`, or a [`units::units`]
-#'   object, or any other class fir which the underlying `storage.mode` is
+#'   object, or any other object for which the underlying `storage.mode` is
 #'   numeric.
 #' @param arg_name Name of the argument, used in messages/errors.
 #'
 #' @returns A vector of class `numeric` in meters.
 #' @keywords internal
-#' @srrstats {G2.6} One-dimensional distance input is pre=processed by
+#' @srrstats {G2.6} One-dimensional distance input is pre-processed by
 #'   `preprocess_distance()` to handle `units` objects or other vector-like
 #'   classes with storage mode `numeric`.
 preprocess_distance <- function(x, arg_name = deparse(substitute(x))) {
