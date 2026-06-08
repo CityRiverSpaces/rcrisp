@@ -5,6 +5,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 # [Unreleased]
 
+## Added
+
+- Distance input preprocessing is now handled by the `preprocess_distance()` function. This function returns a plain numeric in meters, regardless of whether the input is provided as a `units` object, a plain numeric or another vector-like class with numeric `storage.mode`.
+
 ## Fixed
 
 - Fixed typos in test statements.
