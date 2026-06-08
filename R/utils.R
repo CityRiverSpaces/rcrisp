@@ -353,12 +353,11 @@ preprocess_distance <- function(x, arg_name = deparse(substitute(x))) {
   if (length(x) != 1) {
     stop("`", arg_name, "` must be a single value, not length ", length(x))
   }
-  # To handle `units` objects, convert them first to meters and then drop class
+  # To handle both `units` objects and other vector-like objects whose
+  # `storage.mode` is numeric
   if (inherits(x, "units")) {
     x <- units::set_units(x, "m")
     x <- as.numeric(x)
-  # Handle other vector-like classes (e.g., one-column matrices or
-  # one-row data frames) with `storage.mode` numeric
   } else if (!is.null(dim(x)) && storage.mode(x) %in% c("double", "integer")) {
     x <- as.vector(x)
   }
