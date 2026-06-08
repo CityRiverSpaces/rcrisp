@@ -349,6 +349,10 @@ check_invalid_geometry <- function(sf_obj) {
 #'   `preprocess_distance()` to handle `units` objects or other vector-like
 #'   classes with storage mode `numeric`.
 preprocess_distance <- function(x, arg_name = deparse(substitute(x))) {
+  # Ensure that the input is a single value
+  if (length(x) != 1) {
+    stop("`", arg_name, "` must be a single value, not length ", length(x))
+  }
   # To handle `units` objects, convert them first to meters and then drop class
   if (inherits(x, "units")) {
     x <- units::set_units(x, "m")
@@ -357,11 +361,6 @@ preprocess_distance <- function(x, arg_name = deparse(substitute(x))) {
   # one-row data frames) with `storage.mode` numeric
   } else if (!is.null(dim(x)) && storage.mode(x) %in% c("double", "integer")) {
     x <- as.vector(x)
-  }
-
-  # Ensure that the input is a single value
-  if (length(x) != 1) {
-    stop("`", arg_name, "` must be a single value, not length ", length(x))
   }
   x
 }
