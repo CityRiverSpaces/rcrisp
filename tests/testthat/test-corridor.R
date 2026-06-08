@@ -367,3 +367,26 @@ test_that("When river has no crossing, delineation fails with informative
             expect_error(delineate_corridor(network, river),
                          "No river crossings found.")
           })
+
+#' @srrstats {SP6.1a} Geographic (lat/lon) input to `delineate_corridor()`
+#'   yields inaccurate results because all corridor geometry operations assume
+#'   Cartesian (projected) coordinates. The function therefore raises an
+#'   informative error when geographic CRS input is supplied.
+test_that("delineate_corridor() raises an error for geographic CRS input", {
+  network_edges <- sf::st_sfc(
+    sf::st_linestring(cbind(c(26.09, 26.07), c(44.43, 44.43))),
+    sf::st_linestring(cbind(c(26.09, 26.07), c(44.45, 44.45))),
+    sf::st_linestring(cbind(c(26.09, 26.09), c(44.45, 44.43))),
+    sf::st_linestring(cbind(c(26.07, 26.07), c(44.43, 44.45))),
+    crs = 4326
+  )
+  network <- sfnetworks::as_sfnetwork(network_edges, directed = FALSE)
+  river <- sf::st_sfc(
+    sf::st_linestring(cbind(c(26.06, 26.08, 26.10), c(44.44, 44.44, 44.44))),
+    crs = 4326
+  )
+  expect_error(
+    delineate_corridor(network, river),
+    "The input CRS is geographic"
+  )
+})
