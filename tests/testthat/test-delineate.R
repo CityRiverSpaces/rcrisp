@@ -89,3 +89,12 @@ test_that("Only one city can be delineated at a time", {
   expect_error(delineate(c("Bucharest", "Cluj-Napoca"), "Dâmbovița"),
                "Assertion on 'city_name' failed: Must have length 1")
 })
+
+test_that("If `crs` is not specified, message is issued", {
+  expect_message(with_mocked_bindings(get_osmdata = \(...) test_osmdata,
+                                      get_dem = \(...) test_dem,
+                                      delineate(city_name = "MyCity",
+                                                river_name = "MyRiver") |>
+                                        suppressWarnings()),
+                 "Using auto-selected UTM zone: EPSG:")
+})
