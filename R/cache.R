@@ -116,7 +116,7 @@ get_rds_filename <- function(...) {
 #' @keywords internal
 read_data_from_cache <- function(filepath, unwrap = FALSE, quiet = FALSE) {
   if (!quiet) {
-    warning(sprintf("Loading data from cache directory: %s", filepath))
+    cli::cli_inform("Loading data from cache directory: {filepath}")
   }
   data <- readRDS(filepath)
   if (unwrap) {

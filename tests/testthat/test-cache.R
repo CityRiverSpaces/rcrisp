@@ -34,17 +34,17 @@ test_that("A proper path is created to cache a DEM dataset", {
   expect_equal(actual, expected)
 })
 
-test_that("Loading/saving warnings can be suppressed via argument", {
+test_that("Loading/saving messages can be suppressed via argument", {
   cache_dir <- temp_cache_dir()
 
   # check whether we can load test elements from the cache, with and without
-  # warnings
+  # messages
   for (filename in list.files(cache_dir)) {
-    expect_warning(
+    expect_message(
       read_data_from_cache(file.path(cache_dir, filename)),
       "Loading data from cache directory"
     )
-    expect_no_warning(
+    expect_no_message(
       read_data_from_cache(file.path(cache_dir, filename), quiet = TRUE),
     )
   }
