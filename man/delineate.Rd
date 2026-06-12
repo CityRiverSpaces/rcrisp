@@ -8,6 +8,7 @@ delineate(
   aoi,
   osm_data,
   dem = NULL,
+  corridor_init = "valley",
   max_iterations = 10,
   capping_method = "shortest-path",
   angle_threshold = 100,
@@ -24,6 +25,16 @@ objects of class \code{\link[sf:sfc]{sf::sfc}}}
 
 \item{dem}{Digital elevation model (DEM) of the region (only used if
 \code{corridor_init} is \code{"valley"})}
+
+\item{corridor_init}{How to estimate the initial guess of the river corridor.
+It can take the following values:
+\itemize{
+\item "valley": use the river valley boundary, as estimated from a Digital
+Elevation Model (DEM) (for more info see \code{\link[=delineate_valley]{delineate_valley()}})
+\item numeric or integer: use a buffer region of the given size (in meters)
+around the river centerline
+\item An \code{\link[sf:sf]{sf::sf}} or \code{\link[sf:sfc]{sf::sfc}} object: use the given input geometry
+}}
 
 \item{max_iterations}{Maximum number of iterations employed to refine the
 corridor edges (see \code{\link[=corridor_edge]{corridor_edge()}}).}

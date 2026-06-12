@@ -8,7 +8,6 @@ define_aoi(
   city_name,
   river_name,
   crs = NULL,
-  corridor_init = "valley",
   network_buffer = NULL,
   dem_buffer = 2500,
   buildings_buffer = NULL
@@ -21,16 +20,6 @@ define_aoi(
 
 \item{crs}{The projected Coordinate Reference System (CRS) to use. If not
 provided, the suitable Universal Transverse Mercator (UTM) CRS is selected}
-
-\item{corridor_init}{How to estimate the initial guess of the river corridor.
-It can take the following values:
-\itemize{
-\item "valley": use the river valley boundary, as estimated from a Digital
-Elevation Model (DEM) (for more info see \code{\link[=delineate_valley]{delineate_valley()}})
-\item numeric or integer: use a buffer region of the given size (in meters)
-around the river centerline
-\item An \code{\link[sf:sf]{sf::sf}} or \code{\link[sf:sfc]{sf::sfc}} object: use the given input geometry
-}}
 
 \item{network_buffer}{Add a buffer (an integer in meters) around
 river to retrieve additional data (streets, railways, etc.).

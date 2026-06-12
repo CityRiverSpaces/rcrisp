@@ -4,13 +4,6 @@
 #' @param river_name A character vector of length one
 #' @param crs The projected Coordinate Reference System (CRS) to use. If not
 #'   provided, the suitable Universal Transverse Mercator (UTM) CRS is selected
-#' @param corridor_init How to estimate the initial guess of the river corridor.
-#'   It can take the following values:
-#'   * "valley": use the river valley boundary, as estimated from a Digital
-#'     Elevation Model (DEM) (for more info see [delineate_valley()])
-#'   * numeric or integer: use a buffer region of the given size (in meters)
-#'     around the river centerline
-#'   * An [`sf::sf`] or [`sf::sfc`] object: use the given input geometry
 #' @param network_buffer Add a buffer (an integer in meters) around
 #'   river to retrieve additional data (streets, railways, etc.).
 #'   Default is 3000 m.
@@ -45,16 +38,12 @@
 #'                   buildings_buffer = 150)
 define_aoi <- function(
   city_name, river_name,
-  crs = NULL, corridor_init = "valley",
+  crs = NULL,
   network_buffer = NULL, dem_buffer = 2500, buildings_buffer = NULL
 ) {
   # Check input
   checkmate::assert_character(city_name, len = 1)
   checkmate::assert_character(river_name, len = 1)
-  if (is.character(corridor_init)) {
-    corridor_init <- tolower(corridor_init)
-    checkmate::assert_choice(corridor_init, c("valley"))
-  }
   checkmate::assert_numeric(dem_buffer, len = 1)
   checkmate::assert_numeric(network_buffer, null.ok = TRUE, len = 1)
   checkmate::assert_numeric(buildings_buffer, null.ok = TRUE, len = 1)
@@ -93,7 +82,6 @@ define_aoi <- function(
     river_name = river_name,
     bb = bb,
     crs = crs,
-    corridor_init = corridor_init,
     network_buffer = network_buffer,
     dem_buffer = dem_buffer,
     buildings_buffer = buildings_buffer

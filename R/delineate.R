@@ -5,6 +5,13 @@
 #'   objects of class [`sf::sfc`]
 #' @param dem Digital elevation model (DEM) of the region (only used if
 #'   `corridor_init` is `"valley"`)
+#' @param corridor_init How to estimate the initial guess of the river corridor.
+#'   It can take the following values:
+#'   * "valley": use the river valley boundary, as estimated from a Digital
+#'     Elevation Model (DEM) (for more info see [delineate_valley()])
+#'   * numeric or integer: use a buffer region of the given size (in meters)
+#'     around the river centerline
+#'   * An [`sf::sf`] or [`sf::sfc`] object: use the given input geometry
 #' @param max_iterations Maximum number of iterations employed to refine the
 #'   corridor edges (see [`corridor_edge()`]).
 #' @param capping_method The method employed to connect the corridor edge end
@@ -45,12 +52,16 @@
 #'   [`sf::sfc_POLYGON`] objects, explicitly documented as such, and it
 #'   maintains the same units as the input.
 delineate <- function(
-  aoi, osm_data, dem = NULL,
+  aoi, osm_data, dem = NULL, corridor_init = "valley",
   max_iterations = 10, capping_method = "shortest-path", angle_threshold = 100,
   corridor = TRUE, segments = FALSE, riverspace = FALSE
 ) {
   # Check input
   checkmate::assert_list(aoi)
+  if (is.character(corridor_init)) {
+    corridor_init <- tolower(corridor_init)
+    checkmate::assert_choice(corridor_init, c("valley"))
+  }
   checkmate::assert_logical(corridor, len = 1)
   checkmate::assert_logical(segments, len = 1)
   checkmate::assert_logical(riverspace, len = 1)
@@ -62,14 +73,14 @@ delineate <- function(
   # Carry out the required delineations
   if (corridor) {
     # If using the valley method, the user must provide a DEM
-    if (aoi$corridor_init == "valley") {
+    if (corridor_init == "valley") {
       if (is.null(dem)) {
         stop("If initial corridor is \"valley\", a DEM must be provided.")
       }
       corridor_init <- delineate_valley(dem, osm_data$river_centerline)
       delineations$valley <- corridor_init
     } else {
-      corridor_init <- aoi$corridor_init
+      corridor_init <- corridor_init
     }
 
     # Set up the combined street and rail network for the delineation
