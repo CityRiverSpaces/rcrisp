@@ -39,10 +39,6 @@
 #' # Delineate with defaults
 #' delineate(aoi, osm_data, dem)
 #'
-#' # Provide DEM as input
-#' bucharest_dem <- get_dem_example_data()
-#' delineate(aoi, osm_data, dem = bucharest_dem)
-#'
 #' # Carry out all delineations
 #' delineate(aoi, osm_data, dem, segments = TRUE, riverspace = TRUE)
 #' @srrstats {G2.3, G2.3a, G2.3b} The `checkmate` package is used to check that
