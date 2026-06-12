@@ -1,7 +1,7 @@
 #' Delineate a corridor around a river
 #'
 #' @param aoi A list of delineation parameters
-#' @param osm_data A list with OpenStreetMap data sets for the a location, as
+#' @param osm A list with OpenStreetMap data sets for the a location, as
 #'   objects of class [`sf::sfc`]
 #' @param dem Digital elevation model (DEM) of the region (only used if
 #'   `corridor_init` is `"valley"`)
@@ -34,13 +34,13 @@
 #'
 #' # Get data
 #' osm <- get_osmdata(aoi)
-#' dem <- get_dem(aoi, osm_data)
+#' dem <- get_dem(aoi, osm)
 #'
 #' # Delineate with defaults
-#' delineate(aoi, osm_data, dem)
+#' delineate(aoi, osm, dem)
 #'
 #' # Carry out all delineations
-#' delineate(aoi, osm_data, dem, segments = TRUE, riverspace = TRUE)
+#' delineate(aoi, osm, dem, segments = TRUE, riverspace = TRUE)
 #' @srrstats {G2.3, G2.3a, G2.3b} The `checkmate` package is used to check that
 #'   `corridor_init` only uses allowed values. The variable is also made
 #'   case-independent with `tolower()`.
@@ -48,7 +48,7 @@
 #'   [`sf::sfc_POLYGON`] objects, explicitly documented as such, and it
 #'   maintains the same units as the input.
 delineate <- function(
-  aoi, osm_data, dem = NULL, corridor_init = "valley",
+  aoi, osm, dem = NULL, corridor_init = "valley",
   max_iterations = 10, capping_method = "shortest-path", angle_threshold = 100,
   corridor = TRUE, segments = FALSE, riverspace = FALSE
 ) {
@@ -73,19 +73,19 @@ delineate <- function(
       if (is.null(dem)) {
         stop("If initial corridor is \"valley\", a DEM must be provided.")
       }
-      corridor_init <- delineate_valley(dem, osm_data$river_centerline)
+      corridor_init <- delineate_valley(dem, osm$river_centerline)
       delineations$valley <- corridor_init
     } else {
       corridor_init <- corridor_init
     }
 
     # Set up the combined street and rail network for the delineation
-    network_edges <- dplyr::bind_rows(osm_data$streets, osm_data$railways)
+    network_edges <- dplyr::bind_rows(osm$streets, osm$railways)
     network <- as_network(network_edges)
 
     # Run the corridor delineation on the spatial network
     delineations$corridor <- delineate_corridor(
-      network, osm_data$river_centerline, max_width = aoi$network_buffer,
+      network, osm$river_centerline, max_width = aoi$network_buffer,
       corridor_init = corridor_init, max_iterations = max_iterations,
       capping_method = capping_method
     )
@@ -99,19 +99,19 @@ delineate <- function(
 
     delineations$segments <- delineate_segments(delineations$corridor,
                                                 network_filtered,
-                                                osm_data$river_centerline,
+                                                osm$river_centerline,
                                                 angle_threshold)
   }
 
   if (riverspace) {
     river_centerline_clipped <- sf::st_intersection(
-      osm_data$river_centerline, osm_data$aoi_buildings |>
+      osm$river_centerline, osm$aoi_buildings |>
         sf::st_transform(aoi$crs)
     )
     river_combined <- combine_river_features(river_centerline_clipped,
-                                             osm_data$river_surface)
+                                             osm$river_surface)
     delineations$riverspace <- delineate_riverspace(river_combined,
-                                                    osm_data$buildings)
+                                                    osm$buildings)
   }
 
   delineations
@@ -143,9 +143,9 @@ delineate_city_river <- function(city_name, river_name,
                                  segments = TRUE,
                                  riverspace = TRUE) {
   aoi <- define_aoi(city_name, river_name)
-  osm_data <- get_osmdata(aoi)
-  dem <- get_dem(aoi, osm_data)
-  delineate(aoi, osm_data, dem,
+  osm <- get_osmdata(aoi)
+  dem <- get_dem(aoi, osm)
+  delineate(aoi, osm, dem,
             corridor = corridor,
             segments = segments,
             riverspace = riverspace)

@@ -6,7 +6,7 @@
 \usage{
 delineate(
   aoi,
-  osm_data,
+  osm,
   dem = NULL,
   corridor_init = "valley",
   max_iterations = 10,
@@ -20,7 +20,7 @@ delineate(
 \arguments{
 \item{aoi}{A list of delineation parameters}
 
-\item{osm_data}{A list with OpenStreetMap data sets for the a location, as
+\item{osm}{A list with OpenStreetMap data sets for the a location, as
 objects of class \code{\link[sf:sfc]{sf::sfc}}}
 
 \item{dem}{Digital elevation model (DEM) of the region (only used if
@@ -68,12 +68,12 @@ aoi <- define_aoi("Bucharest", "Dâmbovița")
 
 # Get data
 osm <- get_osmdata(aoi)
-dem <- get_dem(aoi, osm_data)
+dem <- get_dem(aoi, osm)
 
 # Delineate with defaults
-delineate(aoi, osm_data, dem)
+delineate(aoi, osm, dem)
 
 # Carry out all delineations
-delineate(aoi, osm_data, dem, segments = TRUE, riverspace = TRUE)
+delineate(aoi, osm, dem, segments = TRUE, riverspace = TRUE)
 \dontshow{\}) # examplesIf}
 }
