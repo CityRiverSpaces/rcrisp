@@ -81,6 +81,12 @@ delineate <- function(
       corridor_init <- corridor_init
     }
 
+    if (is.null(osm$streets) || is.null(osm$railways)) {
+      stop(paste0("Spatial network (streets, railways) data is not available. ",
+                  "Did you set `network = FALSE` when retrieving OSM data ",
+                  "with `get_osmdata()`?"))
+    }
+
     # Set up the combined street and rail network for the delineation
     network_edges <- dplyr::bind_rows(osm$streets, osm$railways)
     network <- as_network(network_edges)
@@ -106,6 +112,11 @@ delineate <- function(
   }
 
   if (riverspace) {
+    if (is.null(osm$aoi_buildings)) {
+      stop(paste0("AOI for buildings is not available. ",
+                  "Did you set `buildings = FALSE` when retrieving OSM data ",
+                  "with `get_osmdata()`?"))
+    }
     river_centerline_clipped <- sf::st_intersection(
       osm$river_centerline, osm$aoi_buildings |>
         sf::st_transform(aoi$crs)

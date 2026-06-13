@@ -4,13 +4,25 @@
 \alias{get_osmdata}
 \title{Retrieve OpenStreetMap data for a given location}
 \usage{
-get_osmdata(aoi, city_boundary = TRUE, force_download = FALSE)
+get_osmdata(
+  aoi,
+  city_boundary = TRUE,
+  network = TRUE,
+  buildings = TRUE,
+  force_download = FALSE
+)
 }
 \arguments{
 \item{aoi}{A list of delineation parameters}
 
 \item{city_boundary}{A logical indicating if the city boundary should be
 retrieved. Default is TRUE.}
+
+\item{network}{A logical indicating if the spatial network should be
+retrieved. Default is TRUE.}
+
+\item{buildings}{A logical indicating if buildings should be retrieved.
+Default is TRUE.}
 
 \item{force_download}{Download data even if cached data is available}
 }

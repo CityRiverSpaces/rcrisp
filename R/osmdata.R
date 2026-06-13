@@ -104,6 +104,10 @@ get_osm_bb <- function(city_name) {
 #' @param aoi A list of delineation parameters
 #' @param city_boundary A logical indicating if the city boundary should be
 #'   retrieved. Default is TRUE.
+#' @param network A logical indicating if the spatial network should be
+#'   retrieved. Default is TRUE.
+#' @param buildings A logical indicating if buildings should be retrieved.
+#'   Default is TRUE.
 #' @param force_download Download data even if cached data is available
 #'
 #' @return A list with the retrieved OpenStreetMap data sets for the
@@ -135,9 +139,15 @@ get_osm_bb <- function(city_name) {
 #' get_osmdata(city_name = city, river_name = river, force_download = TRUE)
 #' @srrstats {SP4.0, SP4.0b, SP4.2} The return value is a list of objects of
 #'   class [`sf::sfc`], explicitly documented as such.
-get_osmdata <- function(aoi, city_boundary = TRUE, force_download = FALSE) {
+get_osmdata <- function(aoi,
+                        city_boundary = TRUE,
+                        network = TRUE,
+                        buildings = TRUE,
+                        force_download = FALSE) {
   # Check input
   checkmate::assert_logical(city_boundary, len = 1)
+  checkmate::assert_logical(network, len = 1)
+  checkmate::assert_logical(buildings, len = 1)
 
   crs <- aoi$crs
   bb <- aoi$bb
@@ -150,7 +160,7 @@ get_osmdata <- function(aoi, city_boundary = TRUE, force_download = FALSE) {
   osm_data <- list(bb = bb, river_centerline = river_centerline)
 
   # Retrieve streets and railways based on the aoi
-  if (!is.null(aoi$network_buffer)) {
+  if (network) {
     aoi_network <- get_river_aoi(river_centerline, bb,
                                  buffer_distance = aoi$network_buffer)
     osm_data$aoi_network <- aoi_network
@@ -161,7 +171,7 @@ get_osmdata <- function(aoi, city_boundary = TRUE, force_download = FALSE) {
   }
 
   # Retrieve buildings and water surface based on a different aoi
-  if (!is.null(aoi$buildings_buffer)) {
+  if (buildings) {
     river_surface <- get_osm_river_surface(bb, river_centerline, crs = crs,
                                            force_download = force_download)
     osm_data$river_surface <- river_surface
