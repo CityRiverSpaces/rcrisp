@@ -18,10 +18,12 @@ delineate(
 )
 }
 \arguments{
-\item{aoi}{A list of delineation parameters}
 
 \item{osm}{A list with OpenStreetMap data sets for the a location, as
 objects of class \code{\link[sf:sfc]{sf::sfc}}}
+\item{aoi}{A list of delineation parameters, namely \verb{$city_name},
+\verb{$river_name}, \verb{$bb}, \verb{$crs}, \verb{$network_buffer}, \verb{$dem_buffer}, and
+\verb{$buildings_buffer}. For more info see \code{\link[=define_aoi]{define_aoi()}}.}
 
 \item{dem}{Digital elevation model (DEM) of the region (only used if
 \code{corridor_init} is \code{"valley"})}
