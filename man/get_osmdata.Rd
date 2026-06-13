@@ -40,22 +40,30 @@ railways, and the buildings
 # Set parameters
 city <- "Bucharest"
 river <- "Dâmbovița"
-crs <- "EPSG:31600"  # National projected CRS
+
+# Define AOI parameters
+aoi <- define_aoi(city, river)
 
 # Get OSM data with defaults
-get_osmdata(city_name = city, river_name = river)
+get_osmdata(aoi)
 
 # Get OSM data without city boundary
-get_osmdata(city_name = city, river_name = river, city_boundary = FALSE)
+get_osmdata(aoi, city_boundary = FALSE)
 
 # Use custom network buffer to get streets and railways
-get_osmdata(city_name = city, river_name = river, network_buffer = 3500)
+aoi2 <- aoi
+aoi2$network_buffer = 3500
+get_osmdata(aoi2)
 
 # Use custom buffer to get buildings
-get_osmdata(city_name = city, river_name = river, buildings_buffer = 150)
+aoi3 <- aoi
+aoi3$buildings_buffer = 150
+get_osmdata(aoi3)
 
 # Use custom CRS
-get_osmdata(city_name = city, river_name = river, crs = crs)
+aoi4 <- aoi
+aoi4$crs <- "EPSG:31600"
+get_osmdata(aoi4)
 
 # Avoid getting OSM data from cache
 get_osmdata(city_name = city, river_name = river, force_download = TRUE)
