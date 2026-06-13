@@ -165,37 +165,37 @@ get_osmdata <- function(aoi,
     bb, aoi$river_name, crs = crs, force_download = force_download
   )
 
-  osm_data <- list(bb = bb, river_centerline = river_centerline)
+  osm <- list(bb = bb, river_centerline = river_centerline)
 
   # Retrieve streets and railways based on the aoi
   if (network) {
     aoi_network <- get_river_aoi(river_centerline, bb,
                                  buffer_distance = aoi$network_buffer)
-    osm_data$aoi_network <- aoi_network
-    osm_data$streets <- get_osm_streets(aoi_network, crs = crs,
-                                        force_download = force_download)
-    osm_data$railways <- get_osm_railways(aoi_network, crs = crs,
-                                          force_download = force_download)
+    osm$aoi_network <- aoi_network
+    osm$streets <- get_osm_streets(aoi_network, crs = crs,
+                                   force_download = force_download)
+    osm$railways <- get_osm_railways(aoi_network, crs = crs,
+                                     force_download = force_download)
   }
 
   # Retrieve buildings and water surface based on a different aoi
   if (buildings) {
     river_surface <- get_osm_river_surface(bb, river_centerline, crs = crs,
                                            force_download = force_download)
-    osm_data$river_surface <- river_surface
+    osm$river_surface <- river_surface
     aoi_buildings <- get_river_aoi(c(river_centerline, river_surface), bb,
                                    buffer_distance = aoi$buildings_buffer)
-    osm_data$aoi_buildings <- sf::st_transform(aoi_buildings, crs)
-    osm_data$buildings <- get_osm_buildings(aoi_buildings, crs = crs,
-                                            force_download = force_download)
+    osm$aoi_buildings <- sf::st_transform(aoi_buildings, crs)
+    osm$buildings <- get_osm_buildings(aoi_buildings, crs = crs,
+                                       force_download = force_download)
   }
 
   if (city_boundary) {
-    osm_data$boundary <- get_osm_city_boundary(bb, aoi$city_name, crs = crs,
-                                               force_download = force_download)
+    osm$boundary <- get_osm_city_boundary(bb, aoi$city_name, crs = crs,
+                                          force_download = force_download)
   }
 
-  osm_data
+  osm
 }
 
 #' Get the city boundary from OpenStreetMap
@@ -615,17 +615,17 @@ get_river_aoi <- function(river, city_bbox, buffer_distance) {
 
 #' Match OpenStreetMap data by name
 #'
-#' @param osm_data An sf object with OpenStreetMap data
+#' @param osm An sf object with OpenStreetMap data
 #' @param match A character string with the name to match
 #'
 #' @return sf object containing only rows with filtered name
 #' @keywords internal
-match_osm_name <- function(osm_data, match) {
+match_osm_name <- function(osm, match) {
   # Function to find partial matches across rows of a data frame
   includes_match <- \(x) grepl(match, x, ignore.case = TRUE)
   # Apply function above to all columns whose name starts with "name", thus
   # checking for matches in all listed languages
-  osm_data |>
+  osm |>
     dplyr::filter(dplyr::if_any(dplyr::matches("name"), includes_match)) |>
     # Make sure that exact match is in the first row(s)
     dplyr::arrange(dplyr::desc(dplyr::if_any(dplyr::matches("name"),

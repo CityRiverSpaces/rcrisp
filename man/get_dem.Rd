@@ -6,7 +6,7 @@
 \usage{
 get_dem(
   aoi,
-  osm_data,
+  osm,
   dem_source = "STAC",
   stac_endpoint = NULL,
   stac_collection = NULL,
@@ -18,7 +18,7 @@ get_dem(
 to expand the area of interest covered by the network and \verb{$crs} for the
 CRS which to transform the DEM to}
 
-\item{osm_data}{A list with OpenStreetMap data sets for the a location, as
+\item{osm}{A list with OpenStreetMap data sets for the a location, as
 objects of class \code{\link[sf:sfc]{sf::sfc}}}
 
 \item{dem_source}{Source of the DEM:
@@ -50,10 +50,10 @@ aoi <- define_aoi("Bucharest", "Dâmbovița")
 osm <- get_osmdata(aoi)
 
 # Get DEM with default values
-dem <- get_dem(aoi, osm_data)
+dem <- get_dem(aoi, osm)
 
 # Get DEM from custom STAC endpoint
-get_dem(aoi, osm_data,
+get_dem(aoi, osm,
         stac_endpoint = "some endpoint",
         stac_collection = "some collection")
 

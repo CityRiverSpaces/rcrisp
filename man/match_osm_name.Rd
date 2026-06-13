@@ -4,10 +4,10 @@
 \alias{match_osm_name}
 \title{Match OpenStreetMap data by name}
 \usage{
-match_osm_name(osm_data, match)
+match_osm_name(osm, match)
 }
 \arguments{
-\item{osm_data}{An sf object with OpenStreetMap data}
+\item{osm}{An sf object with OpenStreetMap data}
 
 \item{match}{A character string with the name to match}
 }

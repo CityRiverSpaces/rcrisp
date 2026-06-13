@@ -22,7 +22,7 @@ default_stac_dem <- list(
 #' @param aoi A list of delineation parameters, including `$dem_buffer` used
 #'   to expand the area of interest covered by the network and `$crs` for the
 #'   CRS which to transform the DEM to
-#' @param osm_data A list with OpenStreetMap data sets for the a location, as
+#' @param osm A list with OpenStreetMap data sets for the a location, as
 #'   objects of class [`sf::sfc`]
 #' @param dem_source Source of the DEM:
 #'   - If "STAC" (default), DEM tiles are searched on a SpatioTemporal Asset
@@ -43,10 +43,10 @@ default_stac_dem <- list(
 #' osm <- get_osmdata(aoi)
 #'
 #' # Get DEM with default values
-#' dem <- get_dem(aoi, osm_data)
+#' dem <- get_dem(aoi, osm)
 #'
 #' # Get DEM from custom STAC endpoint
-#' get_dem(aoi, osm_data,
+#' get_dem(aoi, osm,
 #'         stac_endpoint = "some endpoint",
 #'         stac_collection = "some collection")
 #'
@@ -57,11 +57,11 @@ default_stac_dem <- list(
 #'   A validation is then performed to ensure the value is allowed.
 #' @srrstats {SP6.1} If specified by the user, the CRS is standardised with
 #'   `as_crs()` before being used to reproject the DEM.
-get_dem <- function(aoi, osm_data, dem_source = "STAC", stac_endpoint = NULL,
+get_dem <- function(aoi, osm, dem_source = "STAC", stac_endpoint = NULL,
                     stac_collection = NULL, force_download = FALSE) {
   # Retrieve dataset on a larger AOI to limit edge effects in downstream
   # valley delineation
-  aoi_dem <- buffer(osm_data$aoi_network, aoi$dem_buffer)
+  aoi_dem <- buffer(osm$aoi_network, aoi$dem_buffer)
   bbox <- as_bbox(aoi_dem)
 
   # Check input
