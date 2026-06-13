@@ -65,3 +65,21 @@ test_that("Only one city can be delineated at a time", {
   expect_error(delineate_city_river(c("Bucharest", "Cluj-Napoca"), "Dâmbovița"),
                "Assertion on 'city_name' failed: Must have length 1")
 })
+
+#' @srrstats {G5.8} Edge test: an error is raised if required OSM data is
+#'   missing.
+test_that("Error is raised when OSM spatial network data is missing", {
+  osm_without_streets <- test_osmdata
+  osm_without_streets$streets <- NULL
+  expect_error(delineate(aoi, osm_without_streets, test_dem, corridor = TRUE),
+               "Spatial network \\(streets, railways\\) data is not available")
+})
+
+test_that("Error is raised when buildings data is missing for riverspace delineation", {  # nolint
+  osm_without_buildings <- test_osmdata
+  osm_without_buildings$aoi_buildings <- NULL
+  expect_error(
+    delineate(aoi, osm_without_buildings, test_dem, riverspace = TRUE),
+    "AOI for buildings is not available"
+  )
+})

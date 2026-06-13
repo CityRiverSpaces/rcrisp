@@ -40,9 +40,9 @@ aoi <- list(
                    crs = "EPSG:4326"),
   crs = sf::st_crs("EPSG:4326"),
   corridor_init = "valley",
-  network_buffer = NULL,
+  network_buffer = 3000,
   dem_buffer = 2500,
-  buildings_buffer = NULL
+  buildings_buffer = 100
 )
 
 test_that("OSM queries are stored to and retrieved from the cache", {
@@ -120,19 +120,24 @@ test_that("The correct OSM data elements are retrieved", {
     {
       # By default, the bb, river, river suf
       osmdata_default <- get_osmdata(aoi,
+                                     network = FALSE,
+                                     buildings = FALSE,
                                      force_download = TRUE)
+
       osmdata_nobound <- get_osmdata(aoi,
+                                     network = FALSE,
+                                     buildings = FALSE,
                                      city_boundary = FALSE,
                                      force_download = TRUE)
 
-      aoi$network_buffer <- 3000
-      osmdata_network <- get_osmdata(aoi, force_download = TRUE)
+      osmdata_network <- get_osmdata(aoi,
+                                     buildings = FALSE,
+                                     force_download = TRUE)
 
-      aoi$network_buffer <- NULL
-      aoi$buildings_buffer <- 100
-      osmdata_buildings <- get_osmdata(aoi, force_download = TRUE)
+      osmdata_buildings <- get_osmdata(aoi,
+                                       network = FALSE,
+                                       force_download = TRUE)
 
-      aoi$network_buffer <- 3000
       osmdata_all <- get_osmdata(aoi, force_download = TRUE)
     }
   )
