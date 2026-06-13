@@ -13,7 +13,6 @@ aoi <- list(
                      ymax = 44.541),
                    crs = "EPSG:4326"),
   crs = crs,
-  corridor_init = "valley",
   network_buffer = 3000,
   dem_buffer = 2500,
   buildings_buffer = 100
@@ -51,8 +50,8 @@ test_that("Delineate does not return the valley if the buffer method is used", {
   # Input arguments should mimic as much as possible the input used to setup
   # the example datasets, see:
   # https://github.com/CityRiverSpaces/CRiSpExampleData/blob/main/data-raw/bucharest.R  # nolint
-  aoi$corridor_init <- 1000
   delineations <- delineate(aoi, test_osmdata,
+                            corridor_init = 1000,
                             corridor = TRUE,
                             segments = FALSE,
                             riverspace = FALSE) |>
