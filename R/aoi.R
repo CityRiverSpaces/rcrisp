@@ -39,14 +39,14 @@
 define_aoi <- function(
   city_name, river_name,
   crs = NULL,
-  network_buffer = NULL, dem_buffer = 2500, buildings_buffer = NULL
+  network_buffer = 3000, dem_buffer = 2500, buildings_buffer = 100
 ) {
   # Check input
   checkmate::assert_character(city_name, len = 1)
   checkmate::assert_character(river_name, len = 1)
+  checkmate::assert_numeric(network_buffer, len = 1)
   checkmate::assert_numeric(dem_buffer, len = 1)
-  checkmate::assert_numeric(network_buffer, null.ok = TRUE, len = 1)
-  checkmate::assert_numeric(buildings_buffer, null.ok = TRUE, len = 1)
+  checkmate::assert_numeric(buildings_buffer, len = 1)
 
   bb <- get_osm_bb(city_name)
 
@@ -55,26 +55,6 @@ define_aoi <- function(
     crs <- get_utm_zone(bb) |> as_crs()
   } else {
     crs <- as_crs(crs)
-  }
-
-  # Set default values for network_buffer and buildings_buffer
-  if (is.null(network_buffer)) {
-    network_buffer <- 3000
-    message(sprintf(
-      "The default `network_buffer` of %d m is used for corridor delineation.",
-      network_buffer
-    ))
-  }
-
-  if (is.null(buildings_buffer)) {
-    buildings_buffer <- 100
-    message(sprintf(
-      paste(
-        "The default `buildings_buffer` of %d m is used",
-        "for riverspace delineation."
-      ),
-      buildings_buffer
-    ))
   }
 
   list(

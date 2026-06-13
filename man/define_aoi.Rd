@@ -8,9 +8,9 @@ define_aoi(
   city_name,
   river_name,
   crs = NULL,
-  network_buffer = NULL,
+  network_buffer = 3000,
   dem_buffer = 2500,
-  buildings_buffer = NULL
+  buildings_buffer = 100
 )
 }
 \arguments{
