@@ -47,7 +47,7 @@ Access digital elevation model (DEM) for a given region
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Define delineation parameters and get OSM data within area of interest
 aoi <- define_aoi("Bucharest", "Dâmbovița")
-osm <- get_osmdata(aoi)
+osm <- get_osm(aoi)
 
 # Get DEM with default values
 dem <- get_dem(aoi, osm)

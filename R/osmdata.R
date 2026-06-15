@@ -40,7 +40,7 @@ osmdata_as_sf <- function(key, value, aoi, force_download = FALSE) {
   key <- tolower(key)
   value <- tolower(value)
 
-  filepath <- get_osmdata_cache_filepath(key, value, bbox)
+  filepath <- get_osm_cache_filepath(key, value, bbox)
 
   if (file.exists(filepath) && !force_download) {
     osmdata_sf <- read_data_from_cache(filepath)
@@ -123,35 +123,35 @@ get_osm_bb <- function(city_name) {
 #' aoi <- define_aoi(city, river)
 #'
 #' # Get OSM data with defaults
-#' get_osmdata(aoi)
+#' get_osm(aoi)
 #'
 #' # Get OSM data without city boundary
-#' get_osmdata(aoi, city_boundary = FALSE)
+#' get_osm(aoi, city_boundary = FALSE)
 #'
 #' # Use custom network buffer to get streets and railways
 #' aoi2 <- aoi
 #' aoi2$network_buffer = 3500
-#' get_osmdata(aoi2)
+#' get_osm(aoi2)
 #'
 #' # Use custom buffer to get buildings
 #' aoi3 <- aoi
 #' aoi3$buildings_buffer = 150
-#' get_osmdata(aoi3)
+#' get_osm(aoi3)
 #'
 #' # Use custom CRS
 #' aoi4 <- aoi
 #' aoi4$crs <- "EPSG:31600"
-#' get_osmdata(aoi4)
+#' get_osm(aoi4)
 #'
 #' # Avoid getting OSM data from cache
-#' get_osmdata(city_name = city, river_name = river, force_download = TRUE)
+#' get_osm(city_name = city, river_name = river, force_download = TRUE)
 #' @srrstats {SP4.0, SP4.0b, SP4.2} The return value is a list of objects of
 #'   class [`sf::sfc`], explicitly documented as such.
-get_osmdata <- function(aoi,
-                        city_boundary = TRUE,
-                        network = TRUE,
-                        buildings = TRUE,
-                        force_download = FALSE) {
+get_osm <- function(aoi,
+                    city_boundary = TRUE,
+                    network = TRUE,
+                    buildings = TRUE,
+                    force_download = FALSE) {
   # Check input
   checkmate::assert_logical(city_boundary, len = 1)
   checkmate::assert_logical(network, len = 1)

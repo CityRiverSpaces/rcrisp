@@ -119,26 +119,26 @@ test_that("The correct OSM data elements are retrieved", {
     get_osm_city_boundary = function(...) "city_boundary",
     {
       # By default, the bb, river, river suf
-      osmdata_default <- get_osmdata(aoi,
-                                     network = FALSE,
-                                     buildings = FALSE,
-                                     force_download = TRUE)
+      osmdata_default <- get_osm(aoi,
+                                 network = FALSE,
+                                 buildings = FALSE,
+                                 force_download = TRUE)
 
-      osmdata_nobound <- get_osmdata(aoi,
-                                     network = FALSE,
-                                     buildings = FALSE,
-                                     city_boundary = FALSE,
-                                     force_download = TRUE)
+      osmdata_nobound <- get_osm(aoi,
+                                 network = FALSE,
+                                 buildings = FALSE,
+                                 city_boundary = FALSE,
+                                 force_download = TRUE)
 
-      osmdata_network <- get_osmdata(aoi,
-                                     buildings = FALSE,
-                                     force_download = TRUE)
+      osmdata_network <- get_osm(aoi,
+                                 buildings = FALSE,
+                                 force_download = TRUE)
 
-      osmdata_buildings <- get_osmdata(aoi,
-                                       network = FALSE,
-                                       force_download = TRUE)
+      osmdata_buildings <- get_osm(aoi,
+                                   network = FALSE,
+                                   force_download = TRUE)
 
-      osmdata_all <- get_osmdata(aoi, force_download = TRUE)
+      osmdata_all <- get_osm(aoi, force_download = TRUE)
     }
   )
 

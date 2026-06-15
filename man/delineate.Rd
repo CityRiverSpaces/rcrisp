@@ -69,7 +69,7 @@ Delineate a corridor around a river
 aoi <- define_aoi("Bucharest", "Dâmbovița")
 
 # Get data
-osm <- get_osmdata(aoi)
+osm <- get_osm(aoi)
 dem <- get_dem(aoi, osm)
 
 # Delineate with defaults

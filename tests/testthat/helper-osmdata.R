@@ -1,7 +1,7 @@
 #' Gererate artificial OSM-like data
 #'
 #' This helper function returns a list with the same entries as the one
-#' returned by [`get_osmdata()`]. This function can thus be used to mock
+#' returned by [`get_osm()`]. This function can thus be used to mock
 #' the call to the main rcrisp function, without the need to interact with the
 #' overpass API or other remote services.
 get_test_osmdata <- function() {

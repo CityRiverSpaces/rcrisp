@@ -62,7 +62,7 @@ reference:
   desc: >
     Get OSM data for delineation
   contents:
-    - get_osmdata
+    - get_osm
     - get_osm_bb
     - get_osm_city_boundary
     - get_osm_river_centerline

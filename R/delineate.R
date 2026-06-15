@@ -35,7 +35,7 @@
 #' aoi <- define_aoi("Bucharest", "Dâmbovița")
 #'
 #' # Get data
-#' osm <- get_osmdata(aoi)
+#' osm <- get_osm(aoi)
 #' dem <- get_dem(aoi, osm)
 #'
 #' # Delineate with defaults
@@ -84,7 +84,7 @@ delineate <- function(
     if (is.null(osm$streets) || is.null(osm$railways)) {
       stop(paste0("Spatial network (streets, railways) data is not available. ",
                   "Did you set `network = FALSE` when retrieving OSM data ",
-                  "with `get_osmdata()`?"))
+                  "with `get_osm()`?"))
     }
 
     # Set up the combined street and rail network for the delineation
@@ -115,7 +115,7 @@ delineate <- function(
     if (is.null(osm$aoi_buildings)) {
       stop(paste0("AOI for buildings is not available. ",
                   "Did you set `buildings = FALSE` when retrieving OSM data ",
-                  "with `get_osmdata()`?"))
+                  "with `get_osm()`?"))
     }
     river_centerline_clipped <- sf::st_intersection(
       osm$river_centerline, osm$aoi_buildings |>
@@ -156,7 +156,7 @@ delineate_city_river <- function(city_name, river_name,
                                  segments = TRUE,
                                  riverspace = TRUE) {
   aoi <- define_aoi(city_name, river_name)
-  osm <- get_osmdata(aoi)
+  osm <- get_osm(aoi)
   dem <- get_dem(aoi, osm)
   delineate(aoi, osm, dem,
             corridor = corridor,
