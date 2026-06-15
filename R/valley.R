@@ -61,7 +61,7 @@ get_dem <- function(aoi, osm, dem_source = "STAC", stac_endpoint = NULL,
                     stac_collection = NULL, force_download = FALSE) {
   # Retrieve dataset on a larger AOI to limit edge effects in downstream
   # valley delineation
-  aoi_dem <- buffer(osm$river_centerline, aoi$dem_buffer)
+  aoi_dem <- buffer(osm$aoi_network, aoi$dem_buffer)
   bbox <- as_bbox(aoi_dem)
 
   # Check input
