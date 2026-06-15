@@ -116,7 +116,7 @@ get_rds_filename <- function(...) {
 #' @keywords internal
 read_data_from_cache <- function(filepath, unwrap = FALSE, quiet = FALSE) {
   if (!quiet) {
-    cli::cli_inform("Loading data from cache directory: {filepath}")
+    cli::cli_alert_info("Loading data from cache directory: {filepath}")
   }
   data <- readRDS(filepath)
   if (unwrap) {
@@ -140,7 +140,7 @@ read_data_from_cache <- function(filepath, unwrap = FALSE, quiet = FALSE) {
 #' @keywords internal
 write_data_to_cache <- function(x, filepath, wrap = FALSE, quiet = FALSE) {
   if (!quiet) {
-    message(sprintf("Saving data to cache directory: %s", filepath))
+    cli::cli_alert_info("Saving data to cache directory: {filepath}")
   }
   if (wrap) {
     x <- terra::wrap(x)
@@ -179,12 +179,12 @@ clear_cache <- function(before_date = NULL) {
     file.remove(files_before_date)
     files_remaining <- list.files(cache_dir, full.names = TRUE)
     if (all(!files_before_date %in% files_remaining)) {
-      message("Cache files before date successfully removed.")
+      cli::cli_alert_info("Cache files before date successfully removed.")
     }
   } else {
     file.remove(files)
     if (length(list.files(cache_dir)) == 0) {
-      message("Cache files successfully removed.")
+      cli::cli_alert_info("Cache files successfully removed.")
     }
   }
 }
