@@ -7,9 +7,9 @@
 #' @param network_buffer Add a buffer (an integer in meters) around
 #'   river to retrieve additional data (streets, railways, etc.).
 #'   Default is 3000 m.
-#' @param dem_buffer Size of the buffer region (in meters) around the
-#'   river to retrieve the DEM  (only used if `corridor_init` is `"valley"` and
-#'   `dem` is NULL).
+#' @param dem_buffer Size of the buffer region (in meters) around the spatial
+#'   network to retrieve the DEM  (only used if `corridor_init` is `"valley"`
+#'   and `dem` is NULL).
 #' @param buildings_buffer Add a buffer (an integer in meters) around the
 #'   river to retrieve additional data (buildings). Default is 100 m.
 #'

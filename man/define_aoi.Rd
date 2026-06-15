@@ -25,9 +25,9 @@ provided, the suitable Universal Transverse Mercator (UTM) CRS is selected}
 river to retrieve additional data (streets, railways, etc.).
 Default is 3000 m.}
 
-\item{dem_buffer}{Size of the buffer region (in meters) around the
-river to retrieve the DEM  (only used if \code{corridor_init} is \code{"valley"} and
-\code{dem} is NULL).}
+\item{dem_buffer}{Size of the buffer region (in meters) around the spatial
+network to retrieve the DEM  (only used if \code{corridor_init} is \code{"valley"}
+and \code{dem} is NULL).}
 
 \item{buildings_buffer}{Add a buffer (an integer in meters) around the
 river to retrieve additional data (buildings). Default is 100 m.}
