@@ -110,7 +110,7 @@ get_rds_filename <- function(...) {
 #' @param filepath Path of the file to deserialize as a character string
 #' @param unwrap Whether the deserialized object should be "unpacked" (as
 #'   required by [`terra::SpatRaster`] objects)
-#' @param quiet Omit warning on cache file being loaded
+#' @param quiet Omit message on cache file being loaded
 #'
 #' @return Object deserialized
 #' @keywords internal
