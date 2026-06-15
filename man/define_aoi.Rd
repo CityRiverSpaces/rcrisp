@@ -9,7 +9,7 @@ define_aoi(
   river_name,
   crs = NULL,
   network_buffer = 3000,
-  dem_buffer = 2500,
+  dem_buffer = 5500,
   buildings_buffer = 100
 )
 }

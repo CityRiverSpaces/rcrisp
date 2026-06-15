@@ -39,7 +39,7 @@
 define_aoi <- function(
   city_name, river_name,
   crs = NULL,
-  network_buffer = 3000, dem_buffer = 2500, buildings_buffer = 100
+  network_buffer = 3000, dem_buffer = 5500, buildings_buffer = 100
 ) {
   # Check input
   checkmate::assert_character(city_name, len = 1)
