@@ -65,7 +65,6 @@ get_dem <- function(aoi, osm, dem_source = "STAC", stac_endpoint = NULL,
   bbox <- as_bbox(aoi_dem)
 
   # Check input
-  checkmate::assert_choice(dem_source, "STAC")
   checkmate::assert_character(stac_endpoint, null.ok = TRUE, len = 1)
   checkmate::assert_character(stac_collection, null.ok = TRUE, len = 1)
   checkmate::assert_logical(force_download, len = 1)
