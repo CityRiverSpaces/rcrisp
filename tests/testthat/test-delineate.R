@@ -21,7 +21,10 @@ aoi <- list(
 #' @srrstats {G5.8} Edge test: an error is raised if conflicting input
 #'   parameters are given.
 test_that("Segmentation without corridor raises error", {
-  expect_error(delineate(aoi, corridor = FALSE, segment = TRUE),
+  expect_error(delineate(aoi,
+                         test_osm,
+                         corridor = FALSE,
+                         segments = TRUE),
                "Segmentation requires corridor delineation.")
 })
 
