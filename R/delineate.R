@@ -27,8 +27,12 @@
 #' @param segments Whether to carry out the corridor segmentation
 #' @param riverspace Whether to carry out the riverspace delineation
 #'
-#' @return A list with the valley, corridor, segments, and riverspace geometries
-#'   as [`sf::sfc_POLYGON`] objects.
+#' @return A list containing zero or more of the following elements: "valley",
+#'   "corridor", "segments", and "riverspace", each as an [`sf::sfc_POLYGON`] or
+#'   [`sf::sfc_MULTIPOLYGON`] object (depending on the geometry of the input
+#'   data). The list contains only the geometries corresponding to the
+#'   delineation steps that were carried out (e.g., if `segments` is FALSE, the
+#'   list will not contain a "segments" element).
 #' @export
 #' @examplesIf interactive()
 #' # Define delineation parameters within area of interest

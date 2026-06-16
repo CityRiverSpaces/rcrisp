@@ -11,9 +11,6 @@ clear_cache(before_date = NULL)
 as object of class \code{\link{Date}} or as a case dependent character vector
 accepted by \code{\link[=as.Date]{as.Date()}}}
 }
-\value{
-List of file paths of removed files
-}
 \description{
 Remove files from cache directory either before a given date or entirely.
 }
