@@ -160,8 +160,6 @@ as_crs <- function(x, allow_geographic = FALSE) {
 #' @param ... Optional parameters passed on to [`sf::st_buffer()`]
 #' @return An object of class [`sf::sfc_POLYGON`]
 #' @keywords internal
-#' @srrstats {G2.9) The user is informed when the input object in lat/lon
-#'   coordinates is transformed into a suitable projected CRS.
 #' @srrstats {SP4.0, SP4.0b, SP4.1} The return value is of the class
 #'   [`sf::sfc_POLYGON`], explicitly documented as such, and it maintains the
 #'   same units as the input.
@@ -173,10 +171,6 @@ buffer <- function(obj, buffer_distance, ...) {
   if (is_obj_bbox) obj <- sf::st_as_sfc(obj)
   if (!is.na(is_obj_longlat) && is_obj_longlat) {
     crs_meters <- get_utm_zone(obj) |> as_crs()
-    message(sprintf(
-      "Reprojecting input from EPSG:%s to EPSG:%s for buffering.",
-      dst_crs$epsg, crs_meters$epsg
-    ))
     obj <- sf::st_transform(obj, crs_meters)
   }
   expanded_obj <- sf::st_buffer(obj, buffer_distance, ...)

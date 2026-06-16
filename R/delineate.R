@@ -65,7 +65,9 @@
 #'   `corridor_init` only uses allowed values. The variable is also made
 #'   case-independent with `tolower()`.
 #' @srrstats {G2.9) A message is issued when CRS is not provided by the user and
-#'   a suitable UTM zone is auto-selected instead.
+#'   a suitable UTM zone is auto-selected instead. The user is also informed
+#'   when the retrieved OSM AOI in lat/lon coordinates is transformed into a
+#'   suitable projected CRS.
 #' @srrstats {SP4.0, SP4.0b, SP4.1, SP4.2} The return value is a list of
 #'   [`sf::sfc_POLYGON`] objects, explicitly documented as such, and it
 #'   maintains the same units as the input.
@@ -131,6 +133,14 @@ delineate <- function(
     # on a larger aoi to limit edge effects while determining the valley
     if (corridor_init == "valley") {
       if (is.null(dem)) {
+        if (!is.na(sf::st_is_longlat(osm_data$aoi_network)) &&
+              sf::st_is_longlat(osm_data$aoi_network)) {
+          dst_crs <- get_utm_zone(osm_data$aoi_network) |> as_crs()
+          message(sprintf(
+            "Reprojecting AoI from EPSG:%s to EPSG:%s for DEM extent buffering.",  # nolint
+            sf::st_crs(osm_data$aoi_network)$epsg, dst_crs$epsg
+          ))
+        }
         aoi_dem <- buffer(osm_data$aoi_network, dem_buffer)
         dem <- get_dem(aoi_dem, crs = crs, force_download = force_download, ...)
       }
