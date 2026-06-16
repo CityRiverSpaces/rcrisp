@@ -9,7 +9,7 @@ define_aoi(
   river_name,
   crs = NULL,
   network_buffer = 3000,
-  dem_buffer = 5500,
+  dem_buffer = 2500,
   buildings_buffer = 100
 )
 }
@@ -26,8 +26,7 @@ river to retrieve additional data (streets, railways, etc.).
 Default is 3000 m.}
 
 \item{dem_buffer}{Size of the buffer region (in meters) around the spatial
-network to retrieve the DEM  (only used if \code{corridor_init} is \code{"valley"}
-and \code{dem} is NULL).}
+network to retrieve the DEM.}
 
 \item{buildings_buffer}{Add a buffer (an integer in meters) around the
 river to retrieve additional data (buildings). Default is 100 m.}
@@ -35,8 +34,7 @@ river to retrieve additional data (buildings). Default is 100 m.}
 \value{
 A list with delineation parameter values, namely \code{city_name} and
 \code{river_name} as character vectors of length one, \code{bb} as object of class
-\code{\link[sf:st_bbox]{sf::bbox}}, \code{crs} as object of class \code{\link[sf:coerce-methods]{sf::crs}},
-\code{corridor_init} as character or numerical vector of length one, and
+\code{\link[sf:st_bbox]{sf::bbox}}, \code{crs} as object of class \code{\link[sf:coerce-methods]{sf::crs}}, and
 \code{network_buffer}, \code{dem_buffer} and \code{buildings_buffer} as numerical vector
 of length one.
 }
@@ -52,8 +50,6 @@ aoi <- define_aoi("Bucharest", "Dâmbovița")
 aoi <- define_aoi("Bucharest", "Dâmbovița",
                   crs = "EPSG:3844")  # National projected CRS
 
-# Get parameters in AOI with non-default initial corridor buffer
-aoi <- define_aoi("Bucharest", "Dâmbovița", corridor_init = 1000)
 
 # Get parameters in AOI with non-default buffers
 aoi <- define_aoi("Bucharest", "Dâmbovița",
