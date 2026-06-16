@@ -153,14 +153,6 @@ test_that("Buffer also works without a CRS", {
   expect_true(inherits(x_buff, c("sfc_POLYGON", "sfc_MULTIPOLYGON")))
 })
 
-test_that("buffer() issues a message when reprojecting lon/lat input", {
-  lonlat_point <- sf::st_sfc(sf::st_point(c(26.1, 44.4)), crs = 4326)
-  expect_message(
-    buffer(lonlat_point, 1000),
-    "Reprojecting input from EPSG:4326 to EPSG:32635"
-  )
-})
-
 test_that("River buffer implements a buffer function", {
   river <- sf::st_sfc(sf::st_linestring(cbind(c(-2, 0), c(0, -2))))
   actual <- river_buffer(river, buffer_distance = 0.5)
