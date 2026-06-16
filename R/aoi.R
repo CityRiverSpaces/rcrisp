@@ -8,15 +8,13 @@
 #'   river to retrieve additional data (streets, railways, etc.).
 #'   Default is 3000 m.
 #' @param dem_buffer Size of the buffer region (in meters) around the spatial
-#'   network to retrieve the DEM  (only used if `corridor_init` is `"valley"`
-#'   and `dem` is NULL).
+#'   network to retrieve the DEM.
 #' @param buildings_buffer Add a buffer (an integer in meters) around the
 #'   river to retrieve additional data (buildings). Default is 100 m.
 #'
 #' @return A list with delineation parameter values, namely `city_name` and
 #'   `river_name` as character vectors of length one, `bb` as object of class
-#'   [`sf::bbox`][sf::st_bbox], `crs` as object of class [`sf::crs`],
-#'   `corridor_init` as character or numerical vector of length one, and
+#'   [`sf::bbox`][sf::st_bbox], `crs` as object of class [`sf::crs`], and
 #'   `network_buffer`, `dem_buffer` and `buildings_buffer` as numerical vector
 #'   of length one.
 #' @export
@@ -28,8 +26,6 @@
 #' aoi <- define_aoi("Bucharest", "Dâmbovița",
 #'                   crs = "EPSG:3844")  # National projected CRS
 #'
-#' # Get parameters in AOI with non-default initial corridor buffer
-#' aoi <- define_aoi("Bucharest", "Dâmbovița", corridor_init = 1000)
 #'
 #' # Get parameters in AOI with non-default buffers
 #' aoi <- define_aoi("Bucharest", "Dâmbovița",
