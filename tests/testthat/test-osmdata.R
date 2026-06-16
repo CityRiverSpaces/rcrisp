@@ -343,4 +343,3 @@ test_that("get_river_aoi() issues a message when reprojecting lon/lat input", {
     "Reprojecting river from EPSG:4326 to EPSG:32635 for river AoI buffering."
   )
 })
-
