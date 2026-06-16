@@ -62,7 +62,6 @@ get_dem <- function(bb, dem_source = "STAC", stac_endpoint = NULL,
                     force_download = FALSE) {
   # Check input
   bbox <- as_bbox(bb)
-  checkmate::assert_choice(dem_source, "STAC")
   checkmate::assert_character(stac_endpoint, null.ok = TRUE, len = 1)
   checkmate::assert_character(stac_collection, null.ok = TRUE, len = 1)
   crs <- as_crs(crs)
