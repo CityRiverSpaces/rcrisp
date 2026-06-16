@@ -88,8 +88,13 @@ NULL
 #'   properties.
 #' @srrstatsNA {G5.8c} No tabular data where all fields or all columns can be NA
 #'   can be used as input in any of the function of this package.
-#' @srrstatsNA {G5.9, G5.9a, G5.9b} The core algorithm and input data of this
-#'   package are deterministic, so noise susceptibility tests do not apply.
+#' @srrstatsNA {G5.9, G5.9a, G5.9b} The core algorithms (cost-distance valley
+#'   extraction, shortest-path corridor delineation, DBSCAN-based crossing
+#'   clustering, and reycasting in riverspace delineation) are fully
+#'   deterministic, so noise susceptibility tests do not apply. These standards
+#'   will be reconsidered if future versions introduce randomised sampling, e.g.
+#'   for viewpoint generation in `delineate_riverspace()` or corridor
+#'   corridor initialisation in `delineate_corridor()`
 #' @srrstatsNA {G5.12} No special requirements are needed to run extended tests.
 #'
 #  Not applicable spatial software standards ----
