@@ -18,9 +18,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Changed
 
 - The OSM retrieval vignette was updated to retrieve CRS with `get_utm_zone()`
-
-## Changed
-
 - Attach-time `check_cache()` was moved behind `interactive()`.
 
 ## Removed
