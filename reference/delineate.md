@@ -124,9 +124,15 @@ delineate(
 
 ## Value
 
-A list with the corridor, segments, and riverspace geometries as
+A list containing zero or more of the following elements: "valley",
+"corridor", "segments", and "riverspace", each as an
 [`sf::sfc_POLYGON`](https://r-spatial.github.io/sf/reference/sfc.html)
-objects.
+or
+[`sf::sfc_MULTIPOLYGON`](https://r-spatial.github.io/sf/reference/sfc.html)
+object (depending on the geometry of the input data). The list contains
+only the geometries corresponding to the delineation steps that were
+carried out (e.g., if `segments` is FALSE, the list will not contain a
+"segments" element).
 
 ## Examples
 

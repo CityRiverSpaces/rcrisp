@@ -18,10 +18,6 @@ clear_cache(before_date = NULL)
   dependent character vector accepted by
   [`as.Date()`](https://rdrr.io/r/base/as.Date.html)
 
-## Value
-
-List of file paths of removed files
-
 ## Examples
 
 ``` r

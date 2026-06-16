@@ -165,8 +165,12 @@ and <code>dem</code> is NULL</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A list with the corridor, segments, and riverspace geometries as
-<code><a href="https://r-spatial.github.io/sf/reference/sfc.html" class="external-link">sf::sfc_POLYGON</a></code> objects.</p>
+    <p>A list containing zero or more of the following elements: "valley",
+"corridor", "segments", and "riverspace", each as an <code><a href="https://r-spatial.github.io/sf/reference/sfc.html" class="external-link">sf::sfc_POLYGON</a></code> or
+<code><a href="https://r-spatial.github.io/sf/reference/sfc.html" class="external-link">sf::sfc_MULTIPOLYGON</a></code> object (depending on the geometry of the input
+data). The list contains only the geometries corresponding to the
+delineation steps that were carried out (e.g., if <code>segments</code> is FALSE, the
+list will not contain a "segments" element).</p>
     </div>
 
     <div class="section level2">
