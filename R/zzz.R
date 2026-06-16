@@ -1,14 +1,6 @@
 #' @noRd
-.onLoad <- function(libname, pkgname) {
-  if (is.null(getOption("rcrisp.check_cache"))) {
-    options(rcrisp.check_cache = FALSE)
-  }
-  invisible()
-}
-
-#' @noRd
 .onAttach <- function(libname, pkgname) {
-  if (interactive() || getOption("rcrisp.check_cache")) {
+  if (interactive() || getOption("rcrisp.check_cache", default = FALSE)) {
     check_cache()
   }
 }
