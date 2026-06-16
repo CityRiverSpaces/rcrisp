@@ -88,17 +88,18 @@ provide a buffer around the river used to retrieve OSM data.</p>
 <span></span>
 <span><span class="va">city_name</span> <span class="op">&lt;-</span> <span class="st">"Bucharest"</span></span>
 <span><span class="va">river_name</span> <span class="op">&lt;-</span> <span class="st">"Dâmbovița"</span></span>
-<span><span class="va">crs</span> <span class="op">&lt;-</span> <span class="fl">32635</span>  <span class="co"># EPSG code for UTM zone 35N, where Bucharest is located</span></span>
 <span><span class="va">network_buffer</span> <span class="op">&lt;-</span> <span class="fl">3000</span>  <span class="co"># in m, buffer around the river to get the network</span></span>
 <span><span class="va">buildings_buffer</span> <span class="op">&lt;-</span> <span class="fl">100</span>  <span class="co"># in m, buffer around the river to get the buildings</span></span></code></pre></div>
-<p>We start by getting the bounding box for the study area:</p>
+<p>We start by getting the bounding box and projected CRS for the study
+area.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">bb</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_osm_bb.html">get_osm_bb</a></span><span class="op">(</span><span class="va">city_name</span><span class="op">)</span></span></code></pre></div>
-<p>Using the obtained bounding box, we get the different layers of OSM
-data needed for the delineation of the urban river corridor. We will get
-the city boundary, the waterways, the street network, and the rail
-network using built-in functions from the <code>rcrisp</code>
-package.</p>
+<code class="sourceCode R"><span><span class="va">bb</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_osm_bb.html">get_osm_bb</a></span><span class="op">(</span><span class="va">city_name</span><span class="op">)</span>  <span class="co"># Get bounding box from OSM</span></span>
+<span><span class="va">crs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_utm_zone.html">get_utm_zone</a></span><span class="op">(</span><span class="va">bb</span><span class="op">)</span>  <span class="co"># Get UTM zone for Bucharest</span></span></code></pre></div>
+<p>Using the obtained bounding box and corresponding CRS, we get the
+different layers of OSM data needed for the delineation of the urban
+river corridor. We will get the city boundary, the waterways, the street
+network, and the rail network using built-in functions from the
+<code>rcrisp</code> package.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">city_boundary</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_osm_city_boundary.html">get_osm_city_boundary</a></span><span class="op">(</span><span class="va">bb</span>, <span class="va">city_name</span>, <span class="va">crs</span><span class="op">)</span></span>
 <span><span class="va">river_centerline</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_osm_river_centerline.html">get_osm_river_centerline</a></span><span class="op">(</span><span class="va">bb</span>, <span class="va">river_name</span>, <span class="va">crs</span><span class="op">)</span></span>
