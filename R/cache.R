@@ -214,7 +214,7 @@ check_cache <- function() {
     warning(sprintf(paste0(
       "Cache dir: %s - size: %.0f MB - oldest file from: %s.\n",
       "Clean up files older than 30 days with: `rcrisp::clear_cache('%s')` ",
-      "(or remove all cached files with: `rcrisp::clear_cache()`."
+      "(or remove all cached files with: `rcrisp::clear_cache()`)."
     ), cache_dir, cache_size, as.Date(date_oldest_file), Sys.Date() - 30))
   }
 }
