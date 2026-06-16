@@ -4,7 +4,7 @@
 #' returned by [`get_osm()`]. This function can thus be used to mock
 #' the call to the main rcrisp function, without the need to interact with the
 #' overpass API or other remote services.
-get_test_osmdata <- function() {
+get_test_osm <- function() {
   # Pick a projected CRS (UTM Zone 1N)
   crs <- "EPSG:32601"
   # Define the city boundary and, from it, derive the bbox
