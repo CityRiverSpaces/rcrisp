@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Added
 
-- Messages are now issued when input data is in lat/lon and thus is reprojected to a different CRS in `buffer()`, and when no CRS is provided to `delineate()` and the UTM zone is auto-selected.
+- Context-specific messages are now issued in `get_river_aoi()`, `delineate_corridor()`, and `delineate()` when lat/lon input is reprojected for buffering, and in `delineate()` when no CRS is provided and a UTM zone is auto-selected.
 
 ## Fixed
 
