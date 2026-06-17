@@ -19,9 +19,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - The OSM retrieval vignette was updated to retrieve CRS with `get_utm_zone()`
 - Attach-time `check_cache()` was moved behind `interactive()`.
-
-## Changed
-
 - `get_osmdata()` was renamed to `get_osm()` and all other uses of `osmdata` and `osm_data` in object and function names have been consistently renamed to `osm` throughout the package to avoid confusions with the `osmdata` package.
 - The workflow of `delineate()` was refactored into four composable functions to reduce parameter complexity and improve step-by-step control:
   - `define_aoi()` (new): defines the area of interest and all delineation parameters (CRS, buffer sizes, corridor initialisation method) from a
