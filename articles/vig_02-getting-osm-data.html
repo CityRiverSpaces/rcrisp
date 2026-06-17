@@ -122,12 +122,12 @@ network, and the rail network using built-in functions from the
 <span>  buildings <span class="op">=</span> <span class="va">buildings</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p>The above layers can also be obtained with the all-in-one function
-<code><a href="../reference/get_osmdata.html">get_osmdata()</a></code>. Optionally, a buffer around the river can be
+<code><a href="../reference/get_osm.html">get_osm()</a></code>. Optionally, a buffer around the river can be
 specified for the retrieval of OSM data.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">bucharest_osm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_osmdata.html">get_osmdata</a></span><span class="op">(</span><span class="va">city_name</span>, <span class="va">river_name</span>,</span>
-<span>                             network_buffer <span class="op">=</span> <span class="va">network_buffer</span>,</span>
-<span>                             buildings_buffer <span class="op">=</span> <span class="va">buildings_buffer</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">bucharest_osm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_osm.html">get_osm</a></span><span class="op">(</span><span class="va">city_name</span>, <span class="va">river_name</span>,</span>
+<span>                         network_buffer <span class="op">=</span> <span class="va">network_buffer</span>,</span>
+<span>                         buildings_buffer <span class="op">=</span> <span class="va">buildings_buffer</span><span class="op">)</span></span></code></pre></div>
 <p>The resulting object is a list with all the layers obtained
 above.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">

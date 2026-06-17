@@ -6,50 +6,37 @@ Delineate a corridor around a river
 
 ``` r
 delineate(
-  city_name,
-  river_name,
-  crs = NULL,
-  network_buffer = NULL,
-  buildings_buffer = NULL,
-  corridor_init = "valley",
+  aoi,
+  osm,
   dem = NULL,
-  dem_buffer = 2500,
+  corridor_init = "valley",
   max_iterations = 10,
   capping_method = "shortest-path",
   angle_threshold = 100,
   corridor = TRUE,
   segments = FALSE,
-  riverspace = FALSE,
-  force_download = FALSE,
-  ...
+  riverspace = FALSE
 )
 ```
 
 ## Arguments
 
-- city_name:
+- aoi:
 
-  A character vector of length one
+  A list of delineation parameters, namely `$city_name`, `$river_name`,
+  `$bb`, `$crs`, `$network_buffer`, `$dem_buffer`, and
+  `$buildings_buffer`. For more info see
+  [`define_aoi()`](https://cityriverspaces.github.io/rcrisp/reference/define_aoi.md).
 
-- river_name:
+- osm:
 
-  A character vector of length one
+  A list with OpenStreetMap data sets for the a location, as objects of
+  class [`sf::sfc`](https://r-spatial.github.io/sf/reference/sfc.html)
 
-- crs:
+- dem:
 
-  The projected Coordinate Reference System (CRS) to use. If not
-  provided, the suitable Universal Transverse Mercator (UTM) CRS is
-  selected
-
-- network_buffer:
-
-  Add a buffer (an integer in meters) around river to retrieve
-  additional data (streets, railways, etc.). Default is 3000 m.
-
-- buildings_buffer:
-
-  Add a buffer (an integer in meters) around the river to retrieve
-  additional data (buildings). Default is 100 m.
+  Digital elevation model (DEM) of the region (only used if
+  `corridor_init` is `"valley"`)
 
 - corridor_init:
 
@@ -66,16 +53,6 @@ delineate(
   - An [`sf::sf`](https://r-spatial.github.io/sf/reference/sf.html) or
     [`sf::sfc`](https://r-spatial.github.io/sf/reference/sfc.html)
     object: use the given input geometry
-
-- dem:
-
-  Digital elevation model (DEM) of the region (only used if
-  `corridor_init` is `"valley"`)
-
-- dem_buffer:
-
-  Size of the buffer region (in meters) around the river to retrieve the
-  DEM (only used if `corridor_init` is `"valley"` and `dem` is NULL).
 
 - max_iterations:
 
@@ -111,17 +88,6 @@ delineate(
 
   Whether to carry out the riverspace delineation
 
-- force_download:
-
-  Download data even if cached data is available
-
-- ...:
-
-  Additional (optional) input arguments for retrieving the DEM dataset
-  (see
-  [`get_dem()`](https://cityriverspaces.github.io/rcrisp/reference/get_dem.md)).
-  Only relevant if `corridor_init` is `"valley"` and `dem` is NULL
-
 ## Value
 
 A list containing zero or more of the following elements: "valley",
@@ -138,24 +104,17 @@ carried out (e.g., if `segments` is FALSE, the list will not contain a
 
 ``` r
 if (FALSE) { # interactive()
-# Set parameters
-city <- "Bucharest"
-river <- "Dâmbovița"
+# Define delineation parameters within area of interest
+aoi <- define_aoi("Bucharest", "Dâmbovița")
+
+# Get data
+osm <- get_osm(aoi)
+dem <- get_dem(aoi, osm)
 
 # Delineate with defaults
-delineate(city, river)
+delineate(aoi, osm, dem)
 
-# Use custom CRS
-delineate(city, river, crs = "EPSG:31600")  # National projected CRS
-
-# Use custom network buffer
-delineate(city, river, network_buffer = 3500)
-
-# Use custom buildings buffer
-delineate(city, river, buildings_buffer = 150, riverspace = TRUE)
-
-# Provide DEM as input
-bucharest_dem <- get_dem_example_data()
-delineate(city, river, dem = bucharest_dem)
+# Carry out all delineations
+delineate(aoi, osm, dem, segments = TRUE, riverspace = TRUE)
 }
 ```

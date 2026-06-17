@@ -115,6 +115,8 @@ Functions for full or specific delineation
 
 - [`delineate()`](https://cityriverspaces.github.io/rcrisp/reference/delineate.md)
   : Delineate a corridor around a river
+- [`delineate_city_river()`](https://cityriverspaces.github.io/rcrisp/reference/delineate_city_river.md)
+  : Delineate a corridor around a river
 - [`delineate_valley()`](https://cityriverspaces.github.io/rcrisp/reference/delineate_valley.md)
   : Extract the river valley from the DEM
 - [`delineate_corridor()`](https://cityriverspaces.github.io/rcrisp/reference/delineate_corridor.md)
@@ -130,7 +132,7 @@ Functions for full or specific delineation
 
 Get OSM data for delineation
 
-- [`get_osmdata()`](https://cityriverspaces.github.io/rcrisp/reference/get_osmdata.md)
+- [`get_osm()`](https://cityriverspaces.github.io/rcrisp/reference/get_osm.md)
   : Retrieve OpenStreetMap data for a given location
 - [`get_osm_bb()`](https://cityriverspaces.github.io/rcrisp/reference/get_osm_bb.md)
   : Get the bounding box of a city
@@ -192,6 +194,8 @@ Functions to prepare network for delineation
 
 Helpers used throughout delineation and data retrieval functions
 
+- [`define_aoi()`](https://cityriverspaces.github.io/rcrisp/reference/define_aoi.md)
+  : Define delineation parameters within an area of interest
 - [`as_bbox()`](https://cityriverspaces.github.io/rcrisp/reference/as_bbox.md)
   : Get the bounding box from the x object
 - [`as_crs()`](https://cityriverspaces.github.io/rcrisp/reference/as_crs.md)

@@ -57,15 +57,15 @@ bucharest_osm <- list(
 ```
 
 The above layers can also be obtained with the all-in-one function
-[`get_osmdata()`](https://cityriverspaces.github.io/rcrisp/reference/get_osmdata.md).
+[`get_osm()`](https://cityriverspaces.github.io/rcrisp/reference/get_osm.md).
 Optionally, a buffer around the river can be specified for the retrieval
 of OSM data.
 
 ``` r
 
-bucharest_osm <- get_osmdata(city_name, river_name,
-                             network_buffer = network_buffer,
-                             buildings_buffer = buildings_buffer)
+bucharest_osm <- get_osm(city_name, river_name,
+                         network_buffer = network_buffer,
+                         buildings_buffer = buildings_buffer)
 ```
 
 The resulting object is a list with all the layers obtained above.
