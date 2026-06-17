@@ -18,6 +18,10 @@ clear_cache(before_date = NULL)
   dependent character vector accepted by
   [`as.Date()`](https://rdrr.io/r/base/as.Date.html)
 
+## Value
+
+`NULL`
+
 ## Examples
 
 ``` r
