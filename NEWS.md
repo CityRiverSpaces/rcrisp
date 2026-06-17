@@ -5,6 +5,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 # [Unreleased]
 
+## Added
+
+- The Rbanism community badge was added in the README.
+
 ## Fixed
 
 - Missing parenthesis was added in warning text in `check_cache()`.
