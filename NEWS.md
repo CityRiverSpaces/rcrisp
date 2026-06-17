@@ -7,10 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Added
 
+- A definition of "riverside urban areas" was added in the README.
+- The practical usefulness of the morphological approach was explained in the README.
+- Test coverage of the `osmdata` module was increased.
 - The Rbanism community badge was added in the README.
 
 ## Fixed
 
+- Assertion on CRS input was removed from `get_osm_streets()`. CRS input is now checked in `as_crs()` as in the other `get_osm_*()` functions.
+- Incorrect CRS was fixed in osmdata tests.
 - Missing parenthesis was added in warning text in `check_cache()`.
 - Vignette pre-compilation was updated so that srr tags dropped by `knitr::knit()` are reinserted into the vignettes. Affected vignettes were also recompiled.
 - The input `dem_source` in `get_dem()` was made case insensitive.
