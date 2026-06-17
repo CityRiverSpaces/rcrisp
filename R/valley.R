@@ -19,9 +19,11 @@ default_stac_dem <- list(
 
 #' Access digital elevation model (DEM) for a given region
 #'
-#' @param bb A bounding box, provided either as a matrix (rows for "x", "y",
-#'   columns for "min", "max") or as a vector ("xmin", "ymin", "xmax", "ymax"),
-#'   in lat/lon coordinates (WGS84 coordinate reference system) of class `bbox`
+#' @param aoi A list of delineation parameters, including `$dem_buffer` used
+#'   to expand the area of interest covered by the network and `$crs` for the
+#'   CRS which to transform the DEM to
+#' @param osm A list with OpenStreetMap data sets for the a location, as
+#'   objects of class [`sf::sfc`]
 #' @param dem_source Source of the DEM:
 #'   - If "STAC" (default), DEM tiles are searched on a SpatioTemporal Asset
 #'     Catalog (STAC) end point, then accessed and mosaicked to the area of
@@ -31,21 +33,20 @@ default_stac_dem <- list(
 #' @param stac_collection Identifier of the STAC collection to be queried (only
 #'   used if `dem_source` is `"STAC"`). For more info, see
 #'   [`get_stac_asset_urls()`]
-#' @param crs Coordinate reference system (CRS) which to transform the DEM to
 #' @param force_download Download data even if cached data is available
 #'
 #' @return DEM as a terra `SpatRaster` object
 #' @export
 #' @examplesIf interactive()
-#' # Get DEM with default values
-#' bb <- get_osm_bb("Bucharest")
-#' crs <- 31600  # National projected CRS
+#' # Define delineation parameters and get OSM data within area of interest
+#' aoi <- define_aoi("Bucharest", "Dâmbovița")
+#' osm <- get_osm(aoi)
 #'
 #' # Get DEM with default values
-#' get_dem(bb)
+#' dem <- get_dem(aoi, osm)
 #'
 #' # Get DEM from custom STAC endpoint
-#' get_dem(bb,
+#' get_dem(aoi, osm,
 #'         stac_endpoint = "some endpoint",
 #'         stac_collection = "some collection")
 #'
@@ -54,17 +55,18 @@ default_stac_dem <- list(
 #' @srrstats {G2.3, G2.3b} The input character value for `dem_source` is
 #'   converted to uppercase using toupper(), making the check case-insensitive.
 #'   A validation is then performed to ensure the value is allowed.
-#' @srrstats {G2.7} The `bb` parameter accepts tabular input of class `matrix`.
 #' @srrstats {SP6.1} If specified by the user, the CRS is standardised with
 #'   `as_crs()` before being used to reproject the DEM.
-get_dem <- function(bb, dem_source = "STAC", stac_endpoint = NULL,
-                    stac_collection = NULL, crs = NULL,
-                    force_download = FALSE) {
+get_dem <- function(aoi, osm, dem_source = "STAC", stac_endpoint = NULL,
+                    stac_collection = NULL, force_download = FALSE) {
+  # Retrieve dataset on a larger AOI to limit edge effects in downstream
+  # valley delineation
+  aoi_dem <- buffer(osm$aoi_network, aoi$dem_buffer)
+  bbox <- as_bbox(aoi_dem)
+
   # Check input
-  bbox <- as_bbox(bb)
   checkmate::assert_character(stac_endpoint, null.ok = TRUE, len = 1)
   checkmate::assert_character(stac_collection, null.ok = TRUE, len = 1)
-  crs <- as_crs(crs)
   checkmate::assert_logical(force_download, len = 1)
   dem_source <- toupper(dem_source)
   checkmate::assert_choice(dem_source, c("STAC"))
@@ -76,8 +78,8 @@ get_dem <- function(bb, dem_source = "STAC", stac_endpoint = NULL,
   } else {
     stop(sprintf("DEM source %s unknown", dem_source))
   }
-  if (!is.null(crs)) {
-    dem <- reproject(dem, crs)
+  if (!is.null(aoi$crs)) {
+    dem <- reproject(dem, aoi$crs)
   }
   dem
 }

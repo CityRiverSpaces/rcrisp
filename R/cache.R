@@ -31,7 +31,7 @@ cache_directory <- function() {
 #'
 #' @return A character string representing the file path
 #' @keywords internal
-get_osmdata_cache_filepath <- function(key, value, bbox) {
+get_osm_cache_filepath <- function(key, value, bbox) {
   # collapse `value` (which might be a vector) to a character string
   value_str <- paste(value, collapse = "_")
   # collapse `bbox` components as well, after rounding them
