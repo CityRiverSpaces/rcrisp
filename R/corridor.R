@@ -210,8 +210,8 @@ corridor_end_points <- function(river_network, spatial_network, regions) {
   distances <- sfnetworks::st_network_cost(river_network, from = nodes,
                                            to = nodes, weights = "weight")
 
-  indices <- which(distances == max(distances), arr.ind = TRUE)[1, ]
-  end_points <- c(nodes[indices["row"]], nodes[indices["col"]])
+  indices <- arrayInd(which.max(distances), dim(distances))
+  end_points <- c(nodes[indices[1]], nodes[indices[2]])
   if (end_points[1] == end_points[2]) {
     stop("Corridor start- and end-points coincide!")
   }
@@ -364,7 +364,6 @@ cap_corridor <- function(edges, method = "shortest-path", network = NULL) {
     network <- add_weights(network)
     cap_edge_1 <- shortest_path(network, from = start_pts[1], to = start_pts[2])
     cap_edge_2 <- shortest_path(network, from = end_pts[1], to = end_pts[2])
-    # TODO: raise warning if lenght is 2 times longer than direct segment
   } else {
     stop(
       sprintf("Unknown method to cap the river corridor: %s", method)
