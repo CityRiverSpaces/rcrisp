@@ -191,7 +191,7 @@ clear_cache <- function(before_date = NULL) {
 
 #' Check cache
 #'
-#' A warning is raised if the cache size is > 100 MB or if it includes files
+#' A message is raised if the cache size is > 100 MB or if it includes files
 #' older than 30 days.
 #'
 #' @export
@@ -211,10 +211,10 @@ check_cache <- function() {
     is_too_old <- (Sys.time() - date_oldest_file) > "30 days"
   }
   if (is_too_big || is_too_old) {
-    warning(sprintf(paste0(
-      "Cache dir: %s - size: %.0f MB - oldest file from: %s.\n",
-      "Clean up files older than 30 days with: `rcrisp::clear_cache('%s')` ",
-      "(or remove all cached files with: `rcrisp::clear_cache()`."
-    ), cache_dir, cache_size, as.Date(date_oldest_file), Sys.Date() - 30))
+    cli::cli_alert_info(sprintf(paste0(
+        "Cache dir: %s - size: %.0f MB - oldest file from: %s.\n",
+        "Clean up files older than 30 days with: `rcrisp::clear_cache('%s')` ",
+        "(or remove all cached files with: `rcrisp::clear_cache()`."
+      ), cache_dir, cache_size, as.Date(date_oldest_file), Sys.Date() - 30))
   }
 }
