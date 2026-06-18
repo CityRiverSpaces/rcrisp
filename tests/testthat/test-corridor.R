@@ -367,3 +367,25 @@ test_that("When river has no crossing, delineation fails with informative
             expect_error(delineate_corridor(network, river),
                          "No river crossings found.")
           })
+
+test_that("Endpoint selection is robust to floating point distances", {
+  # In this case, diagonal segments produce floating point distances.
+  river <- sf::st_sfc(
+    sf::st_linestring(cbind(c(0, 1, 2), c(0, 1, 0)))
+  )
+  regions <- c(
+    sf::st_buffer(river, 1.5, singleSide = TRUE),
+    sf::st_buffer(river, -1.5, singleSide = TRUE)
+  )
+
+  # The distance between end points is sqrt(2), which is irrational.
+  network_edges <- sf::st_sfc(
+    sf::st_linestring(cbind(c(0, 1), c(1, 0))),
+    sf::st_linestring(cbind(c(1, 2), c(0, 1)))
+  )
+  river_network <- sfnetworks::as_sfnetwork(river, directed = FALSE)
+  spatial_network <- sfnetworks::as_sfnetwork(network_edges, directed = FALSE)
+  actual <- corridor_end_points(river_network, spatial_network, regions)
+  expected <- sf::st_sfc(sf::st_point(c(0.5, 0.5)), sf::st_point(c(1.5, 0.5)))
+  expect_setequal(actual, expected)
+})

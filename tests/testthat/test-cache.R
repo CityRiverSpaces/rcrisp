@@ -17,7 +17,7 @@ test_that("A proper path is created to cache a OSM dataset", {
   key <- "highway"
   value <- c("primary", "secondary")
   bbox <- sf::st_bbox(c(xmin = 0, xmax = 1, ymin = -2, ymax = -1))
-  actual <- get_osmdata_cache_filepath(key, value, bbox)
+  actual <- get_osm_cache_filepath(key, value, bbox)
   expected <- file.path(cache_dir,
                         "osmdata_highway_primary_secondary_0_-2_1_-1.rds")
   expect_equal(actual, expected)

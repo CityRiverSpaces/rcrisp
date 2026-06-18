@@ -8,12 +8,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Added
 
 - A `plot()` method was created for objects of class `delineation`.
+- The Rbanism community badge was added in the README.
 
 ## Fixed
 
+- Missing parenthesis was added in warning text in `check_cache()`.
+- Vignette pre-compilation was updated so that srr tags dropped by `knitr::knit()` are reinserted into the vignettes. Affected vignettes were also recompiled.
+- The input `dem_source` in `get_dem()` was made case insensitive.
 - Fixed typos in test statements.
 - Corrected documentation for `reproject()`: the `crs` parameter no longer (incorrectly) lists `logical` as an accepted type. `crs` accepts numeric/integer, character (e.g. "EPSG:4326") or an `sf::crs` object; passing `TRUE`/`FALSE` will fail.
 - Vignette pre-compilation was updated so that srr tags dropped by `knitr::knit()` are reinserted into the vignettes. Affected vignettes were also recompiled.
+- Documentation of return values in `clear_cache()` and `delineate()` were made factually consistent with the code.
+
+## Changed
+
+- The OSM retrieval vignette was updated to retrieve CRS with `get_utm_zone()`
+- Attach-time `check_cache()` was moved behind `interactive()`.
+- `get_osmdata()` was renamed to `get_osm()` and all other uses of `osmdata` and `osm_data` in object and function names have been consistently renamed to `osm` throughout the package to avoid confusions with the `osmdata` package.
+- The workflow of `delineate()` was refactored into four composable functions to reduce parameter complexity and improve step-by-step control:
+  - `define_aoi()` (new): defines the area of interest and all delineation parameters (CRS, buffer sizes, corridor initialisation method) from a
+    city and river name.
+  - `get_osmdata()` and `get_dem()` was adapted to accept an `aoi` object returned by `define_aoi()` instead of individual parameters.
+  - `delineate()`: now accepts the `aoi` object, OSM data, and DEM as separate inputs, with a reduced parameter signature.
+- `delineate_city_river()` (new): convenience wrapper that runs the full workflow from city and river name with default parameters.
 
 ## Changed
 

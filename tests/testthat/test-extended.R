@@ -9,16 +9,7 @@ test_that("a full delineation run succeed, including data retrieval", {
   skip_if_not_extended()
 
   run_test <- \() {
-    delineate(city_name = "Bucharest",
-              river_name = "Dâmbovița",
-              crs = 32635,
-              network_buffer = 2500,
-              buildings_buffer = 100,
-              dem_buffer = 2500,
-              corridor_init = "valley",
-              corridor = TRUE,
-              segments = TRUE,
-              riverspace = TRUE) |>
+    delineate_city_river(city_name = "Bucharest", river_name = "Dâmbovița") |>
       suppressMessages() |>
       suppressWarnings()
   }
