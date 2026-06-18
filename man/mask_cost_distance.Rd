@@ -2,7 +2,7 @@
 % Please edit documentation in R/valley.R
 \name{mask_cost_distance}
 \alias{mask_cost_distance}
-\title{Mask out river regions incl. a buffer in cost distance raster data}
+\title{Mask out river regions including a buffer in cost distance raster data}
 \usage{
 mask_cost_distance(cd, river, buffer = 2000)
 }
@@ -17,6 +17,6 @@ mask_cost_distance(cd, river, buffer = 2000)
 cd raster with river+BUFFER pixels masked
 }
 \description{
-Mask out river regions incl. a buffer in cost distance raster data
+Mask out river regions including a buffer in cost distance raster data
 }
 \keyword{internal}
