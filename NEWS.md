@@ -31,9 +31,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `get_osmdata()` and `get_dem()` was adapted to accept an `aoi` object returned by `define_aoi()` instead of individual parameters.
   - `delineate()`: now accepts the `aoi` object, OSM data, and DEM as separate inputs, with a reduced parameter signature.
 - `delineate_city_river()` (new): convenience wrapper that runs the full workflow from city and river name with default parameters.
-
-## Changed
-
 - `delineate()` returns now an S3 object of class `delineation`.
 
 ## Removed
