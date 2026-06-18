@@ -51,7 +51,7 @@ We plan to:
 *  Expand the use of input data from OpenStreetMap to Overture Maps and from
    Copernicus GLO-30 Digital Elevation Models to Global Digital Terrain Models
    from OpenTopography.
-*  Improve segmentation (1) by merging neighbouring corridor segments using
+*  Improve segmentation (1) by merging neighboring corridor segments using
    morphological similarity learned from segment-level morphometrics through
    clustering and (2) by splitting large segments based on potential river
    crossings identified in the street network.

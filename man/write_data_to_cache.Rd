@@ -20,7 +20,7 @@ required by \code{\link[terra:SpatRaster-class]{terra::SpatRaster}} objects)}
 \code{NULL} invisibly
 }
 \description{
-Write object in a serialised form (RDS) to a cache directory. For the
+Write object in a serialized form (RDS) to a cache directory. For the
 directory used for caching see \code{\link[=cache_directory]{cache_directory()}}.
 }
 \keyword{internal}

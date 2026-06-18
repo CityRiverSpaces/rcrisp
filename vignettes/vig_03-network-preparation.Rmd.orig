@@ -76,7 +76,7 @@ We now perform standard cleaning tasks on the network: subdividing edges by addi
 network_cleaned <- clean_network(network_new)
 ```
 
-## 4. Visualise cleaned network
+## 4. Visualize cleaned network
 
 Visualize cleaned network:
 

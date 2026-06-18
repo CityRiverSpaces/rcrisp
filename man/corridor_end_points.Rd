@@ -20,7 +20,7 @@ An \code{\link[sf:sfc]{sf::sfc_POINT}} geometry including a pair of points
 }
 \description{
 Determine the extremes (end points) of the river corridor using the network
-built from the river center line features (see \code{\link[=build_river_network]{build_river_network()}} and
+built from the river centerline features (see \code{\link[=build_river_network]{build_river_network()}} and
 the spatial network used for the delineation. The end points are selected as
 the two furthest river crossings of the spatial network that connect the
 sub-networks for each river sides.

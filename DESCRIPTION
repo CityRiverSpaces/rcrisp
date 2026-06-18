@@ -18,7 +18,7 @@ Description: Provides tools to automate the morphological delineation of
     corridor boundaries, segmentation of the corridor, and delineation of
     the river space using two-dimensional spatial information from street
     network data and digital elevation data in a projected CRS. The
-    resulting delineation can be used to characterise spatial phenomena
+    resulting delineation can be used to characterize spatial phenomena
     that can be related to the river as a central element.
 License: Apache License (>= 2)
 URL: https://cityriverspaces.github.io/rcrisp/, https://github.com/CityRiverSpaces/rcrisp, https://doi.org/10.5281/zenodo.15793526
@@ -55,3 +55,4 @@ Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE, roclets = c("namespace", "rd", "srr::srr_stats_roclet"))
 RoxygenNote: 7.3.2
+Language: en-US

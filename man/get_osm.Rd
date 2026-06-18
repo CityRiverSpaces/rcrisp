@@ -32,7 +32,7 @@ given location, as objects of class \code{\link[sf:sfc]{sf::sfc}}
 }
 \description{
 Retrieve OpenStreetMap data for a given location, including
-the city boundary, the river centreline and surface, the streets, the
+the city boundary, the river centerline and surface, the streets, the
 railways, and the buildings
 }
 \examples{

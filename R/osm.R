@@ -98,7 +98,7 @@ get_osm_bb <- function(city_name) {
 #' Retrieve OpenStreetMap data for a given location
 #'
 #' Retrieve OpenStreetMap data for a given location, including
-#' the city boundary, the river centreline and surface, the streets, the
+#' the city boundary, the river centerline and surface, the streets, the
 #' railways, and the buildings
 #'
 #' @param aoi A list of delineation parameters
@@ -274,7 +274,7 @@ get_osm_city_boundary <- function(bb, city_name, crs = NULL, multiple = FALSE,
   city_boundary
 }
 
-#' Get the river centreline from OpenStreetMap
+#' Get the river centerline from OpenStreetMap
 #'
 #' @param bb Bounding box of class `bbox`
 #' @param river_name The name of the river as character vector of length 1,
@@ -282,7 +282,7 @@ get_osm_city_boundary <- function(bb, city_name, crs = NULL, multiple = FALSE,
 #' @param crs Coordinate reference system as EPSG code
 #' @param force_download Download data even if cached data is available
 #'
-#' @return The river centreline as object of class [`sf::sfc_LINESTRING`] or
+#' @return The river centerline as object of class [`sf::sfc_LINESTRING`] or
 #'   [`sf::sfc_MULTILINESTRING`].
 #' @export
 #'
@@ -307,7 +307,7 @@ get_osm_river_centerline <- function(bb, river_name, crs = NULL,
   crs <- as_crs(crs)
   checkmate::assert_logical(force_download, len = 1)
 
-  # Get the river centreline
+  # Get the river centerline
   river_centerline <- osmdata_as_sf("waterway", "", bb,
                                     force_download = force_download)
 
@@ -573,7 +573,7 @@ get_osm_buildings <- function(aoi, crs = NULL, force_download = FALSE) {
 #' Get an area of interest (AoI) around a river, cropping to the bounding box of
 #' a city
 #'
-#' @param river A `sf::sf` or `sf::sfc` object with the river centreline and
+#' @param river A `sf::sf` or `sf::sfc` object with the river centerline and
 #'   (optionally) the river surface geometry
 #' @param city_bbox Bounding box of class `bbox` around the city
 #' @param buffer_distance A positive number representing the buffer size around

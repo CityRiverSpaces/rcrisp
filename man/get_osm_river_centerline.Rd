@@ -2,7 +2,7 @@
 % Please edit documentation in R/osm.R
 \name{get_osm_river_centerline}
 \alias{get_osm_river_centerline}
-\title{Get the river centreline from OpenStreetMap}
+\title{Get the river centerline from OpenStreetMap}
 \usage{
 get_osm_river_centerline(bb, river_name, crs = NULL, force_download = FALSE)
 }
@@ -17,11 +17,11 @@ case-sensitive.}
 \item{force_download}{Download data even if cached data is available}
 }
 \value{
-The river centreline as object of class \code{\link[sf:sfc]{sf::sfc_LINESTRING}} or
+The river centerline as object of class \code{\link[sf:sfc]{sf::sfc_LINESTRING}} or
 \code{\link[sf:sfc]{sf::sfc_MULTILINESTRING}}.
 }
 \description{
-Get the river centreline from OpenStreetMap
+Get the river centerline from OpenStreetMap
 }
 \examples{
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}

@@ -86,7 +86,7 @@ as_bbox <- function(x) {
   bbox
 }
 
-#' Standardise the coordinate reference system (CRS) of an object
+#' Standardize the coordinate reference system (CRS) of an object
 #'
 #' @param x An object of class `sf`, `sfc`, `bbox`, or a numeric or character
 #'   vector representing a CRS (e.g., EPSG code). If `numeric`, the value

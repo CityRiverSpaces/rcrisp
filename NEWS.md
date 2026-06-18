@@ -25,7 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Attach-time `check_cache()` was moved behind `interactive()`.
 - `get_osmdata()` was renamed to `get_osm()` and all other uses of `osmdata` and `osm_data` in object and function names have been consistently renamed to `osm` throughout the package to avoid confusions with the `osmdata` package.
 - The workflow of `delineate()` was refactored into four composable functions to reduce parameter complexity and improve step-by-step control:
-  - `define_aoi()` (new): defines the area of interest and all delineation parameters (CRS, buffer sizes, corridor initialisation method) from a
+  - `define_aoi()` (new): defines the area of interest and all delineation parameters (CRS, buffer sizes, corridor initialization method) from a
     city and river name.
   - `get_osmdata()` and `get_dem()` was adapted to accept an `aoi` object returned by `define_aoi()` instead of individual parameters.
   - `delineate()`: now accepts the `aoi` object, OSM data, and DEM as separate inputs, with a reduced parameter signature.

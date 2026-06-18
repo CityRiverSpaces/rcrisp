@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{as_crs}
 \alias{as_crs}
-\title{Standardise the coordinate reference system (CRS) of an object}
+\title{Standardize the coordinate reference system (CRS) of an object}
 \usage{
 as_crs(x, allow_geographic = FALSE)
 }
@@ -17,7 +17,7 @@ should be an unrestricted positive number representing a valid EPSG code.}
 An object of class \code{\link[sf:coerce-methods]{sf::crs}} with a valid CRS.
 }
 \description{
-Standardise the coordinate reference system (CRS) of an object
+Standardize the coordinate reference system (CRS) of an object
 }
 \examples{
 library(sf)

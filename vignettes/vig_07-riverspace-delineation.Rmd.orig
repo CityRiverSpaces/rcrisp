@@ -40,7 +40,7 @@ The `delineate_riverspace()` function takes the building polygons and the river 
 riverspace <- delineate_riverspace(river, buildings)
 ```
 
-We visualise the riverspace in a subset of segments.
+We visualize the riverspace in a subset of segments.
 
 ```{r plot-riverspace, fig.alt="Riverspace delineation", fig.cap="", out.width="100%"}
 riverspace_segment_2_4 <- riverspace |>

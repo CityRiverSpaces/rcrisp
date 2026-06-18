@@ -226,12 +226,12 @@ load_dem <- function(bb, tile_urls, force_download = FALSE) {
 #' @return filtered dem
 #' @keywords internal
 #' @srrstats {SP3.0, SP3.0a} This function allows `window` (i.e., the size of
-#'   the neighourhood) to be set and passed down to the `w` parameter of
+#'   the neighorhood) to be set and passed down to the `w` parameter of
 #'   `terra::focal()`. With a single value (default), the function employs the
 #'   square ("queen") neighbourhood form. With a weight matrix, also accepted
 #'   by `terra::focal()`, in which cells on ortogonal direction are assigned
 #'   `1` and cells on diagonal direction are assigned `0`, a "rook"
-#'   neighbourhood form can also be obtained.
+#'   neighborhood form can also be obtained.
 smooth_dem <- function(dem, method = "median", window = 5) {
   dem_smoothed <- terra::focal(dem, w = window, fun = method)
   names(dem_smoothed) <- "dem_smoothed"
@@ -290,7 +290,7 @@ mask_slope <- function(slope, river, lthresh = 1.e-3, target = 0) {
 #' @return raster of cost distance
 #' @keywords internal
 #' @srrstats {SP3.1} This function uses a slope raster as a friction surface,
-#'   weighting neighbour contributions continuously by slope.
+#'   weighting neighbor contributions continuously by slope.
 get_cost_distance <- function(slope, river, target = 0) {
   slope_masked <- mask_slope(slope, river, target = target)
   cd <- terra::costDist(slope_masked, target = target)
@@ -298,7 +298,7 @@ get_cost_distance <- function(slope, river, target = 0) {
   cd
 }
 
-#' Mask out river regions incl. a buffer in cost distance raster data
+#' Mask out river regions including a buffer in cost distance raster data
 #'
 #' @param cd cost distance raster
 #' @param river vector/polygon

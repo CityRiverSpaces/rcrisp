@@ -289,7 +289,7 @@ initial_edges <- function(corridor_initial, regions) {
 #' geometry, and c) an excluded area where corridor edges are aimed not to go
 #' through. The procedure is iterative, with the excluded area only being
 #' accounted for in the first iteration. The identified corridor edge is
-#' used as target edge in the following iteration, with the goal of prioritising
+#' used as target edge in the following iteration, with the goal of prioritizing
 #' the "straightening" of the edge (some overlap with the excluded area is
 #' allowed).
 #'

@@ -94,14 +94,14 @@ NULL
 #'   deterministic, so noise susceptibility tests do not apply. These standards
 #'   will be reconsidered if future versions introduce randomised sampling, e.g.
 #'   for viewpoint generation in `delineate_riverspace()` or corridor
-#'   corridor initialisation in `delineate_corridor()`
+#'   corridor initialization in `delineate_corridor()`
 #' @srrstatsNA {G5.12} No special requirements are needed to run extended tests.
 #'
 #  Not applicable spatial software standards ----
 #' @srrstatsNA {SP2.0a, SP2.0b} This package does not implement any new classes
 #'   for spatial data.
 #' @srrstatsNA {SP2.5a} This package does not implement new classes.
-#' @srrstatsNA {SP3.0b} The package does not consider spatial neighbours in
+#' @srrstatsNA {SP3.0b} The package does not consider spatial neighbors in
 #'   irregular spaces.
 #' @srrstatsNA {SP3.2} The package does not rely on sampling from input data.
 #' @srrstatsNA {SP3.3} The package does not employ regression.
@@ -120,9 +120,9 @@ NULL
 #'   an ability to generate interactive visualisations. The returned
 #'   delineations can be used in static and interactive visualisation workflows
 #'   as any other spatial data.
-#' @srrstatsNA {SP6.3, SP6.4} This package uses spatial neighbours only via the
+#' @srrstatsNA {SP6.3, SP6.4} This package uses spatial neighbors only via the
 #'   `terra::costDist()` function. Therefore, the definition and weighting of
-#'   neighbours are managed by `terra`, and are not implemented or tested within
+#'   neighbors are managed by `terra`, and are not implemented or tested within
 #'   this package.
 #' @srrstatsNA {SP6.5} The comparison between the results from the DBSCAN
 #'   clustering algorithm and a non-spatial clustering algorithm is not
