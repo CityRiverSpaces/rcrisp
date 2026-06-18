@@ -31,7 +31,7 @@ cache_directory <- function() {
 #'
 #' @return A character string representing the file path
 #' @keywords internal
-get_osmdata_cache_filepath <- function(key, value, bbox) {
+get_osm_cache_filepath <- function(key, value, bbox) {
   # collapse `value` (which might be a vector) to a character string
   value_str <- paste(value, collapse = "_")
   # collapse `bbox` components as well, after rounding them
@@ -156,7 +156,7 @@ write_data_to_cache <- function(x, filepath, wrap = FALSE, quiet = FALSE) {
 #'   as object of class [`Date`] or as a case dependent character vector
 #'   accepted by [`as.Date()`]
 #'
-#' @return List of file paths of removed files
+#' @return `NULL`
 #' @export
 #' @examplesIf interactive()
 #' # Clear all cache
@@ -211,10 +211,13 @@ check_cache <- function() {
     is_too_old <- (Sys.time() - date_oldest_file) > "30 days"
   }
   if (is_too_big || is_too_old) {
-    cli::cli_alert_info(sprintf(paste0(
+    cli::cli_alert_info(sprintf(
+      paste0(
         "Cache dir: %s - size: %.0f MB - oldest file from: %s.\n",
         "Clean up files older than 30 days with: `rcrisp::clear_cache('%s')` ",
-        "(or remove all cached files with: `rcrisp::clear_cache()`."
-      ), cache_dir, cache_size, as.Date(date_oldest_file), Sys.Date() - 30))
+        "(or remove all cached files with: `rcrisp::clear_cache()`)."
+      ),
+      cache_dir, cache_size, as.Date(date_oldest_file), Sys.Date() - 30
+    ))
   }
 }
