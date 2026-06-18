@@ -130,7 +130,7 @@ delineate_valley <- function(dem, river) {
 #'
 #' @param bb A bounding box, provided either as a matrix (rows for "x", "y",
 #'   columns for "min", "max") or as a vector ("xmin", "ymin", "xmax", "ymax"),
-#'   in lat/lon coordinates (WGS84 coordinate referece system) of class `bbox`
+#'   in lat/lon coordinates (WGS84 coordinate reference system) of class `bbox`
 #' @param endpoint URL of the STAC API endpoint. To be provided together with
 #'   `stac_collection`, or leave blank to use defaults (see
 #'   [`default_stac_dem`])
@@ -256,7 +256,7 @@ get_slope <- function(dem) {
 #'
 #' @param slope raster data of slope
 #' @param river vector/polygon data of river
-#' @param lthresh lower numerival threshold to consider slope non-zero
+#' @param lthresh lower numerical threshold to consider slope non-zero
 #' @param target value to set for pixels overlapping river area
 #'
 #' @return updated slope raster
@@ -319,7 +319,7 @@ mask_cost_distance <- function(cd, river, buffer = 2000) {
 #' Get characteristic value of distribution of cost distance
 #'
 #' @param cd cost distance raster data
-#' @param method function used to derive caracteristic value (mean)
+#' @param method function used to derive characteristic value (mean)
 #'
 #' @return characteristic value of cd raster
 #' @keywords internal

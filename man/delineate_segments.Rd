@@ -26,7 +26,7 @@ Segment polygons as a simple feature geometry of class
 \code{\link[sf:sfc]{sf::sfc_POLYGON}}
 }
 \description{
-Segments are defined as corridor subregions separated by river-crossing
+Segments are defined as corridor sub-regions separated by river-crossing
 transversal lines that form continuous strokes in the network.
 }
 \examples{

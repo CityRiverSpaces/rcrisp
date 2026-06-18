@@ -10,7 +10,7 @@ simplify_network(network)
 \item{network}{A network object}
 }
 \value{
-A simplifed network object
+A simplified network object
 }
 \description{
 Simplify the graph, removing loops and double-edge connections following

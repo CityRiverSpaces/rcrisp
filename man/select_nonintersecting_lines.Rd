@@ -17,7 +17,7 @@ within the corridor geometry, as a simple feature geometry
 }
 \description{
 Recursively drop intersecting lines, starting from the line that form most
-intersections with other geometries. When multilple lines form the same
+intersections with other geometries. When multiple lines form the same
 number of intersections with other geometries, the longest line is discarded
 first. Note that lines are allowed to intersect on the corridor boundary.
 }

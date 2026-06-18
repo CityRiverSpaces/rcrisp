@@ -1,6 +1,6 @@
 #' Split a river corridor into segments
 #'
-#' Segments are defined as corridor subregions separated by river-crossing
+#' Segments are defined as corridor sub-regions separated by river-crossing
 #' transversal lines that form continuous strokes in the network.
 #'
 #' @param corridor The river corridor as a simple feature geometry of class
@@ -162,7 +162,7 @@ get_corridor_edges <- function(corridor, river) {
 #'   per cluster
 #' @keywords internal
 #' @srrstats {G2.10} This function uses `sf::st_geometry()` to extract the
-#'   geometry column from an `sf` object in a `dplyr` pipline. This is used when
+#'   geometry column from an `sf` object in a `dplyr` pipeline. This is used when
 #'   only geometry information is needed from that point onwards and all other
 #'   attributes (i.e., columns) can be safely discarded. The object returned
 #'   by `sf::st_geometry()` is a simple feature geometry list column of class
@@ -190,7 +190,7 @@ filter_clusters <- function(crossings, river, eps = 100) {
 #' Select non-intersecting line segments
 #'
 #' Recursively drop intersecting lines, starting from the line that form most
-#' intersections with other geometries. When multilple lines form the same
+#' intersections with other geometries. When multiple lines form the same
 #' number of intersections with other geometries, the longest line is discarded
 #' first. Note that lines are allowed to intersect on the corridor boundary.
 #'

@@ -127,7 +127,7 @@ delineate_corridor <- function(
   edge_2 <- corridor_edge(network_2, end_points, edges_init[2], corridor_init,
                           max_iterations)
 
-  # Cap the corritor
+  # Cap the corridor
   cap_corridor(c(edge_1, edge_2), capping_method, network)
 }
 

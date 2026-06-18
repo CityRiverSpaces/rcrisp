@@ -275,7 +275,7 @@ clean_network <- function(network, simplify = TRUE) {
 #'
 #' @param network A network object
 #'
-#' @return A simplifed network object
+#' @return A simplified network object
 #' @keywords internal
 #' @srrstats {SP4.0, SP4.0a, SP4.1, SP4.2} The return value is of class
 #'   [`sfnetworks::sfnetwork`], same as the input class, explicitly documented
@@ -372,7 +372,7 @@ add_weights <- function(network, target = NULL, exclude_area = NULL,
 #' @param from Start node
 #' @param to End node
 #' @param weights Name of the column in the network edge table from where to
-#'   take the weigths
+#'   take the weights
 #'
 #' @return An [`sf::sfc_LINESTRING`] object
 #' @importFrom rlang .data
@@ -464,7 +464,7 @@ filter_network <- function(network, target, elements = "nodes") {
 #'
 #' @param network A spatial network object of class [`sfnetworks::sfnetwork`]
 #' @param geometry An object of class [`sf::sfc`]
-#' @param index Whether to return the indices of the matchin edges or the
+#' @param index Whether to return the indices of the matching edges or the
 #'   geometries
 #'
 #' @return Indices or geometries of the edges intersecting the given geometry

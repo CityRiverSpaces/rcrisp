@@ -21,7 +21,7 @@ cache_directory <- function() {
 
 #' Get the file path where to cache results of an Overpass API query
 #'
-#' The function returns the file path where to serialize an osdata_sf object
+#' The function returns the file path where to serialize an osmdata_sf object
 #' for a given key:value pair and a bounding box. The directory used is the one
 #' returned by [`cache_directory()`].
 #'

@@ -12,7 +12,7 @@ mask_slope(slope, river, lthresh = 0.001, target = 0)
 
 \item{river}{vector/polygon data of river}
 
-\item{lthresh}{lower numerival threshold to consider slope non-zero}
+\item{lthresh}{lower numerical threshold to consider slope non-zero}
 
 \item{target}{value to set for pixels overlapping river area}
 }

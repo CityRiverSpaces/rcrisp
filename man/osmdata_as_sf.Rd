@@ -23,7 +23,7 @@ An \code{\link[osmdata:osmdata]{osmdata::osmdata}} object with the retrieved Ope
 }
 \description{
 Query the Overpass API for a key:value pair within a given bounding box
-(provided as lat/lon coordiates). Results are cached, so that new queries
+(provided as lat/lon coordinates). Results are cached, so that new queries
 with the same input parameters will be loaded from disk.
 }
 \examples{

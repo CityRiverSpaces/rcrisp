@@ -17,7 +17,7 @@ get_osm_cache_filepath(key, value, bbox)
 A character string representing the file path
 }
 \description{
-The function returns the file path where to serialize an osdata_sf object
+The function returns the file path where to serialize an osmdata_sf object
 for a given key:value pair and a bounding box. The directory used is the one
 returned by \code{\link[=cache_directory]{cache_directory()}}.
 }

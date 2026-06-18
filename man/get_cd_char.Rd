@@ -9,7 +9,7 @@ get_cd_char(cd, method = "mean")
 \arguments{
 \item{cd}{cost distance raster data}
 
-\item{method}{function used to derive caracteristic value (mean)}
+\item{method}{function used to derive characteristic value (mean)}
 }
 \value{
 characteristic value of cd raster

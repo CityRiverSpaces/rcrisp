@@ -14,7 +14,7 @@ shortest_path(network, from, to, weights = "weight")
 \item{to}{End node}
 
 \item{weights}{Name of the column in the network edge table from where to
-take the weigths}
+take the weights}
 }
 \value{
 An \code{\link[sf:sfc]{sf::sfc_LINESTRING}} object

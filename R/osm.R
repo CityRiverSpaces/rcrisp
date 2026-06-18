@@ -1,7 +1,7 @@
 #' Retrieve OpenStreetMap data as sf object
 #'
 #' Query the Overpass API for a key:value pair within a given bounding box
-#' (provided as lat/lon coordiates). Results are cached, so that new queries
+#' (provided as lat/lon coordinates). Results are cached, so that new queries
 #' with the same input parameters will be loaded from disk.
 #'
 #' @param key A case-insensitive character vector of length 1 with the key to

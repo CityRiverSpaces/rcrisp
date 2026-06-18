@@ -11,7 +11,7 @@ get_intersecting_edges(network, geometry, index = FALSE)
 
 \item{geometry}{An object of class \code{\link[sf:sfc]{sf::sfc}}}
 
-\item{index}{Whether to return the indices of the matchin edges or the
+\item{index}{Whether to return the indices of the matching edges or the
 geometries}
 }
 \value{
