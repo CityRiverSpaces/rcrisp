@@ -1,10 +1,10 @@
 #' Gererate artificial OSM-like data
 #'
 #' This helper function returns a list with the same entries as the one
-#' returned by [`get_osmdata()`]. This function can thus be used to mock
+#' returned by [`get_osm()`]. This function can thus be used to mock
 #' the call to the main rcrisp function, without the need to interact with the
 #' overpass API or other remote services.
-get_test_osmdata <- function() {
+get_test_osm <- function() {
   # Pick a projected CRS (UTM Zone 1N)
   crs <- "EPSG:32601"
   # Define the city boundary and, from it, derive the bbox
@@ -23,7 +23,7 @@ get_test_osmdata <- function() {
   aoi_network <- sf::st_buffer(river_centerline, 3000) |>
     sf::st_transform(sf::st_crs("EPSG:4326"))
   aoi_buildings <- sf::st_buffer(river_centerline, 100) |>
-    sf::st_transform(sf::st_crs("EPSG:4326"))
+    sf::st_transform(sf::st_crs("EPSG:32601"))
   # Draw some water surfaces (they should all intersect the river centerline)
   river_surface <- sf::st_sfc(
     sf::st_multipolygon(list(
