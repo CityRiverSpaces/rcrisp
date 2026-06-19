@@ -139,7 +139,7 @@ test_that("Cache checks display no messages for small, recent files", {
   expect_no_message(check_cache())
 })
 
-test_that("Cache checks raise messages when old cached files are found", {
+test_that("Cache checks display messages when old cached files are found", {
   cache_dir <- temp_cache_dir()
 
   mocked_file_info_response <- data.frame(
@@ -152,7 +152,7 @@ test_that("Cache checks raise messages when old cached files are found", {
                                       "Clean up files older than 30 days"))
 })
 
-test_that("Cache checks raise messages when large cached files are found", {
+test_that("Cache checks display messages when large cached files are found", {
   cache_dir <- temp_cache_dir()
 
   mocked_file_info_response <- data.frame(
