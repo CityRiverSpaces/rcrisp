@@ -44,6 +44,8 @@ We start by demonstrating the use of the all-in-one `delineate()` function which
 
 4. Delineates the corridor based on the pre-processed network and initial corridor. Optionally, the corridor is split into segments based on the network and the river space is delineated.
 
+For corridor delineation, street and rail networks are assumed to be outside the river valley area. Water bodies intersecting the river centerline are treated as part of the river input.
+
 The `delineate()` function carries out the above steps in one and returns a list that by default contains the following output elements: `corridor`, `segments`, and `riverspace`.
 
 ```{r delineate}
