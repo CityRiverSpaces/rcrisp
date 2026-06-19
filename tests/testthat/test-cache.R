@@ -133,7 +133,7 @@ test_that("Only cache before given date is removed", {
   expect_true(grepl("tmp2", list.files(cache_dir)[1]))
 })
 
-test_that("Cache checks raise no messages for small, recent files", {
+test_that("Cache checks display no messages for small, recent files", {
   cache_dir <- temp_cache_dir()
 
   expect_no_message(check_cache())

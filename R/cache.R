@@ -191,7 +191,7 @@ clear_cache <- function(before_date = NULL) {
 
 #' Check cache
 #'
-#' A message is raised if the cache size is > 100 MB or if it includes files
+#' A message is displayed if the cache size is > 100 MB or if it includes files
 #' older than 30 days.
 #'
 #' @export
