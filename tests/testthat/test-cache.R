@@ -34,23 +34,23 @@ test_that("A proper path is created to cache a DEM dataset", {
   expect_equal(actual, expected)
 })
 
-test_that("Loading/saving warnings can be suppressed via argument", {
+test_that("Loading/saving messages can be suppressed via argument", {
   cache_dir <- temp_cache_dir()
 
   # check whether we can load test elements from the cache, with and without
-  # warnings
+  # messages
   for (filename in list.files(cache_dir)) {
-    expect_warning(
+    expect_message(
       read_data_from_cache(file.path(cache_dir, filename)),
       "Loading data from cache directory"
     )
-    expect_no_warning(
+    expect_no_message(
       read_data_from_cache(file.path(cache_dir, filename), quiet = TRUE),
     )
   }
 
   # check whether we can write a test element to the cache, with and without
-  # warnings
+  # messages
   x <- sf::st_sfc(sf::st_point(c(0, 1)))
   expect_message(
     write_data_to_cache(x, file.path(cache_dir, "point.rds")),
@@ -133,13 +133,13 @@ test_that("Only cache before given date is removed", {
   expect_true(grepl("tmp2", list.files(cache_dir)[1]))
 })
 
-test_that("Cache checks raise no warnings for small, recent files", {
+test_that("Cache checks display no messages for small, recent files", {
   cache_dir <- temp_cache_dir()
 
-  expect_no_warning(check_cache())
+  expect_no_message(check_cache())
 })
 
-test_that("Cache checks raise warnings when old cached files are found", {
+test_that("Cache checks display messages when old cached files are found", {
   cache_dir <- temp_cache_dir()
 
   mocked_file_info_response <- data.frame(
@@ -148,11 +148,11 @@ test_that("Cache checks raise warnings when old cached files are found", {
   )
   with_mocked_bindings(file.info = function(...) mocked_file_info_response,
                        .package = "base",
-                       expect_warning(check_cache(),
+                       expect_message(check_cache(),
                                       "Clean up files older than 30 days"))
 })
 
-test_that("Cache checks raise warnings when large cached files are found", {
+test_that("Cache checks display messages when large cached files are found", {
   cache_dir <- temp_cache_dir()
 
   mocked_file_info_response <- data.frame(
@@ -161,6 +161,6 @@ test_that("Cache checks raise warnings when large cached files are found", {
   )
   with_mocked_bindings(file.info = function(...) mocked_file_info_response,
                        .package = "base",
-                       expect_warning(check_cache(),
+                       expect_message(check_cache(),
                                       "Clean up files older than 30 days"))
 })

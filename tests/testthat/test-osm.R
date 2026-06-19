@@ -64,7 +64,7 @@ test_that("OSM queries are stored to and retrieved from the cache", {
       cached_filepath <- file.path(cache_dir, cached_filename)
       expect_true(file.exists(cached_filepath))
       # subsequent calls read data from the file
-      expect_warning(
+      expect_message(
         osmdata_as_sf("key", "value", bb_bucharest, force_download = FALSE),
         cached_filepath,
         fixed = TRUE
