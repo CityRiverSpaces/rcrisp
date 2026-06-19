@@ -319,9 +319,11 @@ combine_river_features <- function(river_centerline, river_surface) {
   if (n_uncovered > 0) {
     warning(sprintf(
       paste(
-        "For the river centerline segment(s) with length >= 100 m, %d segment(s) are not covered by OSM river surface polygons.",
-        "This may be due to underground river sections or incomplete OSM river surface data.",
-        "Viewpoints for these segments will therefore be calculated from the river centerline."
+        "For the river centerline segment(s) with length >= 100 m,",
+        "%d segment(s) are not covered by OSM river surface polygons.",
+        "This may be due to underground river sections or incomplete OSM",
+        "river surface data. Viewpoints for these segments will therefore",
+        "be calculated from the river centerline."
       ),
       n_uncovered
     ), call. = FALSE)
