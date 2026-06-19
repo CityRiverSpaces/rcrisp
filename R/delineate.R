@@ -136,6 +136,8 @@ delineate <- function(
                                                     osm$buildings)
   }
 
+  delineations$aoi <- aoi
+
   class(delineations) <- c("delineation", "list")
   delineations
 }
