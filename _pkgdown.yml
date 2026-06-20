@@ -57,6 +57,15 @@ reference:
     - delineate_corridor
     - delineate_segments
     - delineate_riverspace
+- title: Visualisation
+  desc: >
+    Functions to visualise and inspect delineation objects
+  contents:
+    - plot.delineation
+    - geom_delineation
+    - print.delineation
+    - summary.delineation
+    - print.summary.delineation
 - title: Data
 - subtitle: Get OSM data
   desc: >
