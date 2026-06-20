@@ -4,7 +4,7 @@
 \alias{match_osm_name}
 \title{Match OpenStreetMap data by name}
 \usage{
-match_osm_name(osm, match)
+match_osm_name(osm, match, exact = FALSE)
 }
 \arguments{
 \item{osm}{An sf object with OpenStreetMap data}
