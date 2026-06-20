@@ -1,9 +1,29 @@
+#' The delineation class
+#'
+#' An S3 class representing the result of a delineation as returned by
+#' [delineate()]. It extends the `list` class with a set of one or more of the
+#' spatial layers `$valley`, `$corridor`, `$segments`, and `$riverspace`, as
+#' well as the [area of interest][define_aoi()] used to produce them in the
+#' `$aoi` list.
+#'
+#' @name delineation
+NULL
+
 #' Delineate a corridor around a river
 #'
-#' @param aoi A list of delineation parameters, namely `$city_name`,
-#'   `$river_name`, `$bb`, `$crs`, `$network_buffer`, `$dem_buffer`, and
+#' Given a set of delineation parameters and input data, carry out corridor
+#' delineation, corridor segmentation and/or riverspace delineation as indicated
+#' by the user.
+#'
+#' The returned [`delineation`] class is a list wrapping objects of class
+#' [`sf::sfc_POLYGON`] or [`sf::sfc_MULTIPOLYGON`] which can be retrieved
+#' through subsetting and converted to other common spatial classes in typical
+#' `sf`- or `terra`-based workflows.
+#'
+#' @param aoi A list of delineation parameters for an area of interest, namely
+#'   `$city_name`, `$river_name`, `$crs`, `$network_buffer`, `$dem_buffer`, and
 #'   `$buildings_buffer`. For more info see [define_aoi()].
-#' @param osm A list with OpenStreetMap data sets for the a location, as
+#' @param osm A list with OpenStreetMap data sets within the `aoi`, as
 #'   objects of class [`sf::sfc`]
 #' @param dem Digital elevation model (DEM) of the region (only used if
 #'   `corridor_init` is `"valley"`)
@@ -27,12 +47,14 @@
 #' @param segments Whether to carry out the corridor segmentation
 #' @param riverspace Whether to carry out the riverspace delineation
 #'
-#' @return A list containing zero or more of the following elements: "valley",
-#'   "corridor", "segments", and "riverspace", each as an [`sf::sfc_POLYGON`] or
-#'   [`sf::sfc_MULTIPOLYGON`] object (depending on the geometry of the input
-#'   data). The list contains only the geometries corresponding to the
-#'   delineation steps that were carried out (e.g., if `segments` is FALSE, the
-#'   list will not contain a "segments" element).
+#' @return A list object of class `delineation` containing zero or more of the
+#'   following elements: "valley", "corridor", "segments", and "riverspace",
+#'   each as an [`sf::sfc_POLYGON`] or [`sf::sfc_MULTIPOLYGON`] object
+#'   (depending on the geometry of the input data). The list contains only
+#'   the geometries corresponding to the delineation steps that were carried out
+#'   (e.g., if `segments` is FALSE, the list will not contain a "segments"
+#'   element). In any case, the returned object also contains a list `aoi`
+#'   with the parameters used for delineation.
 #' @export
 #' @examplesIf interactive()
 #' # Define delineation parameters within area of interest
