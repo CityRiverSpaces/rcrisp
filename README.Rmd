@@ -36,9 +36,10 @@ The package includes functions to delineate the river valley, the river corridor
 
 ## Workflow at a glance
 
-1. (Optionally) get OSM and DEM base layers
-2. Run the all-in-one `delineate()` or delineation-specific `delineate_*()` functions to compute valley, corridor, segments, and/or river space
-3. Visualize/export results for downstream analysis
+1. Define area of interest and parameters for a given city and a river crossing it
+2. Get OSM and DEM base layers within the area of interest
+3. Run the all-in-one `delineate()` or delineation-specific `delineate_*()` functions to compute valley, corridor, segments, and/or river space
+4. Visualize/export results for downstream analysis
 
 See the [Getting started vignette](https://cityriverspaces.github.io/rcrisp/articles/getting-started.html) for further details about the purpose of the package, an end-to-end example, data requirements, and indication of use cases.
 
@@ -68,8 +69,18 @@ library(rcrisp)
 city_name <- "Bucharest"
 river_name <- "Dâmbovița"
 
-# Delineate river corridor
-bd <- delineate(city_name, river_name, segments = TRUE)
+# Set AoI parameters for given location
+aoi <- define_aoi(city_name, river_name)
+
+# Get data
+osm <- get_osm(aoi)
+dem <- get_dem(aoi, osm)
+
+# Delineate river corridor with segments
+bd <- delineate(aoi, osm, dem, segments = TRUE)
+
+# Examine delineation object
+summary(bd)
 
 # Plot delineation object
 plot(bd)

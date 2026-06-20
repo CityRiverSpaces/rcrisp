@@ -49,11 +49,13 @@ data for the delineation process.
 
 ## Workflow at a glance
 
-1.  (Optionally) get OSM and DEM base layers
-2.  Run the all-in-one `delineate()` or delineation-specific
+1.  Define area of interest and parameters for a given city and a river
+    crossing it
+2.  Get OSM and DEM base layers within the area of interest
+3.  Run the all-in-one `delineate()` or delineation-specific
     `delineate_*()` functions to compute valley, corridor, segments,
     and/or river space
-3.  Visualize/export results for downstream analysis
+4.  Visualize/export results for downstream analysis
 
 See the [Getting started
 vignette](https://cityriverspaces.github.io/rcrisp/articles/getting-started.html)
@@ -88,8 +90,37 @@ library(rcrisp)
 city_name <- "Bucharest"
 river_name <- "Dâmbovița"
 
-# Delineate river corridor
-bd <- delineate(city_name, river_name, segments = TRUE)
+# Set AoI parameters for given location
+aoi <- define_aoi(city_name, river_name)
+
+# Get data
+osm <- get_osm(aoi)
+dem <- get_dem(aoi, osm)
+
+# Delineate river corridor with segments
+bd <- delineate(aoi, osm, dem, segments = TRUE)
+
+# Examine delineation object
+summary(bd)
+#> Delineation: Bucharest - Dâmbovița 
+#> CRS:         WGS 84 / UTM zone 35N 
+#> 
+#> Delineation parameters:
+#>   network_buffer   3000 m
+#>   dem_buffer       2500 m
+#>   buildings_buffer 100 m
+#> 
+#> Delineation layers:
+#>   $valley          101.1 km²
+#>   $corridor        65.8 km²
+#>   $segments        10 features, total 65.8 km² (mean 6.6 km²)
+#>   $riverspace      -
+#> 
+#> Base layers:
+#>   $streets         5112 features
+#>   $railways        677 features
+#>   $river_centerline 270.6 km
+#>   $river_surface   3.4 km²
 
 # Plot delineation object
 plot(bd)
