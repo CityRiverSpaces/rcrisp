@@ -51,6 +51,7 @@ reference:
   desc: >
     Functions for full or specific delineation
   contents:
+    - delineation
     - delineate
     - delineate_city_river
     - delineate_valley
