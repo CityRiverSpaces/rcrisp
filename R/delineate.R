@@ -122,8 +122,6 @@ delineate <- function(
       }
       corridor_init <- delineate_valley(dem, osm$river_centerline)
       delineations$valley <- corridor_init
-    } else {
-      corridor_init <- corridor_init
     }
 
     if (is.null(osm$streets) || is.null(osm$railways)) {
