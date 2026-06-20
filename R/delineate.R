@@ -69,6 +69,10 @@ NULL
 #'
 #' # Carry out all delineations
 #' delineate(aoi, osm, dem, segments = TRUE, riverspace = TRUE)
+#' @srrstats {SP2.0a, SP2.5a} The [delineation] class wraps [`sf::sfc_POLYGON`]
+#'   or [`sf::sfc_MULTIPOLYGON`] objects retrievable by subsetting, which are
+#'   directly compatible with `sf`- and `terra`-based conversion workflows
+#'   (e.g. [sf::st_as_sf()], [terra::vect()]).
 #' @srrstats {G2.3, G2.3a, G2.3b} The `checkmate` package is used to check that
 #'   `corridor_init` only uses allowed values. The variable is also made
 #'   case-independent with `tolower()`.

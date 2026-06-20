@@ -11,7 +11,14 @@
 #' @examplesIf interactive()
 #' bd <- delineate_city_river("Bucharest", "Dâmbovița")
 #' print(bd)
+#'
+#' @srrstats {SP2.0b} If object of class other than `delineation` is provided
+#'   as input, the function raises an error with an informative message.
 print.delineation <- function(x) {
+  if (!inherits(x, "delineation")) {
+    stop("'x' must be object of class 'delineation'.")
+  }
+
   d <- unclass(x)
 
   .delineation_header(d)
@@ -64,7 +71,13 @@ print.delineation <- function(x) {
 #' bd <- delineate_city_river("Bucharest", "Dâmbovița")
 #' s <- summary(bd)
 #' s$delineation_layers$corridor$area_km2
+#'
+#' @srrstats {SP2.0b} If object of class other than `delineation` is provided
+#'   as input, the function raises an error with an informative message.
 summary.delineation <- function(x) {
+  if (!inherits(x, "delineation")) {
+    stop("'x' must be object of class 'delineation'.")
+  }
 
   d <- unclass(x)
 
@@ -137,7 +150,15 @@ summary.delineation <- function(x) {
 #'
 #' @returns `x`, invisibly.
 #' @export
+#'
+#' @srrstats {SP2.0b} If object of class other than `summary.delineation` is
+#'   provided as input, the function raises an error with an informative
+#'   message.
 print.summary.delineation <- function(x) {
+  if (!inherits(x, "summary.delineation")) {
+    stop("'x' must be object of class 'summary.delineation'.")
+  }
+
   if (!is.null(x$city_name) && !is.null(x$river_name)) {
     cat("Delineation:", x$city_name, "-", x$river_name, "\n")
   } else {

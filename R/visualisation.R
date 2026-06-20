@@ -20,6 +20,17 @@
 #' @examplesIf interactive()
 #' bd <- delineate_city_river("Bucharest", "Dâmbovița")
 #' plot(bd)
+#'
+#' @srrstats {SP2.0b} If object of class other than `delineation` is provided
+#'   as input, the function raises an error with an informative message.
+#' @srrstats {SP5.0} A `plot()` method is implemented for the quick
+#'   visualisation of ojects of class [delineation].
+#' @srrstats {SP5.1} Spatial layers are plotted using [sf::plot.sfc_POLYGON()]
+#'   or [sf::plot.sfc_MULTIPOLYGON()], which maps easting to the x-axis and
+#'   northing to the y-axis preserving the correct orientation and aspect ratio
+#'   of the CRS.
+#' @srrstats {SP5.2} Axis labels show the units of the coordinate reference
+#'   system, derived from [sf::st_crs()].
 plot.delineation <- function(x, legend = TRUE) {
   if (!inherits(x, "delineation")) {
     stop("The object is not of class 'delineation'")
@@ -70,7 +81,8 @@ plot.delineation <- function(x, legend = TRUE) {
   if (!is.null(x$aoi$city_name) && !is.null(x$aoi$river_name)) {
     title(main = paste0("City: ", x$aoi$city_name, "\n",
                         "River: ", x$aoi$river_name),
-          adj = 0)
+          xlab = paste0("Easting (m)"),
+          ylab = paste0("Northing (m)"))
   }
 
   if (legend) {
@@ -122,6 +134,19 @@ plot.delineation <- function(x, legend = TRUE) {
 #' bd <- delineate_city_river("Bucharest", "Dâmbovița")
 #' ggplot() + geom_delineation(bd) + theme_void()
 #' ggplot() + geom_delineation(bd, extent = "valley") + theme_void()
+#'
+#' @srrstats {SP2.0b} If object of class other than `delineation` is provided
+#'   as input, the function raises an error with an informative message.
+#' @srrstats {SP5.0} This function provides a `ggplot2`-based alternative to the
+#'   base R `plot()` method.
+#' @srrstats {SP5.1} Spatial orientation and aspect ratio are handled by
+#'   [ggplot2::coord_sf()], which maps easting to the x-axis and northing to the
+#'   y-axis.
+#' @srrstats {SP5.2} When axes are displayed, coordinate values are set via
+#'   [ggplot2::coord_sf()] to match the units of the CRS used for delineation.
+#'   Axis labels are the responsibility of the user's ggplot2 theme and are
+#'   conventionally suppressed in cartographic outputs (e.g. with
+#'   [ggplot2::theme_void()]).
 geom_delineation <- function(x, extent = "corridor", legend = TRUE) {
   if (!requireNamespace("ggplot2", quietly = TRUE)) {
     stop(
@@ -202,7 +227,8 @@ geom_delineation <- function(x, extent = "corridor", legend = TRUE) {
     bb <- sf::st_bbox(x[[extent]])
     layers <- c(layers, list(ggplot2::coord_sf(
       xlim = c(bb["xmin"], bb["xmax"]),
-      ylim = c(bb["ymin"], bb["ymax"])
+      ylim = c(bb["ymin"], bb["ymax"]),
+      datum = sf::st_crs(x$aoi$crs)
     )))
   }
 
