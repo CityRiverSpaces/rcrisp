@@ -7,6 +7,16 @@
 #' `$aoi` list.
 #'
 #' @name delineation
+#'
+#' @returns An object of class `delineation`, which is a named list of class
+#'   `c("delineation", "list")` containing zero or more of the spatial layers
+#'   `$valley`, `$corridor`, `$segments`, and `$riverspace` (each an
+#'   [`sf::sfc_POLYGON`] or [`sf::sfc_MULTIPOLYGON`] object), plus an `$aoi`
+#'   list with the delineation parameters. See [delineate()] for details.
+#'
+#' @examplesIf interactive()
+#' bd <- delineate_city_river("Bucharest", "Dâmbovița")
+#' class(bd)
 NULL
 
 #' Delineate a corridor around a river

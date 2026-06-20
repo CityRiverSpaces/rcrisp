@@ -16,3 +16,10 @@
 \description{
 Print a summary.delineation object
 }
+\examples{
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+bd <- delineate_city_river("Bucharest", "Dâmbovița")
+s <- summary(bd)
+print(s)
+\dontshow{\}) # examplesIf}
+}

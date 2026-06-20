@@ -151,6 +151,11 @@ summary.delineation <- function(x) {
 #' @returns `x`, invisibly.
 #' @export
 #'
+#' @examplesIf interactive()
+#' bd <- delineate_city_river("Bucharest", "Dâmbovița")
+#' s <- summary(bd)
+#' print(s)
+#'
 #' @srrstats {SP2.0b} If object of class other than `summary.delineation` is
 #'   provided as input, the function raises an error with an informative
 #'   message.
