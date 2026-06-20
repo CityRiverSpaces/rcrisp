@@ -4,6 +4,7 @@
 #' are present and their feature counts.
 #'
 #' @param x An object of class [delineation].
+#' @param ... Not used; included for compatibility with the generic.
 #'
 #' @returns `x`, invisibly.
 #' @export
@@ -14,7 +15,7 @@
 #'
 #' @srrstats {SP2.0b} If object of class other than `delineation` is provided
 #'   as input, the function raises an error with an informative message.
-print.delineation <- function(x) {
+print.delineation <- function(x, ...) {
   if (!inherits(x, "delineation")) {
     stop("'x' must be object of class 'delineation'.")
   }
@@ -58,6 +59,7 @@ print.delineation <- function(x) {
 #' (in km²).
 #'
 #' @param x An object of class `delineation`.
+#' @param ... Not used; included for compatibility with the generic.
 #'
 #' @returns An object of class `summary.delineation`, which is a named list
 #'   with elements `city_name`, `river_name`, `crs`, `parameters`,
@@ -74,7 +76,7 @@ print.delineation <- function(x) {
 #'
 #' @srrstats {SP2.0b} If object of class other than `delineation` is provided
 #'   as input, the function raises an error with an informative message.
-summary.delineation <- function(x) {
+summary.delineation <- function(x, ...) {
   if (!inherits(x, "delineation")) {
     stop("'x' must be object of class 'delineation'.")
   }
@@ -147,6 +149,7 @@ summary.delineation <- function(x) {
 #'
 #' @param x An object of class `summary.delineation`, as returned by
 #'   [summary.delineation()].
+#' @param ... Not used; included for compatibility with the generic.
 #'
 #' @returns `x`, invisibly.
 #' @export
@@ -159,7 +162,7 @@ summary.delineation <- function(x) {
 #' @srrstats {SP2.0b} If object of class other than `summary.delineation` is
 #'   provided as input, the function raises an error with an informative
 #'   message.
-print.summary.delineation <- function(x) {
+print.summary.delineation <- function(x, ...) {
   if (!inherits(x, "summary.delineation")) {
     stop("'x' must be object of class 'summary.delineation'.")
   }

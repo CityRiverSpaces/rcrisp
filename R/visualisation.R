@@ -10,6 +10,7 @@
 #'
 #' @param x An object of class [delineation], which is typically the output of
 #'   the [delineate()] function.
+#' @param ... Not used; included for compatibility with the generic.
 #' @param legend logical. If TRUE (default), a legend is added to the plot.
 #'
 #' @returns `NULL`, invisibly. This function is called for its side effect of
@@ -31,7 +32,7 @@
 #'   of the CRS.
 #' @srrstats {SP5.2} Axis labels show the units of the coordinate reference
 #'   system, derived from [sf::st_crs()].
-plot.delineation <- function(x, legend = TRUE) {
+plot.delineation <- function(x, ..., legend = TRUE) {
   if (!inherits(x, "delineation")) {
     stop("The object is not of class 'delineation'")
   }
@@ -79,14 +80,14 @@ plot.delineation <- function(x, legend = TRUE) {
   }
 
   if (!is.null(x$aoi$city_name) && !is.null(x$aoi$river_name)) {
-    title(main = paste0("City: ", x$aoi$city_name, "\n",
-                        "River: ", x$aoi$river_name),
-          xlab = paste0("Easting (m)"),
-          ylab = paste0("Northing (m)"))
+    graphics::title(main = paste0("City: ", x$aoi$city_name, "\n",
+                                  "River: ", x$aoi$river_name),
+                    xlab = paste0("Easting (m)"),
+                    ylab = paste0("Northing (m)"))
   }
 
   if (legend) {
-    legend(
+    graphics::legend(
       "bottomleft", inset = 0.01, y.intersp = 0.8, seg.len = 1,
       legend = c("River", "Valley", "Riverspace", "Corridor", "Segment"),
       pch    = c(15,      15,       15,           NA,         NA),

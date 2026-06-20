@@ -4,10 +4,12 @@
 \alias{summary.delineation}
 \title{Summarise a delineation object}
 \usage{
-\method{summary}{delineation}(x)
+\method{summary}{delineation}(x, ...)
 }
 \arguments{
 \item{x}{An object of class \code{delineation}.}
+
+\item{...}{Not used; included for compatibility with the generic.}
 }
 \value{
 An object of class \code{summary.delineation}, which is a named list

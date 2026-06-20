@@ -4,10 +4,12 @@
 \alias{print.delineation}
 \title{Print a delineation object}
 \usage{
-\method{print}{delineation}(x)
+\method{print}{delineation}(x, ...)
 }
 \arguments{
 \item{x}{An object of class \link{delineation}.}
+
+\item{...}{Not used; included for compatibility with the generic.}
 }
 \value{
 \code{x}, invisibly.

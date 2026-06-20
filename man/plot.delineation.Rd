@@ -4,11 +4,13 @@
 \alias{plot.delineation}
 \title{Plot a delineation object}
 \usage{
-\method{plot}{delineation}(x, legend = TRUE)
+\method{plot}{delineation}(x, ..., legend = TRUE)
 }
 \arguments{
 \item{x}{An object of class \link{delineation}, which is typically the output of
 the \code{\link[=delineate]{delineate()}} function.}
+
+\item{...}{Not used; included for compatibility with the generic.}
 
 \item{legend}{logical. If TRUE (default), a legend is added to the plot.}
 }

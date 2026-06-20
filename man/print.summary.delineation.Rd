@@ -4,11 +4,13 @@
 \alias{print.summary.delineation}
 \title{Print a summary.delineation object}
 \usage{
-\method{print}{summary.delineation}(x)
+\method{print}{summary.delineation}(x, ...)
 }
 \arguments{
 \item{x}{An object of class \code{summary.delineation}, as returned by
 \code{\link[=summary.delineation]{summary.delineation()}}.}
+
+\item{...}{Not used; included for compatibility with the generic.}
 }
 \value{
 \code{x}, invisibly.
