@@ -42,8 +42,9 @@ test_that("Delineate returns all required delineation units", {
     suppressWarnings()
   expect_setequal(names(delineations),
                   c("streets", "railways", "river_centerline", "river_surface",
-                    "valley", "corridor", "segments", "riverspace"))
-  geometry_types <- sapply(delineations, sf::st_geometry_type)
+                    "valley", "corridor", "segments", "riverspace", "aoi"))
+  spatial_layers <- Filter(\(x) inherits(x, c("sf", "sfc")), delineations)
+  geometry_types <- sapply(spatial_layers, sf::st_geometry_type)
   # segments include multiple geometries, flatten array for comparison
   expect_in(do.call(c, geometry_types),
             c("POLYGON", "MULTIPOLYGON", "LINESTRING", "MULTILINESTRING"))
@@ -62,7 +63,7 @@ test_that("Delineate does not return the valley if the buffer method is used", {
     suppressWarnings()
   expect_equal(names(delineations),
                c("streets", "railways", "river_centerline", "river_surface",
-                 "corridor"))
+                 "corridor", "aoi"))
 })
 
 #' @srrstats {G5.8} Edge test: an error is raised if the dimension of the input
@@ -88,4 +89,46 @@ test_that("Error is raised when buildings data is missing for riverspace delinea
     delineate(aoi, osm_without_buildings, test_dem, riverspace = TRUE),
     "AOI for buildings is not available"
   )
+})
+
+# Minimal delineation object for print/summary snapshot tests.
+# Using a projected CRS (UTM zone 35N) and simple geometries with known
+# dimensions: a 1x1 km square and a 2 km line.
+square <- sf::st_sfc(
+  sf::st_polygon(list(
+    rbind(c(0, 0), c(1000, 0), c(1000, 1000), c(0, 1000), c(0, 0))
+  )),
+  crs = 32635
+)
+line <- sf::st_sfc(
+  sf::st_linestring(rbind(c(0, 500), c(2000, 500))),
+  crs = 32635
+)
+minimal_bd <- structure(
+  list(
+    streets = sf::st_sf(type = "primary", geometry = square),
+    railways = NULL,
+    river_centerline = line,
+    river_surface = square,
+    valley = square,
+    corridor = square,
+    segments = c(square, square),
+    riverspace = NULL,
+    aoi = list(
+      city_name = "TestCity",
+      river_name = "TestRiver",
+      network_buffer = 3000,
+      dem_buffer = 2500,
+      buildings_buffer = 100
+    )
+  ),
+  class = c("delineation", "list")
+)
+
+test_that("print.delineation output matches snapshot", {
+  expect_snapshot(print(minimal_bd))
+})
+
+test_that("summary.delineation and print.summary.delineation match snapshot", {
+  expect_snapshot(summary(minimal_bd))
 })
