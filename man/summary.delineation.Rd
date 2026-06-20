@@ -4,10 +4,10 @@
 \alias{summary.delineation}
 \title{Summarise a delineation object}
 \usage{
-\method{summary}{delineation}(x, ...)
+\method{summary}{delineation}(object, ...)
 }
 \arguments{
-\item{x}{An object of class \code{delineation}.}
+\item{object}{An object of class \code{delineation}.}
 
 \item{...}{Not used; included for compatibility with the generic.}
 }

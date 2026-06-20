@@ -58,7 +58,7 @@ print.delineation <- function(x, ...) {
 #' `river_centerline` as total length (in km) and `river_surface` as area
 #' (in km²).
 #'
-#' @param x An object of class `delineation`.
+#' @param object An object of class `delineation`.
 #' @param ... Not used; included for compatibility with the generic.
 #'
 #' @returns An object of class `summary.delineation`, which is a named list
@@ -76,12 +76,12 @@ print.delineation <- function(x, ...) {
 #'
 #' @srrstats {SP2.0b} If object of class other than `delineation` is provided
 #'   as input, the function raises an error with an informative message.
-summary.delineation <- function(x, ...) {
-  if (!inherits(x, "delineation")) {
-    stop("'x' must be object of class 'delineation'.")
+summary.delineation <- function(object, ...) {
+  if (!inherits(object, "delineation")) {
+    stop("'object' must be object of class 'delineation'.")
   }
 
-  d <- unclass(x)
+  d <- unclass(object)
 
   delineation_layers <- list(
     valley = if (!is.null(d$valley)) {
