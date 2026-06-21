@@ -5,38 +5,28 @@
 \title{Delineate a corridor around a river}
 \usage{
 delineate(
-  city_name,
-  river_name,
-  crs = NULL,
-  network_buffer = NULL,
-  buildings_buffer = NULL,
-  corridor_init = "valley",
+  aoi,
+  osm,
   dem = NULL,
-  dem_buffer = 2500,
+  corridor_init = "valley",
   max_iterations = 10,
   capping_method = "shortest-path",
   angle_threshold = 100,
   corridor = TRUE,
   segments = FALSE,
-  riverspace = FALSE,
-  force_download = FALSE,
-  ...
+  riverspace = FALSE
 )
 }
 \arguments{
-\item{city_name}{A character vector of length one}
+\item{aoi}{A list of delineation parameters, namely \verb{$city_name},
+\verb{$river_name}, \verb{$bb}, \verb{$crs}, \verb{$network_buffer}, \verb{$dem_buffer}, and
+\verb{$buildings_buffer}. For more info see \code{\link[=define_aoi]{define_aoi()}}.}
 
-\item{river_name}{A character vector of length one}
+\item{osm}{A list with OpenStreetMap data sets for the a location, as
+objects of class \code{\link[sf:sfc]{sf::sfc}}}
 
-\item{crs}{The projected Coordinate Reference System (CRS) to use. If not
-provided, the suitable Universal Transverse Mercator (UTM) CRS is selected}
-
-\item{network_buffer}{Add a buffer (an integer in meters) around
-river to retrieve additional data (streets, railways, etc.).
-Default is 3000 m.}
-
-\item{buildings_buffer}{Add a buffer (an integer in meters) around the
-river to retrieve additional data (buildings). Default is 100 m.}
+\item{dem}{Digital elevation model (DEM) of the region (only used if
+\code{corridor_init} is \code{"valley"})}
 
 \item{corridor_init}{How to estimate the initial guess of the river corridor.
 It can take the following values:
@@ -47,13 +37,6 @@ Elevation Model (DEM) (for more info see \code{\link[=delineate_valley]{delineat
 around the river centerline
 \item An \code{\link[sf:sf]{sf::sf}} or \code{\link[sf:sfc]{sf::sfc}} object: use the given input geometry
 }}
-
-\item{dem}{Digital elevation model (DEM) of the region (only used if
-\code{corridor_init} is \code{"valley"})}
-
-\item{dem_buffer}{Size of the buffer region (in meters) around the
-river to retrieve the DEM  (only used if \code{corridor_init} is \code{"valley"} and
-\code{dem} is NULL).}
 
 \item{max_iterations}{Maximum number of iterations employed to refine the
 corridor edges (see \code{\link[=corridor_edge]{corridor_edge()}}).}
@@ -72,12 +55,6 @@ TRUE.}
 \item{segments}{Whether to carry out the corridor segmentation}
 
 \item{riverspace}{Whether to carry out the riverspace delineation}
-
-\item{force_download}{Download data even if cached data is available}
-
-\item{...}{Additional (optional) input arguments for retrieving the DEM
-dataset (see \code{\link[=get_dem]{get_dem()}}). Only relevant if \code{corridor_init} is \code{"valley"}
-and \code{dem} is NULL}
 }
 \value{
 A list containing zero or more of the following elements: "valley",
@@ -92,24 +69,17 @@ Delineate a corridor around a river
 }
 \examples{
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-# Set parameters
-city <- "Bucharest"
-river <- "Dâmbovița"
+# Define delineation parameters within area of interest
+aoi <- define_aoi("Bucharest", "Dâmbovița")
+
+# Get data
+osm <- get_osm(aoi)
+dem <- get_dem(aoi, osm)
 
 # Delineate with defaults
-delineate(city, river)
+delineate(aoi, osm, dem)
 
-# Use custom CRS
-delineate(city, river, crs = "EPSG:31600")  # National projected CRS
-
-# Use custom network buffer
-delineate(city, river, network_buffer = 3500)
-
-# Use custom buildings buffer
-delineate(city, river, buildings_buffer = 150, riverspace = TRUE)
-
-# Provide DEM as input
-bucharest_dem <- get_dem_example_data()
-delineate(city, river, dem = bucharest_dem)
+# Carry out all delineations
+delineate(aoi, osm, dem, segments = TRUE, riverspace = TRUE)
 \dontshow{\}) # examplesIf}
 }

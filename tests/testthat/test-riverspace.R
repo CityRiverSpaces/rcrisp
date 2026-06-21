@@ -19,9 +19,9 @@ test_that(
   "The area of a riverspace is smaller than an unoccluded buffer and larger
   than the water surface",
   {
-    test_osmdata <- get_test_osmdata()
-    river_surface <- test_osmdata$river_surface
-    buildings <- test_osmdata$buildings
+    test_osm <- get_test_osm()
+    river_surface <- test_osm$river_surface
+    buildings <- test_osm$buildings
     riverspace <- delineate_riverspace(
       river = river_surface, occluders = buildings, ray_length = 100
     )
