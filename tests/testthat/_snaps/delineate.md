@@ -1,7 +1,7 @@
 # print.delineation output matches snapshot
 
     Code
-      print(minimal_bd)
+      print(minimal_delineation)
     Output
       City:    TestCity
       River:   TestRiver
@@ -22,7 +22,7 @@
 # summary.delineation and print.summary.delineation match snapshot
 
     Code
-      summary(minimal_bd)
+      summary(minimal_delineation)
     Output
       Delineation: TestCity - TestRiver 
       CRS:         WGS 84 / UTM zone 35N 

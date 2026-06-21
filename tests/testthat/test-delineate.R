@@ -75,6 +75,11 @@ test_that("Only one city can be delineated at a time", {
 
 #' @srrstats {G5.8} Edge test: an error is raised if required OSM data is
 #'   missing.
+test_that("Error is raised when valley method is used without a DEM", {
+  expect_error(delineate(aoi, test_osm, dem = NULL, corridor_init = "valley"),
+               "If initial corridor is \"valley\", a DEM must be provided.")
+})
+
 test_that("Error is raised when OSM spatial network data is missing", {
   osm_without_streets <- test_osm
   osm_without_streets$streets <- NULL
@@ -104,7 +109,7 @@ line <- sf::st_sfc(
   sf::st_linestring(rbind(c(0, 500), c(2000, 500))),
   crs = 32635
 )
-minimal_bd <- structure(
+minimal_delineation <- structure(
   list(
     streets = sf::st_sf(type = "primary", geometry = square),
     railways = NULL,
@@ -126,9 +131,47 @@ minimal_bd <- structure(
 )
 
 test_that("print.delineation output matches snapshot", {
-  expect_snapshot(print(minimal_bd))
+  expect_snapshot(print(minimal_delineation))
+})
+
+test_that("print.delineation raises error for wrong class", {
+  expect_error(print.delineation(unclass(minimal_delineation)),
+               "'x' must be object of class 'delineation'.")
 })
 
 test_that("summary.delineation and print.summary.delineation match snapshot", {
-  expect_snapshot(summary(minimal_bd))
+  expect_snapshot(summary(minimal_delineation))
+})
+
+test_that("summary.delineation raises error for wrong class", {
+  expect_error(summary.delineation(unclass(minimal_delineation)),
+               "'object' must be object of class 'delineation'.")
+})
+
+test_that("print.summary.delineation raises error for wrong class", {
+  expect_error(print.summary.delineation(list()),
+               "'x' must be object of class 'summary.delineation'.")
+})
+
+test_that("summary.delineation includes riverspace layer", {
+  delineation_with_riverspace <- minimal_delineation
+  delineation_with_riverspace$riverspace <- square
+  s <- summary(delineation_with_riverspace)
+  expect_false(is.null(s$delineation_layers$riverspace))
+  expect_equal(s$delineation_layers$riverspace$area_km2, 1.0)
+})
+
+test_that("print.delineation handles missing city/river name", {
+  delineation_no_name <- minimal_delineation
+  delineation_no_name$aoi$city_name <- NULL
+  expect_output(print(delineation_no_name), "Delineation")
+})
+
+test_that("print.summary.delineation handles missing city/river name and NA CRS", {  # nolint
+  s <- structure(
+    list(city_name = NULL, river_name = NULL, crs = NA_character_,
+         parameters = NULL, delineation_layers = list(), base_layers = list()),
+    class = "summary.delineation"
+  )
+  expect_output(print(s), "Delineation")
 })
