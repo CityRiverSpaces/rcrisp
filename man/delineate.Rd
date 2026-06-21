@@ -63,8 +63,8 @@ each as an \code{\link[sf:sfc]{sf::sfc_POLYGON}} or \code{\link[sf:sfc]{sf::sfc_
 (depending on the geometry of the input data). The list contains only
 the geometries corresponding to the delineation steps that were carried out
 (e.g., if \code{segments} is FALSE, the list will not contain a "segments"
-element). In any case, the returned object also contains a list \code{aoi}
-with the parameters used for delineation.
+element). In any case, the returned object also contains the base layers
+and a list \code{aoi} with the parameters used for delineation.
 }
 \description{
 Given a set of delineation parameters and input data, carry out corridor

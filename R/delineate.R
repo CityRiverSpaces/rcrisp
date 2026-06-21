@@ -5,11 +5,12 @@
 #'
 #' @name delineation
 #'
-#' @returns An object of class `delineation` containing one or more of the
+#' @returns An object of class `delineation` containing zero or more of the
 #'   spatial layers `$valley`, `$corridor`, `$segments`, and `$riverspace`
-#'   (each an [`sf::sfc_POLYGON`] or [`sf::sfc_MULTIPOLYGON`] object), plus an
-#'   `$aoi` list with the delineation parameters produced by [define_aoi()].
-#'   See [delineate()] for details.
+#'   (each an [`sf::sfc_POLYGON`] or [`sf::sfc_MULTIPOLYGON`] object), plus
+#'   the base OSM and optionally DEM layers and an `$aoi` list with the
+#'   delineation parameters produced by [define_aoi()]. See [delineate()] for
+#'   details.
 #'
 #' @examplesIf interactive()
 #' bd <- delineate_city_river("Bucharest", "Dâmbovița")
@@ -60,8 +61,8 @@ NULL
 #'   (depending on the geometry of the input data). The list contains only
 #'   the geometries corresponding to the delineation steps that were carried out
 #'   (e.g., if `segments` is FALSE, the list will not contain a "segments"
-#'   element). In any case, the returned object also contains a list `aoi`
-#'   with the parameters used for delineation.
+#'   element). In any case, the returned object also contains the base layers
+#'   and a list `aoi` with the parameters used for delineation.
 #' @export
 #' @examplesIf interactive()
 #' # Define delineation parameters within area of interest
