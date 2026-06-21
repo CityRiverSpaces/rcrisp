@@ -27,6 +27,7 @@ Depends:
     R (>= 4.1.0)
 Imports:
     checkmate,
+    cli,
     dbscan,
     dplyr,
     lwgeom,
