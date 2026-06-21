@@ -187,3 +187,33 @@ test_that("Errors are raised for wrong input types to segmentation", {
   expect_error(delineate_segments(corridor, network, river = river[[1]]),
                "Assertion on 'river' failed")
 })
+
+#' @srrstats {SP6.1a} Geographic (lat/lon) input to `delineate_segments()`
+#'   yields inaccurate results because all segmentation geometry operations
+#'   assume Cartesian (projected) coordinates. The function therefore raises an
+#'   informative error when geographic CRS input is supplied.
+test_that("delineate_segments() raises an error for geographic CRS input", {
+  network_edges <- sf::st_sfc(
+    sf::st_linestring(cbind(c(26.09, 26.07), c(44.43, 44.43))),
+    sf::st_linestring(cbind(c(26.09, 26.07), c(44.45, 44.45))),
+    sf::st_linestring(cbind(c(26.09, 26.09), c(44.45, 44.43))),
+    sf::st_linestring(cbind(c(26.07, 26.07), c(44.43, 44.45))),
+    crs = 4326
+  )
+  network <- sfnetworks::as_sfnetwork(network_edges, directed = FALSE)
+  corridor <- sf::st_sfc(
+    sf::st_polygon(list(cbind(
+      c(26.07, 26.07, 26.09, 26.09, 26.07),
+      c(44.43, 44.45, 44.45, 44.43, 44.43)
+    ))),
+    crs = 4326
+  )
+  river <- sf::st_sfc(
+    sf::st_linestring(cbind(c(26.06, 26.08, 26.10), c(44.44, 44.44, 44.44))),
+    crs = 4326
+  )
+  expect_error(
+    delineate_segments(corridor, network, river),
+    "The input CRS is geographic"
+  )
+})
