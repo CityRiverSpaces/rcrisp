@@ -44,7 +44,7 @@ test_that("Delineate returns all required delineation units", {
                   c("streets", "railways", "river_centerline", "river_surface",
                     "valley", "corridor", "segments", "riverspace", "aoi"))
   spatial_layers <- Filter(\(x) inherits(x, c("sf", "sfc")), delineations)
-  geometry_types <- sapply(spatial_layers, sf::st_geometry_type)
+  geometry_types <- lapply(spatial_layers, sf::st_geometry_type)
   # segments include multiple geometries, flatten array for comparison
   expect_in(do.call(c, geometry_types),
             c("POLYGON", "MULTIPOLYGON", "LINESTRING", "MULTILINESTRING"))
