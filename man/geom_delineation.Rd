@@ -7,7 +7,7 @@
 geom_delineation(x, extent = "corridor", legend = TRUE)
 }
 \arguments{
-\item{x}{An object of class \code{delineation}. This is typically the output
+\item{x}{An object of class \link{delineation}. This is typically the output
 of the \code{\link[=delineate]{delineate()}} function.}
 
 \item{extent}{The delineation layer whose bounding box sets the plot extent.

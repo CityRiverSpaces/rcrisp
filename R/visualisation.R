@@ -118,7 +118,7 @@ plot.delineation <- function(x, ..., legend = TRUE) {
 #' - `segments`: outlined polygons
 #' - `corridor`: outlined polygon
 #'
-#' @param x An object of class `delineation`. This is typically the output
+#' @param x An object of class [delineation]. This is typically the output
 #'   of the [delineate()] function.
 #' @param extent The delineation layer whose bounding box sets the plot extent.
 #'   One of `"corridor"`, `"valley"`, `"riverspace"`, or `NULL`
