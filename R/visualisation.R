@@ -81,10 +81,10 @@ plot.delineation <- function(x, ..., legend = TRUE) {
 
   if (!is.null(x$aoi$city_name) && !is.null(x$aoi$river_name)) {
     graphics::title(main = paste0("City: ", x$aoi$city_name, "\n",
-                                  "River: ", x$aoi$river_name),
-                    xlab = paste0("Easting (m)"),
-                    ylab = paste0("Northing (m)"))
+                                  "River: ", x$aoi$river_name))
   }
+  graphics::title(xlab = paste0("Easting (m)"),
+                  ylab = paste0("Northing (m)"))
 
   if (legend) {
     graphics::legend(
