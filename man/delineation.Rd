@@ -4,18 +4,15 @@
 \alias{delineation}
 \title{The delineation class}
 \value{
-An object of class \code{delineation}, which is a named list of class
-\code{c("delineation", "list")} containing zero or more of the spatial layers
-\verb{$valley}, \verb{$corridor}, \verb{$segments}, and \verb{$riverspace} (each an
-\code{\link[sf:sfc]{sf::sfc_POLYGON}} or \code{\link[sf:sfc]{sf::sfc_MULTIPOLYGON}} object), plus an \verb{$aoi}
-list with the delineation parameters. See \code{\link[=delineate]{delineate()}} for details.
+An object of class \code{delineation} containing one or more of the
+spatial layers \verb{$valley}, \verb{$corridor}, \verb{$segments}, and \verb{$riverspace}
+(each an \code{\link[sf:sfc]{sf::sfc_POLYGON}} or \code{\link[sf:sfc]{sf::sfc_MULTIPOLYGON}} object), plus an
+\verb{$aoi} list with the delineation parameters produced by \code{\link[=define_aoi]{define_aoi()}}.
+See \code{\link[=delineate]{delineate()}} for details.
 }
 \description{
 An S3 class representing the result of a delineation as returned by
-\code{\link[=delineate]{delineate()}}. It extends the \code{list} class with a set of one or more of the
-spatial layers \verb{$valley}, \verb{$corridor}, \verb{$segments}, and \verb{$riverspace}, as
-well as the \link[=define_aoi]{area of interest} used to produce them in the
-\verb{$aoi} list.
+\code{\link[=delineate]{delineate()}}.
 }
 \examples{
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
