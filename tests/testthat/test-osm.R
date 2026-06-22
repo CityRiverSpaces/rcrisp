@@ -22,7 +22,22 @@ mock_river_lines <- sf::st_sf(
   name = c("Dâmbovița", "Dâmbovița", "Colentina", "Colentina"),
   geometry = mock_river_lines_geom
 )
-mock_river_polygons <- sf::st_buffer(mock_river_lines, 10)
+mock_river_polygons <- sf::st_sf(
+  name = c("Dâmbovița", "Dâmbovița"),
+  geometry = sf::st_sfc(
+    # covers Dâmbovița line 1: (26.0, 44.3) → (26.1, 44.4)
+    sf::st_polygon(list(matrix(
+      c(25.95, 26.15, 26.15, 25.95, 25.95,
+        44.25, 44.25, 44.45, 44.45, 44.25), ncol = 2
+    ))),
+    # covers Dâmbovița line 2: (26.2, 44.5) → (26.3, 44.6)
+    sf::st_polygon(list(matrix(
+      c(26.16, 26.35, 26.35, 26.16, 26.16,
+        44.46, 44.46, 44.65, 44.65, 44.46), ncol = 2
+    ))),
+    crs = "EPSG:4326"
+  )
+)
 mock_city_boundary_geom <- sf::st_as_sfc(bb_bucharest)
 mock_city_boundary <- sf::st_sf(
   name = "Bucharest",
@@ -89,6 +104,53 @@ test_that("OSM queries are always performed if force_download is set to TRUE", {
       )
       expect_message(
         osmdata_as_sf("key", "value", bb_bucharest, force_download = TRUE),
+        "Saving data to cache directory"
+      )
+    }
+  )
+})
+
+test_that("osmdata_as_sf_by_id results are stored to and retrieved from the cache", { # nolint
+
+  cache_dir <- temp_cache_dir()
+
+  with_mocked_bindings(
+    osmdata_id_query = function(...) "mock osmdata id response",
+    {
+      # first call saves data to cache
+      expect_message(
+        osmdata_as_sf_by_id("relation", "123456", force_download = TRUE),
+        "Saving data to cache directory"
+      )
+      # check that the file landed in cache
+      cached_filename <- list.files(cache_dir,
+                                    pattern = "^osmdata_relation_123456")
+      cached_filepath <- file.path(cache_dir, cached_filename)
+      expect_true(file.exists(cached_filepath))
+      # subsequent call reads from cache without querying
+      expect_message(
+        osmdata_as_sf_by_id("relation", "123456", force_download = FALSE),
+        cached_filepath,
+        fixed = TRUE
+      )
+    }
+  )
+})
+
+test_that("osmdata_as_sf_by_id always queries if force_download is TRUE", {
+
+  cache_dir <- temp_cache_dir()
+
+  with_mocked_bindings(
+    osmdata_id_query = function(...) "mock osmdata id response",
+    {
+      # Second call also saves data to cache
+      expect_message(
+        osmdata_as_sf_by_id("relation", "123456", force_download = TRUE),
+        "Saving data to cache directory"
+      )
+      expect_message(
+        osmdata_as_sf_by_id("relation", "123456", force_download = TRUE),
         "Saving data to cache directory"
       )
     }
@@ -233,11 +295,14 @@ test_that("City boundary is retrieved for alternative names", {
   expect_equal(city_boundary_eng, city_boundary_ro)
 })
 
+mock_nominatim_result <- data.frame(osm_type = "relation", osm_id = "123456")
+
 #' @srrstats {G5.8, G5.8a} Edge test: if a value that leads to no data being
 #'   retrieved, an error is raised.
 test_that("River retrieval raise error if no river is found in the bb", {
   with_mocked_bindings(
-    osmdata_as_sf = function(...) list(osm_lines = NULL),
+    nominatim_waterway_lookup = function(...) mock_nominatim_result,
+    osmdata_as_sf_by_id = function(...) list(osm_lines = NULL),
     expect_error(
       get_osm_river_centerline(bb_bucharest, "Thames", force_download = TRUE),
       "No waterway geometries found"
@@ -248,8 +313,17 @@ test_that("River retrieval raise error if no river is found in the bb", {
 #' @srrstats {G5.8, G5.8a} Edge test: if a value that leads to no data being
 #'   retrieved, an error is raised.
 test_that("River retrieval raise error if river is not found in the bb", {
+  # Lines in London — entirely outside Bucharest's bounding box
+  outside_bb_lines <- sf::st_sf(
+    name = "Thames",
+    geometry = sf::st_sfc(
+      sf::st_linestring(matrix(c(-1, 0, 51.5, 51.5), ncol = 2)),
+      crs = "EPSG:4326"
+    )
+  )
   with_mocked_bindings(
-    osmdata_as_sf = function(...) list(osm_lines = mock_river_lines),
+    nominatim_waterway_lookup = function(...) mock_nominatim_result,
+    osmdata_as_sf_by_id = function(...) list(osm_lines = outside_bb_lines),
     expect_error(
       get_osm_river_centerline(bb_bucharest, "Thames", force_download = TRUE),
       "Thames"
@@ -259,9 +333,11 @@ test_that("River retrieval raise error if river is not found in the bb", {
 
 test_that("River lines and surface are properly set up", {
   with_mocked_bindings(
-    osmdata_as_sf = function(...) {
-      list(osm_lines = mock_river_lines, osm_polygons = mock_river_polygons)
-    },
+    nominatim_waterway_lookup = function(...) mock_nominatim_result,
+    # centerline fetch: return only the two Dâmbovița lines
+    osmdata_as_sf_by_id = function(...) list(osm_lines = mock_river_lines[1:2, ]),
+    # surface fetch (osmdata_as_sf) returns the two separate mock polygons
+    osmdata_as_sf = function(...) list(osm_polygons = mock_river_polygons),
     {
       river_centerline <- get_osm_river_centerline(bb_bucharest, "Dâmbovița",
                                                    force_download = TRUE)
@@ -271,6 +347,30 @@ test_that("River lines and surface are properly set up", {
   )
   expect_true(sf::st_is(river_centerline, "MULTILINESTRING"))
   expect_true(sf::st_is(river_surface, "MULTIPOLYGON"))
+})
+
+test_that("Buffered centreline is at least as long as the un-buffered one", {
+  with_mocked_bindings(
+    nominatim_waterway_lookup = function(...) mock_nominatim_result,
+    osmdata_as_sf_by_id = function(...) list(osm_lines = mock_river_lines[1:2, ]),
+    {
+      cl_tight <- get_osm_river_centerline(bb_bucharest, "Dâmbovița",
+                                           force_download = TRUE)
+      cl_buffered <- get_osm_river_centerline(bb_bucharest, "Dâmbovița",
+                                              buffer_distance = 5500,
+                                              force_download = TRUE)
+    }
+  )
+  # Buffered river is greater than or equal to bb-cropped river
+  expect_gte(
+    as.numeric(sf::st_length(cl_buffered)),
+    as.numeric(sf::st_length(cl_tight))
+  )
+  # Geometry type must be preserved regardless of buffering
+  expect_true(
+    sf::st_is(cl_buffered, "MULTILINESTRING") ||
+      sf::st_is(cl_buffered, "LINESTRING")
+  )
 })
 
 test_that("If no river surface is found, an empty sfc object is returned", {
@@ -299,6 +399,49 @@ test_that("If no railways are found, an empty sf object is returned", {
   })
   expect_equal(nrow(railways), 0)
   expect_equal(sf::st_crs(railways), crs)
+})
+
+# --- Tests for the bbox+name fallback strategy ---
+
+test_that("Name filtering isolates only the target river from a mixed response", {
+  # mock_river_lines has "Dâmbovița" (rows 1-2) and "Colentina" (rows 3-4)
+  result <- mock_river_lines |>
+    match_osm_name("Dâmbovița")
+
+  expect_equal(nrow(result), 2)
+  expect_true(all(result$name == "Dâmbovița"))
+})
+
+test_that("bbox filter excludes river segments that lie entirely outside the bbox", {
+  outside_line <- sf::st_sf(
+    name = "Dâmbovița",
+    geometry = sf::st_sfc(
+      # Clearly east of Bucharest
+      sf::st_linestring(matrix(c(27.0, 28.0, 44.4, 44.4), ncol = 2)),
+      crs = "EPSG:4326"
+    )
+  )
+  lines_with_outside <- dplyr::bind_rows(mock_river_lines[1:2, ], outside_line)
+
+  result <- lines_with_outside |>
+    match_osm_name("Dâmbovița") |>
+    sf::st_filter(sf::st_as_sfc(bb_bucharest), .predicate = sf::st_intersects)
+
+  # The outside segment should be dropped; only the two in-bbox Dâmbovița lines remain
+  expect_equal(nrow(result), 2)
+})
+
+test_that("bbox+name fallback returns only Dâmbovița within Bucharest, not Colentina", {
+  # Full pipeline: name filter → bbox filter → union
+  result <- mock_river_lines |>
+    match_osm_name("Dâmbovița") |>
+    sf::st_filter(sf::st_as_sfc(bb_bucharest), .predicate = sf::st_intersects) |>
+    sf::st_geometry() |>
+    sf::st_union()
+
+  expect_false(sf::st_is_empty(result))
+  expect_equal(length(result), 1)
+  expect_true(sf::st_is(result, "MULTILINESTRING") || sf::st_is(result, "LINESTRING"))
 })
 
 test_that("Partial matches of names are accounted for", {
