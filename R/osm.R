@@ -394,7 +394,7 @@ get_osm_river_centerline <- function(bb, river_name, crs = NULL,
 
   waterway_river <- waterway_rivers[1, ]
   feature <- osmdata_as_sf_by_id(waterway_river$osm_type, waterway_river$osm_id,
-                             force_download = force_download)
+                                 force_download = force_download)
 
   # Check that waterway geometries are found
   if (is.null(feature$osm_lines) && is.null(feature$osm_multilines)) {
@@ -409,7 +409,11 @@ get_osm_river_centerline <- function(bb, river_name, crs = NULL,
 
   # Determine crop area: expand bb by buffer_distance when provided so that
   # the centreline covers the full extent used by downstream network/DEM steps
-  crop_area <- if (!is.null(buffer_distance)) buffer(bb, buffer_distance) else bb
+  crop_area <- if (!is.null(buffer_distance)) {
+    buffer(bb, buffer_distance)
+  } else {
+    bb
+  }
 
   # Fix invalid geometries, crop to crop_area (clips straddling geometries
   # rather than keeping them whole), and union

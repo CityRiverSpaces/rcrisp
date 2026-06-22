@@ -333,11 +333,11 @@ test_that("River retrieval raise error if river is not found in the bb", {
 
 test_that("River lines and surface are properly set up", {
   with_mocked_bindings(
-    nominatim_waterway_lookup = function(...) mock_nominatim_result,
+    nominatim_waterway_lookup = \(...) mock_nominatim_result,
     # centerline fetch: return only the two Dâmbovița lines
-    osmdata_as_sf_by_id = function(...) list(osm_lines = mock_river_lines[1:2, ]),
+    osmdata_as_sf_by_id = \(...) list(osm_lines = mock_river_lines[1:2, ]),
     # surface fetch (osmdata_as_sf) returns the two separate mock polygons
-    osmdata_as_sf = function(...) list(osm_polygons = mock_river_polygons),
+    osmdata_as_sf = \(...) list(osm_polygons = mock_river_polygons),
     {
       river_centerline <- get_osm_river_centerline(bb_bucharest, "Dâmbovița",
                                                    force_download = TRUE)
@@ -351,8 +351,8 @@ test_that("River lines and surface are properly set up", {
 
 test_that("Buffered centreline is at least as long as the un-buffered one", {
   with_mocked_bindings(
-    nominatim_waterway_lookup = function(...) mock_nominatim_result,
-    osmdata_as_sf_by_id = function(...) list(osm_lines = mock_river_lines[1:2, ]),
+    nominatim_waterway_lookup = \(...) mock_nominatim_result,
+    osmdata_as_sf_by_id = \(...) list(osm_lines = mock_river_lines[1:2, ]),
     {
       cl_tight <- get_osm_river_centerline(bb_bucharest, "Dâmbovița",
                                            force_download = TRUE)
@@ -403,7 +403,7 @@ test_that("If no railways are found, an empty sf object is returned", {
 
 # --- Tests for the bbox+name fallback strategy ---
 
-test_that("Name filtering isolates only the target river from a mixed response", {
+test_that("Name filtering isolates only the target river from a mixed response", {  # nolint
   # mock_river_lines has "Dâmbovița" (rows 1-2) and "Colentina" (rows 3-4)
   result <- mock_river_lines |>
     match_osm_name("Dâmbovița")
@@ -412,7 +412,7 @@ test_that("Name filtering isolates only the target river from a mixed response",
   expect_true(all(result$name == "Dâmbovița"))
 })
 
-test_that("bbox filter excludes river segments that lie entirely outside the bbox", {
+test_that("bbox filter excludes river segments that lie entirely outside the bbox", {  # nolint
   outside_line <- sf::st_sf(
     name = "Dâmbovița",
     geometry = sf::st_sfc(
@@ -427,21 +427,24 @@ test_that("bbox filter excludes river segments that lie entirely outside the bbo
     match_osm_name("Dâmbovița") |>
     sf::st_filter(sf::st_as_sfc(bb_bucharest), .predicate = sf::st_intersects)
 
-  # The outside segment should be dropped; only the two in-bbox Dâmbovița lines remain
+  # The outside segment should be dropped;
+  # only the two in-bbox Dâmbovița lines remain
   expect_equal(nrow(result), 2)
 })
 
-test_that("bbox+name fallback returns only Dâmbovița within Bucharest, not Colentina", {
+test_that("bbox+name fallback returns only Dâmbovița within Bucharest, not Colentina", {  # nolint
   # Full pipeline: name filter → bbox filter → union
   result <- mock_river_lines |>
     match_osm_name("Dâmbovița") |>
-    sf::st_filter(sf::st_as_sfc(bb_bucharest), .predicate = sf::st_intersects) |>
+    sf::st_filter(sf::st_as_sfc(bb_bucharest),
+                  .predicate = sf::st_intersects) |>
     sf::st_geometry() |>
     sf::st_union()
 
   expect_false(sf::st_is_empty(result))
   expect_equal(length(result), 1)
-  expect_true(sf::st_is(result, "MULTILINESTRING") || sf::st_is(result, "LINESTRING"))
+  expect_true(sf::st_is(result, "MULTILINESTRING") ||
+                sf::st_is(result, "LINESTRING"))
 })
 
 test_that("Partial matches of names are accounted for", {
