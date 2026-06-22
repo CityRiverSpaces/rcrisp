@@ -414,8 +414,7 @@ get_osm_river_centerline <- function(bb, river_name, crs = NULL,
     bb
   }
 
-  # Fix invalid geometries, crop to crop_area (clips straddling geometries
-  # rather than keeping them whole), and union
+  # Fix invalid geometries, crop to crop_area and union
   river_centerline <- suppressWarnings(
     river_centerline_lines |>
       check_invalid_geometry() |>
