@@ -382,8 +382,7 @@ get_osm_river_centerline <- function(bb, river_name, crs = NULL,
   # Check input
   checkmate::assert_character(river_name, len = 1)
   crs <- as_crs(crs)
-  checkmate::assert_numeric(buffer_distance, len = 1, null.ok = TRUE,
-                            lower = 0, finite = TRUE)
+  checkmate::assert_numeric(buffer_distance, len = 1, null.ok = TRUE)
   checkmate::assert_logical(force_download, len = 1)
 
   waterway_rivers <- nominatim_waterway_lookup(river_name)
