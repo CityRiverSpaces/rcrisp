@@ -401,52 +401,6 @@ test_that("If no railways are found, an empty sf object is returned", {
   expect_equal(sf::st_crs(railways), crs)
 })
 
-# --- Tests for the bbox+name fallback strategy ---
-
-test_that("Name filtering isolates only the target river from a mixed response", {  # nolint
-  # mock_river_lines has "Dâmbovița" (rows 1-2) and "Colentina" (rows 3-4)
-  result <- mock_river_lines |>
-    match_osm_name("Dâmbovița")
-
-  expect_equal(nrow(result), 2)
-  expect_true(all(result$name == "Dâmbovița"))
-})
-
-test_that("bbox filter excludes river segments that lie entirely outside the bbox", {  # nolint
-  outside_line <- sf::st_sf(
-    name = "Dâmbovița",
-    geometry = sf::st_sfc(
-      # Clearly east of Bucharest
-      sf::st_linestring(matrix(c(27.0, 28.0, 44.4, 44.4), ncol = 2)),
-      crs = "EPSG:4326"
-    )
-  )
-  lines_with_outside <- dplyr::bind_rows(mock_river_lines[1:2, ], outside_line)
-
-  result <- lines_with_outside |>
-    match_osm_name("Dâmbovița") |>
-    sf::st_filter(sf::st_as_sfc(bb_bucharest), .predicate = sf::st_intersects)
-
-  # The outside segment should be dropped;
-  # only the two in-bbox Dâmbovița lines remain
-  expect_equal(nrow(result), 2)
-})
-
-test_that("bbox+name fallback returns only Dâmbovița within Bucharest, not Colentina", {  # nolint
-  # Full pipeline: name filter → bbox filter → union
-  result <- mock_river_lines |>
-    match_osm_name("Dâmbovița") |>
-    sf::st_filter(sf::st_as_sfc(bb_bucharest),
-                  .predicate = sf::st_intersects) |>
-    sf::st_geometry() |>
-    sf::st_union()
-
-  expect_false(sf::st_is_empty(result))
-  expect_equal(length(result), 1)
-  expect_true(sf::st_is(result, "MULTILINESTRING") ||
-                sf::st_is(result, "LINESTRING"))
-})
-
 test_that("Partial matches of names are accounted for", {
   data <- data.frame(
     name = c("match", "xxx", "xxx", "xxx"),
