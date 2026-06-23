@@ -113,8 +113,8 @@ NULL
 #'   All relevant functionality is limited to either Cartesian or
 #'   ellipsoidal coordinate systems, not both.
 #' @srrstatsNA {SP5.3} The package does not offer an ability to generate
-#'   interactive visualisations. The returned interactive visualisation
-#'   workflows as any other spatial data.
+#'   interactive visualisations. Future implementations may extend the
+#'   `visualisation.R` module, e.g., with `leaflet` functionality.
 #' @srrstatsNA {SP6.3, SP6.4} This package uses spatial neighbours only via the
 #'   `terra::costDist()` function. Therefore, the definition and weighting of
 #'   neighbours are managed by `terra`, and are not implemented or tested within
