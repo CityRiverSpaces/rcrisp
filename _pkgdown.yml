@@ -60,10 +60,14 @@ reference:
     - delineate_riverspace
 - title: Visualisation
   desc: >
-    Functions to visualise and inspect delineation objects
+    Functions to visualise delineation objects
   contents:
     - plot.delineation
     - geom_delineation
+- title: Inspect
+  desc: >
+    Functions to inspect delineation objects
+  contents:
     - print.delineation
     - summary.delineation
     - print.summary.delineation
