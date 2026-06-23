@@ -98,7 +98,7 @@ osm <- get_osm(aoi)
 dem <- get_dem(aoi, osm)
 
 # Delineate river corridor with segments
-bd <- delineate(aoi, osm, dem, segments = TRUE)
+bd <- delineate(aoi, osm, dem, segments = TRUE, riverspace = TRUE)
 
 # Examine delineation object
 summary(bd)
@@ -114,7 +114,7 @@ summary(bd)
 #>   $valley          101.1 km²
 #>   $corridor        65.8 km²
 #>   $segments        10 features, total 65.8 km² (mean 6.6 km²)
-#>   $riverspace      -
+#>   $riverspace      9.3 km²
 #> 
 #> Base layers:
 #>   $streets         5112 features

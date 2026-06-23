@@ -77,7 +77,7 @@ osm <- get_osm(aoi)
 dem <- get_dem(aoi, osm)
 
 # Delineate river corridor with segments
-bd <- delineate(aoi, osm, dem, segments = TRUE)
+bd <- delineate(aoi, osm, dem, segments = TRUE, riverspace = TRUE)
 
 # Examine delineation object
 summary(bd)
