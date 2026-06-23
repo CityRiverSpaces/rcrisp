@@ -170,7 +170,7 @@ delineate <- function(
 
   delineations$aoi <- aoi
 
-  class(delineations) <- c("delineation", "list")
+  class(delineations) <- "delineation"
   delineations
 }
 
