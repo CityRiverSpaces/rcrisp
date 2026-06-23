@@ -309,6 +309,25 @@ combine_river_features <- function(river_centerline, river_surface) {
   message("Calculating viewpoints from both river edge and river centerline.")
   river_centerline_clipped <- sf::st_geometry(river_centerline) |>
     sf::st_difference(river_surface)
+  # Use 100 m as an empirical threshold to filter out minor geometry issues.
+  n_uncovered <- sum(
+    as.numeric(sf::st_length(
+      sf::st_cast(river_centerline_clipped, "LINESTRING", warn = FALSE)
+    )) >= 100,
+    na.rm = TRUE
+  )
+  if (n_uncovered > 0) {
+    warning(sprintf(
+      paste(
+        "For the river centerline segment(s) with length >= 100 m,",
+        "%d segment(s) are not covered by OSM river surface polygons.",
+        "This may be due to underground river sections or incomplete OSM",
+        "river surface data. Viewpoints for these segments will therefore",
+        "be calculated from the river centerline."
+      ),
+      n_uncovered
+    ), call. = FALSE)
+  }
   c(river_centerline_clipped, sf::st_geometry(river_surface)) |>
     sf::st_cast("MULTILINESTRING") |>
     sf::st_union()
