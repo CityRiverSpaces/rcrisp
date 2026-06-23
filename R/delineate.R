@@ -297,15 +297,34 @@ plot.delineation <- function(x, ..., legend = TRUE) {
                   ylab = paste0("Northing (m)"))
 
   if (legend) {
-    graphics::legend(
-      "bottomleft", inset = 0.01, y.intersp = 0.8, seg.len = 1,
-      legend = c("River", "Valley", "Riverspace", "Corridor", "Segment"),
-      pch    = c(15,      15,       15,           NA,         NA),
-      pt.cex = c(2,       2,        2,            NA,         NA),
-      lty    = c(NA,      NA,       NA,           1,          1),
-      lwd    = c(NA,      NA,       NA,           3,          1),
-      col    = c("blue",  "grey70", "lightblue",  "red",      "red")
+    leg <- data.frame(
+      label  = c("River",  "Valley",  "Riverspace", "Corridor", "Segment"),
+      pch    = c(15,       15,        15,            NA,         NA),
+      pt.cex = c(2,        2,         2,             NA,         NA),
+      lty    = c(NA,       NA,        NA,            1,          1),
+      lwd    = c(NA,       NA,        NA,            3,          1),
+      col    = c("blue",   "grey70",  "lightblue",   "red",      "red"),
+      stringsAsFactors = FALSE
     )
+    present <- c(
+      !is.null(x$river_surface),
+      !is.null(x$valley),
+      !is.null(x$riverspace),
+      !is.null(x$corridor),
+      !is.null(x$segments)
+    )
+    leg <- leg[present, ]
+    if (nrow(leg) > 0) {
+      graphics::legend(
+        "bottomleft", inset = 0.01, y.intersp = 0.8, seg.len = 1,
+        legend = leg$label,
+        pch    = leg$pch,
+        pt.cex = leg$pt.cex,
+        lty    = leg$lty,
+        lwd    = leg$lwd,
+        col    = leg$col
+      )
+    }
   }
 
   invisible(NULL)
