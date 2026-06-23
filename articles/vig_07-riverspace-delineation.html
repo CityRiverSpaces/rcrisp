@@ -91,10 +91,15 @@ of Bucharest as the river and the buildings surrounding it as input.</p>
 <code class="sourceCode R"><span><span class="va">buildings</span> <span class="op">&lt;-</span> <span class="va">bucharest_osm</span><span class="op">$</span><span class="va">buildings</span></span>
 <span><span class="va">river</span> <span class="op">&lt;-</span> <span class="va">bucharest_osm</span><span class="op">$</span><span class="va">river_surface</span></span></code></pre></div>
 <p>The <code><a href="../reference/delineate_riverspace.html">delineate_riverspace()</a></code> function takes the building
-polygons and the river surface polygons as input. If no river is
-provided, it will return an error message. If no buildings are provided,
-it will return an unobstructed buffer of a given radius with a warning
-message. The function returns an sf polygon.</p>
+polygons and the river (including surface polygons and centerline) as
+input. The river surface polygons intersecting the river centerline are
+treated as part of the river, including connected water bodies such as
+lakes and reservoirs. Viewpoints are calculated from water edges where
+available, and from the river centerline when river surface polygons are
+missing or partial. If no river is provided, it will return an error
+message. If no buildings are provided, it will return an unobstructed
+buffer of a given radius with a warning message. The function returns an
+sf polygon.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">riverspace</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/delineate_riverspace.html">delineate_riverspace</a></span><span class="op">(</span><span class="va">river</span>, <span class="va">buildings</span><span class="op">)</span></span></code></pre></div>
 <p>We visualise the riverspace in a subset of segments.</p>
