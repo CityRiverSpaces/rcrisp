@@ -62,7 +62,7 @@ default_stac_dem <- list(
 get_dem <- function(aoi, osm, dem_source = "STAC", stac_endpoint = NULL,
                     stac_collection = NULL, force_download = FALSE) {
   if (!is.na(sf::st_is_longlat(osm$aoi_network)) &&
-      sf::st_is_longlat(osm$aoi_network)) {
+        sf::st_is_longlat(osm$aoi_network)) {
     dst_crs <- get_utm_zone(osm$aoi_network) |> as_crs()
     message(sprintf(
       "Reprojecting AoI from EPSG:%s to EPSG:%s for DEM extent buffering.",
