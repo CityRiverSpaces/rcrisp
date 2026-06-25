@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Added
 
+- Context-specific messages are now issued in `get_river_aoi()`, `delineate_corridor()`, and `delineate()` when lat/lon input is reprojected for buffering, and in `delineate()` when no CRS is provided and a UTM zone is auto-selected.
 - Tests were added to `delineate_corridor()`, `delineate_segments()`, and `delineate_riverspace()` to verify that geographic (lat/lon) CRS input raises an informative error.
 - The Rbanism community badge was added in the README.
 

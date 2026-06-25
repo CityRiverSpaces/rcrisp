@@ -71,9 +71,6 @@ NULL
 #'   inheriting from base vector classes. Input types are strictly validated
 #'   with `checkmate`, and custom vector-like classes are not in the list of
 #'   accepted input classes. Therefore, this standard does not apply.
-#' @srrstatsNA {G2.9} This package does not perform type conversions or
-#'   meta-data changes leading to information loss that would require issuing
-#'   diagnostic messages.
 #' @srrstatsNA {G2.11, G2.12} This package does not utilize list columns or
 #'   columns with non-standard class attributes in `data.frame`-like objects.
 #' @srrstatsNA {G2.14, G2.14a, G2.14b, G2.14c} These standards are not

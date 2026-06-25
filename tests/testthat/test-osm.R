@@ -344,3 +344,15 @@ test_that("Only one river can be queried at a time", {
   expect_error(get_osm_river_centerline(bb, c("Dâmbovița", "SomeOtherRiver")),
                "Assertion on 'river_name' failed: Must have length 1")
 })
+
+test_that("get_river_aoi() issues a message when reprojecting lon/lat input", {
+  river <- sf::st_sfc(
+    sf::st_linestring(cbind(c(26.1, 26.2), c(44.4, 44.5))),
+    crs = 4326
+  )
+  bbox <- sf::st_bbox(river)
+  expect_message(
+    get_river_aoi(river, bbox, buffer_distance = 100),
+    "Reprojecting river from EPSG:4326 to EPSG:32635 for river AoI buffering."
+  )
+})
