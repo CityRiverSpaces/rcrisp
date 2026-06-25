@@ -32,6 +32,8 @@
 #'                   network_buffer = 2000,
 #'                   dem_buffer = 2000,
 #'                   buildings_buffer = 150)
+#' @srrstats {G2.9) A message is issued when CRS is not provided by the user and
+#'   a suitable UTM zone is auto-selected instead.
 define_aoi <- function(
   city_name, river_name,
   crs = NULL,
@@ -49,6 +51,8 @@ define_aoi <- function(
   # If not provided, determine the CRS. Otherwise, standardise CRS
   if (is.null(crs)) {
     crs <- get_utm_zone(bb) |> as_crs()
+    message(sprintf("No CRS provided. Using auto-selected UTM zone: EPSG:%s.",
+                    crs))
   } else {
     crs <- as_crs(crs)
   }

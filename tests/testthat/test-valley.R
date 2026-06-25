@@ -114,6 +114,19 @@ test_that("valley polygon is correctly constructed", {
   )
 })
 
+#' @srrstats {G2.9} A message is issued when the AOI network geometry is in
+#'   lon/lat coordinates and is reprojected before DEM extent buffering.
+test_that("A message is issued when AOI network is in lon/lat CRS", {
+  with_mocked_bindings(
+    get_stac_asset_urls = \(...) asset_urls,
+    load_dem = \(...) terra::rast(matrix(1:4, nrow = 2), crs = "EPSG:4326"),
+    expect_message(
+      get_dem(aoi, osm),
+      "Reprojecting AoI from EPSG:"
+    )
+  )
+})
+
 #' @srrstats {G5.8} Edge test: if a value different from a set of
 #'   allowed values is selected, an error is raised.
 test_that("Unknown DEM source throws error", {
