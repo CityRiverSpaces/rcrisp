@@ -220,8 +220,8 @@ corridor_end_points <- function(river_network, spatial_network, regions) {
   distances <- sfnetworks::st_network_cost(river_network, from = nodes,
                                            to = nodes, weights = "weight")
 
-  indices <- which(distances == max(distances), arr.ind = TRUE)[1, ]
-  end_points <- c(nodes[indices["row"]], nodes[indices["col"]])
+  indices <- arrayInd(which.max(distances), dim(distances))
+  end_points <- c(nodes[indices[1]], nodes[indices[2]])
   if (end_points[1] == end_points[2]) {
     stop("Corridor start- and end-points coincide!")
   }
