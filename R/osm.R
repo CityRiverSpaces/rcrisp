@@ -589,6 +589,8 @@ get_osm_buildings <- function(aoi, crs = NULL, force_download = FALSE) {
 #' get_river_aoi(river = river, city_bbox = bb, buffer_distance = 100)
 #' @srrstats {G2.7} The `river` parameter accepts domain-specific tabular input
 #'   of type `sf`.
+#' @srrstats {G2.9} The user is informed when the input object in lat/lon
+#'   coordinates is transformed into a suitable projected CRS.
 #' @srrstats {G2.13} The absence of missing values in numeric inputs is
 #'   asserted using the `checkmate` package.
 #' @srrstats {G2.16} This function checks numeric arguments for undefined values
@@ -609,6 +611,14 @@ get_river_aoi <- function(river, city_bbox, buffer_distance) {
 
   # Make sure crs are the same for cropping with bb
   river <- sf::st_transform(river, sf::st_crs(city_bbox))
+
+  if (!is.na(sf::st_is_longlat(river)) && sf::st_is_longlat(river)) {
+    dst_crs <- get_utm_zone(river) |> as_crs()
+    message(sprintf(
+      "Reprojecting river from EPSG:%s to EPSG:%s for river AoI buffering.",
+      sf::st_crs(river)$epsg, dst_crs$epsg
+    ))
+  }
 
   river_buffer(river, buffer_distance, bbox = city_bbox)
 }
