@@ -41,6 +41,14 @@ delineate_riverspace(
 Riverspace as object of class
 [`sf::sfc_POLYGON`](https://r-spatial.github.io/sf/reference/sfc.html)
 
+## Details
+
+For riverspace delineation, OSM water polygons intersecting the river
+centerline are treated as part of the river, including connected water
+bodies such as lakes and reservoirs. Viewpoints are calculated from
+water edges where available, and from the river centerline when river
+surface polygons are missing or partial.
+
 ## Examples
 
 ``` r
