@@ -49,9 +49,11 @@ test_that("NULL values are rejected for numeric buffer parameters", {
 
 test_that("define_aoi() accepts units objects for buffer parameters", {
   with_mocked_bindings(
-    get_osm_bb = \(...) sf::st_bbox(c(xmin = 25.967, ymin = 44.334,
-                                      xmax = 26.226, ymax = 44.541),
-                                    crs = "EPSG:4326"),
+    get_osm_bb = \(...) {
+      sf::st_bbox(c(xmin = 25.967, ymin = 44.334,
+                    xmax = 26.226, ymax = 44.541),
+                  crs = "EPSG:4326")
+    },
     {
       aoi <- define_aoi("MyCity", "MyRiver",
                         network_buffer   = units::set_units(3, "km"),
