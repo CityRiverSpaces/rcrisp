@@ -84,9 +84,6 @@ NULL
 #' @srrstats {G2.3, G2.3a, G2.3b} The `checkmate` package is used to check that
 #'   `corridor_init` only uses allowed values. The variable is also made
 #'   case-independent with `tolower()`.
-#' @srrstats {G2.6} One-dimensional distance input is pre-processed by
-#'   `preprocess_distance()` to handle `units` objects or other vector-like
-#'   classes with storage mode `numeric`.
 #' @srrstats {SP4.0, SP4.0b, SP4.1, SP4.2} The return value is a list of
 #'   [`sf::sfc_POLYGON`] objects, explicitly documented as such, and it
 #'   maintains the same units as the input.
