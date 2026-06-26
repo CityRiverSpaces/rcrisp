@@ -6,6 +6,14 @@
 #'   converted to nodes
 #' @param clean Whether general cleaning tasks should be run on the generated
 #'   network (see [`clean_network()`] for the description of tasks)
+#' @param na_action A case-insensitive character string specifying how to deal
+#'   with missing values in non-geometry columns of `edges`. Possible values:
+#'   * `"warn"` (default): issue a warning if any `NA` values are found.
+#'   * `"error"`: stop with an error if any `NA` values are found.
+#'   * `"ignore"`: silently proceed without checking for `NA` values
+#'   * `"impute"`: replace `NA` values before building the network. For
+#'     character columns, `NA`s are replaced with `"unknown"`; for numeric
+#'     columns, `NA`s are replaced with the column median.
 #'
 #' @return An [`sfnetworks::sfnetwork`] object
 #' @export
@@ -21,17 +29,50 @@
 #'
 #' # Only build the spatial network
 #' as_network(edges, flatten = FALSE, clean = FALSE)
+#' @srrstats {G2.3, G2.3b} The `na_action` parameter is case-insensitive to
+#'   match the four accepted values.
 #' @srrstats {G2.7} The `edges` parameter only accepts tabular input of class
 #'   `sf`. `sfnetwork` objects are `sf`-compatible and are commonly used
 #'   for spatial network analysis.
+#' @srrstats {G2.14, G2.14a, G2.14b, G2.14c} The `na_action` parameter specifies
+#'   how missing values in non-geometric columns of `edges` should be handled.
+#'   Possibilities are error, proceed with warning, silently ignore, or impute
+#'   missing values differentiating between character and numeric. While such
+#'   attribute values are not used in this package, `NA`s are nevertheless
+#'   explicitly handled as they are propagated to the user's pipeline.
 #' @srrstats {SP4.0, SP4.0b, SP4.1, SP4.2} The return value is of class
 #'   [`sfnetworks::sfnetwork`], explicitly documented as such, and it maintains
 #'   the same units as the input.
-as_network <- function(edges, flatten = TRUE, clean = TRUE) {
+as_network <- function(edges, flatten = TRUE, clean = TRUE,
+                       na_action = "warn") {
   # Check input
   checkmate::assert_multi_class(edges, c("sf", "sfc"))
   checkmate::assert_logical(flatten, len = 1)
   checkmate::assert_logical(clean, len = 1)
+  na_action <- tolower(na_action)
+  checkmate::assert_choice(na_action, c("warn", "error", "ignore", "impute"))
+
+  # Handle NAs in attirbute (non-geometry) columns
+  attr_cols <- setdiff(names(edges), attr(edges, "sf_column"))
+  has_na <- any(vapply(edges[attr_cols], anyNA, logical(1)))
+  if (has_na) {
+    msg <- paste(
+      "Input `edges` contains NA values in one or more attribute columns.",
+      "These are propagated into the network but not used in any computation."
+    )
+    if (na_action == "error") stop(msg)
+    else if (na_action == "warn") warning(msg)
+    else if (na_action == "impute") {
+      edges <- edges |>
+        dplyr::mutate(dplyr::across(
+          dplyr::where(is.character),
+          ~ dplyr::coalesce(.x, "unknown")
+        )) |>
+        dplyr::mutate(dplyr::across(
+          dplyr::where(is.numeric),
+          ~ dplyr::coalesce(.x, median(.x, na.rm = TRUE))))
+    }
+  }
 
   network <- sfnetworks::as_sfnetwork(edges, directed = FALSE)
   if (flatten) network <- flatten_network(network)
