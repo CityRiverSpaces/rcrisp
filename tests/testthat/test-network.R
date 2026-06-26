@@ -427,4 +427,3 @@ test_that("as_network rejects invalid na_action values", {
     "Must be element of set"
   )
 })
-
