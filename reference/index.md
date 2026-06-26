@@ -4,6 +4,8 @@
 
 Functions for full or specific delineation
 
+- [`delineation`](https://cityriverspaces.github.io/rcrisp/reference/delineation.md)
+  : The delineation class
 - [`delineate()`](https://cityriverspaces.github.io/rcrisp/reference/delineate.md)
   : Delineate a corridor around a river
 - [`delineate_city_river()`](https://cityriverspaces.github.io/rcrisp/reference/delineate_city_river.md)
@@ -16,6 +18,26 @@ Functions for full or specific delineation
   : Split a river corridor into segments
 - [`delineate_riverspace()`](https://cityriverspaces.github.io/rcrisp/reference/delineate_riverspace.md)
   : Delineate the space surrounding a river
+
+## Visualisation
+
+Functions to visualise delineation objects
+
+- [`plot(`*`<delineation>`*`)`](https://cityriverspaces.github.io/rcrisp/reference/plot.delineation.md)
+  : Plot a delineation object
+- [`geom_delineation()`](https://cityriverspaces.github.io/rcrisp/reference/geom_delineation.md)
+  : ggplot2 layer for a delineation object
+
+## Inspect
+
+Functions to inspect delineation objects
+
+- [`print(`*`<delineation>`*`)`](https://cityriverspaces.github.io/rcrisp/reference/print.delineation.md)
+  : Print a delineation object
+- [`summary(`*`<delineation>`*`)`](https://cityriverspaces.github.io/rcrisp/reference/summary.delineation.md)
+  : Summarise a delineation object
+- [`print(`*`<summary.delineation>`*`)`](https://cityriverspaces.github.io/rcrisp/reference/print.summary.delineation.md)
+  : Print a summary.delineation object
 
 ## Data
 

@@ -41,10 +41,12 @@
 <url><loc>https://cityriverspaces.github.io/rcrisp/reference/delineate_riverspace.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/rcrisp/reference/delineate_segments.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/rcrisp/reference/delineate_valley.html</loc></url>
+<url><loc>https://cityriverspaces.github.io/rcrisp/reference/delineation.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/rcrisp/reference/filter_clusters.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/rcrisp/reference/filter_network.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/rcrisp/reference/find_intersections.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/rcrisp/reference/flatten_network.html</loc></url>
+<url><loc>https://cityriverspaces.github.io/rcrisp/reference/geom_delineation.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/rcrisp/reference/get_cd_char.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/rcrisp/reference/get_corridor_edges.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/rcrisp/reference/get_cost_distance.html</loc></url>
@@ -82,6 +84,9 @@
 <url><loc>https://cityriverspaces.github.io/rcrisp/reference/nearest_node.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/rcrisp/reference/osmdata_as_sf.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/rcrisp/reference/osmdata_query.html</loc></url>
+<url><loc>https://cityriverspaces.github.io/rcrisp/reference/plot.delineation.html</loc></url>
+<url><loc>https://cityriverspaces.github.io/rcrisp/reference/print.delineation.html</loc></url>
+<url><loc>https://cityriverspaces.github.io/rcrisp/reference/print.summary.delineation.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/rcrisp/reference/rcrisp-package.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/rcrisp/reference/read_data_from_cache.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/rcrisp/reference/reproject.html</loc></url>
@@ -92,6 +97,7 @@
 <url><loc>https://cityriverspaces.github.io/rcrisp/reference/simplify_network.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/rcrisp/reference/smooth_dem.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/rcrisp/reference/split_by.html</loc></url>
+<url><loc>https://cityriverspaces.github.io/rcrisp/reference/summary.delineation.html</loc></url>
 <url><loc>https://cityriverspaces.github.io/rcrisp/reference/write_data_to_cache.html</loc></url>
 </urlset>
 

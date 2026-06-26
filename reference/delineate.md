@@ -1,6 +1,8 @@
 # Delineate a corridor around a river
 
-Delineate a corridor around a river
+Given a set of delineation parameters and input data, carry out corridor
+delineation, corridor segmentation and/or riverspace delineation as
+indicated by the user.
 
 ## Usage
 
@@ -23,14 +25,14 @@ delineate(
 
 - aoi:
 
-  A list of delineation parameters, namely `$city_name`, `$river_name`,
-  `$bb`, `$crs`, `$network_buffer`, `$dem_buffer`, and
-  `$buildings_buffer`. For more info see
+  A list of delineation parameters for an area of interest, namely
+  `$city_name`, `$river_name`, `$crs`, `$network_buffer`, `$dem_buffer`,
+  and `$buildings_buffer`. For more info see
   [`define_aoi()`](https://cityriverspaces.github.io/rcrisp/reference/define_aoi.md).
 
 - osm:
 
-  A list with OpenStreetMap data sets for the a location, as objects of
+  A list with OpenStreetMap data sets within the `aoi`, as objects of
   class [`sf::sfc`](https://r-spatial.github.io/sf/reference/sfc.html)
 
 - dem:
@@ -90,15 +92,28 @@ delineate(
 
 ## Value
 
-A list containing zero or more of the following elements: "valley",
-"corridor", "segments", and "riverspace", each as an
+A list object of class `delineation` containing zero or more of the
+following elements: "valley", "corridor", "segments", and "riverspace",
+each as an
 [`sf::sfc_POLYGON`](https://r-spatial.github.io/sf/reference/sfc.html)
 or
 [`sf::sfc_MULTIPOLYGON`](https://r-spatial.github.io/sf/reference/sfc.html)
 object (depending on the geometry of the input data). The list contains
 only the geometries corresponding to the delineation steps that were
 carried out (e.g., if `segments` is FALSE, the list will not contain a
-"segments" element).
+"segments" element). In any case, the returned object also contains the
+base layers and a list `aoi` with the parameters used for delineation.
+
+## Details
+
+The returned
+[`delineation`](https://cityriverspaces.github.io/rcrisp/reference/delineation.md)
+class is a list wrapping objects of class
+[`sf::sfc_POLYGON`](https://r-spatial.github.io/sf/reference/sfc.html)
+or
+[`sf::sfc_MULTIPOLYGON`](https://r-spatial.github.io/sf/reference/sfc.html)
+which can be retrieved through subsetting and converted to other common
+spatial classes in typical `sf`- or `terra`-based workflows.
 
 ## Examples
 
