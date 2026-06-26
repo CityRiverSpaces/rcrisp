@@ -70,7 +70,8 @@ as_network <- function(edges, flatten = TRUE, clean = TRUE,
         )) |>
         dplyr::mutate(dplyr::across(
           dplyr::where(is.numeric),
-          ~ dplyr::coalesce(.x, median(.x, na.rm = TRUE))))
+          ~ dplyr::coalesce(.x, median(.x, na.rm = TRUE))
+        ))
     }
   }
 
