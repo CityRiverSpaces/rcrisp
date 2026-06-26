@@ -17,6 +17,22 @@ test_that("NULL values are rejected for required parameters", {
   )
 })
 
+#' @srrstats {G2.9} A message is issued when CRS is not provided and a suitable
+#'   UTM zone is auto-selected.
+test_that("If `crs` is not specified, message is issued", {
+  expect_message(
+    with_mocked_bindings(
+      get_osm_bb = \(...) {
+        sf::st_bbox(c(xmin = 25.967, ymin = 44.334,
+                      xmax = 26.226, ymax = 44.541),
+                    crs = "EPSG:4326")
+      },
+      define_aoi(city_name = "MyCity", river_name = "MyRiver")
+    ),
+    "Using auto-selected UTM zone: EPSG:"
+  )
+})
+
 #' @srrstats {G5.8} Edge test: NULL values are rejected for numeric parameters
 test_that("NULL values are rejected for numeric buffer parameters", {
   expect_error(

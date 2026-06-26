@@ -6,6 +6,12 @@
 #' @param ray_num Number of rays as numeric vector of length one
 #' @param ray_length Length of rays in meters as numeric vector of length one
 #'
+#' @details For riverspace delineation, OSM water polygons intersecting the
+#'   river centerline are treated as part of the river, including connected
+#'   water bodies such as lakes and reservoirs. Viewpoints are calculated from
+#'   water edges where available, and from the river centerline when river
+#'   surface polygons are missing or partial.
+#'
 #' @return Riverspace as object of class [`sf::sfc_POLYGON`]
 #' @export
 #'
