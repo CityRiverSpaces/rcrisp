@@ -69,10 +69,6 @@ NULL
 #' @srrstatsNA {G2.4d, G2.4e, G2.5} This package does not make use of factors.
 #' @srrstatsNA {G2.11, G2.12} This package does not utilize list columns or
 #'   columns with non-standard class attributes in `data.frame`-like objects.
-#' @srrstatsNA {G2.14, G2.14a, G2.14b, G2.14c} These standards are not
-#'   applicable because `mean()` is used only within the internal function
-#'   `get_cd_char()` which does not provide a user interface for handling
-#'   missing data.
 #' @srrstatsNA {G3.1, G3.1a} This package does not perform covariance
 #'   calculations.
 #' @srrstatsNA {G5.3} This package does not return objects which explicitly

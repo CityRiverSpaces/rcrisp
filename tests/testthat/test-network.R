@@ -365,3 +365,65 @@ test_that("Network setup with real data", {
 test_that("Flattening network with no crossings does not fail", {
   expect_no_error(flatten_network(network_no_crossings))
 })
+
+# sf edges with attribute columns for na_action tests
+edges_with_attrs <- sf::st_as_sf(sf::st_sfc(e1, e2, e3,
+                                            crs = sf::st_crs("EPSG:32635")))
+edges_with_attrs$type <- c("primary", "secondary", "tertiary")
+edges_with_attrs$width <- c(10, 8, 6)
+
+edges_with_nas <- edges_with_attrs
+edges_with_nas$type[2] <- NA
+edges_with_nas$width[3] <- NA
+
+#' @srrstats {G5.2a, G5.2b} The following six tests verify error and warning
+#'   conditions for `na_action` in `as_network()`.
+#' @noRd
+NULL
+
+test_that("na_action='error' stops on NA attribute columns", {
+  expect_error(
+    as_network(edges_with_nas, flatten = FALSE, clean = FALSE,
+               na_action = "error"),
+    "NA values in one or more attribute columns"
+  )
+})
+
+test_that("na_action='warn' warns on NA attribute columns", {
+  expect_warning(
+    as_network(edges_with_nas, flatten = FALSE, clean = FALSE,
+               na_action = "warn"),
+    "NA values in one or more attribute columns"
+  )
+})
+
+test_that("na_action='ignore' proceeds silently with NAs", {
+  expect_no_warning(
+    as_network(edges_with_nas, flatten = FALSE, clean = FALSE,
+               na_action = "ignore")
+  )
+})
+
+test_that("na_action='impute' replaces NAs before building network", {
+  net <- as_network(edges_with_nas, flatten = FALSE, clean = FALSE,
+                    na_action = "impute")
+  edges_out <- sf::st_as_sf(net, "edges")
+  expect_false(anyNA(edges_out$type))
+  expect_false(anyNA(edges_out$width))
+  expect_equal(edges_out$type[2], "unknown")
+  expect_equal(edges_out$width[3], median(edges_with_nas$width, na.rm = TRUE))
+})
+
+test_that("as_network produces no warning when no NAs present", {
+  expect_no_warning(
+    as_network(edges_with_attrs, flatten = FALSE, clean = FALSE,
+               na_action = "warn")
+  )
+})
+
+test_that("as_network rejects invalid na_action values", {
+  expect_error(
+    as_network(edges_with_nas, na_action = "drop"),
+    "Must be element of set"
+  )
+})
