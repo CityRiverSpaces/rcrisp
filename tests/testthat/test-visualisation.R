@@ -122,7 +122,7 @@ test_that("geom_delineation works with extent = NULL", {
   layers <- geom_delineation(delineation_object, extent = NULL)
   expect_type(layers, "list")
   # No coord_sf appended when extent is NULL
-  is_coord <- vapply(layers, \(l) inherits(l, "CoordSf"), logical (1))
+  is_coord <- vapply(layers, \(l) inherits(l, "CoordSf"), logical(1))
   expect_false(any(is_coord))
 })
 
