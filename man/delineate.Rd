@@ -18,11 +18,11 @@ delineate(
 )
 }
 \arguments{
-\item{aoi}{A list of delineation parameters, namely \verb{$city_name},
-\verb{$river_name}, \verb{$bb}, \verb{$crs}, \verb{$network_buffer}, \verb{$dem_buffer}, and
+\item{aoi}{A list of delineation parameters for an area of interest, namely
+\verb{$city_name}, \verb{$river_name}, \verb{$crs}, \verb{$network_buffer}, \verb{$dem_buffer}, and
 \verb{$buildings_buffer}. For more info see \code{\link[=define_aoi]{define_aoi()}}.}
 
-\item{osm}{A list with OpenStreetMap data sets for the a location, as
+\item{osm}{A list with OpenStreetMap data sets within the \code{aoi}, as
 objects of class \code{\link[sf:sfc]{sf::sfc}}}
 
 \item{dem}{Digital elevation model (DEM) of the region (only used if
@@ -57,15 +57,25 @@ TRUE.}
 \item{riverspace}{Whether to carry out the riverspace delineation}
 }
 \value{
-A list containing zero or more of the following elements: "valley",
-"corridor", "segments", and "riverspace", each as an \code{\link[sf:sfc]{sf::sfc_POLYGON}} or
-\code{\link[sf:sfc]{sf::sfc_MULTIPOLYGON}} object (depending on the geometry of the input
-data). The list contains only the geometries corresponding to the
-delineation steps that were carried out (e.g., if \code{segments} is FALSE, the
-list will not contain a "segments" element).
+A list object of class \code{delineation} containing zero or more of the
+following elements: "valley", "corridor", "segments", and "riverspace",
+each as an \code{\link[sf:sfc]{sf::sfc_POLYGON}} or \code{\link[sf:sfc]{sf::sfc_MULTIPOLYGON}} object
+(depending on the geometry of the input data). The list contains only
+the geometries corresponding to the delineation steps that were carried out
+(e.g., if \code{segments} is FALSE, the list will not contain a "segments"
+element). In any case, the returned object also contains the base layers
+and a list \code{aoi} with the parameters used for delineation.
 }
 \description{
-Delineate a corridor around a river
+Given a set of delineation parameters and input data, carry out corridor
+delineation, corridor segmentation and/or riverspace delineation as indicated
+by the user.
+}
+\details{
+The returned \code{\link{delineation}} class is a list wrapping objects of class
+\code{\link[sf:sfc]{sf::sfc_POLYGON}} or \code{\link[sf:sfc]{sf::sfc_MULTIPOLYGON}} which can be retrieved
+through subsetting and converted to other common spatial classes in typical
+\code{sf}- or \code{terra}-based workflows.
 }
 \examples{
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}

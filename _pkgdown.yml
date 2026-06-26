@@ -51,12 +51,26 @@ reference:
   desc: >
     Functions for full or specific delineation
   contents:
+    - delineation
     - delineate
     - delineate_city_river
     - delineate_valley
     - delineate_corridor
     - delineate_segments
     - delineate_riverspace
+- title: Visualisation
+  desc: >
+    Functions to visualise delineation objects
+  contents:
+    - plot.delineation
+    - geom_delineation
+- title: Inspect
+  desc: >
+    Functions to inspect delineation objects
+  contents:
+    - print.delineation
+    - summary.delineation
+    - print.summary.delineation
 - title: Data
 - subtitle: Get OSM data
   desc: >

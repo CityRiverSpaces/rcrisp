@@ -34,7 +34,7 @@ get_test_osm <- function() {
     crs = crs
   )
   # Draw the street network, with some river crossings
-  streets <- sf::st_as_sf(sf::st_sfc(
+  streets <- sf::st_sf(geometry = sf::st_sfc(
     sf::st_linestring(cbind(c(-10000, 10000), c(2000, 0))),
     sf::st_linestring(cbind(c(-5000, -5000), c(-10000, 10000))),
     sf::st_linestring(cbind(c(-3000, -3000), c(-10000, 10000))),
@@ -46,7 +46,7 @@ get_test_osm <- function() {
     crs = crs
   ))
   # Draw the railway network, with some river crossings
-  railways <- sf::st_as_sf(sf::st_sfc(
+  railways <- sf::st_sf(geometry = sf::st_sfc(
     sf::st_linestring(cbind(c(-10000, 10000), c(2500, 500))),
     sf::st_linestring(cbind(c(-2500, -2500), c(-10000, 10000))),
     sf::st_linestring(cbind(c(2500, 2500), c(-10000, 10000))),

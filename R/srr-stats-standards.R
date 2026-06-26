@@ -99,9 +99,6 @@ NULL
 #' @srrstatsNA {G5.12} No special requirements are needed to run extended tests.
 #'
 #  Not applicable spatial software standards ----
-#' @srrstatsNA {SP2.0a, SP2.0b} This package does not implement any new classes
-#'   for spatial data.
-#' @srrstatsNA {SP2.5a} This package does not implement new classes.
 #' @srrstatsNA {SP3.0b} The package does not consider spatial neighbours in
 #'   irregular spaces.
 #' @srrstatsNA {SP3.2} The package does not rely on sampling from input data.
@@ -112,11 +109,9 @@ NULL
 #'   that yield equivalent accuracy for both rectilinear and curvilinear data.
 #'   All relevant functionality is limited to either Cartesian or
 #'   ellipsoidal coordinate systems, not both.
-#' @srrstatsNA {SP5.0, SP5.1, SP5.2, SP5.3} The package does not return any
-#'   custom classes and thus does not implement a plot method nor does it offer
-#'   an ability to generate interactive visualisations. The returned
-#'   delineations can be used in static and interactive visualisation workflows
-#'   as any other spatial data.
+#' @srrstatsNA {SP5.3} The package does not offer an ability to generate
+#'   interactive visualisations. Future implementations may extend the
+#'   `visualisation.R` module, e.g., with `leaflet` functionality.
 #' @srrstatsNA {SP6.3, SP6.4} This package uses spatial neighbours only via the
 #'   `terra::costDist()` function. Therefore, the definition and weighting of
 #'   neighbours are managed by `terra`, and are not implemented or tested within
