@@ -27,18 +27,18 @@ library(purrr)
 
 city_name <- "Bucharest"
 river_name <- "Dâmbovița"
-crs <- 32635  # EPSG code for UTM zone 35N, where Bucharest is located
 network_buffer <- 3000  # in m, buffer around the river to get the network
 buildings_buffer <- 100  # in m, buffer around the river to get the buildings
 ```
 
-We start by getting the bounding box for the study area:
+We start by getting the bounding box and by defining a suitable projected CRS for the study area (we use a helper function to find the suitable UTM zone).
 
 ```{r}
-bb <- get_osm_bb(city_name)
+bb <- get_osm_bb(city_name)  # Get bounding box from OSM
+crs <- get_utm_zone(bb)  # Get UTM zone for Bucharest
 ```
 
-Using the obtained bounding box, we get the different layers of OSM data needed for the delineation of the urban river corridor. We will get the city boundary, the waterways, the street network, and the rail network using built-in functions from the `rcrisp` package.
+Using the obtained bounding box and corresponding CRS, we get the different layers of OSM data needed for the delineation of the urban river corridor. We will get the city boundary, the waterways, the street network, and the rail network using built-in functions from the `rcrisp` package.
 
 ```{r}
 city_boundary <- get_osm_city_boundary(bb, city_name, crs)
@@ -63,12 +63,12 @@ bucharest_osm <- list(
 )
 ```
 
-The above layers can also be obtained with the all-in-one function `get_osmdata()`. Optionally, a buffer around the river can be specified for the retrieval of OSM data.
+The above layers can also be obtained with the all-in-one function `get_osm()`. Optionally, a buffer around the river can be specified for the retrieval of OSM data.
 
 ```{r}
-bucharest_osm <- get_osmdata(city_name, river_name,
-                             network_buffer = network_buffer,
-                             buildings_buffer = buildings_buffer)
+bucharest_osm <- get_osm(city_name, river_name,
+                         network_buffer = network_buffer,
+                         buildings_buffer = buildings_buffer)
 ```
 
 The resulting object is a list with all the layers obtained above.
