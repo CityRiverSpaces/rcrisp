@@ -22,6 +22,9 @@ test_that("If the corridor cannot be split in two edges, an error is raised", {
                "Cannot identify corridor edges")
 })
 
+#' @srrstats {G5.6} This test verifies that candidate segment boundaries are
+#'   correctly recovered for a provided set of linestrings for which the
+#'   grouping is known beforehand.
 test_that("Candidate segments boundaries are properly grouped and filtered", {
   e1 <- sf::st_linestring(cbind(c(-3, -3), c(-1, 1)))  # group 1 <--
   e2 <- sf::st_linestring(cbind(c(-3.1, -2.9), c(-1, 1)))  # group 1
@@ -40,6 +43,12 @@ test_that("Candidate segments boundaries are properly grouped and filtered", {
   )
   expect_setequal(expected, actual)
 })
+
+#' @srrstats {G5.6} The following four tests verify that non-intersecting
+#'   segment boundaries are correctly recovered for a given set of linestrings,
+#'   designed with the resulting set of lines in mind.
+#' @noRd
+NULL
 
 test_that("Intersecting segment boundaries are correctly discarded", {
   e1 <- sf::st_linestring(cbind(c(-2, -1), c(1, -1)))
@@ -97,7 +106,6 @@ test_that("The first segment boundary is discarded when length is equal", {
 #'   against a simple, trivial case.
 #' @srrstats {G5.5} Correctness tests for DBSCAN clustering are run with a fixed
 #'   random seed.
-
 test_that("The correct crossing segments are selected", {
   crossings <- sf::st_sfc(
     # Three crossings -> should be clustered
