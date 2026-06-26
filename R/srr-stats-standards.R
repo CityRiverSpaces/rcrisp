@@ -51,6 +51,10 @@
 #'   documentation and validated throughout the package using
 #'   `checkmate::assert_*` functions to ensure input data conforms to expected
 #'   types and structures.
+#' @srrstats {SP6.1a} The `delineate_corridor()`, `delineate_segments()`, and
+#'   `delineate_riverspace()` functions require a projected CRS. Because
+#'   passing geographic (lat/lon) data to those functions would yield inaccurate
+#'   results, they raise an informative error to prevent this.
 # nolint end
 #' @noRd
 NULL
@@ -63,6 +67,10 @@ NULL
 #' @srrstatsNA {G1.6} As there are no alternative implementations, no
 #'   performance claims are made in this package.
 #' @srrstatsNA {G2.4d, G2.4e, G2.5} This package does not make use of factors.
+#' @srrstatsNA {G2.6} This package only accepts one-dimensional inputs
+#'   inheriting from base vector classes. Input types are strictly validated
+#'   with `checkmate`, and custom vector-like classes are not in the list of
+#'   accepted input classes. Therefore, this standard does not apply.
 #' @srrstatsNA {G2.9} This package does not perform type conversions or
 #'   meta-data changes leading to information loss that would require issuing
 #'   diagnostic messages.
@@ -84,33 +92,29 @@ NULL
 #'   properties.
 #' @srrstatsNA {G5.8c} No tabular data where all fields or all columns can be NA
 #'   can be used as input in any of the function of this package.
-#' @srrstatsNA {G5.9, G5.9a, G5.9b} The core algorithm and input data of this
-#'   package are deterministic, so noise susceptibility tests do not apply.
+#' @srrstatsNA {G5.9, G5.9a, G5.9b} The core algorithms (cost-distance valley
+#'   extraction, shortest-path corridor delineation, DBSCAN-based crossing
+#'   clustering, and reycasting in riverspace delineation) are fully
+#'   deterministic, so noise susceptibility tests do not apply. These standards
+#'   will be reconsidered if future versions introduce randomised sampling, e.g.
+#'   for viewpoint generation in `delineate_riverspace()` or corridor
+#'   corridor initialisation in `delineate_corridor()`
 #' @srrstatsNA {G5.12} No special requirements are needed to run extended tests.
 #'
 #  Not applicable spatial software standards ----
-#' @srrstatsNA {SP2.0a, SP2.0b} This package does not implement any new classes
-#'   for spatial data.
-#' @srrstatsNA {SP2.5a} This package does not implement new classes.
 #' @srrstatsNA {SP3.0b} The package does not consider spatial neighbours in
 #'   irregular spaces.
 #' @srrstatsNA {SP3.2} The package does not rely on sampling from input data.
 #' @srrstatsNA {SP3.3} The package does not employ regression.
 #' @srrstatsNA {SP3.5, SP3.6} The package does not implement any kind of
 #'   (supervised) machine learning.
-#' @srrstatsNA {SP6.1a} The package relies on the [`sf`] package to
-#'   inform the user about any inaccuracies resulting from the application of
-#'   geoprocessing functions intended for applications in Cartesian space in
-#'   curvilinear space. Therefore no test is implemented here.
 #' @srrstatsNA {SP6.1b} This package does not implement any functions
 #'   that yield equivalent accuracy for both rectilinear and curvilinear data.
 #'   All relevant functionality is limited to either Cartesian or
 #'   ellipsoidal coordinate systems, not both.
-#' @srrstatsNA {SP5.0, SP5.1, SP5.2, SP5.3} The package does not return any
-#'   custom classes and thus does not implement a plot method nor does it offer
-#'   an ability to generate interactive visualisations. The returned
-#'   delineations can be used in static and interactive visualisation workflows
-#'   as any other spatial data.
+#' @srrstatsNA {SP5.3} The package does not offer an ability to generate
+#'   interactive visualisations. Future implementations may extend the
+#'   `visualisation.R` module, e.g., with `leaflet` functionality.
 #' @srrstatsNA {SP6.3, SP6.4} This package uses spatial neighbours only via the
 #'   `terra::costDist()` function. Therefore, the definition and weighting of
 #'   neighbours are managed by `terra`, and are not implemented or tested within

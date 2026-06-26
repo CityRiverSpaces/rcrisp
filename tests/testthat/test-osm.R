@@ -30,6 +30,20 @@ mock_city_boundary <- sf::st_sf(
   admin_level = "4",
   geometry = mock_city_boundary_geom
 )
+aoi <- list(
+  city_name = "Bucharest",
+  river_name = "Dâmbovița",
+  bb = sf::st_bbox(c(xmin = 25.967,
+                     ymin = 44.334,
+                     xmax = 26.226,
+                     ymax = 44.541),
+                   crs = "EPSG:4326"),
+  crs = sf::st_crs("EPSG:4326"),
+  corridor_init = "valley",
+  network_buffer = 3000,
+  dem_buffer = 2500,
+  buildings_buffer = 100
+)
 
 test_that("OSM queries are stored to and retrieved from the cache", {
 
@@ -50,7 +64,7 @@ test_that("OSM queries are stored to and retrieved from the cache", {
       cached_filepath <- file.path(cache_dir, cached_filename)
       expect_true(file.exists(cached_filepath))
       # subsequent calls read data from the file
-      expect_warning(
+      expect_message(
         osmdata_as_sf("key", "value", bb_bucharest, force_download = FALSE),
         cached_filepath,
         fixed = TRUE
@@ -105,27 +119,26 @@ test_that("The correct OSM data elements are retrieved", {
     get_osm_city_boundary = function(...) "city_boundary",
     {
       # By default, the bb, river, river suf
-      osmdata_default <- get_osmdata("Bucharest",
-                                     "Dâmbovița",
-                                     force_download = TRUE)
-      osmdata_nobound <- get_osmdata("Bucharest",
-                                     "Dâmbovița",
-                                     city_boundary = FALSE,
-                                     force_download = TRUE)
-      osmdata_network <- get_osmdata("Bucharest",
-                                     "Dâmbovița",
-                                     network_buffer = 3000,
-                                     force_download = TRUE)
-      osmdata_buildings <- get_osmdata("Bucharest",
-                                       "Dâmbovița",
-                                       buildings_buffer = 100,
-                                       force_download = TRUE)
-      osmdata_all <- get_osmdata("Bucharest",
-                                 "Dâmbovița",
-                                 network_buffer = 3000,
-                                 buildings_buffer = 100,
+      osmdata_default <- get_osm(aoi,
+                                 network = FALSE,
+                                 buildings = FALSE,
                                  force_download = TRUE)
 
+      osmdata_nobound <- get_osm(aoi,
+                                 network = FALSE,
+                                 buildings = FALSE,
+                                 city_boundary = FALSE,
+                                 force_download = TRUE)
+
+      osmdata_network <- get_osm(aoi,
+                                 buildings = FALSE,
+                                 force_download = TRUE)
+
+      osmdata_buildings <- get_osm(aoi,
+                                   network = FALSE,
+                                   force_download = TRUE)
+
+      osmdata_all <- get_osm(aoi, force_download = TRUE)
     }
   )
 
@@ -330,4 +343,16 @@ test_that("Only one river can be queried at a time", {
   bb <- sf::st_bbox(c(xmin = 0, ymin = 0, xmax = 1, ymax = 1))
   expect_error(get_osm_river_centerline(bb, c("Dâmbovița", "SomeOtherRiver")),
                "Assertion on 'river_name' failed: Must have length 1")
+})
+
+test_that("get_river_aoi() issues a message when reprojecting lon/lat input", {
+  river <- sf::st_sfc(
+    sf::st_linestring(cbind(c(26.1, 26.2), c(44.4, 44.5))),
+    crs = 4326
+  )
+  bbox <- sf::st_bbox(river)
+  expect_message(
+    get_river_aoi(river, bbox, buffer_distance = 100),
+    "Reprojecting river from EPSG:4326 to EPSG:32635 for river AoI buffering."
+  )
 })

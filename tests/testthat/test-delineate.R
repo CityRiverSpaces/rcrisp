@@ -1,14 +1,30 @@
-test_osmdata <- get_test_osmdata()
+test_osm <- get_test_osm()
 test_dem <- get_test_dem_valley(
-  test_osmdata$river_centerline, ymin = -10000, ymax = 10000, res = 50
+  test_osm$river_centerline, ymin = -10000, ymax = 10000, res = 50
 )
-crs <- sf::st_crs(test_osmdata$river_centerline)
+crs <- sf::st_crs(test_osm$river_centerline)
+
+aoi <- list(
+  city_name = "Bucharest",
+  river_name = "Dâmbovița",
+  bb = sf::st_bbox(c(xmin = 25.967,
+                     ymin = 44.334,
+                     xmax = 26.226,
+                     ymax = 44.541),
+                   crs = "EPSG:4326"),
+  crs = crs,
+  network_buffer = 3000,
+  dem_buffer = 2500,
+  buildings_buffer = 100
+)
 
 #' @srrstats {G5.8} Edge test: an error is raised if conflicting input
 #'   parameters are given.
 test_that("Segmentation without corridor raises error", {
-  expect_error(delineate("Bucharest", "Dâmbovița",
-                         corridor = FALSE, segment = TRUE),
+  expect_error(delineate(aoi,
+                         test_osm,
+                         corridor = FALSE,
+                         segments = TRUE),
                "Segmentation requires corridor delineation.")
 })
 
@@ -16,76 +32,146 @@ test_that("Delineate returns all required delineation units", {
   # Input arguments should mimic as much as possible the input used to setup
   # the example datasets, see:
   # https://github.com/CityRiverSpaces/CRiSpExampleData/blob/main/data-raw/bucharest.R  # nolint
-  with_mocked_bindings(get_osmdata = function(...) test_osmdata,
-                       get_dem = function(...) test_dem,
-                       delineations <- delineate(city_name = "MyCity",
-                                                 river_name = "MyRiver",
-                                                 crs = crs,
-                                                 network_buffer = 2500,
-                                                 buildings_buffer = 100,
-                                                 dem_buffer = 2500,
-                                                 corridor_init = "valley",
-                                                 corridor = TRUE,
-                                                 segments = TRUE,
-                                                 riverspace = TRUE) |>
-                         suppressMessages() |>
-                         suppressWarnings())
+  delineations <- delineate(aoi,
+                            test_osm,
+                            test_dem,
+                            corridor = TRUE,
+                            segments = TRUE,
+                            riverspace = TRUE) |>
+    suppressMessages() |>
+    suppressWarnings()
   expect_setequal(names(delineations),
-                  c("valley", "corridor", "segments", "riverspace"))
-  expect_true(all(vapply(
-    delineations,
-    \(x) inherits(x, c("sfc_POLYGON", "sfc_MULTIPOLYGON")),
-    logical(1)
-  )))
+                  c("streets", "railways", "river_centerline", "river_surface",
+                    "valley", "corridor", "segments", "riverspace", "aoi"))
+  spatial_layers <- Filter(\(x) inherits(x, c("sf", "sfc")), delineations)
+  geometry_types <- lapply(spatial_layers, sf::st_geometry_type)
+  # segments include multiple geometries, flatten array for comparison
+  expect_in(do.call(c, geometry_types),
+            c("POLYGON", "MULTIPOLYGON", "LINESTRING", "MULTILINESTRING"))
 })
 
 test_that("Delineate does not return the valley if the buffer method is used", {
   # Input arguments should mimic as much as possible the input used to setup
   # the example datasets, see:
   # https://github.com/CityRiverSpaces/CRiSpExampleData/blob/main/data-raw/bucharest.R  # nolint
-  with_mocked_bindings(get_osmdata = function(...) test_osmdata,
-                       get_dem = function(...) test_dem,
-                       delineations <- delineate(city_name = "MyCity",
-                                                 river_name = "MyRiver",
-                                                 crs = crs,
-                                                 network_buffer = 2500,
-                                                 buildings_buffer = 100,
-                                                 dem_buffer = 2500,
-                                                 corridor_init = 1000,
-                                                 corridor = TRUE,
-                                                 # only compute corridor here
-                                                 segments = FALSE,
-                                                 riverspace = FALSE) |>
-                         suppressWarnings())
-  expect_equal(names(delineations), "corridor")
-})
-
-test_that("If `network_buffer` is not specified, the default value is used", {
-  expect_message(with_mocked_bindings(get_osmdata = \(...) test_osmdata,
-                                      get_dem = \(...) test_dem,
-                                      delineate(city_name = "MyCity",
-                                                river_name = "MyRiver",
-                                                crs = crs) |>
-                                        suppressWarnings()),
-                 paste0("The default `network_buffer` of 3000 m ",
-                        "is used for corridor delineation."))
-})
-
-test_that("If `buildings_buffer` is not specified, the default value is used", {
-  expect_message(with_mocked_bindings(get_osmdata = \(...) test_osmdata,
-                                      get_dem = \(...) test_dem,
-                                      delineate(city_name = "MyCity",
-                                                river_name = "MyRiver",
-                                                crs = crs,
-                                                riverspace = TRUE) |>
-                                        suppressWarnings()),
-                 paste0("The default `buildings_buffer` of 100 m ",
-                        "is used for riverspace delineation."))
+  delineations <- delineate(aoi,
+                            test_osm,
+                            corridor_init = 1000,
+                            corridor = TRUE,
+                            segments = FALSE,
+                            riverspace = FALSE) |>
+    suppressWarnings()
+  expect_equal(names(delineations),
+               c("streets", "railways", "river_centerline", "river_surface",
+                 "corridor", "aoi"))
 })
 
 #' @srrstats {G5.8} Edge test: an error is raised if the dimension of the input
 #'   parameters does not fit the requirements.
 test_that("Only one city can be delineated at a time", {
-  expect_error(delineate(c("Bucharest", "Cluj-Napoca"), "Dâmbovița"),
+  expect_error(delineate_city_river(c("Bucharest", "Cluj-Napoca"), "Dâmbovița"),
                "Assertion on 'city_name' failed: Must have length 1")
+})
+
+#' @srrstats {G5.8} Edge test: an error is raised if required OSM data is
+#'   missing.
+test_that("Error is raised when valley method is used without a DEM", {
+  expect_error(delineate(aoi, test_osm, dem = NULL, corridor_init = "valley"),
+               "If initial corridor is \"valley\", a DEM must be provided.")
+})
+
+test_that("Error is raised when OSM spatial network data is missing", {
+  osm_without_streets <- test_osm
+  osm_without_streets$streets <- NULL
+  expect_error(delineate(aoi, osm_without_streets, test_dem, corridor = TRUE),
+               "Spatial network \\(streets, railways\\) data is not available")
+})
+
+test_that("Error is raised when buildings data is missing for riverspace delineation", {  # nolint
+  osm_without_buildings <- test_osm
+  osm_without_buildings$aoi_buildings <- NULL
+  expect_error(
+    delineate(aoi, osm_without_buildings, test_dem, riverspace = TRUE),
+    "AOI for buildings is not available"
+  )
+})
+
+# Minimal delineation object for print/summary snapshot tests.
+# Using a projected CRS (UTM zone 35N) and simple geometries with known
+# dimensions: a 1x1 km square and a 2 km line.
+square <- sf::st_sfc(
+  sf::st_polygon(list(
+    rbind(c(0, 0), c(1000, 0), c(1000, 1000), c(0, 1000), c(0, 0))
+  )),
+  crs = 32635
+)
+line <- sf::st_sfc(
+  sf::st_linestring(rbind(c(0, 500), c(2000, 500))),
+  crs = 32635
+)
+minimal_delineation <- structure(
+  list(
+    streets = sf::st_sf(type = "primary", geometry = square),
+    railways = NULL,
+    river_centerline = line,
+    river_surface = square,
+    valley = square,
+    corridor = square,
+    segments = c(square, square),
+    riverspace = NULL,
+    aoi = list(
+      city_name = "TestCity",
+      river_name = "TestRiver",
+      network_buffer = 3000,
+      dem_buffer = 2500,
+      buildings_buffer = 100
+    )
+  ),
+  class = c("delineation", "list")
+)
+
+test_that("print.delineation output matches snapshot", {
+  expect_snapshot(print(minimal_delineation))
+})
+
+test_that("print.delineation raises error for wrong class", {
+  expect_error(print.delineation(unclass(minimal_delineation)),
+               "'x' must be object of class 'delineation'.")
+})
+
+test_that("summary.delineation and print.summary.delineation match snapshot", {
+  expect_snapshot(summary(minimal_delineation))
+})
+
+test_that("summary.delineation raises error for wrong class", {
+  expect_error(summary.delineation(unclass(minimal_delineation)),
+               "'object' must be object of class 'delineation'.")
+})
+
+test_that("print.summary.delineation raises error for wrong class", {
+  expect_error(print.summary.delineation(list()),
+               "'x' must be object of class 'summary.delineation'.")
+})
+
+test_that("summary.delineation includes riverspace layer", {
+  delineation_with_riverspace <- minimal_delineation
+  delineation_with_riverspace$riverspace <- square
+  s <- summary(delineation_with_riverspace)
+  expect_false(is.null(s$delineation_layers$riverspace))
+  expect_equal(s$delineation_layers$riverspace$area_km2, 1.0)
+})
+
+test_that("print.delineation handles missing city/river name", {
+  delineation_no_name <- minimal_delineation
+  delineation_no_name$aoi$city_name <- NULL
+  expect_output(print(delineation_no_name), "Delineation")
+})
+
+test_that("print.summary.delineation handles missing city/river name and NA CRS", {  # nolint
+  s <- structure(
+    list(city_name = NULL, river_name = NULL, crs = NA_character_,
+         parameters = NULL, delineation_layers = list(), base_layers = list()),
+    class = "summary.delineation"
+  )
+  expect_output(print(s), "Delineation")
 })

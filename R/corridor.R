@@ -55,6 +55,8 @@
 #'   for spatial network analysis. The `river` parameter accepts inputs of type
 #'   `sf` and `sfc`. In the current implementation, any other form of tabular
 #'   input is rejected (the spatial information is strictly needed).
+#' @srrstats {G2.9} The user is informed when the input river object in lat/lon
+#'   coordinates is transformed into a suitable projected CRS.
 #' @srrstats {G2.10} This function uses `sf::st_geometry()` to extract the
 #'   geometry column from the `sf` object `river`. This is used when only
 #'   geometry information is needed from that point onwards and all other
@@ -101,6 +103,14 @@ delineate_corridor <- function(
   capping_method <- tolower(capping_method)
   checkmate::assert_choice(capping_method, c("shortest-path", "direct"))
   checkmate::assert_true(as_crs(network) == as_crs(river))
+
+  if (!is.na(sf::st_is_longlat(river)) && sf::st_is_longlat(river)) {
+    dst_crs <- get_utm_zone(river) |> as_crs()
+    message(sprintf(
+      "Reprojecting river from EPSG:%s to EPSG:%s for corridor delineation.",
+      sf::st_crs(river)$epsg, dst_crs$epsg
+    ))
+  }
 
   # Drop all attributes of river but its geometry
   river <- sf::st_geometry(river)
@@ -218,8 +228,8 @@ corridor_end_points <- function(river_network, spatial_network, regions) {
   distances <- sfnetworks::st_network_cost(river_network, from = nodes,
                                            to = nodes, weights = "weight")
 
-  indices <- which(distances == max(distances), arr.ind = TRUE)[1, ]
-  end_points <- c(nodes[indices["row"]], nodes[indices["col"]])
+  indices <- arrayInd(which.max(distances), dim(distances))
+  end_points <- c(nodes[indices[1]], nodes[indices[2]])
   if (end_points[1] == end_points[2]) {
     stop("Corridor start- and end-points coincide!")
   }

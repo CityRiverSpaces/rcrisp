@@ -31,7 +31,7 @@ cache_directory <- function() {
 #'
 #' @return A character string representing the file path
 #' @keywords internal
-get_osmdata_cache_filepath <- function(key, value, bbox) {
+get_osm_cache_filepath <- function(key, value, bbox) {
   # collapse `value` (which might be a vector) to a character string
   value_str <- paste(value, collapse = "_")
   # collapse `bbox` components as well, after rounding them
@@ -110,13 +110,13 @@ get_rds_filename <- function(...) {
 #' @param filepath Path of the file to deserialize as a character string
 #' @param unwrap Whether the deserialized object should be "unpacked" (as
 #'   required by [`terra::SpatRaster`] objects)
-#' @param quiet Omit warning on cache file being loaded
+#' @param quiet Omit message on cache file being loaded
 #'
 #' @return Object deserialized
 #' @keywords internal
 read_data_from_cache <- function(filepath, unwrap = FALSE, quiet = FALSE) {
   if (!quiet) {
-    warning(sprintf("Loading data from cache directory: %s", filepath))
+    cli::cli_alert_info("Loading data from cache directory: {filepath}")
   }
   data <- readRDS(filepath)
   if (unwrap) {
@@ -140,7 +140,7 @@ read_data_from_cache <- function(filepath, unwrap = FALSE, quiet = FALSE) {
 #' @keywords internal
 write_data_to_cache <- function(x, filepath, wrap = FALSE, quiet = FALSE) {
   if (!quiet) {
-    message(sprintf("Saving data to cache directory: %s", filepath))
+    cli::cli_alert_info("Saving data to cache directory: {filepath}")
   }
   if (wrap) {
     x <- terra::wrap(x)
@@ -156,7 +156,7 @@ write_data_to_cache <- function(x, filepath, wrap = FALSE, quiet = FALSE) {
 #'   as object of class [`Date`] or as a case dependent character vector
 #'   accepted by [`as.Date()`]
 #'
-#' @return List of file paths of removed files
+#' @return `NULL`
 #' @export
 #' @examplesIf interactive()
 #' # Clear all cache
@@ -179,19 +179,19 @@ clear_cache <- function(before_date = NULL) {
     file.remove(files_before_date)
     files_remaining <- list.files(cache_dir, full.names = TRUE)
     if (all(!files_before_date %in% files_remaining)) {
-      message("Cache files before date successfully removed.")
+      cli::cli_alert_info("Cache files before date successfully removed.")
     }
   } else {
     file.remove(files)
     if (length(list.files(cache_dir)) == 0) {
-      message("Cache files successfully removed.")
+      cli::cli_alert_info("Cache files successfully removed.")
     }
   }
 }
 
 #' Check cache
 #'
-#' A warning is raised if the cache size is > 100 MB or if it includes files
+#' A message is displayed if the cache size is > 100 MB or if it includes files
 #' older than 30 days.
 #'
 #' @export
@@ -211,10 +211,13 @@ check_cache <- function() {
     is_too_old <- (Sys.time() - date_oldest_file) > "30 days"
   }
   if (is_too_big || is_too_old) {
-    warning(sprintf(paste0(
-      "Cache dir: %s - size: %.0f MB - oldest file from: %s.\n",
-      "Clean up files older than 30 days with: `rcrisp::clear_cache('%s')` ",
-      "(or remove all cached files with: `rcrisp::clear_cache()`."
-    ), cache_dir, cache_size, as.Date(date_oldest_file), Sys.Date() - 30))
+    cli::cli_alert_info(sprintf(
+      paste0(
+        "Cache dir: %s - size: %.0f MB - oldest file from: %s.\n",
+        "Clean up files older than 30 days with: `rcrisp::clear_cache('%s')` ",
+        "(or remove all cached files with: `rcrisp::clear_cache()`)."
+      ),
+      cache_dir, cache_size, as.Date(date_oldest_file), Sys.Date() - 30
+    ))
   }
 }
