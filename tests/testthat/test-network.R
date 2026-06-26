@@ -381,7 +381,7 @@ edges_with_nas$width[3] <- NA
 #' @noRd
 NULL
 
-test_that("as_network na_action='error' stops on NA attribute columns", {
+test_that("na_action='error' stops on NA attribute columns", {
   expect_error(
     as_network(edges_with_nas, flatten = FALSE, clean = FALSE,
                na_action = "error"),
@@ -389,7 +389,7 @@ test_that("as_network na_action='error' stops on NA attribute columns", {
   )
 })
 
-test_that("as_network na_action='warn' warns on NA attribute columns", {
+test_that("na_action='warn' warns on NA attribute columns", {
   expect_warning(
     as_network(edges_with_nas, flatten = FALSE, clean = FALSE,
                na_action = "warn"),
@@ -397,14 +397,14 @@ test_that("as_network na_action='warn' warns on NA attribute columns", {
   )
 })
 
-test_that("as_network na_action='ignore' proceeds silently with NAs", {
+test_that("na_action='ignore' proceeds silently with NAs", {
   expect_no_warning(
     as_network(edges_with_nas, flatten = FALSE, clean = FALSE,
                na_action = "ignore")
   )
 })
 
-test_that("as_network na_action='impute' replaces NAs before building network", {
+test_that("na_action='impute' replaces NAs before building network", {
   net <- as_network(edges_with_nas, flatten = FALSE, clean = FALSE,
                     na_action = "impute")
   edges_out <- sf::st_as_sf(net, "edges")
