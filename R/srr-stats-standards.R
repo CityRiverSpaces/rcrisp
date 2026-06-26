@@ -67,11 +67,7 @@ NULL
 #' @srrstatsNA {G1.6} As there are no alternative implementations, no
 #'   performance claims are made in this package.
 #' @srrstatsNA {G2.4d, G2.4e, G2.5} This package does not make use of factors.
-#' @srrstatsNA {G2.6} This package only accepts one-dimensional inputs
-#'   inheriting from base vector classes. Input types are strictly validated
-#'   with `checkmate`, and custom vector-like classes are not in the list of
-#'   accepted input classes. Therefore, this standard does not apply.
-#' @srrstatsNA {G2.9} This package does not perform type conversions or
+x#' @srrstatsNA {G2.9} This package does not perform type conversions or
 #'   meta-data changes leading to information loss that would require issuing
 #'   diagnostic messages.
 #' @srrstatsNA {G2.11, G2.12} This package does not utilize list columns or
