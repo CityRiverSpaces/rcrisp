@@ -47,6 +47,9 @@
 #' @srrstats {G2.3, G2.3a, G2.3b} The `checkmate` package is used to check that
 #'   `capping_method` only uses allowed choices. The variable is also made
 #'   case-independent with `tolower()`.
+#' @srrstats {G2.6} One-dimensional distance input is pre-processed by
+#'   `preprocess_distance()` to handle `units` objects or other vector-like
+#'   classes with storage mode `numeric`.
 #' @srrstats {G2.7} The `network` object provided as input must be of class
 #'   `sfnetwork`. `sfnetwork` objects are `sf`-compatible and are commonly used
 #'   for spatial network analysis. The `river` parameter accepts inputs of type
@@ -71,6 +74,11 @@ delineate_corridor <- function(
   network, river, corridor_init = 1000, max_width = 3000, max_iterations = 10,
   capping_method = "shortest-path"
 ) {
+  # Preprocess distances
+  if (is.numeric(corridor_init) || inherits(corridor_init, "units")) {
+    corridor_init <- preprocess_distance(corridor_init)
+  }
+  max_width <- preprocess_distance(max_width)
   # Check input
   checkmate::assert_class(network, "sfnetwork")
   checkmate::assert_multi_class(river, c("sf", "sfc"))

@@ -317,6 +317,7 @@ get_cost_distance <- function(slope, river, target = 0) {
 #' @return cd raster with river+BUFFER pixels masked
 #' @keywords internal
 mask_cost_distance <- function(cd, river, buffer = 2000) {
+  buffer <- preprocess_distance(buffer)
   river_buffer <- sf::st_buffer(river, buffer) |> terra::vect()
   terra::mask(
     cd,

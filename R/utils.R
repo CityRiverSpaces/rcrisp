@@ -164,6 +164,7 @@ as_crs <- function(x, allow_geographic = FALSE) {
 #'   [`sf::sfc_POLYGON`], explicitly documented as such, and it maintains the
 #'   same units as the input.
 buffer <- function(obj, buffer_distance, ...) {
+  buffer_distance <- preprocess_distance(buffer_distance)
   is_obj_longlat <- sf::st_is_longlat(obj)
   dst_crs <- sf::st_crs(obj)
   # check if obj is a bbox
@@ -200,6 +201,7 @@ buffer <- function(obj, buffer_distance, ...) {
 #'   [`sf::sfc_POLYGON`], explicitly documented as such, and it maintains the
 #'   same units as the input.
 river_buffer <- function(river, buffer_distance, bbox = NULL, side = NULL) {
+  buffer_distance <- preprocess_distance(buffer_distance)
   if (!is.null(bbox)) river <- sf::st_crop(river, bbox)
   if (is.null(side)) {
     river_buf <- buffer(river, buffer_distance)
@@ -347,4 +349,36 @@ check_invalid_geometry <- function(sf_obj) {
     message("Invalid geometries detected! Fixing them...")
   }
   sf::st_make_valid(sf_obj) # if input valid, it remains unchanged
+}
+
+#' Pre-process one-dimensional distance input
+#'
+#' Ensure that distance input is plain numeric in meters, regardless of
+#' whether it is provided as a `units` object (e.g., a distance in kilometers),
+#' a plain numeric or another vector-like object with numeric `storage.mode`.
+#'
+#' @param x A distance value which may be `numeric`, or a [`units::units`]
+#'   object, or any other object for which the underlying `storage.mode` is
+#'   numeric.
+#' @param arg_name Name of the argument, used in messages/errors.
+#'
+#' @returns A vector of class `numeric` in meters.
+#' @keywords internal
+#' @srrstats {G2.6} One-dimensional distance input is pre-processed by
+#'   `preprocess_distance()` to handle `units` objects or other vector-like
+#'   classes with storage mode `numeric`.
+preprocess_distance <- function(x, arg_name = deparse(substitute(x))) {
+  # Ensure that the input is a single value
+  if (length(x) != 1) {
+    stop("`", arg_name, "` must be a single value, not length ", length(x))
+  }
+  # To handle both `units` objects and other vector-like objects whose
+  # `storage.mode` is numeric
+  if (inherits(x, "units")) {
+    x <- units::set_units(x, "m")
+    x <- as.numeric(x)
+  } else if (!is.null(dim(x)) && storage.mode(x) %in% c("double", "integer")) {
+    x <- as.vector(x)
+  }
+  x
 }

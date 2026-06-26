@@ -32,6 +32,9 @@
 #'                   network_buffer = 2000,
 #'                   dem_buffer = 2000,
 #'                   buildings_buffer = 150)
+#' @srrstats {G2.6} One-dimensional distance input is pre-processed by
+#'   `preprocess_distance()` to handle `units` objects or other vector-like
+#'   classes with storage mode `numeric`.
 #' @srrstats {G2.9} A message is issued when CRS is not provided by the user and
 #'   a suitable UTM zone is auto-selected instead.
 define_aoi <- function(
@@ -39,6 +42,14 @@ define_aoi <- function(
   crs = NULL,
   network_buffer = 3000, dem_buffer = 2500, buildings_buffer = 100
 ) {
+  # Pre-process distances
+  if (!is.null(network_buffer)) {
+    network_buffer   <- preprocess_distance(network_buffer)
+  }
+  if (!is.null(buildings_buffer)) {
+    buildings_buffer <- preprocess_distance(buildings_buffer)
+  }
+  dem_buffer <- preprocess_distance(dem_buffer)
   # Check input
   checkmate::assert_character(city_name, len = 1)
   checkmate::assert_character(river_name, len = 1)

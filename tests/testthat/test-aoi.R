@@ -46,3 +46,24 @@ test_that("NULL values are rejected for numeric buffer parameters", {
     "Assertion on 'buildings_buffer' failed: Must be of type 'numeric'"
   )
 })
+
+test_that("define_aoi() accepts units objects for buffer parameters", {
+  with_mocked_bindings(
+    get_osm_bb = \(...) {
+      sf::st_bbox(c(xmin = 25.967, ymin = 44.334,
+                    xmax = 26.226, ymax = 44.541),
+                  crs = "EPSG:4326")
+    },
+    {
+      aoi <- define_aoi("MyCity", "MyRiver",
+                        network_buffer   = units::set_units(3, "km"),
+                        dem_buffer       = units::set_units(2500, "m"),
+                        buildings_buffer = units::set_units(100, "m")) |>
+        suppressMessages()
+      expect_type(aoi$network_buffer,   "double")
+      expect_equal(aoi$network_buffer,   3000)
+      expect_equal(aoi$dem_buffer,       2500)
+      expect_equal(aoi$buildings_buffer, 100)
+    }
+  )
+})
