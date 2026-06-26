@@ -39,6 +39,14 @@ define_aoi <- function(
   crs = NULL,
   network_buffer = 3000, dem_buffer = 2500, buildings_buffer = 100
 ) {
+  # Pre-process distances
+  if (!is.null(network_buffer)) {
+    network_buffer   <- preprocess_distance(network_buffer)
+  }
+  if (!is.null(buildings_buffer)) {
+    buildings_buffer <- preprocess_distance(buildings_buffer)
+  }
+  dem_buffer <- preprocess_distance(dem_buffer)
   # Check input
   checkmate::assert_character(city_name, len = 1)
   checkmate::assert_character(river_name, len = 1)

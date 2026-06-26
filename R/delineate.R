@@ -95,14 +95,6 @@ delineate <- function(
   max_iterations = 10, capping_method = "shortest-path", angle_threshold = 100,
   corridor = TRUE, segments = FALSE, riverspace = FALSE
 ) {
-  # Pre-process distances
-  if (!is.null(network_buffer)) {
-    network_buffer   <- preprocess_distance(network_buffer)
-  }
-  if (!is.null(buildings_buffer)) {
-    buildings_buffer <- preprocess_distance(buildings_buffer)
-  }
-  dem_buffer <- preprocess_distance(dem_buffer)
   # Check input
   checkmate::assert_list(aoi)
   if (is.character(corridor_init)) {
