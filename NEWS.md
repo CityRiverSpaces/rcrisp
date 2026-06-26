@@ -38,7 +38,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `delineate()`: now accepts the `aoi` object, OSM data, and DEM as separate inputs, with a reduced parameter signature.
 - `delineate_city_river()` (new): convenience wrapper that runs the full workflow from city and river name with default parameters.
 - `delineate()` returns now an S3 object of class `delineation`.
-- `as_network()` now checks for NAs in non-geometry columns and issues an error, proceeds with an error, imputes NA values, or ignores them, as specified by the user with a new `na_action` parameter.
+- `as_network()` now checks for NAs in non-geometry columns and issues an error, proceeds with a warning, imputes NA values, or ignores them, as specified by the user with a new `na_action` parameter.
 
 ## Removed
 
