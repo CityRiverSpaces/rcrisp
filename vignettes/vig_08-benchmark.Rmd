@@ -22,25 +22,25 @@ knitr::opts_chunk$set(
 This vignette documents how `rcrisp` performs across a diverse set of
 European city-river cases. Benchmarks were run on a single machine in a
 single session using OpenStreetMap and Copernicus GLO-30 DEM data downloaded
-live with the `get_osm()` and `get_dem()` functions. The timings from these
-two data retrieval functions therefore include network latency and reflect
-the volume of spatial data available for each case, not just CPU work.
+live with the `get_osm()` and `get_dem()` functions, respectively. The timings
+from these two data retrieval functions therefore include network latency and
+reflect the volume of spatial data available for each case, not just CPU work.
 
-```{r data}
+```{r prepare-data-and-plot}
 library(dplyr)
 library(ggplot2)
 
-raw <- read.csv(
-  "../inst/extdata/benchmark_timings.csv",
-  stringsAsFactors = FALSE
-) |>
+# Load and prepare data
+raw <- read.csv("../benchmark/output/timings.csv", stringsAsFactors = FALSE) |>
   mutate(case = paste0(city_name, " - ", river_name))
 
+# Define pipeline steps
 io_steps <- c("get_osm", "get_dem")
 compute_steps <- c("delineate_valley", "as_network", "delineate_corridor",
                    "delineate_segments", "delineate_riverspace")
 all_steps <- c(io_steps, compute_steps)
 
+# Define display labels for steps
 step_labels <- c(
   get_osm              = "get_osm()",
   get_dem              = "get_dem()",
@@ -51,27 +51,7 @@ step_labels <- c(
   delineate_riverspace = "delineate_riverspace()"
 )
 
-# Retain only cases that completed the full pipeline, ordered by total time
-case_order <- raw |>
-  filter(step == "total", status == "success") |>
-  arrange(elapsed_s) |>
-  pull(case)
-
-bar_data <- raw |>
-  filter(case %in% case_order, step %in% all_steps, status == "success") |>
-  mutate(
-    step_label = factor(step_labels[step], levels = step_labels[all_steps]),
-    case       = factor(case, levels = case_order)
-  )
-```
-
-## Run time by case and step
-
-Blues indicate **data retrieval** functions (`get_osm()`, `get_dem()`); warm
-colours indicate **computation** functions. Cases are sorted from fastest
-(bottom) to slowest (top).
-
-```{r bar-chart, fig.alt = "Horizontal stacked bar chart showing elapsed time per city-river case, broken down by pipeline step. Blues represent data retrieval functions and warm colours represent computation functions, stacked left to right in pipeline order."}
+# Define colours: blues for I/O steps, warm tones for computation
 step_colours <- c(
   "get_osm()"              = "#2166AC",
   "get_dem()"              = "#74ADD1",
@@ -82,10 +62,31 @@ step_colours <- c(
   "delineate_riverspace()" = "#7F0000"
 )
 
+# Prepare data for plotting
+case_order <- raw |>
+  filter(step == "total", status == "success") |>
+  arrange(elapsed_s) |>
+  pull(case)
+
+bar_data <- raw |>
+  filter(case %in% case_order, step %in% all_steps, status == "success") |>
+  mutate(
+    step_label = factor(step_labels[step], levels = step_labels[all_steps]),
+    case = factor(case, levels = case_order)
+  )
+
 case_totals <- bar_data |>
   group_by(case) |>
   summarise(total = sum(elapsed_s), .groups = "drop")
+```
 
+## Run time by case and step
+
+Blues indicate **data retrieval** functions (`get_osm()`, `get_dem()`); warm
+colours indicate **computation** functions. Cases are sorted from fastest
+(bottom) to slowest (top).
+
+```{r bar-chart, fig.alt = "Horizontal stacked bar chart showing elapsed time per city-river case, broken down by pipeline step. Blues represent data retrieval functions and warm colours represent computation functions, stacked left to right in pipeline order."}
 ggplot(bar_data, aes(x = elapsed_s, y = case, fill = step_label)) +
   geom_bar(stat = "identity", position = position_stack(reverse = TRUE)) +
   geom_text(
@@ -109,22 +110,22 @@ ggplot(bar_data, aes(x = elapsed_s, y = case, fill = step_label)) +
 
 ## Key findings
 
-- **`get_osm()` dominates total runtime**, accounting for 75–95% of
-  wall-clock time in most cases. The wide range (from ~8 s for Plovdiv to
-  ~395 s for Paris) reflects OSM data volume rather than algorithmic
-  complexity.
+- **`get_osm()` dominates total runtime**, typically accounting for 70–90% of
+  wall-clock time. The wide range (from ~8 s for Plovdiv to ~355 s for Paris)
+  reflects OSM data volume rather than algorithmic complexity.
 
-- **`get_dem()` is fast and consistent** (1.5–7 s), since the number of DEM
+- **`get_dem()` is fast and consistent** (1.8–7 s), since the number of DEM
   tiles depends on geographic extent, not urban density.
 
-- **Among computation steps, `delineate_riverspace()` is the most variable.**
-  In cases with large building footprints or complex water surfaces (e.g.,
-  Budapest, Amsterdam) it can exceed 5–30 s; in simpler cases it runs in under
-  1 s.
+- **Among computation steps, `delineate_corridor()` and `delineate_segments()`
+  show the most variability** relative to their mean times.
+  `delineate_corridor()` is noticeably slower for large, dense street networks
+  (Paris: 10.4 s vs. typical 1–2 s), while `delineate_riverspace()` is more
+  consistently fast across all cases.
 
 - **`as_network()` and `delineate_corridor()` scale with street network size**,
-  and are noticeably slower for large, dense cities such as Paris, Budapest,
-  and Rome.
+  and are noticeably slower for large, dense cities such as Paris
+  (~26 s combined), Rome (~17 s), and Budapest (~7 s).
 
-- **`delineate_valley()` and `delineate_segments()` are consistently fast**
-  across all cases (under 3 s in most cases).
+- **`delineate_valley()` and `delineate_segments()` are generally fast**
+  across all cases, though a few complex cases exceed 5 s.
