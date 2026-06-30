@@ -97,7 +97,8 @@
 </ul></div>
 <div class="section level3">
 <h3 id="changed-0-2-0">Changed<a class="anchor" aria-label="anchor" href="#changed-0-2-0"></a></h3>
-<ul><li>Replaced <code><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply()</a></code> with <code><a href="https://rdrr.io/r/base/lapply.html" class="external-link">vapply()</a></code> throughout the package for improved type safety.</li>
+<ul><li>Optimised OSM river retrieval by matching the river to an OSM relation ID via Nominatim and fetching by ID, instead of querying all waterways within a bounding box and filtering by name.</li>
+<li>Replaced <code><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply()</a></code> with <code><a href="https://rdrr.io/r/base/lapply.html" class="external-link">vapply()</a></code> throughout the package for improved type safety.</li>
 <li>Updated package metadata in <code>DESCRIPTION</code> and <code>codemeta.json</code>
 </li>
 <li>Organized function reference page into meaningful sections.</li>

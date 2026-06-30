@@ -54,7 +54,13 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_osm_river_centerline</span><span class="op">(</span><span class="va">bb</span>, <span class="va">river_name</span>, crs <span class="op">=</span> <span class="cn">NULL</span>, force_download <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_osm_river_centerline</span><span class="op">(</span></span>
+<span>  <span class="va">bb</span>,</span>
+<span>  <span class="va">river_name</span>,</span>
+<span>  crs <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  buffer_distance <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  force_download <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -72,6 +78,13 @@ case-sensitive.</p></dd>
 
 <dt id="arg-crs">crs<a class="anchor" aria-label="anchor" href="#arg-crs"></a></dt>
 <dd><p>Coordinate reference system as EPSG code</p></dd>
+
+
+<dt id="arg-buffer-distance">buffer_distance<a class="anchor" aria-label="anchor" href="#arg-buffer-distance"></a></dt>
+<dd><p>Optional buffer distance in metres to expand the
+bounding box before cropping the river centreline. Useful when downstream
+processing (e.g. network or DEM analysis) extends beyond the original <code>bb</code>.
+Defaults to <code>NULL</code> (no expansion).</p></dd>
 
 
 <dt id="arg-force-download">force_download<a class="anchor" aria-label="anchor" href="#arg-force-download"></a></dt>

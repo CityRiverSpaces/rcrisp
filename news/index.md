@@ -69,6 +69,9 @@ CRAN release: 2025-08-21
 
 ### Changed
 
+- Optimised OSM river retrieval by matching the river to an OSM relation
+  ID via Nominatim and fetching by ID, instead of querying all waterways
+  within a bounding box and filtering by name.
 - Replaced [`sapply()`](https://rdrr.io/r/base/lapply.html) with
   [`vapply()`](https://rdrr.io/r/base/lapply.html) throughout the
   package for improved type safety.
