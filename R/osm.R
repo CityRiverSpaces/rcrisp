@@ -76,6 +76,74 @@ osmdata_query <- function(key, value, bb) {
     osmdata::osmdata_sf()
 }
 
+#' Retrieve OpenStreetMap data as sf object for a specific feature type and id
+#'
+#' Results are cached, so that new queries with the same type and id will be
+#' loaded from disk.
+#'
+#' @param type A character string with the OSM element type ("relation",
+#'   "way", or "node")
+#' @param id A character or numeric vector of length 1 with the OSM element id
+#' @param force_download Download data even if cached data is available
+#'
+#' @returns An [`osmdata::osmdata`] object with the retrieved OpenStreetMap data
+#' @keywords internal
+#' @srrstats {G4.0} OSM data is saved with a file name concatenated from the
+#'   OSM element type and id.
+#' @srrstats {G2.3, G2.3b} `type` is made case-insensitive to comply with
+#'   OpenStreetMap (OSM) naming convention.
+#' @srrstats {SP4.0, SP4.0b, SP4.2} The return value is of class
+#'   [`osmdata::osmdata`], explicitly documented as such.
+osmdata_as_sf_by_id <- function(type, id, force_download = FALSE) {
+  type <- tolower(type)
+  checkmate::assert_choice(type, c("node", "way", "relation"))
+  checkmate::assert_scalar(id)
+  checkmate::assert_logical(force_download, len = 1)
+
+  filepath <- get_osm_id_cache_filepath(type, as.character(id))
+
+  if (file.exists(filepath) && !force_download) {
+    return(read_data_from_cache(filepath))
+  }
+
+  osmdata_sf <- osmdata_id_query(type, id)
+
+  write_data_to_cache(osmdata_sf, filepath)
+
+  osmdata_sf
+}
+
+#' Query the Overpass API for a specific feature type and id
+#'
+#' @param type A character string with the OSM element type
+#' @param id A character or numeric vector of length 1 with the OSM element id
+#'
+#' @returns An [`osmdata::osmdata`] object with the retrieved OpenStreetMap data
+#' @keywords internal
+#' @srrstats {SP4.0, SP4.0b, SP4.2} The return value is of class
+#'   [`osmdata::osmdata`], explicitly documented as such.
+osmdata_id_query <- function(type, id) {
+  # Character or numeric (not integer) is required
+  osmdata::opq_osm_id(type = type, id = as.character(id)) |>
+    osmdata::osmdata_sf()
+}
+
+#' Look up a river's OSM relation via Nominatim
+#'
+#' @param river_name A character string with the river name
+#'
+#' @return A data frame with Nominatim results filtered to waterway river
+#'   relations, or an empty data frame if none found.
+#' @keywords internal
+nominatim_waterway_lookup <- function(river_name) {
+  osmdata::getbb(river_name, format_out = "data.frame") |>
+    dplyr::filter(
+      .data$class == "waterway",
+      .data$type == "river",
+      .data$osm_type == "relation"
+    )
+}
+
 #' Get the bounding box of a city
 #'
 #' @param city_name A character vector of length one
@@ -160,9 +228,13 @@ get_osm <- function(aoi,
   crs <- aoi$crs
   bb <- aoi$bb
 
-  # Retrieve the river center line and surface
+  # Retrieve the river center line and surface, expanding the crop area by the
+  # combined network + DEM buffer so the centreline covers the full analysis
+  # extent used by downstream steps
   river_centerline <- get_osm_river_centerline(
-    bb, aoi$river_name, crs = crs, force_download = force_download
+    bb, aoi$river_name, crs = crs,
+    buffer_distance = aoi$network_buffer + aoi$dem_buffer,
+    force_download = force_download
   )
 
   osm <- list(bb = bb, river_centerline = river_centerline)
@@ -280,6 +352,10 @@ get_osm_city_boundary <- function(bb, city_name, crs = NULL, multiple = FALSE,
 #' @param river_name The name of the river as character vector of length 1,
 #'   case-sensitive.
 #' @param crs Coordinate reference system as EPSG code
+#' @param buffer_distance Optional buffer distance in metres to expand the
+#'   bounding box before cropping the river centreline. Useful when downstream
+#'   processing (e.g. network or DEM analysis) extends beyond the original `bb`.
+#'   Defaults to `NULL` (no expansion).
 #' @param force_download Download data even if cached data is available
 #'
 #' @return The river centreline as object of class [`sf::sfc_LINESTRING`] or
@@ -301,35 +377,49 @@ get_osm_city_boundary <- function(bb, city_name, crs = NULL, multiple = FALSE,
 #'   class [`sf::sfc_LINESTRING`] or [`sf::sfc_MULTILINESTRING`], explicitly
 #'   documented as such.
 get_osm_river_centerline <- function(bb, river_name, crs = NULL,
+                                     buffer_distance = NULL,
                                      force_download = FALSE) {
   # Check input
   checkmate::assert_character(river_name, len = 1)
   crs <- as_crs(crs)
+  checkmate::assert_numeric(buffer_distance, len = 1, null.ok = TRUE)
   checkmate::assert_logical(force_download, len = 1)
 
-  # Get the river centreline
-  river_centerline <- osmdata_as_sf("waterway", "", bb,
-                                    force_download = force_download)
+  waterway_rivers <- nominatim_waterway_lookup(river_name)
 
-  # Check that waterway geometries are found within bb
-  if (is.null(river_centerline$osm_lines) &&
-        is.null(river_centerline$osm_multilines)) {
-    stop(sprintf("No waterway geometries found within given bounding box"))
+  if (nrow(waterway_rivers) == 0) {
+    stop(sprintf("No OSM waterway relation found for: %s", river_name))
   }
 
-  river_centerline_lines <- river_centerline$osm_lines
-  if (!is.null(river_centerline$osm_multilines)) {
+  waterway_river <- waterway_rivers[1, ]
+  feature <- osmdata_as_sf_by_id(waterway_river$osm_type, waterway_river$osm_id,
+                                 force_download = force_download)
+
+  # Check that waterway geometries are found
+  if (is.null(feature$osm_lines) && is.null(feature$osm_multilines)) {
+    stop(sprintf("No waterway geometries found for river %s", river_name))
+  }
+
+  river_centerline_lines <- feature$osm_lines
+  if (!is.null(feature$osm_multilines)) {
     river_centerline_lines <- dplyr::bind_rows(river_centerline_lines,
-                                               river_centerline$osm_multilines)
+                                               feature$osm_multilines)
   }
 
-  # Retrieve river centerline of interest
-  river_centerline <- river_centerline_lines |>
-    # filter using any of the "name" columns (matching different languages)
-    match_osm_name(river_name) |>
-    check_invalid_geometry() |> # fix invalid geometries, if any
-    # the query can return more features than actually intersecting the bb
-    sf::st_filter(sf::st_as_sfc(bb), .predicate = sf::st_intersects) |>
+  # Determine crop area: expand bb by buffer_distance when provided so that
+  # the centreline covers the full extent used by downstream network/DEM steps
+  crop_area <- if (!is.null(buffer_distance)) {
+    buffer(bb, buffer_distance)
+  } else {
+    bb
+  }
+
+  # Fix invalid geometries, crop to crop_area and union
+  river_centerline <- suppressWarnings(
+    river_centerline_lines |>
+      check_invalid_geometry() |>
+      sf::st_crop(crop_area)
+  ) |>
     sf::st_geometry() |>
     sf::st_union()
 
