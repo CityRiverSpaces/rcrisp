@@ -1,9 +1,10 @@
-# All functions using [`osmdata_as_sf()`] store and data in a cache folder and
-# read data from there when already available. In order not to mess up with the
-# user cache directory, we setup a temporary cache folder that already contains
-# some datasets, only used for testing purposes. This is achieved via the
-# [`temp_cache_dir()`] helper function, which should be called in each test that
-# does not mock [`osmdata_as_sf()`].
+# All functions using [`osmdata_as_sf()`] or [`osmdata_as_sf_by_id()`] store
+# and data in a cache folder and read data from there when already available.
+# In order not to mess up with the user cache directory, we setup a temporary
+# cache folder that already contains some datasets, only used for testing
+# purposes. This is achieved via the [`temp_cache_dir()`] helper function,
+# which should be called in each test that does not mock [`osmdata_as_sf()`] or
+# [`osmdata_as_sf_by_id()`]
 
 # setup mock test dataset
 bb_bucharest <- sf::st_bbox(c(xmin = 25.967,
