@@ -62,8 +62,6 @@ NULL
 #' NA_standards
 #'
 #  Not applicable general software standards ---
-#' @srrstatsNA {G1.5} There is no associated publication for this package yet,
-#'   and no performance claims are made.
 #' @srrstatsNA {G1.6} As there are no alternative implementations, no
 #'   performance claims are made in this package.
 #' @srrstatsNA {G2.4d, G2.4e, G2.5} This package does not make use of factors.
