@@ -70,6 +70,23 @@ get_dem_cache_filepath <- function(tile_urls, bbox) {
   file.path(cache_directory(), filename)
 }
 
+#' Get file path where to cache results of an Overpass API query by OSM id
+#'
+#' The function returns the file path where to serialize an osmdata_sf object
+#' for a given OSM element type and id. The directory used is the one returned
+#' by [`cache_directory()`].
+#'
+#' @param type A character string with the OSM element type (e.g. "relation",
+#'   "way", "node")
+#' @param id A character string with the OSM element id
+#'
+#' @return A character string representing the file path
+#' @keywords internal
+get_osm_id_cache_filepath <- function(type, id) {
+  filename <- get_rds_filename("osmdata", type, id)
+  file.path(cache_directory(), filename)
+}
+
 #' Get file path where to cache example data files
 #'
 #' The function returns the file path where to store example data files that

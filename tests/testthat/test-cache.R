@@ -23,6 +23,15 @@ test_that("A proper path is created to cache a OSM dataset", {
   expect_equal(actual, expected)
 })
 
+test_that("A proper path is created to cache an OSM dataset queried by id", {
+  cache_dir <- temp_cache_dir()
+  type <- "relation"
+  id <- "123456"
+  actual <- get_osm_id_cache_filepath(type, id)
+  expected <- file.path(cache_dir, "osmdata_relation_123456.rds")
+  expect_equal(actual, expected)
+})
+
 test_that("A proper path is created to cache a DEM dataset", {
   cache_dir <- temp_cache_dir()
   tile_urls <- c("https://www.mydem.org/tile1/tile1.tif",

@@ -90,6 +90,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Changed
 
+- Optimised OSM river retrieval by matching the river to an OSM relation ID via Nominatim and fetching by ID, instead of querying all waterways within a bounding box and filtering by name.
 - Replaced `sapply()` with `vapply()` throughout the package for improved type safety.
 - Updated package metadata in `DESCRIPTION` and `codemeta.json`
 - Organized function reference page into meaningful sections.
