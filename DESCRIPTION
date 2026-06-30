@@ -10,6 +10,8 @@ Authors@R: c(
            comment = c(ORCID = "0000-0001-8407-6472")),
     person("Meiert Willem", "Grootes", , "m.grootes@esciencecenter.nl", role = "ctb",
            comment = c(ORCID = "0000-0002-5733-4795")),
+    person("Yehan", "Wu", , "y.wu-13@tudelft.nl", role = c("ctb"),
+           comment = c(ORCID = "0000-0003-4063-7535")),
     person("Netherlands eScience Center", , , "info@esciencecenter.nl", role = "fnd")
   )
 Description: Provides tools to automate the morphological delineation of
