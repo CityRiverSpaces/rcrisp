@@ -144,7 +144,10 @@ delineate <- function(
     # Too few river crossings may lead to failed corridor delineation.
     if (length(crossings_clustered) < 2) {
       stop(sprintf(
-        "Insufficient OSM data: %d river crossings found, but at least 2 are required.",
+        paste(
+          "Insufficient OSM data: %d river crossings found,",
+          "but at least 2 are required."
+        ),
         length(crossings_clustered)
       ))
     }
