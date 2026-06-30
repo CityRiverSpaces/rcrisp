@@ -1,0 +1,130 @@
+---
+title: "Benchmarking across city-river cases"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Benchmarking across city-river cases}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse  = TRUE,
+  comment   = "#>",
+  message   = FALSE,
+  warning   = FALSE,
+  fig.width = 7,
+  fig.height = 8,
+  eval = requireNamespace("ggplot2", quietly = TRUE)
+)
+```
+
+This vignette documents how `rcrisp` performs across a diverse set of
+European city-river cases. Benchmarks were run on a single machine in a
+single session using OpenStreetMap and Copernicus GLO-30 DEM data downloaded
+live with the `get_osm()` and `get_dem()` functions. The timings from these
+two data retrieval functions therefore include network latency and reflect
+the volume of spatial data available for each case, not just CPU work.
+
+```{r data}
+library(dplyr)
+library(ggplot2)
+
+raw <- read.csv(
+  "../inst/extdata/benchmark_timings.csv",
+  stringsAsFactors = FALSE
+) |>
+  mutate(case = paste0(city_name, " - ", river_name))
+
+io_steps <- c("get_osm", "get_dem")
+compute_steps <- c("delineate_valley", "as_network", "delineate_corridor",
+                   "delineate_segments", "delineate_riverspace")
+all_steps <- c(io_steps, compute_steps)
+
+step_labels <- c(
+  get_osm              = "get_osm()",
+  get_dem              = "get_dem()",
+  delineate_valley     = "delineate_valley()",
+  as_network           = "as_network()",
+  delineate_corridor   = "delineate_corridor()",
+  delineate_segments   = "delineate_segments()",
+  delineate_riverspace = "delineate_riverspace()"
+)
+
+# Retain only cases that completed the full pipeline, ordered by total time
+case_order <- raw |>
+  filter(step == "total", status == "success") |>
+  arrange(elapsed_s) |>
+  pull(case)
+
+bar_data <- raw |>
+  filter(case %in% case_order, step %in% all_steps, status == "success") |>
+  mutate(
+    step_label = factor(step_labels[step], levels = step_labels[all_steps]),
+    case       = factor(case, levels = case_order)
+  )
+```
+
+## Run time by case and step
+
+Blues indicate **data retrieval** functions (`get_osm()`, `get_dem()`); warm
+colours indicate **computation** functions. Cases are sorted from fastest
+(bottom) to slowest (top).
+
+```{r bar-chart, fig.alt = "Horizontal stacked bar chart showing elapsed time per city-river case, broken down by pipeline step. Blues represent data retrieval functions and warm colours represent computation functions, stacked left to right in pipeline order."}
+step_colours <- c(
+  "get_osm()"              = "#2166AC",
+  "get_dem()"              = "#74ADD1",
+  "delineate_valley()"     = "#FDCC8A",
+  "as_network()"           = "#FC8D59",
+  "delineate_corridor()"   = "#E34A33",
+  "delineate_segments()"   = "#B30000",
+  "delineate_riverspace()" = "#7F0000"
+)
+
+case_totals <- bar_data |>
+  group_by(case) |>
+  summarise(total = sum(elapsed_s), .groups = "drop")
+
+ggplot(bar_data, aes(x = elapsed_s, y = case, fill = step_label)) +
+  geom_bar(stat = "identity", position = position_stack(reverse = TRUE)) +
+  geom_text(
+    data = case_totals,
+    aes(x = total, y = case, label = paste0(round(total), " s")),
+    inherit.aes = FALSE,
+    hjust = -0.15,
+    size  = 3
+  ) +
+  scale_x_continuous(expand = expansion(mult = c(0, 0.12))) +
+  scale_fill_manual(values = step_colours,
+                    guide  = guide_legend(nrow = 2)) +
+  labs(x = "Elapsed time (s)", y = NULL, fill = NULL) +
+  theme_minimal(base_size = 11) +
+  theme(
+    legend.position    = "top",
+    legend.key.size    = unit(0.5, "cm"),
+    panel.grid.major.y = element_blank()
+  )
+```
+
+## Key findings
+
+- **`get_osm()` dominates total runtime**, accounting for 75–95% of
+  wall-clock time in most cases. The wide range (from ~8 s for Plovdiv to
+  ~395 s for Paris) reflects OSM data volume rather than algorithmic
+  complexity.
+
+- **`get_dem()` is fast and consistent** (1.5–7 s), since the number of DEM
+  tiles depends on geographic extent, not urban density.
+
+- **Among computation steps, `delineate_riverspace()` is the most variable.**
+  In cases with large building footprints or complex water surfaces (e.g.,
+  Budapest, Amsterdam) it can exceed 5–30 s; in simpler cases it runs in under
+  1 s.
+
+- **`as_network()` and `delineate_corridor()` scale with street network size**,
+  and are noticeably slower for large, dense cities such as Paris, Budapest,
+  and Rome.
+
+- **`delineate_valley()` and `delineate_segments()` are consistently fast**
+  across all cases (under 3 s in most cases).
