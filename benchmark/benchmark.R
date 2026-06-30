@@ -1,10 +1,16 @@
+# ---- Set alternative Overpass API URL
+library(osmdata)
+url <- "https://maps.mail.ru/osm/tools/overpass/api/interpreter"
+set_overpass_url(url)
+
+# ---- Attach packages
 library(rcrisp)
 library(sf)
 library(dplyr)
 
 # ---- Configuration ----------------------------------------------------------
 
-INPUT_CSV    <- "benchmark/data/city_rivers.csv"
+INPUT_CSV    <- "benchmark/data/city_rivers_selection.csv"
 OUTPUT_DIR   <- "benchmark/output"
 TIMINGS_CSV  <- file.path(OUTPUT_DIR, "timings.csv")
 MAX_RETRIES  <- 3
