@@ -1,5 +1,5 @@
 ---
-title: "Benchmarking across city-river cases"
+title: "8. Benchmarking across city-river cases"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Benchmarking across city-river cases}
