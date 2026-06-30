@@ -18,3 +18,5 @@
   segmentation](https://cityriverspaces.github.io/rcrisp/articles/vig_06-corridor-segmentation.md):
 - [7. Riverspace
   delineation](https://cityriverspaces.github.io/rcrisp/articles/vig_07-riverspace-delineation.md):
+- [8. Benchmarking across city-river
+  cases](https://cityriverspaces.github.io/rcrisp/articles/vig_08-benchmark.md):
