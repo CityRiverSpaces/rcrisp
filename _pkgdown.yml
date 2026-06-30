@@ -18,6 +18,7 @@ articles:
   - vig_05-corridor-delineation
   - vig_06-corridor-segmentation
   - vig_07-riverspace-delineation
+  - vig_08-benchmark
 navbar:
   structure:
     left: [reference, getting-started, articles, news]
@@ -46,6 +47,10 @@ navbar:
           href: articles/vig_06-corridor-segmentation.html
         - text: Riverspace delineation
           href: articles/vig_07-riverspace-delineation.html
+        - text: -------
+        - text: Performance
+        - text: Benchmarking across city-river cases
+          href: articles/vig_08-benchmark.html
 reference:
 - title: Delineation
   desc: >
