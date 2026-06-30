@@ -51,6 +51,13 @@
       "familyName": "Grootes",
       "email": "m.grootes@esciencecenter.nl",
       "@id": "https://orcid.org/0000-0002-5733-4795"
+    },
+    {
+      "@type": "Person",
+      "givenName": "Yehan",
+      "familyName": "Wu",
+      "email": "y.wu-13@tudelft.nl",
+      "@id": "https://orcid.org/0000-0003-4063-7535"
     }
   ],
   "copyrightHolder": [
