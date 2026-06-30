@@ -14,6 +14,8 @@
 - **Meiert Willem Grootes**. Contributor.
   [](https://orcid.org/0000-0002-5733-4795)
 
+- **Yehan Wu**. Contributor. [](https://orcid.org/0000-0003-4063-7535)
+
 - **Netherlands eScience Center**. Funder.
 
 ## Citation
