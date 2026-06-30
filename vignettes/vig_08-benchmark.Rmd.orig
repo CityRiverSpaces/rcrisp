@@ -7,7 +7,18 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse  = TRUE,
+  comment   = "#>",
+  message   = FALSE,
+  warning   = FALSE,
+  fig.width = 7,
+  fig.height = 8,
+  fig.path  = "img/vig_08-benchmark-",
+  eval = requireNamespace("ggplot2", quietly = TRUE)
+)
+```
 
 This vignette documents how `rcrisp` performs across a diverse set of
 European city-river cases. Benchmarks were run on a single machine in a
@@ -16,8 +27,7 @@ live with the `get_osm()` and `get_dem()` functions, respectively. The timings
 from these two data retrieval functions therefore include network latency and
 reflect the volume of spatial data available for each case, not just CPU work.
 
-
-``` r
+```{r prepare-data-and-plot}
 library(dplyr)
 library(ggplot2)
 
@@ -77,8 +87,7 @@ Blues indicate **data retrieval** functions (`get_osm()`, `get_dem()`); warm
 colours indicate **computation** functions. Cases are sorted from fastest
 (bottom) to slowest (top).
 
-
-``` r
+```{r bar-chart, fig.alt = "Horizontal stacked bar chart showing elapsed time per city-river case, broken down by pipeline step. Blues represent data retrieval functions and warm colours represent computation functions, stacked left to right in pipeline order."}
 ggplot(bar_data, aes(x = elapsed_s, y = case, fill = step_label)) +
   geom_bar(stat = "identity", position = position_stack(reverse = TRUE)) +
   geom_text(
@@ -99,11 +108,6 @@ ggplot(bar_data, aes(x = elapsed_s, y = case, fill = step_label)) +
     panel.grid.major.y = element_blank()
   )
 ```
-
-<div class="figure">
-<img src="img/vig_08-benchmark-bar-chart-1.png" alt="Horizontal stacked bar chart showing elapsed time per city-river case, broken down by pipeline step. Blues represent data retrieval functions and warm colours represent computation functions, stacked left to right in pipeline order."  />
-<p class="caption">plot of chunk bar-chart</p>
-</div>
 
 ## Key findings
 
