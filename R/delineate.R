@@ -23,6 +23,10 @@ NULL
 #' delineation, corridor segmentation and/or riverspace delineation as indicated
 #' by the user.
 #'
+#' Corridor delineation depends on the availability of OpenStreetMap street and
+#' railway data around the river. Sparse OSM data, especially too few river
+#' crossings, may lead to failed delineation.
+#'
 #' The returned [`delineation`] class is a list wrapping objects of class
 #' [`sf::sfc_POLYGON`] or [`sf::sfc_MULTIPOLYGON`] which can be retrieved
 #' through subsetting and converted to other common spatial classes in typical
@@ -131,6 +135,22 @@ delineate <- function(
     # Set up the combined street and rail network for the delineation
     network_edges <- dplyr::bind_rows(osm$streets, osm$railways)
     network <- as_network(network_edges)
+    crossings <- get_intersecting_edges(network, osm$river_centerline)
+    crossings_clustered <- if (nrow(crossings) == 0) {
+      sf::st_geometry(crossings)
+    } else {
+      filter_clusters(crossings, osm$river_centerline)
+    }
+    # Too few river crossings may lead to failed corridor delineation.
+    if (length(crossings_clustered) < 2) {
+      stop(sprintf(
+        paste(
+          "Insufficient OSM data: %d river crossings found,",
+          "but at least 2 are required."
+        ),
+        length(crossings_clustered)
+      ))
+    }
 
     # Run the corridor delineation on the spatial network
     delineations$corridor <- delineate_corridor(
