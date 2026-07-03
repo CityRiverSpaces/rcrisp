@@ -13,6 +13,10 @@ In this notebook we explore how to delineate an urban river corridor
 using river Dâmbovița in Bucharest, Romania. We will use OpenStreetMap
 (OSM) data, first from the Overpass API and then from a local file.
 
+Corridor delineation depends on the availability of OpenStreetMap street
+and railway data around the river. Sparse OSM data, especially too few
+river crossings, may lead to failed delineation.
+
 ``` r
 
 city_name <- "Bucharest"

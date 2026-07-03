@@ -154,6 +154,9 @@ and a list <code>aoi</code> with the parameters used for delineation.</p>
 <code><a href="https://r-spatial.github.io/sf/reference/sfc.html" class="external-link">sf::sfc_POLYGON</a></code> or <code><a href="https://r-spatial.github.io/sf/reference/sfc.html" class="external-link">sf::sfc_MULTIPOLYGON</a></code> which can be retrieved
 through subsetting and converted to other common spatial classes in typical
 <code>sf</code>- or <code>terra</code>-based workflows.</p>
+<p>Corridor delineation depends on the availability of OpenStreetMap street and
+railway data around the river. Sparse OSM data, especially too few river
+crossings, may lead to failed delineation.</p>
     </div>
 
     <div class="section level2">
