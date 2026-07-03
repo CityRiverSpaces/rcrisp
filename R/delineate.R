@@ -23,14 +23,14 @@ NULL
 #' delineation, corridor segmentation and/or riverspace delineation as indicated
 #' by the user.
 #'
-#' Corridor delineation depends on the availability of OpenStreetMap street and
-#' railway data around the river. Sparse OSM data, especially too few river
-#' crossings, may lead to failed delineation.
-#'
 #' The returned [`delineation`] class is a list wrapping objects of class
 #' [`sf::sfc_POLYGON`] or [`sf::sfc_MULTIPOLYGON`] which can be retrieved
 #' through subsetting and converted to other common spatial classes in typical
 #' `sf`- or `terra`-based workflows.
+#'
+#' Corridor delineation depends on the availability of OpenStreetMap street and
+#' railway data around the river. Sparse OSM data, especially too few river
+#' crossings, may lead to failed delineation.
 #'
 #' @param aoi A list of delineation parameters for an area of interest, namely
 #'   `$city_name`, `$river_name`, `$crs`, `$network_buffer`, `$dem_buffer`, and

@@ -76,6 +76,10 @@ The returned \code{\link{delineation}} class is a list wrapping objects of class
 \code{\link[sf:sfc]{sf::sfc_POLYGON}} or \code{\link[sf:sfc]{sf::sfc_MULTIPOLYGON}} which can be retrieved
 through subsetting and converted to other common spatial classes in typical
 \code{sf}- or \code{terra}-based workflows.
+
+Corridor delineation depends on the availability of OpenStreetMap street and
+railway data around the river. Sparse OSM data, especially too few river
+crossings, may lead to failed delineation.
 }
 \examples{
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}

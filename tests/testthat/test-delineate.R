@@ -87,6 +87,25 @@ test_that("Error is raised when OSM spatial network data is missing", {
                "Spatial network \\(streets, railways\\) data is not available")
 })
 
+test_that("Error is raised when fewer than two river crossings are found", {
+  osm <- test_osm
+  osm$railways <- test_osm$railways[0, ]
+  osm$streets <- test_osm$streets[1, ]
+  expect_error(
+    delineate(aoi, osm, corridor_init = 1000) |>
+      suppressWarnings(),
+    "Corridor delineation is not possible with no crossings"
+  )
+  osm$streets <- test_osm$streets[2, ]
+  expect_error(
+    delineate(aoi, osm, corridor_init = 1000) |>
+      suppressWarnings(),
+    "Corridor delineation is not possible with 1 crossing"
+  )
+  expect_no_error(delineate(aoi, test_osm, corridor_init = 1000) |>
+                    suppressWarnings())
+})
+
 test_that("Error is raised when buildings data is missing for riverspace delineation", {  # nolint
   osm_without_buildings <- test_osm
   osm_without_buildings$aoi_buildings <- NULL
