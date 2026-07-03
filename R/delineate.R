@@ -145,10 +145,10 @@ delineate <- function(
     if (length(crossings_clustered) < 2) {
       stop(sprintf(
         paste(
-          "Insufficient OSM data: %d river crossings found,",
-          "but at least 2 are required."
+          "Corridor delineation is not possible with %s.",
+          "At least 2 are required."
         ),
-        length(crossings_clustered)
+        ifelse(length(crossings_clustered) == 0, "no crossings", "1 crossing")
       ))
     }
 
