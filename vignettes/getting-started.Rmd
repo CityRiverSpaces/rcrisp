@@ -18,7 +18,21 @@ link-citations: true
 
 Such spatial units enable integrated local analyses (many different layers within one case) and large-scale cross-case analyses (many cases using comparable spatial units) in a wide range of domains of application, such as urban planning, environmental management, public space design, and disaster risk reduction.
 
-In short, given a city name and a river name, it:
+## Why is consistent delineation important?
+
+Riverside areas are often defined inconsistently or arbitrarily. Different approaches to defining corridor boundaries can produce substantially different results, each capturing different aspects of the urban environment while missing others. This inconsistency creates problems:
+
+- Ambiguous local analyses: which area should be included when studying a specific riverside neighborhood or phenomenon?
+- Unreliable comparative studies: without a consistent definition, comparing the same phenomenon across different cities becomes problematic.
+- Subjective integrated analyses: when combining multiple data sources, the choice of boundaries can bias the results.
+
+The figure below illustrates how alternative delineation approaches can significantly differ. By contrast, `rcrisp` implements a morphological delineation method that combines the natural terrain of the river valley with the configuration of the urban fabric, providing an objective and reproducible approach.
+
+![](img/alternatives.png)
+
+## What does it do?
+
+In short, given a city name and a river name, `rcrisp`:
 
 - identifies corridor boundaries on the street network along the edges of the river valley;
 - (optionally) segments the corridor; and
@@ -53,6 +67,7 @@ epsg_code <- 32635
 
 # Delineation
 bd <- delineate(city_name, river_name, segments = TRUE)
+#> Error in delineate(city_name, river_name, segments = TRUE): Assertion on 'aoi' failed: Must be of type 'list', not 'character'.
 
 # Base layers for visualisation
 bb <- get_osm_bb(city_name)
@@ -61,13 +76,16 @@ railways <- get_osm_railways(bb, epsg_code)$geometry
 
 # Plot
 plot(bd$corridor)
+#> Error: object 'bd' not found
 plot(railways, col = "darkgrey", add = TRUE, lwd = 0.5)
+#> Error in plot.xy(xy.coords(x, y), type = type, ...): plot.new has not been called yet
 plot(streets, add = TRUE)
+#> Error in plot.xy(xy.coords(x, y), type = type, ...): plot.new has not been called yet
 plot(bd$segments, border = "orange", add = TRUE, lwd = 3)
+#> Error: object 'bd' not found
 plot(bd$corridor, border = "red", add = TRUE, lwd = 3)
+#> Error: object 'bd' not found
 ```
-
-<img src="img/getting-started-plot-1.png" width="100%" />
 
 # Interpretation and next steps
 
