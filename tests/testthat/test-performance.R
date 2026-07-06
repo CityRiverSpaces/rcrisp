@@ -1,12 +1,11 @@
-#' @srrstats {G5.7} Algorithm performance tests to test that implementation
-#'   performs as expected as properties of data change. This test runs the full
-#'   pipeline on example data and verifies that:
+#' @srrstats {G5.7} Algorithm performance tests to verify that the full
+#'   pipeline completes successfully on real-world example data and performs
+#'   within reasonable bounds. This verifies that:
 #'   - Each step completes successfully
 #'   - Performance remains within reasonable bounds (< 60s per step)
-#'   - Steps scale reasonably with data complexity
-#'   - Corridor delineation does not explode relative to network construction
+#'   - Corridor delineation does not become dramatically slower than network construction
 #'   - Riverspace delineation is fast (< 5s, mostly simple geometry ops)
-test_that("Full pipeline performance on Bucharest/Dambovita example data", {
+test_that("Full pipeline completes successfully on Bucharest/Dambovita example data within reasonable performance bounds ", {  # nolint
   skip_on_cran()
   skip_on_ci()
 
