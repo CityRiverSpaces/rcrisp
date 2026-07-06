@@ -1,10 +1,12 @@
 # 2. Getting OSM data for delineation
 
 In this notebook we download OpenStreetMap (OSM) data needed for the
-delineation of the urban river corridor of River Dâmbovița in Bucharest,
-Romania. After attaching the packages used in the vignette, we specify
-the city name, the river name, and the CRS, and we make sure that we
-provide a buffer around the river used to retrieve OSM data.
+delineation of the urban river corridor of River Dâmbovita in Bucharest,
+Romania. The simplest approach is to use
+[`define_aoi()`](https://cityriverspaces.github.io/rcrisp/reference/define_aoi.md)
+to set up parameters with automatic CRS selection, then fetch all OSM
+data with
+[`get_osm()`](https://cityriverspaces.github.io/rcrisp/reference/get_osm.md).
 
 ``` r
 
@@ -12,63 +14,19 @@ library(rcrisp)
 library(purrr)
 
 city_name <- "Bucharest"
-river_name <- "Dâmbovița"
-network_buffer <- 3000  # in m, buffer around the river to get the network
-buildings_buffer <- 100  # in m, buffer around the river to get the buildings
+river_name <- "Dâmbovita"
+
+# Define area of interest with automatic CRS selection
+aoi <- define_aoi(city_name, river_name,
+                  network_buffer = 3000,    # in m
+                  buildings_buffer = 100)   # in m
+
+# Retrieve all OSM data
+bucharest_osm <- get_osm(aoi)
 ```
 
-We start by getting the bounding box and projected CRS for the study
-area.
-
-``` r
-
-bb <- get_osm_bb(city_name)  # Get bounding box from OSM
-crs <- get_utm_zone(bb)  # Get UTM zone for Bucharest
-```
-
-Using the obtained bounding box and corresponding CRS, we get the
-different layers of OSM data needed for the delineation of the urban
-river corridor. We will get the city boundary, the waterways, the street
-network, and the rail network using built-in functions from the `rcrisp`
-package.
-
-``` r
-
-city_boundary <- get_osm_city_boundary(bb, city_name, crs)
-river_centerline <- get_osm_river_centerline(bb, river_name, crs)
-river_surface <- get_osm_river_surface(bb, river_centerline, crs)
-river <- c(river_centerline, river_surface)
-aoi_network <- get_river_aoi(river, bb, buffer_distance = network_buffer)
-streets <- get_osm_streets(bb, crs)
-railways <- get_osm_railways(bb, crs)
-aoi_buildings <- get_river_aoi(river, bb, buffer_distance = buildings_buffer)
-buildings <- get_osm_buildings(bb, crs)
-
-bucharest_osm <- list(
-  boundary = city_boundary,
-  river_centerline = river_centerline,
-  river_surface = river_surface,
-  aoi_network = aoi_network,
-  streets = streets,
-  railways = railways,
-  aoi_buildings = aoi_buildings,
-  buildings = buildings
-)
-```
-
-The above layers can also be obtained with the all-in-one function
-[`get_osm()`](https://cityriverspaces.github.io/rcrisp/reference/get_osm.md).
-Optionally, a buffer around the river can be specified for the retrieval
-of OSM data.
-
-``` r
-
-bucharest_osm <- get_osm(city_name, river_name,
-                         network_buffer = network_buffer,
-                         buildings_buffer = buildings_buffer)
-```
-
-The resulting object is a list with all the layers obtained above.
+The resulting object is a list with all the OSM layers needed for
+delineation.
 
 ``` r
 

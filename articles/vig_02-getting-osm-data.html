@@ -81,59 +81,27 @@
     
 <!-- the *.Rmd vignettes are generated from the *.Rmd.orig files. Please edit those files. -->
 <p>In this notebook we download OpenStreetMap (OSM) data needed for the
-delineation of the urban river corridor of River Dâmbovița in Bucharest,
-Romania. After attaching the packages used in the vignette, we specify
-the city name, the river name, and the CRS, and we make sure that we
-provide a buffer around the river used to retrieve OSM data.</p>
+delineation of the urban river corridor of River Dâmbovita in Bucharest,
+Romania. The simplest approach is to use <code><a href="../reference/define_aoi.html">define_aoi()</a></code> to
+set up parameters with automatic CRS selection, then fetch all OSM data
+with <code><a href="../reference/get_osm.html">get_osm()</a></code>.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://cityriverspaces.github.io/rcrisp/">rcrisp</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://purrr.tidyverse.org/" class="external-link">purrr</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">city_name</span> <span class="op">&lt;-</span> <span class="st">"Bucharest"</span></span>
-<span><span class="va">river_name</span> <span class="op">&lt;-</span> <span class="st">"Dâmbovița"</span></span>
-<span><span class="va">network_buffer</span> <span class="op">&lt;-</span> <span class="fl">3000</span>  <span class="co"># in m, buffer around the river to get the network</span></span>
-<span><span class="va">buildings_buffer</span> <span class="op">&lt;-</span> <span class="fl">100</span>  <span class="co"># in m, buffer around the river to get the buildings</span></span></code></pre></div>
-<p>We start by getting the bounding box and projected CRS for the study
-area.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">bb</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_osm_bb.html">get_osm_bb</a></span><span class="op">(</span><span class="va">city_name</span><span class="op">)</span>  <span class="co"># Get bounding box from OSM</span></span>
-<span><span class="va">crs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_utm_zone.html">get_utm_zone</a></span><span class="op">(</span><span class="va">bb</span><span class="op">)</span>  <span class="co"># Get UTM zone for Bucharest</span></span></code></pre></div>
-<p>Using the obtained bounding box and corresponding CRS, we get the
-different layers of OSM data needed for the delineation of the urban
-river corridor. We will get the city boundary, the waterways, the street
-network, and the rail network using built-in functions from the
-<code>rcrisp</code> package.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">city_boundary</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_osm_city_boundary.html">get_osm_city_boundary</a></span><span class="op">(</span><span class="va">bb</span>, <span class="va">city_name</span>, <span class="va">crs</span><span class="op">)</span></span>
-<span><span class="va">river_centerline</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_osm_river_centerline.html">get_osm_river_centerline</a></span><span class="op">(</span><span class="va">bb</span>, <span class="va">river_name</span>, <span class="va">crs</span><span class="op">)</span></span>
-<span><span class="va">river_surface</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_osm_river_surface.html">get_osm_river_surface</a></span><span class="op">(</span><span class="va">bb</span>, <span class="va">river_centerline</span>, <span class="va">crs</span><span class="op">)</span></span>
-<span><span class="va">river</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">river_centerline</span>, <span class="va">river_surface</span><span class="op">)</span></span>
-<span><span class="va">aoi_network</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_river_aoi.html">get_river_aoi</a></span><span class="op">(</span><span class="va">river</span>, <span class="va">bb</span>, buffer_distance <span class="op">=</span> <span class="va">network_buffer</span><span class="op">)</span></span>
-<span><span class="va">streets</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_osm_streets.html">get_osm_streets</a></span><span class="op">(</span><span class="va">bb</span>, <span class="va">crs</span><span class="op">)</span></span>
-<span><span class="va">railways</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_osm_railways.html">get_osm_railways</a></span><span class="op">(</span><span class="va">bb</span>, <span class="va">crs</span><span class="op">)</span></span>
-<span><span class="va">aoi_buildings</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_river_aoi.html">get_river_aoi</a></span><span class="op">(</span><span class="va">river</span>, <span class="va">bb</span>, buffer_distance <span class="op">=</span> <span class="va">buildings_buffer</span><span class="op">)</span></span>
-<span><span class="va">buildings</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_osm_buildings.html">get_osm_buildings</a></span><span class="op">(</span><span class="va">bb</span>, <span class="va">crs</span><span class="op">)</span></span>
+<span><span class="va">river_name</span> <span class="op">&lt;-</span> <span class="st">"Dâmbovita"</span></span>
 <span></span>
-<span><span class="va">bucharest_osm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>  boundary <span class="op">=</span> <span class="va">city_boundary</span>,</span>
-<span>  river_centerline <span class="op">=</span> <span class="va">river_centerline</span>,</span>
-<span>  river_surface <span class="op">=</span> <span class="va">river_surface</span>,</span>
-<span>  aoi_network <span class="op">=</span> <span class="va">aoi_network</span>,</span>
-<span>  streets <span class="op">=</span> <span class="va">streets</span>,</span>
-<span>  railways <span class="op">=</span> <span class="va">railways</span>,</span>
-<span>  aoi_buildings <span class="op">=</span> <span class="va">aoi_buildings</span>,</span>
-<span>  buildings <span class="op">=</span> <span class="va">buildings</span></span>
-<span><span class="op">)</span></span></code></pre></div>
-<p>The above layers can also be obtained with the all-in-one function
-<code><a href="../reference/get_osm.html">get_osm()</a></code>. Optionally, a buffer around the river can be
-specified for the retrieval of OSM data.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">bucharest_osm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_osm.html">get_osm</a></span><span class="op">(</span><span class="va">city_name</span>, <span class="va">river_name</span>,</span>
-<span>                         network_buffer <span class="op">=</span> <span class="va">network_buffer</span>,</span>
-<span>                         buildings_buffer <span class="op">=</span> <span class="va">buildings_buffer</span><span class="op">)</span></span></code></pre></div>
-<p>The resulting object is a list with all the layers obtained
-above.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<span><span class="co"># Define area of interest with automatic CRS selection</span></span>
+<span><span class="va">aoi</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/define_aoi.html">define_aoi</a></span><span class="op">(</span><span class="va">city_name</span>, <span class="va">river_name</span>,</span>
+<span>                  network_buffer <span class="op">=</span> <span class="fl">3000</span>,    <span class="co"># in m</span></span>
+<span>                  buildings_buffer <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>   <span class="co"># in m</span></span>
+<span></span>
+<span><span class="co"># Retrieve all OSM data</span></span>
+<span><span class="va">bucharest_osm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_osm.html">get_osm</a></span><span class="op">(</span><span class="va">aoi</span><span class="op">)</span></span></code></pre></div>
+<p>The resulting object is a list with all the OSM layers needed for
+delineation.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">bucharest_osm</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "bb"               "river_centerline" "aoi_network"      "streets"         </span></span>
 <span><span class="co">#&gt; [5] "railways"         "river_surface"    "aoi_buildings"    "buildings"       </span></span>
@@ -145,7 +113,7 @@ All layers combined (buildings not shown)
 </div>
 <p>Individual layers can be written to disk before being read in for
 delineation.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map2.html" class="external-link">walk2</a></span><span class="op">(</span></span>
 <span>  <span class="va">bucharest_osm</span>,</span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">bucharest_osm</span><span class="op">)</span>,</span>
