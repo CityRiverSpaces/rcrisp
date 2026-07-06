@@ -4,7 +4,7 @@
 \alias{as_network}
 \title{Create a network from a collection of line strings}
 \usage{
-as_network(edges, flatten = TRUE, clean = TRUE)
+as_network(edges, flatten = TRUE, clean = TRUE, na_action = "warn")
 }
 \arguments{
 \item{edges}{An \code{\link[sf:sf]{sf::sf}} or \code{\link[sf:sfc]{sf::sfc_LINESTRING}} object with the
@@ -15,6 +15,17 @@ converted to nodes}
 
 \item{clean}{Whether general cleaning tasks should be run on the generated
 network (see \code{\link[=clean_network]{clean_network()}} for the description of tasks)}
+
+\item{na_action}{A case-insensitive character string specifying how to deal
+with missing values in non-geometry columns of \code{edges}. Possible values:
+\itemize{
+\item \code{"warn"} (default): issue a warning if any \code{NA} values are found.
+\item \code{"error"}: stop with an error if any \code{NA} values are found.
+\item \code{"ignore"}: silently proceed without checking for \code{NA} values
+\item \code{"impute"}: replace \code{NA} values before building the network. For
+character columns, \code{NA}s are replaced with \code{"unknown"}; for numeric
+columns, \code{NA}s are replaced with the column median.
+}}
 }
 \value{
 An \code{\link[sfnetworks:sfnetwork]{sfnetworks::sfnetwork}} object

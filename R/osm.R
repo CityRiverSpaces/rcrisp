@@ -40,7 +40,7 @@ osmdata_as_sf <- function(key, value, aoi, force_download = FALSE) {
   key <- tolower(key)
   value <- tolower(value)
 
-  filepath <- get_osmdata_cache_filepath(key, value, bbox)
+  filepath <- get_osm_cache_filepath(key, value, bbox)
 
   if (file.exists(filepath) && !force_download) {
     osmdata_sf <- read_data_from_cache(filepath)
@@ -76,6 +76,74 @@ osmdata_query <- function(key, value, bb) {
     osmdata::osmdata_sf()
 }
 
+#' Retrieve OpenStreetMap data as sf object for a specific feature type and id
+#'
+#' Results are cached, so that new queries with the same type and id will be
+#' loaded from disk.
+#'
+#' @param type A character string with the OSM element type ("relation",
+#'   "way", or "node")
+#' @param id A character or numeric vector of length 1 with the OSM element id
+#' @param force_download Download data even if cached data is available
+#'
+#' @returns An [`osmdata::osmdata`] object with the retrieved OpenStreetMap data
+#' @keywords internal
+#' @srrstats {G4.0} OSM data is saved with a file name concatenated from the
+#'   OSM element type and id.
+#' @srrstats {G2.3, G2.3b} `type` is made case-insensitive to comply with
+#'   OpenStreetMap (OSM) naming convention.
+#' @srrstats {SP4.0, SP4.0b, SP4.2} The return value is of class
+#'   [`osmdata::osmdata`], explicitly documented as such.
+osmdata_as_sf_by_id <- function(type, id, force_download = FALSE) {
+  type <- tolower(type)
+  checkmate::assert_choice(type, c("node", "way", "relation"))
+  checkmate::assert_scalar(id)
+  checkmate::assert_logical(force_download, len = 1)
+
+  filepath <- get_osm_id_cache_filepath(type, as.character(id))
+
+  if (file.exists(filepath) && !force_download) {
+    return(read_data_from_cache(filepath))
+  }
+
+  osmdata_sf <- osmdata_id_query(type, id)
+
+  write_data_to_cache(osmdata_sf, filepath)
+
+  osmdata_sf
+}
+
+#' Query the Overpass API for a specific feature type and id
+#'
+#' @param type A character string with the OSM element type
+#' @param id A character or numeric vector of length 1 with the OSM element id
+#'
+#' @returns An [`osmdata::osmdata`] object with the retrieved OpenStreetMap data
+#' @keywords internal
+#' @srrstats {SP4.0, SP4.0b, SP4.2} The return value is of class
+#'   [`osmdata::osmdata`], explicitly documented as such.
+osmdata_id_query <- function(type, id) {
+  # Character or numeric (not integer) is required
+  osmdata::opq_osm_id(type = type, id = as.character(id)) |>
+    osmdata::osmdata_sf()
+}
+
+#' Look up a river's OSM relation via Nominatim
+#'
+#' @param river_name A character string with the river name
+#'
+#' @return A data frame with Nominatim results filtered to waterway river
+#'   relations, or an empty data frame if none found.
+#' @keywords internal
+nominatim_waterway_lookup <- function(river_name) {
+  osmdata::getbb(river_name, format_out = "data.frame") |>
+    dplyr::filter(
+      .data$class == "waterway",
+      .data$type == "river",
+      .data$osm_type == "relation"
+    )
+}
+
 #' Get the bounding box of a city
 #'
 #' @param city_name A character vector of length one
@@ -101,21 +169,13 @@ get_osm_bb <- function(city_name) {
 #' the city boundary, the river centreline and surface, the streets, the
 #' railways, and the buildings
 #'
-#' @param city_name The name of the city as character vector of length 1,
-#'   case-sensitive. Required, no default.
-#' @param river_name The name of the river as character vector of length 1,
-#'   case-sensitive. Required, no default.
-#' @param network_buffer Buffer distance in meters around the river
-#'   to get the streets and railways, default is 0 means no
-#'   network data will be downloaded
-#' @param buildings_buffer Buffer distance in meters around the river
-#'   to get the buildings, default is 0 means no
-#'   buildings data will be downloaded
+#' @param aoi A list of delineation parameters
 #' @param city_boundary A logical indicating if the city boundary should be
 #'   retrieved. Default is TRUE.
-#' @param crs An integer or character vector of length one with the EPSG code
-#'   for the projection. If no CRS is specified, the default is the UTM zone
-#'   for the city.
+#' @param network A logical indicating if the spatial network should be
+#'   retrieved. Default is TRUE.
+#' @param buildings A logical indicating if buildings should be retrieved.
+#'   Default is TRUE.
 #' @param force_download Download data even if cached data is available
 #'
 #' @return A list with the retrieved OpenStreetMap data sets for the
@@ -126,77 +186,88 @@ get_osm_bb <- function(city_name) {
 #' # Set parameters
 #' city <- "Bucharest"
 #' river <- "Dâmbovița"
-#' crs <- "EPSG:31600"  # National projected CRS
+#'
+#' # Define AOI parameters
+#' aoi <- define_aoi(city, river)
 #'
 #' # Get OSM data with defaults
-#' get_osmdata(city_name = city, river_name = river)
+#' get_osm(aoi)
 #'
 #' # Get OSM data without city boundary
-#' get_osmdata(city_name = city, river_name = river, city_boundary = FALSE)
+#' get_osm(aoi, city_boundary = FALSE)
 #'
 #' # Use custom network buffer to get streets and railways
-#' get_osmdata(city_name = city, river_name = river, network_buffer = 3500)
+#' aoi2 <- aoi
+#' aoi2$network_buffer = 3500
+#' get_osm(aoi2)
 #'
 #' # Use custom buffer to get buildings
-#' get_osmdata(city_name = city, river_name = river, buildings_buffer = 150)
+#' aoi3 <- aoi
+#' aoi3$buildings_buffer = 150
+#' get_osm(aoi3)
 #'
 #' # Use custom CRS
-#' get_osmdata(city_name = city, river_name = river, crs = crs)
+#' aoi4 <- aoi
+#' aoi4$crs <- "EPSG:31600"
+#' get_osm(aoi4)
 #'
 #' # Avoid getting OSM data from cache
-#' get_osmdata(city_name = city, river_name = river, force_download = TRUE)
+#' get_osm(city_name = city, river_name = river, force_download = TRUE)
 #' @srrstats {SP4.0, SP4.0b, SP4.2} The return value is a list of objects of
 #'   class [`sf::sfc`], explicitly documented as such.
-get_osmdata <- function(
-  city_name, river_name, network_buffer = NULL, buildings_buffer = NULL,
-  city_boundary = TRUE, crs = NULL, force_download = FALSE
-) {
+get_osm <- function(aoi,
+                    city_boundary = TRUE,
+                    network = TRUE,
+                    buildings = TRUE,
+                    force_download = FALSE) {
   # Check input
-  checkmate::assert_numeric(network_buffer, null.ok = TRUE, len = 1)
-  checkmate::assert_numeric(buildings_buffer, null.ok = TRUE, len = 1)
   checkmate::assert_logical(city_boundary, len = 1)
-  crs <- as_crs(crs)
+  checkmate::assert_logical(network, len = 1)
+  checkmate::assert_logical(buildings, len = 1)
 
-  bb <- get_osm_bb(city_name)
-  # If not provided, determine the CRS
-  if (is.null(crs)) crs <- get_utm_zone(bb)
+  crs <- aoi$crs
+  bb <- aoi$bb
 
-  # Retrieve the river center line and surface
+  # Retrieve the river center line and surface, expanding the crop area by the
+  # combined network + DEM buffer so the centreline covers the full analysis
+  # extent used by downstream steps
   river_centerline <- get_osm_river_centerline(
-    bb, river_name, crs = crs, force_download = force_download
+    bb, aoi$river_name, crs = crs,
+    buffer_distance = aoi$network_buffer + aoi$dem_buffer,
+    force_download = force_download
   )
 
-  osm_data <- list(bb = bb, river_centerline = river_centerline)
+  osm <- list(bb = bb, river_centerline = river_centerline)
 
   # Retrieve streets and railways based on the aoi
-  if (!is.null(network_buffer)) {
+  if (network) {
     aoi_network <- get_river_aoi(river_centerline, bb,
-                                 buffer_distance = network_buffer)
-    osm_data$aoi_network <- aoi_network
-    osm_data$streets <- get_osm_streets(aoi_network, crs = crs,
-                                        force_download = force_download)
-    osm_data$railways <- get_osm_railways(aoi_network, crs = crs,
-                                          force_download = force_download)
+                                 buffer_distance = aoi$network_buffer)
+    osm$aoi_network <- aoi_network
+    osm$streets <- get_osm_streets(aoi_network, crs = crs,
+                                   force_download = force_download)
+    osm$railways <- get_osm_railways(aoi_network, crs = crs,
+                                     force_download = force_download)
   }
 
   # Retrieve buildings and water surface based on a different aoi
-  if (!is.null(buildings_buffer)) {
+  if (buildings) {
     river_surface <- get_osm_river_surface(bb, river_centerline, crs = crs,
                                            force_download = force_download)
-    osm_data$river_surface <- river_surface
+    osm$river_surface <- river_surface
     aoi_buildings <- get_river_aoi(c(river_centerline, river_surface), bb,
-                                   buffer_distance = buildings_buffer)
-    osm_data$aoi_buildings <- aoi_buildings
-    osm_data$buildings <- get_osm_buildings(aoi_buildings, crs = crs,
-                                            force_download = force_download)
+                                   buffer_distance = aoi$buildings_buffer)
+    osm$aoi_buildings <- sf::st_transform(aoi_buildings, crs)
+    osm$buildings <- get_osm_buildings(aoi_buildings, crs = crs,
+                                       force_download = force_download)
   }
 
   if (city_boundary) {
-    osm_data$boundary <- get_osm_city_boundary(bb, city_name, crs = crs,
-                                               force_download = force_download)
+    osm$boundary <- get_osm_city_boundary(bb, aoi$city_name, crs = crs,
+                                          force_download = force_download)
   }
 
-  osm_data
+  osm
 }
 
 #' Get the city boundary from OpenStreetMap
@@ -281,6 +352,10 @@ get_osm_city_boundary <- function(bb, city_name, crs = NULL, multiple = FALSE,
 #' @param river_name The name of the river as character vector of length 1,
 #'   case-sensitive.
 #' @param crs Coordinate reference system as EPSG code
+#' @param buffer_distance Optional buffer distance in metres to expand the
+#'   bounding box before cropping the river centreline. Useful when downstream
+#'   processing (e.g. network or DEM analysis) extends beyond the original `bb`.
+#'   Defaults to `NULL` (no expansion).
 #' @param force_download Download data even if cached data is available
 #'
 #' @return The river centreline as object of class [`sf::sfc_LINESTRING`] or
@@ -302,35 +377,49 @@ get_osm_city_boundary <- function(bb, city_name, crs = NULL, multiple = FALSE,
 #'   class [`sf::sfc_LINESTRING`] or [`sf::sfc_MULTILINESTRING`], explicitly
 #'   documented as such.
 get_osm_river_centerline <- function(bb, river_name, crs = NULL,
+                                     buffer_distance = NULL,
                                      force_download = FALSE) {
   # Check input
   checkmate::assert_character(river_name, len = 1)
   crs <- as_crs(crs)
+  checkmate::assert_numeric(buffer_distance, len = 1, null.ok = TRUE)
   checkmate::assert_logical(force_download, len = 1)
 
-  # Get the river centreline
-  river_centerline <- osmdata_as_sf("waterway", "", bb,
-                                    force_download = force_download)
+  waterway_rivers <- nominatim_waterway_lookup(river_name)
 
-  # Check that waterway geometries are found within bb
-  if (is.null(river_centerline$osm_lines) &&
-        is.null(river_centerline$osm_multilines)) {
-    stop(sprintf("No waterway geometries found within given bounding box"))
+  if (nrow(waterway_rivers) == 0) {
+    stop(sprintf("No OSM waterway relation found for: %s", river_name))
   }
 
-  river_centerline_lines <- river_centerline$osm_lines
-  if (!is.null(river_centerline$osm_multilines)) {
+  waterway_river <- waterway_rivers[1, ]
+  feature <- osmdata_as_sf_by_id(waterway_river$osm_type, waterway_river$osm_id,
+                                 force_download = force_download)
+
+  # Check that waterway geometries are found
+  if (is.null(feature$osm_lines) && is.null(feature$osm_multilines)) {
+    stop(sprintf("No waterway geometries found for river %s", river_name))
+  }
+
+  river_centerline_lines <- feature$osm_lines
+  if (!is.null(feature$osm_multilines)) {
     river_centerline_lines <- dplyr::bind_rows(river_centerline_lines,
-                                               river_centerline$osm_multilines)
+                                               feature$osm_multilines)
   }
 
-  # Retrieve river centerline of interest
-  river_centerline <- river_centerline_lines |>
-    # filter using any of the "name" columns (matching different languages)
-    match_osm_name(river_name) |>
-    check_invalid_geometry() |> # fix invalid geometries, if any
-    # the query can return more features than actually intersecting the bb
-    sf::st_filter(sf::st_as_sfc(bb), .predicate = sf::st_intersects) |>
+  # Determine crop area: expand bb by buffer_distance when provided so that
+  # the centreline covers the full extent used by downstream network/DEM steps
+  crop_area <- if (!is.null(buffer_distance)) {
+    buffer(bb, buffer_distance)
+  } else {
+    bb
+  }
+
+  # Fix invalid geometries, crop to crop_area and union
+  river_centerline <- suppressWarnings(
+    river_centerline_lines |>
+      check_invalid_geometry() |>
+      sf::st_crop(crop_area)
+  ) |>
     sf::st_geometry() |>
     sf::st_union()
 
@@ -437,9 +526,7 @@ get_osm_streets <- function(aoi, crs = NULL, highway_values = NULL,
                             force_download = FALSE) {
   # Check input
   checkmate::assert_true(inherits(aoi, c("sf", "sfc", "bbox")))
-  checkmate::assert_numeric(crs,
-                            null.ok = TRUE,
-                            any.missing = FALSE)
+  crs <- as_crs(crs)
   checkmate::assert_character(highway_values, null.ok = TRUE)
 
   if (is.null(highway_values)) {
@@ -592,6 +679,8 @@ get_osm_buildings <- function(aoi, crs = NULL, force_download = FALSE) {
 #' get_river_aoi(river = river, city_bbox = bb, buffer_distance = 100)
 #' @srrstats {G2.7} The `river` parameter accepts domain-specific tabular input
 #'   of type `sf`.
+#' @srrstats {G2.9} The user is informed when the input object in lat/lon
+#'   coordinates is transformed into a suitable projected CRS.
 #' @srrstats {G2.13} The absence of missing values in numeric inputs is
 #'   asserted using the `checkmate` package.
 #' @srrstats {G2.16} This function checks numeric arguments for undefined values
@@ -613,22 +702,30 @@ get_river_aoi <- function(river, city_bbox, buffer_distance) {
   # Make sure crs are the same for cropping with bb
   river <- sf::st_transform(river, sf::st_crs(city_bbox))
 
+  if (!is.na(sf::st_is_longlat(river)) && sf::st_is_longlat(river)) {
+    dst_crs <- get_utm_zone(river) |> as_crs()
+    message(sprintf(
+      "Reprojecting river from EPSG:%s to EPSG:%s for river AoI buffering.",
+      sf::st_crs(river)$epsg, dst_crs$epsg
+    ))
+  }
+
   river_buffer(river, buffer_distance, bbox = city_bbox)
 }
 
 #' Match OpenStreetMap data by name
 #'
-#' @param osm_data An sf object with OpenStreetMap data
+#' @param osm An sf object with OpenStreetMap data
 #' @param match A character string with the name to match
 #'
 #' @return sf object containing only rows with filtered name
 #' @keywords internal
-match_osm_name <- function(osm_data, match) {
+match_osm_name <- function(osm, match) {
   # Function to find partial matches across rows of a data frame
   includes_match <- \(x) grepl(match, x, ignore.case = TRUE)
   # Apply function above to all columns whose name starts with "name", thus
   # checking for matches in all listed languages
-  osm_data |>
+  osm |>
     dplyr::filter(dplyr::if_any(dplyr::matches("name"), includes_match)) |>
     # Make sure that exact match is in the first row(s)
     dplyr::arrange(dplyr::desc(dplyr::if_any(dplyr::matches("name"),

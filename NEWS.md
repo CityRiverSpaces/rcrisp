@@ -9,12 +9,40 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - A definition of "riverside urban areas" was added in the README.
 - The practical usefulness of the morphological approach was explained in the README.
+- Added an algorithm performance test to verify that the full pipeline completes successfully on real-world example data and performs within reasonable bounds.
+- Added a test demonstrating that `reproject()` yields equivalent results regardless of whether input data are curvilinear (WGS84) or rectilinear (projected).
+- Distance input preprocessing is now handled by the `preprocess_distance()` function. This function returns a plain numeric in meters, regardless of whether the input is provided as a `units` object, a plain numeric or another vector-like class with numeric `storage.mode`.
+- `geom_delineation()` was added as a `ggplot2`-based alternative to the `plot()` method, returning a list of `geom_sf()` layers that can be added to a `ggplot` object with `+`.
+- `print()` and `summary()` methods were added for `delineation` objects. `print()` gives a compact overview of present layers and their feature counts. `summary()` additionally reports areas (sqkm) for delineation layers and lengths (km) for `river_centerline`.
+- A `plot()` method was created for objects of class `delineation`.
+- Context-specific messages are now issued in `get_river_aoi()`, `delineate_corridor()`, and `delineate()` when lat/lon input is reprojected for buffering, and in `delineate()` when no CRS is provided and a UTM zone is auto-selected.
+- Tests were added to `delineate_corridor()`, `delineate_segments()`, and `delineate_riverspace()` to verify that geographic (lat/lon) CRS input raises an informative error.
+- The Rbanism community badge was added in the README.
+- `delineate()` now errors early when fewer than two river crossings are found.
 
 ## Fixed
 
+- Missing parenthesis was added in warning text in `check_cache()`.
+- Vignette pre-compilation was updated so that srr tags dropped by `knitr::knit()` are reinserted into the vignettes. Affected vignettes were also recompiled.
+- The input `dem_source` in `get_dem()` was made case insensitive.
 - Fixed typos in test statements.
 - Corrected documentation for `reproject()`: the `crs` parameter no longer (incorrectly) lists `logical` as an accepted type. `crs` accepts numeric/integer, character (e.g. "EPSG:4326") or an `sf::crs` object; passing `TRUE`/`FALSE` will fail.
 - Vignette pre-compilation was updated so that srr tags dropped by `knitr::knit()` are reinserted into the vignettes. Affected vignettes were also recompiled.
+- Documentation of return values in `clear_cache()` and `delineate()` were made factually consistent with the code.
+
+## Changed
+
+- The OSM retrieval vignette was updated to use the redesigned main functions. UTM CRS is retrieved now implicitly as part of `define_aoi()`.
+- Attach-time `check_cache()` was moved behind `interactive()`.
+- `get_osmdata()` was renamed to `get_osm()` and all other uses of `osmdata` and `osm_data` in object and function names have been consistently renamed to `osm` throughout the package to avoid confusions with the `osmdata` package.
+- The workflow of `delineate()` was refactored into four composable functions to reduce parameter complexity and improve step-by-step control:
+  - `define_aoi()` (new): defines the area of interest and all delineation parameters (CRS, buffer sizes, corridor initialisation method) from a
+    city and river name.
+  - `get_osmdata()` and `get_dem()` was adapted to accept an `aoi` object returned by `define_aoi()` instead of individual parameters.
+  - `delineate()`: now accepts the `aoi` object, OSM data, and DEM as separate inputs, with a reduced parameter signature.
+- `delineate_city_river()` (new): convenience wrapper that runs the full workflow from city and river name with default parameters.
+- `delineate()` returns now an S3 object of class `delineation`.
+- `as_network()` now checks for NAs in non-geometry columns and issues an error, proceeds with a warning, imputes NA values, or ignores them, as specified by the user with a new `na_action` parameter.
 
 ## Removed
 
@@ -66,6 +94,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Changed
 
+- Optimised OSM river retrieval by matching the river to an OSM relation ID via Nominatim and fetching by ID, instead of querying all waterways within a bounding box and filtering by name.
 - Replaced `sapply()` with `vapply()` throughout the package for improved type safety.
 - Updated package metadata in `DESCRIPTION` and `codemeta.json`
 - Organized function reference page into meaningful sections.

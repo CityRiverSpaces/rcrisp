@@ -12,6 +12,7 @@ Provides tools to automate the morphological delineation of riverside urban area
 Useful links:
 \itemize{
   \item \url{https://cityriverspaces.github.io/rcrisp/}
+  \item \url{https://github.com/CityRiverSpaces/rcrisp}
   \item \doi{10.5281/zenodo.15793526}
   \item Report bugs at \url{https://github.com/CityRiverSpaces/rcrisp/issues}
 }

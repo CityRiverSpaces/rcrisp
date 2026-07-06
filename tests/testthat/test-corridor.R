@@ -54,6 +54,12 @@ test_that("Build river network only select longest segment within AoI", {
   expect_setequal(expected_edges, actual_edges)
 })
 
+#' @srrstats {G5.6} The following three tests of `corridor_end_points()` verify
+#'   that corridor endpoints are correctly recovered for a given synthetic river
+#'   and spatial network for which the expected output can be easily derived.
+#' @noRd
+NULL
+
 test_that("Endpoints are found for two intersections with network edges", {
   river <- sf::st_sfc(sf::st_linestring(cbind(c(-2, 0, 0), c(0, 0, -2))))
   regions <- c(sf::st_buffer(river, 2, singleSide = TRUE),
@@ -151,6 +157,12 @@ test_that("River banks works with real data", {
   expect_equal(length(regions), 2)
 })
 
+#' @srrstats {G5.6} The following two tests verify that initial edges are
+#'   correctly recovered for a given corridor and regions on the two sides of
+#'   the river for which the expected output can be easily derived.
+#' @noRd
+NULL
+
 test_that("Initial edges are identified if corridor exceeds AoI", {
   #        ____________
   #       |            |
@@ -202,6 +214,12 @@ test_that("Initial edges are identified if AoI includes corridor", {
   )
   expect_setequal(edges_actual, edges_expected)
 })
+
+#' @srrstats {G5.6} The following two tests verify that the correct corridor
+#'   polygon is recovered for given corridor edges for which the expected
+#'   output can be easily derived.
+#' @noRd
+NULL
 
 test_that("Capping a corridor with method 'direct' properly closes a polygon", {
   edge_1 <- sf::st_linestring(cbind(c(-1, 1), c(1, 1)))
@@ -367,3 +385,48 @@ test_that("When river has no crossing, delineation fails with informative
             expect_error(delineate_corridor(network, river),
                          "No river crossings found.")
           })
+
+#' @srrstats {SP6.1a} Geographic (lat/lon) input to `delineate_corridor()`
+#'   yields inaccurate results because all corridor geometry operations assume
+#'   Cartesian (projected) coordinates. The function therefore raises an
+#'   informative error when geographic CRS input is supplied.
+test_that("delineate_corridor() raises an error for geographic CRS input", {
+  network_edges <- sf::st_sfc(
+    sf::st_linestring(cbind(c(26.09, 26.07), c(44.43, 44.43))),
+    sf::st_linestring(cbind(c(26.09, 26.07), c(44.45, 44.45))),
+    sf::st_linestring(cbind(c(26.09, 26.09), c(44.45, 44.43))),
+    sf::st_linestring(cbind(c(26.07, 26.07), c(44.43, 44.45))),
+    crs = 4326
+  )
+  network <- sfnetworks::as_sfnetwork(network_edges, directed = FALSE)
+  river <- sf::st_sfc(
+    sf::st_linestring(cbind(c(26.06, 26.08, 26.10), c(44.44, 44.44, 44.44))),
+    crs = 4326
+  )
+  expect_error(
+    delineate_corridor(network, river),
+    "The input CRS is geographic"
+  )
+})
+
+test_that("Endpoint selection is robust to floating point distances", {
+  # In this case, diagonal segments produce floating point distances.
+  river <- sf::st_sfc(
+    sf::st_linestring(cbind(c(0, 1, 2), c(0, 1, 0)))
+  )
+  regions <- c(
+    sf::st_buffer(river, 1.5, singleSide = TRUE),
+    sf::st_buffer(river, -1.5, singleSide = TRUE)
+  )
+
+  # The distance between end points is sqrt(2), which is irrational.
+  network_edges <- sf::st_sfc(
+    sf::st_linestring(cbind(c(0, 1), c(1, 0))),
+    sf::st_linestring(cbind(c(1, 2), c(0, 1)))
+  )
+  river_network <- sfnetworks::as_sfnetwork(river, directed = FALSE)
+  spatial_network <- sfnetworks::as_sfnetwork(network_edges, directed = FALSE)
+  actual <- corridor_end_points(river_network, spatial_network, regions)
+  expected <- sf::st_sfc(sf::st_point(c(0.5, 0.5)), sf::st_point(c(1.5, 0.5)))
+  expect_setequal(actual, expected)
+})

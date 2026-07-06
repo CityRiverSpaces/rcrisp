@@ -5,7 +5,9 @@
 #
 # NOTE: pre-existing vignettes will not be compiled, remove the .Rmd files to
 # re-generate them!
-vigs_orig <- list.files(".", pattern = "\\.Rmd.orig")
+vigs_orig <- list.files("vignettes",
+                        pattern = "\\.Rmd.orig",
+                        full.names = TRUE)
 
 # Extract all srr chunks from an .Rmd file as a character vector of lines.
 # Chunks with eval=FALSE, echo=FALSE are silently dropped by knitr::knit(), so

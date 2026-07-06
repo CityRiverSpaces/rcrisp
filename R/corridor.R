@@ -47,11 +47,16 @@
 #' @srrstats {G2.3, G2.3a, G2.3b} The `checkmate` package is used to check that
 #'   `capping_method` only uses allowed choices. The variable is also made
 #'   case-independent with `tolower()`.
+#' @srrstats {G2.6} One-dimensional distance input is pre-processed by
+#'   `preprocess_distance()` to handle `units` objects or other vector-like
+#'   classes with storage mode `numeric`.
 #' @srrstats {G2.7} The `network` object provided as input must be of class
 #'   `sfnetwork`. `sfnetwork` objects are `sf`-compatible and are commonly used
 #'   for spatial network analysis. The `river` parameter accepts inputs of type
 #'   `sf` and `sfc`. In the current implementation, any other form of tabular
 #'   input is rejected (the spatial information is strictly needed).
+#' @srrstats {G2.9} The user is informed when the input river object in lat/lon
+#'   coordinates is transformed into a suitable projected CRS.
 #' @srrstats {G2.10} This function uses `sf::st_geometry()` to extract the
 #'   geometry column from the `sf` object `river`. This is used when only
 #'   geometry information is needed from that point onwards and all other
@@ -69,6 +74,11 @@ delineate_corridor <- function(
   network, river, corridor_init = 1000, max_width = 3000, max_iterations = 10,
   capping_method = "shortest-path"
 ) {
+  # Preprocess distances
+  if (is.numeric(corridor_init) || inherits(corridor_init, "units")) {
+    corridor_init <- preprocess_distance(corridor_init)
+  }
+  max_width <- preprocess_distance(max_width)
   # Check input
   checkmate::assert_class(network, "sfnetwork")
   checkmate::assert_multi_class(river, c("sf", "sfc"))
@@ -93,6 +103,14 @@ delineate_corridor <- function(
   capping_method <- tolower(capping_method)
   checkmate::assert_choice(capping_method, c("shortest-path", "direct"))
   checkmate::assert_true(as_crs(network) == as_crs(river))
+
+  if (!is.na(sf::st_is_longlat(river)) && sf::st_is_longlat(river)) {
+    dst_crs <- get_utm_zone(river) |> as_crs()
+    message(sprintf(
+      "Reprojecting river from EPSG:%s to EPSG:%s for corridor delineation.",
+      sf::st_crs(river)$epsg, dst_crs$epsg
+    ))
+  }
 
   # Drop all attributes of river but its geometry
   river <- sf::st_geometry(river)
@@ -210,8 +228,8 @@ corridor_end_points <- function(river_network, spatial_network, regions) {
   distances <- sfnetworks::st_network_cost(river_network, from = nodes,
                                            to = nodes, weights = "weight")
 
-  indices <- which(distances == max(distances), arr.ind = TRUE)[1, ]
-  end_points <- c(nodes[indices["row"]], nodes[indices["col"]])
+  indices <- arrayInd(which.max(distances), dim(distances))
+  end_points <- c(nodes[indices[1]], nodes[indices[2]])
   if (end_points[1] == end_points[2]) {
     stop("Corridor start- and end-points coincide!")
   }
