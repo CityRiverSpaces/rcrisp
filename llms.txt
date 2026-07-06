@@ -92,15 +92,15 @@ summary(bd)
 #>   buildings_buffer 100 m
 #> 
 #> Delineation layers:
-#>   $valley          101.1 km²
-#>   $corridor        65.8 km²
-#>   $segments        10 features, total 65.8 km² (mean 6.6 km²)
-#>   $riverspace      9.3 km²
+#>   $valley          84.0 km²
+#>   $corridor        56.5 km²
+#>   $segments        10 features, total 56.5 km² (mean 5.7 km²)
+#>   $riverspace      8.6 km²
 #> 
 #> Base layers:
-#>   $streets         5112 features
-#>   $railways        677 features
-#>   $river_centerline 270.6 km
+#>   $streets         4933 features
+#>   $railways        654 features
+#>   $river_centerline 36.2 km
 #>   $river_surface   3.4 km²
 
 # Plot delineation object
