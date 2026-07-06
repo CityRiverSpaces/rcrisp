@@ -28,6 +28,10 @@ NULL
 #' through subsetting and converted to other common spatial classes in typical
 #' `sf`- or `terra`-based workflows.
 #'
+#' Corridor delineation depends on the availability of OpenStreetMap street and
+#' railway data around the river. Sparse OSM data, especially too few river
+#' crossings, may lead to failed delineation.
+#'
 #' @param aoi A list of delineation parameters for an area of interest, namely
 #'   `$city_name`, `$river_name`, `$crs`, `$network_buffer`, `$dem_buffer`, and
 #'   `$buildings_buffer`. For more info see [define_aoi()].
@@ -131,6 +135,22 @@ delineate <- function(
     # Set up the combined street and rail network for the delineation
     network_edges <- dplyr::bind_rows(osm$streets, osm$railways)
     network <- as_network(network_edges)
+    crossings <- get_intersecting_edges(network, osm$river_centerline)
+    crossings_clustered <- if (nrow(crossings) == 0) {
+      sf::st_geometry(crossings)
+    } else {
+      filter_clusters(crossings, osm$river_centerline)
+    }
+    # Too few river crossings may lead to failed corridor delineation.
+    if (length(crossings_clustered) < 2) {
+      stop(sprintf(
+        paste(
+          "Corridor delineation is not possible with %s.",
+          "At least 2 are required."
+        ),
+        ifelse(length(crossings_clustered) == 0, "no crossings", "1 crossing")
+      ))
+    }
 
     # Run the corridor delineation on the spatial network
     delineations$corridor <- delineate_corridor(
