@@ -29,7 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Changed
 
-- The OSM retrieval vignette was updated to retrieve CRS with `get_utm_zone()`
+- The OSM retrieval vignette was updated to use the redesigned main functions. UTM CRS is retrieved now implicitly as part of `define_aoi()`.
 - Attach-time `check_cache()` was moved behind `interactive()`.
 - `get_osmdata()` was renamed to `get_osm()` and all other uses of `osmdata` and `osm_data` in object and function names have been consistently renamed to `osm` throughout the package to avoid confusions with the `osmdata` package.
 - The workflow of `delineate()` was refactored into four composable functions to reduce parameter complexity and improve step-by-step control:
