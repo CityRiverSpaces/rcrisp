@@ -74,9 +74,6 @@ NULL
 #' @srrstatsNA {G5.4b, G5.4c} This package implements a new method.
 #' @srrstatsNA {G5.6b} The core algorithms of this package do not involve random
 #'   components.
-#' @srrstatsNA {G5.7} The results of the core algorithm of this package are not
-#'   expected to return predictable trends for given changes in input data
-#'   properties.
 #' @srrstatsNA {G5.8c} No tabular data where all fields or all columns can be NA
 #'   can be used as input in any of the function of this package.
 #' @srrstatsNA {G5.9, G5.9a, G5.9b} The core algorithms (cost-distance valley
