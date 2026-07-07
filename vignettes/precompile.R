@@ -37,7 +37,11 @@ for (vig_orig in vigs_orig) {
   vig <- gsub(".orig", "", vig_orig)
   # Only knit the vignettes that are missing
   if (!file.exists(vig)) {
-    knitr::knit(vig_orig, vig)
+    vig_orig_abs <- normalizePath(vig_orig, mustWork = TRUE)
+    vig_abs <- sub("\\.orig$", "", vig_orig_abs)
+    old_wd <- setwd(dirname(vig_orig_abs))
+    knitr::knit(basename(vig_orig_abs), basename(vig_abs))
+    setwd(old_wd)
 
     # Reinsert srr chunks that are lost during knitting
     orig_lines <- readLines(vig_orig)
