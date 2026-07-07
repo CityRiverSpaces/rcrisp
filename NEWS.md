@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - A definition of "riverside urban areas" was added in the README.
 - The practical usefulness of the morphological approach was explained in the README.
-- Test coverage of the `osmdata` module was increased.
+- Test coverage of the `osm` and `aoi` modules was increased.
 - The "Getting started" vignette was updated with a "Why is consistent delineation important?" section clarifying the problem `rcrisp` is meant to solve in contrast with alternative approaches.
 - A note was added in the "Getting started" vignette stating that the workflow can be replicated for any city and river where sufficient data are available.
 - Added an algorithm performance test to verify that the full pipeline completes successfully on real-world example data and performs within reasonable bounds.
