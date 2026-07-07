@@ -329,17 +329,17 @@ get_osm_city_boundary <- function(bb, city_name, crs = NULL, multiple = FALSE,
                             error = function(e) NULL)
 
   if (is.null(city_boundary) || length(city_boundary) == 0) {
-    stop("No city boundary found. The city name may be incorrect.")
+    cli::cli_abort("No city boundary found. The city name may be incorrect.")
   }
 
   if (!is.null(crs)) city_boundary <- sf::st_transform(city_boundary, crs)
 
   if (length(city_boundary) > 1) {
     if (!multiple) {
-      message("Multiple boundaries were found. Using the first one.")
+      cli::cli_inform("Multiple boundaries were found. Using the first one.")
       return(city_boundary[1])
     } else {
-      message("Multiple boundaries were found. Returning all.")
+      cli::cli_inform("Multiple boundaries were found. Returning all.")
     }
   }
 
@@ -388,7 +388,7 @@ get_osm_river_centerline <- function(bb, river_name, crs = NULL,
   waterway_rivers <- nominatim_waterway_lookup(river_name)
 
   if (nrow(waterway_rivers) == 0) {
-    stop(sprintf("No OSM waterway relation found for: %s", river_name))
+    cli::cli_abort("No OSM waterway relation found for: {river_name}.")
   }
 
   waterway_river <- waterway_rivers[1, ]
@@ -397,7 +397,7 @@ get_osm_river_centerline <- function(bb, river_name, crs = NULL,
 
   # Check that waterway geometries are found
   if (is.null(feature$osm_lines) && is.null(feature$osm_multilines)) {
-    stop(sprintf("No waterway geometries found for river %s", river_name))
+    cli::cli_abort("No waterway geometries found for river {river_name}.")
   }
 
   river_centerline_lines <- feature$osm_lines
@@ -423,8 +423,8 @@ get_osm_river_centerline <- function(bb, river_name, crs = NULL,
     sf::st_geometry() |>
     sf::st_union()
 
-  if (sf::st_is_empty(river_centerline)) stop(
-    sprintf("No river geometry found for %s", river_name)
+  if (sf::st_is_empty(river_centerline)) cli::cli_abort(
+    "No river geometry found for {river_name}."
   )
 
   if (!is.null(crs)) river_centerline <- sf::st_transform(river_centerline, crs)
@@ -703,10 +703,9 @@ get_river_aoi <- function(river, city_bbox, buffer_distance) {
   river <- sf::st_transform(river, sf::st_crs(city_bbox))
 
   if (!is.na(sf::st_is_longlat(river)) && sf::st_is_longlat(river)) {
-    dst_crs <- get_utm_zone(river) |> as_crs()
-    message(sprintf(
-      "Reprojecting river from EPSG:%s to EPSG:%s for river AoI buffering.",
-      sf::st_crs(river)$epsg, dst_crs$epsg
+    cli::cli_inform(paste0(
+      "Reprojecting river from EPSG:{sf::st_crs(river)$epsg}",
+      " to EPSG:{get_utm_zone(river)} for river AoI buffering."
     ))
   }
 

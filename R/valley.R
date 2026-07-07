@@ -63,10 +63,9 @@ get_dem <- function(aoi, osm, dem_source = "STAC", stac_endpoint = NULL,
                     stac_collection = NULL, force_download = FALSE) {
   if (!is.na(sf::st_is_longlat(osm$aoi_network)) &&
         sf::st_is_longlat(osm$aoi_network)) {
-    dst_crs <- get_utm_zone(osm$aoi_network) |> as_crs()
-    message(sprintf(
-      "Reprojecting AoI from EPSG:%s to EPSG:%s for DEM extent buffering.",
-      sf::st_crs(osm$aoi_network)$epsg, dst_crs$epsg
+    cli::cli_inform(paste0(
+      "Reprojecting AoI from EPSG:{sf::st_crs(osm$aoi_network)$epsg}",
+      " to EPSG:{get_utm_zone(osm$aoi_network)} for DEM extent buffering."
     ))
   }
   # Retrieve dataset on a larger AOI to limit edge effects in downstream
@@ -86,7 +85,7 @@ get_dem <- function(aoi, osm, dem_source = "STAC", stac_endpoint = NULL,
                                       collection = stac_collection)
     dem <- load_dem(bbox, asset_urls, force_download = force_download)
   } else {
-    stop(sprintf("DEM source %s unknown", dem_source))
+    cli::cli_abort("DEM source {dem_source} unknown.")
   }
   if (!is.null(aoi$crs)) {
     dem <- reproject(dem, aoi$crs)
@@ -124,7 +123,7 @@ delineate_valley <- function(dem, river) {
   checkmate::assert_multi_class(river, c("sf", "sfc"))
 
   if (!terra::same.crs(dem, sf::st_crs(river)$wkt)) {
-    stop("DEM and river geometry should be in the same CRS")
+    cli::cli_abort("DEM and river geometry should be in the same CRS.")
   }
   cd_masked <- smooth_dem(dem) |>
     get_slope() |>
@@ -175,7 +174,7 @@ get_stac_asset_urls <- function(bb, endpoint = NULL, collection = NULL) {
       Sys.setenv("AWS_NO_SIGN_REQUEST" = "YES")
     }
   } else if (is.null(endpoint) || is.null(collection)) {
-    stop("Provide both or neither of STAC endpoint and collection")
+    cli::cli_abort("Provide both or neither of STAC endpoint and collection.")
   }
 
   rstac::stac(endpoint) |>
@@ -342,7 +341,7 @@ get_cd_char <- function(cd, method = "mean") {
   if (method == "mean") {
     mean(terra::values(cd), na.rm = TRUE)
   } else {
-    stop("Not implemented!")
+    cli::cli_abort("Method {.val {method}} is not implemented.")
   }
 }
 

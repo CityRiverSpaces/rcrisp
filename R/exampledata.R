@@ -106,7 +106,7 @@ retry <- function(func, ..., max_retries = 5, delay = 2) {
     result <- tryCatch({
       func(...)  # Call the function with arguments
     }, error = function(e) {
-      message(sprintf("Attempt %d failed: %s", attempt, e$message))
+      cli::cli_inform("Attempt {attempt} failed: {e$message}")
       NULL
     })
 
@@ -114,12 +114,12 @@ retry <- function(func, ..., max_retries = 5, delay = 2) {
       return(result)  # Successfully retrieved result
     }
 
-    message(sprintf("Retrying in %d seconds...", delay))
+    cli::cli_inform("Retrying in {delay} seconds...")
     Sys.sleep(delay)
     attempt <- attempt + 1
   }
 
-  message("Function failed after multiple attempts.")
+  cli::cli_inform("Function failed after multiple attempts.")
   NULL
 }
 
