@@ -40,4 +40,7 @@ Other contributors:
 - Meiert Willem Grootes <m.grootes@esciencecenter.nl>
   ([ORCID](https://orcid.org/0000-0002-5733-4795)) \[contributor\]
 
+- Yehan Wu <y.wu-13@tudelft.nl>
+  ([ORCID](https://orcid.org/0000-0003-4063-7535)) \[contributor\]
+
 - Netherlands eScience Center <info@esciencecenter.nl> \[funder\]
