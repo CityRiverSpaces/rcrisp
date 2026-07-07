@@ -1,9 +1,10 @@
-# All functions using [`osmdata_as_sf()`] store and data in a cache folder and
-# read data from there when already available. In order not to mess up with the
-# user cache directory, we setup a temporary cache folder that already contains
-# some datasets, only used for testing purposes. This is achieved via the
-# [`temp_cache_dir()`] helper function, which should be called in each test that
-# does not mock [`osmdata_as_sf()`].
+# All functions using [`osmdata_as_sf()`] or [`osmdata_as_sf_by_id()`] store
+# and data in a cache folder and read data from there when already available.
+# In order not to mess up with the user cache directory, we setup a temporary
+# cache folder that already contains some datasets, only used for testing
+# purposes. This is achieved via the [`temp_cache_dir()`] helper function,
+# which should be called in each test that does not mock [`osmdata_as_sf()`] or
+# [`osmdata_as_sf_by_id()`]
 
 # setup mock test dataset
 bb_bucharest <- sf::st_bbox(c(xmin = 25.967,
@@ -56,7 +57,23 @@ mock_streets_polygon <- list(
     geometry = sf::st_sfc(sf::st_polygon(list(
       matrix(c(1, 1, 3, 1, 3, 2, 1, 2, 1, 1), ncol = 2, byrow = TRUE)
     ))),
-    crs = sf::st_crs("EPSG:4326")
+    crs = sf::st_crs("EPSG:4326")    
+  )
+)
+mock_river_polygons <- sf::st_sf(
+  name = c("Dâmbovița", "Dâmbovița"),
+  geometry = sf::st_sfc(
+    # covers Dâmbovița line 1: (26.0, 44.3) → (26.1, 44.4)
+    sf::st_polygon(list(matrix(
+      c(25.95, 26.15, 26.15, 25.95, 25.95,
+        44.25, 44.25, 44.45, 44.45, 44.25), ncol = 2
+    ))),
+    # covers Dâmbovița line 2: (26.2, 44.5) → (26.3, 44.6)
+    sf::st_polygon(list(matrix(
+      c(26.16, 26.35, 26.35, 26.16, 26.16,
+        44.46, 44.46, 44.65, 44.65, 44.46), ncol = 2
+    ))),
+    crs = "EPSG:4326"
   )
 )
 mock_city_boundary_geom <- sf::st_as_sfc(bb_bucharest)
@@ -100,7 +117,7 @@ test_that("OSM queries are stored to and retrieved from the cache", {
       cached_filepath <- file.path(cache_dir, cached_filename)
       expect_true(file.exists(cached_filepath))
       # subsequent calls read data from the file
-      expect_warning(
+      expect_message(
         osmdata_as_sf("key", "value", bb_bucharest, force_download = FALSE),
         cached_filepath,
         fixed = TRUE
@@ -125,6 +142,53 @@ test_that("OSM queries are always performed if force_download is set to TRUE", {
       )
       expect_message(
         osmdata_as_sf("key", "value", bb_bucharest, force_download = TRUE),
+        "Saving data to cache directory"
+      )
+    }
+  )
+})
+
+test_that("osmdata_as_sf_by_id results are stored to and retrieved from the cache", { # nolint
+
+  cache_dir <- temp_cache_dir()
+
+  with_mocked_bindings(
+    osmdata_id_query = function(...) "mock osmdata id response",
+    {
+      # first call saves data to cache
+      expect_message(
+        osmdata_as_sf_by_id("relation", "123456", force_download = TRUE),
+        "Saving data to cache directory"
+      )
+      # check that the file landed in cache
+      cached_filename <- list.files(cache_dir,
+                                    pattern = "^osmdata_relation_123456")
+      cached_filepath <- file.path(cache_dir, cached_filename)
+      expect_true(file.exists(cached_filepath))
+      # subsequent call reads from cache without querying
+      expect_message(
+        osmdata_as_sf_by_id("relation", "123456", force_download = FALSE),
+        cached_filepath,
+        fixed = TRUE
+      )
+    }
+  )
+})
+
+test_that("osmdata_as_sf_by_id always queries if force_download is TRUE", {
+
+  cache_dir <- temp_cache_dir()
+
+  with_mocked_bindings(
+    osmdata_id_query = function(...) "mock osmdata id response",
+    {
+      # Second call also saves data to cache
+      expect_message(
+        osmdata_as_sf_by_id("relation", "123456", force_download = TRUE),
+        "Saving data to cache directory"
+      )
+      expect_message(
+        osmdata_as_sf_by_id("relation", "123456", force_download = TRUE),
         "Saving data to cache directory"
       )
     }
@@ -335,12 +399,15 @@ test_that("Both polygons and multipolygons are included in river retrieval", {
     tolerance = 1e-5
   )
 })
+    
+mock_nominatim_result <- data.frame(osm_type = "relation", osm_id = "123456")
 
 #' @srrstats {G5.8, G5.8a} Edge test: if a value that leads to no data being
 #'   retrieved, an error is raised.
 test_that("River retrieval raise error if no river is found in the bb", {
   with_mocked_bindings(
-    osmdata_as_sf = function(...) list(osm_lines = NULL),
+    nominatim_waterway_lookup = function(...) mock_nominatim_result,
+    osmdata_as_sf_by_id = function(...) list(osm_lines = NULL),
     expect_error(
       get_osm_river_centerline(bb_bucharest, "Thames", force_download = TRUE),
       "No waterway geometries found"
@@ -351,8 +418,17 @@ test_that("River retrieval raise error if no river is found in the bb", {
 #' @srrstats {G5.8, G5.8a} Edge test: if a value that leads to no data being
 #'   retrieved, an error is raised.
 test_that("River retrieval raise error if river is not found in the bb", {
+  # Lines in London — entirely outside Bucharest's bounding box
+  outside_bb_lines <- sf::st_sf(
+    name = "Thames",
+    geometry = sf::st_sfc(
+      sf::st_linestring(matrix(c(-1, 0, 51.5, 51.5), ncol = 2)),
+      crs = "EPSG:4326"
+    )
+  )
   with_mocked_bindings(
-    osmdata_as_sf = function(...) list(osm_lines = mock_river_lines),
+    nominatim_waterway_lookup = function(...) mock_nominatim_result,
+    osmdata_as_sf_by_id = function(...) list(osm_lines = outside_bb_lines),
     expect_error(
       get_osm_river_centerline(bb_bucharest, "Thames", force_download = TRUE),
       "Thames"
@@ -362,9 +438,11 @@ test_that("River retrieval raise error if river is not found in the bb", {
 
 test_that("River lines and surface are properly set up", {
   with_mocked_bindings(
-    osmdata_as_sf = function(...) {
-      list(osm_lines = mock_river_lines, osm_polygons = mock_river_polygons)
-    },
+    nominatim_waterway_lookup = \(...) mock_nominatim_result,
+    # centerline fetch: return only the two Dâmbovița lines
+    osmdata_as_sf_by_id = \(...) list(osm_lines = mock_river_lines[1:2, ]),
+    # surface fetch (osmdata_as_sf) returns the two separate mock polygons
+    osmdata_as_sf = \(...) list(osm_polygons = mock_river_polygons),
     {
       river_centerline <- get_osm_river_centerline(bb_bucharest, "Dâmbovița",
                                                    force_download = TRUE,
@@ -378,6 +456,30 @@ test_that("River lines and surface are properly set up", {
   expect_true(sf::st_is(river_surface, "MULTIPOLYGON"))
   expect_equal(sf::st_crs(river_centerline)$epsg, 32635)
   expect_equal(sf::st_crs(river_surface)$epsg, 32635)
+})
+
+test_that("Buffered centreline is at least as long as the un-buffered one", {
+  with_mocked_bindings(
+    nominatim_waterway_lookup = \(...) mock_nominatim_result,
+    osmdata_as_sf_by_id = \(...) list(osm_lines = mock_river_lines[1:2, ]),
+    {
+      cl_tight <- get_osm_river_centerline(bb_bucharest, "Dâmbovița",
+                                           force_download = TRUE)
+      cl_buffered <- get_osm_river_centerline(bb_bucharest, "Dâmbovița",
+                                              buffer_distance = 5500,
+                                              force_download = TRUE)
+    }
+  )
+  # Buffered river is greater than or equal to bb-cropped river
+  expect_gte(
+    as.numeric(sf::st_length(cl_buffered)),
+    as.numeric(sf::st_length(cl_tight))
+  )
+  # Geometry type must be preserved regardless of buffering
+  expect_true(
+    sf::st_is(cl_buffered, "MULTILINESTRING") ||
+      sf::st_is(cl_buffered, "LINESTRING")
+  )
 })
 
 test_that("If no river surface is found, an empty sfc object is returned", {
@@ -513,4 +615,24 @@ test_that("OSM buildings are retrieved with bounding box as input", {
   })
   expect_equal(length(buildings), 2)
   expect_equal(sf::st_crs(buildings), crs)
+})
+
+#' @srrstats {G5.8} Edge test: an error is raised if the dimension of the input
+#'   parameters does not fit the requirements.
+test_that("Only one river can be queried at a time", {
+  bb <- sf::st_bbox(c(xmin = 0, ymin = 0, xmax = 1, ymax = 1))
+  expect_error(get_osm_river_centerline(bb, c("Dâmbovița", "SomeOtherRiver")),
+               "Assertion on 'river_name' failed: Must have length 1")
+})
+
+test_that("get_river_aoi() issues a message when reprojecting lon/lat input", {
+  river <- sf::st_sfc(
+    sf::st_linestring(cbind(c(26.1, 26.2), c(44.4, 44.5))),
+    crs = 4326
+  )
+  bbox <- sf::st_bbox(river)
+  expect_message(
+    get_river_aoi(river, bbox, buffer_distance = 100),
+    "Reprojecting river from EPSG:4326 to EPSG:32635 for river AoI buffering."
+  )
 })

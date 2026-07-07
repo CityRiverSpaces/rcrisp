@@ -76,13 +76,18 @@ test_that("Download DEM data can be retrieved from the cache on new calls", {
       expect_true(file.exists(cached_filepath))
 
       # calling load_dem again should read data from the cached file, raising a
-      # warning that includes the path to the cached file as well
-      expect_warning(load_dem(aoi$bb, asset_urls, force_download = FALSE),
+      # message that includes the path to the cached file as well
+      expect_message(load_dem(aoi$bb, asset_urls, force_download = FALSE),
                      cached_filepath, fixed = TRUE)
     }
   )
 })
 
+#' @srrstats {G5.6} This test verifies that valley delineation correctly
+#'   recovers the expected valley boundary for a DEM generated with a known,
+#'   fixed slope, for which the expected output can be analytically derived.
+#' @srrstats {G5.6a} The test succeeds if the recovered valley boundary lies
+#'   within one raster cell resolution (`res`) from the expected geometry.
 test_that("valley polygon is correctly constructed", {
   res <- 50
   crs <- "EPSG:32601"
@@ -111,6 +116,19 @@ test_that("valley polygon is correctly constructed", {
 
   expect_true(
     sf::st_equals_exact(valley_crop, valley_expected, par = res, sparse = FALSE)
+  )
+})
+
+#' @srrstats {G2.9} A message is issued when the AOI network geometry is in
+#'   lon/lat coordinates and is reprojected before DEM extent buffering.
+test_that("A message is issued when AOI network is in lon/lat CRS", {
+  with_mocked_bindings(
+    get_stac_asset_urls = \(...) asset_urls,
+    load_dem = \(...) terra::rast(matrix(1:4, nrow = 2), crs = "EPSG:4326"),
+    expect_message(
+      get_dem(aoi, osm),
+      "Reprojecting AoI from EPSG:"
+    )
   )
 })
 

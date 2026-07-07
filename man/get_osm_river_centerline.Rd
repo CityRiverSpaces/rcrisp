@@ -4,7 +4,13 @@
 \alias{get_osm_river_centerline}
 \title{Get the river centreline from OpenStreetMap}
 \usage{
-get_osm_river_centerline(bb, river_name, crs = NULL, force_download = FALSE)
+get_osm_river_centerline(
+  bb,
+  river_name,
+  crs = NULL,
+  buffer_distance = NULL,
+  force_download = FALSE
+)
 }
 \arguments{
 \item{bb}{Bounding box of class \code{bbox}}
@@ -13,6 +19,11 @@ get_osm_river_centerline(bb, river_name, crs = NULL, force_download = FALSE)
 case-sensitive.}
 
 \item{crs}{Coordinate reference system as EPSG code}
+
+\item{buffer_distance}{Optional buffer distance in metres to expand the
+bounding box before cropping the river centreline. Useful when downstream
+processing (e.g. network or DEM analysis) extends beyond the original \code{bb}.
+Defaults to \code{NULL} (no expansion).}
 
 \item{force_download}{Download data even if cached data is available}
 }

@@ -24,17 +24,20 @@ Review](https://badges.ropensci.org/718_status.svg)](https://github.com/ropensci
 <!-- badges: end -->
 
 rcrisp provides tools to automate the morphological delineation of
-riverside urban areas—i.e., spaces where social, environmental and
-economic phenomena are assumed to be influenced by the presence of the
-river—following a method developed in Forgaci ([2018, pp.
-88–89](#ref-forgaci2018)).
+riverside urban areas—i.e., the spaces surrounding a river where social,
+environmental and economic phenomena are assumed to be influenced by the
+presence of the river—following a method developed in Forgaci ([2018,
+pp. 88–89](#ref-forgaci2018)).
 
 The method is based on the premise that analyses of riverside urban
 phenomena are often done without a clear and consistent spatial
 definition of the area of interest and that a morphological
 delineation—combining the natural terrain of the river valley and the
-configuration of the built urban fabric—can provide a more objective and
-comparable approach. Delineations following this morphological
+configuration of the overlapping built urban fabric—can provide a more
+objective and comparable approach. See the [Getting started
+vignette](https://cityriverspaces.github.io/rcrisp/articles/getting-started.html#why-is-consistent-delineation-important)
+to understand why consistent delineation matters and how alternative
+approaches fall short. Delineations following this morphological
 delineation method enable integrated local analyses, where data from
 different sources must be combined within a neutral spatial unit, as
 well as global cross-case analyses, which require a spatial unit that is
@@ -58,11 +61,13 @@ data for the delineation process.
 
 ## Workflow at a glance
 
-1.  (Optionally) get OSM and DEM base layers
-2.  Run the all-in-one `delineate()` or delineation-specific
+1.  Define area of interest and parameters for a given city and a river
+    crossing it
+2.  Get OSM and DEM base layers within the area of interest
+3.  Run the all-in-one `delineate()` or delineation-specific
     `delineate_*()` functions to compute valley, corridor, segments,
     and/or river space
-3.  Visualize/export results for downstream analysis
+4.  Visualize/export results for downstream analysis
 
 See the [Getting started
 vignette](https://cityriverspaces.github.io/rcrisp/articles/getting-started.html)
@@ -96,22 +101,41 @@ library(rcrisp)
 # Set location parameters
 city_name <- "Bucharest"
 river_name <- "Dâmbovița"
-epsg_code <- 32635
 
-# Delineate river corridor
-bd <- delineate(city_name, river_name, segments = TRUE)
+# Set AoI parameters for given location
+aoi <- define_aoi(city_name, river_name)
 
-# Get base layers for plotting
-bb <- get_osm_bb(city_name)
-streets <- get_osm_streets(bb, epsg_code)$geometry
-railways <- get_osm_railways(bb, epsg_code)$geometry
+# Get data
+osm <- get_osm(aoi)
+dem <- get_dem(aoi, osm)
 
-# Plot results
-plot(bd$corridor)
-plot(railways, col = "darkgrey", add = TRUE, lwd = 0.5)
-plot(streets, add = TRUE)
-plot(bd$segments, border = "orange", add = TRUE, lwd = 3)
-plot(bd$corridor, border = "red", add = TRUE, lwd = 3)
+# Delineate river corridor with segments
+bd <- delineate(aoi, osm, dem, segments = TRUE, riverspace = TRUE)
+
+# Examine delineation object
+summary(bd)
+#> Delineation: Bucharest - Dâmbovița 
+#> CRS:         WGS 84 / UTM zone 35N 
+#> 
+#> Delineation parameters:
+#>   network_buffer   3000 m
+#>   dem_buffer       2500 m
+#>   buildings_buffer 100 m
+#> 
+#> Delineation layers:
+#>   $valley          84.0 km²
+#>   $corridor        56.5 km²
+#>   $segments        10 features, total 56.5 km² (mean 5.7 km²)
+#>   $riverspace      8.6 km²
+#> 
+#> Base layers:
+#>   $streets         4933 features
+#>   $railways        654 features
+#>   $river_centerline 36.2 km
+#>   $river_surface   3.4 km²
+
+# Plot delineation object
+plot(bd)
 ```
 
 <img src="man/figures/README-example-1.png" width="100%" />

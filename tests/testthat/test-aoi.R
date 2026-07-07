@@ -31,6 +31,22 @@ test_that("NULL values are rejected for required parameters", {
   )
 })
 
+#' @srrstats {G2.9} A message is issued when CRS is not provided and a suitable
+#'   UTM zone is auto-selected.
+test_that("If `crs` is not specified, message is issued", {
+  expect_message(
+    with_mocked_bindings(
+      get_osm_bb = \(...) {
+        sf::st_bbox(c(xmin = 25.967, ymin = 44.334,
+                      xmax = 26.226, ymax = 44.541),
+                    crs = "EPSG:4326")
+      },
+      define_aoi(city_name = "MyCity", river_name = "MyRiver")
+    ),
+    "Using auto-selected UTM zone: EPSG:"
+  )
+})
+
 #' @srrstats {G5.8} Edge test: NULL values are rejected for numeric parameters
 test_that("NULL values are rejected for numeric buffer parameters", {
   expect_error(
@@ -85,4 +101,25 @@ test_that("AOI object returns correct list of items", {
                                 "network_buffer",
                                 "dem_buffer",
                                 "buildings_buffer"))
+})
+
+test_that("define_aoi() accepts units objects for buffer parameters", {
+  with_mocked_bindings(
+    get_osm_bb = \(...) {
+      sf::st_bbox(c(xmin = 25.967, ymin = 44.334,
+                    xmax = 26.226, ymax = 44.541),
+                  crs = "EPSG:4326")
+    },
+    {
+      aoi <- define_aoi("MyCity", "MyRiver",
+                        network_buffer   = units::set_units(3, "km"),
+                        dem_buffer       = units::set_units(2500, "m"),
+                        buildings_buffer = units::set_units(100, "m")) |>
+        suppressMessages()
+      expect_type(aoi$network_buffer,   "double")
+      expect_equal(aoi$network_buffer,   3000)
+      expect_equal(aoi$dem_buffer,       2500)
+      expect_equal(aoi$buildings_buffer, 100)
+    }
+  )
 })

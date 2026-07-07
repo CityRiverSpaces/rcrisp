@@ -22,6 +22,9 @@ test_that("If the corridor cannot be split in two edges, an error is raised", {
                "Cannot identify corridor edges")
 })
 
+#' @srrstats {G5.6} This test verifies that candidate segment boundaries are
+#'   correctly recovered for a provided set of linestrings for which the
+#'   grouping is known beforehand.
 test_that("Candidate segments boundaries are properly grouped and filtered", {
   e1 <- sf::st_linestring(cbind(c(-3, -3), c(-1, 1)))  # group 1 <--
   e2 <- sf::st_linestring(cbind(c(-3.1, -2.9), c(-1, 1)))  # group 1
@@ -40,6 +43,12 @@ test_that("Candidate segments boundaries are properly grouped and filtered", {
   )
   expect_setequal(expected, actual)
 })
+
+#' @srrstats {G5.6} The following four tests verify that non-intersecting
+#'   segment boundaries are correctly recovered for a given set of linestrings,
+#'   designed with the resulting set of lines in mind.
+#' @noRd
+NULL
 
 test_that("Intersecting segment boundaries are correctly discarded", {
   e1 <- sf::st_linestring(cbind(c(-2, -1), c(1, -1)))
@@ -97,7 +106,6 @@ test_that("The first segment boundary is discarded when length is equal", {
 #'   against a simple, trivial case.
 #' @srrstats {G5.5} Correctness tests for DBSCAN clustering are run with a fixed
 #'   random seed.
-
 test_that("The correct crossing segments are selected", {
   crossings <- sf::st_sfc(
     # Three crossings -> should be clustered
@@ -186,4 +194,34 @@ test_that("Errors are raised for wrong input types to segmentation", {
   # river must be of class `sf`/`sfc`
   expect_error(delineate_segments(corridor, network, river = river[[1]]),
                "Assertion on 'river' failed")
+})
+
+#' @srrstats {SP6.1a} Geographic (lat/lon) input to `delineate_segments()`
+#'   yields inaccurate results because all segmentation geometry operations
+#'   assume Cartesian (projected) coordinates. The function therefore raises an
+#'   informative error when geographic CRS input is supplied.
+test_that("delineate_segments() raises an error for geographic CRS input", {
+  network_edges <- sf::st_sfc(
+    sf::st_linestring(cbind(c(26.09, 26.07), c(44.43, 44.43))),
+    sf::st_linestring(cbind(c(26.09, 26.07), c(44.45, 44.45))),
+    sf::st_linestring(cbind(c(26.09, 26.09), c(44.45, 44.43))),
+    sf::st_linestring(cbind(c(26.07, 26.07), c(44.43, 44.45))),
+    crs = 4326
+  )
+  network <- sfnetworks::as_sfnetwork(network_edges, directed = FALSE)
+  corridor <- sf::st_sfc(
+    sf::st_polygon(list(cbind(
+      c(26.07, 26.07, 26.09, 26.09, 26.07),
+      c(44.43, 44.45, 44.45, 44.43, 44.43)
+    ))),
+    crs = 4326
+  )
+  river <- sf::st_sfc(
+    sf::st_linestring(cbind(c(26.06, 26.08, 26.10), c(44.44, 44.44, 44.44))),
+    crs = 4326
+  )
+  expect_error(
+    delineate_segments(corridor, network, river),
+    "The input CRS is geographic"
+  )
 })

@@ -29,6 +29,13 @@ Riverspace as object of class \code{\link[sf:sfc]{sf::sfc_POLYGON}}
 \description{
 Delineate the space surrounding a river
 }
+\details{
+For riverspace delineation, OSM water polygons intersecting the
+river centerline are treated as part of the river, including connected
+water bodies such as lakes and reservoirs. Viewpoints are calculated from
+water edges where available, and from the river centerline when river
+surface polygons are missing or partial.
+}
 \examples{
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 bucharest_osm <- get_osm_example_data()
