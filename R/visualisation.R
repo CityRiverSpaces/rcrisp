@@ -47,19 +47,19 @@
 #'   [ggplot2::theme_void()]).
 geom_delineation <- function(x, extent = "corridor", legend = TRUE) {
   if (!requireNamespace("ggplot2", quietly = TRUE)) {
-    stop(
-      "Package 'ggplot2' is required for geom_delineation(). ",
-      "Install it with: install.packages('ggplot2')"
-    )
+    cli::cli_abort(c(
+      "Package {.pkg ggplot2} is required for {.fn geom_delineation}.",
+      "i" = "Install it with: {.code install.packages('ggplot2')}"
+    ))
   }
   if (!inherits(x, "delineation")) {
-    stop("'x' must be an object of class 'delineation'.")
+    cli::cli_abort("'x' must be an object of class 'delineation'.")
   }
 
   x <- unclass(x)
 
   if (is.null(x$corridor) && is.null(x$segments) && is.null(x$riverspace)) {
-    stop("No delineation layers present in the delineation object.")
+    cli::cli_abort("No delineation layers present in the delineation object.")
   }
 
   if (!is.null(extent)) {
@@ -67,7 +67,9 @@ geom_delineation <- function(x, extent = "corridor", legend = TRUE) {
       extent, c("corridor", "valley", "riverspace"),
     )
     if (is.null(x[[extent]])) {
-      warning("Layer '", extent, "' not found; extent will not be restricted.")
+      cli::cli_warn(
+        "Layer '{extent}' not found; extent will not be restricted."
+      )
       extent <- NULL
     }
   }
