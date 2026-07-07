@@ -82,9 +82,9 @@ single-case local studies and comparative cross-case analyses.
 - Spatial (street and railway) network completeness and elevation data
   quality may affect corridor and segment accuracy.
 - The
-  [`delineate()`](https://cityriverspaces.github.io/rcrisp/reference/delineate.md)
-  function retrieves OSM data and global DEM data by default, so no
-  additional data retrieval is needed.
+  [`delineate_city_river()`](https://cityriverspaces.github.io/rcrisp/reference/delineate_city_river.md)
+  convenience function retrieves OSM data and global DEM data
+  automatically, so no additional data retrieval is needed.
 - The `delineate_*()` functions allow for any data input, not only OSM
   and global DEM data.
 
@@ -97,29 +97,19 @@ library(rcrisp)
 # Parameters
 city_name <- "Bucharest"
 river_name <- "Dâmbovița"
-epsg_code <- 32635
 
 # Delineation
-bd <- delineate(city_name, river_name, segments = TRUE)
-#> Error in delineate(city_name, river_name, segments = TRUE): Assertion on 'aoi' failed: Must be of type 'list', not 'character'.
-
-# Base layers for visualisation
-bb <- get_osm_bb(city_name)
-streets <- get_osm_streets(bb, epsg_code)$geometry
-railways <- get_osm_railways(bb, epsg_code)$geometry
+bd <- delineate_city_river(city_name, river_name, segments = TRUE)
 
 # Plot
 plot(bd$corridor)
-#> Error: object 'bd' not found
-plot(railways, col = "darkgrey", add = TRUE, lwd = 0.5)
-#> Error in plot.xy(xy.coords(x, y), type = type, ...): plot.new has not been called yet
-plot(streets, add = TRUE)
-#> Error in plot.xy(xy.coords(x, y), type = type, ...): plot.new has not been called yet
+plot(bd$railways$geometry, col = "darkgrey", add = TRUE, lwd = 0.5)
+plot(bd$streets$geometry, add = TRUE)
 plot(bd$segments, border = "orange", add = TRUE, lwd = 3)
-#> Error: object 'bd' not found
 plot(bd$corridor, border = "red", add = TRUE, lwd = 3)
-#> Error: object 'bd' not found
 ```
+
+![](img/getting-started-plot-1.png)
 
 ## Interpretation and next steps
 

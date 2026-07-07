@@ -164,8 +164,9 @@ code).</li>
 <li>Verify OSM coverage and elevation availability for your area.</li>
 <li>Spatial (street and railway) network completeness and elevation data
 quality may affect corridor and segment accuracy.</li>
-<li>The <code><a href="../reference/delineate.html">delineate()</a></code> function retrieves OSM data and global
-DEM data by default, so no additional data retrieval is needed.</li>
+<li>The <code><a href="../reference/delineate_city_river.html">delineate_city_river()</a></code> convenience function
+retrieves OSM data and global DEM data automatically, so no additional
+data retrieval is needed.</li>
 <li>The <code>delineate_*()</code> functions allow for any data input,
 not only OSM and global DEM data.</li>
 </ul>
@@ -179,28 +180,17 @@ not only OSM and global DEM data.</li>
 <span><span class="co"># Parameters</span></span>
 <span><span class="va">city_name</span> <span class="op">&lt;-</span> <span class="st">"Bucharest"</span></span>
 <span><span class="va">river_name</span> <span class="op">&lt;-</span> <span class="st">"Dâmbovița"</span></span>
-<span><span class="va">epsg_code</span> <span class="op">&lt;-</span> <span class="fl">32635</span></span>
 <span></span>
 <span><span class="co"># Delineation</span></span>
-<span><span class="va">bd</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/delineate.html">delineate</a></span><span class="op">(</span><span class="va">city_name</span>, <span class="va">river_name</span>, segments <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error in delineate(city_name, river_name, segments = TRUE): Assertion on 'aoi' failed: Must be of type 'list', not 'character'.</span></span>
-<span></span>
-<span><span class="co"># Base layers for visualisation</span></span>
-<span><span class="va">bb</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_osm_bb.html">get_osm_bb</a></span><span class="op">(</span><span class="va">city_name</span><span class="op">)</span></span>
-<span><span class="va">streets</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_osm_streets.html">get_osm_streets</a></span><span class="op">(</span><span class="va">bb</span>, <span class="va">epsg_code</span><span class="op">)</span><span class="op">$</span><span class="va">geometry</span></span>
-<span><span class="va">railways</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_osm_railways.html">get_osm_railways</a></span><span class="op">(</span><span class="va">bb</span>, <span class="va">epsg_code</span><span class="op">)</span><span class="op">$</span><span class="va">geometry</span></span>
+<span><span class="va">bd</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/delineate_city_river.html">delineate_city_river</a></span><span class="op">(</span><span class="va">city_name</span>, <span class="va">river_name</span>, segments <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Plot</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">bd</span><span class="op">$</span><span class="va">corridor</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error: object 'bd' not found</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">railways</span>, col <span class="op">=</span> <span class="st">"darkgrey"</span>, add <span class="op">=</span> <span class="cn">TRUE</span>, lwd <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error in plot.xy(xy.coords(x, y), type = type, ...): plot.new has not been called yet</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">streets</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error in plot.xy(xy.coords(x, y), type = type, ...): plot.new has not been called yet</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">bd</span><span class="op">$</span><span class="va">railways</span><span class="op">$</span><span class="va">geometry</span>, col <span class="op">=</span> <span class="st">"darkgrey"</span>, add <span class="op">=</span> <span class="cn">TRUE</span>, lwd <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">bd</span><span class="op">$</span><span class="va">streets</span><span class="op">$</span><span class="va">geometry</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">bd</span><span class="op">$</span><span class="va">segments</span>, border <span class="op">=</span> <span class="st">"orange"</span>, add <span class="op">=</span> <span class="cn">TRUE</span>, lwd <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error: object 'bd' not found</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">bd</span><span class="op">$</span><span class="va">corridor</span>, border <span class="op">=</span> <span class="st">"red"</span>, add <span class="op">=</span> <span class="cn">TRUE</span>, lwd <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error: object 'bd' not found</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">bd</span><span class="op">$</span><span class="va">corridor</span>, border <span class="op">=</span> <span class="st">"red"</span>, add <span class="op">=</span> <span class="cn">TRUE</span>, lwd <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
+<p><img src="img/getting-started-plot-1.png" width="100%"></p>
 </div>
 <div class="section level2">
 <h2 id="interpretation-and-next-steps">Interpretation and next steps<a class="anchor" aria-label="anchor" href="#interpretation-and-next-steps"></a>
