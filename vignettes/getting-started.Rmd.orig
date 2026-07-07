@@ -48,11 +48,15 @@ In short, given a city name and a river name, `rcrisp`:
 
 # Workflow
 
-1. Acquire base data:
-   - OpenStreetMap layers using `get_osm_*()` functions
-   - (Optional) global Digital Elevation Model data
-2. Delineate the river valley, corridor, segments and/or riverspace with the all-in-one `delineate()` function or with the dedicated `delineate_*()` functions
-3. Visualize, validate, and export results for use in downstream analyses
+The typical workflow consists of the following steps:
+
+1. Define parameters: Use `define_aoi()` to set up parameters for a given location, defined by a city name and a river name.
+2. Acquire base data: Use `get_osm()` to retrieve OpenStreetMap layers (streets, railways, buildings) and `get_dem()` to download global elevation data.
+3. Run delineation: Use the all-in-one `delineate()` function to compute the river valley, corridor, segments, and/or river space; or use dedicated `delineate_*()` functions for fine-grained control.
+4. Visualize and validate: Use plotting and summary methods to examine the results.
+5. Export for downstream analysis: Export the delineations to GIS formats or use them directly in R-based analyses.
+
+This workflow can be replicated for any city and river where sufficient OpenStreetMap and elevation data are available. The reproducibility of the morphological delineation method makes it suitable for both single-case local studies and comparative cross-case analyses.
 
 # Data considerations
 
