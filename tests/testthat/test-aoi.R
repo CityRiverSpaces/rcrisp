@@ -12,11 +12,11 @@ test_that("Parameters can be set for only one city or river at a time", {
 
 test_that("Buffer parametes are of length 1", {
   expect_error(define_aoi("Bucharest", "Dâmbovița", network_buffer = c(1, 2)),
-               "Assertion on 'network_buffer' failed: Must have length 1")
+               "`network_buffer` must be a single value, not length 2")
   expect_error(define_aoi("Bucharest", "Dâmbovița", dem_buffer = c(1, 2)),
-               "Assertion on 'dem_buffer' failed: Must have length 1")
+               "`dem_buffer` must be a single value, not length 2")
   expect_error(define_aoi("Bucharest", "Dâmbovița", buildings_buffer = c(1, 2)),
-               "Assertion on 'buildings_buffer' failed: Must have length 1")
+               "`buildings_buffer` must be a single value, not length 2")
 })
 
 #' @srrstats {G5.8} Edge test: NULL values are rejected for city and river names
