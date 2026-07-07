@@ -92,7 +92,35 @@ layers within one case) and large-scale cross-case analyses (many cases
 using comparable spatial units) in a wide range of domains of
 application, such as urban planning, environmental management, public
 space design, and disaster risk reduction.</p>
-<p>In short, given a city name and a river name, it:</p>
+<div class="section level3">
+<h3 id="why-is-consistent-delineation-important">Why is consistent delineation important?<a class="anchor" aria-label="anchor" href="#why-is-consistent-delineation-important"></a>
+</h3>
+<p>Riverside areas are often defined inconsistently or arbitrarily.
+Different approaches to defining corridor boundaries can produce
+substantially different results, each capturing different aspects of the
+urban environment while missing others. This inconsistency creates
+problems:</p>
+<ul>
+<li>Ambiguous local analyses: which area should be included when
+studying a specific riverside neighborhood or phenomenon?</li>
+<li>Unreliable comparative studies: without a consistent definition,
+comparing the same phenomenon across different cities becomes
+problematic.</li>
+<li>Subjective integrated analyses: when combining multiple data
+sources, the choice of boundaries can bias the results.</li>
+</ul>
+<p>The figure below illustrates how alternative delineation approaches
+can significantly differ. By contrast, <code>rcrisp</code> implements a
+morphological delineation method that combines the natural terrain of
+the river valley with the configuration of the urban fabric, providing
+an objective and reproducible approach.</p>
+<p><img src="img/alternatives.png"></p>
+</div>
+<div class="section level3">
+<h3 id="what-does-it-do">What does it do?<a class="anchor" aria-label="anchor" href="#what-does-it-do"></a>
+</h3>
+<p>In short, given a city name and a river name,
+<code>rcrisp</code>:</p>
 <ul>
 <li>identifies corridor boundaries on the street network along the edges
 of the river valley;</li>
@@ -100,22 +128,32 @@ of the river valley;</li>
 <li>(optionally) delineates the river space.</li>
 </ul>
 </div>
+</div>
 <div class="section level2">
 <h2 id="workflow">Workflow<a class="anchor" aria-label="anchor" href="#workflow"></a>
 </h2>
+<p>The typical workflow consists of the following steps:</p>
 <ol style="list-style-type: decimal">
-<li>Acquire base data:
-<ul>
-<li>OpenStreetMap layers using <code>get_osm_*()</code> functions</li>
-<li>(Optional) global Digital Elevation Model data</li>
-</ul>
-</li>
-<li>Delineate the river valley, corridor, segments and/or riverspace
-with the all-in-one <code><a href="../reference/delineate.html">delineate()</a></code> function or with the
-dedicated <code>delineate_*()</code> functions</li>
-<li>Visualize, validate, and export results for use in downstream
-analyses</li>
+<li>Define parameters: Use <code><a href="../reference/define_aoi.html">define_aoi()</a></code> to set up
+parameters for a given location, defined by a city name and a river
+name.</li>
+<li>Acquire base data: Use <code><a href="../reference/get_osm.html">get_osm()</a></code> to retrieve
+OpenStreetMap layers (streets, railways, buildings) and
+<code><a href="../reference/get_dem.html">get_dem()</a></code> to download global elevation data.</li>
+<li>Run delineation: Use the all-in-one <code><a href="../reference/delineate.html">delineate()</a></code>
+function to compute the river valley, corridor, segments, and/or river
+space; or use dedicated <code>delineate_*()</code> functions for
+fine-grained control.</li>
+<li>Visualize and validate: Use plotting and summary methods to examine
+the results.</li>
+<li>Export for downstream analysis: Export the delineations to GIS
+formats or use them directly in R-based analyses.</li>
 </ol>
+<p>This workflow can be replicated for any city and river where
+sufficient OpenStreetMap and elevation data are available. The
+reproducibility of the morphological delineation method makes it
+suitable for both single-case local studies and comparative cross-case
+analyses.</p>
 </div>
 <div class="section level2">
 <h2 id="data-considerations">Data considerations<a class="anchor" aria-label="anchor" href="#data-considerations"></a>
@@ -145,6 +183,7 @@ not only OSM and global DEM data.</li>
 <span></span>
 <span><span class="co"># Delineation</span></span>
 <span><span class="va">bd</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/delineate.html">delineate</a></span><span class="op">(</span><span class="va">city_name</span>, <span class="va">river_name</span>, segments <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Error in delineate(city_name, river_name, segments = TRUE): Assertion on 'aoi' failed: Must be of type 'list', not 'character'.</span></span>
 <span></span>
 <span><span class="co"># Base layers for visualisation</span></span>
 <span><span class="va">bb</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_osm_bb.html">get_osm_bb</a></span><span class="op">(</span><span class="va">city_name</span><span class="op">)</span></span>
@@ -153,11 +192,15 @@ not only OSM and global DEM data.</li>
 <span></span>
 <span><span class="co"># Plot</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">bd</span><span class="op">$</span><span class="va">corridor</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Error: object 'bd' not found</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">railways</span>, col <span class="op">=</span> <span class="st">"darkgrey"</span>, add <span class="op">=</span> <span class="cn">TRUE</span>, lwd <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Error in plot.xy(xy.coords(x, y), type = type, ...): plot.new has not been called yet</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">streets</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Error in plot.xy(xy.coords(x, y), type = type, ...): plot.new has not been called yet</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">bd</span><span class="op">$</span><span class="va">segments</span>, border <span class="op">=</span> <span class="st">"orange"</span>, add <span class="op">=</span> <span class="cn">TRUE</span>, lwd <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">bd</span><span class="op">$</span><span class="va">corridor</span>, border <span class="op">=</span> <span class="st">"red"</span>, add <span class="op">=</span> <span class="cn">TRUE</span>, lwd <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
-<p><img src="img/getting-started-plot-1.png" width="100%"></p>
+<span><span class="co">#&gt; Error: object 'bd' not found</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">bd</span><span class="op">$</span><span class="va">corridor</span>, border <span class="op">=</span> <span class="st">"red"</span>, add <span class="op">=</span> <span class="cn">TRUE</span>, lwd <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Error: object 'bd' not found</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="interpretation-and-next-steps">Interpretation and next steps<a class="anchor" aria-label="anchor" href="#interpretation-and-next-steps"></a>

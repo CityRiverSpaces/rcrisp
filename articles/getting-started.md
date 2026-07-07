@@ -14,7 +14,33 @@ using comparable spatial units) in a wide range of domains of
 application, such as urban planning, environmental management, public
 space design, and disaster risk reduction.
 
-In short, given a city name and a river name, it:
+### Why is consistent delineation important?
+
+Riverside areas are often defined inconsistently or arbitrarily.
+Different approaches to defining corridor boundaries can produce
+substantially different results, each capturing different aspects of the
+urban environment while missing others. This inconsistency creates
+problems:
+
+- Ambiguous local analyses: which area should be included when studying
+  a specific riverside neighborhood or phenomenon?
+- Unreliable comparative studies: without a consistent definition,
+  comparing the same phenomenon across different cities becomes
+  problematic.
+- Subjective integrated analyses: when combining multiple data sources,
+  the choice of boundaries can bias the results.
+
+The figure below illustrates how alternative delineation approaches can
+significantly differ. By contrast, `rcrisp` implements a morphological
+delineation method that combines the natural terrain of the river valley
+with the configuration of the urban fabric, providing an objective and
+reproducible approach.
+
+![](img/alternatives.png)
+
+### What does it do?
+
+In short, given a city name and a river name, `rcrisp`:
 
 - identifies corridor boundaries on the street network along the edges
   of the river valley;
@@ -23,15 +49,31 @@ In short, given a city name and a river name, it:
 
 ## Workflow
 
-1.  Acquire base data:
-    - OpenStreetMap layers using `get_osm_*()` functions
-    - (Optional) global Digital Elevation Model data
-2.  Delineate the river valley, corridor, segments and/or riverspace
-    with the all-in-one
+The typical workflow consists of the following steps:
+
+1.  Define parameters: Use
+    [`define_aoi()`](https://cityriverspaces.github.io/rcrisp/reference/define_aoi.md)
+    to set up parameters for a given location, defined by a city name
+    and a river name.
+2.  Acquire base data: Use
+    [`get_osm()`](https://cityriverspaces.github.io/rcrisp/reference/get_osm.md)
+    to retrieve OpenStreetMap layers (streets, railways, buildings) and
+    [`get_dem()`](https://cityriverspaces.github.io/rcrisp/reference/get_dem.md)
+    to download global elevation data.
+3.  Run delineation: Use the all-in-one
     [`delineate()`](https://cityriverspaces.github.io/rcrisp/reference/delineate.md)
-    function or with the dedicated `delineate_*()` functions
-3.  Visualize, validate, and export results for use in downstream
-    analyses
+    function to compute the river valley, corridor, segments, and/or
+    river space; or use dedicated `delineate_*()` functions for
+    fine-grained control.
+4.  Visualize and validate: Use plotting and summary methods to examine
+    the results.
+5.  Export for downstream analysis: Export the delineations to GIS
+    formats or use them directly in R-based analyses.
+
+This workflow can be replicated for any city and river where sufficient
+OpenStreetMap and elevation data are available. The reproducibility of
+the morphological delineation method makes it suitable for both
+single-case local studies and comparative cross-case analyses.
 
 ## Data considerations
 
@@ -59,6 +101,7 @@ epsg_code <- 32635
 
 # Delineation
 bd <- delineate(city_name, river_name, segments = TRUE)
+#> Error in delineate(city_name, river_name, segments = TRUE): Assertion on 'aoi' failed: Must be of type 'list', not 'character'.
 
 # Base layers for visualisation
 bb <- get_osm_bb(city_name)
@@ -67,13 +110,16 @@ railways <- get_osm_railways(bb, epsg_code)$geometry
 
 # Plot
 plot(bd$corridor)
+#> Error: object 'bd' not found
 plot(railways, col = "darkgrey", add = TRUE, lwd = 0.5)
+#> Error in plot.xy(xy.coords(x, y), type = type, ...): plot.new has not been called yet
 plot(streets, add = TRUE)
+#> Error in plot.xy(xy.coords(x, y), type = type, ...): plot.new has not been called yet
 plot(bd$segments, border = "orange", add = TRUE, lwd = 3)
+#> Error: object 'bd' not found
 plot(bd$corridor, border = "red", add = TRUE, lwd = 3)
+#> Error: object 'bd' not found
 ```
-
-![](img/getting-started-plot-1.png)
 
 ## Interpretation and next steps
 
