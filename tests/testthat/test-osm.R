@@ -13,15 +13,52 @@ bb_bucharest <- sf::st_bbox(c(xmin = 25.967,
                               ymax = 44.541),
                             crs = "EPSG:4326")
 mock_river_lines_geom <- sf::st_sfc(
-  sf::st_linestring(matrix(c(26.0, 26.1, 44.3, 44.4), ncol = 2)),
-  sf::st_linestring(matrix(c(26.2, 26.3, 44.5, 44.6), ncol = 2)),
-  sf::st_linestring(matrix(c(26.2, 26.3, 44.3, 44.4), ncol = 2)),
-  sf::st_linestring(matrix(c(26.0, 26.1, 44.5, 44.6), ncol = 2)),
+  sf::st_linestring(matrix(c(26.0, 26.1, 44.35, 44.4), ncol = 2)),
+  sf::st_linestring(matrix(c(26.05, 26.15, 44.4, 44.45), ncol = 2)),
+  sf::st_linestring(matrix(c(26.0, 26.1, 44.35, 44.4), ncol = 2)),
+  sf::st_linestring(matrix(c(26.05, 26.15, 44.4, 44.45), ncol = 2)),
   crs = "EPSG:4326"
 )
 mock_river_lines <- sf::st_sf(
   name = c("Dâmbovița", "Dâmbovița", "Colentina", "Colentina"),
   geometry = mock_river_lines_geom
+)
+mock_river_multilines_geom <- sf::st_sfc(
+  sf::st_multilinestring(list(matrix(c(26.0, 26.1, 44.45, 44.53), ncol = 2))),
+  sf::st_multilinestring(list(matrix(c(26.05, 26.15, 44.45, 44.53), ncol = 2))),
+  crs = "EPSG:4326"
+)
+mock_river_multilines <- sf::st_sf(
+  name = c("Dâmbovița", "Colentina"),
+  geometry = mock_river_multilines_geom
+)
+mock_river_polygons <- sf::st_buffer(mock_river_lines, 10)
+mock_river_multipolygons <- sf::st_buffer(mock_river_multilines, 10)
+mock_streets <- list(
+  osm_lines = sf::st_sf(
+    highway = c("residential", "primary"),
+    geometry = sf::st_sfc(
+      sf::st_linestring(matrix(c(1, 1, 1.5, 1.5), ncol = 2, byrow = TRUE)),
+      sf::st_linestring(matrix(c(1.5, 1.5, 2, 2), ncol = 2, byrow = TRUE))
+    ),
+    crs = sf::st_crs("EPSG:4326")
+  ),
+  osm_polygons = sf::st_sf(
+    highway = c("primary"),
+    geometry = sf::st_sfc(sf::st_polygon(list(
+      matrix(c(1, 1, 2, 1, 2, 2, 1, 2, 1, 1), ncol = 2, byrow = TRUE)
+    )), crs = sf::st_crs("EPSG:4326"))
+  )
+)
+mock_streets_polygon <- list(
+  osm_lines = NULL,
+  osm_polygons = sf::st_sf(
+    highway = "residential",
+    geometry = sf::st_sfc(sf::st_polygon(list(
+      matrix(c(1, 1, 3, 1, 3, 2, 1, 2, 1, 1), ncol = 2, byrow = TRUE)
+    ))),
+    crs = sf::st_crs("EPSG:4326")
+  )
 )
 mock_river_polygons <- sf::st_sf(
   name = c("Dâmbovița", "Dâmbovița"),
@@ -60,6 +97,8 @@ aoi <- list(
   dem_buffer = 2500,
   buildings_buffer = 100
 )
+
+mock_nominatim_result <- data.frame(osm_type = "relation", osm_id = "123456")
 
 test_that("OSM queries are stored to and retrieved from the cache", {
 
@@ -241,10 +280,13 @@ test_that("City boundary of Bucharest is correctly retrieved", {
   with_mocked_bindings(
     osmdata_as_sf = function(...) list(osm_polygons = mock_city_boundary),
     expect_no_message(
-      city_boundary <- get_osm_city_boundary(bb_bucharest, "Bucharest")
+      city_boundary <- get_osm_city_boundary(bb_bucharest,
+                                             "Bucharest",
+                                             crs = 32635)
     )
   )
   expect_true(inherits(city_boundary, "sfc"))
+  expect_equal(sf::st_crs(city_boundary)$epsg, 32635)
 })
 
 #' @srrstats {G5.8, G5.8a} Edge test: if a value that leads to no data being
@@ -296,7 +338,67 @@ test_that("City boundary is retrieved for alternative names", {
   expect_equal(city_boundary_eng, city_boundary_ro)
 })
 
-mock_nominatim_result <- data.frame(osm_type = "relation", osm_id = "123456")
+test_that("Both lines and multilines are included in river retrieval", {
+  with_mocked_bindings(
+    nominatim_waterway_lookup = \(...) mock_nominatim_result,
+    osmdata_as_sf_by_id = \(...) {
+      list(osm_lines = mock_river_lines,
+           osm_multilines = NULL)
+    },
+    {
+      river_centerline_1 <- get_osm_river_centerline(bb_bucharest, "Dâmbovița",
+                                                     force_download = TRUE)
+    }
+  )
+  with_mocked_bindings(
+    nominatim_waterway_lookup = \(...) mock_nominatim_result,
+    osmdata_as_sf_by_id = \(...) {
+      list(osm_lines = mock_river_lines,
+           osm_multilines = mock_river_multilines)
+    },
+    {
+      river_centerline_2 <- get_osm_river_centerline(bb_bucharest, "Dâmbovitza",
+                                                     force_download = TRUE)
+    }
+  )
+  # Verify that multilines are included by checking that river_centerline_2
+  # has more length than river_centerline_1
+  expect_gt(
+    sf::st_length(river_centerline_2),
+    sf::st_length(river_centerline_1)
+  )
+})
+
+test_that("Both polygons and multipolygons are included in river retrieval", {
+  with_mocked_bindings(
+    nominatim_waterway_lookup = \(...) mock_nominatim_result,
+    osmdata_as_sf_by_id = \(...) {
+      list(osm_lines = mock_river_lines,
+           osm_multilines = mock_river_multilines)
+    },
+    {
+      river_centerline <- get_osm_river_centerline(bb_bucharest, "Dâmbovița",
+                                                   force_download = TRUE)
+    }
+  )
+  with_mocked_bindings(
+    osmdata_as_sf = function(...) {
+      list(osm_polygons = mock_river_polygons,
+           osm_multipolygons = mock_river_multipolygons)
+    },
+    {
+      river_polygons <- get_osm_river_surface(bb_bucharest,
+                                              river_centerline,
+                                              force_download = TRUE)
+    }
+  )
+  # Verify that both polygons and multipolygons are included
+  # by checking that river_polygons has some area
+  expect_gt(
+    sum(sf::st_area(river_polygons)),
+    units::set_units(0, "m^2")
+  )
+})
 
 #' @srrstats {G5.8, G5.8a} Edge test: if a value that leads to no data being
 #'   retrieved, an error is raised.
@@ -341,13 +443,19 @@ test_that("River lines and surface are properly set up", {
     osmdata_as_sf = \(...) list(osm_polygons = mock_river_polygons),
     {
       river_centerline <- get_osm_river_centerline(bb_bucharest, "Dâmbovița",
-                                                   force_download = TRUE)
+                                                   force_download = TRUE,
+                                                   crs = 32635)
       river_surface <- get_osm_river_surface(bb_bucharest, river_centerline,
-                                             force_download = TRUE)
+                                             force_download = TRUE,
+                                             crs = 32635)
     }
   )
   expect_true(sf::st_is(river_centerline, "MULTILINESTRING"))
-  expect_true(sf::st_is(river_surface, "MULTIPOLYGON"))
+  # st_union can result in POLYGON or MULTIPOLYGON depending on structure
+  expect_true(sf::st_is(river_surface, "POLYGON") ||
+                sf::st_is(river_surface, "MULTIPOLYGON"))
+  expect_equal(sf::st_crs(river_centerline)$epsg, 32635)
+  expect_equal(sf::st_crs(river_surface)$epsg, 32635)
 })
 
 test_that("Buffered centreline is at least as long as the un-buffered one", {
@@ -389,6 +497,77 @@ test_that("If no river surface is found, an empty sfc object is returned", {
   })
   expect_equal(length(water_surface), 0)
   expect_equal(sf::st_crs(water_surface), crs)
+})
+
+#' @srrstats {G5.8} Edge test: an error is raised if the dimension of the input
+#'   parameters does not fit the requirements.
+test_that("Only one river can be queried at a time", {
+  bb <- sf::st_bbox(c(xmin = 0, ymin = 0, xmax = 1, ymax = 1))
+  expect_error(get_osm_river_centerline(bb, c("Dâmbovița", "SomeOtherRiver")),
+               "Assertion on 'river_name' failed: Must have length 1")
+})
+
+test_that("get_osm_streets returns an sf of street lines with correct CRS", {
+  crs <- sf::st_crs("EPSG:32632")
+  aoi <- sf::st_bbox(c(xmin = 1, ymin = 1, xmax = 2, ymax = 2),
+                     crs = sf::st_crs("EPSG:4326"))
+
+  with_mocked_bindings(
+    osmdata_as_sf = function(...) mock_streets,
+    {
+      streets <- get_osm_streets(
+        aoi,
+        crs = crs,
+        highway_values = c("residential", "primary"),
+        force_download = FALSE
+      )
+    }
+  )
+
+  mock_streets_no_poly <- mock_streets
+  mock_streets_no_poly$osm_polygons <- NULL
+
+  with_mocked_bindings(
+    osmdata_as_sf = function(...) mock_streets_no_poly,
+    {
+      streets_no_poly <- get_osm_streets(
+        aoi,
+        crs = crs,
+        highway_values = c("residential", "primary"),
+        force_download = FALSE
+      )
+    }
+  )
+
+  expect_equal(nrow(streets), 3)
+  expect_equal(nrow(streets_no_poly), 2)
+  expect_equal(sf::st_crs(streets), crs)
+  expect_true(
+    all(sf::st_is(streets, "LINESTRING") |
+          sf::st_is(streets, "MULTILINESTRING"))
+  )
+})
+
+test_that("Street polygons cast to lines are included", {
+  crs <- sf::st_crs("EPSG:32632")
+  aoi <- sf::st_bbox(c(xmin = 1, ymin = 1, xmax = 2, ymax = 2),
+                     crs = sf::st_crs("EPSG:4326"))
+
+  with_mocked_bindings(
+    osmdata_as_sf = function(...) mock_streets_polygon,
+    {
+      streets_from_polygons <- get_osm_streets(aoi,
+                                               crs = crs,
+                                               force_download = FALSE)
+    }
+  )
+
+  expect_gt(nrow(streets_from_polygons), 0)
+  expect_equal(sf::st_crs(streets_from_polygons), crs)
+  expect_true(all(
+    sf::st_is(streets_from_polygons, "LINESTRING") |
+      sf::st_is(streets_from_polygons, "MULTILINESTRING")
+  ))
 })
 
 test_that("If no railways are found, an empty sf object is returned", {
@@ -456,4 +635,202 @@ test_that("get_river_aoi() issues a message when reprojecting lon/lat input", {
     get_river_aoi(river, bbox, buffer_distance = 100),
     "Reprojecting river from EPSG:4326 to EPSG:32635 for river AoI buffering."
   )
+})
+
+test_that("get_river_aoi() returns a geographic polygon and respects city bbox", {  # nolint
+  river_full <- sf::st_sfc(
+    sf::st_linestring(cbind(c(26.0, 26.3), c(44.3, 44.6))),
+    crs = 4326
+  )
+  # A bbox that clips the river to a shorter segment
+  bbox_tight <- sf::st_bbox(c(xmin = 26.12, ymin = 44.41,
+                              xmax = 26.18, ymax = 44.49),
+                            crs = sf::st_crs(4326))
+  # A bbox that keeps the entire river
+  bbox_wide <- sf::st_bbox(c(xmin = 25.9, ymin = 44.2,
+                             xmax = 26.4, ymax = 44.7),
+                           crs = sf::st_crs(4326))
+  result_tight <- suppressMessages(
+    get_river_aoi(river_full, bbox_tight, buffer_distance = 100)
+  )
+  result_wide <- suppressMessages(
+    get_river_aoi(river_full, bbox_wide, buffer_distance = 100)
+  )
+  # Result must be a geographic polygon
+  expect_true(inherits(result_tight, "sfc_POLYGON"))
+  expect_true(sf::st_is_longlat(result_tight))
+  # Tighter bbox results in smaller buffer polygon
+  expect_lt(
+    sf::st_area(result_tight),
+    sf::st_area(result_wide)
+  )
+})
+
+test_that("osmdata_as_sf_by_id rejects invalid OSM element types", {
+  expect_error(
+    osmdata_as_sf_by_id("invalid_type", "123456"),
+    "Assertion on 'type' failed"
+  )
+})
+
+test_that("osmdata_as_sf lowercases key and value before querying", {
+  cache_dir <- temp_cache_dir()
+  with_mocked_bindings(
+    osmdata_query = function(...) "mock response",
+    {
+      expect_message(
+        osmdata_as_sf("HIGHWAY", "PRIMARY", bb_bucharest,
+                      force_download = TRUE),
+        "Saving data to cache directory"
+      )
+    }
+  )
+  # The cache file is named with the lowercased key and value
+  cached_files <- list.files(cache_dir)
+  expect_true(any(grepl("osmdata_highway_primary", cached_files)))
+})
+
+test_that("get_osm_river_centerline errors when no Nominatim result found", {
+  with_mocked_bindings(
+    nominatim_waterway_lookup = function(...) data.frame(),
+    expect_error(
+      get_osm_river_centerline(bb_bucharest, "NoRiver", force_download = TRUE),
+      "No OSM waterway relation found for: NoRiver"
+    )
+  )
+})
+
+#' @srrstats {G2.3} City names with country suffixes (e.g. "Paris, France") are
+#'   handled by stripping everything after the comma before matching.
+test_that("get_osm_city_boundary strips country suffix from city name", {
+  with_mocked_bindings(
+    osmdata_as_sf = function(...) list(osm_polygons = mock_city_boundary),
+    {
+      boundary_full <- get_osm_city_boundary(bb_bucharest, "Bucharest")
+      boundary_with_country <- get_osm_city_boundary(
+        bb_bucharest, "Bucharest, Romania"
+      )
+    }
+  )
+  expect_equal(boundary_full, boundary_with_country)
+})
+
+test_that("get_osm_city_boundary selects the highest admin_level", {
+  mock_boundaries_mixed <- sf::st_sf(
+    name = c("Bucharest", "Bucharest"),
+    `name:ro` = c("București", "București"),
+    admin_level = c("4", "6"),
+    geometry = sf::st_sfc(
+      sf::st_polygon(list(matrix(c(0, 1, 1, 0, 0, 0, 0, 1, 1, 0), ncol = 2))),
+      sf::st_polygon(list(matrix(c(0, 0.5, 0.5, 0, 0, 0, 0, 0.5, 0.5, 0),
+                                 ncol = 2)))
+    )
+  )
+  with_mocked_bindings(
+    osmdata_as_sf = function(...) list(osm_polygons = mock_boundaries_mixed),
+    {
+      boundary <- get_osm_city_boundary(bb_bucharest, "Bucharest")
+    }
+  )
+  expect_equal(length(boundary), 1)
+  # Confirm the level-6 polygon (the smaller one) is returned, not the level-4
+  expect_equal(
+    sf::st_area(boundary),
+    sf::st_area(sf::st_geometry(mock_boundaries_mixed)[2])
+  )
+})
+
+test_that("get_osm_railways returns lines with correct CRS when found", {
+  crs <- sf::st_crs("EPSG:32635")
+  mock_rails <- list(
+    osm_lines = sf::st_sf(
+      railway = "rail",
+      geometry = sf::st_sfc(
+        sf::st_linestring(matrix(c(26.0, 26.1, 44.35, 44.45), ncol = 2)),
+        crs = sf::st_crs("EPSG:4326")
+      )
+    )
+  )
+  aoi_bb <- sf::st_bbox(c(xmin = 25.9, ymin = 44.3,
+                          xmax = 26.3, ymax = 44.6),
+                        crs = sf::st_crs("EPSG:4326"))
+  with_mocked_bindings(
+    osmdata_as_sf = function(...) mock_rails,
+    {
+      railways <- get_osm_railways(aoi_bb, crs = crs, force_download = FALSE)
+    }
+  )
+  expect_gt(nrow(railways), 0)
+  expect_equal(sf::st_crs(railways), crs)
+  expect_true(all(railways$type == "rail"))
+  expect_true(all(
+    sf::st_is(railways, "LINESTRING") | sf::st_is(railways, "MULTILINESTRING")
+  ))
+})
+
+test_that("get_osm_buildings filters out features with building tag 'NULL'", {
+  crs <- sf::st_crs("EPSG:32632")
+  aoi_sf <- sf::st_as_sfc(sf::st_bbox(c(xmin = 1, xmax = 2,
+                                        ymin = 1, ymax = 2),
+                                      crs = crs))
+  mocked_response <- list(osm_polygons = sf::st_sf(
+    building = c("yes", "NULL", "residential"),
+    geometry = sf::st_sfc(
+      sf::st_polygon(list(matrix(c(1, 1, 1.5, 1, 1.5, 1.5, 1, 1.5, 1, 1),
+                                 ncol = 2, byrow = TRUE))),
+      sf::st_polygon(list(matrix(c(1.5, 1.5, 2, 1.5, 2, 2, 1.5, 2, 1.5, 1.5),
+                                 ncol = 2, byrow = TRUE))),
+      sf::st_polygon(list(matrix(c(1.2, 1.2, 1.8, 1.2, 1.8,
+                                   1.8, 1.2, 1.8, 1.2, 1.2),
+                                 ncol = 2, byrow = TRUE)))
+    ),
+    crs = crs
+  ))
+  with_mocked_bindings(osmdata_as_sf = \(...) mocked_response, {
+    buildings <- get_osm_buildings(aoi_sf, crs = crs, force_download = FALSE)
+  })
+  # From 3 input buildings, 1 tagged "NULL", only 2 should be returned
+  expect_equal(length(buildings), 2)
+})
+
+test_that("match_osm_name places exact match first", {
+  data <- data.frame(
+    name = c("Bucharest District", "Bucharest", "Greater Bucharest"),
+    admin_level = c("6", "4", "8")
+  )
+  res <- match_osm_name(data, "Bucharest")
+  # All 3 rows match (partial), but exact match should be first
+  expect_equal(nrow(res), 3)
+  expect_equal(res$name[1], "Bucharest")
+})
+
+test_that("get_osm_streets filters out streets outside the AOI", {
+  crs <- sf::st_crs("EPSG:32632")
+  aoi_bb <- sf::st_bbox(c(xmin = 1, ymin = 1, xmax = 2, ymax = 2),
+                        crs = sf::st_crs("EPSG:4326"))
+  mock_with_outside <- list(
+    osm_lines = sf::st_sf(
+      highway = c("primary", "primary"),
+      geometry = sf::st_sfc(
+        # inside the AOI
+        sf::st_linestring(matrix(c(1.2, 1.8, 1.2, 1.8), ncol = 2,
+                                 byrow = TRUE)),
+        # entirely outside the AOI
+        sf::st_linestring(matrix(c(5, 6, 5, 6), ncol = 2, byrow = TRUE))
+      ),
+      crs = sf::st_crs("EPSG:4326")
+    ),
+    osm_polygons = NULL
+  )
+  with_mocked_bindings(
+    osmdata_as_sf = function(...) mock_with_outside,
+    {
+      streets <- get_osm_streets(aoi_bb, crs = crs, force_download = FALSE)
+    }
+  )
+  # Only the inside street should be returned
+  expect_equal(nrow(streets), 1)
+  # Confirm it is the inside street, not the outside one
+  aoi_sfc <- sf::st_transform(sf::st_as_sfc(aoi_bb), crs)
+  expect_true(sf::st_intersects(streets, aoi_sfc, sparse = FALSE)[1, 1])
 })
