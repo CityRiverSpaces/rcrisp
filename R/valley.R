@@ -55,10 +55,20 @@ default_stac_dem <- list(
 #' @srrstats {G2.3, G2.3b} The input character value for `dem_source` is
 #'   converted to uppercase using toupper(), making the check case-insensitive.
 #'   A validation is then performed to ensure the value is allowed.
+#' @srrstats {G2.9} The user is informed when the retrieved OSM AOI in lat/lon
+#'   coordinates is transformed into a suitable projected CRS.
 #' @srrstats {SP6.1} If specified by the user, the CRS is standardised with
 #'   `as_crs()` before being used to reproject the DEM.
 get_dem <- function(aoi, osm, dem_source = "STAC", stac_endpoint = NULL,
                     stac_collection = NULL, force_download = FALSE) {
+  if (!is.na(sf::st_is_longlat(osm$aoi_network)) &&
+        sf::st_is_longlat(osm$aoi_network)) {
+    dst_crs <- get_utm_zone(osm$aoi_network) |> as_crs()
+    message(sprintf(
+      "Reprojecting AoI from EPSG:%s to EPSG:%s for DEM extent buffering.",
+      sf::st_crs(osm$aoi_network)$epsg, dst_crs$epsg
+    ))
+  }
   # Retrieve dataset on a larger AOI to limit edge effects in downstream
   # valley delineation
   aoi_dem <- buffer(osm$aoi_network, aoi$dem_buffer)
@@ -307,6 +317,7 @@ get_cost_distance <- function(slope, river, target = 0) {
 #' @return cd raster with river+BUFFER pixels masked
 #' @keywords internal
 mask_cost_distance <- function(cd, river, buffer = 2000) {
+  buffer <- preprocess_distance(buffer)
   river_buffer <- sf::st_buffer(river, buffer) |> terra::vect()
   terra::mask(
     cd,

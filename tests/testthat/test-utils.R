@@ -298,6 +298,35 @@ test_that("the original coordinates of vector data can be recovered after
             )
           })
 
+#' @srrstats {SP6.1b} `reproject()` returns equivalent results regardless of
+#'   whether input data are curvilinear (geographic, WGS84) or rectilinear
+#'   (projected, UTM). Equivalent results are obtained whether curvilinear input
+#'   is first transformed to a projected CRS or rectilinear input is reprojected
+#'   directly.
+test_that("reproject() yields equivalent results from curvilinear and
+          rectilinear input",
+          {
+            target_crs <- "EPSG:32633"  # UTM zone 33N
+
+            # Curvilinear input (WGS84): transform first to rectilinear,
+            # then to target
+            x_geo <- sf::st_sfc(sf::st_polygon(list(cbind(
+              c(12, 12, 15, 15, 12), c(47, 50, 50, 47, 47)
+            ))), crs = "EPSG:4326")
+            x_from_geo <- reproject(x_geo, target_crs)
+
+            # Rectilinear input: same geometry already in a projected CRS
+            x_proj <- reproject(x_geo, "EPSG:3035")
+            x_from_proj <- reproject(x_proj, target_crs)
+
+            # Both routes should produce the same coordinates within numeric
+            # tolerance
+            expect_true(all(abs(
+              sf::st_coordinates(x_from_geo) -
+                sf::st_coordinates(x_from_proj)
+            ) < 1e-03))
+          })
+
 test_that("load_raster correctly retrieve and merge local data", {
 
   write_local_raster <- function(fname, xmin, xmax, ymin, ymax) {
@@ -377,4 +406,28 @@ test_that("as_crs raises error if input object does not have CRS", {
   # Create dummy sf object with no crs
   x <- sf::st_sfc(sf::st_point(c(1, 2)))
   expect_error(as_crs(x), "Input should have a CRS.")
+})
+
+test_that("Distance pre-processing handles units objects", {
+  x_m  <- units::set_units(500, "m")
+  x_km <- units::set_units(0.5, "km")
+  expect_equal(preprocess_distance(x_m),  500)
+  expect_equal(preprocess_distance(x_km), 500)
+  expect_type(preprocess_distance(x_m), "double")
+})
+
+test_that("Distance pre-processing does not change plain numeric values", {
+  expect_equal(preprocess_distance(500), 500)
+})
+
+test_that("Distance pre-processing coerces non-atomic, vector-like objects", {
+  m <- matrix(500, nrow = 1, ncol = 1)
+  expect_equal(preprocess_distance(m), 500)
+})
+
+test_that("Distance pre-processing only accepts input of length 1", {
+  expect_error(preprocess_distance(c(500, 1000)), "single value")
+  expect_error(preprocess_distance(units::set_units(c(500, 1000), "m")),
+               "single value")
+
 })

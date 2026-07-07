@@ -10,7 +10,7 @@ check_cache()
 \code{NULL}
 }
 \description{
-A warning is raised if the cache size is > 100 MB or if it includes files
+A message is displayed if the cache size is > 100 MB or if it includes files
 older than 30 days.
 }
 \examples{

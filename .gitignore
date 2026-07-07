@@ -8,3 +8,4 @@ inst/doc
 /Meta/
 R/tmp.R
 tmp/
+benchmark/output/*.gpkg
