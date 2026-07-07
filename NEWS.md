@@ -37,6 +37,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Changed
 
+- The getting started vignette was updated to use `delineate_city_river()` instead of the old `delineate(city_name, river_name, ...)` call.
 - The corridor delineation vignette was updated to use `delineate_city_river()` instead of the old `delineate(city_name, river_name, ...)` call, and to reflect the current `corridor_init` parameter (replacing the old `method` argument). The description of the return value was updated to mention the `delineation` S3 class and its full set of layers.
 - The corridor segmentation vignette was updated to accurately describe the default behaviour of `delineate()`, to reference `delineate_city_river()`, and to remove an unused `get_dem_example_data()` call from the setup chunk.
 - All user-facing `stop()`, `warning()`, and `message()` calls have been migrated to `cli` equivalents (`cli_abort()`, `cli_warn()`, `cli_inform()`) for consistent output.
