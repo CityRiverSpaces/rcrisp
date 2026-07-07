@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Added
 
+- A definition of "riverside urban areas" was added in the README.
+- The practical usefulness of the morphological approach was explained in the README.
+- The "Getting started" vignette was updated with a "Why is consistent delineation important?" section clarifying the problem `rcrisp` is meant to solve in contrast with alternative approaches.
+- A note was added in the "Getting started" vignette stating that the workflow can be replicated for any city and river where sufficient data are available.
 - Added an algorithm performance test to verify that the full pipeline completes successfully on real-world example data and performs within reasonable bounds.
 - Added a test demonstrating that `reproject()` yields equivalent results regardless of whether input data are curvilinear (WGS84) or rectilinear (projected).
 - Distance input preprocessing is now handled by the `preprocess_distance()` function. This function returns a plain numeric in meters, regardless of whether the input is provided as a `units` object, a plain numeric or another vector-like class with numeric `storage.mode`.
@@ -30,6 +34,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Changed
 
+- The workflow section of the getting started vignette was updated to reflect the latest package design with the five-step workflow: define parameters, acquire data, run delineation, visualize and validate, and export results.
+- The README was updated with a link to the getting started vignette when discussing the problem of consistent delineation.
 - The OSM retrieval vignette was updated to use the redesigned main functions. UTM CRS is retrieved now implicitly as part of `define_aoi()`.
 - Attach-time `check_cache()` was moved behind `interactive()`.
 - `get_osmdata()` was renamed to `get_osm()` and all other uses of `osmdata` and `osm_data` in object and function names have been consistently renamed to `osm` throughout the package to avoid confusions with the `osmdata` package.
