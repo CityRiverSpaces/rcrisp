@@ -30,6 +30,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Changed
 
+- All user-facing `stop()`, `warning()`, and `message()` calls have been migrated to `cli` equivalents (`cli_abort()`, `cli_warn()`, `cli_inform()`) for consistent output.
+- The `aoi_buildings` availability check in `delineate()` was moved earlier to fail before any computation begins.
 - The OSM retrieval vignette was updated to use the redesigned main functions. UTM CRS is retrieved now implicitly as part of `define_aoi()`.
 - Attach-time `check_cache()` was moved behind `interactive()`.
 - `get_osmdata()` was renamed to `get_osm()` and all other uses of `osmdata` and `osm_data` in object and function names have been consistently renamed to `osm` throughout the package to avoid confusions with the `osmdata` package.
