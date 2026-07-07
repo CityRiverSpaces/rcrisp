@@ -95,32 +95,39 @@ too few river crossings, may lead to failed delineation.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">city_name</span> <span class="op">&lt;-</span> <span class="st">"Bucharest"</span></span>
 <span><span class="va">river_name</span> <span class="op">&lt;-</span> <span class="st">"Dâmbovița"</span></span></code></pre></div>
-<p>We start by demonstrating the use of the all-in-one
-<code><a href="../reference/delineate.html">delineate()</a></code> function which does the following three
-steps:</p>
+<p>We start by demonstrating the use of the
+<code><a href="../reference/delineate_city_river.html">delineate_city_river()</a></code> convenience function, which runs the
+full workflow from city and river name with default parameters.
+Internally, it carries out the following steps:</p>
 <ol style="list-style-type: decimal">
+<li><p>Defines the area of interest and delineation parameters with
+<code><a href="../reference/define_aoi.html">define_aoi()</a></code>;</p></li>
 <li><p>Fetches city boundary, street and rail network, as well as river
 centreline and surface data from the <a href="https://wiki.openstreetmap.org/wiki/Overpass_API" class="external-link">Overpass API</a>
 as shown in <code>vignette("getting-osm-data")</code>;</p></li>
 <li><p>Pre-processes the street and rail network for delineation as
-shown in <code>vignette("network-preparation")</code></p></li>
+shown in <code>vignette("network-preparation")</code>;</p></li>
 <li><p>Constructs the initial corridor based on the chosen method. With
-the default <code>method = "valley"</code>, the Cost Distance
+the default <code>corridor_init = "valley"</code>, the Cost Distance
 Accumulation algorithm is used to delineate the corridor based on the
-digital elevation model (DEM) of the area retrieved from the <a href="https://element84.com/earth-search/" class="external-link">Earth Search API</a>. If the
-<code>method = "buffer"</code> is chosen instead, the corridor is
-constructed by buffering the river centreline and surface data with a
-given buffer distance.</p></li>
+digital elevation model (DEM) of the area retrieved from the <a href="https://element84.com/earth-search/" class="external-link">Earth Search API</a>. If
+<code>corridor_init</code> is set to a numeric value instead, the
+corridor is initialised by buffering the river centreline with a buffer
+of that distance (in metres).</p></li>
 <li><p>Delineates the corridor based on the pre-processed network and
 initial corridor. Optionally, the corridor is split into segments based
 on the network and the river space is delineated.</p></li>
 </ol>
-<p>The <code><a href="../reference/delineate.html">delineate()</a></code> function carries out the above steps in
-one and returns a list that by default contains the following output
-elements: <code>corridor</code>, <code>segments</code>, and
-<code>riverspace</code>.</p>
+<p><code><a href="../reference/delineate_city_river.html">delineate_city_river()</a></code> returns an object of class
+<code>delineation</code>, which is a named list containing zero or more
+of the delineation layers <code>valley</code>, <code>corridor</code>,
+<code>segments</code>, and <code>riverspace</code>, plus the base OSM
+layers and delineation parameters. For step-by-step control, each of the
+above steps can also be run individually using
+<code><a href="../reference/define_aoi.html">define_aoi()</a></code>, <code><a href="../reference/get_osm.html">get_osm()</a></code>,
+<code><a href="../reference/get_dem.html">get_dem()</a></code>, and <code><a href="../reference/delineate.html">delineate()</a></code>.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">bucharest_dambovita</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/delineate.html">delineate</a></span><span class="op">(</span></span>
+<code class="sourceCode R"><span><span class="va">bucharest_dambovita</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/delineate_city_river.html">delineate_city_river</a></span><span class="op">(</span></span>
 <span>  <span class="va">city_name</span>,</span>
 <span>  <span class="va">river_name</span>,</span>
 <span>  segments <span class="op">=</span> <span class="cn">TRUE</span>,</span>

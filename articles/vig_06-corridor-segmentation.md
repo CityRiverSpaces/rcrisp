@@ -6,7 +6,6 @@ library(rcrisp)
 library(sf)
 
 bucharest_osm <- get_osm_example_data()
-bucharest_dem <- get_dem_example_data()
 ```
 
 For a more detailed analysis of an urban river corridor, corridor-level
@@ -15,11 +14,14 @@ into smaller morphological units. Segmentation is a process of
 subdividing the corridor by using major transversal road or rail
 infrastructure lines.
 
-By default, the all-in-one function
+By default, the
 [`delineate()`](https://cityriverspaces.github.io/rcrisp/reference/delineate.md)
-only returns the corridor boundary. The corridor can be segmented either
-by setting the argument `segments = TRUE` in
+function returns a `delineation` object with the corridor delineation
+only (i.e., `segments = FALSE` and `riverspace = FALSE`). The corridor
+can be segmented either by setting the argument `segments = TRUE` in
 [`delineate()`](https://cityriverspaces.github.io/rcrisp/reference/delineate.md)
+(or in
+[`delineate_city_river()`](https://cityriverspaces.github.io/rcrisp/reference/delineate_city_river.md)),
 or by using the
 [`delineate_segments()`](https://cityriverspaces.github.io/rcrisp/reference/delineate_segments.md)
 function in a separate step.
@@ -38,7 +40,7 @@ that cover the river corridor plus a small buffer region (see also
 # Add a buffer region around the corridor
 corridor_buffer <- sf::st_buffer(bucharest_dambovita$corridor, 500)
 
-# Filter the streets and railwayas to the buffer area
+# Filter the streets and railways to the buffer area
 streets <- bucharest_osm$streets |>
   sf::st_filter(corridor_buffer, .predicate = sf::st_covered_by)
 railways <- bucharest_osm$railways |>
