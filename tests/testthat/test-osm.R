@@ -451,11 +451,9 @@ test_that("River lines and surface are properly set up", {
     }
   )
   expect_true(sf::st_is(river_centerline, "MULTILINESTRING"))
-  # After st_union, result could be POLYGON or MULTIPOLYGON depending on structure
-  expect_true(
-    sf::st_is(river_surface, "POLYGON") ||
-    sf::st_is(river_surface, "MULTIPOLYGON")
-  )
+  # st_union can result in POLYGON or MULTIPOLYGON depending on structure
+  expect_true(sf::st_is(river_surface, "POLYGON") ||
+                sf::st_is(river_surface, "MULTIPOLYGON"))
   expect_equal(sf::st_crs(river_centerline)$epsg, 32635)
   expect_equal(sf::st_crs(river_surface)$epsg, 32635)
 })
@@ -647,11 +645,11 @@ test_that("get_river_aoi() returns a geographic polygon and respects city bbox",
   # A bbox that clips the river to a shorter segment
   bbox_tight <- sf::st_bbox(c(xmin = 26.12, ymin = 44.41,
                               xmax = 26.18, ymax = 44.49),
-                             crs = sf::st_crs(4326))
+                            crs = sf::st_crs(4326))
   # A bbox that keeps the entire river
   bbox_wide <- sf::st_bbox(c(xmin = 25.9, ymin = 44.2,
                              xmax = 26.4, ymax = 44.7),
-                            crs = sf::st_crs(4326))
+                           crs = sf::st_crs(4326))
   result_tight <- suppressMessages(
     get_river_aoi(river_full, bbox_tight, buffer_distance = 100)
   )
@@ -681,7 +679,8 @@ test_that("osmdata_as_sf lowercases key and value before querying", {
     osmdata_query = function(...) "mock response",
     {
       expect_message(
-        osmdata_as_sf("HIGHWAY", "PRIMARY", bb_bucharest, force_download = TRUE),
+        osmdata_as_sf("HIGHWAY", "PRIMARY", bb_bucharest,
+                      force_download = TRUE),
         "Saving data to cache directory"
       )
     }
@@ -723,7 +722,8 @@ test_that("get_osm_city_boundary selects the highest admin_level", {
     admin_level = c("4", "6"),
     geometry = sf::st_sfc(
       sf::st_polygon(list(matrix(c(0, 1, 1, 0, 0, 0, 0, 1, 1, 0), ncol = 2))),
-      sf::st_polygon(list(matrix(c(0, 0.5, 0.5, 0, 0, 0, 0, 0.5, 0.5, 0), ncol = 2)))
+      sf::st_polygon(list(matrix(c(0, 0.5, 0.5, 0, 0, 0, 0, 0.5, 0.5, 0),
+                                 ncol = 2)))
     )
   )
   with_mocked_bindings(
@@ -807,13 +807,14 @@ test_that("match_osm_name places exact match first", {
 test_that("get_osm_streets filters out streets outside the AOI", {
   crs <- sf::st_crs("EPSG:32632")
   aoi_bb <- sf::st_bbox(c(xmin = 1, ymin = 1, xmax = 2, ymax = 2),
-                         crs = sf::st_crs("EPSG:4326"))
+                        crs = sf::st_crs("EPSG:4326"))
   mock_with_outside <- list(
     osm_lines = sf::st_sf(
       highway = c("primary", "primary"),
       geometry = sf::st_sfc(
         # inside the AOI
-        sf::st_linestring(matrix(c(1.2, 1.8, 1.2, 1.8), ncol = 2, byrow = TRUE)),
+        sf::st_linestring(matrix(c(1.2, 1.8, 1.2, 1.8), ncol = 2,
+                                 byrow = TRUE)),
         # entirely outside the AOI
         sf::st_linestring(matrix(c(5, 6, 5, 6), ncol = 2, byrow = TRUE))
       ),
