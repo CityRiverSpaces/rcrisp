@@ -138,7 +138,9 @@ get_corridor_edges <- function(corridor, river) {
   corridor_edges <- split_by(corridor, river, boundary = TRUE)
   # For complex river geometries, splitting the corridor might actually return
   # multiple linestrings - select here the two longest segments
-  if (length(corridor_edges) < 2) stop("Cannot identify corridor edges")
+  if (length(corridor_edges) < 2) {
+    cli::cli_abort("Cannot identify corridor edges.")
+  }
   corridor_edges[find_longest(corridor_edges, n = 2)]
 }
 

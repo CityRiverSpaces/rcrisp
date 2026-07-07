@@ -105,10 +105,9 @@ delineate_corridor <- function(
   checkmate::assert_true(as_crs(network) == as_crs(river))
 
   if (!is.na(sf::st_is_longlat(river)) && sf::st_is_longlat(river)) {
-    dst_crs <- get_utm_zone(river) |> as_crs()
-    message(sprintf(
-      "Reprojecting river from EPSG:%s to EPSG:%s for corridor delineation.",
-      sf::st_crs(river)$epsg, dst_crs$epsg
+    cli::cli_inform(paste0(
+      "Reprojecting river from EPSG:{sf::st_crs(river)$epsg}",
+      " to EPSG:{get_utm_zone(river)} for corridor delineation."
     ))
   }
 
@@ -212,7 +211,7 @@ corridor_end_points <- function(river_network, spatial_network, regions) {
   # Identify common intersections between the two sub-networks
   intersections <- inters_reg_1[inters_reg_1 %in% inters_reg_2]
   if (length(intersections) == 0) {
-    stop("No river crossings found. Corridor cannot be delineated.")
+    cli::cli_abort("No river crossings found. Corridor cannot be delineated.")
   }
   # Make sure they are "POINTS" (no "MULTIPOINTS")
   intersections <- sfheaders::sfc_cast(intersections, "POINT")
@@ -231,7 +230,7 @@ corridor_end_points <- function(river_network, spatial_network, regions) {
   indices <- arrayInd(which.max(distances), dim(distances))
   end_points <- c(nodes[indices[1]], nodes[indices[2]])
   if (end_points[1] == end_points[2]) {
-    stop("Corridor start- and end-points coincide!")
+    cli::cli_abort("Corridor start- and end-points coincide!")
   }
   end_points
 }
@@ -342,9 +341,9 @@ corridor_edge <- function(network, end_points, target_edge, exclude_area = NULL,
     niter <- niter + 1
   }
 
-  if (!converged) warning(sprintf(
-    "River corridor edge not converged within %s iterations", max_iterations
-  ))
+  if (!converged) cli::cli_warn(
+    "River corridor edge not converged within {max_iterations} iterations."
+  )
 
   edge
 }
@@ -376,16 +375,14 @@ cap_corridor <- function(edges, method = "shortest-path", network = NULL) {
     cap_edge_1 <- as_linestring(start_pts)
     cap_edge_2 <- as_linestring(end_pts)
   } else if (method == "shortest-path") {
-    if (is.null(network)) stop(
-      "A network should be provided if `capping_method = 'shortest-path'`"
+    if (is.null(network)) cli::cli_abort(
+      "A network should be provided if `capping_method = 'shortest-path'`."
     )
     network <- add_weights(network)
     cap_edge_1 <- shortest_path(network, from = start_pts[1], to = start_pts[2])
     cap_edge_2 <- shortest_path(network, from = end_pts[1], to = end_pts[2])
   } else {
-    stop(
-      sprintf("Unknown method to cap the river corridor: %s", method)
-    )
+    cli::cli_abort("Unknown method to cap the river corridor: {method}.")
   }
   polygon <- as_polygon(c(edges, cap_edge_1, cap_edge_2))
 
@@ -393,8 +390,8 @@ cap_corridor <- function(edges, method = "shortest-path", network = NULL) {
   # than the end points, the polygonization of the corridor boundary leads to
   # small side polygons. We drop these, after raising a warning
   if (length(polygon) > 1) {
-    warning(
-      "Corridor capping gives multiple polygons - selecting the largest one"
+    cli::cli_warn(
+      "Corridor capping gives multiple polygons - selecting the largest one."
     )
     polygon <- polygon[find_largest(polygon)]
   }

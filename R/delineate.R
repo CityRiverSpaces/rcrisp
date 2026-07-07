@@ -108,7 +108,19 @@ delineate <- function(
 
   delineations <- list()
 
-  if (segments && !corridor) stop("Segmentation requires corridor delineation.")
+  if (segments && !corridor) {
+    cli::cli_abort("Segmentation requires corridor delineation.")
+  }
+
+  if (riverspace && is.null(osm$aoi_buildings)) {
+    cli::cli_abort(c(
+      "AOI for buildings is not available.",
+      "i" = paste0(
+        "Did you set `buildings = FALSE`",
+        " when retrieving OSM data with `get_osm()`?"
+      )
+    ))
+  }
 
   delineations$streets <- osm$streets
   delineations$railways <- osm$railways
@@ -120,16 +132,22 @@ delineate <- function(
     # If using the valley method, the user must provide a DEM
     if (corridor_init == "valley") {
       if (is.null(dem)) {
-        stop("If initial corridor is \"valley\", a DEM must be provided.")
+        cli::cli_abort(
+          'If initial corridor is "valley", a DEM must be provided.'
+        )
       }
       corridor_init <- delineate_valley(dem, osm$river_centerline)
       delineations$valley <- corridor_init
     }
 
     if (is.null(osm$streets) || is.null(osm$railways)) {
-      stop(paste0("Spatial network (streets, railways) data is not available. ",
-                  "Did you set `network = FALSE` when retrieving OSM data ",
-                  "with `get_osm()`?"))
+      cli::cli_abort(c(
+        "Spatial network (streets, railways) data is not available.",
+        "i" = paste0(
+          "Did you set `network = FALSE`",
+          " when retrieving OSM data with `get_osm()`?"
+        )
+      ))
     }
 
     # Set up the combined street and rail network for the delineation
@@ -143,12 +161,15 @@ delineate <- function(
     }
     # Too few river crossings may lead to failed corridor delineation.
     if (length(crossings_clustered) < 2) {
-      stop(sprintf(
-        paste(
+      n_crossings <- ifelse(
+        length(crossings_clustered) == 0, "no crossings", "1 crossing"
+      )
+      cli::cli_abort(sprintf(
+        paste0(
           "Corridor delineation is not possible with %s.",
-          "At least 2 are required."
+          " At least 2 are required."
         ),
-        ifelse(length(crossings_clustered) == 0, "no crossings", "1 crossing")
+        n_crossings
       ))
     }
 
@@ -173,11 +194,6 @@ delineate <- function(
   }
 
   if (riverspace) {
-    if (is.null(osm$aoi_buildings)) {
-      stop(paste0("AOI for buildings is not available. ",
-                  "Did you set `buildings = FALSE` when retrieving OSM data ",
-                  "with `get_osm()`?"))
-    }
     river_centerline_clipped <- sf::st_intersection(
       osm$river_centerline, osm$aoi_buildings |>
         sf::st_transform(aoi$crs)
@@ -264,7 +280,7 @@ delineate_city_river <- function(city_name, river_name,
 #'   system, derived from [sf::st_crs()].
 plot.delineation <- function(x, ..., legend = TRUE) {
   if (!inherits(x, "delineation")) {
-    stop("The object is not of class 'delineation'")
+    cli::cli_abort("The object is not of class 'delineation'.")
   }
   x <- unclass(x)
 
@@ -275,13 +291,15 @@ plot.delineation <- function(x, ..., legend = TRUE) {
   } else if (!is.null(x$riverspace)) {
     plot(x$riverspace, col = NA, border = NA)
   } else {
-    stop("No delineation layers present in the delineation object.")
+    cli::cli_abort("No delineation layers present in the delineation object.")
   }
 
   base_layers <- c("streets", "railways", "river_centerline")
   if (!all(base_layers %in% names(x))) {
-    warning(paste("Not all base layers found in the delineation object.",
-                  "Plotting without those."))
+    cli::cli_warn(paste0(
+      "Not all base layers found in the delineation object.",
+      " Plotting without those."
+    ))
   }
 
   if (!is.null(x$valley)) {
@@ -369,7 +387,7 @@ plot.delineation <- function(x, ..., legend = TRUE) {
 #'   as input, the function raises an error with an informative message.
 print.delineation <- function(x, ...) {
   if (!inherits(x, "delineation")) {
-    stop("'x' must be object of class 'delineation'.")
+    cli::cli_abort("'x' must be object of class 'delineation'.")
   }
 
   d <- unclass(x)
@@ -430,7 +448,7 @@ print.delineation <- function(x, ...) {
 #'   as input, the function raises an error with an informative message.
 summary.delineation <- function(object, ...) {
   if (!inherits(object, "delineation")) {
-    stop("'object' must be object of class 'delineation'.")
+    cli::cli_abort("'object' must be object of class 'delineation'.")
   }
 
   d <- unclass(object)
@@ -516,7 +534,7 @@ summary.delineation <- function(object, ...) {
 #'   message.
 print.summary.delineation <- function(x, ...) {
   if (!inherits(x, "summary.delineation")) {
-    stop("'x' must be object of class 'summary.delineation'.")
+    cli::cli_abort("'x' must be object of class 'summary.delineation'.")
   }
 
   if (!is.null(x$city_name) && !is.null(x$river_name)) {

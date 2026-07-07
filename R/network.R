@@ -60,8 +60,8 @@ as_network <- function(edges, flatten = TRUE, clean = TRUE,
       "Input `edges` contains NA values in one or more attribute columns.",
       "These are propagated into the network but not used in any computation."
     )
-    if (na_action == "error") stop(msg)
-    else if (na_action == "warn") warning(msg)
+    if (na_action == "error") cli::cli_abort(msg)
+    else if (na_action == "warn") cli::cli_warn(msg)
     else if (na_action == "impute") {
       edges <- edges |>
         dplyr::mutate(dplyr::across(
@@ -492,7 +492,7 @@ filter_network <- function(network, target, elements = "nodes") {
   } else if (elements == "edges") {
     intersect_func <- sfnetworks::edge_intersects
   } else {
-    stop("Unknown elements - choose beetween 'nodes' and 'edges'")
+    cli::cli_abort("Unknown elements - choose between 'nodes' and 'edges'.")
   }
   network |>
     tidygraph::activate(!!elements) |>

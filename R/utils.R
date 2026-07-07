@@ -38,7 +38,9 @@ get_utm_zone <- function(x) {
   bb <- sf::st_transform(bb, "EPSG:4326")
 
   if (bb[["ymin"]] < -80 || bb[["ymax"]] > 84) {
-    stop("The bbox is outside the UTM validity range (80 deg S; 84 deg N)")
+    cli::cli_abort(
+      "The bbox is outside the UTM validity range (80 deg S; 84 deg N)."
+    )
   }
   centroid_long <- (bb[["xmin"]] + bb[["xmax"]]) / 2
   centroid_lat <- (bb[["ymin"]] + bb[["ymax"]]) / 2
@@ -136,11 +138,13 @@ as_crs <- function(x, allow_geographic = FALSE) {
   if (!is.null(x)) {
     crs <- sf::st_crs(x)
     if (is.na(crs$IsGeographic)) {
-      stop("Input should have a CRS.")
+      cli::cli_abort("Input should have a CRS.")
     }
     if (!allow_geographic && crs$IsGeographic) {
-      stop(paste("The input CRS is geographic (lat/lon),",
-                 "please provide a projected CRS."))
+      cli::cli_abort(paste0(
+        "The input CRS is geographic (lat/lon),",
+        " please provide a projected CRS."
+      ))
     }
     crs
   } else {
@@ -212,7 +216,7 @@ river_buffer <- function(river, buffer_distance, bbox = NULL, side = NULL) {
     } else if (side == "right") {
       river_buf <- buffer(river, -buffer_distance, singleSide = TRUE)
     } else {
-      stop("If specified, 'side' should be either 'right' or 'left'")
+      cli::cli_abort("If specified, 'side' should be either 'right' or 'left'.")
     }
     # Merge all components, than make sure we do not spill over the river by
     # splitting the computed geometry with the river centerline and by
@@ -256,7 +260,7 @@ reproject <- function(x, crs, ...) {
   } else if (inherits(x, c("bbox", "sfc", "sf"))) {
     sf::st_transform(x, crs, ...)
   } else {
-    stop(sprintf("Cannot reproject object type: %s", class(x)))
+    cli::cli_abort("Cannot reproject object type: {class(x)}.")
   }
 }
 
@@ -305,10 +309,12 @@ load_raster <- function(urlpaths, bbox = NULL) {
 #'   maintains the same units as the input.
 combine_river_features <- function(river_centerline, river_surface) {
   if (is.null(river_surface)) {
-    warning("Calculating viewpoints along river centerline.")
+    cli::cli_warn("Calculating viewpoints along river centerline.")
     return(river_centerline)
   }
-  message("Calculating viewpoints from both river edge and river centerline.")
+  cli::cli_inform(
+    "Calculating viewpoints from both river edge and river centerline."
+  )
   river_centerline_clipped <- sf::st_geometry(river_centerline) |>
     sf::st_difference(river_surface)
   # Use 100 m as an empirical threshold to filter out minor geometry issues.
@@ -319,16 +325,20 @@ combine_river_features <- function(river_centerline, river_surface) {
     na.rm = TRUE
   )
   if (n_uncovered > 0) {
-    warning(sprintf(
-      paste(
-        "For the river centerline segment(s) with length >= 100 m,",
-        "%d segment(s) are not covered by OSM river surface polygons.",
-        "This may be due to underground river sections or incomplete OSM",
-        "river surface data. Viewpoints for these segments will therefore",
-        "be calculated from the river centerline."
+    cli::cli_warn(c(
+      paste0(
+        "{n_uncovered} river centerline segment(s) with length >= 100 m",
+        " are not covered by OSM river surface polygons."
       ),
-      n_uncovered
-    ), call. = FALSE)
+      "i" = paste0(
+        "This may be due to underground river sections",
+        " or incomplete OSM river surface data."
+      ),
+      "i" = paste0(
+        "Viewpoints for these segments",
+        " will be calculated from the river centerline."
+      )
+    ))
   }
   c(river_centerline_clipped, sf::st_geometry(river_surface)) |>
     sf::st_cast("MULTILINESTRING") |>
@@ -346,7 +356,7 @@ combine_river_features <- function(river_centerline, river_surface) {
 #'   explicitly documented as such.
 check_invalid_geometry <- function(sf_obj) {
   if (!all(sf::st_is_valid(sf_obj))) {
-    message("Invalid geometries detected! Fixing them...")
+    cli::cli_inform("Invalid geometries detected! Fixing them...")
   }
   sf::st_make_valid(sf_obj) # if input valid, it remains unchanged
 }
@@ -370,7 +380,9 @@ check_invalid_geometry <- function(sf_obj) {
 preprocess_distance <- function(x, arg_name = deparse(substitute(x))) {
   # Ensure that the input is a single value
   if (length(x) != 1) {
-    stop("`", arg_name, "` must be a single value, not length ", length(x))
+    cli::cli_abort(
+      "`{arg_name}` must be a single value, not length {length(x)}."
+    )
   }
   # To handle both `units` objects and other vector-like objects whose
   # `storage.mode` is numeric

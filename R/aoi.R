@@ -62,8 +62,9 @@ define_aoi <- function(
   # If not provided, determine the CRS. Otherwise, standardise CRS
   if (is.null(crs)) {
     crs <- get_utm_zone(bb) |> as_crs()
-    message(sprintf("No CRS provided. Using auto-selected UTM zone: EPSG:%s.",
-                    crs))
+    cli::cli_inform(
+      "No CRS provided. Using auto-selected UTM zone: EPSG:{crs$epsg}."
+    )
   } else {
     crs <- as_crs(crs)
   }
