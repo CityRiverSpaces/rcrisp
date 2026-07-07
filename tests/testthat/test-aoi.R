@@ -1,7 +1,7 @@
 #' @srrstats {G5.8} Edge test: in the following two tests, an error is raised
 #'   if the dimension of the input parameters does not fit the requirements.
 #' @noRd
-#' NULL
+NULL
 
 test_that("Parameters can be set for only one city or river at a time", {
   expect_error(define_aoi(c("Bucharest", "Cluj-Napoca"), "Dâmbovița"),
