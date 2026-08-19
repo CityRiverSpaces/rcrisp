@@ -7,10 +7,10 @@
 check_invalid_geometry(sf_obj)
 }
 \arguments{
-\item{sf_obj}{sf object}
+\item{sf_obj}{An object of class \code{\link[sf:sf]{sf::sf}} or \code{\link[sf:sfc]{sf::sfc}}}
 }
 \value{
-sf object with valid geometries
+\code{\link[sf:sf]{sf::sf}} or \code{\link[sf:sfc]{sf::sfc}} object with valid geometries
 }
 \description{
 Check and fix invalid geometries

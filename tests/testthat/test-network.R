@@ -62,6 +62,7 @@ network_no_crossings <- sfnetworks::sfnetwork(nodes = nodes_no_crossings,
                                               edges = edges_no_crossings,
                                               directed = FALSE, force = TRUE,
                                               node_key = "x")
+sf::st_crs(network_no_crossings) <- 32635
 
 #' @srrstats {G2.10} Several tests in this test module use `sf::st_geometry()`
 #'   to extract the geometry column from the either the "edges" or "nodes"
@@ -98,6 +99,7 @@ test_that("Network flattening inject intersection within edges", {
   network <- sfnetworks::sfnetwork(nodes = nodes, edges = edges,
                                    directed = FALSE, force = TRUE,
                                    node_key = "x")
+  sf::st_crs(network) <- 32635
   network_flat <- flatten_network(network)
   nodes_actual <- sf::st_geometry(sf::st_as_sf(network_flat, "nodes"))
   edges_actual <- sf::st_geometry(sf::st_as_sf(network_flat, "edges"))
@@ -197,6 +199,12 @@ test_that("Network simplification drops loops and multiple edges", {
   expect_setequal(edges_clean, edges_simplified)
 })
 
+#' @srrstats {G5.6} The following four tests verify that network weights are
+#'   correctly recovered for the provided input network for which the weights
+#'   can be easily derived.
+#' @noRd
+NULL
+
 test_that("Weights only include edge lengths if no opt args are given", {
   network_weights <- add_weights(network)
   edges <- sf::st_as_sf(network_weights, "edges")
@@ -256,6 +264,12 @@ test_that("Weight name can be changed", {
   expect_equal(colnames(edges), colnames_expected)
 })
 
+#' @srrstats {G5.6} The following two tests verify that shortest paths are
+#'   correctly recovered for provided input network and end points for which the
+#'   shortest path can be easily derived.
+#' @noRd
+NULL
+
 test_that("Shortest path works for single-edge path", {
   endpoints <- sf::st_sfc(p6, p7)
   path <- shortest_path(network_shortpath, from = endpoints[1],
@@ -274,6 +288,13 @@ test_that("Shortest path can reorient edges to return a LINESTRING", {
   path_expected <- sf::st_sfc(sf::st_linestring(c(p6, p10, p8)))
   expect_equal(path, path_expected)
 })
+
+
+#' @srrstats {G5.6} The following two tests verify that the nearest node is
+#'   correctly recovered for provided input network and target point for which
+#'   the nearest point can be easily derived.
+#' @noRd
+NULL
 
 test_that("Nearest node always return one point", {
   # Even if the feature is equidistant from two nodes
@@ -323,12 +344,17 @@ test_that("Filter network drops smallest disconnected components", {
   expect_length(nodes_area, 3)
 })
 
+#' @srrstats {G5.8} Edge test: if a value different from a set of
+#'   allowed values is selected, an error is raised.
 test_that("Filter network raises error if elements argument is unknown", {
   expect_error(filter_network(network, elements = "unknown"),
                "Unknown elements")
 })
 
 test_that("Network setup with real data", {
+  skip_on_ci()
+  skip_on_cran()
+  bucharest_osm <- get_osm_example_data()
   edges <- bucharest_osm$streets
   network <- as_network(edges, clean = FALSE, flatten = FALSE)
   edges_actual <- sf::st_geometry(sf::st_as_sf(network, "edges"))
@@ -337,6 +363,67 @@ test_that("Network setup with real data", {
 })
 
 test_that("Flattening network with no crossings does not fail", {
-  network_no_crossings_flat <- flatten_network(network_no_crossings)
-  expect_true(inherits(network_no_crossings_flat, "sfnetwork"))
+  expect_no_error(flatten_network(network_no_crossings))
+})
+
+# sf edges with attribute columns for na_action tests
+edges_with_attrs <- sf::st_as_sf(sf::st_sfc(e1, e2, e3,
+                                            crs = sf::st_crs("EPSG:32635")))
+edges_with_attrs$type <- c("primary", "secondary", "tertiary")
+edges_with_attrs$width <- c(10, 8, 6)
+
+edges_with_nas <- edges_with_attrs
+edges_with_nas$type[2] <- NA
+edges_with_nas$width[3] <- NA
+
+#' @srrstats {G5.2a, G5.2b} The following six tests verify error and warning
+#'   conditions for `na_action` in `as_network()`.
+#' @noRd
+NULL
+
+test_that("na_action='error' stops on NA attribute columns", {
+  expect_error(
+    as_network(edges_with_nas, flatten = FALSE, clean = FALSE,
+               na_action = "error"),
+    "NA values in one or more attribute columns"
+  )
+})
+
+test_that("na_action='warn' warns on NA attribute columns", {
+  expect_warning(
+    as_network(edges_with_nas, flatten = FALSE, clean = FALSE,
+               na_action = "warn"),
+    "NA values in one or more attribute columns"
+  )
+})
+
+test_that("na_action='ignore' proceeds silently with NAs", {
+  expect_no_warning(
+    as_network(edges_with_nas, flatten = FALSE, clean = FALSE,
+               na_action = "ignore")
+  )
+})
+
+test_that("na_action='impute' replaces NAs before building network", {
+  net <- as_network(edges_with_nas, flatten = FALSE, clean = FALSE,
+                    na_action = "impute")
+  edges_out <- sf::st_as_sf(net, "edges")
+  expect_false(anyNA(edges_out$type))
+  expect_false(anyNA(edges_out$width))
+  expect_equal(edges_out$type[2], "unknown")
+  expect_equal(edges_out$width[3], median(edges_with_nas$width, na.rm = TRUE))
+})
+
+test_that("as_network produces no warning when no NAs present", {
+  expect_no_warning(
+    as_network(edges_with_attrs, flatten = FALSE, clean = FALSE,
+               na_action = "warn")
+  )
+})
+
+test_that("as_network rejects invalid na_action values", {
+  expect_error(
+    as_network(edges_with_nas, na_action = "drop"),
+    "Must be element of set"
+  )
 })

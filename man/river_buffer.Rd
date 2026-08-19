@@ -18,7 +18,7 @@ This is only applicable if \code{river} is a (multi)linestring geometry.
 Choose between \code{NULL} (double-sided), \code{"right"} and \code{"left"}}
 }
 \value{
-A simple feature geometry
+An object of class \code{\link[sf:sfc]{sf::sfc_POLYGON}}
 }
 \description{
 The river geometry may consist of multiple spatial features, these are

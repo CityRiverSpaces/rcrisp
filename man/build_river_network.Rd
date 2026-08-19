@@ -13,7 +13,7 @@ river centerline}
 \item{bbox}{Bounding box of the area of interest}
 }
 \value{
-A \code{\link[sfnetworks:sfnetwork]{sfnetworks::sfnetwork}} object
+An \code{\link[sfnetworks:sfnetwork]{sfnetworks::sfnetwork}} object
 }
 \description{
 If a bounding box is provided, only the river segments that intersect it are

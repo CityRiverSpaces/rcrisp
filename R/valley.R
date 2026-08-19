@@ -19,9 +19,11 @@ default_stac_dem <- list(
 
 #' Access digital elevation model (DEM) for a given region
 #'
-#' @param bb A bounding box, provided either as a matrix (rows for "x", "y",
-#'   columns for "min", "max") or as a vector ("xmin", "ymin", "xmax", "ymax"),
-#'   in lat/lon coordinates (WGS84 coordinate reference system) of class `bbox`
+#' @param aoi A list of delineation parameters, including `$dem_buffer` used
+#'   to expand the area of interest covered by the network and `$crs` for the
+#'   CRS which to transform the DEM to
+#' @param osm A list with OpenStreetMap data sets for the a location, as
+#'   objects of class [`sf::sfc`]
 #' @param dem_source Source of the DEM:
 #'   - If "STAC" (default), DEM tiles are searched on a SpatioTemporal Asset
 #'     Catalog (STAC) end point, then accessed and mosaicked to the area of
@@ -31,21 +33,20 @@ default_stac_dem <- list(
 #' @param stac_collection Identifier of the STAC collection to be queried (only
 #'   used if `dem_source` is `"STAC"`). For more info, see
 #'   [`get_stac_asset_urls()`]
-#' @param crs Coordinate reference system (CRS) which to transform the DEM to
 #' @param force_download Download data even if cached data is available
 #'
 #' @return DEM as a terra `SpatRaster` object
 #' @export
 #' @examplesIf interactive()
-#' # Get DEM with default values
-#' bb <- get_osm_bb("Bucharest")
-#' crs <- 31600  # National projected CRS
+#' # Define delineation parameters and get OSM data within area of interest
+#' aoi <- define_aoi("Bucharest", "Dâmbovița")
+#' osm <- get_osm(aoi)
 #'
 #' # Get DEM with default values
-#' get_dem(bb)
+#' dem <- get_dem(aoi, osm)
 #'
 #' # Get DEM from custom STAC endpoint
-#' get_dem(bb,
+#' get_dem(aoi, osm,
 #'         stac_endpoint = "some endpoint",
 #'         stac_collection = "some collection")
 #'
@@ -54,24 +55,41 @@ default_stac_dem <- list(
 #' @srrstats {G2.3, G2.3b} The input character value for `dem_source` is
 #'   converted to uppercase using toupper(), making the check case-insensitive.
 #'   A validation is then performed to ensure the value is allowed.
-#' @srrstats {G2.7} The `bb` parameter accepts tabular input of class `matrix`.
-get_dem <- function(bb, dem_source = "STAC", stac_endpoint = NULL,
-                    stac_collection = NULL, crs = NULL,
-                    force_download = FALSE) {
+#' @srrstats {G2.9} The user is informed when the retrieved OSM AOI in lat/lon
+#'   coordinates is transformed into a suitable projected CRS.
+#' @srrstats {SP6.1} If specified by the user, the CRS is standardised with
+#'   `as_crs()` before being used to reproject the DEM.
+get_dem <- function(aoi, osm, dem_source = "STAC", stac_endpoint = NULL,
+                    stac_collection = NULL, force_download = FALSE) {
+  if (!is.na(sf::st_is_longlat(osm$aoi_network)) &&
+        sf::st_is_longlat(osm$aoi_network)) {
+    cli::cli_inform(paste0(
+      "Reprojecting AoI from EPSG:{sf::st_crs(osm$aoi_network)$epsg}",
+      " to EPSG:{get_utm_zone(osm$aoi_network)} for DEM extent buffering."
+    ))
+  }
+  # Retrieve dataset on a larger AOI to limit edge effects in downstream
+  # valley delineation
+  aoi_dem <- buffer(osm$aoi_network, aoi$dem_buffer)
+  bbox <- as_bbox(aoi_dem)
+
   # Check input
+  checkmate::assert_character(stac_endpoint, null.ok = TRUE, len = 1)
+  checkmate::assert_character(stac_collection, null.ok = TRUE, len = 1)
   checkmate::assert_logical(force_download, len = 1)
   dem_source <- toupper(dem_source)
   checkmate::assert_choice(dem_source, c("STAC"))
 
-  bbox <- as_bbox(bb)
   if (dem_source == "STAC") {
     asset_urls <- get_stac_asset_urls(bbox, endpoint = stac_endpoint,
                                       collection = stac_collection)
     dem <- load_dem(bbox, asset_urls, force_download = force_download)
   } else {
-    stop(sprintf("DEM source %s unknown", dem_source))
+    cli::cli_abort("DEM source {dem_source} unknown.")
   }
-  if (!is.null(crs)) dem <- reproject(dem, crs)
+  if (!is.null(aoi$crs)) {
+    dem <- reproject(dem, aoi$crs)
+  }
   dem
 }
 
@@ -88,7 +106,8 @@ get_dem <- function(bb, dem_source = "STAC", stac_endpoint = NULL,
 #' @srrstats {G1.3} The Cost Distance algorithm is explained here.
 #'
 #' @param dem `SpatRaster` object with the digital elevation model of the region
-#' @param river An object of class `sf` or `sfc` representing the river
+#' @param river An object of class [`sf::sf`] or [`sf::sfc`]
+#'   representing the river
 #'
 #' @return River valley as a simple feature geometry of class `sfc_MULTIPOLYGON`
 #' @export
@@ -101,10 +120,10 @@ get_dem <- function(bb, dem_source = "STAC", stac_endpoint = NULL,
 delineate_valley <- function(dem, river) {
   # Check input
   checkmate::assert_class(dem, "SpatRaster")
-  checkmate::assert_true(inherits(river, c("sf", "sfc")))
+  checkmate::assert_multi_class(river, c("sf", "sfc"))
 
   if (!terra::same.crs(dem, sf::st_crs(river)$wkt)) {
-    stop("DEM and river geometry should be in the same CRS")
+    cli::cli_abort("DEM and river geometry should be in the same CRS.")
   }
   cd_masked <- smooth_dem(dem) |>
     get_slope() |>
@@ -155,7 +174,7 @@ get_stac_asset_urls <- function(bb, endpoint = NULL, collection = NULL) {
       Sys.setenv("AWS_NO_SIGN_REQUEST" = "YES")
     }
   } else if (is.null(endpoint) || is.null(collection)) {
-    stop("Provide both or neither of STAC endpoint and collection")
+    cli::cli_abort("Provide both or neither of STAC endpoint and collection.")
   }
 
   rstac::stac(endpoint) |>
@@ -182,7 +201,7 @@ get_stac_asset_urls <- function(bb, endpoint = NULL, collection = NULL) {
 #' @examplesIf interactive()
 #' bb <- get_osm_bb("Bucharest")
 #' tile_urls <- get_stac_asset_urls(bb)
-#' load_dem(bb, tile_urls, force_download = TRUE)
+#' load_dem(bb = bb, tile_urls = tile_urls, force_download = TRUE)
 #' @srrstats {G4.0} DEM data is written to cache with a file name concatenated
 #'   from tile names and boundig box coordinates.
 #' @srrstats {G2.7} The `bb` parameter accepts tabular input of class `matrix`.
@@ -261,7 +280,7 @@ mask_slope <- function(slope, river, lthresh = 1.e-3, target = 0) {
   slope_masked <- terra::mask(slope,
                               terra::ifel(slope <= lthresh, NA, 1),
                               updatevalue = lthresh)
-  for (ngeom in seq_len(length(sf::st_geometry(river)))) {
+  for (ngeom in seq_along(sf::st_geometry(river))) {
     slope_masked <- terra::mask(slope_masked,
                                 terra::vect(river[ngeom]),
                                 inverse = TRUE,
@@ -297,6 +316,7 @@ get_cost_distance <- function(slope, river, target = 0) {
 #' @return cd raster with river+BUFFER pixels masked
 #' @keywords internal
 mask_cost_distance <- function(cd, river, buffer = 2000) {
+  buffer <- preprocess_distance(buffer)
   river_buffer <- sf::st_buffer(river, buffer) |> terra::vect()
   terra::mask(
     cd,
@@ -321,7 +341,7 @@ get_cd_char <- function(cd, method = "mean") {
   if (method == "mean") {
     mean(terra::values(cd), na.rm = TRUE)
   } else {
-    stop("Not implemented!")
+    cli::cli_abort("Method {.val {method}} is not implemented.")
   }
 }
 

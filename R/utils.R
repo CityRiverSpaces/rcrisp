@@ -25,7 +25,7 @@ set_units_like <- function(x, y) {
 #' @export
 #' @examples
 #' # Get EPSG code for UTM zone of Bucharest
-#' bb <- get_osm_bb("Bucharest")
+#' bb <- c(xmin = 25.97, ymin = 44.33, xmax = 26.23, ymax = 44.54)
 #' get_utm_zone(bb)
 #' @srrstats {SP2.8, SP2.9} Before determining the UTM zone, the bounding box
 #'   given as input is transformed into an object of class `bbox`. If input
@@ -38,7 +38,9 @@ get_utm_zone <- function(x) {
   bb <- sf::st_transform(bb, "EPSG:4326")
 
   if (bb[["ymin"]] < -80 || bb[["ymax"]] > 84) {
-    stop("The bbox is outside the UTM validity range (80 deg S; 84 deg N)")
+    cli::cli_abort(
+      "The bbox is outside the UTM validity range (80 deg S; 84 deg N)."
+    )
   }
   centroid_long <- (bb[["xmin"]] + bb[["xmax"]]) / 2
   centroid_lat <- (bb[["ymin"]] + bb[["ymax"]]) / 2
@@ -74,9 +76,7 @@ get_utm_zone <- function(x) {
 #'   in the input object.
 as_bbox <- function(x) {
   # Check input
-  checkmate::assert_true(
-    inherits(x, c("sf", "sfc", "numeric", "matrix", "bbox"))
-  )
+  checkmate::assert_multi_class(x, c("sf", "sfc", "numeric", "matrix", "bbox"))
 
   if (inherits(x, c("numeric", "matrix"))) {
     x <- as.vector(x)
@@ -86,6 +86,70 @@ as_bbox <- function(x) {
   crs <- sf::st_crs(bbox)
   if (is.na(crs)) sf::st_crs(bbox) <- sf::st_crs("EPSG:4326")
   bbox
+}
+
+#' Standardise the coordinate reference system (CRS) of an object
+#'
+#' @param x An object of class `sf`, `sfc`, `bbox`, or a numeric or character
+#'   vector representing a CRS (e.g., EPSG code). If `numeric`, the value
+#'   should be an unrestricted positive number representing a valid EPSG code.
+#' @param allow_geographic Logical, whether to allow geographic CRS (lat/lon).
+#'
+#' @returns An object of class [`sf::crs`] with a valid CRS.
+#' @export
+#'
+#' @examples
+#' library(sf)
+#'
+#' # Standardise a numeric EPSG code
+#' as_crs(4326, allow_geographic = TRUE)
+#'
+#' # Standardise a character EPSG code
+#' as_crs("EPSG:4326", allow_geographic = TRUE)
+#'
+#' # Standardise a bbox object
+#' bb <- st_bbox(c(xmin = 25.9, ymin = 44.3, xmax = 26.2, ymax = 44.5),
+#'                 crs = 4326)
+#' as_crs(bb, allow_geographic = TRUE)
+#'
+#' # Standardise a simple feature object
+#' bb_sfc <- st_as_sfc(bb)
+#' bb_sf <- st_as_sf(bb_sfc)
+#' as_crs(bb_sf, allow_geographic = TRUE)
+#' as_crs(bb_sfc, allow_geographic = TRUE)
+#' @srrstats {G2.8} This function ensures all supported input types are in a
+#'   consistent class accepted by `sf::st_crs()` and it is used throughout the
+#'   package to standardise CRS input.
+as_crs <- function(x, allow_geographic = FALSE) {
+  checkmate::assert_multi_class(x,
+                                c("numeric",
+                                  "integer",
+                                  "character",
+                                  "bbox",
+                                  "sf",
+                                  "sfc",
+                                  "sfnetwork",
+                                  "SpatRaster",
+                                  "crs"),
+                                null.ok = TRUE)
+  if (!is.null(x)) checkmate::assert_vector(x, min.len = 1)
+  checkmate::assert_logical(allow_geographic, len = 1)
+
+  if (!is.null(x)) {
+    crs <- sf::st_crs(x)
+    if (is.na(crs$IsGeographic)) {
+      cli::cli_abort("Input should have a CRS.")
+    }
+    if (!allow_geographic && crs$IsGeographic) {
+      cli::cli_abort(paste0(
+        "The input CRS is geographic (lat/lon),",
+        " please provide a projected CRS."
+      ))
+    }
+    crs
+  } else {
+    NULL
+  }
 }
 
 #' Apply a buffer region to a sf object
@@ -104,13 +168,14 @@ as_bbox <- function(x) {
 #'   [`sf::sfc_POLYGON`], explicitly documented as such, and it maintains the
 #'   same units as the input.
 buffer <- function(obj, buffer_distance, ...) {
+  buffer_distance <- preprocess_distance(buffer_distance)
   is_obj_longlat <- sf::st_is_longlat(obj)
   dst_crs <- sf::st_crs(obj)
   # check if obj is a bbox
   is_obj_bbox <- inherits(obj, "bbox")
   if (is_obj_bbox) obj <- sf::st_as_sfc(obj)
   if (!is.na(is_obj_longlat) && is_obj_longlat) {
-    crs_meters <- get_utm_zone(obj)
+    crs_meters <- get_utm_zone(obj) |> as_crs()
     obj <- sf::st_transform(obj, crs_meters)
   }
   expanded_obj <- sf::st_buffer(obj, buffer_distance, ...)
@@ -140,17 +205,18 @@ buffer <- function(obj, buffer_distance, ...) {
 #'   [`sf::sfc_POLYGON`], explicitly documented as such, and it maintains the
 #'   same units as the input.
 river_buffer <- function(river, buffer_distance, bbox = NULL, side = NULL) {
+  buffer_distance <- preprocess_distance(buffer_distance)
   if (!is.null(bbox)) river <- sf::st_crop(river, bbox)
   if (is.null(side)) {
     river_buf <- buffer(river, buffer_distance)
-    return(sf::st_union(river_buf))
+    sf::st_union(river_buf)
   } else {
     if (side == "left") {
       river_buf <- buffer(river, buffer_distance, singleSide = TRUE)
     } else if (side == "right") {
       river_buf <- buffer(river, -buffer_distance, singleSide = TRUE)
     } else {
-      stop("If specified, 'side' should be either 'right' or 'left'")
+      cli::cli_abort("If specified, 'side' should be either 'right' or 'left'.")
     }
     # Merge all components, than make sure we do not spill over the river by
     # splitting the computed geometry with the river centerline and by
@@ -158,7 +224,7 @@ river_buffer <- function(river, buffer_distance, bbox = NULL, side = NULL) {
     splits <- split_by(sf::st_union(river_buf), river)
     river_buf <- splits[find_largest(splits)]
     # Finally drop any eventual hole
-    return(sfheaders::sf_remove_holes(river_buf))
+    sfheaders::sf_remove_holes(river_buf)
   }
 }
 
@@ -166,7 +232,10 @@ river_buffer <- function(river, buffer_distance, bbox = NULL, side = NULL) {
 #' coordinate reference system (CRS)
 #'
 #' @param x Raster (`SpatRaster`) or vector (`sf`) object
-#' @param crs CRS to be projected to
+#' @param crs CRS to be projected to, provided as `numeric`, `integer` or
+#'   `character` vector of length one or [`sf::crs`]. If `numeric`, the value
+#'   should be a positive number with unrestricted upper bound representing
+#'   a valid EPSG code.
 #' @param ... Optional arguments for raster or vector reproject functions
 #'
 #' @return [`sf::sf`], [`sf::sfc`], or [`terra::SpatRaster`] object reprojected
@@ -182,19 +251,16 @@ river_buffer <- function(river, buffer_distance, bbox = NULL, side = NULL) {
 #'   [`sf::sfc`] or [`terra::SpatRaster`], explicitly documented as such, with
 #'   transformed CRS as specified by the `crs` parameter.
 reproject <- function(x, crs, ...) {
+  # Check input
+  checkmate::assert_multi_class(x, c("SpatRaster", "sf", "sfc", "bbox"))
+  crs <- as_crs(crs, allow_geographic = TRUE)
   if (inherits(x, "SpatRaster")) {
-    if (inherits(crs, c("integer", "numeric"))) {
-      # terra::crs does not support a numeric value as CRS, convert to character
-      crs <- sprintf("EPSG:%s", crs)
-    } else if (inherits(crs, "crs")) {
-      # terra::crs also does not understand sf::crs objects
-      crs <- sprintf("EPSG:%s", crs$epsg)
-    }
+    crs <- sprintf("EPSG:%s", crs$epsg)
     terra::project(x, crs, ...)
   } else if (inherits(x, c("bbox", "sfc", "sf"))) {
     sf::st_transform(x, crs, ...)
   } else {
-    stop(sprintf("Cannot reproject object type: %s", class(x)))
+    cli::cli_abort("Cannot reproject object type: {class(x)}.")
   }
 }
 
@@ -243,12 +309,37 @@ load_raster <- function(urlpaths, bbox = NULL) {
 #'   maintains the same units as the input.
 combine_river_features <- function(river_centerline, river_surface) {
   if (is.null(river_surface)) {
-    warning("Calculating viewpoints along river centerline.")
+    cli::cli_warn("Calculating viewpoints along river centerline.")
     return(river_centerline)
   }
-  message("Calculating viewpoints from both river edge and river centerline.")
+  cli::cli_inform(
+    "Calculating viewpoints from both river edge and river centerline."
+  )
   river_centerline_clipped <- sf::st_geometry(river_centerline) |>
     sf::st_difference(river_surface)
+  # Use 100 m as an empirical threshold to filter out minor geometry issues.
+  n_uncovered <- sum(
+    as.numeric(sf::st_length(
+      sf::st_cast(river_centerline_clipped, "LINESTRING", warn = FALSE)
+    )) >= 100,
+    na.rm = TRUE
+  )
+  if (n_uncovered > 0) {
+    cli::cli_warn(c(
+      paste0(
+        "{n_uncovered} river centerline segment(s) with length >= 100 m",
+        " are not covered by OSM river surface polygons."
+      ),
+      "i" = paste0(
+        "This may be due to underground river sections",
+        " or incomplete OSM river surface data."
+      ),
+      "i" = paste0(
+        "Viewpoints for these segments",
+        " will be calculated from the river centerline."
+      )
+    ))
+  }
   c(river_centerline_clipped, sf::st_geometry(river_surface)) |>
     sf::st_cast("MULTILINESTRING") |>
     sf::st_union()
@@ -265,7 +356,41 @@ combine_river_features <- function(river_centerline, river_surface) {
 #'   explicitly documented as such.
 check_invalid_geometry <- function(sf_obj) {
   if (!all(sf::st_is_valid(sf_obj))) {
-    message("Invalid geometries detected! Fixing them...")
+    cli::cli_inform("Invalid geometries detected! Fixing them...")
   }
   sf::st_make_valid(sf_obj) # if input valid, it remains unchanged
+}
+
+#' Pre-process one-dimensional distance input
+#'
+#' Ensure that distance input is plain numeric in meters, regardless of
+#' whether it is provided as a `units` object (e.g., a distance in kilometers),
+#' a plain numeric or another vector-like object with numeric `storage.mode`.
+#'
+#' @param x A distance value which may be `numeric`, or a [`units::units`]
+#'   object, or any other object for which the underlying `storage.mode` is
+#'   numeric.
+#' @param arg_name Name of the argument, used in messages/errors.
+#'
+#' @returns A vector of class `numeric` in meters.
+#' @keywords internal
+#' @srrstats {G2.6} One-dimensional distance input is pre-processed by
+#'   `preprocess_distance()` to handle `units` objects or other vector-like
+#'   classes with storage mode `numeric`.
+preprocess_distance <- function(x, arg_name = deparse(substitute(x))) {
+  # Ensure that the input is a single value
+  if (length(x) != 1) {
+    cli::cli_abort(
+      "`{arg_name}` must be a single value, not length {length(x)}."
+    )
+  }
+  # To handle both `units` objects and other vector-like objects whose
+  # `storage.mode` is numeric
+  if (inherits(x, "units")) {
+    x <- units::set_units(x, "m")
+    x <- as.numeric(x)
+  } else if (!is.null(dim(x)) && storage.mode(x) %in% c("double", "integer")) {
+    x <- as.vector(x)
+  }
+  x
 }

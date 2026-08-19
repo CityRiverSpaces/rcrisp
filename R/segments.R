@@ -8,10 +8,10 @@
 #' @param network The spatial network of class `sfnetwork` to be used for the
 #'   segmentation
 #' @param river The river centerline as a simple feature geometry of class
-#'   `sfc_LINESTRING` or `sfc_MULTILINESTRING`
+#'   [`sf::sf`] or [`sf::sfc`]
 #' @param angle_threshold Only consider angles above this threshold (in degrees)
-#'   to form continuous strokes in the network. A meaningful angle is between
-#'   90 and 180, with the default set to 100. See [`rcoins::stroke()`] for more
+#'   to form continuous strokes in the network. The value can range between
+#'   0 and 180, with the default set to 100. See [`rcoins::stroke()`] for more
 #'   details.
 #'
 #' @return Segment polygons as a simple feature geometry of class
@@ -44,13 +44,16 @@
 delineate_segments <- function(corridor, network, river,
                                angle_threshold = 100) {
   # Check input
-  checkmate::assert_class(corridor, "sfc_POLYGON")
+  checkmate::assert_multi_class(corridor, c("sfc_POLYGON", "sfc_MULTIPOLYGON"))
   checkmate::assert_class(network, "sfnetwork")
-  checkmate::assert_true(inherits(river, c("sf", "sfc")))
+  checkmate::assert_multi_class(river, c("sf", "sfc"))
   checkmate::assert_numeric(angle_threshold,
                             lower = 0,
                             upper = 180,
+                            len = 1,
                             any.missing = FALSE)
+  checkmate::assert_true(as_crs(corridor) == as_crs(network) &&
+                           as_crs(network) == as_crs(river))
 
   # Drop all attributes of river but its geometry
   river <- sf::st_geometry(river)
@@ -135,7 +138,9 @@ get_corridor_edges <- function(corridor, river) {
   corridor_edges <- split_by(corridor, river, boundary = TRUE)
   # For complex river geometries, splitting the corridor might actually return
   # multiple linestrings - select here the two longest segments
-  if (length(corridor_edges) < 2) stop("Cannot identify corridor edges")
+  if (length(corridor_edges) < 2) {
+    cli::cli_abort("Cannot identify corridor edges.")
+  }
   corridor_edges[find_longest(corridor_edges, n = 2)]
 }
 
@@ -214,7 +219,7 @@ select_nonintersecting_lines <- function(lines, corridor) {
   } else {
     # Identify the line with maximum number of intersections
     intersecting_lines <- intersections[["origins"]]
-    num_intersections <- vapply(seq_len(length(lines)),
+    num_intersections <- vapply(seq_along(lines),
                                 \(x) sum(unlist(intersecting_lines) == x),
                                 integer(1))
     max_intersections <- max(num_intersections)

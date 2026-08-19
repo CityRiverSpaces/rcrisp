@@ -12,7 +12,7 @@ either as a matrix (with x, y as rows and min, max as columns) or as a
 vector (xmin, ymin, xmax, ymax)}
 }
 \value{
-A bounding box as returned by \code{\link[sf:st_bbox]{sf::st_bbox()}}
+A \code{bbox} object as returned by \code{\link[sf:st_bbox]{sf::st_bbox()}}
 }
 \description{
 If the x does not have a CRS, WGS84 is assumed.

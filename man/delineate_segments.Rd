@@ -14,15 +14,16 @@ delineate_segments(corridor, network, river, angle_threshold = 100)
 segmentation}
 
 \item{river}{The river centerline as a simple feature geometry of class
-\code{sfc_LINESTRING} or \code{sfc_MULTILINESTRING}}
+\code{\link[sf:sf]{sf::sf}} or \code{\link[sf:sfc]{sf::sfc}}}
 
 \item{angle_threshold}{Only consider angles above this threshold (in degrees)
-to form continuous strokes in the network. A meaningful angle is between
-90 and 180, with the default set to 100. See \code{\link[rcoins:stroke]{rcoins::stroke()}} for more
+to form continuous strokes in the network. The value can range between
+0 and 180, with the default set to 100. See \code{\link[rcoins:stroke]{rcoins::stroke()}} for more
 details.}
 }
 \value{
-Segment polygons as a simple feature geometry of class \code{sfc_POLYGON}
+Segment polygons as a simple feature geometry of class
+\code{\link[sf:sfc]{sf::sfc_POLYGON}}
 }
 \description{
 Segments are defined as corridor subregions separated by river-crossing
@@ -34,7 +35,7 @@ bucharest_osm <- get_osm_example_data()
 corridor <- bucharest_dambovita$corridor
 network <- rbind(bucharest_osm$streets, bucharest_osm$railways) |>
   as_network()
-river <- bucharest_osm$river_centerline |> sf::st_geometry()
+river <- bucharest_osm$river_centerline
 delineate_segments(corridor, network, river)
 \dontshow{\}) # examplesIf}
 }

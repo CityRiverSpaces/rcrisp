@@ -13,10 +13,66 @@ developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.re
 [![CRAN
 status](https://www.r-pkg.org/badges/version/rcrisp)](https://CRAN.R-project.org/package=rcrisp)
 [![](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
+[![name status
+badge](https://cityriverspaces.r-universe.dev/badges/:name)](https://cityriverspaces.r-universe.dev/)
+[![Research Software
+Directory](https://img.shields.io/badge/rsd-rcrisp-00a3e3.svg)](https://research-software-directory.org/software/crisp)
+[![Rbanism: R
+package](https://img.shields.io/static/v1?label=Rbanism&message=R%20package&labelColor=93278F&color=00A99D&style=flat-square)](https://github.com/Rbanism)
+[![Status at rOpenSci Software Peer
+Review](https://badges.ropensci.org/718_status.svg)](https://github.com/ropensci/software-review/issues/718)
 <!-- badges: end -->
 
 rcrisp provides tools to automate the morphological delineation of
-riverside urban areas following the CRiSp (City River Spaces) method.
+riverside urban areas—i.e., the spaces surrounding a river where social,
+environmental and economic phenomena are assumed to be influenced by the
+presence of the river—following a method developed in Forgaci ([2018,
+pp. 88–89](#ref-forgaci2018)).
+
+The method is based on the premise that analyses of riverside urban
+phenomena are often done without a clear and consistent spatial
+definition of the area of interest and that a morphological
+delineation—combining the natural terrain of the river valley and the
+configuration of the overlapping built urban fabric—can provide a more
+objective and comparable approach. See the [Getting started
+vignette](https://cityriverspaces.github.io/rcrisp/articles/getting-started.html#why-is-consistent-delineation-important)
+to understand why consistent delineation matters and how alternative
+approaches fall short. Delineations following this morphological
+delineation method enable integrated local analyses, where data from
+different sources must be combined within a neutral spatial unit, as
+well as global cross-case analyses, which require a spatial unit that is
+comparable across different geographic contexts.
+
+The method proposes a hierarchical delineation of four spatial units:
+the river valley, the river corridor, the corridor segments and the
+river space. These units are defined based on the combined morphologies
+of the river valley and urban form. The resulting delineations can be
+used in any downstream analysis of riverside urban areas that can
+benefit from consistent and comparable spatial units, including land
+use, accessibility, and ecosystem services assessments.
+
+The package includes functions to delineate the river valley, the river
+corridor, the corridor segments, and the river space (i.e., the area
+between the riverbanks and the first line of buildings) as well as an
+all-in-one function that runs all desired delineations. The package also
+includes functions to download and preprocess OpenStreetMap (OSM) and
+global Digital Elevation Model (DEM) data, which are required as input
+data for the delineation process.
+
+## Workflow at a glance
+
+1.  Define area of interest and parameters for a given city and a river
+    crossing it
+2.  Get OSM and DEM base layers within the area of interest
+3.  Run the all-in-one `delineate()` or delineation-specific
+    `delineate_*()` functions to compute valley, corridor, segments,
+    and/or river space
+4.  Visualize/export results for downstream analysis
+
+See the [Getting started
+vignette](https://cityriverspaces.github.io/rcrisp/articles/getting-started.html)
+for further details about the purpose of the package, an end-to-end
+example, data requirements, and indication of use cases.
 
 ## Installation
 
@@ -45,24 +101,41 @@ library(rcrisp)
 # Set location parameters
 city_name <- "Bucharest"
 river_name <- "Dâmbovița"
-epsg_code <- 32635
 
-# Get base layer for plotting
-bb <- get_osm_bb(city_name)
-streets <- get_osm_streets(bb, epsg_code)$geometry
-railways <- get_osm_railways(bb, epsg_code)$geometry
+# Set AoI parameters for given location
+aoi <- define_aoi(city_name, river_name)
 
-# Delineate river corridor
-bd <- delineate(city_name, river_name, segments = TRUE)
-corridor <- bd$corridor
-segments <- bd$segments
+# Get data
+osm <- get_osm(aoi)
+dem <- get_dem(aoi, osm)
 
-# Plot results
-plot(corridor)
-plot(railways, col = "darkgrey", add = TRUE, lwd = 0.5)
-plot(streets, add = TRUE)
-plot(segments, border = "orange", add = TRUE, lwd = 3)
-plot(corridor, border = "red", add = TRUE, lwd = 3)
+# Delineate river corridor with segments
+bd <- delineate(aoi, osm, dem, segments = TRUE, riverspace = TRUE)
+
+# Examine delineation object
+summary(bd)
+#> Delineation: Bucharest - Dâmbovița 
+#> CRS:         WGS 84 / UTM zone 35N 
+#> 
+#> Delineation parameters:
+#>   network_buffer   3000 m
+#>   dem_buffer       2500 m
+#>   buildings_buffer 100 m
+#> 
+#> Delineation layers:
+#>   $valley          84.0 km²
+#>   $corridor        56.5 km²
+#>   $segments        10 features, total 56.5 km² (mean 5.7 km²)
+#>   $riverspace      8.6 km²
+#> 
+#> Base layers:
+#>   $streets         4933 features
+#>   $railways        654 features
+#>   $river_centerline 36.2 km
+#>   $river_surface   3.4 km²
+
+# Plot delineation object
+plot(bd)
 ```
 
 <img src="man/figures/README-example-1.png" width="100%" />
@@ -79,3 +152,18 @@ for further details.
 This package is released with a [Contributor Code of
 Conduct](https://github.com/CityRiverSpaces/rcrisp/blob/main/.github/CODE_OF_CONDUCT.md).
 By contributing to this project you agree to abide by its terms.
+
+## References
+
+<div id="refs" class="references csl-bib-body hanging-indent"
+entry-spacing="0" line-spacing="2">
+
+<div id="ref-forgaci2018" class="csl-entry">
+
+Forgaci, C. (2018). *Integrated urban river corridors: Spatial design
+for social-ecological integration in bucharest and beyond* \[PhD
+thesis\]. <https://doi.org/10.7480/abe.2018.31>
+
+</div>
+
+</div>

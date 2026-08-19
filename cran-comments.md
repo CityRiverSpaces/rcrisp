@@ -1,17 +1,18 @@
 ## R CMD check results
 
-0 errors | 0 warnings | 1 note
-
-Days since last update: 2
+0 errors | 0 warnings | 0 note
 
 ## Resubmission
 
-This is a resubmission in response to a problem pointed out on CRAN.
-In this version:
+* This is a resubmission to solve problems identified by package checks on CRAN.
+Specifically, vignettes, tests and examples are now modified so that no remote
+resources are required during CRAN checks.
 
-* `check_cache()` is moved from `.onLoad()` to `.onAttach()` to comply with
-  CRAN policy on namespace loading.
-* The NOTE on namespace load is resolved.
-* In addition, the CRAN badge is added to the README, the DOI from Zenodo is
-  added to CITATION.cff, DESCRIPTION and README (badge), and vignette file
-  names are updated to ensure they are listed in order on CRAN.
+* We also noticed in the rendering of all vignettes a warning originating from
+`rmarkdown`. A recent release of `rmarkdown` (v2.30) addresses this issue and
+thus we expect that the warning will be resolved when that version is used in
+the checks on CRAN.
+
+* One of the CRAN checks also shows a dependency error, stating that `osmdata`
+is not available. However, `osmdata` is on CRAN and we believe this to be a
+temporary issue on CRAN's side (see check for `r-oldrel-macos-x86_64`: https://www.r-project.org/nosvn/R.check/r-oldrel-macos-x86_64/rcrisp-00check.html).

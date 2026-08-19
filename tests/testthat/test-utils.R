@@ -58,6 +58,8 @@ test_that("correct UTM zone is returend in the northern hemisphere", {
 #'   default we work with UTM zones, which are defined only outside polar
 #'   regions. We make sure that errors are raised if polar regions are
 #'   considered.
+#' @srrstats {G5.8, G5.8d} Edge test: input outside the expected validity ranges
+#'   raise an error.
 test_that("an error is raised for latitudes outside the validity range", {
   bbox <- sf::st_bbox(
     c(xmin = 0, ymin = 83, xmax = 1, ymax = 84.1),
@@ -152,32 +154,35 @@ test_that("Buffer also works without a CRS", {
 })
 
 test_that("River buffer implements a buffer function", {
-  river <- bucharest_osm$river_centerline |> sf::st_geometry()
+  river <- sf::st_sfc(sf::st_linestring(cbind(c(-2, 0), c(0, -2))))
   actual <- river_buffer(river, buffer_distance = 0.5)
   expected <- sf::st_buffer(river, 0.5)
   expect_setequal(actual, expected)
 })
 
 test_that("River buffer can trim to the region of interest", {
-  river <- bucharest_osm$river_centerline
-  bbox <- sf::st_bbox(bucharest_osm$boundary)
-  actual <- river_buffer(river, buffer_distance = 10, bbox = bbox)
-  river_buffer <- sf::st_buffer(river, 10)
-  # set precision to bypass numerical issues
-  actual <- sf::st_set_precision(actual, 1.e-3)
-  river_buffer <- sf::st_set_precision(river_buffer, 1.e-3)
+  river <- sf::st_sfc(sf::st_linestring(cbind(c(2, -2), c(0, 0))))
+  bbox <- c(xmin = -1, ymin = -1, xmax = 1, ymax = 1)
+  actual <- river_buffer(river, buffer_distance = 0.1, bbox = bbox)
+  river_buffer <- sf::st_buffer(river, 0.1)
   covers <- sf::st_covers(river_buffer, actual, sparse = FALSE)
   expect_true(covers)
 })
 
+#' @srrstats {G5.8} Edge test: if a value different from a set of
+#'   allowed values is selected, an error is raised.
 test_that("River buffer throws error if wrong 'side' value is provided", {
-  river <- bucharest_osm$river_centerline
-  bbox <- sf::st_bbox(bucharest_osm$boundary)
+  river <- sf::st_sfc(sf::st_linestring(cbind(c(-2, 2), c(0, 0))))
+  bbox <- sf::st_bbox(c(xmin = -1, xmax = 1, ymin = -1, ymax = 1))
   expect_error(
     river_buffer(river, buffer_distance = 10, bbox = bbox, side = "wrong"),
     "If specified, 'side' should be either 'right' or 'left'"
   )
 })
+
+#' @srrstats {SP6.1} The following two tests show that `reproject()` works with
+#'   both vector and raster data.
+NULL
 
 #' @srrstats {G2.4, G2.4a} Explicit conversion to integer with `as.integer()`
 #'   used to test `reproject()` with different ways of providing CRS input.
@@ -245,9 +250,82 @@ test_that("reproject works with bbox", {
   expect_equal(crs_actual_str, crs_expected)
 })
 
+#' @srrstats {G5.8, G5.8b} Edge test: giving as input a value of wrong type
+#'   raises an error is raised.
 test_that("reproject does not work with objects of unknown type", {
-  expect_error(reproject(1, 4326), "Cannot reproject object type: numeric")
+  expect_error(reproject(1, 4326),
+               "Must inherit from class 'SpatRaster'/'sf'/'sfc'")
 })
+
+#' @srrstats {SP6.0} This test checks that the original coordinates of a raster
+#'   can be recovered after reprojection within a reasonable numeric tolerance.
+test_that("the original coordinates of a raster can be recovered after
+          reprojection within reasonable numeric tolerance", {
+            # raster in WGS84
+            x <- terra::rast(xmin = -174, xmax = -168, ymin = 45, ymax = 51,
+                             res = 1, vals = 1, crs = "EPSG:4326")
+
+            # reproject to UTM zone 2
+            x_repr <- reproject(x, "EPSG:32602")
+
+            # recover original CRS
+            x_recovered <- reproject(x_repr, "EPSG:4326")
+
+            # check that the original coordinates are recovered
+            # within a tolerance of 1 (the size of a grid cell)
+            expect_true(all(abs(terra::xmin(x) - terra::xmin(x_recovered)) < 1))
+          })
+
+#' @srrstats {SP6.0} This test checks that the original coordinates of a vector
+#'   can be recovered after reprojection within a reasonable numeric tolerance.
+test_that("the original coordinates of vector data can be recovered after
+          reprojection within reasonable numeric tolerance", {
+            # polygon in WGS84
+            x <- sf::st_polygon(list(cbind(c(-174, -174, -168, -168, -174),
+                                           c(45, 51, 51, 45, 45))))
+            x <- sf::st_sfc(x, crs = "EPSG:4326")
+
+            # reproject to UTM zone 2
+            x_repr <- reproject(x, "EPSG:32602")
+
+            # recover original CRS
+            x_recovered <- reproject(x_repr, "EPSG:4326")
+
+            # check that the original coordinates are recovered
+            expect_true(
+              all(abs(sf::st_coordinates(x) -
+                        sf::st_coordinates(x_recovered)) < 1e-06)
+            )
+          })
+
+#' @srrstats {SP6.1b} `reproject()` returns equivalent results regardless of
+#'   whether input data are curvilinear (geographic, WGS84) or rectilinear
+#'   (projected, UTM). Equivalent results are obtained whether curvilinear input
+#'   is first transformed to a projected CRS or rectilinear input is reprojected
+#'   directly.
+test_that("reproject() yields equivalent results from curvilinear and
+          rectilinear input",
+          {
+            target_crs <- "EPSG:32633"  # UTM zone 33N
+
+            # Curvilinear input (WGS84): transform first to rectilinear,
+            # then to target
+            x_geo <- sf::st_sfc(sf::st_polygon(list(cbind(
+              c(12, 12, 15, 15, 12), c(47, 50, 50, 47, 47)
+            ))), crs = "EPSG:4326")
+            x_from_geo <- reproject(x_geo, target_crs)
+
+            # Rectilinear input: same geometry already in a projected CRS
+            x_proj <- reproject(x_geo, "EPSG:3035")
+            x_from_proj <- reproject(x_proj, target_crs)
+
+            # Both routes should produce the same coordinates within numeric
+            # tolerance
+            expect_true(all(abs(
+              sf::st_coordinates(x_from_geo) -
+                sf::st_coordinates(x_from_proj)
+            ) < 1e-03))
+          })
 
 test_that("load_raster correctly retrieve and merge local data", {
 
@@ -274,39 +352,42 @@ test_that("load_raster correctly retrieve and merge local data", {
 })
 
 test_that("River centerline and surface are combined without overlap", {
-  l_centerline <- sf::st_length(bucharest_osm$river_centerline)
-  l_surface <- bucharest_osm$river_surface |>
+  centerline <- sf::st_sfc(sf::st_linestring(cbind(c(-2, 2), c(0, 0))))
+  surface <- sf::st_sfc(sf::st_multipolygon(list(
+    sf::st_polygon(list(cbind(c(-1, -1, -0.5, -0.5, -1), c(-1, 1, 1, -1, -1)))),
+    sf::st_polygon(list(cbind(c(0.5, 0.5, 1, 1, 0.5), c(-1, 1, 1, -1, -1))))
+  )))
+  l_centerline <- sf::st_length(centerline)
+  l_surface <- surface |>
     sf::st_cast("MULTILINESTRING") |>
     sf::st_length()
-  l_overlap <- bucharest_osm$river_centerline |>
-    sf::st_intersection(bucharest_osm$river_surface) |>
+  l_overlap <- sf::st_intersection(centerline, surface) |>
     sf::st_length()
   l_combined_expected <- l_centerline + l_surface - l_overlap
-  l_combined_actual <-
-    combine_river_features(sf::st_geometry(bucharest_osm$river_centerline),
-                           sf::st_geometry(bucharest_osm$river_surface)) |>
+  l_combined_actual <- combine_river_features(centerline, surface) |>
     sf::st_length()
   expect_equal(l_combined_actual, l_combined_expected)
 })
 
-test_that("When river surface is not available,
-  river centerline is used with warning",
-          {
-            expect_warning(
-              combine_river_features(bucharest_osm$river_centerline, NULL),
-              regexp = "*Calculating viewpoints along river centerline.*"
-            )
-          })
+test_that(
+  "When river surface is not available, river centerline is used with warning",
+  {
+    river_centerline <- sf::st_sfc(sf::st_linestring(cbind(c(-2, 0), c(0, -2))))
+    expect_warning(
+      combine_river_features(river_centerline, NULL),
+      "*Calculating viewpoints along river centerline.*"
+    )
+  }
+)
 
 test_that(
-  "When both river centerlin and river surface are used for setting viewpoints,
+  "When both river centerline and river surface are used for setting viewpoints,
   message is returned",
   {
+    river_centerline <- sf::st_sfc(sf::st_linestring(cbind(c(-2, 0), c(0, -2))))
+    river_surface <- sf::st_buffer(river_centerline, 0.1)
     expect_message(
-      combine_river_features(
-        bucharest_osm$river_centerline |> sf::st_geometry(),
-        bucharest_osm$river_surface |> sf::st_geometry()
-      ),
+      combine_river_features(river_centerline, river_surface),
       "*Calculating viewpoints from both river edge and river centerline.*"
     )
   }
@@ -319,4 +400,34 @@ test_that("Invalid geometry input produces message", {
     check_invalid_geometry(invalid_geom),
     "Invalid geometries detected! Fixing them..."
   )
+})
+
+test_that("as_crs raises error if input object does not have CRS", {
+  # Create dummy sf object with no crs
+  x <- sf::st_sfc(sf::st_point(c(1, 2)))
+  expect_error(as_crs(x), "Input should have a CRS.")
+})
+
+test_that("Distance pre-processing handles units objects", {
+  x_m  <- units::set_units(500, "m")
+  x_km <- units::set_units(0.5, "km")
+  expect_equal(preprocess_distance(x_m),  500)
+  expect_equal(preprocess_distance(x_km), 500)
+  expect_type(preprocess_distance(x_m), "double")
+})
+
+test_that("Distance pre-processing does not change plain numeric values", {
+  expect_equal(preprocess_distance(500), 500)
+})
+
+test_that("Distance pre-processing coerces non-atomic, vector-like objects", {
+  m <- matrix(500, nrow = 1, ncol = 1)
+  expect_equal(preprocess_distance(m), 500)
+})
+
+test_that("Distance pre-processing only accepts input of length 1", {
+  expect_error(preprocess_distance(c(500, 1000)), "single value")
+  expect_error(preprocess_distance(units::set_units(c(500, 1000), "m")),
+               "single value")
+
 })

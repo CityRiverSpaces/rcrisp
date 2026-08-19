@@ -7,12 +7,12 @@
 nearest_node(network, target)
 }
 \arguments{
-\item{network}{A network object}
+\item{network}{A network object of class \code{\link[sfnetworks:sfnetwork]{sfnetworks::sfnetwork}}}
 
-\item{target}{The target geometry}
+\item{target}{An object of class \code{\link[sf:sf]{sf::sf}} or \code{\link[sf:sfc]{sf::sfc}}}
 }
 \value{
-A node in the network as a simple feature geometry
+A node in the network as an object of class \code{\link[sf:sfc]{sf::sfc_POINT}}
 }
 \description{
 Find the node in a network that is closest to a target geometry.

@@ -13,7 +13,7 @@ or \code{\link[sf:sf]{sf::sf}}/\code{\link[sf:sfc]{sf::sfc}} object.}
 \item{width}{Width of the regions}
 }
 \value{
-A \code{\link[sf:sfc]{sf::sfc}} object with two polygon features
+A \code{\link[sf:sfc]{sf::sfc_POLYGON}} object with two polygon features
 }
 \description{
 These are constructed as single-sided buffers around the river geometry (see

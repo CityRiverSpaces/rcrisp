@@ -21,7 +21,7 @@ edges via straight segments
 \code{method = 'shortest-path'}}
 }
 \value{
-A simple feature geometry representing the corridor (i.e. a polygon)
+An \code{\link[sf:sfc]{sf::sfc_POLYGON}} object representing the corridor
 }
 \description{
 Cap the corridor by connecting the edge end points

@@ -1,4 +1,4 @@
-#' Create a network from a collection of line strings.
+#' Create a network from a collection of line strings
 #'
 #' @param edges An [`sf::sf`] or [`sf::sfc_LINESTRING`] object with the
 #'   network edges
@@ -6,6 +6,14 @@
 #'   converted to nodes
 #' @param clean Whether general cleaning tasks should be run on the generated
 #'   network (see [`clean_network()`] for the description of tasks)
+#' @param na_action A case-insensitive character string specifying how to deal
+#'   with missing values in non-geometry columns of `edges`. Possible values:
+#'   * `"warn"` (default): issue a warning if any `NA` values are found.
+#'   * `"error"`: stop with an error if any `NA` values are found.
+#'   * `"ignore"`: silently proceed without checking for `NA` values
+#'   * `"impute"`: replace `NA` values before building the network. For
+#'     character columns, `NA`s are replaced with `"unknown"`; for numeric
+#'     columns, `NA`s are replaced with the column median.
 #'
 #' @return An [`sfnetworks::sfnetwork`] object
 #' @export
@@ -13,7 +21,7 @@
 #' edges <- sf::st_sfc(
 #'   sf::st_linestring(matrix(c(0, 0, 1, 1), ncol = 2, byrow = TRUE)),
 #'   sf::st_linestring(matrix(c(0, 1, 1, 0), ncol = 2, byrow = TRUE)),
-#'   crs = sf::st_crs("EPSG:4326")
+#'   crs = sf::st_crs("EPSG:32635")
 #' )
 #'
 #' # Run with default values
@@ -21,17 +29,51 @@
 #'
 #' # Only build the spatial network
 #' as_network(edges, flatten = FALSE, clean = FALSE)
+#' @srrstats {G2.3, G2.3b} The `na_action` parameter is case-insensitive to
+#'   match the four accepted values.
 #' @srrstats {G2.7} The `edges` parameter only accepts tabular input of class
 #'   `sf`. `sfnetwork` objects are `sf`-compatible and are commonly used
 #'   for spatial network analysis.
+#' @srrstats {G2.14, G2.14a, G2.14b, G2.14c} The `na_action` parameter specifies
+#'   how missing values in non-geometric columns of `edges` should be handled.
+#'   Possibilities are error, proceed with warning, silently ignore, or impute
+#'   missing values differentiating between character and numeric. While such
+#'   attribute values are not used in this package, `NA`s are nevertheless
+#'   explicitly handled as they are propagated to the user's pipeline.
 #' @srrstats {SP4.0, SP4.0b, SP4.1, SP4.2} The return value is of class
 #'   [`sfnetworks::sfnetwork`], explicitly documented as such, and it maintains
 #'   the same units as the input.
-as_network <- function(edges, flatten = TRUE, clean = TRUE) {
+as_network <- function(edges, flatten = TRUE, clean = TRUE,
+                       na_action = "warn") {
   # Check input
-  checkmate::assert_true(inherits(edges, c("sf", "sfc")))
+  checkmate::assert_multi_class(edges, c("sf", "sfc"))
   checkmate::assert_logical(flatten, len = 1)
   checkmate::assert_logical(clean, len = 1)
+  na_action <- tolower(na_action)
+  checkmate::assert_choice(na_action, c("warn", "error", "ignore", "impute"))
+
+  # Handle NAs in attirbute (non-geometry) columns
+  attr_cols <- setdiff(names(edges), attr(edges, "sf_column"))
+  has_na <- any(vapply(edges[attr_cols], anyNA, logical(1)))
+  if (has_na) {
+    msg <- paste(
+      "Input `edges` contains NA values in one or more attribute columns.",
+      "These are propagated into the network but not used in any computation."
+    )
+    if (na_action == "error") cli::cli_abort(msg)
+    else if (na_action == "warn") cli::cli_warn(msg)
+    else if (na_action == "impute") {
+      edges <- edges |>
+        dplyr::mutate(dplyr::across(
+          dplyr::where(is.character),
+          ~ dplyr::coalesce(.x, "unknown")
+        )) |>
+        dplyr::mutate(dplyr::across(
+          dplyr::where(is.numeric),
+          ~ dplyr::coalesce(.x, median(.x, na.rm = TRUE))
+        ))
+    }
+  }
 
   network <- sfnetworks::as_sfnetwork(edges, directed = FALSE)
   if (flatten) network <- flatten_network(network)
@@ -39,7 +81,7 @@ as_network <- function(edges, flatten = TRUE, clean = TRUE) {
   network
 }
 
-#' Flatten a network by adding points at apparent intersections.
+#' Flatten a network by adding points at apparent intersections
 #'
 #' All crossing edges are identified, and the points of intersections are
 #' injected within the edge geometries. Note that the injected points are
@@ -56,7 +98,7 @@ as_network <- function(edges, flatten = TRUE, clean = TRUE) {
 #' @return An [`sfnetworks::sfnetwork`] object with additional points at
 #'   intersections
 #' @export
-#' @examples
+#' @examplesIf interactive()
 #' bucharest_osm <- get_osm_example_data()
 #' edges <- dplyr::bind_rows(bucharest_osm$streets,
 #'                           bucharest_osm$railways)
@@ -69,6 +111,10 @@ as_network <- function(edges, flatten = TRUE, clean = TRUE) {
 #'   [`sfnetworks::sfnetwork`], same as the input class, explicitly documented
 #'   as such, and it maintains the same units as the input.
 flatten_network <- function(network) {
+  # Check input
+  as_crs(network)
+  checkmate::assert_class(network, "sfnetwork")
+
   nodes <- sf::st_as_sf(network, "nodes")
   edges <- sf::st_as_sf(network, "edges")
 
@@ -103,7 +149,7 @@ flatten_network <- function(network) {
 #'   it maintains the same units as the input.
 get_crossing_edges <- function(edges) {
   geometry <- sf::st_geometry(edges)
-  crossings <- sf::st_crosses(geometry) |> suppressMessages()
+  crossings <- sf::st_crosses(geometry)
   mask <- lengths(crossings) > 0
   sf::st_sf(id = which(mask), geometry = geometry[mask])
 }
@@ -115,7 +161,7 @@ get_crossing_edges <- function(edges) {
 #'   [`sf::sfc_POINT`] and it maintains the same units as the input.
 get_intersection_points <- function(edges) {
   # make sure edges is an sf object, so st_intersection also returns origins
-  intersections <- sf::st_intersection(sf::st_sf(edges)) |> suppressMessages()
+  intersections <- sf::st_intersection(sf::st_sf(edges))
   # only consider (multi-)point intersections
   points <- sf::st_collection_extract(intersections, type = "POINT")
   # cast multipoint intersections to points
@@ -184,7 +230,7 @@ insert_intersections <- function(edges, points, tol = 1.e-3) {
     x = "x", y = "y", linestring_id = "linestring_id"
   )
   sf::st_crs(edges_new) <- sf::st_crs(edges)
-  return(edges_new)
+  edges_new
 }
 
 #' Check if a point is within a given edge.
@@ -216,7 +262,7 @@ calc_rolling_sum <- function(x, n = 2) {
   tail(cs - cs_roll, length(x) - 1)
 }
 
-#' Clean a spatial network.
+#' Clean a spatial network
 #'
 # nolint start
 #' Subdivide edges by [adding missing nodes](https://luukvdmeer.github.io/sfnetworks/articles/sfn02_preprocess_clean.html#subdivide-edges),
@@ -446,7 +492,7 @@ filter_network <- function(network, target, elements = "nodes") {
   } else if (elements == "edges") {
     intersect_func <- sfnetworks::edge_intersects
   } else {
-    stop("Unknown elements - choose beetween 'nodes' and 'edges'")
+    cli::cli_abort("Unknown elements - choose between 'nodes' and 'edges'.")
   }
   network |>
     tidygraph::activate(!!elements) |>

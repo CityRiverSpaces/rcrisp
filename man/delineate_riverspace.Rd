@@ -19,19 +19,26 @@ delineate_riverspace(
 
 \item{density}{Density of viewpoints}
 
-\item{ray_num}{Number of rays}
+\item{ray_num}{Number of rays as numeric vector of length one}
 
-\item{ray_length}{Length of rays in meters}
+\item{ray_length}{Length of rays in meters as numeric vector of length one}
 }
 \value{
-Polygon geometry with the riverspace
+Riverspace as object of class \code{\link[sf:sfc]{sf::sfc_POLYGON}}
 }
 \description{
 Delineate the space surrounding a river
 }
-\examples{
-\dontrun{
-  bucharest_osm <- get_osm_example_data()
-  delineate_riverspace(bucharest_osm$river_surface, bucharest_osm$buildings)
+\details{
+For riverspace delineation, OSM water polygons intersecting the
+river centerline are treated as part of the river, including connected
+water bodies such as lakes and reservoirs. Viewpoints are calculated from
+water edges where available, and from the river centerline when river
+surface polygons are missing or partial.
 }
+\examples{
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+bucharest_osm <- get_osm_example_data()
+delineate_riverspace(bucharest_osm$river_surface, bucharest_osm$buildings)
+\dontshow{\}) # examplesIf}
 }

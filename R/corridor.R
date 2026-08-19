@@ -1,25 +1,28 @@
-#' Delineate a river corridor on a spatial network.
+#' Delineate a river corridor on a spatial network
 #'
 #' The corridor edges on the two river banks are drawn on the provided spatial
 #' network starting from an initial guess of the corridor (based e.g. on the
 #' river valley).
 #'
-#' @param network The spatial network of class `sfnetwork` to be used for the
-#'   delineation
-#' @param river A (MULTI)LINESTRING simple feature geometry of class `sf`
-#'   or `sfc` representing the river centerline
+#' @param network The spatial network of class [`sfnetworks::sfnetwork`] to be
+#'   used for the delineation. Required, no default.
+#' @param river A (MULTI)LINESTRING simple feature geometry of class [`sf::sf`]
+#'   or [`sf::sfc`] representing the river centerline. Required, no default.
 #' @param corridor_init How to estimate the initial guess of the river corridor.
 #'   It can take the following values:
-#'   * numeric or integer: use a buffer region of the given size (in meters)
-#'     around the river centerline
+#'   * numeric or integer: use a buffer region of the given size (in meters,
+#'     positive, unrestricted) around the river centerline
 #'   * An [`sf::sf`] or [`sf::sfc`] object: use the given input geometry
-#' @param max_width (Approximate) maximum width of the corridor. The spatial
-#'   network is trimmed by a buffer region of this size around the river
-#' @param max_iterations Maximum number of iterations employed to refine the
-#'   corridor edges (see [`corridor_edge()`]).
-#' @param capping_method The method employed to connect the corridor edge end
-#'   points (i.e. to "cap" the corridor). See [cap_corridor()] for
-#'   the available methods
+#' @param max_width A positive number representing the (approximate)
+#'   maximum width of the corridor in meters. The upper limit is unrestricted.
+#'   The spatial network is trimmed by a buffer region of this size around the
+#'   river.
+#' @param max_iterations A positive integer greater than 0, with upper limit
+#'   unrestricted, representing the maximum number of iterations employed to
+#'   refine the corridor edges (see [`corridor_edge()`]).
+#' @param capping_method Case-insensitive character vector of length 1 with the
+#'   method employed to connect the corridor edge end points (i.e. to "cap" the
+#'   corridor). See [cap_corridor()] for the available methods.
 #'
 #' @return A simple feature geometry of class [`sf::sfc_POLYGON`] representing
 #'   the river corridor
@@ -32,21 +35,28 @@
 #'
 #' # Delineate with default values
 #' network <- rbind(streets, railways) |> as_network()
-#' delineate_corridor(network, river)
+#' delineate_corridor(network = network, river = river)
 #'
 #' # Delineate with user-specified parameters
 #' bucharest_dem <- get_dem_example_data()
-#' corridor_init <- delineate_valley(bucharest_dem, river)
-#' delineate_corridor(network, river, corridor_init = corridor_init,
-#'                    max_width = 4000, max_iterations = 5, capping = "direct")
+#' corridor_init <- delineate_valley(dem = bucharest_dem, river = river)
+#' delineate_corridor(network = network, river = river,
+#'                    corridor_init = corridor_init,
+#'                    max_width = 4000, max_iterations = 5,
+#'                    capping_method = "direct")
 #' @srrstats {G2.3, G2.3a, G2.3b} The `checkmate` package is used to check that
 #'   `capping_method` only uses allowed choices. The variable is also made
 #'   case-independent with `tolower()`.
+#' @srrstats {G2.6} One-dimensional distance input is pre-processed by
+#'   `preprocess_distance()` to handle `units` objects or other vector-like
+#'   classes with storage mode `numeric`.
 #' @srrstats {G2.7} The `network` object provided as input must be of class
 #'   `sfnetwork`. `sfnetwork` objects are `sf`-compatible and are commonly used
 #'   for spatial network analysis. The `river` parameter accepts inputs of type
 #'   `sf` and `sfc`. In the current implementation, any other form of tabular
 #'   input is rejected (the spatial information is strictly needed).
+#' @srrstats {G2.9} The user is informed when the input river object in lat/lon
+#'   coordinates is transformed into a suitable projected CRS.
 #' @srrstats {G2.10} This function uses `sf::st_geometry()` to extract the
 #'   geometry column from the `sf` object `river`. This is used when only
 #'   geometry information is needed from that point onwards and all other
@@ -64,13 +74,19 @@ delineate_corridor <- function(
   network, river, corridor_init = 1000, max_width = 3000, max_iterations = 10,
   capping_method = "shortest-path"
 ) {
+  # Preprocess distances
+  if (is.numeric(corridor_init) || inherits(corridor_init, "units")) {
+    corridor_init <- preprocess_distance(corridor_init)
+  }
+  max_width <- preprocess_distance(max_width)
   # Check input
   checkmate::assert_class(network, "sfnetwork")
-  checkmate::assert_true(inherits(river, c("sf", "sfc")))
-  checkmate::assert_true(
-    inherits(corridor_init, c("numeric", "sfc_POLYGON", "sfc_MULTIPOLYGON"))
-  )
-  if (inherits(corridor_init, c("numeric"))) {
+  checkmate::assert_multi_class(river, c("sf", "sfc"))
+  checkmate::assert_multi_class(corridor_init, c("numeric",
+                                                 "integer",
+                                                 "sf",
+                                                 "sfc"))
+  if (is.numeric(corridor_init)) {
     checkmate::assert_numeric(corridor_init,
                               len = 1,
                               any.missing = FALSE,
@@ -86,6 +102,14 @@ delineate_corridor <- function(
                             finite = TRUE)
   capping_method <- tolower(capping_method)
   checkmate::assert_choice(capping_method, c("shortest-path", "direct"))
+  checkmate::assert_true(as_crs(network) == as_crs(river))
+
+  if (!is.na(sf::st_is_longlat(river)) && sf::st_is_longlat(river)) {
+    cli::cli_inform(paste0(
+      "Reprojecting river from EPSG:{sf::st_crs(river)$epsg}",
+      " to EPSG:{get_utm_zone(river)} for corridor delineation."
+    ))
+  }
 
   # Drop all attributes of river but its geometry
   river <- sf::st_geometry(river)
@@ -186,6 +210,9 @@ corridor_end_points <- function(river_network, spatial_network, regions) {
   inters_reg_2 <- find_intersections(network_2, river_network)
   # Identify common intersections between the two sub-networks
   intersections <- inters_reg_1[inters_reg_1 %in% inters_reg_2]
+  if (length(intersections) == 0) {
+    cli::cli_abort("No river crossings found. Corridor cannot be delineated.")
+  }
   # Make sure they are "POINTS" (no "MULTIPOINTS")
   intersections <- sfheaders::sfc_cast(intersections, "POINT")
 
@@ -200,10 +227,10 @@ corridor_end_points <- function(river_network, spatial_network, regions) {
   distances <- sfnetworks::st_network_cost(river_network, from = nodes,
                                            to = nodes, weights = "weight")
 
-  indices <- which(distances == max(distances), arr.ind = TRUE)[1, ]
-  end_points <- c(nodes[indices["row"]], nodes[indices["col"]])
+  indices <- arrayInd(which.max(distances), dim(distances))
+  end_points <- c(nodes[indices[1]], nodes[indices[2]])
   if (end_points[1] == end_points[2]) {
-    stop("Corridor start- and end-points coincide!")
+    cli::cli_abort("Corridor start- and end-points coincide!")
   }
   end_points
 }
@@ -314,9 +341,9 @@ corridor_edge <- function(network, end_points, target_edge, exclude_area = NULL,
     niter <- niter + 1
   }
 
-  if (!converged) warning(sprintf(
-    "River corridor edge not converged within %s iterations", max_iterations
-  ))
+  if (!converged) cli::cli_warn(
+    "River corridor edge not converged within {max_iterations} iterations."
+  )
 
   edge
 }
@@ -348,17 +375,14 @@ cap_corridor <- function(edges, method = "shortest-path", network = NULL) {
     cap_edge_1 <- as_linestring(start_pts)
     cap_edge_2 <- as_linestring(end_pts)
   } else if (method == "shortest-path") {
-    if (is.null(network)) stop(
-      "A network should be provided if `capping_method = 'shortest-path'`"
+    if (is.null(network)) cli::cli_abort(
+      "A network should be provided if `capping_method = 'shortest-path'`."
     )
     network <- add_weights(network)
     cap_edge_1 <- shortest_path(network, from = start_pts[1], to = start_pts[2])
     cap_edge_2 <- shortest_path(network, from = end_pts[1], to = end_pts[2])
-    # TODO: raise warning if lenght is 2 times longer than direct segment
   } else {
-    stop(
-      sprintf("Unknown method to cap the river corridor: %s", method)
-    )
+    cli::cli_abort("Unknown method to cap the river corridor: {method}.")
   }
   polygon <- as_polygon(c(edges, cap_edge_1, cap_edge_2))
 
@@ -366,8 +390,8 @@ cap_corridor <- function(edges, method = "shortest-path", network = NULL) {
   # than the end points, the polygonization of the corridor boundary leads to
   # small side polygons. We drop these, after raising a warning
   if (length(polygon) > 1) {
-    warning(
-      "Corridor capping gives multiple polygons - selecting the largest one"
+    cli::cli_warn(
+      "Corridor capping gives multiple polygons - selecting the largest one."
     )
     polygon <- polygon[find_largest(polygon)]
   }

@@ -12,7 +12,7 @@ read_data_from_cache(filepath, unwrap = FALSE, quiet = FALSE)
 \item{unwrap}{Whether the deserialized object should be "unpacked" (as
 required by \code{\link[terra:SpatRaster-class]{terra::SpatRaster}} objects)}
 
-\item{quiet}{Omit warning on cache file being loaded}
+\item{quiet}{Omit message on cache file being loaded}
 }
 \value{
 Object deserialized

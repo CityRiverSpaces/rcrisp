@@ -14,7 +14,7 @@ split_by(geometry, line, boundary = FALSE)
 \item{boundary}{Whether to return the split boundary instead of the regions}
 }
 \value{
-A simple feature object
+An object of class \code{\link[sf:sfc]{sf::sfc}}
 }
 \description{
 Split a geometry along a (multi)linestring.

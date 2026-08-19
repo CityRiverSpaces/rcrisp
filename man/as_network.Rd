@@ -2,30 +2,42 @@
 % Please edit documentation in R/network.R
 \name{as_network}
 \alias{as_network}
-\title{Create a network from a collection of line strings.}
+\title{Create a network from a collection of line strings}
 \usage{
-as_network(edges, flatten = TRUE, clean = TRUE)
+as_network(edges, flatten = TRUE, clean = TRUE, na_action = "warn")
 }
 \arguments{
-\item{edges}{An \code{sfc_LINESTRING} object with the network edges}
+\item{edges}{An \code{\link[sf:sf]{sf::sf}} or \code{\link[sf:sfc]{sf::sfc_LINESTRING}} object with the
+network edges}
 
 \item{flatten}{Whether all intersections between edges should be
 converted to nodes}
 
 \item{clean}{Whether general cleaning tasks should be run on the generated
 network (see \code{\link[=clean_network]{clean_network()}} for the description of tasks)}
+
+\item{na_action}{A case-insensitive character string specifying how to deal
+with missing values in non-geometry columns of \code{edges}. Possible values:
+\itemize{
+\item \code{"warn"} (default): issue a warning if any \code{NA} values are found.
+\item \code{"error"}: stop with an error if any \code{NA} values are found.
+\item \code{"ignore"}: silently proceed without checking for \code{NA} values
+\item \code{"impute"}: replace \code{NA} values before building the network. For
+character columns, \code{NA}s are replaced with \code{"unknown"}; for numeric
+columns, \code{NA}s are replaced with the column median.
+}}
 }
 \value{
-A spatial network object of class \code{sfnetwork}
+An \code{\link[sfnetworks:sfnetwork]{sfnetworks::sfnetwork}} object
 }
 \description{
-Create a network from a collection of line strings.
+Create a network from a collection of line strings
 }
 \examples{
 edges <- sf::st_sfc(
   sf::st_linestring(matrix(c(0, 0, 1, 1), ncol = 2, byrow = TRUE)),
   sf::st_linestring(matrix(c(0, 1, 1, 0), ncol = 2, byrow = TRUE)),
-  crs = sf::st_crs("EPSG:4326")
+  crs = sf::st_crs("EPSG:32635")
 )
 
 # Run with default values
