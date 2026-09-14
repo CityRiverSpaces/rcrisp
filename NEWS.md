@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The Rbanism community badge was added in the README.
 - `delineate()` now errors early when fewer than two river crossings are found.
 - rOpenSci reviewers were acknowledged in the package metadata.
+- Package logo was added.
 
 ## Fixed
 
