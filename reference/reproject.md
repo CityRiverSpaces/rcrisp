@@ -17,8 +17,8 @@ reproject(x, crs, ...)
 
 - crs:
 
-  CRS to be projected to, provided as `numeric`, `integer` or `logical`
-  vector of length one or
+  CRS to be projected to, provided as `numeric`, `integer` or
+  `character` vector of length one or
   [`sf::crs`](https://r-spatial.github.io/sf/reference/coerce-methods.html).
   If `numeric`, the value should be a positive number with unrestricted
   upper bound representing a valid EPSG code.

@@ -23,7 +23,7 @@ read_data_from_cache(filepath, unwrap = FALSE, quiet = FALSE)
 
 - quiet:
 
-  Omit warning on cache file being loaded
+  Omit message on cache file being loaded
 
 ## Value
 

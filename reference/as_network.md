@@ -5,7 +5,7 @@ Create a network from a collection of line strings
 ## Usage
 
 ``` r
-as_network(edges, flatten = TRUE, clean = TRUE)
+as_network(edges, flatten = TRUE, clean = TRUE, na_action = "warn")
 ```
 
 ## Arguments
@@ -26,6 +26,21 @@ as_network(edges, flatten = TRUE, clean = TRUE)
   (see
   [`clean_network()`](https://cityriverspaces.github.io/rcrisp/reference/clean_network.md)
   for the description of tasks)
+
+- na_action:
+
+  A case-insensitive character string specifying how to deal with
+  missing values in non-geometry columns of `edges`. Possible values:
+
+  - `"warn"` (default): issue a warning if any `NA` values are found.
+
+  - `"error"`: stop with an error if any `NA` values are found.
+
+  - `"ignore"`: silently proceed without checking for `NA` values
+
+  - `"impute"`: replace `NA` values before building the network. For
+    character columns, `NA`s are replaced with `"unknown"`; for numeric
+    columns, `NA`s are replaced with the column median.
 
 ## Value
 

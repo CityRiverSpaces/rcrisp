@@ -5,7 +5,13 @@ Get the river centreline from OpenStreetMap
 ## Usage
 
 ``` r
-get_osm_river_centerline(bb, river_name, crs = NULL, force_download = FALSE)
+get_osm_river_centerline(
+  bb,
+  river_name,
+  crs = NULL,
+  buffer_distance = NULL,
+  force_download = FALSE
+)
 ```
 
 ## Arguments
@@ -21,6 +27,13 @@ get_osm_river_centerline(bb, river_name, crs = NULL, force_download = FALSE)
 - crs:
 
   Coordinate reference system as EPSG code
+
+- buffer_distance:
+
+  Optional buffer distance in metres to expand the bounding box before
+  cropping the river centreline. Useful when downstream processing (e.g.
+  network or DEM analysis) extends beyond the original `bb`. Defaults to
+  `NULL` (no expansion).
 
 - force_download:
 

@@ -4,7 +4,11 @@
 
 Functions for full or specific delineation
 
+- [`delineation`](https://cityriverspaces.github.io/rcrisp/reference/delineation.md)
+  : The delineation class
 - [`delineate()`](https://cityriverspaces.github.io/rcrisp/reference/delineate.md)
+  : Delineate a corridor around a river
+- [`delineate_city_river()`](https://cityriverspaces.github.io/rcrisp/reference/delineate_city_river.md)
   : Delineate a corridor around a river
 - [`delineate_valley()`](https://cityriverspaces.github.io/rcrisp/reference/delineate_valley.md)
   : Extract the river valley from the DEM
@@ -15,13 +19,33 @@ Functions for full or specific delineation
 - [`delineate_riverspace()`](https://cityriverspaces.github.io/rcrisp/reference/delineate_riverspace.md)
   : Delineate the space surrounding a river
 
+## Visualisation
+
+Functions to visualise delineation objects
+
+- [`plot(`*`<delineation>`*`)`](https://cityriverspaces.github.io/rcrisp/reference/plot.delineation.md)
+  : Plot a delineation object
+- [`geom_delineation()`](https://cityriverspaces.github.io/rcrisp/reference/geom_delineation.md)
+  : ggplot2 layer for a delineation object
+
+## Inspect
+
+Functions to inspect delineation objects
+
+- [`print(`*`<delineation>`*`)`](https://cityriverspaces.github.io/rcrisp/reference/print.delineation.md)
+  : Print a delineation object
+- [`summary(`*`<delineation>`*`)`](https://cityriverspaces.github.io/rcrisp/reference/summary.delineation.md)
+  : Summarise a delineation object
+- [`print(`*`<summary.delineation>`*`)`](https://cityriverspaces.github.io/rcrisp/reference/print.summary.delineation.md)
+  : Print a summary.delineation object
+
 ## Data
 
 ### Get OSM data
 
 Get OSM data for delineation
 
-- [`get_osmdata()`](https://cityriverspaces.github.io/rcrisp/reference/get_osmdata.md)
+- [`get_osm()`](https://cityriverspaces.github.io/rcrisp/reference/get_osm.md)
   : Retrieve OpenStreetMap data for a given location
 - [`get_osm_bb()`](https://cityriverspaces.github.io/rcrisp/reference/get_osm_bb.md)
   : Get the bounding box of a city
@@ -83,6 +107,8 @@ Functions to prepare network for delineation
 
 Helpers used throughout delineation and data retrieval functions
 
+- [`define_aoi()`](https://cityriverspaces.github.io/rcrisp/reference/define_aoi.md)
+  : Define delineation parameters within an area of interest
 - [`as_bbox()`](https://cityriverspaces.github.io/rcrisp/reference/as_bbox.md)
   : Get the bounding box from the x object
 - [`as_crs()`](https://cityriverspaces.github.io/rcrisp/reference/as_crs.md)

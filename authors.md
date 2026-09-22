@@ -14,21 +14,23 @@
 - **Meiert Willem Grootes**. Contributor.
   [](https://orcid.org/0000-0002-5733-4795)
 
+- **Yehan Wu**. Contributor. [](https://orcid.org/0000-0003-4063-7535)
+
 - **Netherlands eScience Center**. Funder.
 
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/CityRiverSpaces/rcrisp/blob/v0.3.2/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/CityRiverSpaces/rcrisp/blob/main/DESCRIPTION)
 
 Forgaci C, Nattino F (2026). *rcrisp: Automate the Delineation of Urban
-River Spaces*. R package version 0.3.2,
+River Spaces*. R package version 0.3.1,
 <https://cityriverspaces.github.io/rcrisp/>.
 
     @Manual{,
       title = {rcrisp: Automate the Delineation of Urban River Spaces},
       author = {Claudiu Forgaci and Francesco Nattino},
       year = {2026},
-      note = {R package version 0.3.2},
+      note = {R package version 0.3.1},
       url = {https://cityriverspaces.github.io/rcrisp/},
     }

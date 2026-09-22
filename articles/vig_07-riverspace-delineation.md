@@ -22,10 +22,15 @@ river <- bucharest_osm$river_surface
 
 The
 [`delineate_riverspace()`](https://cityriverspaces.github.io/rcrisp/reference/delineate_riverspace.md)
-function takes the building polygons and the river surface polygons as
-input. If no river is provided, it will return an error message. If no
-buildings are provided, it will return an unobstructed buffer of a given
-radius with a warning message. The function returns an sf polygon.
+function takes the building polygons and the river (including surface
+polygons and centerline) as input. The river surface polygons
+intersecting the river centerline are treated as part of the river,
+including connected water bodies such as lakes and reservoirs.
+Viewpoints are calculated from water edges where available, and from the
+river centerline when river surface polygons are missing or partial. If
+no river is provided, it will return an error message. If no buildings
+are provided, it will return an unobstructed buffer of a given radius
+with a warning message. The function returns an sf polygon.
 
 ``` r
 
