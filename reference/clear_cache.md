@@ -20,7 +20,7 @@ clear_cache(before_date = NULL)
 
 ## Value
 
-`NULL`
+List of file paths of removed files
 
 ## Examples
 

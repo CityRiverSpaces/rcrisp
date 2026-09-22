@@ -5,12 +5,12 @@ Match OpenStreetMap data by name
 ## Usage
 
 ``` r
-match_osm_name(osm, match)
+match_osm_name(osm_data, match)
 ```
 
 ## Arguments
 
-- osm:
+- osm_data:
 
   An sf object with OpenStreetMap data
 

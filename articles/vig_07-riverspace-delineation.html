@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">rcrisp</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -45,9 +45,6 @@
     <li><a class="dropdown-item" href="../articles/vig_05-corridor-delineation.html">Corridor delineation</a></li>
     <li><a class="dropdown-item" href="../articles/vig_06-corridor-segmentation.html">Corridor segmentation</a></li>
     <li><a class="dropdown-item" href="../articles/vig_07-riverspace-delineation.html">Riverspace delineation</a></li>
-    <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Performance</h6></li>
-    <li><a class="dropdown-item" href="../articles/vig_08-benchmark.html">Benchmarking across city-river cases</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -73,7 +70,7 @@
       <h1>7. Riverspace delineation</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/CityRiverSpaces/rcrisp/blob/main/vignettes/vig_07-riverspace-delineation.Rmd" class="external-link"><code>vignettes/vig_07-riverspace-delineation.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/CityRiverSpaces/rcrisp/blob/v0.3.2/vignettes/vig_07-riverspace-delineation.Rmd" class="external-link"><code>vignettes/vig_07-riverspace-delineation.Rmd</code></a></small>
       <div class="d-none name"><code>vig_07-riverspace-delineation.Rmd</code></div>
     </div>
 
@@ -94,15 +91,10 @@ of Bucharest as the river and the buildings surrounding it as input.</p>
 <code class="sourceCode R"><span><span class="va">buildings</span> <span class="op">&lt;-</span> <span class="va">bucharest_osm</span><span class="op">$</span><span class="va">buildings</span></span>
 <span><span class="va">river</span> <span class="op">&lt;-</span> <span class="va">bucharest_osm</span><span class="op">$</span><span class="va">river_surface</span></span></code></pre></div>
 <p>The <code><a href="../reference/delineate_riverspace.html">delineate_riverspace()</a></code> function takes the building
-polygons and the river (including surface polygons and centerline) as
-input. The river surface polygons intersecting the river centerline are
-treated as part of the river, including connected water bodies such as
-lakes and reservoirs. Viewpoints are calculated from water edges where
-available, and from the river centerline when river surface polygons are
-missing or partial. If no river is provided, it will return an error
-message. If no buildings are provided, it will return an unobstructed
-buffer of a given radius with a warning message. The function returns an
-sf polygon.</p>
+polygons and the river surface polygons as input. If no river is
+provided, it will return an error message. If no buildings are provided,
+it will return an unobstructed buffer of a given radius with a warning
+message. The function returns an sf polygon.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">riverspace</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/delineate_riverspace.html">delineate_riverspace</a></span><span class="op">(</span><span class="va">river</span>, <span class="va">buildings</span><span class="op">)</span></span></code></pre></div>
 <p>We visualise the riverspace in a subset of segments.</p>
@@ -128,7 +120,7 @@ sf polygon.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>

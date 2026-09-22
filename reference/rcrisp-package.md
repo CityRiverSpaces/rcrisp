@@ -16,8 +16,6 @@ Useful links:
 
 - <https://cityriverspaces.github.io/rcrisp/>
 
-- <https://github.com/CityRiverSpaces/rcrisp>
-
 - [doi:10.5281/zenodo.15793526](https://doi.org/10.5281/zenodo.15793526)
 
 - Report bugs at <https://github.com/CityRiverSpaces/rcrisp/issues>
@@ -39,8 +37,5 @@ Other contributors:
 
 - Meiert Willem Grootes <m.grootes@esciencecenter.nl>
   ([ORCID](https://orcid.org/0000-0002-5733-4795)) \[contributor\]
-
-- Yehan Wu <y.wu-13@tudelft.nl>
-  ([ORCID](https://orcid.org/0000-0003-4063-7535)) \[contributor\]
 
 - Netherlands eScience Center <info@esciencecenter.nl> \[funder\]
