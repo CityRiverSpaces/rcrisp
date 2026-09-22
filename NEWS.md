@@ -3,6 +3,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+# rcrisp 0.3.2 - 2026-09-22
+
+## Fixed
+
+- The `autotest` test is now skipped when the `autotest` package is not installed, and `autotest` is declared in `Suggests` together with its `Additional_repositories` source, resolving a check warning on CRAN.
+
 # rcrisp 0.3.1 - 2025-11-24
 
 ## Changed

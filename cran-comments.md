@@ -1,18 +1,17 @@
 ## R CMD check results
 
-0 errors | 0 warnings | 0 note
+0 errors | 0 warnings | 1 note
 
-## Resubmission
+## Submission
 
-* This is a resubmission to solve problems identified by package checks on CRAN.
-Specifically, vignettes, tests and examples are now modified so that no remote
-resources are required during CRAN checks.
+* This is a patch release that fixes the CRAN warning from the check for
+unstated dependencies in `tests`. The `autotest` package, which is used in the
+test suite, is now declared under `Suggests`. As `autotest` is available from
+R-universe rather than CRAN, its source is declared via
+`Additional_repositories`, and the corresponding test is skipped when the
+package is not installed.
 
-* We also noticed in the rendering of all vignettes a warning originating from
-`rmarkdown`. A recent release of `rmarkdown` (v2.30) addresses this issue and
-thus we expect that the warning will be resolved when that version is used in
-the checks on CRAN.
-
-* One of the CRAN checks also shows a dependency error, stating that `osmdata`
-is not available. However, `osmdata` is on CRAN and we believe this to be a
-temporary issue on CRAN's side (see check for `r-oldrel-macos-x86_64`: https://www.r-project.org/nosvn/R.check/r-oldrel-macos-x86_64/rcrisp-00check.html).
+* The remaining note concerns the CRAN incoming feasibility check, which reports
+the availability of the `Additional_repositories` entry
+(https://ropensci.r-universe.dev). This is expected, as `autotest` is only
+available from R-universe.
