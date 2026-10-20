@@ -32,13 +32,13 @@ Source:
 [`DESCRIPTION`](https://github.com/CityRiverSpaces/rcrisp/blob/main/DESCRIPTION)
 
 Forgaci C, Nattino F (2026). *rcrisp: Automate the Delineation of Urban
-River Spaces*. R package version 0.3.1,
+River Spaces*. R package version 1.0.0,
 <https://cityriverspaces.github.io/rcrisp/>.
 
     @Manual{,
       title = {rcrisp: Automate the Delineation of Urban River Spaces},
       author = {Claudiu Forgaci and Francesco Nattino},
       year = {2026},
-      note = {R package version 0.3.1},
+      note = {R package version 1.0.0},
       url = {https://cityriverspaces.github.io/rcrisp/},
     }

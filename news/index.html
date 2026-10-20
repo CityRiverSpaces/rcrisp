@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">rcrisp</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -49,6 +49,84 @@
       <small>Source: <a href="https://github.com/CityRiverSpaces/rcrisp/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.0.0" id="rcrisp-100---2026-10-20">rcrisp 1.0.0 - 2026-10-20<a class="anchor" aria-label="anchor" href="#rcrisp-100---2026-10-20"></a></h2>
+<div class="section level3">
+<h3 id="added-1-0-0">Added<a class="anchor" aria-label="anchor" href="#added-1-0-0"></a></h3>
+<ul><li>A definition of “riverside urban areas” was added in the README.</li>
+<li>The practical usefulness of the morphological approach was explained in the README.</li>
+<li>Test coverage of the <code>osm</code> and <code>aoi</code> modules was increased.</li>
+<li>The “Getting started” vignette was updated with a “Why is consistent delineation important?” section clarifying the problem <code>rcrisp</code> is meant to solve in contrast with alternative approaches.</li>
+<li>A note was added in the “Getting started” vignette stating that the workflow can be replicated for any city and river where sufficient data are available.</li>
+<li>Added an algorithm performance test to verify that the full pipeline completes successfully on real-world example data and performs within reasonable bounds.</li>
+<li>Added a test demonstrating that <code><a href="../reference/reproject.html">reproject()</a></code> yields equivalent results regardless of whether input data are curvilinear (WGS84) or rectilinear (projected).</li>
+<li>Distance input preprocessing is now handled by the <code><a href="../reference/preprocess_distance.html">preprocess_distance()</a></code> function. This function returns a plain numeric in meters, regardless of whether the input is provided as a <code>units</code> object, a plain numeric or another vector-like class with numeric <code>storage.mode</code>.</li>
+<li>
+<code><a href="../reference/geom_delineation.html">geom_delineation()</a></code> was added as a <code>ggplot2</code>-based alternative to the <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> method, returning a list of <code><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf()</a></code> layers that can be added to a <code>ggplot</code> object with <code>+</code>.</li>
+<li>
+<code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code> and <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> methods were added for <code>delineation</code> objects. <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code> gives a compact overview of present layers and their feature counts. <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> additionally reports areas (sqkm) for delineation layers and lengths (km) for <code>river_centerline</code>.</li>
+<li>A <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> method was created for objects of class <code>delineation</code>.</li>
+<li>Context-specific messages are now issued in <code><a href="../reference/get_river_aoi.html">get_river_aoi()</a></code>, <code><a href="../reference/delineate_corridor.html">delineate_corridor()</a></code>, and <code><a href="../reference/delineate.html">delineate()</a></code> when lat/lon input is reprojected for buffering, and in <code><a href="../reference/delineate.html">delineate()</a></code> when no CRS is provided and a UTM zone is auto-selected.</li>
+<li>Tests were added to <code><a href="../reference/delineate_corridor.html">delineate_corridor()</a></code>, <code><a href="../reference/delineate_segments.html">delineate_segments()</a></code>, and <code><a href="../reference/delineate_riverspace.html">delineate_riverspace()</a></code> to verify that geographic (lat/lon) CRS input raises an informative error.</li>
+<li>The Rbanism community badge was added in the README.</li>
+<li>
+<code><a href="../reference/delineate.html">delineate()</a></code> now errors early when fewer than two river crossings are found.</li>
+<li>rOpenSci reviewers were acknowledged in the package metadata.</li>
+<li>Package logo was added.</li>
+<li>A JOSS paper describing the package was added in <code>inst/joss/</code>, along with a GitHub Actions workflow to build a draft PDF.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="fixed-1-0-0">Fixed<a class="anchor" aria-label="anchor" href="#fixed-1-0-0"></a></h3>
+<ul><li>Assertion on CRS input was removed from <code><a href="../reference/get_osm_streets.html">get_osm_streets()</a></code>. CRS input is now checked in <code><a href="../reference/as_crs.html">as_crs()</a></code> as in the other <code>get_osm_*()</code> functions.</li>
+<li>Incorrect CRS was fixed in osmdata tests.</li>
+<li>Missing parenthesis was added in warning text in <code><a href="../reference/check_cache.html">check_cache()</a></code>.</li>
+<li>Vignette pre-compilation was updated so that srr tags dropped by <code><a href="https://rdrr.io/pkg/knitr/man/knit.html" class="external-link">knitr::knit()</a></code> are reinserted into the vignettes. Affected vignettes were also recompiled.</li>
+<li>The input <code>dem_source</code> in <code><a href="../reference/get_dem.html">get_dem()</a></code> was made case insensitive.</li>
+<li>Fixed typos in test statements.</li>
+<li>Corrected documentation for <code><a href="../reference/reproject.html">reproject()</a></code>: the <code>crs</code> parameter no longer (incorrectly) lists <code>logical</code> as an accepted type. <code>crs</code> accepts numeric/integer, character (e.g. “EPSG:4326”) or an <code><a href="https://r-spatial.github.io/sf/reference/coerce-methods.html" class="external-link">sf::crs</a></code> object; passing <code>TRUE</code>/<code>FALSE</code> will fail.</li>
+<li>Vignette pre-compilation was updated so that srr tags dropped by <code><a href="https://rdrr.io/pkg/knitr/man/knit.html" class="external-link">knitr::knit()</a></code> are reinserted into the vignettes. Affected vignettes were also recompiled.</li>
+<li>Documentation of return values in <code><a href="../reference/clear_cache.html">clear_cache()</a></code> and <code><a href="../reference/delineate.html">delineate()</a></code> were made factually consistent with the code.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="changed-1-0-0">Changed<a class="anchor" aria-label="anchor" href="#changed-1-0-0"></a></h3>
+<ul><li>The getting started vignette was updated to use <code><a href="../reference/delineate_city_river.html">delineate_city_river()</a></code> instead of the old <code>delineate(city_name, river_name, ...)</code> call.</li>
+<li>The corridor delineation vignette was updated to use <code><a href="../reference/delineate_city_river.html">delineate_city_river()</a></code> instead of the old <code>delineate(city_name, river_name, ...)</code> call, and to reflect the current <code>corridor_init</code> parameter (replacing the old <code>method</code> argument). The description of the return value was updated to mention the <code>delineation</code> S3 class and its full set of layers.</li>
+<li>The corridor segmentation vignette was updated to accurately describe the default behaviour of <code><a href="../reference/delineate.html">delineate()</a></code>, to reference <code><a href="../reference/delineate_city_river.html">delineate_city_river()</a></code>, and to remove an unused <code><a href="../reference/get_dem_example_data.html">get_dem_example_data()</a></code> call from the setup chunk.</li>
+<li>All user-facing <code><a href="https://rdrr.io/r/base/stop.html" class="external-link">stop()</a></code>, <code><a href="https://rdrr.io/r/base/warning.html" class="external-link">warning()</a></code>, and <code><a href="https://rdrr.io/r/base/message.html" class="external-link">message()</a></code> calls have been migrated to <code>cli</code> equivalents (<code>cli_abort()</code>, <code>cli_warn()</code>, <code>cli_inform()</code>) for consistent output.</li>
+<li>The <code>aoi_buildings</code> availability check in <code><a href="../reference/delineate.html">delineate()</a></code> was moved earlier to fail before any computation begins.</li>
+<li>The workflow section of the getting started vignette was updated to reflect the latest package design with the five-step workflow: define parameters, acquire data, run delineation, visualize and validate, and export results.</li>
+<li>The README was updated with a link to the getting started vignette when discussing the problem of consistent delineation.</li>
+<li>The OSM retrieval vignette was updated to use the redesigned main functions. UTM CRS is retrieved now implicitly as part of <code><a href="../reference/define_aoi.html">define_aoi()</a></code>.</li>
+<li>Attach-time <code><a href="../reference/check_cache.html">check_cache()</a></code> was moved behind <code><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive()</a></code>.</li>
+<li>
+<code>get_osmdata()</code> was renamed to <code><a href="../reference/get_osm.html">get_osm()</a></code> and all other uses of <code>osmdata</code> and <code>osm_data</code> in object and function names have been consistently renamed to <code>osm</code> throughout the package to avoid confusions with the <code>osmdata</code> package.</li>
+<li>The workflow of <code><a href="../reference/delineate.html">delineate()</a></code> was refactored into four composable functions to reduce parameter complexity and improve step-by-step control:
+<ul><li>
+<code><a href="../reference/define_aoi.html">define_aoi()</a></code> (new): defines the area of interest and all delineation parameters (CRS, buffer sizes, corridor initialisation method) from a city and river name.</li>
+<li>
+<code>get_osmdata()</code> and <code><a href="../reference/get_dem.html">get_dem()</a></code> was adapted to accept an <code>aoi</code> object returned by <code><a href="../reference/define_aoi.html">define_aoi()</a></code> instead of individual parameters.</li>
+<li>
+<code><a href="../reference/delineate.html">delineate()</a></code>: now accepts the <code>aoi</code> object, OSM data, and DEM as separate inputs, with a reduced parameter signature.</li>
+</ul></li>
+<li>
+<code><a href="../reference/delineate_city_river.html">delineate_city_river()</a></code> (new): convenience wrapper that runs the full workflow from city and river name with default parameters.</li>
+<li>
+<code><a href="../reference/delineate.html">delineate()</a></code> returns now an S3 object of class <code>delineation</code>.</li>
+<li>
+<code><a href="../reference/as_network.html">as_network()</a></code> now checks for NAs in non-geometry columns and issues an error, proceeds with a warning, imputes NA values, or ignores them, as specified by the user with a new <code>na_action</code> parameter.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="removed-1-0-0">Removed<a class="anchor" aria-label="anchor" href="#removed-1-0-0"></a></h3>
+<ul><li>TODOs were moved from released code to GitHub issues.</li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.3.2" id="rcrisp-032---2026-09-22">rcrisp 0.3.2 - 2026-09-22<a class="anchor" aria-label="anchor" href="#rcrisp-032---2026-09-22"></a></h2><p class="text-muted">CRAN release: 2026-09-22</p>
+<div class="section level3">
+<h3 id="fixed-0-3-2">Fixed<a class="anchor" aria-label="anchor" href="#fixed-0-3-2"></a></h3>
+<ul><li>The <code>autotest</code> test is now skipped when the <code>autotest</code> package is not installed, and <code>autotest</code> is declared in <code>Suggests</code> together with its <code>Additional_repositories</code> source, resolving a check warning on CRAN.</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.3.1" id="rcrisp-031---2025-11-24">rcrisp 0.3.1 - 2025-11-24<a class="anchor" aria-label="anchor" href="#rcrisp-031---2025-11-24"></a></h2><p class="text-muted">CRAN release: 2025-11-24</p>
 <div class="section level3">

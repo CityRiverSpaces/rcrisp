@@ -22,7 +22,3 @@ the data (not the catalog). References:
 ``` r
 default_stac_dem
 ```
-
-## Format
-
-An object of class `list` of length 2.

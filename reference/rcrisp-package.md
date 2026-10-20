@@ -29,6 +29,9 @@ Useful links:
 
 Authors:
 
+- Claudiu Forgaci <c.forgaci@tudelft.nl>
+  ([ORCID](https://orcid.org/0000-0003-3218-5102)) \[copyright holder\]
+
 - Francesco Nattino <f.nattino@esciencecenter.nl>
   ([ORCID](https://orcid.org/0000-0003-3286-0139))
 
