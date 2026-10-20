@@ -6,6 +6,9 @@ docs
 inst/doc
 /doc/
 /Meta/
+/inst/joss/*
+!/inst/joss/paper.qmd
+!/inst/joss/method.png
 R/tmp.R
 tmp/
 benchmark/output/*.gpkg
