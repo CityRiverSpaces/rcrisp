@@ -4,17 +4,17 @@
   "identifier": "rcrisp",
   "description": "Provides tools to automate the morphological delineation of riverside urban areas based on a method introduced in Forgaci (2018) <doi:10.7480/abe.2018.31>. Delineation entails the identification of corridor boundaries, segmentation of the corridor, and delineation of the river space using two-dimensional spatial information from street network data and digital elevation data in a projected CRS. The resulting delineation can be used to characterise spatial phenomena that can be related to the river as a central element.",
   "name": "rcrisp: Automate the Delineation of Urban River Spaces",
-  "relatedLink": ["https://cityriverspaces.github.io/rcrisp/", "https://CRAN.R-project.org/package=rcrisp", "https://doi.org/10.5281/zenodo.15793526"],
+  "relatedLink": ["https://cityriverspaces.github.io/rcrisp/", "https://doi.org/10.5281/zenodo.15793526", "https://CRAN.R-project.org/package=rcrisp"],
   "codeRepository": "https://github.com/CityRiverSpaces/rcrisp",
   "issueTracker": "https://github.com/CityRiverSpaces/rcrisp/issues",
   "license": "Apache License 2",
-  "version": "0.3.1",
+  "version": "1.0.0",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 4.5.1 (2025-06-13)",
+  "runtimePlatform": "R version 4.6.1 (2026-06-24)",
   "provider": {
     "@id": "https://cran.r-project.org",
     "@type": "Organization",
@@ -86,6 +86,30 @@
     }
   ],
   "softwareSuggestions": [
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "autotest",
+      "name": "autotest",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=autotest"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "ggplot2",
+      "name": "ggplot2",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=ggplot2"
+    },
     {
       "@type": "SoftwareApplication",
       "identifier": "knitr",
@@ -169,6 +193,18 @@
     },
     "3": {
       "@type": "SoftwareApplication",
+      "identifier": "cli",
+      "name": "cli",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=cli"
+    },
+    "4": {
+      "@type": "SoftwareApplication",
       "identifier": "dbscan",
       "name": "dbscan",
       "provider": {
@@ -179,7 +215,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=dbscan"
     },
-    "4": {
+    "5": {
       "@type": "SoftwareApplication",
       "identifier": "dplyr",
       "name": "dplyr",
@@ -191,7 +227,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=dplyr"
     },
-    "5": {
+    "6": {
       "@type": "SoftwareApplication",
       "identifier": "lwgeom",
       "name": "lwgeom",
@@ -203,7 +239,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=lwgeom"
     },
-    "6": {
+    "7": {
       "@type": "SoftwareApplication",
       "identifier": "osmdata",
       "name": "osmdata",
@@ -215,7 +251,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=osmdata"
     },
-    "7": {
+    "8": {
       "@type": "SoftwareApplication",
       "identifier": "rcoins",
       "name": "rcoins",
@@ -227,7 +263,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=rcoins"
     },
-    "8": {
+    "9": {
       "@type": "SoftwareApplication",
       "identifier": "rlang",
       "name": "rlang",
@@ -239,7 +275,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=rlang"
     },
-    "9": {
+    "10": {
       "@type": "SoftwareApplication",
       "identifier": "rstac",
       "name": "rstac",
@@ -251,7 +287,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=rstac"
     },
-    "10": {
+    "11": {
       "@type": "SoftwareApplication",
       "identifier": "sf",
       "name": "sf",
@@ -264,7 +300,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=sf"
     },
-    "11": {
+    "12": {
       "@type": "SoftwareApplication",
       "identifier": "sfheaders",
       "name": "sfheaders",
@@ -276,7 +312,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=sfheaders"
     },
-    "12": {
+    "13": {
       "@type": "SoftwareApplication",
       "identifier": "sfnetworks",
       "name": "sfnetworks",
@@ -288,7 +324,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=sfnetworks"
     },
-    "13": {
+    "14": {
       "@type": "SoftwareApplication",
       "identifier": "stringr",
       "name": "stringr",
@@ -300,7 +336,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=stringr"
     },
-    "14": {
+    "15": {
       "@type": "SoftwareApplication",
       "identifier": "terra",
       "name": "terra",
@@ -312,7 +348,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=terra"
     },
-    "15": {
+    "16": {
       "@type": "SoftwareApplication",
       "identifier": "tidygraph",
       "name": "tidygraph",
@@ -324,7 +360,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=tidygraph"
     },
-    "16": {
+    "17": {
       "@type": "SoftwareApplication",
       "identifier": "units",
       "name": "units",
@@ -336,7 +372,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=units"
     },
-    "17": {
+    "18": {
       "@type": "SoftwareApplication",
       "identifier": "visor",
       "name": "visor",
@@ -350,7 +386,7 @@
     },
     "SystemRequirements": null
   },
-  "fileSize": "3377.344KB",
+  "fileSize": "4083.097KB",
   "releaseNotes": "https://github.com/CityRiverSpaces/rcrisp/blob/main/NEWS.md",
   "readme": "https://github.com/CityRiverSpaces/rcrisp/blob/main/README.md",
   "contIntegration": "https://github.com/CityRiverSpaces/rcrisp/actions/workflows/R-CMD-check.yaml",
@@ -359,5 +395,6 @@
     "@type": "Review",
     "url": "https://github.com/ropensci/software-review/issues/718",
     "provider": "https://ropensci.org"
-  }
+  },
+  "keywords": ["r", "r-package", "rstats", "spatial"]
 }
