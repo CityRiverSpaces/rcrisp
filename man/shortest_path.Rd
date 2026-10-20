@@ -17,7 +17,7 @@ shortest_path(network, from, to, weights = "weight")
 take the weigths}
 }
 \value{
-An \code{\link[sf:sfc]{sf::sfc_LINESTRING}} object
+An \code{\link[sf:sfc_LINESTRING]{sf::sfc_LINESTRING}} object
 }
 \description{
 Find shortest path between a pair of nodes in the network.

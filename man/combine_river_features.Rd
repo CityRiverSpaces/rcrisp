@@ -7,14 +7,14 @@
 combine_river_features(river_centerline, river_surface)
 }
 \arguments{
-\item{river_centerline}{River line as \code{\link[sf:sfc]{sf::sfc_LINESTRING}} or
-\code{\link[sf:sfc]{sf::sfc_MULTILINESTRING}}}
+\item{river_centerline}{River line as \code{\link[sf:sfc_LINESTRING]{sf::sfc_LINESTRING}} or
+\code{\link[sf:sfc_MULTILINESTRING]{sf::sfc_MULTILINESTRING}}}
 
-\item{river_surface}{River surface as \code{\link[sf:sfc]{sf::sfc_POLYGON}} or
-\code{\link[sf:sfc]{sf::sfc_MULTIPOLYGON}}}
+\item{river_surface}{River surface as \code{\link[sf:sfc_POLYGON]{sf::sfc_POLYGON}} or
+\code{\link[sf:sfc_MULTIPOLYGON]{sf::sfc_MULTIPOLYGON}}}
 }
 \value{
-Combined river as \code{\link[sf:sfc]{sf::sfc_MULTILINESTRING}}
+Combined river as \code{\link[sf:sfc_MULTILINESTRING]{sf::sfc_MULTILINESTRING}}
 }
 \description{
 Combine river centerline and surface

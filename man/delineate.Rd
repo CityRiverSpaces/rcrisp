@@ -59,7 +59,7 @@ TRUE.}
 \value{
 A list object of class \code{delineation} containing zero or more of the
 following elements: "valley", "corridor", "segments", and "riverspace",
-each as an \code{\link[sf:sfc]{sf::sfc_POLYGON}} or \code{\link[sf:sfc]{sf::sfc_MULTIPOLYGON}} object
+each as an \code{\link[sf:sfc_POLYGON]{sf::sfc_POLYGON}} or \code{\link[sf:sfc_MULTIPOLYGON]{sf::sfc_MULTIPOLYGON}} object
 (depending on the geometry of the input data). The list contains only
 the geometries corresponding to the delineation steps that were carried out
 (e.g., if \code{segments} is FALSE, the list will not contain a "segments"
@@ -73,7 +73,7 @@ by the user.
 }
 \details{
 The returned \code{\link{delineation}} class is a list wrapping objects of class
-\code{\link[sf:sfc]{sf::sfc_POLYGON}} or \code{\link[sf:sfc]{sf::sfc_MULTIPOLYGON}} which can be retrieved
+\code{\link[sf:sfc_POLYGON]{sf::sfc_POLYGON}} or \code{\link[sf:sfc_MULTIPOLYGON]{sf::sfc_MULTIPOLYGON}} which can be retrieved
 through subsetting and converted to other common spatial classes in typical
 \code{sf}- or \code{terra}-based workflows.
 
@@ -82,7 +82,7 @@ railway data around the river. Sparse OSM data, especially too few river
 crossings, may lead to failed delineation.
 }
 \examples{
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 # Define delineation parameters within area of interest
 aoi <- define_aoi("Bucharest", "Dâmbovița")
 

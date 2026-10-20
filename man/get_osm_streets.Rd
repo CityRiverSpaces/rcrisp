@@ -18,13 +18,13 @@ If left NULL, the function retrieves the following values:
 \item{force_download}{Download data even if cached data is available}
 }
 \value{
-An object of class \code{\link[sf:sfc]{sf::sfc_LINESTRING}}
+An object of class \code{\link[sf:sfc_LINESTRING]{sf::sfc_LINESTRING}}
 }
 \description{
 Get OpenStreetMap streets
 }
 \examples{
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 # Set parameters
 bb <- get_osm_bb("Bucharest")
 crs <- 31600  # National projected CRS

@@ -17,7 +17,7 @@ intersections
 All crossing edges are identified, and the points of intersections are
 injected within the edge geometries. Note that the injected points are
 not converted to network nodes (this can be achieved via sfnetworks'
-\code{\link[sfnetworks:spatial_morphers]{sfnetworks::to_spatial_subdivision()}}, which is part of the tasks
+\code{\link[sfnetworks:to_spatial_subdivision]{sfnetworks::to_spatial_subdivision()}}, which is part of the tasks
 that are included in \code{\link[=clean_network]{clean_network()}}.
 }
 \details{
@@ -26,7 +26,7 @@ The functionality is similar to sfnetworks'
 only injected to the closest edge.
 }
 \examples{
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 bucharest_osm <- get_osm_example_data()
 edges <- dplyr::bind_rows(bucharest_osm$streets,
                           bucharest_osm$railways)

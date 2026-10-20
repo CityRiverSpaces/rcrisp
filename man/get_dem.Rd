@@ -44,7 +44,7 @@ DEM as a terra \code{SpatRaster} object
 Access digital elevation model (DEM) for a given region
 }
 \examples{
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 # Define delineation parameters and get OSM data within area of interest
 aoi <- define_aoi("Bucharest", "Dâmbovița")
 osm <- get_osm(aoi)

@@ -17,14 +17,14 @@ get_river_aoi(river, city_bbox, buffer_distance)
 the river in meters. The upper limit is unrestricted.}
 }
 \value{
-An \code{\link[sf:sfc]{sf::sfc_POLYGON}} object in lat/lon coordinates
+An \code{\link[sf:sfc_POLYGON]{sf::sfc_POLYGON}} object in lat/lon coordinates
 }
 \description{
 Get an area of interest (AoI) around a river, cropping to the bounding box of
 a city
 }
 \examples{
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 bb <- get_osm_bb("Bucharest")
 river_centerline <- get_osm_river_centerline(bb, "Dâmbovița")
 river_surface <- get_osm_river_surface(bb, "Dâmbovița")

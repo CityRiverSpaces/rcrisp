@@ -28,7 +28,7 @@ delineation object, some of the delineation layers may not be present and
 thus will not be plotted.
 }
 \examples{
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 bd <- delineate_city_river("Bucharest", "Dâmbovița")
 plot(bd)
 \dontshow{\}) # examplesIf}

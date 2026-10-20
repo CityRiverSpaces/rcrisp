@@ -18,7 +18,7 @@ accepted by \code{\link[=as.Date]{as.Date()}}}
 Remove files from cache directory either before a given date or entirely.
 }
 \examples{
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 # Clear all cache
 clear_cache()
 

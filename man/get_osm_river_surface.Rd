@@ -10,21 +10,21 @@ get_osm_river_surface(bb, river_centerline, crs = NULL, force_download = FALSE)
 \item{bb}{Bounding box of class \code{bbox}}
 
 \item{river_centerline}{The river centerline as an object of class
-\code{\link[sf:sfc]{sf::sfc_LINESTRING}} or \code{\link[sf:sfc]{sf::sfc_MULTILINESTRING}}}
+\code{\link[sf:sfc_LINESTRING]{sf::sfc_LINESTRING}} or \code{\link[sf:sfc_MULTILINESTRING]{sf::sfc_MULTILINESTRING}}}
 
 \item{crs}{Coordinate reference system as EPSG code}
 
 \item{force_download}{Download data even if cached data is available}
 }
 \value{
-The river surface as object of class \code{\link[sf:sfc]{sf::sfc_POLYGON}} or
-\code{\link[sf:sfc]{sf::sfc_MULTIPOLYGON}}.
+The river surface as object of class \code{\link[sf:sfc_POLYGON]{sf::sfc_POLYGON}} or
+\code{\link[sf:sfc_MULTIPOLYGON]{sf::sfc_MULTIPOLYGON}}.
 }
 \description{
 Get the river surface from OpenStreetMap
 }
 \examples{
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 bb <- get_osm_bb("Bucharest")
 crs <- get_utm_zone(bb)
 river <- get_osm_river_centerline(bb, "Dâmbovița")

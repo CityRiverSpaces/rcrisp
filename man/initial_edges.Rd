@@ -14,7 +14,7 @@ the initial corridor}
 by cutting the area of interest along the river}
 }
 \value{
-An \code{\link[sf:sfc]{sf::sfc_LINESTRING}} or \code{\link[sf:sfc]{sf::sfc_MULTILINESTRING}} object
+An \code{\link[sf:sfc_LINESTRING]{sf::sfc_LINESTRING}} or \code{\link[sf:sfc_MULTILINESTRING]{sf::sfc_MULTILINESTRING}} object
 representing the initial corridor edges
 }
 \description{

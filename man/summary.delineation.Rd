@@ -28,7 +28,7 @@ and mean area are also given. Base layers are reported with feature counts;
 (in km²).
 }
 \examples{
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 bd <- delineate_city_river("Bucharest", "Dâmbovița")
 s <- summary(bd)
 s$delineation_layers$corridor$area_km2

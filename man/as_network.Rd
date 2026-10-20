@@ -7,7 +7,7 @@
 as_network(edges, flatten = TRUE, clean = TRUE, na_action = "warn")
 }
 \arguments{
-\item{edges}{An \code{\link[sf:sf]{sf::sf}} or \code{\link[sf:sfc]{sf::sfc_LINESTRING}} object with the
+\item{edges}{An \code{\link[sf:sf]{sf::sf}} or \code{\link[sf:sfc_LINESTRING]{sf::sfc_LINESTRING}} object with the
 network edges}
 
 \item{flatten}{Whether all intersections between edges should be

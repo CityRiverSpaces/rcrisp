@@ -14,7 +14,7 @@ clip_and_filter(lines, corridor, river)
 \item{river}{The river centerline as a simple feature geometry}
 }
 \value{
-Candidate segment edges as object of class \code{\link[sf:sfc]{sf::sfc_LINESTRING}}
+Candidate segment edges as object of class \code{\link[sf:sfc_LINESTRING]{sf::sfc_LINESTRING}}
 }
 \description{
 Lines that intersect the river and that cross the corridor from side to side

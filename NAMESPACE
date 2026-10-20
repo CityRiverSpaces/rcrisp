@@ -37,11 +37,15 @@ export(get_utm_zone)
 export(load_dem)
 export(osmdata_as_sf)
 export(reproject)
-importFrom(rlang,"!!")
-importFrom(rlang,":=")
-importFrom(rlang,.data)
-importFrom(rlang,sym)
+importFrom(rlang,
+  "!!",
+  ":=",
+  .data,
+  sym
+)
 importFrom(stats,setNames)
-importFrom(utils,download.file)
-importFrom(utils,head)
-importFrom(utils,tail)
+importFrom(utils,
+  download.file,
+  head,
+  tail
+)

@@ -12,7 +12,7 @@ nearest_node(network, target)
 \item{target}{An object of class \code{\link[sf:sf]{sf::sf}} or \code{\link[sf:sfc]{sf::sfc}}}
 }
 \value{
-A node in the network as an object of class \code{\link[sf:sfc]{sf::sfc_POINT}}
+A node in the network as an object of class \code{\link[sf:sfc_POINT]{sf::sfc_POINT}}
 }
 \description{
 Find the node in a network that is closest to a target geometry.

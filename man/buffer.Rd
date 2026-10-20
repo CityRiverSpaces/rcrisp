@@ -11,10 +11,10 @@ buffer(obj, buffer_distance, ...)
 
 \item{buffer_distance}{Buffer distance in meters}
 
-\item{...}{Optional parameters passed on to \code{\link[sf:geos_unary]{sf::st_buffer()}}}
+\item{...}{Optional parameters passed on to \code{\link[sf:st_buffer]{sf::st_buffer()}}}
 }
 \value{
-An object of class \code{\link[sf:sfc]{sf::sfc_POLYGON}}
+An object of class \code{\link[sf:sfc_POLYGON]{sf::sfc_POLYGON}}
 }
 \description{
 If the input object is in lat/lon coordinates, the buffer is approximately

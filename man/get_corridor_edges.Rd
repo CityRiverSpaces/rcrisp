@@ -12,7 +12,7 @@ get_corridor_edges(corridor, river)
 \item{river}{The river centerline as a simple feature geometry}
 }
 \value{
-Corridor edges as an object of class \code{\link[sf:sfc]{sf::sfc_LINESTRING}}
+Corridor edges as an object of class \code{\link[sf:sfc_LINESTRING]{sf::sfc_LINESTRING}}
 }
 \description{
 Split corridor along the river to find edges on the two banks

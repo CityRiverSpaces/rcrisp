@@ -27,7 +27,7 @@ the specified bounding box
 Retrieve the URLs of all the assets intersecting a bbox from a STAC API
 }
 \examples{
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 bb <- get_osm_bb("Bucharest")
 get_stac_asset_urls(bb)
 
