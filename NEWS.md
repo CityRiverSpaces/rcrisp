@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Tests were added to `delineate_corridor()`, `delineate_segments()`, and `delineate_riverspace()` to verify that geographic (lat/lon) CRS input raises an informative error.
 - The Rbanism community badge was added in the README.
 - `delineate()` now errors early when fewer than two river crossings are found.
+- rOpenSci reviewers were acknowledged in the package metadata.
 
 ## Fixed
 
