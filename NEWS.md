@@ -24,7 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `delineate()` now errors early when fewer than two river crossings are found.
 - rOpenSci reviewers were acknowledged in the package metadata.
 - Package logo was added.
-- A JOSS (Journal of Open Source Software) paper describing the package was added in `inst/joss/`, along with a GitHub Actions workflow to build a draft PDF.
+- A JOSS paper describing the package was added in `inst/joss/`, along with a GitHub Actions workflow to build a draft PDF.
 
 ## Fixed
 
