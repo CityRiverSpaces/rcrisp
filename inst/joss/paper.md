@@ -109,7 +109,7 @@ elements of urban form and as such do not integrate green spaces and
 river spaces. On the other hand, river space delineation methods and
 software, like the one developed by the *Vermont Agency of Natural
 Resources* [-@vermontagencyofnaturalresources2007] and the ATRIC tool
-developed by Bhowmik et al. [-@bhowmik2015]*,* mostly focus on non-urban
+developed by Bhowmik et al. [-@bhowmik2015], mostly focus on non-urban
 contexts on a larger scale, where reading geomorphological information
 from digital elevation models in the absence of buildings and urban
 infrastructure is easier. Also, such specialised tools are either not
@@ -160,7 +160,7 @@ functionality needed for processing `sfnetwork` [@vandermeer2024a] and
 `sf` [@pebesma2018] objects, respectively. The retrieval of OSM data is
 available from the `osm` module, while example delineation data and
 example OSM data used in the documentation are available from the `data`
-and `exampeldata` modules. Utility functions are collected in a `utils`
+and `exampledata` modules. Utility functions are collected in a `utils`
 module and the `cache` module is used to retain and manage OSM and DEM
 data retrieved by the user.
 
