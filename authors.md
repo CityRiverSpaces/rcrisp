@@ -18,6 +18,14 @@
 
 - **Netherlands eScience Center**. Funder.
 
+- **Mark Padgham**. Reviewer.  
+  Mark reviewed the package (v. 0.3.1) for rOpenSci, see
+  \<<https://github.com/ropensci/software-review/issues/718>\>
+
+- **Anatolii Tsyplenkov**. Reviewer.  
+  Anatolii reviewed the package (v. 0.3.1) for rOpenSci, see
+  \<<https://github.com/ropensci/software-review/issues/718>\>
+
 ## Citation
 
 Source:
