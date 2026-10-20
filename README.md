@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# rcrisp
+# rcrisp <a href="https://cityriverspaces.github.io/rcrisp/"><img src="man/figures/logo.png" align="right" height="139" alt="rcrisp website" /></a>
 
 <!-- badges: start -->
 
@@ -156,7 +156,7 @@ By contributing to this project you agree to abide by its terms.
 ## References
 
 <div id="refs" class="references csl-bib-body hanging-indent"
-entry-spacing="0" line-spacing="2">
+data-entry-spacing="0" data-line-spacing="2">
 
 <div id="ref-forgaci2018" class="csl-entry">
 
