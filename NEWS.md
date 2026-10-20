@@ -22,6 +22,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Tests were added to `delineate_corridor()`, `delineate_segments()`, and `delineate_riverspace()` to verify that geographic (lat/lon) CRS input raises an informative error.
 - The Rbanism community badge was added in the README.
 - `delineate()` now errors early when fewer than two river crossings are found.
+- rOpenSci reviewers were acknowledged in the package metadata.
+- Package logo was added.
 - A JOSS (Journal of Open Source Software) paper describing the package was added in `inst/joss/`, along with a GitHub Actions workflow to build a draft PDF.
 
 ## Fixed
@@ -35,9 +37,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Corrected documentation for `reproject()`: the `crs` parameter no longer (incorrectly) lists `logical` as an accepted type. `crs` accepts numeric/integer, character (e.g. "EPSG:4326") or an `sf::crs` object; passing `TRUE`/`FALSE` will fail.
 - Vignette pre-compilation was updated so that srr tags dropped by `knitr::knit()` are reinserted into the vignettes. Affected vignettes were also recompiled.
 - Documentation of return values in `clear_cache()` and `delineate()` were made factually consistent with the code.
+- The `autotest` package is now declared in `Suggests` with its `Additional_repositories` (R-universe) source, and the `autotest` test is skipped when the package is not installed, resolving a CRAN check warning about an unstated test dependency.
 
 ## Changed
 
+- The getting started vignette was updated to use `delineate_city_river()` instead of the old `delineate(city_name, river_name, ...)` call.
 - The corridor delineation vignette was updated to use `delineate_city_river()` instead of the old `delineate(city_name, river_name, ...)` call, and to reflect the current `corridor_init` parameter (replacing the old `method` argument). The description of the return value was updated to mention the `delineation` S3 class and its full set of layers.
 - The corridor segmentation vignette was updated to accurately describe the default behaviour of `delineate()`, to reference `delineate_city_river()`, and to remove an unused `get_dem_example_data()` call from the setup chunk.
 - All user-facing `stop()`, `warning()`, and `message()` calls have been migrated to `cli` equivalents (`cli_abort()`, `cli_warn()`, `cli_inform()`) for consistent output.
@@ -89,6 +93,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - OSM river surface retrieval was moved to a separate function.
 - Small rivers for which OSM river surface is not available can still be delineated.
+- The Code of Conduct was replaced with the rOpenSci version as part of finalising the rOpenSci software review process.
 
 # rcrisp 0.2.0 - 2025-08-21
 

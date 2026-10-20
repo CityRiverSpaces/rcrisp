@@ -15,3 +15,4 @@
 ^Meta$
 ^cran-comments\.md$
 ^benchmark$
+^inst/joss$
