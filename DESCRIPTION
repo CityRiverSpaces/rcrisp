@@ -53,7 +53,6 @@ Suggests:
     rmarkdown,
     testthat (>= 3.0.0),
     withr
-Additional_repositories: https://ropensci.r-universe.dev
 VignetteBuilder:
     knitr
 Config/testthat/edition: 3
