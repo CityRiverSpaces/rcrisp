@@ -23,8 +23,3 @@ jobs:
           name: paper
           path: inst/joss/paper.pdf
           archive: false
-      - name: Commit PDF to repository
-        uses: EndBug/add-and-commit@v9
-        with:
-          message: '(auto) Paper PDF Draft'
-          add: 'inst/joss/paper.pdf'
