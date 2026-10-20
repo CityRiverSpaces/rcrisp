@@ -22,7 +22,7 @@ dataset is cached locally, so that subsequent calls to the function can
 load the example data from disk without having to re-download the data.
 }
 \examples{
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 get_osm_example_data(force_download = TRUE)
 \dontshow{\}) # examplesIf}
 }

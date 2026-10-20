@@ -3,7 +3,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-# [Unreleased]
+# rcrisp 1.0.0 - 2026-10-20
 
 ## Added
 
@@ -37,7 +37,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Corrected documentation for `reproject()`: the `crs` parameter no longer (incorrectly) lists `logical` as an accepted type. `crs` accepts numeric/integer, character (e.g. "EPSG:4326") or an `sf::crs` object; passing `TRUE`/`FALSE` will fail.
 - Vignette pre-compilation was updated so that srr tags dropped by `knitr::knit()` are reinserted into the vignettes. Affected vignettes were also recompiled.
 - Documentation of return values in `clear_cache()` and `delineate()` were made factually consistent with the code.
-- The `autotest` package is now declared in `Suggests` with its `Additional_repositories` (R-universe) source, and the `autotest` test is skipped when the package is not installed, resolving a CRAN check warning about an unstated test dependency.
 
 ## Changed
 
@@ -63,6 +62,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Removed
 
 - TODOs were moved from released code to GitHub issues.
+
+# rcrisp 0.3.2 - 2026-09-22
+
+## Fixed
+
+- The `autotest` test is now skipped when the `autotest` package is not installed, and `autotest` is declared in `Suggests` together with its `Additional_repositories` source, resolving a check warning on CRAN.
 
 # rcrisp 0.3.1 - 2025-11-24
 

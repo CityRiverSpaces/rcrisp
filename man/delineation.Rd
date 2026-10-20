@@ -6,7 +6,7 @@
 \value{
 An object of class \code{delineation} containing zero or more of the
 spatial layers \verb{$valley}, \verb{$corridor}, \verb{$segments}, and \verb{$riverspace}
-(each an \code{\link[sf:sfc]{sf::sfc_POLYGON}} or \code{\link[sf:sfc]{sf::sfc_MULTIPOLYGON}} object), plus
+(each an \code{\link[sf:sfc_POLYGON]{sf::sfc_POLYGON}} or \code{\link[sf:sfc_MULTIPOLYGON]{sf::sfc_MULTIPOLYGON}} object), plus
 the base OSM and optionally DEM layers and an \verb{$aoi} list with the
 delineation parameters produced by \code{\link[=define_aoi]{define_aoi()}}. See \code{\link[=delineate]{delineate()}} for
 details.
@@ -16,7 +16,7 @@ An S3 class representing the result of a delineation as returned by
 \code{\link[=delineate]{delineate()}}.
 }
 \examples{
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 bd <- delineate_city_river("Bucharest", "Dâmbovița")
 class(bd)
 \dontshow{\}) # examplesIf}

@@ -11,13 +11,13 @@ The cache directory used by rcrisp.
 }
 \description{
 By default, the user-specific directory as returned by
-\code{\link[tools:userdir]{tools::R_user_dir()}} is used. A different directory can be used by
+\code{\link[tools:R_user_dir]{tools::R_user_dir()}} is used. A different directory can be used by
 setting the environment variable \code{CRISP_CACHE_DIRECTORY}. This can also be
 done by adding the following line to the \code{.Renviron} file:
 \verb{CRISP_CACHE_DIRECTORY=/path/to/crisp/cache/dir}.
 }
 \examples{
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 cache_directory()
 \dontshow{\}) # examplesIf}
 }

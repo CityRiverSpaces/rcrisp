@@ -34,7 +34,7 @@ river to retrieve additional data (buildings). Default is 100 m.}
 \value{
 A list with delineation parameter values, namely \code{city_name} and
 \code{river_name} as character vectors of length one, \code{bb} as object of class
-\code{\link[sf:st_bbox]{sf::bbox}}, \code{crs} as object of class \code{\link[sf:coerce-methods]{sf::crs}}, and
+\code{\link[sf:st_bbox]{sf::bbox}}, \code{crs} as object of class \code{\link[sf:crs]{sf::crs}}, and
 \code{network_buffer}, \code{dem_buffer} and \code{buildings_buffer} as numerical vector
 of length one.
 }
@@ -42,7 +42,7 @@ of length one.
 Define delineation parameters within an area of interest
 }
 \examples{
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 # Get default parameters in AOI
 aoi <- define_aoi("Bucharest", "Dâmbovița")
 

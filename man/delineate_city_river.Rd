@@ -28,7 +28,7 @@ Default is TRUE.}
 }
 \value{
 A list with the valley, corridor, segments, and riverspace
-geometries as \code{\link[sf:sfc]{sf::sfc_POLYGON}} objects.
+geometries as \code{\link[sf:sfc_POLYGON]{sf::sfc_POLYGON}} objects.
 }
 \description{
 This is a convenience function used for quick delineation. With only the city
@@ -36,7 +36,7 @@ name and river name as input, it uses default delineation parameters, it
 retrieves OSM and DEM data and returns a list with all three delineations.
 }
 \examples{
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 delineate_city_river("Bucharest", "Dâmbovița")
 \dontshow{\}) # examplesIf}
 }

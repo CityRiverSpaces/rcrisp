@@ -19,7 +19,7 @@ Prints a compact summary of a \link{delineation} object, showing which layers
 are present and their feature counts.
 }
 \examples{
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 bd <- delineate_city_river("Bucharest", "Dâmbovița")
 print(bd)
 \dontshow{\}) # examplesIf}

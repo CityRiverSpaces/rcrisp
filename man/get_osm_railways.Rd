@@ -22,13 +22,13 @@ values to retrieve.}
 \item{force_download}{Download data even if cached data is available}
 }
 \value{
-An object of class \code{\link[sf:sfc]{sf::sfc_LINESTRING}}
+An object of class \code{\link[sf:sfc_LINESTRING]{sf::sfc_LINESTRING}}
 }
 \description{
 Get OpenStreetMap railways
 }
 \examples{
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 bb <- get_osm_bb("Bucharest")
 crs <- get_utm_zone(bb)
 get_osm_railways(aoi = bb, crs = crs)

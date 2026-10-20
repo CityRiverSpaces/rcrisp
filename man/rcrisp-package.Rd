@@ -23,6 +23,7 @@ Useful links:
 
 Authors:
 \itemize{
+  \item Claudiu Forgaci \email{c.forgaci@tudelft.nl} (\href{https://orcid.org/0000-0003-3218-5102}{ORCID}) [copyright holder]
   \item Francesco Nattino \email{f.nattino@esciencecenter.nl} (\href{https://orcid.org/0000-0003-3286-0139}{ORCID})
 }
 

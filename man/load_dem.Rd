@@ -16,7 +16,7 @@ of class \code{bbox}.}
 \item{force_download}{Download data even if cached data is available}
 }
 \value{
-A DEM of class \code{\link[terra:SpatRaster-class]{terra::SpatRaster}}, retrieved and retiled to the
+A DEM of class \code{\link[terra:SpatRaster]{terra::SpatRaster}}, retrieved and retiled to the
 given bounding box
 }
 \description{
@@ -25,7 +25,7 @@ box to create a raster DEM for the specified region. Results are cached, so
 that new queries with the same input parameters will be loaded from disk.
 }
 \examples{
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 bb <- get_osm_bb("Bucharest")
 tile_urls <- get_stac_asset_urls(bb)
 load_dem(bb = bb, tile_urls = tile_urls, force_download = TRUE)

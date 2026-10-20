@@ -1,6 +1,6 @@
 Package: rcrisp
 Title: Automate the Delineation of Urban River Spaces
-Version: 0.3.1
+Version: 1.0.0
 Authors@R: c(
     person("Claudiu", "Forgaci", , "c.forgaci@tudelft.nl", role = c("aut", "cre", "cph"),
            comment = c(ORCID = "0000-0003-3218-5102")),
@@ -57,11 +57,10 @@ Suggests:
     rmarkdown,
     testthat (>= 3.0.0),
     withr
-Additional_repositories: https://ropensci.r-universe.dev
 VignetteBuilder:
     knitr
 Config/testthat/edition: 3
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE, roclets = c("namespace", "rd", "srr::srr_stats_roclet"))
-RoxygenNote: 7.3.2
+Config/roxygen2/version: 8.1.1

@@ -1,47 +1,524 @@
-# This CITATION.cff file was generated with cffinit.
-# Visit https://bit.ly/cffinit to generate yours today!
-
+# ------------------------------------------------
+# CITATION.cff file created with {cffr} R package
+# See also: https://docs.ropensci.org/cffr/
+# ------------------------------------------------
+ 
 cff-version: 1.2.0
-title: 'rcrisp: Automate the Delineation of Urban River Spaces'
-message: >-
-  If you use this software, please cite it using the
-  metadata from this file.
+message: 'To cite package "rcrisp" in publications use:'
 type: software
-authors:
-  - given-names: Claudiu
-    family-names: Forgaci
-    email: c.forgaci@tudelft.nl
-    affiliation: Delft University of Technology
-    orcid: 'https://orcid.org/0000-0003-3218-5102'
-  - given-names: Francesco
-    family-names: Nattino
-    email: f.nattino@esciencecenter.nl
-    affiliation: Netherlands eScience Center
-    orcid: 'https://orcid.org/0000-0003-3286-0139'
-contributors:
-  - given-names: Fakhereh
-    family-names: Alidoost
-    email: f.alidoost@esciencecenter.nl
-    affiliation: Netherlands eScience Center
-    orcid: 'https://orcid.org/0000-0001-8407-6472'
-  - given-names: Meiert Willem
-    family-names: Grootes
-    email: m.grootes@esciencecenter.nl
-    affiliation: Netherlands eScience Center
-    orcid: 'https://orcid.org/0000-0002-5733-4795'
-  - given-names: Yehan
-    family-names: Wu
-    email: y.wu-13@tudelft.nl
-    affiliation: Delft University of Technology
-    orcid: 'https://orcid.org/0000-0003-4063-7535'
-repository-code: 'https://github.com/CityRiverSpaces/rcrisp'
-identifiers:
-  - type: doi
-    value: 10.5281/zenodo.15793526
-abstract: >-
-  Automates the process of urban river space delineation
-  using the CRiSp (City River Spaces) method.
-keywords:
-  - urban rivers
-  - geospatial data
 license: Apache-2.0
+title: 'rcrisp: Automate the Delineation of Urban River Spaces'
+version: 1.0.0
+doi: 10.32614/CRAN.package.rcrisp
+identifiers:
+- type: url
+  value: https://doi.org/10.5281/zenodo.15793526
+abstract: Provides tools to automate the morphological delineation of riverside urban
+  areas based on a method introduced in Forgaci (2018) <https://doi.org/10.7480/abe.2018.31>.
+  Delineation entails the identification of corridor boundaries, segmentation of the
+  corridor, and delineation of the river space using two-dimensional spatial information
+  from street network data and digital elevation data in a projected CRS. The resulting
+  delineation can be used to characterise spatial phenomena that can be related to
+  the river as a central element.
+authors:
+- family-names: Forgaci
+  given-names: Claudiu
+  email: c.forgaci@tudelft.nl
+  orcid: https://orcid.org/0000-0003-3218-5102
+- family-names: Nattino
+  given-names: Francesco
+  email: f.nattino@esciencecenter.nl
+  orcid: https://orcid.org/0000-0003-3286-0139
+repository: https://CRAN.R-project.org/package=rcrisp
+repository-code: https://github.com/CityRiverSpaces/rcrisp
+url: https://cityriverspaces.github.io/rcrisp/
+contact:
+- family-names: Forgaci
+  given-names: Claudiu
+  email: c.forgaci@tudelft.nl
+  orcid: https://orcid.org/0000-0003-3218-5102
+keywords:
+- r
+- r-package
+- rstats
+- spatial
+references:
+- type: software
+  title: 'R: A Language and Environment for Statistical Computing'
+  notes: Depends
+  url: https://www.R-project.org/
+  authors:
+  - name: R Core Team
+    website: https://ror.org/02zz1nj61
+  institution:
+    name: R Foundation for Statistical Computing
+    website: https://ror.org/05qewa988
+    address: Vienna, Austria
+  year: '2026'
+  doi: 10.32614/R.manuals
+  version: '>= 4.1.0'
+- type: software
+  title: checkmate
+  abstract: 'checkmate: Fast and Versatile Argument Checks'
+  notes: Imports
+  url: https://mllg.github.io/checkmate/
+  repository: https://CRAN.R-project.org/package=checkmate
+  authors:
+  - family-names: Lang
+    given-names: Michel
+    email: michellang@gmail.com
+    orcid: https://orcid.org/0000-0001-9754-0393
+  year: '2026'
+  doi: 10.32614/CRAN.package.checkmate
+- type: software
+  title: cli
+  abstract: 'cli: Helpers for Developing Command Line Interfaces'
+  notes: Imports
+  url: https://cli.r-lib.org
+  repository: https://CRAN.R-project.org/package=cli
+  authors:
+  - family-names: Csárdi
+    given-names: Gábor
+    email: gabor@posit.co
+  year: '2026'
+  doi: 10.32614/CRAN.package.cli
+- type: software
+  title: dbscan
+  abstract: 'dbscan: Density-Based Spatial Clustering of Applications with Noise (DBSCAN)
+    and Related Algorithms'
+  notes: Imports
+  url: http://michael.hahsler.net/dbscan/
+  repository: https://CRAN.R-project.org/package=dbscan
+  authors:
+  - family-names: Hahsler
+    given-names: Michael
+    email: mhahsler@lyle.smu.edu
+    orcid: https://orcid.org/0000-0003-2716-1405
+  - family-names: Piekenbrock
+    given-names: Matthew
+  year: '2026'
+  doi: 10.32614/CRAN.package.dbscan
+- type: software
+  title: dplyr
+  abstract: 'dplyr: A Grammar of Data Manipulation'
+  notes: Imports
+  url: https://dplyr.tidyverse.org
+  repository: https://CRAN.R-project.org/package=dplyr
+  authors:
+  - family-names: Wickham
+    given-names: Hadley
+    email: hadley@posit.co
+    orcid: https://orcid.org/0000-0003-4757-117X
+  - family-names: François
+    given-names: Romain
+    orcid: https://orcid.org/0000-0002-2444-4226
+  - family-names: Henry
+    given-names: Lionel
+  - family-names: Müller
+    given-names: Kirill
+    orcid: https://orcid.org/0000-0002-1416-3412
+  - family-names: Vaughan
+    given-names: Davis
+    email: davis@posit.co
+    orcid: https://orcid.org/0000-0003-4777-038X
+  year: '2026'
+  doi: 10.32614/CRAN.package.dplyr
+- type: software
+  title: lwgeom
+  abstract: 'lwgeom: Bindings to Selected ''liblwgeom'' Functions for Simple Features'
+  notes: Imports
+  url: https://r-spatial.github.io/lwgeom/
+  repository: https://CRAN.R-project.org/package=lwgeom
+  authors:
+  - family-names: Pebesma
+    given-names: Edzer
+    email: edzer.pebesma@uni-muenster.de
+    orcid: https://orcid.org/0000-0001-8049-7069
+  year: '2026'
+  doi: 10.32614/CRAN.package.lwgeom
+- type: software
+  title: osmdata
+  abstract: 'osmdata: Import ''OpenStreetMap'' Data as Simple Features or Spatial
+    Objects'
+  notes: Imports
+  url: https://docs.ropensci.org/osmdata/
+  repository: https://CRAN.R-project.org/package=osmdata
+  authors:
+  - family-names: Maspons
+    given-names: Joan
+    email: joanmaspons@gmail.com
+    orcid: https://orcid.org/0000-0003-2286-8727
+  - family-names: Padgham
+    given-names: Mark
+    email: mark.padgham@email.com
+  - family-names: Rudis
+    given-names: Bob
+  - family-names: Lovelace
+    given-names: Robin
+  - family-names: Salmon
+    given-names: Maëlle
+  - family-names: Forgaci
+    given-names: Claudiu
+    email: c.forgaci@tudelft.nl
+    orcid: https://orcid.org/0000-0003-3218-5102
+  year: '2026'
+  doi: 10.32614/CRAN.package.osmdata
+- type: software
+  title: rcoins
+  abstract: 'rcoins: Identify Naturally Continuous Lines in a Spatial Network'
+  notes: Imports
+  url: https://cityriverspaces.github.io/rcoins/
+  repository: https://CRAN.R-project.org/package=rcoins
+  authors:
+  - family-names: Nattino
+    given-names: Francesco
+    email: f.nattino@esciencecenter.nl
+    orcid: https://orcid.org/0000-0003-3286-0139
+  - family-names: Forgaci
+    given-names: Claudiu
+    email: c.forgaci@tudelft.nl
+    orcid: https://orcid.org/0000-0003-3218-5102
+  - family-names: Alidoost
+    given-names: Fakhereh
+    email: f.alidoost@esciencecenter.nl
+    orcid: https://orcid.org/0000-0001-8407-6472
+  year: '2026'
+  doi: 10.32614/CRAN.package.rcoins
+- type: software
+  title: rlang
+  abstract: 'rlang: Functions for Base Types and Core R and ''Tidyverse'' Features'
+  notes: Imports
+  url: https://rlang.r-lib.org
+  repository: https://CRAN.R-project.org/package=rlang
+  authors:
+  - family-names: Henry
+    given-names: Lionel
+    email: lionel@posit.co
+  - family-names: Wickham
+    given-names: Hadley
+    email: hadley@posit.co
+  year: '2026'
+  doi: 10.32614/CRAN.package.rlang
+- type: software
+  title: rstac
+  abstract: 'rstac: Client Library for SpatioTemporal Asset Catalog'
+  notes: Imports
+  url: https://brazil-data-cube.github.io/rstac/
+  repository: https://CRAN.R-project.org/package=rstac
+  authors:
+  - family-names: Simoes
+    given-names: Rolf
+    email: rolfsimoes@gmail.com
+  - family-names: Carvalho
+    given-names: Felipe
+    email: lipecaso@gmail.com
+  - name: Brazil Data Cube Team
+    email: brazildatacube@inpe.br
+  year: '2026'
+  doi: 10.32614/CRAN.package.rstac
+- type: software
+  title: sf
+  abstract: 'sf: Simple Features for R'
+  notes: Imports
+  url: https://r-spatial.github.io/sf/
+  repository: https://CRAN.R-project.org/package=sf
+  authors:
+  - family-names: Pebesma
+    given-names: Edzer
+    email: edzer.pebesma@uni-muenster.de
+    orcid: https://orcid.org/0000-0001-8049-7069
+  year: '2026'
+  doi: 10.32614/CRAN.package.sf
+  version: '>= 0.9.0'
+- type: software
+  title: sfheaders
+  abstract: 'sfheaders: Converts Between R Objects and Simple Feature Objects'
+  notes: Imports
+  url: https://dcooley.github.io/sfheaders/
+  repository: https://CRAN.R-project.org/package=sfheaders
+  authors:
+  - family-names: Cooley
+    given-names: David
+    email: david.cooley.au@gmail.com
+  year: '2026'
+  doi: 10.32614/CRAN.package.sfheaders
+- type: software
+  title: sfnetworks
+  abstract: 'sfnetworks: Tidy Geospatial Networks'
+  notes: Imports
+  url: https://luukvdmeer.github.io/sfnetworks/
+  repository: https://CRAN.R-project.org/package=sfnetworks
+  authors:
+  - family-names: Meer
+    given-names: Lucas
+    name-particle: van der
+    email: luukvandermeer@live.nl
+    orcid: https://orcid.org/0000-0001-6336-8628
+  - family-names: Abad
+    given-names: Lorena
+    email: lore.abad6@gmail.com
+    orcid: https://orcid.org/0000-0003-0554-734X
+  - family-names: Gilardi
+    given-names: Andrea
+    email: andrea.gilardi@unimib.it
+    orcid: https://orcid.org/0000-0002-9424-7439
+  - family-names: Lovelace
+    given-names: Robin
+    email: r.lovelace@leeds.ac.uk
+    orcid: https://orcid.org/0000-0001-5679-6536
+  year: '2026'
+  doi: 10.32614/CRAN.package.sfnetworks
+- type: software
+  title: stringr
+  abstract: 'stringr: Simple, Consistent Wrappers for Common String Operations'
+  notes: Imports
+  url: https://stringr.tidyverse.org
+  repository: https://CRAN.R-project.org/package=stringr
+  authors:
+  - family-names: Wickham
+    given-names: Hadley
+    email: hadley@posit.co
+  year: '2026'
+  doi: 10.32614/CRAN.package.stringr
+- type: software
+  title: terra
+  abstract: 'terra: Spatial Data Analysis'
+  notes: Imports
+  url: https://rspatial.org/
+  repository: https://CRAN.R-project.org/package=terra
+  authors:
+  - family-names: Hijmans
+    given-names: Robert J.
+    email: r.hijmans@gmail.com
+    orcid: https://orcid.org/0000-0001-5872-2872
+  - family-names: Brown
+    given-names: Andrew
+    orcid: https://orcid.org/0000-0002-4565-533X
+  - family-names: Barbosa
+    given-names: A. Márcia
+    orcid: https://orcid.org/0000-0001-8972-7713
+  - family-names: Cordano
+    given-names: Emanuele
+    orcid: https://orcid.org/0000-0002-3508-5898
+  - family-names: Dyba
+    given-names: Krzysztof
+    orcid: https://orcid.org/0000-0002-8614-3816
+  year: '2026'
+  doi: 10.32614/CRAN.package.terra
+- type: software
+  title: tidygraph
+  abstract: 'tidygraph: A Tidy API for Graph Manipulation'
+  notes: Imports
+  url: https://tidygraph.data-imaginist.com
+  repository: https://CRAN.R-project.org/package=tidygraph
+  authors:
+  - family-names: Pedersen
+    given-names: Thomas Lin
+    email: thomasp85@gmail.com
+    orcid: https://orcid.org/0000-0002-5147-4711
+  year: '2026'
+  doi: 10.32614/CRAN.package.tidygraph
+- type: software
+  title: units
+  abstract: 'units: Measurement Units for R Vectors'
+  notes: Imports
+  url: https://r-quantities.github.io/units/
+  repository: https://CRAN.R-project.org/package=units
+  authors:
+  - family-names: Pebesma
+    given-names: Edzer
+    email: edzer.pebesma@uni-muenster.de
+    orcid: https://orcid.org/0000-0001-8049-7069
+  - family-names: Mailund
+    given-names: Thomas
+    email: mailund@birc.au.dk
+  - family-names: Kalinowski
+    given-names: Tomasz
+  - family-names: Ucar
+    given-names: Iñaki
+    email: iucar@fedoraproject.org
+    orcid: https://orcid.org/0000-0001-6403-5550
+  year: '2026'
+  doi: 10.32614/CRAN.package.units
+- type: software
+  title: visor
+  abstract: 'visor: Geospatial Tools for Visibility Analysis'
+  notes: Imports
+  url: https://cityriverspaces.github.io/visor/
+  repository: https://CRAN.R-project.org/package=visor
+  authors:
+  - family-names: Forgaci
+    given-names: Claudiu
+    email: c.forgaci@tudelft.nl
+    orcid: https://orcid.org/0000-0003-3218-5102
+  - family-names: Nattino
+    given-names: Francesco
+    email: f.nattino@esciencecenter.nl
+    orcid: https://orcid.org/0000-0003-3286-0139
+  year: '2026'
+  doi: 10.32614/CRAN.package.visor
+- type: software
+  title: autotest
+  abstract: 'autotest: Automatic Package Testing'
+  notes: Suggests
+  url: https://docs.ropensci.org/autotest/
+  repository: https://CRAN.R-project.org/package=autotest
+  authors:
+  - family-names: Padgham
+    given-names: Mark
+    email: mark.padgham@email.com
+    orcid: https://orcid.org/0000-0003-2172-5265
+  year: '2026'
+  doi: 10.32614/CRAN.package.autotest
+- type: software
+  title: ggplot2
+  abstract: 'ggplot2: Create Elegant Data Visualisations Using the Grammar of Graphics'
+  notes: Suggests
+  url: https://ggplot2.tidyverse.org
+  repository: https://CRAN.R-project.org/package=ggplot2
+  authors:
+  - family-names: Wickham
+    given-names: Hadley
+    email: hadley@posit.co
+    orcid: https://orcid.org/0000-0003-4757-117X
+  - family-names: Chang
+    given-names: Winston
+    orcid: https://orcid.org/0000-0002-1576-2126
+  - family-names: Henry
+    given-names: Lionel
+  - family-names: Pedersen
+    given-names: Thomas Lin
+    email: thomas.pedersen@posit.co
+    orcid: https://orcid.org/0000-0002-5147-4711
+  - family-names: Takahashi
+    given-names: Kohske
+  - family-names: Wilke
+    given-names: Claus
+    orcid: https://orcid.org/0000-0002-7470-9261
+  - family-names: Woo
+    given-names: Kara
+    orcid: https://orcid.org/0000-0002-5125-4188
+  - family-names: Yutani
+    given-names: Hiroaki
+    orcid: https://orcid.org/0000-0002-3385-7233
+  - family-names: Dunnington
+    given-names: Dewey
+    orcid: https://orcid.org/0000-0002-9415-4582
+  - family-names: Brand
+    given-names: Teun
+    name-particle: van den
+    orcid: https://orcid.org/0000-0002-9335-7468
+  year: '2026'
+  doi: 10.32614/CRAN.package.ggplot2
+- type: software
+  title: knitr
+  abstract: 'knitr: A General-Purpose Package for Dynamic Report Generation in R'
+  notes: Suggests
+  url: https://yihui.org/knitr/
+  repository: https://CRAN.R-project.org/package=knitr
+  authors:
+  - family-names: Xie
+    given-names: Yihui
+    email: xie@yihui.name
+    orcid: https://orcid.org/0000-0003-0645-5666
+  year: '2026'
+  doi: 10.32614/CRAN.package.knitr
+- type: software
+  title: purrr
+  abstract: 'purrr: Functional Programming Tools'
+  notes: Suggests
+  url: https://purrr.tidyverse.org/
+  repository: https://CRAN.R-project.org/package=purrr
+  authors:
+  - family-names: Wickham
+    given-names: Hadley
+    email: hadley@posit.co
+    orcid: https://orcid.org/0000-0003-4757-117X
+  - family-names: Henry
+    given-names: Lionel
+    email: lionel@posit.co
+  year: '2026'
+  doi: 10.32614/CRAN.package.purrr
+- type: software
+  title: rmarkdown
+  abstract: 'rmarkdown: Dynamic Documents for R'
+  notes: Suggests
+  url: https://pkgs.rstudio.com/rmarkdown/
+  repository: https://CRAN.R-project.org/package=rmarkdown
+  authors:
+  - family-names: Allaire
+    given-names: JJ
+    email: jj@posit.co
+  - family-names: Xie
+    given-names: Yihui
+    email: xie@yihui.name
+    orcid: https://orcid.org/0000-0003-0645-5666
+  - family-names: Dervieux
+    given-names: Christophe
+    email: cderv@posit.co
+    orcid: https://orcid.org/0000-0003-4474-2498
+  - family-names: McPherson
+    given-names: Jonathan
+    email: jonathan@posit.co
+  - family-names: Luraschi
+    given-names: Javier
+  - family-names: Ushey
+    given-names: Kevin
+    email: kevin@posit.co
+  - family-names: Atkins
+    given-names: Aron
+    email: aron@posit.co
+  - family-names: Wickham
+    given-names: Hadley
+    email: hadley@posit.co
+  - family-names: Cheng
+    given-names: Joe
+    email: joe@posit.co
+  - family-names: Chang
+    given-names: Winston
+    email: winston@posit.co
+  - family-names: Iannone
+    given-names: Richard
+    email: rich@posit.co
+    orcid: https://orcid.org/0000-0003-3925-190X
+  year: '2026'
+  doi: 10.32614/CRAN.package.rmarkdown
+- type: software
+  title: testthat
+  abstract: 'testthat: Unit Testing for R'
+  notes: Suggests
+  url: https://testthat.r-lib.org
+  repository: https://CRAN.R-project.org/package=testthat
+  authors:
+  - family-names: Wickham
+    given-names: Hadley
+    email: hadley@posit.co
+  year: '2026'
+  doi: 10.32614/CRAN.package.testthat
+  version: '>= 3.0.0'
+- type: software
+  title: withr
+  abstract: 'withr: Run Code ''With'' Temporarily Modified Global State'
+  notes: Suggests
+  url: https://withr.r-lib.org
+  repository: https://CRAN.R-project.org/package=withr
+  authors:
+  - family-names: Hester
+    given-names: Jim
+  - family-names: Henry
+    given-names: Lionel
+    email: lionel@posit.co
+  - family-names: Müller
+    given-names: Kirill
+    email: krlmlr+r@mailbox.org
+  - family-names: Ushey
+    given-names: Kevin
+    email: kevinushey@gmail.com
+  - family-names: Wickham
+    given-names: Hadley
+    email: hadley@posit.co
+  - family-names: Chang
+    given-names: Winston
+  year: '2026'
+  doi: 10.32614/CRAN.package.withr
+

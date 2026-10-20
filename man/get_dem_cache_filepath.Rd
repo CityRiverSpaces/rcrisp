@@ -15,7 +15,7 @@ get_dem_cache_filepath(tile_urls, bbox)
 A character string representing the file path
 }
 \description{
-The function returns the file path where to serialize a \code{\link[terra:SpatRaster-class]{terra::SpatRaster}}
+The function returns the file path where to serialize a \code{\link[terra:SpatRaster]{terra::SpatRaster}}
 object representing the DEM as retrieved from a set of tiles reachable at the
 given URLs, cropped and merged for the given bounding box. The directory used
 is the one returned by \code{\link[=cache_directory]{cache_directory()}}.

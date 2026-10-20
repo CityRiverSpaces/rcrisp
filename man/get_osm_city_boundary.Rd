@@ -26,7 +26,7 @@ returned. By default, only the first one is returned.}
 \item{force_download}{Download data even if cached data is available}
 }
 \value{
-An object of class \code{\link[sf:sfc]{sf::sfc_POLYGON}} or \code{\link[sf:sfc]{sf::sfc_MULTIPOLYGON}}
+An object of class \code{\link[sf:sfc_POLYGON]{sf::sfc_POLYGON}} or \code{\link[sf:sfc_MULTIPOLYGON]{sf::sfc_MULTIPOLYGON}}
 with the city boundary
 }
 \description{
@@ -35,7 +35,7 @@ bounding box with the OSM tags "place:city" and "boundary:administrative".
 The result is filtered by the city name.
 }
 \examples{
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 bb <- get_osm_bb("Bucharest")
 crs <- get_utm_zone(bb)
 get_osm_city_boundary(bb = bb, city_name = "Bucharest", crs = crs)

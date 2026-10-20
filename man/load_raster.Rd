@@ -12,7 +12,7 @@ load_raster(urlpaths, bbox = NULL)
 \item{bbox}{A bounding box}
 }
 \value{
-Raster data as a \code{\link[terra:SpatRaster-class]{terra::SpatRaster}} object
+Raster data as a \code{\link[terra:SpatRaster]{terra::SpatRaster}} object
 }
 \description{
 If a bounding box is provided, the file(s) are cropped for the given extent.

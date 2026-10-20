@@ -17,16 +17,16 @@ One of \code{"corridor"}, \code{"valley"}, \code{"riverspace"}, or \code{NULL}
 \item{legend}{Whether the plot should display a legend. Default is TRUE.}
 }
 \value{
-A list of \code{\link[ggplot2:ggsf]{ggplot2::geom_sf()}} and \code{\link[ggplot2:ggsf]{ggplot2::coord_sf()}} elements
+A list of \code{\link[ggplot2:geom_sf]{ggplot2::geom_sf()}} and \code{\link[ggplot2:coord_sf]{ggplot2::coord_sf()}} elements
 to be added to a \code{\link[ggplot2:ggplot]{ggplot2::ggplot()}} object.
 }
 \description{
-Creates a list of \code{\link[ggplot2:ggsf]{ggplot2::geom_sf()}} layers representing the delineation
+Creates a list of \code{\link[ggplot2:geom_sf]{ggplot2::geom_sf()}} layers representing the delineation
 results of a delineation object. The list can be added to a
 \code{\link[ggplot2:ggplot]{ggplot2::ggplot()}} object with \code{+}, and further layers or themes can be
 added on top. Base layers (\code{streets}, \code{railways}, \code{river_centerline},
 \code{river_surface}) are not included and can be added separately with
-\code{\link[ggplot2:ggsf]{ggplot2::geom_sf()}}.
+\code{\link[ggplot2:geom_sf]{ggplot2::geom_sf()}}.
 }
 \details{
 The following layers are included (where present in \code{x}), in the following
@@ -40,7 +40,7 @@ drawn first to set the plot extent
 }
 }
 \examples{
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 library(ggplot2)
 bd <- delineate_city_river("Bucharest", "Dâmbovița")
 ggplot() + geom_delineation(bd) + theme_void()

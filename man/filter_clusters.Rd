@@ -16,7 +16,7 @@ neighborhood. Should approximate the distance between edges that we want
 to consider as a single river crossing}
 }
 \value{
-An object of class \code{\link[sf:sfc]{sf::sfc_LINESTRING}} including the shortest edge
+An object of class \code{\link[sf:sfc_LINESTRING]{sf::sfc_LINESTRING}} including the shortest edge
 per cluster
 }
 \description{

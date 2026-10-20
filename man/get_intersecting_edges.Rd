@@ -16,7 +16,7 @@ geometries}
 }
 \value{
 Indices or geometries of the edges intersecting the given geometry
-of class \code{\link[sf:sfc]{sf::sfc_LINESTRING}}
+of class \code{\link[sf:sfc_LINESTRING]{sf::sfc_LINESTRING}}
 }
 \description{
 Identify network edges that are intersecting a geometry

@@ -42,7 +42,7 @@ method employed to connect the corridor edge end points (i.e. to "cap" the
 corridor). See \code{\link[=cap_corridor]{cap_corridor()}} for the available methods.}
 }
 \value{
-A simple feature geometry of class \code{\link[sf:sfc]{sf::sfc_POLYGON}} representing
+A simple feature geometry of class \code{\link[sf:sfc_POLYGON]{sf::sfc_POLYGON}} representing
 the river corridor
 }
 \description{
@@ -51,7 +51,7 @@ network starting from an initial guess of the corridor (based e.g. on the
 river valley).
 }
 \examples{
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 bucharest_osm <- get_osm_example_data()
 streets <- bucharest_osm$streets
 railways <- bucharest_osm$railways

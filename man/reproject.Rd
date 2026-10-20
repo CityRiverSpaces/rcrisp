@@ -11,14 +11,14 @@ reproject(x, crs, ...)
 \item{x}{Raster (\code{SpatRaster}) or vector (\code{sf}) object}
 
 \item{crs}{CRS to be projected to, provided as \code{numeric}, \code{integer} or
-\code{character} vector of length one or \code{\link[sf:coerce-methods]{sf::crs}}. If \code{numeric}, the value
+\code{character} vector of length one or \code{\link[sf:crs]{sf::crs}}. If \code{numeric}, the value
 should be a positive number with unrestricted upper bound representing
 a valid EPSG code.}
 
 \item{...}{Optional arguments for raster or vector reproject functions}
 }
 \value{
-\code{\link[sf:sf]{sf::sf}}, \code{\link[sf:sfc]{sf::sfc}}, or \code{\link[terra:SpatRaster-class]{terra::SpatRaster}} object reprojected
+\code{\link[sf:sf]{sf::sf}}, \code{\link[sf:sfc]{sf::sfc}}, or \code{\link[terra:SpatRaster]{terra::SpatRaster}} object reprojected
 to specified CRS
 }
 \description{

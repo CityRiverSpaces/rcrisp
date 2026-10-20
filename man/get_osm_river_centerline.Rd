@@ -28,14 +28,14 @@ Defaults to \code{NULL} (no expansion).}
 \item{force_download}{Download data even if cached data is available}
 }
 \value{
-The river centreline as object of class \code{\link[sf:sfc]{sf::sfc_LINESTRING}} or
-\code{\link[sf:sfc]{sf::sfc_MULTILINESTRING}}.
+The river centreline as object of class \code{\link[sf:sfc_LINESTRING]{sf::sfc_LINESTRING}} or
+\code{\link[sf:sfc_MULTILINESTRING]{sf::sfc_MULTILINESTRING}}.
 }
 \description{
 Get the river centreline from OpenStreetMap
 }
 \examples{
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 bb <- get_osm_bb("Bucharest")
 crs <- get_utm_zone(bb)
 get_osm_river_centerline(bb = bb, river_name = "Dâmbovița", crs = crs,

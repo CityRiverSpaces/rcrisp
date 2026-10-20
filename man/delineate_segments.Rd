@@ -23,14 +23,14 @@ details.}
 }
 \value{
 Segment polygons as a simple feature geometry of class
-\code{\link[sf:sfc]{sf::sfc_POLYGON}}
+\code{\link[sf:sfc_POLYGON]{sf::sfc_POLYGON}}
 }
 \description{
 Segments are defined as corridor subregions separated by river-crossing
 transversal lines that form continuous strokes in the network.
 }
 \examples{
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 bucharest_osm <- get_osm_example_data()
 corridor <- bucharest_dambovita$corridor
 network <- rbind(bucharest_osm$streets, bucharest_osm$railways) |>
