@@ -91,6 +91,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - OSM river surface retrieval was moved to a separate function.
 - Small rivers for which OSM river surface is not available can still be delineated.
+- The Code of Conduct was replaced with the rOpenSci version as part of finalising the rOpenSci software review process.
 
 # rcrisp 0.2.0 - 2025-08-21
 
