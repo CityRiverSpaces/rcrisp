@@ -5,6 +5,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 # [Unreleased]
 
+## Added
+
+- Two bibliographic references were added to the JOSS paper.
+
 ## Fixed
 
 - Missing DOIs were added and duplicate bibliographic reference was fixed in the JOSS paper.
