@@ -156,7 +156,7 @@ following algorithms:
 
 An `aoi` module is used to set location parameters as input for
 delineation. The dedicated `network` and `sf` modules contain
-functionality needed for processing `sfnetwork` [@vandermeer2024a] and
+functionality needed for processing `sfnetwork` [@vandermeer2024] and
 `sf` [@pebesma2018] objects, respectively. The retrieval of OSM data is
 available from the `osm` module, while example delineation data and
 example OSM data used in the documentation are available from the `data`
