@@ -56,7 +56,7 @@ Most current software which may be usable for URS delineation purposes either re
 
 4.  The `riverspace` module applies an isovist algorithm implemented in the visor R package [@visor] to determine the space enclosed by the first line of buildings around the river within a given visibility distance.
 
-An `aoi` module is used to set location parameters as input for delineation. The dedicated `network` and `sf` modules contain functionality needed for processing `sfnetwork` [@vandermeer2024a] and `sf` [@pebesma2018] objects, respectively. The retrieval of OSM data is available from the `osm` module, while example delineation data and example OSM data used in the documentation are available from the `data` and `exampledata` modules. Utility functions are collected in a `utils` module and the `cache` module is used to retain and manage OSM and DEM data retrieved by the user.
+An `aoi` module is used to set location parameters as input for delineation. The dedicated `network` and `sf` modules contain functionality needed for processing `sfnetwork` [@vandermeer2024] and `sf` [@pebesma2018] objects, respectively. The retrieval of OSM data is available from the `osm` module, while example delineation data and example OSM data used in the documentation are available from the `data` and `exampledata` modules. Utility functions are collected in a `utils` module and the `cache` module is used to retain and manage OSM and DEM data retrieved by the user.
 
 ![Diagram of the four delineation steps carried out by rcrisp.](method.png)
 
