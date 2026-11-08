@@ -2,6 +2,8 @@
 
 ## rcrisp 1.0.0 - 2026-10-20
 
+CRAN release: 2026-10-20
+
 ### Added
 
 - A definition of “riverside urban areas” was added in the README.
