@@ -21,6 +21,7 @@ Directory](https://img.shields.io/badge/rsd-rcrisp-00a3e3.svg)](https://research
 package](https://img.shields.io/static/v1?label=Rbanism&message=R%20package&labelColor=93278F&color=00A99D&style=flat-square)](https://github.com/Rbanism)
 [![Status at rOpenSci Software Peer
 Review](https://badges.ropensci.org/718_status.svg)](https://github.com/ropensci/software-review/issues/718)
+[![status](https://joss.theoj.org/papers/281d54fb7012711f3d2f0133c965026f/status.svg)](https://joss.theoj.org/papers/281d54fb7012711f3d2f0133c965026f)
 <!-- badges: end -->
 
 rcrisp provides tools to automate the morphological delineation of
